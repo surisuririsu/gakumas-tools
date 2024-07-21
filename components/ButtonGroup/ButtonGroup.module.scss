@@ -1,0 +1,32 @@
+@import "@/constants";
+
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid $gk-orange;
+  border-radius: 4px;
+
+  button {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    background-color: transparent;
+    color: $gk-orange;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.selected {
+      background-color: $gk-orange;
+      color: $white;
+
+      &:hover {
+        color: $gk-red-orange;
+      }
+    }
+
+    &:hover {
+      background-color: lighten($gk-orange, 40%);
+    }
+  }
+}

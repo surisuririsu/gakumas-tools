@@ -1,0 +1,14 @@
+.item {
+  position: relative;
+  width: 3.75em;
+  height: 3.75em;
+  background-color: #ddd;
+  border: 0.25em solid #ccc;
+  border-radius: 0.5em;
+  overflow: hidden;
+  cursor: grab;
+
+  &.selected {
+    box-shadow: 0 0 0.8em #02f;
+  }
+}

@@ -1,0 +1,29 @@
+@import "@/constants";
+
+.produceRankCalculator {
+  max-width: 400px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+  color: $black;
+  overflow-y: auto;
+
+  .bonus {
+    font-size: 0.8em;
+  }
+
+  .result {
+    thead {
+      background-color: $gk-orange;
+    }
+
+    tbody {
+      background-color: lighten($gk-orange, 40%);
+    }
+
+    th,
+    td {
+      padding: 8px;
+    }
+  }
+}

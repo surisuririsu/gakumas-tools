@@ -1,0 +1,30 @@
+@import "@/constants";
+@import "@/components/Input/Input.module";
+
+.parameters {
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+
+  input {
+    @extend .input;
+
+    $inputs: (
+      1: $vocal,
+      2: $dance,
+      3: $visual,
+    );
+
+    @each $i, $param-color in $inputs {
+      &:nth-child(#{$i}) {
+        border-color: $param-color;
+        background-color: lighten($param-color, 35%);
+        color: $param-color;
+        &::placeholder {
+          color: lighten($param-color, 15%);
+        }
+      }
+    }
+  }
+}

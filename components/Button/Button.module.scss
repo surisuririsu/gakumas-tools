@@ -1,0 +1,18 @@
+@import "@/constants";
+
+.button {
+  border: 2px solid $white;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: transparent;
+  color: $white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover,
+  &:focus {
+    background-color: $white;
+    color: $gk-red-orange;
+  }
+}

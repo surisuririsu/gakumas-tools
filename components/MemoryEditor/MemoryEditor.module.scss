@@ -1,0 +1,10 @@
+.memoryEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+
+  .params {
+    max-width: 400px;
+  }
+}

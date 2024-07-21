@@ -1,0 +1,24 @@
+{
+  "name": "gakumas-tools",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data",
+    "next": "14.2.5",
+    "next-auth": "^4.24.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "sass": "^1.77.8"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5"
+  },
+  "packageManager": "yarn@4.3.1"
+}

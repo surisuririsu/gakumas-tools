@@ -1,0 +1,25 @@
+@import "@/constants";
+
+.pIdolSelect {
+  display: flex;
+  gap: 4px;
+
+  .pIdol {
+    width: 96px;
+    height: 128px;
+    border: 4px dashed $gray-light;
+    border-radius: 4px;
+    background-color: $gray-extra-light;
+    cursor: pointer;
+  }
+
+  .filters {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .option {
+    display: block;
+  }
+}

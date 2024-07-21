@@ -1,0 +1,28 @@
+@import "@/constants";
+
+.iconSelect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 20px;
+  border: 2px solid $gray-light;
+
+  .option {
+    padding: 4px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    .imageWrapper {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      user-select: none;
+    }
+
+    &.selected {
+      box-shadow: 0 0 4px $gray-dark;
+    }
+  }
+}

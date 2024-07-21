@@ -1,0 +1,14 @@
+@import "@/constants";
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px;
+  background-color: $gk-orange;
+  color: $white;
+
+  a {
+    text-decoration: underline;
+  }
+}

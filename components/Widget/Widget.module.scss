@@ -1,0 +1,28 @@
+@import "@/constants";
+
+.widget {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid darken($gk-red-orange, 15%);
+
+  &:last-child {
+    border-right: none;
+  }
+
+  &.fill {
+    flex: 1;
+  }
+
+  h2 {
+    border-top: 6px solid darken($gk-red-orange, 15%);
+    padding: 8px;
+    background-color: lighten($gk-orange, 40%);
+    color: $gk-orange;
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+  }
+}
