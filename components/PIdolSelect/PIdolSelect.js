@@ -12,10 +12,7 @@ export default function PIdolSelect({ selected, onChange }) {
 
   return (
     <div className={styles.pIdolSelect}>
-      <div className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
-        {selected}
-      </div>
-      {expanded && (
+      {expanded ? (
         <div>
           <div className={styles.filters}>
             <IconSelect
@@ -51,6 +48,10 @@ export default function PIdolSelect({ selected, onChange }) {
               )
             )}
           </div>
+        </div>
+      ) : (
+        <div className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
+          {selected}
         </div>
       )}
     </div>

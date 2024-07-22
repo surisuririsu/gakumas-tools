@@ -1,18 +1,15 @@
+@import "@/constants";
+
 .dex {
-  min-width: 400px;
+  width: 400px;
+  max-width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 
-  .tabs {
-    padding: 4px;
-  }
-
-  .filter {
-    margin-left: 8px;
-  }
-
   .result {
+    border-top: 2px solid $gray-light;
+    border-bottom: 2px solid $gray-light;
     flex: 1;
     overflow-y: scroll;
     display: grid;
@@ -21,5 +18,13 @@
     gap: 8px;
     justify-content: space-around;
     padding: 8px;
+  }
+
+  .filter {
+    margin: 8px;
+  }
+
+  .tabs {
+    padding: 4px;
   }
 }

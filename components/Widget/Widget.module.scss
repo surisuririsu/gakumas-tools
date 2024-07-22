@@ -6,10 +6,6 @@
   flex-direction: column;
   border-right: 2px solid darken($gk-red-orange, 15%);
 
-  &.fill {
-    flex: 1;
-  }
-
   h2 {
     border-top: 6px solid darken($gk-red-orange, 15%);
     padding: 8px;
@@ -18,7 +14,19 @@
   }
 
   .content {
+    width: 400px;
+    max-width: 100vw;
     flex: 1;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
+  }
+
+  &.fill {
+    flex: 1;
+
+    .content {
+      width: auto;
+    }
   }
 }

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "gakumas-data": "https://github.com/surisuririsu/gakumas-data",
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#0.3.0",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "react": "^18",

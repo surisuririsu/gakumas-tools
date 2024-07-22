@@ -4,15 +4,18 @@ import PIdolSelect from "@/components/PIdolSelect";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import MemoryContext from "@/contexts/MemoryContext";
+import SelectionContext from "@/contexts/SelectionContext";
 import styles from "./MemoryEditor.module.scss";
 
 export default function MemoryEditor() {
-  const { pIdolId, setPIdolId } = useContext(MemoryContext);
-  const [params, setParams] = useState([null, null, null]);
-  const [pItemIds, setPItemIds] = useState([0, 0, 20, 0]);
-  const [skillCardIds, setSkillCardIds] = useState([0, 0, 20, 0, 0, 0]);
+  const { pIdolId, setPIdolId, params, setParams, pItemIds, skillCardIds } =
+    useContext(MemoryContext);
+  const { setSelectedEntity } = useContext(SelectionContext);
   return (
-    <div className={styles.memoryEditor}>
+    <div
+      className={styles.memoryEditor}
+      onClick={() => setSelectedEntity(null)}
+    >
       <label>P-idol</label>
       <PIdolSelect selected={pIdolId} onChange={setPIdolId} />
       <label>Parameters</label>
