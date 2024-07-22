@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ParametersInput from "@/components/ParametersInput";
 import PIdolSelect from "@/components/PIdolSelect";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
+import Trash from "@/components/Trash";
 import MemoryContext from "@/contexts/MemoryContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import styles from "./MemoryEditor.module.scss";
@@ -26,6 +27,7 @@ export default function MemoryEditor() {
       <StagePItems pItemIds={pItemIds} />
       <label>Skill cards</label>
       <StageSkillCards skillCardIds={skillCardIds} />
+      <Trash />
     </div>
   );
 }

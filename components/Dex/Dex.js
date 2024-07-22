@@ -39,11 +39,9 @@ export default function Dex() {
 
   return (
     <div className={styles.dex}>
-      {selectedEntity && selectedEntity.id != 0 && (
-        <div className={styles.details}>
-          <EntityDetails type={selectedEntity.type} id={selectedEntity.id} />
-        </div>
-      )}
+      <div className={styles.details}>
+        <EntityDetails type={selectedEntity?.type} id={selectedEntity?.id} />
+      </div>
       <div className={styles.result}>
         {entities.map((entity, index) => (
           <EntityIcon

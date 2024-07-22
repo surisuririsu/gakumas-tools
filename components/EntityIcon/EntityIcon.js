@@ -42,6 +42,9 @@ export default function EntityIcon({ type, id, widget, index, small }) {
       setState((cur) => {
         const next = [...cur];
         next[index] = selectedEntity.id;
+        if (selectedEntity.widget == widget) {
+          next[selectedEntity.index] = id;
+        }
         return next;
       });
       setSelectedEntity(null);

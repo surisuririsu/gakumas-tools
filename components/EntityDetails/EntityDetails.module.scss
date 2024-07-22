@@ -1,8 +1,19 @@
+@import "@/constants";
+
 .entityDetails {
   position: relative;
-  height: 180px;
+  height: 100%;
 
   img {
     object-fit: contain;
+  }
+
+  .placeholder {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    color: $gray-light;
   }
 }

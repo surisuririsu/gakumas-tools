@@ -5,8 +5,8 @@ const WorkspaceContext = createContext();
 export function WorkspaceContextProvider({ children }) {
   const [showProduceRankCalculator, setShowProduceRankCalculator] =
     useState(false);
-  const [showMemoryEditor, setShowMemoryEditor] = useState(false);
-  const [showDex, setShowDex] = useState(false);
+  const [showMemoryEditor, setShowMemoryEditor] = useState(true);
+  const [showDex, setShowDex] = useState(true);
 
   return (
     <WorkspaceContext.Provider
