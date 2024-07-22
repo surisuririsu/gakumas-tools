@@ -4,9 +4,17 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <span>
-        Made with ☕ by <a href="https://www.ris.moe">risりす</a>
+        Made with ☕ by{" "}
+        <a href="https://www.ris.moe" target="_blank">
+          risりす
+        </a>
       </span>
-      <a>GitHub</a>
+      <a
+        href="https://github.com/surisuririsu/gakumas-tools/issues/new"
+        target="_blank"
+      >
+        Report a problem
+      </a>
     </footer>
   );
 }

@@ -1,0 +1,24 @@
+.dex {
+  min-width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .tabs {
+    padding: 4px;
+  }
+
+  .filter {
+    margin-left: 8px;
+  }
+
+  .result {
+    flex: 1;
+    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 60px);
+    gap: 8px;
+    justify-content: space-around;
+    padding: 8px;
+  }
+}

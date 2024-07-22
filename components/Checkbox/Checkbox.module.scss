@@ -1,0 +1,17 @@
+@import "@/constants";
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  input {
+    width: 16px;
+    height: 16px;
+    accent-color: $gk-orange;
+  }
+
+  label {
+    display: inline;
+  }
+}

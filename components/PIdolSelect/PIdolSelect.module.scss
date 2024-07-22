@@ -7,7 +7,7 @@
   .pIdol {
     width: 96px;
     height: 128px;
-    border: 4px dashed $gray-light;
+    border: 4px solid $gray-light;
     border-radius: 4px;
     background-color: $gray-extra-light;
     cursor: pointer;
@@ -16,6 +16,7 @@
   .filters {
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
     padding: 4px;
   }
 
