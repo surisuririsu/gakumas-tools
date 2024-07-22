@@ -11,6 +11,8 @@ export default function Navbar() {
     setShowProduceRankCalculator,
     showMemoryEditor,
     setShowMemoryEditor,
+    showDex,
+    setShowDex,
   } = useContext(WorkspaceContext);
   const { data: session, status } = useSession();
   return (
@@ -30,6 +32,12 @@ export default function Navbar() {
           onClick={() => setShowMemoryEditor(!showMemoryEditor)}
         >
           Memory Editor
+        </a>
+        <a
+          className={showDex ? styles.active : ""}
+          onClick={() => setShowDex(!showDex)}
+        >
+          Index
         </a>
       </div>
       {status == "authenticated" && (

@@ -9,4 +9,9 @@
   border-radius: 8px;
   overflow: hidden;
   cursor: grab;
+
+  &.small {
+    width: 40px;
+    height: 40px;
+  }
 }

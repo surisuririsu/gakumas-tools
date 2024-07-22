@@ -17,6 +17,7 @@
     overflow-y: scroll;
     display: grid;
     grid-template-columns: repeat(auto-fill, 60px);
+    grid-template-rows: repeat(auto-fill, 60px);
     gap: 8px;
     justify-content: space-around;
     padding: 8px;

@@ -9,9 +9,11 @@
     width: 16px;
     height: 16px;
     accent-color: $gk-orange;
+    cursor: pointer;
   }
 
   label {
     display: inline;
+    user-select: none;
   }
 }

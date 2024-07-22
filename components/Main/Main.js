@@ -7,7 +7,7 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Main.module.scss";
 
 export default function Home() {
-  const { showProduceRankCalculator, showMemoryEditor } =
+  const { showProduceRankCalculator, showMemoryEditor, showDex } =
     useContext(WorkspaceContext);
   return (
     <main className={styles.main}>
@@ -21,9 +21,11 @@ export default function Home() {
           <MemoryEditor />
         </Widget>
       )}
-      <Widget title="Index">
-        <Dex />
-      </Widget>
+      {showDex && (
+        <Widget title="Index">
+          <Dex />
+        </Widget>
+      )}
     </main>
   );
 }
