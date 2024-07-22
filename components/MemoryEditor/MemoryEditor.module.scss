@@ -6,7 +6,16 @@
   gap: 8px;
   padding: 16px;
 
+  .name {
+    max-width: 400px;
+  }
+
   .params {
+    max-width: 400px;
+  }
+
+  .save {
+    margin-top: 16px;
     max-width: 400px;
   }
 }

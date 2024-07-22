@@ -1,13 +1,11 @@
 @import "@/constants";
 
 .input {
-  flex: 1;
   min-width: 0;
   outline: none;
   border: none;
   border-bottom: 4px solid $gk-orange;
   padding: 8px;
-  background-color: lighten($gk-orange, 35%);
   color: $gk-orange;
   text-align: center;
   font-weight: 600;

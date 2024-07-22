@@ -1,18 +1,33 @@
 @import "@/constants";
 
 .button {
-  border: 2px solid $white;
+  border: 2px solid $gk-orange;
   border-radius: 4px;
   padding: 8px;
-  background-color: transparent;
   color: $white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+}
+
+.primary {
+  @extend .button;
+  background-color: $gk-orange;
 
   &:hover,
   &:focus {
     background-color: $white;
     color: $gk-red-orange;
+  }
+}
+
+.secondary {
+  @extend .button;
+  background-color: $white;
+  color: $gk-orange;
+
+  &:hover,
+  &:focus {
+    background-color: lighten($gk-orange, 40%);
   }
 }

@@ -1,8 +1,8 @@
 import styles from "./Button.module.scss";
 
-export default function Button({ children, onClick }) {
+export default function Button({ children, onClick, style = "primary" }) {
   return (
-    <button className={styles.button} onClick={onClick}>
+    <button className={`${styles[style]}`} onClick={onClick}>
       {children}
     </button>
   );

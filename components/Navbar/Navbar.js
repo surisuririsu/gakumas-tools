@@ -40,13 +40,14 @@ export default function Navbar() {
           Index
         </a>
       </div>
-      {status == "authenticated" && (
+      {status == "unauthenticated" ? (
+        <Button onClick={() => signIn("discord")}>Sign in with Discord</Button>
+      ) : (
         <div className={styles.avatar}>
-          <Image src={session.user.image} fill alt="" sizes="32px" />
+          {status == "authenticated" && (
+            <Image src={session.user.image} fill alt="" sizes="32px" />
+          )}
         </div>
-      )}
-      {status == "unauthenticated" && (
-        <Button onClick={() => signIn("discord")}>Sign in</Button>
       )}
     </nav>
   );
