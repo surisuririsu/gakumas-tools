@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useDrop } from "react-dnd";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { EntityTypes } from "@/utils/entities";
 import MemoryContext from "@/contexts/MemoryContext";
@@ -8,24 +9,40 @@ import styles from "./Trash.module.scss";
 export default function Trash() {
   const { setPItemIds, setSkillCardIds } = useContext(MemoryContext);
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
+
+  function clearEntity(entity) {
+    const setState =
+      entity.type == EntityTypes.SKILL_CARD ? setSkillCardIds : setPItemIds;
+    setState((cur) => {
+      const next = [...cur];
+      next[entity.index] = 0;
+      return next;
+    });
+  }
+
+  const [, dropRef] = useDrop(() => ({
+    accept: [EntityTypes.SKILL_CARD, EntityTypes.P_ITEM],
+    drop: (item) => {
+      if (item.widget != "dex") {
+        clearEntity(item);
+      }
+    },
+  }));
+
   function handleClick(e) {
     e.stopPropagation();
     if (!selectedEntity) return;
     if (selectedEntity.widget == "memory_editor") {
-      const setState =
-        selectedEntity.type == EntityTypes.SKILL_CARD
-          ? setSkillCardIds
-          : setPItemIds;
-      setState((cur) => {
-        const next = [...cur];
-        next[selectedEntity.index] = 0;
-        return next;
-      });
+      clearEntity(item);
     }
     setSelectedEntity(null);
   }
   return (
-    <button className={styles.trash} onClick={(e) => handleClick(e)}>
+    <button
+      className={styles.trash}
+      ref={dropRef}
+      onClick={(e) => handleClick(e)}
+    >
       <FaRegTrashCan />
     </button>
   );

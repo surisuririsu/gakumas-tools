@@ -45,7 +45,7 @@ export default function Dex() {
       <div className={styles.result}>
         {entities.map((entity, index) => (
           <EntityIcon
-            key={entity.id}
+            key={`${entity.type}_${entity.id}`}
             type={
               activeTab == "Skill cards"
                 ? EntityTypes.SKILL_CARD
