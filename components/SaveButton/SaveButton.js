@@ -1,11 +1,11 @@
 import { useSession, signIn } from "next-auth/react";
 import Button from "@/components/Button";
 
-export default function SaveButton() {
+export default function SaveButton({ onSave }) {
   const { data: session, status } = useSession();
 
   if (status == "authenticated") {
-    return <Button>Save</Button>;
+    return <Button onClick={onSave}>Save</Button>;
   }
 
   if (status == "unauthenticated") {

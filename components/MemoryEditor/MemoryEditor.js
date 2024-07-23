@@ -20,8 +20,10 @@ export default function MemoryEditor() {
     setParams,
     pItemIds,
     skillCardIds,
+    save,
   } = useContext(MemoryContext);
   const { setSelectedEntity } = useContext(SelectionContext);
+
   return (
     <div
       className={styles.memoryEditor}
@@ -42,7 +44,7 @@ export default function MemoryEditor() {
       <label>Skill cards</label>
       <StageSkillCards skillCardIds={skillCardIds} />
       <div className={styles.save}>
-        <SaveButton />
+        <SaveButton onSave={save} />
       </div>
       <Trash />
     </div>

@@ -56,7 +56,7 @@ export default function ProduceRankCalculator() {
       const targetRating =
         TARGET_RATING_BY_RANK[rank] - placeRating - paramRating;
       for (let { threshold, base, multiplier } of REVERSE_RATING_REGIMES) {
-        if (threshold && targetRating > threshold) {
+        if (targetRating > threshold) {
           return {
             rank,
             score: Math.floor(base + (targetRating - threshold) / multiplier),
@@ -97,7 +97,7 @@ export default function ProduceRankCalculator() {
       <div className={styles.bonus}>Bonus parameter: +{placeParamBonus}</div>
       <label>Parameters</label>
       <ParametersInput parameters={params} onChange={setParams} />
-      {!!params.every((p) => p != null) && (
+      {!!params.every((p) => !!p) && (
         <>
           <label>Target exam scores</label>
           <table className={styles.result}>

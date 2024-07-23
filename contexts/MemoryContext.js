@@ -6,8 +6,16 @@ export function MemoryContextProvider({ children }) {
   const [name, setName] = useState(null);
   const [pIdolId, setPIdolId] = useState(null);
   const [params, setParams] = useState([null, null, null]);
-  const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
+  const [pItemIds, setPItemIds] = useState([0, 0, 0]);
   const [skillCardIds, setSkillCardIds] = useState([0, 0, 0, 0, 0, 0]);
+
+  async function save() {
+    const result = await fetch("/api/memory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, pIdolId, params, pItemIds, skillCardIds }),
+    });
+  }
 
   return (
     <MemoryContext.Provider
@@ -22,6 +30,7 @@ export function MemoryContextProvider({ children }) {
         setPItemIds,
         skillCardIds,
         setSkillCardIds,
+        save,
       }}
     >
       {children}

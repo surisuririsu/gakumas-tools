@@ -9,6 +9,7 @@ import styles from "./Main.module.scss";
 export default function Home() {
   const { showProduceRankCalculator, showMemoryEditor, showDex } =
     useContext(WorkspaceContext);
+
   return (
     <main className={styles.main}>
       {showProduceRankCalculator && (
