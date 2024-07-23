@@ -17,14 +17,14 @@ export default function Home() {
           <ProduceRankCalculator />
         </Widget>
       )}
-      {showMemoryEditor && (
-        <Widget title="Memory Editor" fill>
-          <MemoryEditor />
-        </Widget>
-      )}
       {showDex && (
         <Widget title="Index">
           <Dex />
+        </Widget>
+      )}
+      {showMemoryEditor && (
+        <Widget title="Memory Editor" fill>
+          <MemoryEditor />
         </Widget>
       )}
     </main>

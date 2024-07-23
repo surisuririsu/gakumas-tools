@@ -4,6 +4,7 @@ $gk-red-orange: #ff7600;
 $vocal: #f23584;
 $dance: #1c85ed;
 $visual: #f7b12e;
+$stamina: #00d35b;
 
 $white: #fefefe;
 $gray-extra-light: #eee;
@@ -11,6 +12,7 @@ $gray-light: #ccc;
 $gray-dark: #666;
 $black: #111;
 
-$red-light: #f9a;
-$red-medium: #f67;
-$red-dark: #b24;
+$red: #f67;
+$red-extra-light: lighten($red, 20%);
+$red-light: lighten($red, 10%);
+$red-dark: darken($red, 10%);

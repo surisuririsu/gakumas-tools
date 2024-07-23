@@ -29,7 +29,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=10bc7f0ccaeda48b0c8d33c96e8427abeb77243e"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c6689f7c78fb587cff0abda6b0d3d0483a276a1"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
@@ -2086,10 +2086,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=10bc7f0ccaeda48b0c8d33c96e8427abeb77243e", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-4c6e00f58f-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=1c6689f7c78fb587cff0abda6b0d3d0483a276a1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-c894ba4f6e-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=10bc7f0ccaeda48b0c8d33c96e8427abeb77243e"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c6689f7c78fb587cff0abda6b0d3d0483a276a1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2101,7 +2101,7 @@ const RAW_RUNTIME_STATE =
           ["gakumas-tools", "workspace:."],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=10bc7f0ccaeda48b0c8d33c96e8427abeb77243e"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c6689f7c78fb587cff0abda6b0d3d0483a276a1"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\

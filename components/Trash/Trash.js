@@ -20,26 +20,29 @@ export default function Trash() {
     });
   }
 
-  const [, dropRef] = useDrop(() => ({
+  const [{ hover }, dropRef] = useDrop(() => ({
     accept: [EntityTypes.SKILL_CARD, EntityTypes.P_ITEM],
     drop: (item) => {
       if (item.widget != "dex") {
         clearEntity(item);
       }
     },
+    collect: (monitor) => ({
+      hover: !!monitor.isOver() && !!monitor.canDrop(),
+    }),
   }));
 
   function handleClick(e) {
     e.stopPropagation();
     if (!selectedEntity) return;
     if (selectedEntity.widget == "memory_editor") {
-      clearEntity(item);
+      clearEntity(selectedEntity);
     }
     setSelectedEntity(null);
   }
   return (
     <button
-      className={styles.trash}
+      className={`${styles.trash} ${hover ? styles.hover : ""}`}
       ref={dropRef}
       onClick={(e) => handleClick(e)}
     >

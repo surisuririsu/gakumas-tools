@@ -14,15 +14,16 @@
       1: $vocal,
       2: $dance,
       3: $visual,
+      4: $stamina,
     );
 
     @each $i, $param-color in $inputs {
       &:nth-child(#{$i}) {
         border-color: $param-color;
-        background-color: lighten($param-color, 35%);
+        background-color: scale-color($param-color, $lightness: 80%);
         color: $param-color;
         &::placeholder {
-          color: lighten($param-color, 15%);
+          color: scale-color($param-color, $alpha: -50%);
         }
       }
     }

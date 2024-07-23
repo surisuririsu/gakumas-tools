@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Idols, PIdols } from "gakumas-data";
 import IconSelect from "@/components/IconSelect";
+import PIdol from "@/components/PIdol";
 import styles from "./PIdolSelect.module.scss";
 
 const PLANS = ["sense", "logic"];
@@ -12,8 +13,11 @@ export default function PIdolSelect({ selected, onChange }) {
 
   return (
     <div className={styles.pIdolSelect}>
-      {expanded ? (
-        <div>
+      <button className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
+        <PIdol pIdolId={selected} />
+      </button>
+      {expanded && (
+        <div className={styles.expander}>
           <div className={styles.filters}>
             <IconSelect
               options={PLANS.map((alias) => ({
@@ -32,26 +36,22 @@ export default function PIdolSelect({ selected, onChange }) {
               onChange={setIdol}
             />
           </div>
-          <div>
+          <div className={styles.result}>
             {PIdols.getFiltered({ plans: [plan], idolIds: [idol] }).map(
               (pIdol) => (
-                <a
+                <button
                   key={pIdol.id}
-                  className={styles.option}
+                  className={styles.pIdolButton}
                   onClick={() => {
                     onChange(pIdol.id);
                     setExpanded(false);
                   }}
                 >
-                  {pIdol.rarity} {pIdol.title}
-                </a>
+                  <PIdol pIdolId={pIdol.id} />
+                </button>
               )
             )}
           </div>
-        </div>
-      ) : (
-        <div className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
-          {selected}
         </div>
       )}
     </div>

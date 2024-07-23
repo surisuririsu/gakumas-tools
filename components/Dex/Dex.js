@@ -30,6 +30,7 @@ export default function Dex() {
     const nonSignatureEntities = Entities.getFiltered({
       rarities: ["R", "SR", "SSR"],
       plans: [pIdol.plan, "free"],
+      modes: ["stage"],
       sourceTypes: ["produce", "support"],
     }).sort(compareFn);
     entities = signatureEntities.concat(nonSignatureEntities);

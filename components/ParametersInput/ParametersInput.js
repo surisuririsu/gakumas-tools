@@ -4,10 +4,10 @@ const PARAMETER_NAMES = ["Vocal", "Dance", "Visual"];
 const MIN = 0;
 const MAX = 1500;
 
-export default function ParametersInput({ parameters, onChange }) {
+export default function ParametersInput({ parameters, onChange, withStamina }) {
   return (
     <div className={styles.parameters}>
-      {PARAMETER_NAMES.map((name, i) => (
+      {PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []).map((name, i) => (
         <input
           key={name}
           type="number"

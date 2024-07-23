@@ -9,6 +9,7 @@
   border-radius: 8px;
   overflow: hidden;
   cursor: grab;
+  transition: 0.2s box-shadow;
 
   &:hover {
     box-shadow: 0 0 4px $gk-orange;

@@ -5,7 +5,7 @@ const MemoryContext = createContext();
 export function MemoryContextProvider({ children }) {
   const [name, setName] = useState(null);
   const [pIdolId, setPIdolId] = useState(null);
-  const [params, setParams] = useState([null, null, null]);
+  const [params, setParams] = useState([null, null, null, null]);
   const [pItemIds, setPItemIds] = useState([0, 0, 0]);
   const [skillCardIds, setSkillCardIds] = useState([0, 0, 0, 0, 0, 0]);
 

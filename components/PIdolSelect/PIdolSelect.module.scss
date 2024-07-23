@@ -3,14 +3,40 @@
 .pIdolSelect {
   display: flex;
   gap: 4px;
+  user-select: none;
 
   .pIdol {
-    width: 96px;
-    height: 128px;
+    height: fit-content;
+    border: none;
     border: 4px solid $gray-light;
-    border-radius: 4px;
-    background-color: $gray-extra-light;
+    border-radius: 8px;
+    overflow: hidden;
+    outline: none;
     cursor: pointer;
+  }
+
+  .expander {
+    margin-left: 8px;
+    border: 2px solid $gray-light;
+    border-radius: 4px;
+    padding: 4px;
+  }
+
+  .result {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .pIdolButton {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.2s all;
+
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 
   .filters {

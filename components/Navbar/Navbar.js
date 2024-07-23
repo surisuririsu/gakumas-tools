@@ -28,16 +28,16 @@ export default function Navbar() {
           Produce Rank Calculator
         </a>
         <a
-          className={showMemoryEditor ? styles.active : ""}
-          onClick={() => setShowMemoryEditor(!showMemoryEditor)}
-        >
-          Memory Editor
-        </a>
-        <a
           className={showDex ? styles.active : ""}
           onClick={() => setShowDex(!showDex)}
         >
           Index
+        </a>
+        <a
+          className={showMemoryEditor ? styles.active : ""}
+          onClick={() => setShowMemoryEditor(!showMemoryEditor)}
+        >
+          Memory Editor
         </a>
       </div>
       {status == "unauthenticated" ? (
