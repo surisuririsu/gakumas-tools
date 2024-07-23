@@ -1,0 +1,38 @@
+@import "@/constants";
+
+.memorySummary {
+  display: flex;
+  border: none;
+  background-color: transparent;
+  color: $gk-orange;
+  cursor: pointer;
+  transition: 0.2s all;
+
+  &:hover {
+    background-color: lighten($gk-orange, 15%);
+    color: $white;
+  }
+
+  .details {
+    flex: 1;
+    padding: 4px;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: 600;
+  }
+
+  .row {
+    display: flex;
+    gap: 2px;
+
+    img {
+      border: 2px solid $gray-light;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  }
+}

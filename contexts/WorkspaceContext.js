@@ -7,8 +7,9 @@ export function WorkspaceContextProvider({ children }) {
   const { status } = useSession();
   const [showProduceRankCalculator, setShowProduceRankCalculator] =
     useState(false);
-  const [showMemoryEditor, setShowMemoryEditor] = useState(false);
   const [showDex, setShowDex] = useState(false);
+  const [showMemoryEditor, setShowMemoryEditor] = useState(false);
+  const [showMemories, setShowMemories] = useState(false);
 
   useEffect(() => {
     if (status == "authenticated") {
@@ -16,8 +17,9 @@ export function WorkspaceContextProvider({ children }) {
         const response = await fetch("/api/workspace");
         const data = await response.json();
         setShowProduceRankCalculator(!!data.showProduceRankCalculator);
-        setShowMemoryEditor(!!data.showMemoryEditor);
         setShowDex(!!data.showDex);
+        setShowMemoryEditor(!!data.showMemoryEditor);
+        setShowMemories(!!data.showMemories);
       }
       fetchData();
     }
@@ -31,24 +33,27 @@ export function WorkspaceContextProvider({ children }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             showProduceRankCalculator,
-            showMemoryEditor,
             showDex,
+            showMemoryEditor,
+            showMemories,
           }),
         });
       }
       fetchData();
     }
-  }, [showProduceRankCalculator, showMemoryEditor, showDex]);
+  }, [showProduceRankCalculator, showDex, showMemoryEditor, showMemories]);
 
   return (
     <WorkspaceContext.Provider
       value={{
         showProduceRankCalculator,
         setShowProduceRankCalculator,
-        showMemoryEditor,
-        setShowMemoryEditor,
         showDex,
         setShowDex,
+        showMemoryEditor,
+        setShowMemoryEditor,
+        showMemories,
+        setShowMemories,
       }}
     >
       {children}
