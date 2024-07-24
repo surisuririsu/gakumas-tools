@@ -36,7 +36,12 @@ export default function MemorySummary({ memory }) {
             .filter((p) => !!p)
             .map(PItems.getById)
             .map((pItem) => (
-              <Image src={pItem.icon} width={32} />
+              <Image
+                key={pItem.id}
+                src={pItem.icon}
+                width={32}
+                alt={pItem.name}
+              />
             ))}
         </div>
         <div className={styles.row}>
@@ -44,7 +49,12 @@ export default function MemorySummary({ memory }) {
             .filter((s) => !!s)
             .map(SkillCards.getById)
             .map((skillCard) => (
-              <Image src={skillCard.icon} width={48} />
+              <Image
+                key={skillCard.id}
+                src={skillCard.icon}
+                width={48}
+                alt={skillCard.name}
+              />
             ))}
         </div>
       </div>

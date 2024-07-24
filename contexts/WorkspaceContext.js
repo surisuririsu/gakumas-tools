@@ -1,10 +1,11 @@
 import { createContext, useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+
+const WORKSPACE_STORAGE_KEY = "gakumas-tools.workspace";
 
 const WorkspaceContext = createContext();
 
 export function WorkspaceContextProvider({ children }) {
-  const { status } = useSession();
+  const [loaded, setLoaded] = useState(false);
   const [showProduceRankCalculator, setShowProduceRankCalculator] =
     useState(false);
   const [showDex, setShowDex] = useState(false);
@@ -12,35 +13,28 @@ export function WorkspaceContextProvider({ children }) {
   const [showMemories, setShowMemories] = useState(false);
 
   useEffect(() => {
-    if (status == "authenticated") {
-      async function fetchData() {
-        const response = await fetch("/api/workspace");
-        const data = await response.json();
-        setShowProduceRankCalculator(!!data.showProduceRankCalculator);
-        setShowDex(!!data.showDex);
-        setShowMemoryEditor(!!data.showMemoryEditor);
-        setShowMemories(!!data.showMemories);
-      }
-      fetchData();
+    const workspaceString = localStorage.getItem(WORKSPACE_STORAGE_KEY);
+    if (workspaceString) {
+      const data = JSON.parse(workspaceString);
+      setShowProduceRankCalculator(!!data.showProduceRankCalculator);
+      setShowDex(!!data.showDex);
+      setShowMemoryEditor(!!data.showMemoryEditor);
+      setShowMemories(!!data.showMemories);
     }
-  }, [status]);
+    setLoaded(true);
+  }, []);
 
   useEffect(() => {
-    if (status == "authenticated") {
-      async function fetchData() {
-        const response = await fetch("/api/workspace", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            showProduceRankCalculator,
-            showDex,
-            showMemoryEditor,
-            showMemories,
-          }),
-        });
-      }
-      fetchData();
-    }
+    if (!loaded) return;
+    localStorage.setItem(
+      WORKSPACE_STORAGE_KEY,
+      JSON.stringify({
+        showProduceRankCalculator,
+        showDex,
+        showMemoryEditor,
+        showMemories,
+      })
+    );
   }, [showProduceRankCalculator, showDex, showMemoryEditor, showMemories]);
 
   return (
