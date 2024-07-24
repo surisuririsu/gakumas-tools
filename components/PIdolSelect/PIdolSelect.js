@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Idols, PIdols } from "gakumas-data";
 import IconSelect from "@/components/IconSelect";
 import PIdol from "@/components/PIdol";
@@ -10,6 +10,13 @@ export default function PIdolSelect({ selected, onChange }) {
   const [expanded, setExpanded] = useState(!selected);
   const [plan, setPlan] = useState("sense");
   const [idol, setIdol] = useState(1);
+
+  useEffect(() => {
+    const pIdol = PIdols.getById(selected);
+    if (!pIdol) return;
+    setPlan(pIdol.plan);
+    setIdol(pIdol.idolId);
+  }, [selected]);
 
   return (
     <div className={styles.pIdolSelect}>

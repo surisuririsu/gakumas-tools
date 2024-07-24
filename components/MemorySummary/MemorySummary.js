@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import Image from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
+import Button from "@/components/Button";
 import PIdol from "@/components/PIdol";
 import MemoryContext from "@/contexts/MemoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -8,24 +9,25 @@ import { calculateContestPower } from "@/utils/contestPower";
 import styles from "./MemorySummary.module.scss";
 
 export default function MemorySummary({ memory }) {
-  const { setName, setPIdolId, setParams, setPItemIds, setSkillCardIds } =
-    useContext(MemoryContext);
-  const { setShowMemoryEditor } = useContext(WorkspaceContext);
+  const { setAll } = useContext(MemoryContext);
+  const { open } = useContext(WorkspaceContext);
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
 
   function editMemory() {
-    setName(name);
-    setPIdolId(pIdolId);
-    setParams(params);
-    setPItemIds(pItemIds);
-    setSkillCardIds(skillCardIds);
-    setShowMemoryEditor(true);
+    setAll(memory);
+    open("memoryEditor");
   }
 
   return (
-    <button className={styles.memorySummary} onClick={editMemory}>
-      <PIdol pIdolId={pIdolId} />
+    <div className={styles.memorySummary}>
+      <div className={styles.left}>
+        <PIdol pIdolId={pIdolId} />
+        <div className={styles.actions}>
+          <Button onClick={editMemory}>Edit</Button>
+        </div>
+      </div>
+
       <div className={styles.details}>
         <span className={styles.text}>
           <span>{name}</span>
@@ -58,6 +60,6 @@ export default function MemorySummary({ memory }) {
             ))}
         </div>
       </div>
-    </button>
+    </div>
   );
 }

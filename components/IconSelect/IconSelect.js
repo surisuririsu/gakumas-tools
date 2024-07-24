@@ -5,7 +5,7 @@ export default function IconSelect({ options, selected, onChange }) {
   return (
     <div className={styles.iconSelect}>
       {options.map(({ id, iconSrc }) => (
-        <div
+        <button
           key={id}
           className={`${styles.option} ${
             selected === id ? styles.selected : ""
@@ -20,7 +20,7 @@ export default function IconSelect({ options, selected, onChange }) {
               sizes="24px"
             />
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );

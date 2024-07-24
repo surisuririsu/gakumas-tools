@@ -8,27 +8,26 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Main.module.scss";
 
 export default function Home() {
-  const { showProduceRankCalculator, showDex, showMemoryEditor, showMemories } =
-    useContext(WorkspaceContext);
+  const { openWidgets } = useContext(WorkspaceContext);
 
   return (
     <main className={styles.main}>
-      {showProduceRankCalculator && (
+      {openWidgets.produceRankCalculator && (
         <Widget title="Produce Rank Calculator">
           <ProduceRankCalculator />
         </Widget>
       )}
-      {showDex && (
+      {openWidgets.dex && (
         <Widget title="Index">
           <Dex />
         </Widget>
       )}
-      {showMemoryEditor && (
+      {openWidgets.memoryEditor && (
         <Widget title="Memory Editor" fill>
           <MemoryEditor />
         </Widget>
       )}
-      {showMemories && (
+      {openWidgets.memories && (
         <Widget title="Memories">
           <Memories />
         </Widget>

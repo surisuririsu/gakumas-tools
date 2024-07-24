@@ -6,16 +6,17 @@
   user-select: none;
 
   .pIdol {
+    min-width: 89px;
     height: fit-content;
     border: none;
     border: 4px solid $gray-light;
     border-radius: 8px;
     overflow: hidden;
-    outline: none;
     cursor: pointer;
   }
 
   .expander {
+    min-width: 0;
     margin-left: 8px;
     border: 2px solid $gray-light;
     border-radius: 4px;
@@ -26,15 +27,16 @@
     display: flex;
     gap: 4px;
     padding: 4px;
+    overflow-x: auto;
   }
 
   .pIdolButton {
     border: none;
-    outline: none;
     cursor: pointer;
     transition: 0.2s all;
 
-    &:hover {
+    &:hover,
+    &:focus {
       transform: scale(1.05);
     }
   }

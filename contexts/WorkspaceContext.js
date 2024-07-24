@@ -6,20 +6,13 @@ const WorkspaceContext = createContext();
 
 export function WorkspaceContextProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
-  const [showProduceRankCalculator, setShowProduceRankCalculator] =
-    useState(false);
-  const [showDex, setShowDex] = useState(false);
-  const [showMemoryEditor, setShowMemoryEditor] = useState(false);
-  const [showMemories, setShowMemories] = useState(false);
+  const [openWidgets, setOpenWidgets] = useState({});
 
   useEffect(() => {
     const workspaceString = localStorage.getItem(WORKSPACE_STORAGE_KEY);
     if (workspaceString) {
       const data = JSON.parse(workspaceString);
-      setShowProduceRankCalculator(!!data.showProduceRankCalculator);
-      setShowDex(!!data.showDex);
-      setShowMemoryEditor(!!data.showMemoryEditor);
-      setShowMemories(!!data.showMemories);
+      if (data.openWidgets) setOpenWidgets(data.openWidgets);
     }
     setLoaded(true);
   }, []);
@@ -28,26 +21,29 @@ export function WorkspaceContextProvider({ children }) {
     if (!loaded) return;
     localStorage.setItem(
       WORKSPACE_STORAGE_KEY,
-      JSON.stringify({
-        showProduceRankCalculator,
-        showDex,
-        showMemoryEditor,
-        showMemories,
-      })
+      JSON.stringify({ openWidgets })
     );
-  }, [showProduceRankCalculator, showDex, showMemoryEditor, showMemories]);
+  }, [openWidgets]);
+
+  function open(widget) {
+    setOpenWidgets({ ...openWidgets, [widget]: true });
+  }
+
+  function close(widget) {
+    setOpenWidgets({ ...openWidgets, [widget]: false });
+  }
+
+  function toggle(widget) {
+    setOpenWidgets({ ...openWidgets, [widget]: !openWidgets[widget] });
+  }
 
   return (
     <WorkspaceContext.Provider
       value={{
-        showProduceRankCalculator,
-        setShowProduceRankCalculator,
-        showDex,
-        setShowDex,
-        showMemoryEditor,
-        setShowMemoryEditor,
-        showMemories,
-        setShowMemories,
+        openWidgets,
+        open,
+        close,
+        toggle,
       }}
     >
       {children}
