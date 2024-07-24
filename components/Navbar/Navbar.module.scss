@@ -10,6 +10,10 @@
 
   h1 {
     margin: 0 8px;
+
+    @media only screen and (max-width: 600px) {
+      display: none;
+    }
   }
 
   .links {
@@ -20,8 +24,10 @@
     align-items: stretch;
 
     a {
+      min-width: 48px;
       padding: 8px;
       display: flex;
+      justify-content: center;
       align-items: center;
       cursor: pointer;
       transition: all 0.2s;
