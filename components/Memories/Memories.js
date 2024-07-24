@@ -7,16 +7,11 @@ import styles from "./Memories.module.scss";
 
 export default function Memories() {
   const { status } = useSession();
-  const { getMemories } = useContext(DataContext);
-  const [memories, setMemories] = useState([]);
+  const { memories, fetchMemories } = useContext(DataContext);
 
   useEffect(() => {
     if (status == "authenticated") {
-      async function fetchData() {
-        const data = await getMemories();
-        setMemories(data);
-      }
-      fetchData();
+      fetchMemories();
     }
   }, [status]);
 

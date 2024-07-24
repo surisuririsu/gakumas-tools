@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { useSession, signIn } from "next-auth/react";
-import Button from "@/components/Button";
 import Input from "@/components/Input";
+import MemorySave from "@/components/MemorySave";
 import ParametersInput from "@/components/ParametersInput";
 import PIdolSelect from "@/components/PIdolSelect";
 import StagePItems from "@/components/StagePItems";
@@ -16,10 +15,7 @@ import {
 import styles from "./MemoryEditor.module.scss";
 
 export default function MemoryEditor() {
-  const { status } = useSession();
   const {
-    id,
-    setId,
     name,
     setName,
     pIdolId,
@@ -58,19 +54,7 @@ export default function MemoryEditor() {
       <StageSkillCards skillCardIds={skillCardIds} />
       <div>Cost: {skillCardCost}</div>
       <Trash />
-      <div className={styles.save}>
-        {status == "unauthenticated" && (
-          <Button onClick={() => signIn("discord")}>
-            Sign in with Discord to save
-          </Button>
-        )}
-        {status == "authenticated" && (
-          <>
-            <Button onClick={() => save(false)}>Save</Button>
-            {id && <Button onClick={() => save(true)}>Save as new</Button>}
-          </>
-        )}
-      </div>
+      <MemorySave />
     </div>
   );
 }

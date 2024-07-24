@@ -1,23 +1,22 @@
-import { createContext, useRef } from "react";
+import { createContext, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const DataContext = createContext();
 
 export function DataContextProvider({ children }) {
   const { status } = useSession();
-  const memories = useRef(null);
+  const [memories, setMemories] = useState([]);
 
-  async function getMemories() {
-    if (status == "authenticated" && !memories.current) {
+  async function fetchMemories() {
+    if (status == "authenticated") {
       const response = await fetch("/api/memory");
       const data = await response.json();
-      memories.current = data.memories;
+      setMemories(data.memories);
     }
-    return memories.current;
   }
 
   return (
-    <DataContext.Provider value={{ getMemories }}>
+    <DataContext.Provider value={{ memories, fetchMemories }}>
       {children}
     </DataContext.Provider>
   );

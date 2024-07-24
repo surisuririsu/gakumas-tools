@@ -31,3 +31,11 @@
     background-color: lighten($gk-orange, 40%);
   }
 }
+
+.disabled {
+  @extend .button;
+  border-color: $gray-light;
+  background-color: $gray-extra-light;
+  color: $gray;
+  cursor: default;
+}
