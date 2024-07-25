@@ -43,7 +43,16 @@ export default function MemoryImporter() {
 
             const powerCandidates = extractPower(await engWhitePromise);
             const params = extractParams(await engBlackPromise);
+
+            const items = [];
+            while (items.length < 3) {
+              items.push(0);
+            }
+
             const cards = extractCards(await jpnBlackPromise);
+            while (cards.length < 6) {
+              cards.push(0);
+            }
 
             const calculatedPower = calculateContestPower(params, [], cards);
             const flag = !powerCandidates.includes(calculatedPower);
@@ -51,10 +60,11 @@ export default function MemoryImporter() {
             const memory = {
               name: `${Math.max(...powerCandidates)}${flag ? " (FIXME)" : ""}`,
               pIdolId: cards
+                .filter((c) => !!c)
                 .map(SkillCards.getById)
                 .find((card) => card.pIdolId)?.pIdolId,
               params,
-              pItemIds: [],
+              pItemIds: items,
               skillCardIds: cards,
             };
 
