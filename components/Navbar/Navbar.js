@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Image from "next/image";
 import { useSession, signIn } from "next-auth/react";
-import { FaCalculator, FaBook, FaBrain, FaPenToSquare } from "react-icons/fa6";
+import { FaCalculator, FaBook, FaFilm, FaPen } from "react-icons/fa6";
 import Button from "@/components/Button";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Navbar.module.scss";
@@ -11,11 +11,11 @@ const WIDGET_NAMES = {
   dex: <FaBook />,
   memoryEditor: (
     <>
-      <FaBrain />
-      <FaPenToSquare />
+      <FaFilm />
+      <FaPen />
     </>
   ),
-  memories: <FaBrain />,
+  memories: <FaFilm />,
 };
 
 export default function Navbar() {
@@ -40,7 +40,13 @@ export default function Navbar() {
       ) : (
         <div className={styles.avatar}>
           {status == "authenticated" && (
-            <Image src={session.user.image} fill alt="" sizes="32px" />
+            <Image
+              src={session.user.image}
+              fill
+              alt=""
+              sizes="32px"
+              draggable={false}
+            />
           )}
         </div>
       )}

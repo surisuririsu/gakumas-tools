@@ -32,6 +32,18 @@
   }
 }
 
+.red {
+  @extend .button;
+  border-color: $red-dark;
+  background-color: $red-dark;
+
+  &:hover,
+  &:focus {
+    background-color: $red-extra-light;
+    color: $red-dark;
+  }
+}
+
 .disabled {
   @extend .button;
   border-color: $gray-light;
