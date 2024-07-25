@@ -11,6 +11,8 @@ import {
   extractCards,
   getBlackCanvas,
   getWhiteCanvas,
+  extractItems,
+  getItemImageData,
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporter.module.scss";
 
@@ -20,10 +22,12 @@ export default function MemoryImporter() {
   const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
-    const engWorker = await createWorker("eng", 1);
-    const jpnWorker = await createWorker("jpn", 1);
-    const files = Array.from(e.target.files);
+    let engWorker, jpnWorker;
+    const engWorkerPromise = createWorker("eng", 1);
+    const jpnWorkerPromise = createWorker("jpn", 1);
+    const itemImageDataPromise = getItemImageData();
 
+    const files = Array.from(e.target.files);
     setTotal(files.length);
     setProgress(0);
 
@@ -37,24 +41,31 @@ export default function MemoryImporter() {
             const blackCanvas = getBlackCanvas(img);
             const whiteCanvas = getWhiteCanvas(img);
 
+            engWorker = await engWorkerPromise;
+            jpnWorker = await jpnWorkerPromise;
+
             const engWhitePromise = engWorker.recognize(whiteCanvas);
             const engBlackPromise = engWorker.recognize(blackCanvas);
             const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
 
             const powerCandidates = extractPower(await engWhitePromise);
             const params = extractParams(await engBlackPromise);
+            const items = extractItems(
+              await jpnBlackPromise,
+              img,
+              blackCanvas,
+              await itemImageDataPromise
+            );
+            const cards = extractCards(await jpnBlackPromise);
 
-            const items = [];
             while (items.length < 3) {
               items.push(0);
             }
-
-            const cards = extractCards(await jpnBlackPromise);
             while (cards.length < 6) {
               cards.push(0);
             }
 
-            const calculatedPower = calculateContestPower(params, [], cards);
+            const calculatedPower = calculateContestPower(params, items, cards);
             const flag = !powerCandidates.includes(calculatedPower);
 
             const memory = {
@@ -75,16 +86,15 @@ export default function MemoryImporter() {
     );
 
     Promise.all(promises).then(async (res) => {
-      const fetchPromise = fetch("/api/memory", {
+      engWorker.terminate();
+      jpnWorker.terminate();
+
+      const result = await fetch("/api/memory", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ memories: res }),
       });
 
-      await engWorker.terminate();
-      await jpnWorker.terminate();
-
-      const result = await fetchPromise;
       fetchMemories();
     });
   }
