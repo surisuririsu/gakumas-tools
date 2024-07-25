@@ -10,17 +10,22 @@ import {
   getBlackCanvas,
   getWhiteCanvas,
 } from "@/utils/memoryFromImage";
+import styles from "./MemoryImporter.module.scss";
 
-export default function MemoryUploader() {
-  const [progress, setProgress] = useState(0);
+export default function MemoryImporter() {
+  const [total, setTotal] = useState("?");
+  const [progress, setProgress] = useState(null);
   const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
     const engWorker = await createWorker("eng", 1);
     const jpnWorker = await createWorker("jpn", 1);
-    const files = e.target.files;
+    const files = Array.from(e.target.files);
 
-    const promises = Array.from(files).map(
+    setTotal(files.length);
+    setProgress(0);
+
+    const promises = files.map(
       (file) =>
         new Promise((resolve, reject) => {
           const blobURL = URL.createObjectURL(file);
@@ -73,9 +78,15 @@ export default function MemoryUploader() {
   }
 
   return (
-    <div>
-      {progress}
+    <div className={styles.memoryImporter}>
       <input type="file" id="input" multiple onChange={handleFiles} />
+      <div className={styles.progress}>
+        {progress != null && (
+          <>
+            Progress: {progress}/{total}
+          </>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,40 @@
+@import "@/constants";
+
 .memories {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  .header {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    border-bottom: 2px solid $gray-light;
+
+    button {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 24px;
+      background-color: $gray-extra-light;
+      color: $gk-orange;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.2s all;
+
+      &:hover {
+        box-shadow: 0 0 4px $gk-orange;
+      }
+    }
+  }
+
+  .list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
 }

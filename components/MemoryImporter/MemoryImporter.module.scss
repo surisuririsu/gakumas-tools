@@ -1,0 +1,14 @@
+@import "@/constants";
+
+.memoryImporter {
+  input {
+    border-radius: 8px;
+    padding: 16px;
+    background-color: lighten($gk-orange, 40%);
+  }
+
+  .progress {
+    height: 16px;
+    color: $gk-orange;
+  }
+}
