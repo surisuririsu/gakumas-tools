@@ -18,9 +18,9 @@ export default function Memories() {
   return (
     <div className={styles.memories}>
       {status == "authenticated" ? (
-        memories.map((memory) => (
-          <MemorySummary key={memory._id} memory={memory} />
-        ))
+        memories
+          .reverse()
+          .map((memory) => <MemorySummary key={memory._id} memory={memory} />)
       ) : (
         <Button onClick={() => signIn("discord")}>
           Sign in with Discord to show memories

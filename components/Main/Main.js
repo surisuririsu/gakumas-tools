@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Dex from "@/components/Dex";
 import Memories from "@/components/Memories";
 import MemoryEditor from "@/components/MemoryEditor";
+import MemoryUploader from "@/components/MemoryUploader";
 import ProduceRankCalculator from "@/components/ProduceRankCalculator";
 import Widget from "@/components/Widget";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -32,6 +33,7 @@ export default function Home() {
           <Memories />
         </Widget>
       )}
+      <MemoryUploader />
     </main>
   );
 }
