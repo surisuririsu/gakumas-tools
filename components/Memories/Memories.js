@@ -71,7 +71,11 @@ export default function Memories() {
             {action == "delete" && (
               <div className={styles.delete}>
                 {selectedMemoryIds.length} memories selected{" "}
-                <Button style="red" onClick={deleteMemories}>
+                <Button
+                  style="red"
+                  onClick={deleteMemories}
+                  disabled={!selectedMemoryIds.length}
+                >
                   Delete
                 </Button>
               </div>
