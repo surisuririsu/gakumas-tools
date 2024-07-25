@@ -1,6 +1,8 @@
 @import "@/constants";
 
 .memorySummary {
+  min-width: 0;
+  flex: 1;
   display: flex;
   transition: 0.2s all;
 

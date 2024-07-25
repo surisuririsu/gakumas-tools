@@ -14,7 +14,13 @@ export default function EntityDetails({ type, id }) {
   return (
     <div className={styles.entityDetails}>
       {entity ? (
-        <Image src={entity.details} fill alt={entity.name} sizes="400px" />
+        <Image
+          src={entity.details}
+          fill
+          alt={entity.name}
+          sizes="400px"
+          draggable={false}
+        />
       ) : (
         <div className={styles.placeholder}>
           <FaRegRectangleList />
