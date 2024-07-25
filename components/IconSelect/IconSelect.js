@@ -18,6 +18,7 @@ export default function IconSelect({ options, selected, onChange }) {
               alt=""
               onClick={() => onChange(id)}
               sizes="24px"
+              draggable={false}
             />
           </div>
         </button>

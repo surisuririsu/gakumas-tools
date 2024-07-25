@@ -43,6 +43,7 @@ export default function MemorySummary({ memory }) {
                 src={pItem.icon}
                 width={32}
                 alt={pItem.name}
+                draggable={false}
               />
             ))}
         </div>
@@ -56,6 +57,7 @@ export default function MemorySummary({ memory }) {
                 src={skillCard.icon}
                 width={48}
                 alt={skillCard.name}
+                draggable={false}
               />
             ))}
         </div>

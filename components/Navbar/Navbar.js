@@ -40,7 +40,13 @@ export default function Navbar() {
       ) : (
         <div className={styles.avatar}>
           {status == "authenticated" && (
-            <Image src={session.user.image} fill alt="" sizes="32px" />
+            <Image
+              src={session.user.image}
+              fill
+              alt=""
+              sizes="32px"
+              draggable={false}
+            />
           )}
         </div>
       )}
