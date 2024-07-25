@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
 import { SkillCards } from "gakumas-data";
+import { FaCircleQuestion } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
+import IconButton from "@/components/IconButton";
 import DataContext from "@/contexts/DataContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import {
@@ -79,7 +81,20 @@ export default function MemoryImporter() {
 
   return (
     <div className={styles.memoryImporter}>
-      <input type="file" id="input" multiple onChange={handleFiles} />
+      <div className={styles.top}>
+        <input type="file" id="input" multiple onChange={handleFiles} />
+        <IconButton
+          icon={FaCircleQuestion}
+          onClick={() =>
+            alert(
+              "Import memories from screenshots.\n" +
+                "Contest power, parameters, P-items, and names of skill cards must be visible in each screenshot.\n\n" +
+                "Some memories may fail to parse, and require fixing after import.\n" +
+                "Those will be labeled with (FIXME) in the name."
+            )
+          }
+        />
+      </div>
       <div className={styles.progress}>
         {progress != null && (
           <>

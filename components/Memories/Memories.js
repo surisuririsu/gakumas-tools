@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa6";
 import { useSession, signIn } from "next-auth/react";
 import Button from "@/components/Button";
+import IconButton from "@/components/IconButton";
 import MemoryImporter from "@/components//MemoryImporter";
 import MemorySummary from "@/components/MemorySummary";
 import DataContext from "@/contexts/DataContext";
@@ -16,12 +17,27 @@ export default function Memories() {
   const { status } = useSession();
   const { memories, fetchMemories } = useContext(DataContext);
   const [action, setAction] = useState(null);
+  const [selectedMemories, setSelectedMemories] = useState({});
+
+  const selectedMemoryIds = Object.keys(selectedMemories).filter(
+    (s) => selectedMemories[s]
+  );
 
   useEffect(() => {
     if (status == "authenticated") {
       fetchMemories();
     }
   }, [status]);
+
+  async function deleteMemories() {
+    const result = await fetch("/api/memory/bulk_delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: selectedMemoryIds }),
+    });
+    fetchMemories();
+    setSelectedMemories({});
+  }
 
   return (
     <div className={styles.memories}>
@@ -30,28 +46,57 @@ export default function Memories() {
           <div className={styles.header}>
             {action ? (
               <div>
-                <button onClick={() => setAction(null)}>
-                  <FaCircleXmark />
-                </button>
+                <IconButton
+                  icon={FaCircleXmark}
+                  onClick={() => setAction(null)}
+                />
               </div>
             ) : (
               <>
-                <button onClick={() => setAction("search")}>
-                  <FaMagnifyingGlass />
-                </button>
-                <button onClick={() => setAction("import")}>
-                  <FaFileImport />
-                </button>
-                <button onClick={() => setAction("delete")}>
-                  <FaRegTrashCan />
-                </button>
+                <IconButton
+                  icon={FaMagnifyingGlass}
+                  onClick={() => setAction("search")}
+                />
+                <IconButton
+                  icon={FaFileImport}
+                  onClick={() => setAction("import")}
+                />
+                <IconButton
+                  icon={FaRegTrashCan}
+                  onClick={() => setAction("delete")}
+                />
               </>
             )}
             {action == "import" && <MemoryImporter />}
+            {action == "delete" && (
+              <div className={styles.delete}>
+                {selectedMemoryIds.length} memories selected{" "}
+                <Button style="red" onClick={deleteMemories}>
+                  Delete
+                </Button>
+              </div>
+            )}
           </div>
           <div className={styles.list}>
-            {memories.reverse().map((memory) => (
-              <MemorySummary key={memory._id} memory={memory} />
+            {memories.map((memory) => (
+              <div key={memory._id} className={styles.memoryTile}>
+                {action == "delete" && (
+                  <div className={styles.check}>
+                    <input
+                      type="checkbox"
+                      checked={selectedMemories[memory._id] || false}
+                      onChange={(e) =>
+                        setSelectedMemories((prev) => ({
+                          ...prev,
+                          [memory._id]: e.target.checked,
+                        }))
+                      }
+                      readOnly
+                    />
+                  </div>
+                )}
+                <MemorySummary memory={memory} />
+              </div>
             ))}
           </div>
         </>

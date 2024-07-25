@@ -1,10 +1,25 @@
 @import "@/constants";
 
 .memoryImporter {
-  input {
-    border-radius: 8px;
-    padding: 16px;
-    background-color: lighten($gk-orange, 40%);
+  flex: 1;
+  min-width: 0;
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    input {
+      flex: 1;
+      border-radius: 8px;
+      padding: 16px;
+      background-color: lighten($gk-orange, 40%);
+    }
+
+    button {
+      width: 32px;
+      height: 32px;
+    }
   }
 
   .progress {

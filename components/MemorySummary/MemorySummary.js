@@ -41,7 +41,7 @@ export default function MemorySummary({ memory }) {
               <Image
                 key={pItem.id}
                 src={pItem.icon}
-                width={32}
+                width={30}
                 alt={pItem.name}
                 draggable={false}
               />
@@ -55,7 +55,7 @@ export default function MemorySummary({ memory }) {
               <Image
                 key={skillCard.id}
                 src={skillCard.icon}
-                width={48}
+                width={40}
                 alt={skillCard.name}
                 draggable={false}
               />
