@@ -19,10 +19,22 @@ function getPreprocessedCanvas(img, textColorFn) {
   return canvas;
 }
 
+// export function getCardCanvas(img) {
+//   return getPreprocessedCanvas(img, (rgb) => {
+//     // const average = rgb.reduce((acc, cur) => acc + cur, 0) / 3;
+//     const [r, g, b] = rgb;
+//     return r > 70 && r < 100 && g > 76 && g < 106 && b > 93 && b < 123;
+//   });
+// }
+
 export function getBlackCanvas(img) {
   return getPreprocessedCanvas(img, (rgb) => {
     const average = rgb.reduce((acc, cur) => acc + cur, 0) / 3;
-    return rgb.every((v) => Math.abs(v - average) < 8 && v < 180);
+    const [r, g, b] = rgb;
+    return (
+      rgb.every((v) => Math.abs(v - average) < 8 && v < 180) ||
+      (r > 70 && r < 100 && g > 76 && g < 106 && b > 93 && b < 123)
+    );
   });
 }
 
@@ -82,26 +94,101 @@ const COMP_SIZE = 24;
 const DRAW_AREA = [0, 0, COMP_SIZE, COMP_SIZE];
 const COMP_AREA = [2, 2, COMP_SIZE - 4, COMP_SIZE - 4];
 
-export async function getItemImageData() {
+export async function getEntityImageData(entityData) {
   return await Promise.all(
-    PItems.getAll().map(
+    entityData.getAll().map(
       ({ id, name, icon }) =>
         new Promise((resolve, reject) => {
-          const itemCanvas = document.createElement("canvas");
-          const itemCtx = itemCanvas.getContext("2d");
-          const itemImg = new Image();
-          itemImg.src = icon.src;
-          itemImg.onload = async () => {
-            itemCtx.drawImage(itemImg, ...DRAW_AREA);
+          const entCanvas = document.createElement("canvas");
+          const entCtx = entCanvas.getContext("2d");
+          const entImg = new Image();
+          entImg.src = icon.src;
+          entImg.onload = async () => {
+            entCtx.drawImage(entImg, ...DRAW_AREA);
             resolve({
               id,
               name,
-              data: itemCtx.getImageData(...COMP_AREA).data,
+              data: entCtx.getImageData(...COMP_AREA).data,
             });
           };
         })
     )
   );
+}
+
+function searchCanvas(canvas, searchArea, threshold) {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const d = ctx.getImageData(
+    searchArea.x,
+    searchArea.y,
+    searchArea.width,
+    searchArea.height
+  );
+
+  let coords = [];
+  let width = 0;
+  let consecutivePixels = 0;
+  for (let i = 0; i < searchArea.height; i++) {
+    for (let j = 0; j < searchArea.width; j++) {
+      const dIndex = (i * searchArea.width + j) * 4;
+      if (d.data.slice(dIndex, dIndex + 3).every((v) => v == 0)) {
+        consecutivePixels++;
+      } else {
+        if (consecutivePixels > threshold) {
+          width = consecutivePixels;
+          coords.push([searchArea.x + j, searchArea.y + i]);
+        }
+        consecutivePixels = 0;
+      }
+    }
+    if (coords.length) break;
+  }
+  return [coords, width];
+}
+
+function identifyEntities(img, coords, width, entityData, plusIndex) {
+  const memCanvas = document.createElement("canvas");
+  memCanvas.width = COMP_SIZE;
+  memCanvas.height = COMP_SIZE;
+  const memCtx = memCanvas.getContext("2d");
+  document.body.append(memCanvas);
+
+  const detectedEntities = [];
+  for (let [x, y] of coords) {
+    memCtx.drawImage(img, x, y, width, width, ...DRAW_AREA);
+    const d = memCtx.getImageData(...COMP_AREA);
+    const diffScores = entityData.map((entity) => ({
+      id: entity.id,
+      name: entity.name,
+      score: entity.data.reduce(
+        (sum, _, i) =>
+          sum +
+          (i % 4
+            ? 0
+            : deltaE(d.data.slice(i, i + 3), entity.data.slice(i, i + 3))),
+        0
+      ),
+    }));
+
+    // Hint whether upgraded based on pixel color
+    const pd = memCtx.getImageData(...DRAW_AREA);
+    const upgraded =
+      pd.data[plusIndex] > 200 &&
+      pd.data[plusIndex + 1] < 150 &&
+      pd.data[plusIndex + 2] > 50 &&
+      pd.data[plusIndex + 2] < 150;
+
+    const sorted = diffScores.sort((a, b) => a.score - b.score);
+
+    if (sorted[0].name.startsWith(sorted[1].name)) {
+      detectedEntities.push(upgraded ? sorted[0].id : sorted[1].id);
+    } else if (sorted[1].name.startsWith(sorted[0].name)) {
+      detectedEntities.push(upgraded ? sorted[1].id : sorted[0].id);
+    } else {
+      detectedEntities.push(sorted[0].id);
+    }
+  }
+  return detectedEntities;
 }
 
 export function extractItems(result, img, blackCanvas, itemImageData) {
@@ -120,35 +207,147 @@ export function extractItems(result, img, blackCanvas, itemImageData) {
     width: Math.floor(labelWidth * 3.2),
     height: labelHeight,
   };
-  const blackCtx = blackCanvas.getContext("2d", { willReadFrequently: true });
-  const d = blackCtx.getImageData(
-    searchArea.x,
-    searchArea.y,
-    searchArea.width,
-    searchArea.height
+  let [itemCoords, itemWidth] = searchCanvas(
+    blackCanvas,
+    searchArea,
+    labelWidth / 2
+  );
+  itemWidth = Math.round(itemWidth / 0.825);
+  itemCoords = itemCoords.map(([x, y]) => [
+    x - Math.round(itemWidth * 0.08) - itemWidth * 0.825,
+    y - Math.round(itemWidth / 100) - itemWidth,
+  ]);
+
+  // Identify items
+  const plusIndex =
+    (Math.round(COMP_SIZE * 0.08) * COMP_SIZE + Math.round(COMP_SIZE * 0.85)) *
+    4;
+  const detectedItems = identifyEntities(
+    img,
+    itemCoords,
+    itemWidth,
+    itemImageData,
+    plusIndex
   );
 
-  let itemCoords = [];
-  let itemWidth = 0;
-  let consecutivePixels = 0;
-  for (let i = 0; i < searchArea.height; i++) {
-    for (let j = 0; j < searchArea.width; j++) {
-      const dIndex = (i * searchArea.width + j) * 4;
-      if (d.data.slice(dIndex, dIndex + 3).every((v) => v == 0)) {
-        consecutivePixels++;
-      } else {
-        if (consecutivePixels > labelWidth / 2) {
-          itemWidth = Math.round(consecutivePixels / 0.825);
-          itemCoords.push([
-            searchArea.x + Math.round(j - itemWidth * 0.08) - consecutivePixels,
-            searchArea.y + i + Math.round(itemWidth / 100) - itemWidth,
-          ]);
-        }
-        consecutivePixels = 0;
-      }
-    }
-    if (itemCoords.length) break;
-  }
+  return detectedItems;
+}
+
+export function extractCards2(result, img, blackCanvas, cardImageData) {
+  // Find skill cards label
+  const labelLine = result.data.lines.find(({ text }) =>
+    text.replaceAll(" ", "").startsWith("スキルカード")
+  );
+  const labelBounds = labelLine.bbox;
+  const labelWidth = labelBounds.x1 - labelBounds.x0;
+  const labelHeight = labelBounds.y1 - labelBounds.y0;
+
+  // Find coordinates of skill cards
+  let searchArea = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1 + labelHeight * 0.5,
+    width: Math.floor(labelWidth * 4.75),
+    height: labelHeight,
+  };
+  const [cardCoords, cardWidth] = searchCanvas(
+    blackCanvas,
+    searchArea,
+    labelWidth / 2,
+    false
+  );
+  // const blackCtx = blackCanvas.getContext("2d", { willReadFrequently: true });
+  // const d = blackCtx.getImageData(
+  //   searchArea.x,
+  //   searchArea.y,
+  //   searchArea.width,
+  //   searchArea.height
+  // );
+
+  // const nc = document.createElement("canvas");
+  // const nctx = nc.getContext("2d");
+  // nctx.drawImage(
+  //   blackCanvas,
+  //   searchArea.x,
+  //   searchArea.y,
+  //   searchArea.width,
+  //   searchArea.height,
+  //   0,
+  //   0,
+  //   searchArea.width,
+  //   searchArea.height
+  // );
+  // document.body.append(nc);
+
+  // let cardCoords = [];
+  // let cardWidth = 0;
+  // let consecutivePixels = 0;
+  // for (let i = 0; i < searchArea.height; i++) {
+  //   for (let j = 0; j < searchArea.width; j++) {
+  //     const dIndex = (i * searchArea.width + j) * 4;
+  //     if (d.data.slice(dIndex, dIndex + 3).every((v) => v == 0)) {
+  //       consecutivePixels++;
+  //     } else {
+  //       if (consecutivePixels > labelWidth / 2) {
+  //         cardWidth = Math.round(consecutivePixels / 0.825);
+  //         cardCoords.push([
+  //           searchArea.x + Math.round(j - cardWidth * 0.08) - consecutivePixels,
+  //           searchArea.y + i + Math.round(cardWidth / 100) - cardWidth,
+  //         ]);
+  //       }
+  //       consecutivePixels = 0;
+  //     }
+  //   }
+  //   if (cardCoords.length) break;
+  // }
+
+  console.log(cardCoords, cardWidth);
+
+  // const searchArea2 = {
+  //   x: labelBounds.x0 - labelHeight,
+  //   y: labelBounds.y1 + cardWidth * 1.3,
+  //   width: Math.floor(labelWidth * 4.75),
+  //   height: labelHeight,
+  // };
+  // nctx.drawImage(
+  //   blackCanvas,
+  //   searchArea2.x,
+  //   searchArea2.y,
+  //   searchArea2.width,
+  //   searchArea2.height,
+  //   0,
+  //   0,
+  //   searchArea2.width,
+  //   searchArea2.height
+  // );
+  // const d2 = blackCtx.getImageData(
+  //   searchArea2.x,
+  //   searchArea2.y,
+  //   searchArea2.width,
+  //   searchArea2.height
+  // );
+  // let cardCoords2 = [];
+  // consecutivePixels = 0;
+  // for (let i = 0; i < searchArea2.height; i++) {
+  //   for (let j = 0; j < searchArea2.width; j++) {
+  //     const dIndex = (i * searchArea2.width + j) * 4;
+  //     if (d2.data.slice(dIndex, dIndex + 3).every((v) => v == 0)) {
+  //       consecutivePixels++;
+  //     } else {
+  //       if (consecutivePixels > labelWidth / 2) {
+  //         cardWidth = Math.round(consecutivePixels / 0.825);
+  //         cardCoords2.push([
+  //           searchArea2.x +
+  //             Math.round(j - cardWidth * 0.08) -
+  //             consecutivePixels,
+  //           searchArea2.y + i + Math.round(cardWidth / 100) - cardWidth,
+  //         ]);
+  //       }
+  //       consecutivePixels = 0;
+  //     }
+  //   }
+  //   if (cardCoords2.length) break;
+  // }
+  // console.log(cardCoords.concat(cardCoords2));
 
   // Classify items
   const memCanvas = document.createElement("canvas");

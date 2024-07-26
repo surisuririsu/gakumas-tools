@@ -9,8 +9,10 @@ import { DataContextProvider } from "@/contexts/DataContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { SelectionContextProvider } from "@/contexts/SelectionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
+import MemoryImporter from "@/components/MemoryImporter";
 
 export default function Home() {
+  return <MemoryImporter />;
   return (
     <WorkspaceContextProvider>
       <SessionProvider>

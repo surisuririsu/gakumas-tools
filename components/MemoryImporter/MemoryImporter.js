@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
 import { FaCircleQuestion } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import IconButton from "@/components/IconButton";
@@ -8,24 +8,25 @@ import { calculateContestPower } from "@/utils/contestPower";
 import {
   extractPower,
   extractParams,
-  extractCards,
+  extractCards2,
   getBlackCanvas,
   getWhiteCanvas,
   extractItems,
-  getItemImageData,
+  getEntityImageData,
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporter.module.scss";
 
 export default function MemoryImporter() {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
-  const { fetchMemories } = useContext(DataContext);
+  // const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
     let engWorker, jpnWorker;
     const engWorkerPromise = createWorker("eng", 1);
     const jpnWorkerPromise = createWorker("jpn", 1);
-    const itemImageDataPromise = getItemImageData();
+    const itemImageDataPromise = getEntityImageData(PItems);
+    const cardImageDataPromise = getEntityImageData(SkillCards);
 
     const files = Array.from(e.target.files);
     setTotal(files.length);
@@ -48,39 +49,46 @@ export default function MemoryImporter() {
             const engBlackPromise = engWorker.recognize(blackCanvas);
             const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
 
-            const powerCandidates = extractPower(await engWhitePromise);
-            const params = extractParams(await engBlackPromise);
+            // const powerCandidates = extractPower(await engWhitePromise);
+            // const params = extractParams(await engBlackPromise);
             const items = extractItems(
               await jpnBlackPromise,
               img,
               blackCanvas,
               await itemImageDataPromise
             );
-            const cards = extractCards(await jpnBlackPromise);
+            console.log(items);
+            // const cards = extractCards(await jpnBlackPromise);
+            // const cards = extractCards2(
+            //   await jpnBlackPromise,
+            //   img,
+            //   blackCanvas,
+            //   await cardImageDataPromise
+            // );
 
-            while (items.length < 3) {
-              items.push(0);
-            }
-            while (cards.length < 6) {
-              cards.push(0);
-            }
+            // while (items.length < 3) {
+            //   items.push(0);
+            // }
+            // while (cards.length < 6) {
+            //   cards.push(0);
+            // }
 
-            const calculatedPower = calculateContestPower(params, items, cards);
-            const flag = !powerCandidates.includes(calculatedPower);
+            // const calculatedPower = calculateContestPower(params, items, cards);
+            // const flag = !powerCandidates.includes(calculatedPower);
 
-            const memory = {
-              name: `${Math.max(...powerCandidates)}${flag ? " (FIXME)" : ""}`,
-              pIdolId: cards
-                .filter((c) => !!c)
-                .map(SkillCards.getById)
-                .find((card) => card.pIdolId)?.pIdolId,
-              params,
-              pItemIds: items,
-              skillCardIds: cards,
-            };
+            // const memory = {
+            //   name: `${Math.max(...powerCandidates)}${flag ? " (FIXME)" : ""}`,
+            //   pIdolId: cards
+            //     .filter((c) => !!c)
+            //     .map(SkillCards.getById)
+            //     .find((card) => card.pIdolId)?.pIdolId,
+            //   params,
+            //   pItemIds: items,
+            //   skillCardIds: cards,
+            // };
 
-            setProgress((p) => p + 1);
-            resolve(memory);
+            // setProgress((p) => p + 1);
+            // resolve(memory);
           };
         })
     );
