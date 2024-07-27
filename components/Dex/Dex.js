@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import ButtonGroup from "@/components/ButtonGroup";
 import Checkbox from "@/components/Checkbox";
@@ -14,16 +14,20 @@ import styles from "./Dex.module.scss";
 export default function Dex() {
   const { openWidgets } = useContext(WorkspaceContext);
   const { pIdolId } = useContext(MemoryContext);
-  const { selectedEntity } = useContext(SelectionContext);
+  const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
   const [activeTab, setActiveTab] = useState("Skill cards");
   const [filter, setFilter] = useState(true);
+  const pIdol = PIdols.getById(pIdolId);
+
+  useEffect(() => {
+    setSelectedEntity(null);
+  }, [filter]);
 
   let entities = [];
   const Entities = activeTab == "Skill cards" ? SkillCards : PItems;
   const compareFn =
     activeTab == "Skill cards" ? compareSkillCards : comparePItems;
   if (openWidgets.memoryEditor && filter && pIdolId) {
-    const pIdol = PIdols.getById(pIdolId);
     const signatureEntities = Entities.getFiltered({
       pIdolIds: [pIdolId],
     });
@@ -55,6 +59,7 @@ export default function Dex() {
             id={entity.id}
             widget="dex"
             index={index}
+            idolId={pIdol?.idolId}
           />
         ))}
       </div>
