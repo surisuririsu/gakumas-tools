@@ -2,7 +2,7 @@ import EntityIcon from "@/components/EntityIcon";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StagePItems.module.scss";
 
-export default function StagePItems({ pItemIds }) {
+export default function StagePItems({ pItemIds, widget, size }) {
   return (
     <div className={styles.stagePItems}>
       {pItemIds.map((pItemId, index) => (
@@ -10,9 +10,9 @@ export default function StagePItems({ pItemIds }) {
           key={`${index}_${pItemId}`}
           type={EntityTypes.P_ITEM}
           id={pItemId}
-          widget="memory_editor"
+          widget={widget}
           index={index}
-          small
+          size={size}
         />
       ))}
     </div>

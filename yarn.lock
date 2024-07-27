@@ -1655,10 +1655,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#0.4.0":
-  version: 0.4.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=1c6689f7c78fb587cff0abda6b0d3d0483a276a1"
-  checksum: 10c0/4f87400d324edc05d97399414805e49aa9abc83e2a02edcc9942e1d4eca10450361b0cbc957f6022f140f346e2736c55b3a92b83c5d19d2294b029b6c36ad399
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v0.5.0":
+  version: 0.4.1
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=dc93f6e8c4ed5fed71597d13c2aa8930faab4567"
+  checksum: 10c0/27903bdd12cc415967d48e48b26b5c0ae168a95d970d625b9329f938cb64c2d2e88e497c1e508b21d5d604c296cb08ea8f8fdf075e8fd208510268ee51275a2b
   languageName: node
   linkType: hard
 
@@ -1668,7 +1668,7 @@ __metadata:
   dependencies:
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.5"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#0.4.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v0.5.0"
     mongodb: "npm:^6.8.0"
     next: "npm:14.2.5"
     next-auth: "npm:^4.24.7"

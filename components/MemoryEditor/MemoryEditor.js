@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { PIdols } from "gakumas-data";
 import Input from "@/components/Input";
 import MemorySave from "@/components/MemorySave";
 import ParametersInput from "@/components/ParametersInput";
@@ -24,9 +25,9 @@ export default function MemoryEditor() {
     setParams,
     pItemIds,
     skillCardIds,
-    save,
   } = useContext(MemoryContext);
   const { setSelectedEntity } = useContext(SelectionContext);
+  const idolId = PIdols.getById(pIdolId)?.idolId;
 
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
   const skillCardCost = calculateSkillCardCost(skillCardIds);
@@ -49,9 +50,13 @@ export default function MemoryEditor() {
         <ParametersInput parameters={params} onChange={setParams} withStamina />
       </div>
       <label>P-items</label>
-      <StagePItems pItemIds={pItemIds} />
+      <StagePItems pItemIds={pItemIds} widget="memory_editor" size="small" />
       <label>Skill cards</label>
-      <StageSkillCards skillCardIds={skillCardIds} />
+      <StageSkillCards
+        skillCardIds={skillCardIds}
+        widget="memory_editor"
+        idolId={idolId}
+      />
       <div>Cost: {skillCardCost}</div>
       <Trash />
       <MemorySave />

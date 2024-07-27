@@ -23,7 +23,10 @@
   }
 
   .progress {
-    height: 16px;
+    margin-top: 4px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
     color: $gk-orange;
   }
 }

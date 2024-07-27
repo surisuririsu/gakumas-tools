@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Image from "next/image";
-import { PItems, SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
 import PIdol from "@/components/PIdol";
 import MemoryContext from "@/contexts/MemoryContext";
@@ -12,6 +12,7 @@ export default function MemorySummary({ memory }) {
   const { setAll } = useContext(MemoryContext);
   const { open } = useContext(WorkspaceContext);
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
+  const idolId = PIdols.getById(pIdolId)?.idolId;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
 
   function editMemory() {
@@ -37,9 +38,9 @@ export default function MemorySummary({ memory }) {
           {pItemIds
             .filter((p) => !!p)
             .map(PItems.getById)
-            .map((pItem) => (
+            .map((pItem, i) => (
               <Image
-                key={pItem.id}
+                key={i}
                 src={pItem.icon}
                 width={30}
                 alt={pItem.name}
@@ -51,10 +52,10 @@ export default function MemorySummary({ memory }) {
           {skillCardIds
             .filter((s) => !!s)
             .map(SkillCards.getById)
-            .map((skillCard) => (
+            .map((skillCard, i) => (
               <Image
-                key={skillCard.id}
-                src={skillCard.icon}
+                key={i}
+                src={skillCard.getDynamicIcon(idolId)}
                 width={40}
                 alt={skillCard.name}
                 draggable={false}
