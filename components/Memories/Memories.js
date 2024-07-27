@@ -167,6 +167,13 @@ export default function Memories() {
                 <MemorySummary memory={memory} />
               </div>
             ))}
+            {action != "import" && (
+              <div className={styles.nudge}>
+                <Button onClick={() => setAction("import")}>
+                  Import memories from screenshots
+                </Button>
+              </div>
+            )}
           </div>
         </>
       ) : (

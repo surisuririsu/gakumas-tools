@@ -138,7 +138,7 @@ export default function MemoryImporter() {
           onClick={() =>
             alert(
               "Import memories from screenshots.\n" +
-                "Contest power, parameters, P-items, and names of skill cards must be visible in each screenshot.\n\n" +
+                "Contest power, parameters, P-items, and skill cards icons must be visible in each screenshot.\n\n" +
                 "Some memories may fail to parse, and require fixing after import.\n" +
                 "Those will be labeled with (FIXME) in the name."
             )

@@ -197,7 +197,6 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
       }));
 
     const sorted = diffScores.sort((a, b) => a.score - b.score);
-    console.log(sorted.slice(0, 3).map((s) => [s.name, s.score]));
 
     // Heuristic to detect upgraded vs non-upgraded to be more stable
     const pd = memCtx.getImageData(...DRAW_AREA);
