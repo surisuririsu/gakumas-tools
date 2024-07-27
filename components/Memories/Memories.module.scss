@@ -11,6 +11,12 @@
     padding: 8px;
     border-bottom: 2px solid $gray-light;
 
+    .search {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     .delete {
       display: flex;
       align-items: center;
@@ -39,5 +45,11 @@
         cursor: pointer;
       }
     }
+  }
+
+  .nudge {
+    display: flex;
+    justify-content: center;
+    padding: 32px;
   }
 }

@@ -6,16 +6,22 @@ import {
   FaRegTrashCan,
 } from "react-icons/fa6";
 import { useSession, signIn } from "next-auth/react";
+import { PItems, SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import MemoryImporter from "@/components//MemoryImporter";
 import MemorySummary from "@/components/MemorySummary";
+import StagePItems from "@/components/StagePItems";
+import StageSkillCards from "@/components/StageSkillCards";
+import Trash from "@/components/Trash";
 import DataContext from "@/contexts/DataContext";
+import SearchContext from "@/contexts/SearchContext";
 import styles from "./Memories.module.scss";
 
 export default function Memories() {
   const { status } = useSession();
   const { memories, fetchMemories } = useContext(DataContext);
+  const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
 
@@ -37,6 +43,50 @@ export default function Memories() {
     });
     fetchMemories();
     setSelectedMemories({});
+  }
+
+  function getSearchScore(memory) {
+    let score = 0;
+    pItemIds
+      .filter((i) => !!i)
+      .map(PItems.getById)
+      .forEach((pItem, i) => {
+        const multiplier = Math.pow(0.95, i);
+        if (memory.pItemIds.includes(pItem.id)) score += 1 * multiplier;
+        if (pItem.sourceType == "pIdol") {
+          if (!pItem.upgraded && memory.pItemIds.includes(pItem.id + 1))
+            score += 0.6 * multiplier;
+          if (pItem.upgraded && memory.pItemIds.includes(pItem.id - 1))
+            score += 0.5 * multiplier;
+        }
+      });
+    skillCardIds
+      .filter((i) => !!i)
+      .map(SkillCards.getById)
+      .forEach((skillCard, i) => {
+        const multiplier = Math.pow(0.95, i);
+        if (memory.skillCardIds.includes(skillCard.id)) score += 1 * multiplier;
+        if (skillCard.type != "trouble") {
+          if (
+            !skillCard.upgraded &&
+            memory.skillCardIds.includes(skillCard.id + 1)
+          )
+            score += 0.6 * multiplier;
+          if (
+            skillCard.upgraded &&
+            memory.skillCardIds.includes(skillCard.id - 1)
+          )
+            score += 0.5 * multiplier;
+        }
+      });
+    return score;
+  }
+
+  function sortFn(a, b) {
+    if (pItemIds.some((i) => i) || skillCardIds.some((i) => i)) {
+      return getSearchScore(b) - getSearchScore(a);
+    }
+    return 0;
   }
 
   return (
@@ -67,6 +117,21 @@ export default function Memories() {
                 />
               </>
             )}
+            {action == "search" && (
+              <div className={styles.search}>
+                <StagePItems
+                  pItemIds={pItemIds}
+                  widget="memories"
+                  size="small"
+                />
+                <StageSkillCards
+                  skillCardIds={skillCardIds}
+                  widget="memories"
+                  size="medium"
+                />
+                <Trash size="small" />
+              </div>
+            )}
             {action == "import" && <MemoryImporter />}
             {action == "delete" && (
               <div className={styles.delete}>
@@ -82,7 +147,7 @@ export default function Memories() {
             )}
           </div>
           <div className={styles.list}>
-            {memories.map((memory) => (
+            {memories.sort(sortFn).map((memory) => (
               <div key={memory._id} className={styles.memoryTile}>
                 {action == "delete" && (
                   <div className={styles.check}>
@@ -102,6 +167,13 @@ export default function Memories() {
                 <MemorySummary memory={memory} />
               </div>
             ))}
+            {action != "import" && (
+              <div className={styles.nudge}>
+                <Button onClick={() => setAction("import")}>
+                  Import memories from screenshots
+                </Button>
+              </div>
+            )}
           </div>
         </>
       ) : (

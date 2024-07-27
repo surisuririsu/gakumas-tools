@@ -2,7 +2,12 @@ import EntityIcon from "@/components/EntityIcon";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StageSkillCards.module.scss";
 
-export default function StageSkillCards({ skillCardIds }) {
+export default function StageSkillCards({
+  skillCardIds,
+  widget,
+  idolId,
+  size,
+}) {
   return (
     <div className={styles.stageSkillCards}>
       {skillCardIds.map((skillCardId, index) => (
@@ -10,8 +15,10 @@ export default function StageSkillCards({ skillCardIds }) {
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
-          widget="memory_editor"
+          widget={widget}
           index={index}
+          idolId={idolId}
+          size={size}
         />
       ))}
     </div>

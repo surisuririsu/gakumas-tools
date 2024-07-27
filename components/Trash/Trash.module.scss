@@ -16,4 +16,9 @@
     border-color: $red;
     background-color: $red-extra-light;
   }
+
+  &.small {
+    padding: 4px;
+    font-size: 16px;
+  }
 }

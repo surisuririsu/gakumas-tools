@@ -7,6 +7,7 @@ import Main from "@/components/Main";
 import Navbar from "@/components/Navbar";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
+import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SelectionContextProvider } from "@/contexts/SelectionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 
@@ -18,9 +19,11 @@ export default function Home() {
         <DataContextProvider>
           <SelectionContextProvider>
             <MemoryContextProvider>
-              <DndProvider backend={HTML5Backend}>
-                <Main />
-              </DndProvider>
+              <SearchContextProvider>
+                <DndProvider backend={HTML5Backend}>
+                  <Main />
+                </DndProvider>
+              </SearchContextProvider>
             </MemoryContextProvider>
           </SelectionContextProvider>
         </DataContextProvider>

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { SkillCards } from "gakumas-data";
-import { FaCircleQuestion } from "react-icons/fa6";
+import { PItems, SkillCards } from "gakumas-data";
+import { FaCircleQuestion, FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import IconButton from "@/components/IconButton";
 import DataContext from "@/contexts/DataContext";
@@ -12,7 +12,9 @@ import {
   getBlackCanvas,
   getWhiteCanvas,
   extractItems,
-  getItemImageData,
+  getSignatureSkillCardsImageData,
+  getNonSignatureSkillCardsImageData,
+  getPItemsImageData,
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporter.module.scss";
 
@@ -22,18 +24,26 @@ export default function MemoryImporter() {
   const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
-    let engWorker, jpnWorker;
-    const engWorkerPromise = createWorker("eng", 1);
-    const jpnWorkerPromise = createWorker("jpn", 1);
-    const itemImageDataPromise = getItemImageData();
-
+    // Get files and reset progress
     const files = Array.from(e.target.files);
+    setProgress(null);
+    if (!files.length) return;
     setTotal(files.length);
     setProgress(0);
 
+    // Set up workers and entity image data promises
+    let engWorker, jpnWorker;
+    const engWorkerPromise = createWorker("eng", 1);
+    const jpnWorkerPromise = createWorker("jpn", 1);
+    const signatureSkillCardsImageDataPromise =
+      getSignatureSkillCardsImageData();
+    const nonSignatureSkillCardsImageDataPromise =
+      getNonSignatureSkillCardsImageData();
+    const itemImageDataPromise = getPItemsImageData();
+
     const promises = files.map(
       (file) =>
-        new Promise((resolve, reject) => {
+        new Promise((resolve) => {
           const blobURL = URL.createObjectURL(file);
           const img = new Image();
           img.src = blobURL;
@@ -50,14 +60,32 @@ export default function MemoryImporter() {
 
             const powerCandidates = extractPower(await engWhitePromise);
             const params = extractParams(await engBlackPromise);
+
             const items = extractItems(
               await jpnBlackPromise,
               img,
               blackCanvas,
               await itemImageDataPromise
             );
-            const cards = extractCards(await jpnBlackPromise);
+            const itemsPIdolId = items
+              .filter((c) => !!c)
+              .map(PItems.getById)
+              .find((item) => item.pIdolId)?.pIdolId;
 
+            const cards = extractCards(
+              await jpnBlackPromise,
+              img,
+              blackCanvas,
+              await signatureSkillCardsImageDataPromise,
+              await nonSignatureSkillCardsImageDataPromise,
+              itemsPIdolId
+            );
+            const cardsPIdolId = cards
+              .filter((c) => !!c)
+              .map(SkillCards.getById)
+              .find((card) => card.pIdolId)?.pIdolId;
+
+            // Pad items and cards to fixed number
             while (items.length < 3) {
               items.push(0);
             }
@@ -65,15 +93,17 @@ export default function MemoryImporter() {
               cards.push(0);
             }
 
+            // Calculate contest power and flag those that are mismatched with the screenshot
             const calculatedPower = calculateContestPower(params, items, cards);
-            const flag = !powerCandidates.includes(calculatedPower);
+            const flag =
+              !powerCandidates.includes(calculatedPower) ||
+              itemsPIdolId != cardsPIdolId;
 
             const memory = {
-              name: `${Math.max(...powerCandidates)}${flag ? " (FIXME)" : ""}`,
-              pIdolId: cards
-                .filter((c) => !!c)
-                .map(SkillCards.getById)
-                .find((card) => card.pIdolId)?.pIdolId,
+              name: `${Math.max(...powerCandidates, 0)}${
+                flag ? " (FIXME)" : ""
+              }`,
+              pIdolId: cardsPIdolId,
               params,
               pItemIds: items,
               skillCardIds: cards,
@@ -108,7 +138,7 @@ export default function MemoryImporter() {
           onClick={() =>
             alert(
               "Import memories from screenshots.\n" +
-                "Contest power, parameters, P-items, and names of skill cards must be visible in each screenshot.\n\n" +
+                "Contest power, parameters, P-items, and skill cards icons must be visible in each screenshot.\n\n" +
                 "Some memories may fail to parse, and require fixing after import.\n" +
                 "Those will be labeled with (FIXME) in the name."
             )
@@ -118,7 +148,7 @@ export default function MemoryImporter() {
       <div className={styles.progress}>
         {progress != null && (
           <>
-            Progress: {progress}/{total}
+            Progress: {progress}/{total} {progress == total && <FaCheck />}
           </>
         )}
       </div>

@@ -3,12 +3,20 @@ import Image from "next/image";
 import { useDrag, useDrop } from "react-dnd";
 import { PItems, SkillCards } from "gakumas-data";
 import MemoryContext from "@/contexts/MemoryContext";
+import SearchContext from "@/contexts/SearchContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
-export default function EntityIcon({ type, id, widget, index, small }) {
-  const { setPItemIds, setSkillCardIds } = useContext(MemoryContext);
+export default function EntityIcon({ type, id, widget, index, size, idolId }) {
+  const {
+    setPItemIds: setMemoryPItemIds,
+    setSkillCardIds: setMemorySkillCardIds,
+  } = useContext(MemoryContext);
+  const {
+    setPItemIds: setSearchPItemIds,
+    setSkillCardIds: setSearchSkillCardIds,
+  } = useContext(SearchContext);
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
   const selected =
     selectedEntity &&
@@ -24,8 +32,18 @@ export default function EntityIcon({ type, id, widget, index, small }) {
   }
 
   function clearEntity(entity) {
-    const setState =
-      entity.type == EntityTypes.SKILL_CARD ? setSkillCardIds : setPItemIds;
+    let setState = () => {};
+    if (entity.widget == "memory_editor") {
+      setState =
+        entity.type == EntityTypes.SKILL_CARD
+          ? setMemorySkillCardIds
+          : setMemoryPItemIds;
+    } else if (entity.widget == "memories") {
+      setState =
+        entity.type == EntityTypes.SKILL_CARD
+          ? setSearchSkillCardIds
+          : setSearchPItemIds;
+    }
     setState((cur) => {
       const next = [...cur];
       next[entity.index] = 0;
@@ -34,16 +52,45 @@ export default function EntityIcon({ type, id, widget, index, small }) {
   }
 
   function swapEntity(entity) {
-    const setState =
-      entity.type == EntityTypes.SKILL_CARD ? setSkillCardIds : setPItemIds;
+    let setState = () => {};
+    if (widget == "memory_editor") {
+      setState =
+        entity.type == EntityTypes.SKILL_CARD
+          ? setMemorySkillCardIds
+          : setMemoryPItemIds;
+    } else if (widget == "memories") {
+      setState =
+        entity.type == EntityTypes.SKILL_CARD
+          ? setSearchSkillCardIds
+          : setSearchPItemIds;
+    }
+
     setState((cur) => {
       const next = [...cur];
       next[index] = entity.id;
-      if (entity.widget == widget) {
-        next[entity.index] = id;
-      }
       return next;
     });
+
+    if (entity.widget == widget) {
+      let setSourceState = () => {};
+      if (entity.widget == "memory_editor") {
+        setSourceState =
+          entity.type == EntityTypes.SKILL_CARD
+            ? setMemorySkillCardIds
+            : setMemoryPItemIds;
+      } else if (entity.widget == "memories") {
+        setSourceState =
+          entity.type == EntityTypes.SKILL_CARD
+            ? setSearchSkillCardIds
+            : setSearchPItemIds;
+      }
+
+      setSourceState((cur) => {
+        const next = [...cur];
+        next[entity.index] = id;
+        return next;
+      });
+    }
   }
 
   const [, dragRef] = useDrag(() => ({
@@ -86,14 +133,19 @@ export default function EntityIcon({ type, id, widget, index, small }) {
   return (
     <div ref={dropRef}>
       <button
-        className={`${styles.entityIcon} ${small ? styles.small : ""} ${
+        className={`${styles.entityIcon} ${styles[size] || ""} ${
           selected ? styles.selected : ""
         }`}
         ref={dragRef}
         onClick={(e) => handleClick(e)}
       >
         {entity?.icon && (
-          <Image src={entity.icon} fill alt={entity.name} sizes="52px" />
+          <Image
+            src={entity.getDynamicIcon?.(idolId) || entity.icon}
+            fill
+            alt={entity.name}
+            sizes="52px"
+          />
         )}
       </button>
     </div>
