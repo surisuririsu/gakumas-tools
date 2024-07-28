@@ -15,7 +15,7 @@
 
   .content {
     width: 400px;
-    max-width: 100vw;
+    max-width: calc(100vw - 2px);
     flex: 1;
     display: flex;
     flex-direction: column;

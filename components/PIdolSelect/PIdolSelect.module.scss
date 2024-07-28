@@ -8,11 +8,9 @@
   .pIdol {
     min-width: 89px;
     height: fit-content;
-    border: none;
     border: 4px solid $gray-light;
     border-radius: 8px;
     overflow: hidden;
-    cursor: pointer;
   }
 
   .expander {
@@ -31,8 +29,6 @@
   }
 
   .pIdolButton {
-    border: none;
-    cursor: pointer;
     transition: 0.2s all;
 
     &:hover,

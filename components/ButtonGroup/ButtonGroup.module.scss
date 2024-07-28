@@ -8,12 +8,9 @@
 
   button {
     flex: 1;
-    border: none;
     padding: 8px;
-    background-color: transparent;
     color: $gk-orange;
     font-weight: 600;
-    cursor: pointer;
     transition: all 0.2s;
 
     &.selected {

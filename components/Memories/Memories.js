@@ -177,9 +177,11 @@ export default function Memories() {
           </div>
         </>
       ) : (
-        <Button onClick={() => signIn("discord")}>
-          Sign in with Discord to show memories
-        </Button>
+        <div className={styles.nudge}>
+          <Button onClick={() => signIn("discord")}>
+            Sign in with Discord to save/load memories
+          </Button>
+        </div>
       )}
     </div>
   );

@@ -39,17 +39,20 @@ export function getWhiteCanvas(img) {
 }
 
 // Read contest power from OCR result
+const POWER_REGEXP = new RegExp(/\s*\d+\s*/gm);
 export function extractPower(result) {
-  const powerLines = result.data.text.match(/\s*\d+\s*/gm) || [];
+  const powerLines = result.data.text.match(POWER_REGEXP) || [];
   const powerCandidates = powerLines.map((p) => parseInt(p, 10));
   return powerCandidates;
 }
 
 // Read Vo, Da, Vi, stamina from OCR result
+const PARAMS_REGEXP = new RegExp(/^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/gm);
+const WS_REGEXP = new RegExp(/\s+/);
 export function extractParams(result) {
-  const paramsLine = result.data.text.match(/^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/gm);
+  const paramsLine = result.data.text.match(PARAMS_REGEXP);
   if (!paramsLine) return [null, null, null, null];
-  const params = paramsLine[0].split(/\s+/).map((t) => parseInt(t, 10));
+  const params = paramsLine[0].split(WS_REGEXP).map((t) => parseInt(t, 10));
   return params;
 }
 

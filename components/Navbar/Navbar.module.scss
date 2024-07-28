@@ -23,15 +23,12 @@
     gap: 4px;
     align-items: stretch;
 
-    a {
+    button {
       min-width: 48px;
-      padding: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
+      margin: 0;
+      color: $white;
+      font-size: 16px;
       transition: all 0.2s;
-      user-select: none;
 
       &.active {
         background-color: darken($gk-red-orange, 15%);
@@ -43,6 +40,7 @@
     position: relative;
     width: 32px;
     height: 32px;
+    border: none;
     border-radius: 16px;
     margin: 8px;
     overflow: hidden;
@@ -50,5 +48,14 @@
 
   button {
     margin: 8px;
+  }
+
+  .menu {
+    position: absolute;
+    right: 0;
+    top: 48px;
+    border: 2px solid $gk-orange;
+    border-top: none;
+    background-color: $white;
   }
 }
