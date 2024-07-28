@@ -16,7 +16,7 @@ export async function PUT(request, { params: routeParams }) {
   const { updatedId } = await db
     .collection("memories")
     .updateOne(
-      { _id: id },
+      { _id: id, userId },
       { $set: { userId, name, pIdolId, params, pItemIds, skillCardIds } }
     );
 

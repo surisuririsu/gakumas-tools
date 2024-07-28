@@ -33,3 +33,13 @@ label {
   font-weight: 600;
   color: $gk-orange;
 }
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  user-select: none;
+}
