@@ -156,12 +156,12 @@ export default function MemoryImporter() {
           </p>
           <p>
             Importing may take several minutes or longer depending on the number
-            of memories imported and your device's processor and memory.
+            of memories imported and your device&apos;s processor and memory.
           </p>
           <p>
             Some memories may fail to parse correctly, and require fixing after
-            import. In such cases, they will be marked with "(FIXME)" in the
-            name.
+            import. In such cases, they will be marked with &quot;(FIXME)&quot;
+            in the name.
           </p>
         </Modal>
       )}
