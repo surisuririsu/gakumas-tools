@@ -3,10 +3,10 @@
 .produceRankCalculator {
   max-width: 400px;
   padding: 16px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   color: $black;
-  overflow-y: auto;
 
   .bonus {
     font-size: 0.8em;
