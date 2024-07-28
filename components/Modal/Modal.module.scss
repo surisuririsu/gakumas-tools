@@ -1,0 +1,39 @@
+@import "@/constants";
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .modal {
+    position: relative;
+    width: 600px;
+    max-width: 100vw;
+    box-shadow: 0 0 16px $gray-dark;
+    border-radius: 16px;
+    padding: 32px;
+    background-color: $white;
+
+    .close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    h3 {
+      margin-bottom: 24px;
+      color: $gk-red-orange;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+  }
+}
