@@ -3,6 +3,7 @@ import { PItems, SkillCards } from "gakumas-data";
 import { FaCircleQuestion, FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import IconButton from "@/components/IconButton";
+import Modal from "@/components/Modal";
 import DataContext from "@/contexts/DataContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import {
@@ -21,6 +22,7 @@ import styles from "./MemoryImporter.module.scss";
 export default function MemoryImporter() {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
+  const [showModal, setShowModal] = useState(null);
   const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
@@ -135,14 +137,7 @@ export default function MemoryImporter() {
         <input type="file" id="input" multiple onChange={handleFiles} />
         <IconButton
           icon={FaCircleQuestion}
-          onClick={() =>
-            alert(
-              "Import memories from screenshots.\n" +
-                "Contest power, parameters, P-items, and skill cards icons must be visible in each screenshot.\n\n" +
-                "Some memories may fail to parse, and require fixing after import.\n" +
-                "Those will be labeled with (FIXME) in the name."
-            )
-          }
+          onClick={() => setShowModal(true)}
         />
       </div>
       <div className={styles.progress}>
@@ -152,6 +147,24 @@ export default function MemoryImporter() {
           </>
         )}
       </div>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <h3>Import memories from screenshots</h3>
+          <p>
+            Contest power, parameters, P-items, and skill cards icons must be
+            visible in each screenshot.
+          </p>
+          <p>
+            Importing may take several minutes or longer depending on the number
+            of memories imported and your device's processor and memory.
+          </p>
+          <p>
+            Some memories may fail to parse correctly, and require fixing after
+            import. In such cases, they will be marked with "(FIXME)" in the
+            name.
+          </p>
+        </Modal>
+      )}
     </div>
   );
 }
