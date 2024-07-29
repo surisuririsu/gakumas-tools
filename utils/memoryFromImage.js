@@ -1,16 +1,25 @@
 import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
 
+export function getGameRegion(img) {
+  let width = img.width;
+  const height = img.height;
+  if (img.width > (img.height * 9) / 16) {
+    width = Math.round((img.height * 9) / 16);
+  }
+  return [Math.round((img.width - width) / 2), 0, width, height];
+}
+
 // Get a canvas with image black/white filtered
 function getPreprocessedCanvas(img, textColorFn) {
   const canvas = document.createElement("canvas");
-  const width = (canvas.width = img.width);
-  const height = (canvas.height = img.height);
+  const [x, y, width, height] = getGameRegion(img);
+  canvas.width = width;
+  canvas.height = height;
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0, width, height);
-
+  ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
   let d = ctx.getImageData(0, 0, width, height);
   for (var i = 0; i < d.data.length; i += 4) {
-    if (textColorFn(d.data.slice(i, i + 3))) {
+    if (textColorFn(d.data[i], d.data[i + 1], d.data[i + 2])) {
       d.data[i] = d.data[i + 1] = d.data[i + 2] = 0;
     } else {
       d.data[i] = d.data[i + 1] = d.data[i + 2] = 255;
@@ -23,23 +32,45 @@ function getPreprocessedCanvas(img, textColorFn) {
 
 // Black or entity edge color
 export function getBlackCanvas(img) {
-  return getPreprocessedCanvas(img, (rgb) => {
-    const [r, g, b] = rgb;
+  return getPreprocessedCanvas(img, (r, g, b) => {
     const average = (r + g + b) / 3;
     return (
-      rgb.every((v) => Math.abs(v - average) < 8 && v < 180) ||
-      (r > 70 && r < 100 && g > 76 && g < 106 && b > 93 && b < 123)
+      [r, g, b].every((v) => Math.abs(v - average) < 8 && v < 185) ||
+      (r > 70 && r < 120 && g > 70 && g < 120 && b > 90 && b < 130)
     );
   });
 }
 
 // White (contest power text)
 export function getWhiteCanvas(img) {
-  return getPreprocessedCanvas(img, (rgb) => rgb.every((v) => v > 252));
+  return getPreprocessedCanvas(img, (r, g, b) =>
+    [r, g, b].every((v) => v > 252)
+  );
+}
+
+// Find y-value of the top of the white section
+export function getWhiteAreaTop(img) {
+  const canvas = getPreprocessedCanvas(img, (r, g, b) =>
+    [r, g, b].every((v) => v > 245)
+  );
+  const ctx = canvas.getContext("2d");
+  const d = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < canvas.height; i++) {
+    let whitePixelCount = 0;
+    for (let j = 0; j < canvas.width * 4; j += 4) {
+      if (d.data[i * canvas.width * 4 + j] == 0) {
+        whitePixelCount++;
+      }
+    }
+    if (whitePixelCount > canvas.width * 0.98) {
+      return i;
+    }
+  }
+  return 0;
 }
 
 // Read contest power from OCR result
-const POWER_REGEXP = new RegExp(/\s*\d+\s*/gm);
+const POWER_REGEXP = new RegExp(/\d+/gm);
 export function extractPower(result) {
   const powerLines = result.data.text.match(POWER_REGEXP) || [];
   const powerCandidates = powerLines.map((p) => parseInt(p, 10));
@@ -52,7 +83,10 @@ const WS_REGEXP = new RegExp(/\s+/);
 export function extractParams(result) {
   const paramsLine = result.data.text.match(PARAMS_REGEXP);
   if (!paramsLine) return [null, null, null, null];
-  const params = paramsLine[0].split(WS_REGEXP).map((t) => parseInt(t, 10));
+  const params = paramsLine[0]
+    .trim()
+    .split(WS_REGEXP)
+    .map((t) => parseInt(t, 10));
   return params;
 }
 
@@ -138,7 +172,7 @@ export async function getPItemsImageData() {
 }
 
 // Search for rows of black pixels marking edge of item/card
-function searchCanvas(canvas, searchArea, threshold) {
+function countEntities(canvas, searchArea, threshold) {
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   const d = ctx.getImageData(
     searchArea.x,
@@ -147,32 +181,30 @@ function searchCanvas(canvas, searchArea, threshold) {
     searchArea.height
   );
 
-  let coords = [];
-  let width = 0;
+  let numEntities = 0;
   let consecutivePixels = 0;
   for (let i = 0; i < searchArea.height; i++) {
     for (let j = 0; j < searchArea.width; j++) {
       const dIndex = (i * searchArea.width + j) * 4;
       // Check if pixel is black
-      if (d.data.slice(dIndex, dIndex + 3).every((v) => v == 0)) {
+      if (d.data[dIndex] == 0) {
         consecutivePixels++;
       } else {
-        // If we have enough consecutive pixels, add this as a detected entity
+        // If we have enough consecutive pixels, increment detected entities
         if (consecutivePixels > threshold) {
-          width = consecutivePixels;
-          coords.push([searchArea.x + j, searchArea.y + i]);
+          numEntities++;
         }
         consecutivePixels = 0;
       }
     }
-    if (coords.length) break;
+    if (numEntities) break;
   }
 
-  return [coords, width];
+  return numEntities;
 }
 
 // Compare detected areas with item/card icons to find most similar
-function identifyEntities(img, coords, width, entityData, plusIndex) {
+function identifyEntities(img, coords, width, entityData) {
   const memCanvas = document.createElement("canvas");
   memCanvas.width = COMP_SIZE;
   memCanvas.height = COMP_SIZE;
@@ -183,72 +215,64 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
     const [x, y] = coords[index];
     memCtx.drawImage(img, x, y, width, width, ...DRAW_AREA);
     const d = memCtx.getImageData(...COMP_AREA);
-    const diffScores = entityData
-      .filter((entity) => !(index > 0 && entity.pIdolId))
-      .map((entity) => ({
-        id: entity.id,
-        name: entity.name,
-        // Sum color difference of each pixel
-        score: entity.data.reduce(
-          (sum, _, i) =>
-            sum +
-            (i % 4
-              ? 0
-              : deltaE(d.data.slice(i, i + 3), entity.data.slice(i, i + 3))),
-          0
-        ),
-      }));
+
+    const filtered = entityData.filter(
+      (entity) => !(index > 0 && entity.pIdolId)
+    );
+
+    const diffScores = filtered.map((entity) => ({
+      id: entity.id,
+      name: entity.name,
+      // Sum color difference of each pixel
+      score: entity.data.reduce(
+        (sum, _, i) =>
+          sum +
+          (i % 4
+            ? 0
+            : deltaEFast(
+                d.data[i],
+                entity.data[i],
+                d.data[i + 1],
+                entity.data[i + 1],
+                d.data[i + 2],
+                entity.data[i + 2]
+              )),
+        0
+      ),
+    }));
 
     const sorted = diffScores.sort((a, b) => a.score - b.score);
 
-    // Heuristic to detect upgraded vs non-upgraded to be more stable
-    const pd = memCtx.getImageData(...DRAW_AREA);
-    const upgraded =
-      pd.data[plusIndex] > 200 &&
-      pd.data[plusIndex + 1] < 150 &&
-      pd.data[plusIndex + 2] > 50 &&
-      pd.data[plusIndex + 2] < 150;
-
-    if (sorted[0].name.startsWith(sorted[1].name)) {
-      detectedEntities.push(upgraded ? sorted[0].id : sorted[1].id);
-    } else if (sorted[1].name.startsWith(sorted[0].name)) {
-      detectedEntities.push(upgraded ? sorted[1].id : sorted[0].id);
-    } else {
-      detectedEntities.push(sorted[0].id);
-    }
+    detectedEntities.push(sorted[0].id);
   }
 
   return detectedEntities;
 }
 
-export function extractItems(result, img, blackCanvas, itemImageData) {
-  // Find P-Items label
-  const labelLine = result.data.lines.find(({ text }) =>
-    text.replaceAll(" ", "").startsWith("Pアイテム")
-  );
-  if (!labelLine) return [];
-  const labelBounds = labelLine.bbox;
-  const labelWidth = labelBounds.x1 - labelBounds.x0;
-  const labelHeight = labelBounds.y1 - labelBounds.y0;
-
-  // Find coordinates of items
+export function extractItems(img, blackCanvas, itemImageData) {
+  // Determine number of items
+  const [x, _, width] = getGameRegion(img);
+  const whiteTop = getWhiteAreaTop(img);
   const searchArea = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelWidth * 0.9,
-    width: Math.floor(labelWidth * 3.2),
-    height: labelHeight,
+    x: Math.round(width * 0.07),
+    y: whiteTop + Math.round(width * 0.6167),
+    width: Math.round(width * 0.86),
+    height: 8,
   };
-  let [itemCoords, itemWidth] = searchCanvas(
+  const numItems = countEntities(
     blackCanvas,
     searchArea,
-    labelWidth / 2
+    Math.floor(width * 0.05)
   );
-  if (!itemCoords) return [];
-  itemWidth = Math.round(itemWidth / 0.825);
-  itemCoords = itemCoords.map(([x, y]) => [
-    x - Math.round(itemWidth * 0.08) - itemWidth * 0.825,
-    y - Math.round(itemWidth / 100) - itemWidth,
-  ]);
+
+  // Generate item coordinates
+  let itemCoords = [];
+  for (let i = 0; i < numItems; i++) {
+    itemCoords.push([
+      x + Math.round(width * 0.07) + Math.round(width * 0.137) * i,
+      whiteTop + Math.round(width * 0.5),
+    ]);
+  }
 
   // Identify items
   const plusIndex =
@@ -257,7 +281,7 @@ export function extractItems(result, img, blackCanvas, itemImageData) {
   const detectedItems = identifyEntities(
     img,
     itemCoords,
-    itemWidth,
+    Math.round(width * 0.1185),
     itemImageData,
     plusIndex
   );
@@ -266,66 +290,63 @@ export function extractItems(result, img, blackCanvas, itemImageData) {
 }
 
 export function extractCards(
-  result,
   img,
   blackCanvas,
   signatureSkillCardsImageData,
   nonSignatureSkillCardsImageData,
   itemsPIdolId
 ) {
-  // Find skill cards label
-  const labelLine = result.data.lines.find(({ text }) =>
-    text.replaceAll(" ", "").startsWith("スキルカード")
-  );
-  if (!labelLine) return [];
-  const labelBounds = labelLine.bbox;
-  const labelWidth = labelBounds.x1 - labelBounds.x0;
-  const labelHeight = labelBounds.y1 - labelBounds.y0;
-
-  // Find coordinates of skill cards
-  let searchArea = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelHeight * 0.5,
-    width: Math.floor(labelWidth * 4.75),
-    height: labelHeight,
+  // Determine number of items
+  const [x, _, width] = getGameRegion(img);
+  const whiteTop = getWhiteAreaTop(img);
+  const searchArea = {
+    x: Math.round(width * 0.07),
+    y: whiteTop + Math.round(width * 0.718),
+    width: Math.round(width * 0.86),
+    height: 16,
   };
-  let [cardCoords, cardWidth] = searchCanvas(
+  const numCards1 = countEntities(
     blackCanvas,
     searchArea,
-    labelWidth / 2,
-    false
+    Math.floor(width * 0.12)
   );
-  if (!cardCoords) return [];
-  cardWidth = Math.round(cardWidth / 0.88);
-  cardCoords = cardCoords.map(([x, y]) => [
-    Math.round(x - cardWidth * 0.94),
-    y,
-  ]);
-
-  // Find coordinates of cards in second row
   const searchArea2 = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + cardWidth * 1.3,
-    width: Math.floor(labelWidth * 4.75),
-    height: labelHeight,
+    x: Math.round(width * 0.07),
+    y: whiteTop + Math.round(width * 0.9725),
+    width: Math.round(width * 0.86),
+    height: 16,
   };
-  let [cardCoords2, _] = searchCanvas(blackCanvas, searchArea2, labelWidth / 2);
-  cardCoords2 = cardCoords2.map(([x, y]) => [
-    Math.round(x - cardWidth * 0.94),
-    y,
-  ]);
-  cardCoords = cardCoords.concat(cardCoords2);
+  const numCards2 = countEntities(
+    blackCanvas,
+    searchArea2,
+    Math.floor(width * 0.12)
+  );
+
+  // Generate card coordinates
+  let cardCoords = [];
+  for (let i = 0; i < numCards1; i++) {
+    cardCoords.push([
+      x + Math.round(width * 0.07) + Math.round(width * 0.218) * i,
+      whiteTop + Math.round(width * 0.718),
+    ]);
+  }
+  for (let j = 0; j < numCards2; j++) {
+    cardCoords.push([
+      x + Math.round(width * 0.07) + Math.round(width * 0.218) * j,
+      whiteTop + Math.round(width * 0.9725),
+    ]);
+  }
+
+  if (!cardCoords.length) {
+    return [];
+  }
 
   // Identify signature card
-  const plusIndex =
-    (Math.round(COMP_SIZE * 0.45) * COMP_SIZE + Math.round(COMP_SIZE * 0.875)) *
-    4;
   const detectedSignatureCard = identifyEntities(
     img,
     [cardCoords[0]],
-    cardWidth,
-    signatureSkillCardsImageData,
-    plusIndex
+    Math.round(width * 0.2),
+    signatureSkillCardsImageData
   )[0];
 
   // Identify the rest of the cards
@@ -337,64 +358,27 @@ export function extractCards(
     const detectedNonSignatureCards = identifyEntities(
       img,
       cardCoords.slice(1),
-      cardWidth,
-      nonSignatureSkillCardsImageData[idolId],
-      plusIndex
+      Math.round(width * 0.2),
+      nonSignatureSkillCardsImageData[idolId]
     );
     return [detectedSignatureCard, ...detectedNonSignatureCards];
   } else {
     const idolId = PIdols.getById(itemsPIdolId)?.idolId || 1;
-    return identifyEntities(
+    const detectedCards = identifyEntities(
       img,
       cardCoords,
       cardWidth,
       signatureSkillCardsImageData.concat(
         nonSignatureSkillCardsImageData[idolId]
-      ),
-      plusIndex
+      )
     );
+    return detectedCards;
   }
 }
 
-// Calculate color similarity
-// Source: https://stackoverflow.com/a/52453462
-
-function deltaE(rgbA, rgbB) {
-  let labA = rgb2lab(rgbA);
-  let labB = rgb2lab(rgbB);
-  let deltaL = labA[0] - labB[0];
-  let deltaA = labA[1] - labB[1];
-  let deltaB = labA[2] - labB[2];
-  let c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2]);
-  let c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2]);
-  let deltaC = c1 - c2;
-  let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
-  deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
-  let sc = 1.0 + 0.045 * c1;
-  let sh = 1.0 + 0.015 * c1;
-  let deltaLKlsl = deltaL / 1.0;
-  let deltaCkcsc = deltaC / sc;
-  let deltaHkhsh = deltaH / sh;
-  let i =
-    deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
-  return i < 0 ? 0 : Math.sqrt(i);
-}
-
-function rgb2lab(rgb) {
-  let r = rgb[0] / 255,
-    g = rgb[1] / 255,
-    b = rgb[2] / 255,
-    x,
-    y,
-    z;
-  r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-  g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-  b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-  x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-  y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0;
-  z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-  x = x > 0.008856 ? Math.pow(x, 1 / 3) : 7.787 * x + 16 / 116;
-  y = y > 0.008856 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
-  z = z > 0.008856 ? Math.pow(z, 1 / 3) : 7.787 * z + 16 / 116;
-  return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
+// Euclidean distance between colors
+function deltaEFast(r1, r2, g1, g2, b1, b2) {
+  return Math.sqrt(
+    Math.pow(r2 - r1, 2) + Math.pow(g2 - g1, 2) + Math.pow(b2 - b1, 2)
+  );
 }

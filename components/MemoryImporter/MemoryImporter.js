@@ -34,9 +34,8 @@ export default function MemoryImporter() {
     setProgress(0);
 
     // Set up workers and entity image data promises
-    let engWorker, jpnWorker;
-    const engWorkerPromise = createWorker("eng", 1);
-    const jpnWorkerPromise = createWorker("jpn", 1);
+    let worker;
+    const workerPromise = createWorker("eng");
     const signatureSkillCardsImageDataPromise =
       getSignatureSkillCardsImageData();
     const nonSignatureSkillCardsImageDataPromise =
@@ -53,18 +52,11 @@ export default function MemoryImporter() {
             const blackCanvas = getBlackCanvas(img);
             const whiteCanvas = getWhiteCanvas(img);
 
-            engWorker = await engWorkerPromise;
-            jpnWorker = await jpnWorkerPromise;
-
-            const engWhitePromise = engWorker.recognize(whiteCanvas);
-            const engBlackPromise = engWorker.recognize(blackCanvas);
-            const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
-
-            const powerCandidates = extractPower(await engWhitePromise);
-            const params = extractParams(await engBlackPromise);
+            worker = await workerPromise;
+            const engWhitePromise = worker.recognize(whiteCanvas);
+            const engBlackPromise = worker.recognize(blackCanvas);
 
             const items = extractItems(
-              await jpnBlackPromise,
               img,
               blackCanvas,
               await itemImageDataPromise
@@ -75,7 +67,6 @@ export default function MemoryImporter() {
               .find((item) => item.pIdolId)?.pIdolId;
 
             const cards = extractCards(
-              await jpnBlackPromise,
               img,
               blackCanvas,
               await signatureSkillCardsImageDataPromise,
@@ -94,6 +85,9 @@ export default function MemoryImporter() {
             while (cards.length < 6) {
               cards.push(0);
             }
+
+            const powerCandidates = extractPower(await engWhitePromise);
+            const params = extractParams(await engBlackPromise);
 
             // Calculate contest power and flag those that are mismatched with the screenshot
             const calculatedPower = calculateContestPower(params, items, cards);
@@ -118,8 +112,7 @@ export default function MemoryImporter() {
     );
 
     Promise.all(promises).then(async (res) => {
-      engWorker.terminate();
-      jpnWorker.terminate();
+      worker.terminate();
 
       const result = await fetch("/api/memory", {
         method: "POST",
