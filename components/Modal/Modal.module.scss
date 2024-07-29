@@ -16,6 +16,9 @@
     position: relative;
     width: 600px;
     max-width: 100vw;
+    max-height: 100dvh;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 0 16px $gray-dark;
     border-radius: 16px;
     padding: 32px;

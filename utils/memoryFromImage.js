@@ -275,15 +275,11 @@ export function extractItems(img, blackCanvas, itemImageData) {
   }
 
   // Identify items
-  const plusIndex =
-    (Math.round(COMP_SIZE * 0.08) * COMP_SIZE + Math.round(COMP_SIZE * 0.85)) *
-    4;
   const detectedItems = identifyEntities(
     img,
     itemCoords,
     Math.round(width * 0.1185),
-    itemImageData,
-    plusIndex
+    itemImageData
   );
 
   return detectedItems;

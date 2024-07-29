@@ -30,4 +30,11 @@
     align-items: center;
     color: $gk-orange;
   }
+
+  .help {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    overflow: auto;
+  }
 }
