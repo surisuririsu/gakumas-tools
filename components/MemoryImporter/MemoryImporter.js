@@ -153,6 +153,7 @@ export default function MemoryImporter() {
               src="/memory_importer_reference.png"
               width={152}
               height={360}
+              alt=""
             />
             <div>
               <p>
