@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
 import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
 import { createWorker } from "tesseract.js";
