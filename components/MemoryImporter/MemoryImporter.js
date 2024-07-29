@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import Image from "next/image";
+import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
 import { FaCircleQuestion, FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
@@ -145,7 +145,7 @@ export default function MemoryImporter() {
         <Modal onClose={() => setShowModal(false)}>
           <h3>Import memories from screenshots</h3>
           <div className={styles.help}>
-            <Image
+            <NextImage
               src="/memory_importer_reference.png"
               width={152}
               height={360}
