@@ -202,7 +202,7 @@ function countEntities(canvas, searchArea, threshold) {
 }
 
 // Compare detected areas with item/card icons to find most similar
-function identifyEntities(img, coords, width, entityData) {
+function identifyEntities(img, coords, width, entityData, plusIndex) {
   const memCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
   const memCtx = memCanvas.getContext("2d");
 
@@ -239,7 +239,21 @@ function identifyEntities(img, coords, width, entityData) {
 
     const sorted = diffScores.sort((a, b) => a.score - b.score);
 
-    detectedEntities.push(sorted[0].id);
+    // Heuristic to detect upgraded vs non-upgraded to be more stable
+    const pd = memCtx.getImageData(...DRAW_AREA);
+    const upgraded =
+      pd.data[plusIndex] > 200 &&
+      pd.data[plusIndex + 1] < 150 &&
+      pd.data[plusIndex + 2] > 50 &&
+      pd.data[plusIndex + 2] < 150;
+
+    if (sorted[0].name.startsWith(sorted[1].name)) {
+      detectedEntities.push(upgraded ? sorted[0].id : sorted[1].id);
+    } else if (sorted[1].name.startsWith(sorted[0].name)) {
+      detectedEntities.push(upgraded ? sorted[1].id : sorted[0].id);
+    } else {
+      detectedEntities.push(sorted[0].id);
+    }
   }
 
   return detectedEntities;
@@ -271,11 +285,15 @@ export function extractItems(img, blackCanvas, itemImageData) {
   }
 
   // Identify items
+  const plusIndex =
+    (Math.round(COMP_SIZE * 0.08) * COMP_SIZE + Math.round(COMP_SIZE * 0.85)) *
+    4;
   const detectedItems = identifyEntities(
     img,
     itemCoords,
     Math.round(width * 0.1185),
-    itemImageData
+    itemImageData,
+    plusIndex
   );
 
   return detectedItems;
@@ -334,11 +352,15 @@ export function extractCards(
   }
 
   // Identify signature card
+  const plusIndex =
+    (Math.round(COMP_SIZE * 0.45) * COMP_SIZE + Math.round(COMP_SIZE * 0.875)) *
+    4;
   const detectedSignatureCard = identifyEntities(
     img,
     [cardCoords[0]],
     Math.round(width * 0.2),
-    signatureSkillCardsImageData
+    signatureSkillCardsImageData,
+    plusIndex
   )[0];
 
   // Identify the rest of the cards
@@ -351,7 +373,8 @@ export function extractCards(
       img,
       cardCoords.slice(1),
       Math.round(width * 0.2),
-      nonSignatureSkillCardsImageData[idolId]
+      nonSignatureSkillCardsImageData[idolId],
+      plusIndex
     );
     return [detectedSignatureCard, ...detectedNonSignatureCards];
   } else {
@@ -362,7 +385,8 @@ export function extractCards(
       cardWidth,
       signatureSkillCardsImageData.concat(
         nonSignatureSkillCardsImageData[idolId]
-      )
+      ),
+      plusIndex
     );
     return detectedCards;
   }
