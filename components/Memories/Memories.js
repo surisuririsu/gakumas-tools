@@ -43,10 +43,21 @@ export default function Memories() {
     })
     .filter((memory) => memory.searchScore)
     .sort((a, b) => {
-      if (hasSearchQuery && b.searchScore != a.searchScore) {
-        return b.searchScore - a.searchScore;
+      if (hasSearchQuery) {
+        if (b.searchScore != a.searchScore) {
+          return b.searchScore - a.searchScore;
+        } else {
+          return b.contestPower - a.contestPower;
+        }
       } else {
-        return b.contestPower - a.contestPower;
+        if (
+          b.name.indexOf("(FIXME)") != -1 ||
+          a.name.indexOf("(FIXME)") != -1
+        ) {
+          return b.name.indexOf("(FIXME)") - a.name.indexOf("(FIXME)");
+        } else {
+          return b.contestPower - a.contestPower;
+        }
       }
     });
 
