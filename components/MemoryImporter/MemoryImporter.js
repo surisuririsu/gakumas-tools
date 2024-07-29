@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import Image from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
 import { FaCircleQuestion, FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
@@ -143,19 +144,31 @@ export default function MemoryImporter() {
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <h3>Import memories from screenshots</h3>
-          <p>
-            Contest power, parameters, P-items, and skill cards icons must be
-            visible in each screenshot.
-          </p>
-          <p>
-            Importing may take several minutes or longer depending on the number
-            of memories imported and your device&apos;s processor and memory.
-          </p>
-          <p>
-            Some memories may fail to parse correctly, and require fixing after
-            import. In such cases, they will be marked with &quot;(FIXME)&quot;
-            in the name.
-          </p>
+          <div className={styles.help}>
+            <Image
+              src="/memory_importer_reference.png"
+              width={152}
+              height={360}
+            />
+            <div>
+              <p>
+                Contest power, parameters, P-items, and skill card icons must be
+                visible in each screenshot. The top of the white section must
+                also be visible, and the bottom section must not be scrolled
+                down.
+              </p>
+              <p>
+                Importing may take several minutes or longer depending on the
+                number of memories imported and your device&apos;s processor and
+                memory. Use on a smartphone is not recommended.
+              </p>
+              <p>
+                Some memories may fail to parse correctly, and require fixing
+                after import. In such cases, they will be marked with
+                &quot;(FIXME)&quot; in the name.
+              </p>
+            </div>
+          </div>
         </Modal>
       )}
     </div>
