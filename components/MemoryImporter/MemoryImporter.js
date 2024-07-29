@@ -165,7 +165,9 @@ export default function MemoryImporter() {
               <p>
                 Importing may take several minutes or longer depending on the
                 number of memories imported and your device&apos;s processor and
-                memory. Use on a smartphone is not recommended.
+                memory. Your browser may crash if you try to import too many
+                memories at once. The recommended limit is 50 memories per
+                batch. Use on a smartphone is not recommended.
               </p>
               <p>
                 Some memories may fail to parse correctly, and require fixing
