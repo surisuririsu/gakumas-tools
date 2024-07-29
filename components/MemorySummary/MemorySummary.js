@@ -47,6 +47,12 @@ export default function MemorySummary({ memory }) {
                 draggable={false}
               />
             ))}
+          <div className={styles.filler} />
+          <div className={styles.parameters}>
+            <div className={styles.vocal} style={{ flex: params[0] }} />
+            <div className={styles.dance} style={{ flex: params[1] }} />
+            <div className={styles.visual} style={{ flex: params[2] }} />
+          </div>
         </div>
         <div className={styles.row}>
           {skillCardIds
