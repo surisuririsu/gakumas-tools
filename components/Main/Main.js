@@ -3,6 +3,7 @@ import Dex from "@/components/Dex";
 import Memories from "@/components/Memories";
 import MemoryEditor from "@/components/MemoryEditor";
 import ProduceRankCalculator from "@/components/ProduceRankCalculator";
+import Welcome from "@/components/Welcome";
 import Widget from "@/components/Widget";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Main.module.scss";
@@ -32,6 +33,7 @@ export default function Home() {
           <Memories />
         </Widget>
       )}
+      {!Object.values(openWidgets).some((v) => v) && <Welcome />}
     </main>
   );
 }

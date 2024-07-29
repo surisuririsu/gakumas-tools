@@ -157,7 +157,9 @@ export default function Memories() {
                 <Trash size="small" />
               </div>
             )}
-            {action == "import" && <MemoryImporter />}
+            {action == "import" && (
+              <MemoryImporter onClose={() => setAction(null)} />
+            )}
             {action == "delete" && (
               <div className={styles.delete}>
                 {selectedMemoryIds.length} memories selected{" "}
