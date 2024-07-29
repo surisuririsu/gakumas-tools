@@ -11,10 +11,8 @@ export function getGameRegion(img) {
 
 // Get a canvas with image black/white filtered
 function getPreprocessedCanvas(img, textColorFn) {
-  const canvas = document.createElement("canvas");
   const [x, y, width, height] = getGameRegion(img);
-  canvas.width = width;
-  canvas.height = height;
+  const canvas = new OffscreenCanvas(width, height);
   const ctx = canvas.getContext("2d");
   ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
   let d = ctx.getImageData(0, 0, width, height);
@@ -102,7 +100,7 @@ export async function getEntityImageData(entityData, idolId) {
     entityData.map(
       (entity) =>
         new Promise((resolve) => {
-          const entCanvas = document.createElement("canvas");
+          const entCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
           const entCtx = entCanvas.getContext("2d");
           const entImg = new Image();
           entImg.src = idolId
@@ -205,9 +203,7 @@ function countEntities(canvas, searchArea, threshold) {
 
 // Compare detected areas with item/card icons to find most similar
 function identifyEntities(img, coords, width, entityData) {
-  const memCanvas = document.createElement("canvas");
-  memCanvas.width = COMP_SIZE;
-  memCanvas.height = COMP_SIZE;
+  const memCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
   const memCtx = memCanvas.getContext("2d");
 
   const detectedEntities = [];
