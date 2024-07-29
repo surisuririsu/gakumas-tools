@@ -34,6 +34,8 @@ export default function MemoryImporter() {
     setTotal(files.length);
     setProgress(0);
 
+    console.time("All memories parsed");
+
     // Set up workers and entity image data promises
     let worker;
     const workerPromise = createWorker("eng");
@@ -113,6 +115,8 @@ export default function MemoryImporter() {
     );
 
     Promise.all(promises).then(async (res) => {
+      console.timeEnd("All memories parsed");
+
       worker.terminate();
 
       const result = await fetch("/api/memory", {

@@ -173,7 +173,7 @@ export async function getPItemsImageData() {
 
 // Search for rows of black pixels marking edge of item/card
 function countEntities(canvas, searchArea, threshold) {
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const ctx = canvas.getContext("2d");
   const d = ctx.getImageData(
     searchArea.x,
     searchArea.y,
