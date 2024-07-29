@@ -60,4 +60,29 @@
       overflow: hidden;
     }
   }
+
+  .filler {
+    flex: 1;
+  }
+
+  .parameters {
+    display: flex;
+    gap: 1px;
+    width: 80px;
+    margin: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    .vocal {
+      background-color: $vocal;
+    }
+
+    .dance {
+      background-color: $dance;
+    }
+
+    .visual {
+      background-color: $visual;
+    }
+  }
 }

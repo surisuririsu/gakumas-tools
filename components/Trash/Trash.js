@@ -53,7 +53,7 @@ export default function Trash({ size }) {
   function handleClick(e) {
     e.stopPropagation();
     if (!selectedEntity) return;
-    if (selectedEntity.widget == "memory_editor") {
+    if (selectedEntity.widget != "dex") {
       clearEntity(selectedEntity);
     }
     setSelectedEntity(null);

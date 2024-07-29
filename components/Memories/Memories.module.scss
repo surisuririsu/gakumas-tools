@@ -33,6 +33,7 @@
 
   .memoryTile {
     display: flex;
+    border-bottom: 1px solid $gk-orange;
 
     .check {
       display: flex;
