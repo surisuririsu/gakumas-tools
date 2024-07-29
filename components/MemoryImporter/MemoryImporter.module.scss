@@ -1,39 +1,27 @@
 @import "@/constants";
 
-.memoryImporter {
-  flex: 1;
-  min-width: 0;
+.files {
+  margin-top: 16px;
+  display: flex;
 
-  .top {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    input {
-      min-width: 0;
-      flex: 1;
-      border-radius: 8px;
-      padding: 16px;
-      background-color: lighten($gk-orange, 40%);
-    }
-
-    button {
-      width: 32px;
-      height: 32px;
-    }
+  input {
+    flex: 1;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: lighten($gk-orange, 40%);
   }
+}
 
-  .progress {
-    margin-top: 4px;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    color: $gk-orange;
-  }
+.progress {
+  margin-top: 4px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  color: $gk-orange;
+}
 
-  .help {
-    display: flex;
-    gap: 16px;
-    overflow: auto;
-  }
+.help {
+  display: flex;
+  gap: 16px;
+  overflow: auto;
 }

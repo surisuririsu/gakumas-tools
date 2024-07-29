@@ -1,9 +1,7 @@
 import { useContext, useState } from "react";
 import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
-import { FaCircleQuestion, FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
-import IconButton from "@/components/IconButton";
 import Modal from "@/components/Modal";
 import DataContext from "@/contexts/DataContext";
 import { calculateContestPower } from "@/utils/contestPower";
@@ -20,10 +18,9 @@ import {
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporter.module.scss";
 
-export default function MemoryImporter() {
+export default function MemoryImporter({ onClose }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
-  const [showModal, setShowModal] = useState(null);
   const { fetchMemories } = useContext(DataContext);
 
   async function handleFiles(e) {
@@ -130,13 +127,37 @@ export default function MemoryImporter() {
   }
 
   return (
-    <div className={styles.memoryImporter}>
-      <div className={styles.top}>
-        <input type="file" id="input" multiple onChange={handleFiles} />
-        <IconButton
-          icon={FaCircleQuestion}
-          onClick={() => setShowModal(true)}
+    <Modal onClose={onClose}>
+      <h3>Import memories from screenshots</h3>
+      <div className={styles.help}>
+        <NextImage
+          src="/memory_importer_reference.png"
+          width={152}
+          height={360}
+          alt=""
         />
+        <div>
+          <p>
+            Contest power, parameters, P-items, and skill card icons must be
+            visible in each screenshot. The top of the white section must also
+            be visible, and the bottom section must not be scrolled down.
+          </p>
+          <p>
+            Importing may take several minutes or longer depending on the number
+            of memories imported and your device&apos;s processor and memory.
+            Your browser may crash if you try to import too many memories at
+            once. The recommended limit is 50 memories per batch. Use on a
+            smartphone is not recommended.
+          </p>
+          <p>
+            Some memories may fail to parse correctly, and require fixing after
+            import. In such cases, they will be marked with &quot;(FIXME)&quot;
+            in the name.
+          </p>
+        </div>
+      </div>
+      <div className={styles.files}>
+        <input type="file" id="input" multiple onChange={handleFiles} />
       </div>
       <div className={styles.progress}>
         {progress != null && (
@@ -145,39 +166,6 @@ export default function MemoryImporter() {
           </>
         )}
       </div>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <h3>Import memories from screenshots</h3>
-          <div className={styles.help}>
-            <NextImage
-              src="/memory_importer_reference.png"
-              width={152}
-              height={360}
-              alt=""
-            />
-            <div>
-              <p>
-                Contest power, parameters, P-items, and skill card icons must be
-                visible in each screenshot. The top of the white section must
-                also be visible, and the bottom section must not be scrolled
-                down.
-              </p>
-              <p>
-                Importing may take several minutes or longer depending on the
-                number of memories imported and your device&apos;s processor and
-                memory. Your browser may crash if you try to import too many
-                memories at once. The recommended limit is 50 memories per
-                batch. Use on a smartphone is not recommended.
-              </p>
-              <p>
-                Some memories may fail to parse correctly, and require fixing
-                after import. In such cases, they will be marked with
-                &quot;(FIXME)&quot; in the name.
-              </p>
-            </div>
-          </div>
-        </Modal>
-      )}
-    </div>
+    </Modal>
   );
 }
