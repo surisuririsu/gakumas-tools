@@ -16,6 +16,7 @@ import StageSkillCards from "@/components/StageSkillCards";
 import Trash from "@/components/Trash";
 import DataContext from "@/contexts/DataContext";
 import SearchContext from "@/contexts/SearchContext";
+import { calculateContestPower } from "@/utils/contestPower";
 import styles from "./Memories.module.scss";
 
 export default function Memories() {
@@ -28,6 +29,26 @@ export default function Memories() {
   const selectedMemoryIds = Object.keys(selectedMemories).filter(
     (s) => selectedMemories[s]
   );
+
+  const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
+  const displayedMemories = memories
+    .map((memory) => {
+      memory.searchScore = hasSearchQuery ? getSearchScore(memory) : 1;
+      memory.contestPower = calculateContestPower(
+        memory.params,
+        memory.pItemIds,
+        memory.skillCardIds
+      );
+      return memory;
+    })
+    .filter((memory) => memory.searchScore)
+    .sort((a, b) => {
+      if (hasSearchQuery && b.searchScore != a.searchScore) {
+        return b.searchScore - a.searchScore;
+      } else {
+        return b.contestPower - a.contestPower;
+      }
+    });
 
   useEffect(() => {
     if (status == "authenticated") {
@@ -82,16 +103,9 @@ export default function Memories() {
     return score;
   }
 
-  function sortFn(a, b) {
-    if (pItemIds.some((i) => i) || skillCardIds.some((i) => i)) {
-      return getSearchScore(b) - getSearchScore(a);
-    }
-    return 0;
-  }
-
   return (
     <div className={styles.memories}>
-      {status == "authenticated" ? (
+      {status == "authenticated" && (
         <>
           <div className={styles.header}>
             {action ? (
@@ -147,7 +161,7 @@ export default function Memories() {
             )}
           </div>
           <div className={styles.list}>
-            {memories.sort(sortFn).map((memory) => (
+            {displayedMemories.map((memory) => (
               <div key={memory._id} className={styles.memoryTile}>
                 {action == "delete" && (
                   <div className={styles.check}>
@@ -176,7 +190,8 @@ export default function Memories() {
             )}
           </div>
         </>
-      ) : (
+      )}
+      {status == "unauthenticated" && (
         <div className={styles.nudge}>
           <Button onClick={() => signIn("discord")}>
             Sign in with Discord to save/load memories
