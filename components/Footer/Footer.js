@@ -13,7 +13,7 @@ export default function Footer() {
         href="https://github.com/surisuririsu/gakumas-tools/issues/new"
         target="_blank"
       >
-        Report a problem
+        Report a problem or request a feature
       </a>
     </footer>
   );
