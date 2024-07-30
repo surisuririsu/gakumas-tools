@@ -2,16 +2,16 @@
 
 .welcome {
   width: 100%;
-  height: 100%;
+  padding: 32px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: auto;
 
   .content {
     max-width: 800px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin: auto;
 
     h2 {
       color: $gk-red-orange;

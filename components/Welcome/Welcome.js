@@ -52,6 +52,24 @@ export default function Welcome() {
             </Button>
           </li>
         </ul>
+        <h3>Current features</h3>
+        <ul>
+          <li>Calculate required exam score for produce ranks</li>
+          <li>View skill card and p-item information</li>
+          <li>Save and load memories, import memories from screenshots</li>
+          <li>Search memories by skill cards and p-items</li>
+        </ul>
+        <h3>Planned features</h3>
+        <ul>
+          <li>
+            Create contest loadouts and find matching combinations of memories
+          </li>
+          <li>Simulate contest stage with loadouts</li>
+          <li>
+            Find ideal loadouts based on contest stage parameters and items
+          </li>
+          <li>And more</li>
+        </ul>
       </div>
       {showImporter && (
         <MemoryImporter onClose={() => setShowImporter(false)} />
