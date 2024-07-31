@@ -26,7 +26,7 @@ export default function Memories() {
   const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
-  const [maxToShow, setMaxToShow] = useState(100);
+  const [maxToShow, setMaxToShow] = useState(50);
 
   useEffect(() => {
     if (status == "authenticated" && !memories.length) {
@@ -204,7 +204,7 @@ export default function Memories() {
             ))}
             <div className={styles.nudge}>
               {filteredMemories.length > maxToShow && (
-                <Button onClick={() => setMaxToShow(maxToShow + 100)}>
+                <Button onClick={() => setMaxToShow(maxToShow + 50)}>
                   Show more memories
                 </Button>
               )}
