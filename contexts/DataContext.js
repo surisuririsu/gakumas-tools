@@ -6,20 +6,20 @@ const DataContext = createContext();
 export function DataContextProvider({ children }) {
   const { status } = useSession();
   const [memories, setMemories] = useState([]);
-  const memoryFetchInFlight = useRef(false);
+  const [memoriesLoading, setMemoriesLoading] = useState(false);
 
   async function fetchMemories() {
-    if (status == "authenticated" && !memoryFetchInFlight.current) {
-      memoryFetchInFlight.current = true;
+    if (status == "authenticated" && !memoriesLoading) {
+      setMemoriesLoading(true);
       const response = await fetch("/api/memory");
       const data = await response.json();
       setMemories(data.memories);
-      memoryFetchInFlight.current = false;
+      setMemoriesLoading(false);
     }
   }
 
   return (
-    <DataContext.Provider value={{ memories, fetchMemories }}>
+    <DataContext.Provider value={{ memories, fetchMemories, memoriesLoading }}>
       {children}
     </DataContext.Provider>
   );

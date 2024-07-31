@@ -22,7 +22,7 @@ import styles from "./Memories.module.scss";
 
 export default function Memories() {
   const { status } = useSession();
-  const { memories, fetchMemories } = useContext(DataContext);
+  const { memories, fetchMemories, memoriesLoading } = useContext(DataContext);
   const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
@@ -144,10 +144,12 @@ export default function Memories() {
                   onClick={() => setAction("delete")}
                 />
                 <div className={styles.fill} />
-                <div className={styles.count}>
-                  <FaFilm />
-                  {filteredMemories.length}
-                </div>
+                {!memoriesLoading && (
+                  <div className={styles.count}>
+                    <FaFilm />
+                    {filteredMemories.length}
+                  </div>
+                )}
               </>
             )}
             {action == "search" && (
@@ -208,7 +210,7 @@ export default function Memories() {
                   Show more memories
                 </Button>
               )}
-              {action != "import" && (
+              {action != "import" && !memoriesLoading && (
                 <Button onClick={() => setAction("import")}>
                   Import memories from screenshots
                 </Button>
