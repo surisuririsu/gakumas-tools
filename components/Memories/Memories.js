@@ -4,6 +4,7 @@ import {
   FaMagnifyingGlass,
   FaFileImport,
   FaRegTrashCan,
+  FaFilm,
 } from "react-icons/fa6";
 import { useSession, signIn } from "next-auth/react";
 import { PItems, SkillCards } from "gakumas-data";
@@ -25,57 +26,13 @@ export default function Memories() {
   const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
-
-  const selectedMemoryIds = Object.keys(selectedMemories).filter(
-    (s) => selectedMemories[s]
-  );
-
-  const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
-  const displayedMemories = memories
-    .map((memory) => {
-      memory.searchScore = hasSearchQuery ? getSearchScore(memory) : 1;
-      memory.contestPower = calculateContestPower(
-        memory.params,
-        memory.pItemIds,
-        memory.skillCardIds
-      );
-      return memory;
-    })
-    .filter((memory) => memory.searchScore)
-    .sort((a, b) => {
-      if (hasSearchQuery) {
-        if (b.searchScore != a.searchScore) {
-          return b.searchScore - a.searchScore;
-        } else {
-          return b.contestPower - a.contestPower;
-        }
-      } else {
-        if (
-          b.name.indexOf("(FIXME)") != -1 ||
-          a.name.indexOf("(FIXME)") != -1
-        ) {
-          return b.name.indexOf("(FIXME)") - a.name.indexOf("(FIXME)");
-        } else {
-          return b.contestPower - a.contestPower;
-        }
-      }
-    });
+  const [maxToShow, setMaxToShow] = useState(100);
 
   useEffect(() => {
-    if (status == "authenticated") {
+    if (status == "authenticated" && !memories.length) {
       fetchMemories();
     }
   }, [status]);
-
-  async function deleteMemories() {
-    const result = await fetch("/api/memory/bulk_delete", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids: selectedMemoryIds }),
-    });
-    fetchMemories();
-    setSelectedMemories({});
-  }
 
   function getSearchScore(memory) {
     let score = 0;
@@ -114,6 +71,52 @@ export default function Memories() {
     return score;
   }
 
+  const selectedMemoryIds = Object.keys(selectedMemories).filter(
+    (s) => selectedMemories[s]
+  );
+
+  const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
+  const filteredMemories = memories
+    .map((memory) => {
+      memory.searchScore = hasSearchQuery ? getSearchScore(memory) : 1;
+      memory.contestPower = calculateContestPower(
+        memory.params,
+        memory.pItemIds,
+        memory.skillCardIds
+      );
+      return memory;
+    })
+    .filter((memory) => memory.searchScore)
+    .sort((a, b) => {
+      if (hasSearchQuery) {
+        if (b.searchScore != a.searchScore) {
+          return b.searchScore - a.searchScore;
+        } else {
+          return b.contestPower - a.contestPower;
+        }
+      } else {
+        if (
+          b.name.indexOf("(FIXME)") != -1 ||
+          a.name.indexOf("(FIXME)") != -1
+        ) {
+          return b.name.indexOf("(FIXME)") - a.name.indexOf("(FIXME)");
+        } else {
+          return b.contestPower - a.contestPower;
+        }
+      }
+    });
+  const displayedMemories = filteredMemories.slice(0, maxToShow);
+
+  async function deleteMemories() {
+    const result = await fetch("/api/memory/bulk_delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: selectedMemoryIds }),
+    });
+    fetchMemories();
+    setSelectedMemories({});
+  }
+
   return (
     <div className={styles.memories}>
       {status == "authenticated" && (
@@ -140,6 +143,11 @@ export default function Memories() {
                   icon={FaRegTrashCan}
                   onClick={() => setAction("delete")}
                 />
+                <div className={styles.fill} />
+                <div className={styles.count}>
+                  <FaFilm />
+                  {filteredMemories.length}
+                </div>
               </>
             )}
             {action == "search" && (
@@ -194,13 +202,18 @@ export default function Memories() {
                 <MemorySummary memory={memory} />
               </div>
             ))}
-            {action != "import" && (
-              <div className={styles.nudge}>
+            <div className={styles.nudge}>
+              {filteredMemories.length > maxToShow && (
+                <Button onClick={() => setMaxToShow(maxToShow + 100)}>
+                  Show more memories
+                </Button>
+              )}
+              {action != "import" && (
                 <Button onClick={() => setAction("import")}>
                   Import memories from screenshots
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </>
       )}

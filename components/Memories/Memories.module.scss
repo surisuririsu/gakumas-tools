@@ -7,8 +7,8 @@
 
   .header {
     display: flex;
-    gap: 8px;
-    padding: 8px;
+    gap: 6px;
+    padding: 6px;
     border-bottom: 2px solid $gray-light;
 
     .search {
@@ -21,6 +21,17 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .fill {
+      flex: 1;
+    }
+
+    .count {
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      color: $gk-orange;
     }
   }
 
@@ -50,7 +61,9 @@
 
   .nudge {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     padding: 32px;
   }
 }
