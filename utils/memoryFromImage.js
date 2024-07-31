@@ -1,3 +1,4 @@
+import { getImageProps } from "next/image";
 import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
 
 export function getGameRegion(img) {
@@ -103,9 +104,12 @@ export async function getEntityImageData(entityData, idolId) {
           const entCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
           const entCtx = entCanvas.getContext("2d");
           const entImg = new Image();
-          entImg.src = idolId
-            ? entity.getDynamicIcon(idolId).src
-            : entity.icon.src;
+          const icon = idolId ? entity.getDynamicIcon(idolId) : entity.icon;
+          entImg.src = getImageProps({
+            ...icon,
+            width: 32,
+            height: 32,
+          }).props.src;
           entImg.onload = async () => {
             entCtx.drawImage(entImg, ...DRAW_AREA);
             resolve({

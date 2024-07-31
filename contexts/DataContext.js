@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const DataContext = createContext();
@@ -6,12 +6,15 @@ const DataContext = createContext();
 export function DataContextProvider({ children }) {
   const { status } = useSession();
   const [memories, setMemories] = useState([]);
+  const memoryFetchInFlight = useRef(false);
 
   async function fetchMemories() {
-    if (status == "authenticated") {
+    if (status == "authenticated" && !memoryFetchInFlight.current) {
+      memoryFetchInFlight.current = true;
       const response = await fetch("/api/memory");
       const data = await response.json();
       setMemories(data.memories);
+      memoryFetchInFlight.current = false;
     }
   }
 
