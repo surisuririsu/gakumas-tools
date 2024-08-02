@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import Dex from "@/components/Dex";
+import LoadoutEditor from "@/components/LoadoutEditor";
 import Memories from "@/components/Memories";
 import MemoryEditor from "@/components/MemoryEditor";
 import ProduceRankCalculator from "@/components/ProduceRankCalculator";
@@ -21,6 +22,11 @@ export default function Home() {
       {openWidgets.dex && (
         <Widget title="Index">
           <Dex />
+        </Widget>
+      )}
+      {openWidgets.loadoutEditor && (
+        <Widget title="Loadout Editor" fill>
+          <LoadoutEditor />
         </Widget>
       )}
       {openWidgets.memoryEditor && (

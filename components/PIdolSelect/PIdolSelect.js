@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 import { Idols, PIdols } from "gakumas-data";
 import IconSelect from "@/components/IconSelect";
 import PIdol from "@/components/PIdol";
+import { PLANS } from "@/utils/plans";
 import styles from "./PIdolSelect.module.scss";
-
-const PLANS = ["sense", "logic"];
 
 export default function PIdolSelect({ selected, onChange }) {
   const [expanded, setExpanded] = useState(!selected);
   const [plan, setPlan] = useState("sense");
-  const [idol, setIdol] = useState(1);
+  const [idolId, setIdolId] = useState(1);
 
   useEffect(() => {
     const pIdol = PIdols.getById(selected);
     if (!pIdol) return;
     setPlan(pIdol.plan);
-    setIdol(pIdol.idolId);
+    setIdolId(pIdol.idolId);
   }, [selected]);
 
   return (
@@ -39,12 +38,12 @@ export default function PIdolSelect({ selected, onChange }) {
                 id,
                 iconSrc: icon,
               }))}
-              selected={idol}
-              onChange={setIdol}
+              selected={idolId}
+              onChange={setIdolId}
             />
           </div>
           <div className={styles.result}>
-            {PIdols.getFiltered({ plans: [plan], idolIds: [idol] }).map(
+            {PIdols.getFiltered({ plans: [plan], idolIds: [idolId] }).map(
               (pIdol) => (
                 <button
                   key={pIdol.id}

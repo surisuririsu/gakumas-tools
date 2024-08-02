@@ -7,6 +7,7 @@ export default function StageSkillCards({
   widget,
   idolId,
   size,
+  groupIndex = 0,
 }) {
   return (
     <div className={styles.stageSkillCards}>
@@ -16,7 +17,7 @@ export default function StageSkillCards({
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
           widget={widget}
-          index={index}
+          index={groupIndex * 6 + index}
           idolId={idolId}
           size={size}
         />
