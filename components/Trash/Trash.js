@@ -2,12 +2,17 @@ import { useContext } from "react";
 import { useDrop } from "react-dnd";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { EntityTypes } from "@/utils/entities";
+import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import styles from "./Trash.module.scss";
 
 export default function Trash({ size }) {
+  const {
+    setPItemIds: setLoadoutPItemIds,
+    setSkillCardIds: setLoadoutSkillCardIds,
+  } = useContext(LoadoutContext);
   const {
     setPItemIds: setMemoryPItemIds,
     setSkillCardIds: setMemorySkillCardIds,
@@ -18,19 +23,23 @@ export default function Trash({ size }) {
   } = useContext(SearchContext);
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
 
+  const settersByWidgetAndType = {
+    memoryEditor: {
+      [EntityTypes.P_ITEM]: setMemoryPItemIds,
+      [EntityTypes.SKILL_CARD]: setMemorySkillCardIds,
+    },
+    memories: {
+      [EntityTypes.P_ITEM]: setSearchPItemIds,
+      [EntityTypes.SKILL_CARD]: setSearchSkillCardIds,
+    },
+    loadoutEditor: {
+      [EntityTypes.P_ITEM]: setLoadoutPItemIds,
+      [EntityTypes.SKILL_CARD]: setLoadoutSkillCardIds,
+    },
+  };
+
   function clearEntity(entity) {
-    let setState = () => {};
-    if (entity.widget == "memory_editor") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setMemorySkillCardIds
-          : setMemoryPItemIds;
-    } else if (entity.widget == "memories") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setSearchSkillCardIds
-          : setSearchPItemIds;
-    }
+    const setState = settersByWidgetAndType[entity.widget][entity.type];
     setState((cur) => {
       const next = [...cur];
       next[entity.index] = 0;

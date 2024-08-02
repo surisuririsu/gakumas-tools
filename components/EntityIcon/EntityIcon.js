@@ -2,13 +2,23 @@ import { useContext } from "react";
 import Image from "next/image";
 import { useDrag, useDrop } from "react-dnd";
 import { PItems, SkillCards } from "gakumas-data";
+import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
+const ENTITY_DATA_BY_TYPE = {
+  [EntityTypes.P_ITEM]: PItems,
+  [EntityTypes.SKILL_CARD]: SkillCards,
+};
+
 export default function EntityIcon({ type, id, widget, index, size, idolId }) {
+  const {
+    setPItemIds: setLoadoutPItemIds,
+    setSkillCardIds: setLoadoutSkillCardIds,
+  } = useContext(LoadoutContext);
   const {
     setPItemIds: setMemoryPItemIds,
     setSkillCardIds: setMemorySkillCardIds,
@@ -17,6 +27,7 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     setPItemIds: setSearchPItemIds,
     setSkillCardIds: setSearchSkillCardIds,
   } = useContext(SearchContext);
+
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
   const selected =
     selectedEntity &&
@@ -24,26 +35,24 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     selectedEntity.widget == widget &&
     selectedEntity.index == index;
 
-  let entity;
-  if (type == EntityTypes.P_ITEM) {
-    entity = PItems.getById(id);
-  } else if (type == EntityTypes.SKILL_CARD) {
-    entity = SkillCards.getById(id);
-  }
+  const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
+  const settersByWidgetAndType = {
+    memoryEditor: {
+      [EntityTypes.P_ITEM]: setMemoryPItemIds,
+      [EntityTypes.SKILL_CARD]: setMemorySkillCardIds,
+    },
+    memories: {
+      [EntityTypes.P_ITEM]: setSearchPItemIds,
+      [EntityTypes.SKILL_CARD]: setSearchSkillCardIds,
+    },
+    loadoutEditor: {
+      [EntityTypes.P_ITEM]: setLoadoutPItemIds,
+      [EntityTypes.SKILL_CARD]: setLoadoutSkillCardIds,
+    },
+  };
 
   function clearEntity(entity) {
-    let setState = () => {};
-    if (entity.widget == "memory_editor") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setMemorySkillCardIds
-          : setMemoryPItemIds;
-    } else if (entity.widget == "memories") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setSearchSkillCardIds
-          : setSearchPItemIds;
-    }
+    const setState = settersByWidgetAndType[entity.widget][entity.type];
     setState((cur) => {
       const next = [...cur];
       next[entity.index] = 0;
@@ -52,19 +61,7 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
   }
 
   function swapEntity(entity) {
-    let setState = () => {};
-    if (widget == "memory_editor") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setMemorySkillCardIds
-          : setMemoryPItemIds;
-    } else if (widget == "memories") {
-      setState =
-        entity.type == EntityTypes.SKILL_CARD
-          ? setSearchSkillCardIds
-          : setSearchPItemIds;
-    }
-
+    const setState = settersByWidgetAndType[widget][entity.type];
     setState((cur) => {
       const next = [...cur];
       next[index] = entity.id;
@@ -72,19 +69,7 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     });
 
     if (entity.widget == widget) {
-      let setSourceState = () => {};
-      if (entity.widget == "memory_editor") {
-        setSourceState =
-          entity.type == EntityTypes.SKILL_CARD
-            ? setMemorySkillCardIds
-            : setMemoryPItemIds;
-      } else if (entity.widget == "memories") {
-        setSourceState =
-          entity.type == EntityTypes.SKILL_CARD
-            ? setSearchSkillCardIds
-            : setSearchPItemIds;
-      }
-
+      const setSourceState = settersByWidgetAndType[entity.widget][entity.type];
       setSourceState((cur) => {
         const next = [...cur];
         next[entity.index] = id;

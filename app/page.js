@@ -7,6 +7,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Main from "@/components/Main";
 import Navbar from "@/components/Navbar";
 import { DataContextProvider } from "@/contexts/DataContext";
+import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SelectionContextProvider } from "@/contexts/SelectionContext";
@@ -23,9 +24,11 @@ export default function Home() {
             <SelectionContextProvider>
               <MemoryContextProvider>
                 <SearchContextProvider>
-                  <DndProvider backend={HTML5Backend}>
-                    <Main />
-                  </DndProvider>
+                  <LoadoutContextProvider>
+                    <DndProvider backend={HTML5Backend}>
+                      <Main />
+                    </DndProvider>
+                  </LoadoutContextProvider>
                 </SearchContextProvider>
               </MemoryContextProvider>
             </SelectionContextProvider>

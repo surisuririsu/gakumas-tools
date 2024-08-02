@@ -1,0 +1,12 @@
+.loadoutEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
