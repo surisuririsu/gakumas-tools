@@ -1,25 +1,13 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import {
-  FaS,
-  FaCalculator,
-  FaBook,
-  FaFilm,
-  FaPen,
-  FaTrophy,
-} from "react-icons/fa6";
+import { FaCalculator, FaBook, FaFilm, FaPen, FaTrophy } from "react-icons/fa6";
 import Button from "@/components/Button";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Navbar.module.scss";
 
 const WIDGET_NAMES = {
-  produceRankCalculator: (
-    <>
-      <FaS />
-      <FaCalculator />
-    </>
-  ),
+  produceRankCalculator: <FaCalculator />,
   dex: <FaBook />,
   loadoutEditor: (
     <>
