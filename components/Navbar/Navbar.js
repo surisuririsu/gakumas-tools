@@ -16,16 +16,10 @@ import styles from "./Navbar.module.scss";
 const WIDGET_NAMES = {
   produceRankCalculator: <FaCalculator />,
   dex: <FaBook />,
-  loadoutEditor: (
+  memoryCalculator: (
     <>
-      <FaTrophy />
-      <FaPen />
-    </>
-  ),
-  loadouts: (
-    <>
-      <FaTrophy />
-      <FaList />
+      <FaFilm />
+      <FaCalculator />
     </>
   ),
   memoryEditor: (
@@ -38,6 +32,12 @@ const WIDGET_NAMES = {
     <>
       <FaFilm />
       <FaList />
+    </>
+  ),
+  loadoutEditor: (
+    <>
+      <FaTrophy />
+      <FaPen />
     </>
   ),
 };
