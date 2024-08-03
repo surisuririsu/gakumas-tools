@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Idols } from "gakumas-data";
 import IconSelect from "@/components/IconSelect";
+import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import StagePItems from "@/components/StagePItems";
-import StageSkillCards from "@/components/StageSkillCards";
 import Trash from "@/components/Trash";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import { PLANS } from "@/utils/plans";
@@ -36,11 +36,9 @@ export default function LoadoutEditor() {
       <StagePItems pItemIds={pItemIds} widget="loadoutEditor" size="small" />
       <label>Skill cards</label>
       {skillCardIdGroups.map((skillCardIdGroup, i) => (
-        <StageSkillCards
+        <LoadoutSkillCardGroup
           key={i}
           skillCardIds={skillCardIdGroup}
-          widget="loadoutEditor"
-          idolId={idolId}
           groupIndex={i}
         />
       ))}
