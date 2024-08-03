@@ -96,10 +96,13 @@ export default function Memories() {
         }
       } else {
         if (
-          b.name.indexOf("(FIXME)") != -1 ||
-          a.name.indexOf("(FIXME)") != -1
+          b.name?.indexOf("(FIXME)") > -1 ||
+          a.name?.indexOf("(FIXME)") > -1
         ) {
-          return b.name.indexOf("(FIXME)") - a.name.indexOf("(FIXME)");
+          return (
+            (b.name?.indexOf("(FIXME)") || -1) -
+            (a.name?.indexOf("(FIXME)") || -1)
+          );
         } else {
           return b.contestPower - a.contestPower;
         }
