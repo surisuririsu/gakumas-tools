@@ -1,7 +1,14 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { FaCalculator, FaBook, FaFilm, FaPen, FaTrophy } from "react-icons/fa6";
+import {
+  FaBook,
+  FaCalculator,
+  FaFilm,
+  FaList,
+  FaPen,
+  FaTrophy,
+} from "react-icons/fa6";
 import Button from "@/components/Button";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Navbar.module.scss";
@@ -15,13 +22,24 @@ const WIDGET_NAMES = {
       <FaPen />
     </>
   ),
+  loadouts: (
+    <>
+      <FaTrophy />
+      <FaList />
+    </>
+  ),
   memoryEditor: (
     <>
       <FaFilm />
       <FaPen />
     </>
   ),
-  memories: <FaFilm />,
+  memories: (
+    <>
+      <FaFilm />
+      <FaList />
+    </>
+  ),
 };
 
 export default function Navbar() {
