@@ -8,6 +8,7 @@ import Main from "@/components/Main";
 import Navbar from "@/components/Navbar";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
+import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SelectionContextProvider } from "@/contexts/SelectionContext";
@@ -22,15 +23,17 @@ export default function Home() {
           <Navbar />
           <DataContextProvider>
             <SelectionContextProvider>
-              <MemoryContextProvider>
-                <SearchContextProvider>
-                  <LoadoutContextProvider>
-                    <DndProvider backend={HTML5Backend}>
-                      <Main />
-                    </DndProvider>
-                  </LoadoutContextProvider>
-                </SearchContextProvider>
-              </MemoryContextProvider>
+              <MemoryCalculatorContextProvider>
+                <MemoryContextProvider>
+                  <SearchContextProvider>
+                    <LoadoutContextProvider>
+                      <DndProvider backend={HTML5Backend}>
+                        <Main />
+                      </DndProvider>
+                    </LoadoutContextProvider>
+                  </SearchContextProvider>
+                </MemoryContextProvider>
+              </MemoryCalculatorContextProvider>
             </SelectionContextProvider>
           </DataContextProvider>
           <Footer />

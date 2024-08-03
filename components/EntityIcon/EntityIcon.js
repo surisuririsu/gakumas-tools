@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useDrag, useDrop } from "react-dnd";
 import { PItems, SkillCards } from "gakumas-data";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
 import SelectionContext from "@/contexts/SelectionContext";
@@ -19,6 +20,9 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     setPItemIds: setLoadoutPItemIds,
     setSkillCardIds: setLoadoutSkillCardIds,
   } = useContext(LoadoutContext);
+  const { setSkillCardIds: setMemoryCalculatorSkillCardIds } = useContext(
+    MemoryCalculatorContext
+  );
   const {
     setPItemIds: setMemoryPItemIds,
     setSkillCardIds: setMemorySkillCardIds,
@@ -37,6 +41,10 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
 
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const settersByWidgetAndType = {
+    memoryCalculator: {
+      [EntityTypes.P_ITEM]: () => {},
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorSkillCardIds,
+    },
     memoryEditor: {
       [EntityTypes.P_ITEM]: setMemoryPItemIds,
       [EntityTypes.SKILL_CARD]: setMemorySkillCardIds,
@@ -116,23 +124,21 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
   }
 
   return (
-    <div ref={dropRef}>
-      <button
-        className={`${styles.entityIcon} ${styles[size] || ""} ${
-          selected ? styles.selected : ""
-        }`}
-        ref={dragRef}
-        onClick={(e) => handleClick(e)}
-      >
-        {entity?.icon && (
-          <Image
-            src={entity.getDynamicIcon?.(idolId) || entity.icon}
-            fill
-            alt={entity.name}
-            sizes="52px"
-          />
-        )}
-      </button>
-    </div>
+    <button
+      className={`${styles.entityIcon} ${styles[size] || ""} ${
+        selected ? styles.selected : ""
+      }`}
+      ref={(node) => dragRef(dropRef(node))}
+      onClick={(e) => handleClick(e)}
+    >
+      {entity?.icon && (
+        <Image
+          src={entity.getDynamicIcon?.(idolId) || entity.icon}
+          fill
+          alt={entity.name}
+          sizes="52px"
+        />
+      )}
+    </button>
   );
 }

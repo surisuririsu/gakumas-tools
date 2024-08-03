@@ -1,0 +1,30 @@
+@import "@/constants";
+
+.memoryCalculator {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .acquiredSkillCards {
+    max-width: 390px;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .rankSelect {
+    align-self: flex-start;
+  }
+
+  .memory {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 4px solid $gray-light;
+    border-radius: 8px;
+    padding: 2px;
+    background-color: $gray-extra-light;
+  }
+}

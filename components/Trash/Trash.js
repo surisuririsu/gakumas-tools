@@ -3,6 +3,7 @@ import { useDrop } from "react-dnd";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { EntityTypes } from "@/utils/entities";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
 import SelectionContext from "@/contexts/SelectionContext";
@@ -13,6 +14,9 @@ export default function Trash({ size }) {
     setPItemIds: setLoadoutPItemIds,
     setSkillCardIds: setLoadoutSkillCardIds,
   } = useContext(LoadoutContext);
+  const { setSkillCardIds: setMemoryCalculatorSkillCardIds } = useContext(
+    MemoryCalculatorContext
+  );
   const {
     setPItemIds: setMemoryPItemIds,
     setSkillCardIds: setMemorySkillCardIds,
@@ -24,6 +28,10 @@ export default function Trash({ size }) {
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
 
   const settersByWidgetAndType = {
+    memoryCalculator: {
+      [EntityTypes.P_ITEM]: () => {},
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorSkillCardIds,
+    },
     memoryEditor: {
       [EntityTypes.P_ITEM]: setMemoryPItemIds,
       [EntityTypes.SKILL_CARD]: setMemorySkillCardIds,
