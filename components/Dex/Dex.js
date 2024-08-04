@@ -4,6 +4,7 @@ import ButtonGroup from "@/components/ButtonGroup";
 import Checkbox from "@/components/Checkbox";
 import EntityDetails from "@/components/EntityDetails";
 import EntityIcon from "@/components/EntityIcon";
+import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -14,26 +15,47 @@ import styles from "./Dex.module.scss";
 export default function Dex() {
   const { openWidgets } = useContext(WorkspaceContext);
   const { pIdolId } = useContext(MemoryContext);
+  const { plan, idolId } = useContext(LoadoutContext);
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
   const [activeTab, setActiveTab] = useState("Skill cards");
   const [filter, setFilter] = useState(true);
-  const pIdol = PIdols.getById(pIdolId);
 
   useEffect(() => {
     setSelectedEntity(null);
   }, [filter]);
 
+  const pIdol = PIdols.getById(pIdolId);
+
   let entities = [];
   const Entities = activeTab == "Skill cards" ? SkillCards : PItems;
   const compareFn =
     activeTab == "Skill cards" ? compareSkillCards : comparePItems;
-  if (openWidgets.memoryEditor && filter && pIdolId) {
+
+  let pIdolIds = [];
+  let plans = [];
+
+  if (filter) {
+    if (openWidgets.memoryEditor && pIdolId) {
+      pIdolIds.push(pIdolId);
+      plans.push(pIdol.plan);
+    }
+    if (openWidgets.loadoutEditor) {
+      const filteredPIdols = PIdols.getFiltered({
+        idolIds: [idolId],
+        plans: [plan],
+      });
+      pIdolIds = pIdolIds.concat(filteredPIdols.map((pi) => pi.id));
+      plans.push(plan);
+    }
+  }
+
+  if (pIdolIds.length || plans.length) {
     const signatureEntities = Entities.getFiltered({
-      pIdolIds: [pIdolId],
+      pIdolIds,
     });
     const nonSignatureEntities = Entities.getFiltered({
       rarities: ["R", "SR", "SSR"],
-      plans: [pIdol.plan, "free"],
+      plans: [...plans, "free"],
       modes: ["stage"],
       sourceTypes: ["produce", "support"],
     }).sort(compareFn);
@@ -63,7 +85,7 @@ export default function Dex() {
           />
         ))}
       </div>
-      {openWidgets.memoryEditor && pIdolId && (
+      {((openWidgets.memoryEditor && pIdolId) || openWidgets.loadoutEditor) && (
         <div className={styles.filter}>
           <Checkbox label="Filter" checked={filter} onChange={setFilter} />
         </div>

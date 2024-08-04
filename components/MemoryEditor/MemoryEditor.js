@@ -50,11 +50,11 @@ export default function MemoryEditor() {
         <ParametersInput parameters={params} onChange={setParams} withStamina />
       </div>
       <label>P-items</label>
-      <StagePItems pItemIds={pItemIds} widget="memory_editor" size="small" />
+      <StagePItems pItemIds={pItemIds} widget="memoryEditor" size="small" />
       <label>Skill cards</label>
       <StageSkillCards
         skillCardIds={skillCardIds}
-        widget="memory_editor"
+        widget="memoryEditor"
         idolId={idolId}
       />
       <div>Cost: {skillCardCost}</div>
