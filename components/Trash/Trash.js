@@ -14,9 +14,10 @@ export default function Trash({ size }) {
     setPItemIds: setLoadoutPItemIds,
     setSkillCardIds: setLoadoutSkillCardIds,
   } = useContext(LoadoutContext);
-  const { setSkillCardIds: setMemoryCalculatorSkillCardIds } = useContext(
-    MemoryCalculatorContext
-  );
+  const {
+    setTargetSkillCardIds: setMemoryCalculatorTargetSkillCardIds,
+    setAcquiredSkillCardIds: setMemoryCalculatorAcquiredSkillCardIds,
+  } = useContext(MemoryCalculatorContext);
   const {
     setPItemIds: setMemoryPItemIds,
     setSkillCardIds: setMemorySkillCardIds,
@@ -28,9 +29,13 @@ export default function Trash({ size }) {
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
 
   const settersByWidgetAndType = {
-    memoryCalculator: {
+    "memoryCalculator:target": {
       [EntityTypes.P_ITEM]: () => {},
-      [EntityTypes.SKILL_CARD]: setMemoryCalculatorSkillCardIds,
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorTargetSkillCardIds,
+    },
+    "memoryCalculator:acquired": {
+      [EntityTypes.P_ITEM]: () => {},
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorAcquiredSkillCardIds,
     },
     memoryEditor: {
       [EntityTypes.P_ITEM]: setMemoryPItemIds,
