@@ -51,21 +51,24 @@ export default function MemoryCalculator() {
         {costRange.min} ~ {costRange.max}
       </div>
       <label>Possible memories</label>
-      {possibleMemories.map((memory) => (
+      {possibleMemories.map(({ skillCards, probability }) => (
         <div
-          key={JSON.stringify(memory.map(({ id }) => id))}
+          key={JSON.stringify(skillCards.map(({ id }) => id))}
           className={styles.memory}
         >
-          {memory.map((skillCard) => (
-            <Image
-              key={skillCard.id}
-              src={skillCard.icon}
-              width={60}
-              alt={skillCard.name}
-              draggable={false}
-            />
-          ))}
-          {calculateSkillCardCost(memory.map(({ id }) => id))}
+          <div className={styles.memoryCards}>
+            {skillCards.map((skillCard) => (
+              <Image
+                key={skillCard.id}
+                src={skillCard.icon}
+                width={60}
+                alt={skillCard.name}
+                draggable={false}
+              />
+            ))}
+            {calculateSkillCardCost(skillCards.map(({ id }) => id))}
+          </div>
+          <div>{(probability * 100).toFixed(2)}%</div>
         </div>
       ))}
     </div>
