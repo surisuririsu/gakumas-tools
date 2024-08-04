@@ -67,7 +67,10 @@ export function generatePossibleMemories(skillCardIds, rank) {
     while (true) {
       // If no possible combinations, add lonely memory
       if (remainingSlots == 0) {
-        fullCombinations.push(preLotteryCombination);
+        fullCombinations.push({
+          skillCards: preLotteryCombination,
+          probability: 1 / preLotteryCombinations.length,
+        });
         break;
       }
 
@@ -111,7 +114,13 @@ export function generatePossibleMemories(skillCardIds, rank) {
 
       // If we found combinations at the current number of slots, end the lottery
       if (stepCombinations.length) {
-        fullCombinations = fullCombinations.concat(stepCombinations);
+        fullCombinations = fullCombinations.concat(
+          stepCombinations.map((combination) => ({
+            skillCards: combination,
+            probability:
+              1 / preLotteryCombinations.length / stepCombinations.length,
+          }))
+        );
         break;
       }
 
