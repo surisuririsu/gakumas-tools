@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import Image from "next/image";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
@@ -11,7 +10,6 @@ import {
   generatePossibleMemories,
 } from "@/utils/skillCardLottery";
 import styles from "./MemoryCalculator.module.scss";
-import { calculateSkillCardCost } from "@/utils/contestPower";
 
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
@@ -22,7 +20,6 @@ export default function MemoryCalculator() {
   const [rank, setRank] = useState("A");
   const costRange = COST_RANGES_BY_RANK[rank];
   const possibleMemories = generatePossibleMemories(acquiredSkillCardIds, rank);
-  const targetSet = new Set(targetSkillCardIds.filter((id) => id));
   const {
     onTargetMemories,
     offTargetMemories,
@@ -30,7 +27,11 @@ export default function MemoryCalculator() {
     offTargetProbability,
   } = possibleMemories.reduce(
     (acc, cur) => {
-      if (targetSet.isSubsetOf(new Set(cur.skillCardIds))) {
+      if (
+        targetSkillCardIds
+          .filter((id) => id)
+          .every((id) => cur.skillCardIds.includes(id))
+      ) {
         acc.onTargetMemories.push(cur);
         acc.onTargetProbability += cur.probability;
       } else {
