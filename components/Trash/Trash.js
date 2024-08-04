@@ -16,6 +16,7 @@ export default function Trash({ size }) {
   } = useContext(LoadoutContext);
   const {
     setTargetSkillCardIds: setMemoryCalculatorTargetSkillCardIds,
+    setAlternateSkillCardIds: setMemoryCalculatorAlternateSkillCardIds,
     setAcquiredSkillCardIds: setMemoryCalculatorAcquiredSkillCardIds,
   } = useContext(MemoryCalculatorContext);
   const {
@@ -32,6 +33,10 @@ export default function Trash({ size }) {
     "memoryCalculator:target": {
       [EntityTypes.P_ITEM]: () => {},
       [EntityTypes.SKILL_CARD]: setMemoryCalculatorTargetSkillCardIds,
+    },
+    "memoryCalculator:alternate": {
+      [EntityTypes.P_ITEM]: () => {},
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorAlternateSkillCardIds,
     },
     "memoryCalculator:acquired": {
       [EntityTypes.P_ITEM]: () => {},

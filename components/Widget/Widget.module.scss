@@ -2,6 +2,7 @@
 
 .widget {
   min-height: 100%;
+  min-width: 400px;
   display: flex;
   flex-direction: column;
   border-right: 2px solid darken($gk-red-orange, 15%);
@@ -20,6 +21,10 @@
     display: flex;
     flex-direction: column;
     overflow: hidden auto;
+
+    @media only screen and (max-width: 600px) {
+      width: calc(100vw - 2px);
+    }
   }
 
   &.fill {
