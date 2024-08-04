@@ -20,7 +20,9 @@ export function generatePossibleMemories(skillCardIds, rank) {
 
   // Separate skill cards by support/produce
   const supportSkillCards = skillCards.filter(
-    ({ sourceType }) => sourceType == "support"
+    ({ name, sourceType }) =>
+      sourceType == "support" &&
+      !skillCards.find((other) => other.name == `${name}+`)
   );
   const produceSkillCards = skillCards
     .filter(({ sourceType }) => sourceType == "produce")
@@ -129,5 +131,8 @@ export function generatePossibleMemories(skillCardIds, rank) {
     }
   }
 
-  return fullCombinations;
+  return fullCombinations.map(({ skillCards, probability }) => ({
+    skillCardIds: skillCards.map(({ id }) => id),
+    probability,
+  }));
 }

@@ -3,10 +3,19 @@ import { createContext, useState } from "react";
 const MemoryCalculatorContext = createContext();
 
 export function MemoryCalculatorContextProvider({ children }) {
-  const [skillCardIds, _setSkillCardIds] = useState([0]);
+  const [targetSkillCardIds, _setTargetSkillCardIds] = useState([0]);
+  const [acquiredSkillCardIds, _setAcquiredSkillCardIds] = useState([0]);
 
-  function setSkillCardIds(callback) {
-    _setSkillCardIds((cur) => {
+  function setAcquiredSkillCardIds(callback) {
+    _setAcquiredSkillCardIds((cur) => {
+      return callback(cur)
+        .filter((id) => id)
+        .concat(0);
+    });
+  }
+
+  function setTargetSkillCardIds(callback) {
+    _setTargetSkillCardIds((cur) => {
       return callback(cur)
         .filter((id) => id)
         .concat(0);
@@ -16,8 +25,10 @@ export function MemoryCalculatorContextProvider({ children }) {
   return (
     <MemoryCalculatorContext.Provider
       value={{
-        skillCardIds,
-        setSkillCardIds,
+        targetSkillCardIds,
+        setTargetSkillCardIds,
+        acquiredSkillCardIds,
+        setAcquiredSkillCardIds,
       }}
     >
       {children}
