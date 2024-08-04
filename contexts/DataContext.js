@@ -1,4 +1,4 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const DataContext = createContext();
