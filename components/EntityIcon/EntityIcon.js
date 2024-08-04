@@ -16,12 +16,14 @@ const ENTITY_DATA_BY_TYPE = {
 };
 
 export default function EntityIcon({ type, id, widget, index, size, idolId }) {
+  // TODO: refactor
   const {
     setPItemIds: setLoadoutPItemIds,
     setSkillCardIds: setLoadoutSkillCardIds,
   } = useContext(LoadoutContext);
   const {
     setTargetSkillCardIds: setMemoryCalculatorTargetSkillCardIds,
+    setAlternateSkillCardIds: setMemoryCalculatorAlternateSkillCardIds,
     setAcquiredSkillCardIds: setMemoryCalculatorAcquiredSkillCardIds,
   } = useContext(MemoryCalculatorContext);
   const {
@@ -45,6 +47,10 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     "memoryCalculator:target": {
       [EntityTypes.P_ITEM]: () => {},
       [EntityTypes.SKILL_CARD]: setMemoryCalculatorTargetSkillCardIds,
+    },
+    "memoryCalculator:alternate": {
+      [EntityTypes.P_ITEM]: () => {},
+      [EntityTypes.SKILL_CARD]: setMemoryCalculatorAlternateSkillCardIds,
     },
     "memoryCalculator:acquired": {
       [EntityTypes.P_ITEM]: () => {},

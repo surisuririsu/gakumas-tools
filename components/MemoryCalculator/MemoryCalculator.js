@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
+import TargetSkillCards from "@/components/TargetSkillCards";
 import Trash from "@/components/Trash";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import { EntityTypes } from "@/utils/entities";
@@ -14,9 +15,8 @@ import styles from "./MemoryCalculator.module.scss";
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
 export default function MemoryCalculator() {
-  const { targetSkillCardIds, acquiredSkillCardIds } = useContext(
-    MemoryCalculatorContext
-  );
+  const { targetSkillCardIds, alternateSkillCardIds, acquiredSkillCardIds } =
+    useContext(MemoryCalculatorContext);
   const [rank, setRank] = useState("A");
   const costRange = COST_RANGES_BY_RANK[rank];
   const possibleMemories = generatePossibleMemories(acquiredSkillCardIds, rank);
@@ -30,7 +30,13 @@ export default function MemoryCalculator() {
       if (
         targetSkillCardIds
           .filter((id) => id)
-          .every((id) => cur.skillCardIds.includes(id))
+          .every(
+            (id, idx) =>
+              cur.skillCardIds.includes(id) ||
+              alternateSkillCardIds[idx]?.some((altId) =>
+                cur.skillCardIds.includes(altId)
+              )
+          )
       ) {
         acc.onTargetMemories.push(cur);
         acc.onTargetProbability += cur.probability;
@@ -52,17 +58,7 @@ export default function MemoryCalculator() {
     <div className={styles.memoryCalculator}>
       <b>This feature is a work-in-progress! Accuracy is not guaranteed.</b>
       <label>Target skill cards</label>
-      <div className={styles.skillCards}>
-        {targetSkillCardIds.map((skillCardId, index) => (
-          <EntityIcon
-            key={`${index}_${skillCardId}`}
-            type={EntityTypes.SKILL_CARD}
-            id={skillCardId}
-            widget="memoryCalculator:target"
-            index={index}
-          />
-        ))}
-      </div>
+      <TargetSkillCards />
       <label>Acquired skill cards</label>
       <div className={styles.skillCards}>
         {acquiredSkillCardIds.map((skillCardId, index) => (
