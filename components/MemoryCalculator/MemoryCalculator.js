@@ -22,6 +22,7 @@ export default function MemoryCalculator() {
 
   return (
     <div className={styles.memoryCalculator}>
+      <b>This feature is a work-in-progress! Accuracy is not guaranteed.</b>
       <label>Acquired skill cards</label>
       <div className={styles.acquiredSkillCards}>
         {skillCardIds.map((skillCardId, index) => (
