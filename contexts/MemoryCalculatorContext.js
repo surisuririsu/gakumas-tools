@@ -31,8 +31,8 @@ export function MemoryCalculatorContextProvider({ children }) {
     // If target skill card is removed, also remove the associated alternates
     _setAlternateSkillCardIds((curAlts) => {
       const updatedCurAlts = JSON.parse(JSON.stringify(curAlts));
-      removedIndices.forEach((idx) => (updatedCurAlts[idx] = null));
-      return updatedCurAlts.filter((alts) => alts);
+      removedIndices.forEach((idx) => (updatedCurAlts[idx] = 0));
+      return updatedCurAlts.filter((alts) => alts !== 0);
     });
   }
 
