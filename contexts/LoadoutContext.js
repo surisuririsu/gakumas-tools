@@ -1,10 +1,8 @@
-import { createContext, useContext, useState } from "react";
-import SelectionContext from "@/contexts/SelectionContext";
+import { createContext, useState } from "react";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
-  const { setSelectedEntity } = useContext(SelectionContext);
   const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState([
     [0, 0, 0, 0, 0, 0],
@@ -29,7 +27,6 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
       return updatedSkillCardIds;
     });
-    setSelectedEntity(null);
   };
 
   const deleteSkillCardIdGroup = (groupIndex) => {
@@ -38,7 +35,6 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds.splice(groupIndex, 1);
       return updatedSkillCardIds;
     });
-    setSelectedEntity(null);
   };
 
   const swapSkillCardIdGroups = (groupIndexA, groupIndexB) => {
@@ -49,7 +45,6 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds[groupIndexB] = temp;
       return updatedSkillCardIds;
     });
-    setSelectedEntity(null);
   };
 
   return (

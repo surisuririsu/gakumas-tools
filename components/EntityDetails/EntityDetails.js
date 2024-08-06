@@ -11,13 +11,14 @@ export default function EntityDetails({ type, id }) {
   } else if (type == EntityTypes.SKILL_CARD) {
     entity = SkillCards.getById(id);
   }
+
   return (
     <div className={styles.entityDetails}>
       {entity ? (
         <Image
           src={entity.details}
-          fill
           alt={entity.name}
+          fill
           sizes="400px"
           draggable={false}
         />

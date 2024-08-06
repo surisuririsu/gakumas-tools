@@ -5,7 +5,7 @@ import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
-export default function TargetSkillCards() {
+export default function TargetSkillCards({ idolId }) {
   const { targetSkillCardIds, alternateSkillCardIds, addAlternateSkillCards } =
     useContext(MemoryCalculatorContext);
 
@@ -21,9 +21,11 @@ export default function TargetSkillCards() {
           <EntityIcon
             type={EntityTypes.SKILL_CARD}
             id={skillCardId}
-            widget="memoryCalculator:target"
+            region="memoryCalculator:target"
             index={index}
+            idolId={idolId}
           />
+
           {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
             <React.Fragment
               key={`${index}_${altIndex}_${skillCardId}_${altSkillCardId}`}
@@ -32,11 +34,13 @@ export default function TargetSkillCards() {
               <EntityIcon
                 type={EntityTypes.SKILL_CARD}
                 id={altSkillCardId}
-                widget="memoryCalculator:alternate"
+                region="memoryCalculator:alternate"
                 index={index * 10 + altIndex}
+                idolId={idolId}
               />
             </React.Fragment>
           ))}
+
           {alternateSkillCardIds[index]?.length != 10 &&
             alternateSkillCardIds[index]?.[
               alternateSkillCardIds[index].length - 1

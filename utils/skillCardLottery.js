@@ -49,8 +49,7 @@ export function generatePossibleMemories(skillCardIds, rank) {
 
     // Recursive function to generate all combinations of a specified length
     function generateCombinations(cards, length) {
-      if (length == 0) return [];
-      if (length == 1) return cards.map((card) => [card]);
+      if (length == 0) return [[]];
       return cards.reduce(
         (acc, cur, i) =>
           acc.concat(

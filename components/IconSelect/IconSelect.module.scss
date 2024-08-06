@@ -4,21 +4,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
-  padding: 4px;
   border-radius: 20px;
   border: 2px solid $gray-light;
+  padding: 4px;
 
   .option {
-    padding: 4px;
     border-radius: 16px;
+    padding: 4px;
     transition: all 0.2s;
-
-    .imageWrapper {
-      position: relative;
-      width: 24px;
-      height: 24px;
-      user-select: none;
-    }
 
     &.selected {
       box-shadow: 0 0 4px $gray-dark;

@@ -6,7 +6,7 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
-import SelectionContext from "@/contexts/SelectionContext";
+import EntityContext from "@/contexts/EntityContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
@@ -15,7 +15,7 @@ const ENTITY_DATA_BY_TYPE = {
   [EntityTypes.SKILL_CARD]: SkillCards,
 };
 
-export default function EntityIcon({ type, id, widget, index, size, idolId }) {
+export default function EntityIcon({ type, id, region, index, size, idolId }) {
   // TODO: refactor
   const {
     setPItemIds: setLoadoutPItemIds,
@@ -35,15 +35,15 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     setSkillCardIds: setSearchSkillCardIds,
   } = useContext(SearchContext);
 
-  const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
+  const { selectedEntity, setSelectedEntity } = useContext(EntityContext);
   const selected =
     selectedEntity &&
     selectedEntity.type == type &&
-    selectedEntity.widget == widget &&
+    selectedEntity.region == region &&
     selectedEntity.index == index;
 
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
-  const settersByWidgetAndType = {
+  const settersByRegionAndType = {
     "memoryCalculator:target": {
       [EntityTypes.P_ITEM]: () => {},
       [EntityTypes.SKILL_CARD]: setMemoryCalculatorTargetSkillCardIds,
@@ -71,7 +71,7 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
   };
 
   function clearEntity(entity) {
-    const setState = settersByWidgetAndType[entity.widget][entity.type];
+    const setState = settersByRegionAndType[entity.region][entity.type];
     setState((cur) => {
       const next = [...cur];
       next[entity.index] = 0;
@@ -80,15 +80,15 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
   }
 
   function swapEntity(entity) {
-    const setState = settersByWidgetAndType[widget][entity.type];
+    const setState = settersByRegionAndType[region][entity.type];
     setState((cur) => {
       const next = [...cur];
       next[index] = entity.id;
       return next;
     });
 
-    if (entity.widget == widget) {
-      const setSourceState = settersByWidgetAndType[entity.widget][entity.type];
+    if (entity.region == region) {
+      const setSourceState = settersByRegionAndType[entity.region][entity.type];
       setSourceState((cur) => {
         const next = [...cur];
         next[entity.index] = id;
@@ -99,15 +99,15 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
 
   const [, dragRef] = useDrag(() => ({
     type,
-    item: { type, id, widget, index },
+    item: { type, id, region, index },
   }));
   const [, dropRef] = useDrop(() => ({
     accept:
-      widget == "dex" ? [EntityTypes.SKILL_CARD, EntityTypes.P_ITEM] : type,
+      region == "dex" ? [EntityTypes.SKILL_CARD, EntityTypes.P_ITEM] : type,
     drop: (item) => {
-      if (widget == "dex" && item.widget != "dex") {
+      if (region == "dex" && item.region != "dex") {
         clearEntity(item);
-      } else if (widget != "dex" && type == item.type) {
+      } else if (region != "dex" && type == item.type) {
         swapEntity(item);
       }
     },
@@ -118,16 +118,16 @@ export default function EntityIcon({ type, id, widget, index, size, idolId }) {
     if (selected) {
       setSelectedEntity(null);
     } else if (!selectedEntity) {
-      setSelectedEntity({ type, id, widget, index });
-    } else if (widget == "dex") {
-      if (selectedEntity.widget == "dex") {
-        setSelectedEntity({ type, id, widget, index });
+      setSelectedEntity({ type, id, region, index });
+    } else if (region == "dex") {
+      if (selectedEntity.region == "dex") {
+        setSelectedEntity({ type, id, region, index });
       } else {
         clearEntity(selectedEntity);
         setSelectedEntity(null);
       }
     } else if (selectedEntity.type != type) {
-      setSelectedEntity({ type, id, widget, index });
+      setSelectedEntity({ type, id, region, index });
     } else {
       swapEntity(selectedEntity);
       setSelectedEntity(null);

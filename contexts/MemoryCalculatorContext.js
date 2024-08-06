@@ -28,6 +28,7 @@ export function MemoryCalculatorContextProvider({ children }) {
         .concat(0)
         .slice(0, 5);
     });
+
     // If target skill card is removed, also remove the associated alternates
     _setAlternateSkillCardIds((curAlts) => {
       const updatedCurAlts = JSON.parse(JSON.stringify(curAlts));

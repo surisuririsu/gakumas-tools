@@ -7,11 +7,11 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Main from "@/components/Main";
 import Navbar from "@/components/Navbar";
 import { DataContextProvider } from "@/contexts/DataContext";
+import { EntityContextProvider } from "@/contexts/EntityContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
-import { SelectionContextProvider } from "@/contexts/SelectionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 
 export default function Home() {
@@ -22,19 +22,19 @@ export default function Home() {
         <SessionProvider>
           <Navbar />
           <DataContextProvider>
-            <SelectionContextProvider>
-              <MemoryCalculatorContextProvider>
-                <MemoryContextProvider>
-                  <SearchContextProvider>
-                    <LoadoutContextProvider>
+            <MemoryCalculatorContextProvider>
+              <MemoryContextProvider>
+                <SearchContextProvider>
+                  <LoadoutContextProvider>
+                    <EntityContextProvider>
                       <DndProvider backend={HTML5Backend}>
                         <Main />
                       </DndProvider>
-                    </LoadoutContextProvider>
-                  </SearchContextProvider>
-                </MemoryContextProvider>
-              </MemoryCalculatorContextProvider>
-            </SelectionContextProvider>
+                    </EntityContextProvider>
+                  </LoadoutContextProvider>
+                </SearchContextProvider>
+              </MemoryContextProvider>
+            </MemoryCalculatorContextProvider>
           </DataContextProvider>
           <Footer />
         </SessionProvider>

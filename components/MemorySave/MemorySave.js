@@ -16,6 +16,7 @@ export default function MemorySave() {
           Sign in with Discord to save
         </Button>
       )}
+
       {status == "authenticated" && (
         <>
           <Button onClick={() => save(false)} disabled={saveState == "saving"}>
@@ -28,7 +29,9 @@ export default function MemorySave() {
           )}
         </>
       )}
+
       {saveState == "saving" && "Saving..."}
+
       {saveState == "saved" && (
         <>
           Saved <FaCheck />

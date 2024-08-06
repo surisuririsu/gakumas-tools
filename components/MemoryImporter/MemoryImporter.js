@@ -117,7 +117,7 @@ export default function MemoryImporter({ onClose }) {
 
       worker.terminate();
 
-      const result = await fetch("/api/memory", {
+      await fetch("/api/memory", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ memories: res }),
@@ -137,6 +137,7 @@ export default function MemoryImporter({ onClose }) {
           height={360}
           alt=""
         />
+
         <div>
           <p>
             Contest power, parameters, P-items, and skill card icons must be
@@ -157,16 +158,20 @@ export default function MemoryImporter({ onClose }) {
           </p>
         </div>
       </div>
-      <div className={styles.files}>
-        <input type="file" id="input" multiple onChange={handleFiles} />
-      </div>
-      <div className={styles.progress}>
-        {progress != null && (
-          <>
-            Progress: {progress}/{total} {progress == total && <FaCheck />}
-          </>
-        )}
-      </div>
+
+      <input
+        className={styles.files}
+        type="file"
+        id="input"
+        multiple
+        onChange={handleFiles}
+      />
+
+      {progress != null && (
+        <div className={styles.progress}>
+          Progress: {progress}/{total} {progress == total && <FaCheck />}
+        </div>
+      )}
     </Modal>
   );
 }

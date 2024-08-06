@@ -11,7 +11,8 @@ export default function LoadoutEditor() {
   return (
     <div className={styles.loadoutEditor}>
       <label>P-items</label>
-      <StagePItems pItemIds={pItemIds} widget="loadoutEditor" size="small" />
+      <StagePItems pItemIds={pItemIds} region="loadoutEditor" size="small" />
+
       <label>Skill cards</label>
       {skillCardIdGroups.map((skillCardIdGroup, i) => (
         <LoadoutSkillCardGroup
@@ -20,6 +21,7 @@ export default function LoadoutEditor() {
           groupIndex={i}
         />
       ))}
+
       <Trash />
     </div>
   );

@@ -9,11 +9,11 @@
   }
 
   .placeholder {
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 60px;
+    height: 100%;
     color: $gray-light;
+    font-size: 60px;
   }
 }

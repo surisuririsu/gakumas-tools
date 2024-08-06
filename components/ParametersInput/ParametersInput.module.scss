@@ -2,9 +2,9 @@
 @import "@/components/Input/Input.module";
 
 .parameters {
-  border-radius: 4px;
   display: flex;
   flex-direction: row;
+  border-radius: 4px;
   overflow: hidden;
 
   input {

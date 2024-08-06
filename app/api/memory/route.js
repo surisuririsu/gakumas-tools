@@ -22,6 +22,7 @@ export async function POST(request) {
     return new Response("Unauthorized", { status: 401 });
   }
   const userId = session.user.id;
+
   const { memories } = await request.json();
 
   const { db } = await connect();

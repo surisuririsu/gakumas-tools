@@ -1,11 +1,11 @@
 @import "@/constants";
 
 .navbar {
-  background-color: $gk-orange;
   display: flex;
-  gap: 8px;
   flex-direction: row;
   align-items: center;
+  gap: 8px;
+  background-color: $gk-orange;
   color: $white;
 
   h1 {
@@ -40,9 +40,9 @@
     position: relative;
     width: 32px;
     height: 32px;
+    margin: 8px;
     border: none;
     border-radius: 16px;
-    margin: 8px;
     overflow: hidden;
   }
 

@@ -95,8 +95,10 @@ export default function ProduceRankCalculator() {
         onChange={setPlace}
       />
       <div className={styles.bonus}>Bonus parameter: +{placeParamBonus}</div>
+
       <label>Parameters</label>
       <ParametersInput parameters={params} onChange={setParams} />
+
       {!!params.every((p) => !!p) && (
         <>
           <label>Target exam scores</label>
@@ -116,6 +118,7 @@ export default function ProduceRankCalculator() {
               ))}
             </tbody>
           </table>
+
           <label>Exam score</label>
           <Input
             type="number"
@@ -125,6 +128,7 @@ export default function ProduceRankCalculator() {
             min={0}
             max={1000000}
           />
+
           {actualScore && (
             <>
               <label>Produce rating</label>

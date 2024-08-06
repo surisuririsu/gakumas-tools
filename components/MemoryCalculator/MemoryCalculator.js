@@ -5,6 +5,7 @@ import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
 import TargetSkillCards from "@/components/TargetSkillCards";
 import Trash from "@/components/Trash";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
 import {
   COST_RANGES_BY_RANK,
@@ -17,7 +18,9 @@ const RANKS = ["B", "B+", "A", "A+", "S"];
 export default function MemoryCalculator() {
   const { targetSkillCardIds, alternateSkillCardIds, acquiredSkillCardIds } =
     useContext(MemoryCalculatorContext);
+  const { idolId } = useContext(WorkspaceContext);
   const [rank, setRank] = useState("A");
+
   const costRange = COST_RANGES_BY_RANK[rank];
 
   const possibleMemories = generatePossibleMemories(acquiredSkillCardIds, rank);
@@ -30,9 +33,7 @@ export default function MemoryCalculator() {
     (acc, cur) => {
       // Generates all combinations of target cards
       function generateCombinations(slots) {
-        if (slots.length === 0) {
-          return [[]];
-        }
+        if (slots.length === 0) return [[]];
         const restCombos = generateCombinations(slots.slice(1));
         return slots[0].reduce(
           (acc, cur) => acc.concat(restCombos.map((c) => c.concat(cur))),
@@ -60,6 +61,7 @@ export default function MemoryCalculator() {
         acc.offTargetMemories.push(cur);
         acc.offTargetProbability += cur.probability;
       }
+
       return acc;
     },
     {
@@ -73,8 +75,10 @@ export default function MemoryCalculator() {
   return (
     <div className={styles.memoryCalculator}>
       <b>This feature is a work-in-progress! Accuracy is not guaranteed.</b>
+
       <label>Target skill cards</label>
-      <TargetSkillCards />
+      <TargetSkillCards idolId={idolId} />
+
       <label>Acquired skill cards</label>
       <div className={styles.skillCards}>
         {acquiredSkillCardIds.map((skillCardId, index) => (
@@ -82,27 +86,33 @@ export default function MemoryCalculator() {
             key={`${index}_${skillCardId}`}
             type={EntityTypes.SKILL_CARD}
             id={skillCardId}
-            widget="memoryCalculator:acquired"
+            region="memoryCalculator:acquired"
             index={index}
+            idolId={idolId}
           />
         ))}
       </div>
+
       <Trash />
+
       <label>Produce rank</label>
       <div className={styles.rankSelect}>
         <IconSelect
           options={RANKS.map((r) => ({
             id: r,
             iconSrc: `/ranks/${r}.png`,
+            alt: r,
           }))}
           selected={rank}
           onChange={setRank}
         />
       </div>
+
       <label>Cost range</label>
       <div>
         {costRange.min} ~ {costRange.max}
       </div>
+
       <label>
         On-target memories ({(onTargetProbability * 100).toFixed(2)}%)
       </label>
@@ -111,8 +121,10 @@ export default function MemoryCalculator() {
           key={skillCardIds}
           skillCardIds={skillCardIds}
           probability={probability}
+          idolId={idolId}
         />
       ))}
+
       <label>
         Off-target memories ({(offTargetProbability * 100).toFixed(2)}%)
       </label>
@@ -121,6 +133,7 @@ export default function MemoryCalculator() {
           key={skillCardIds}
           skillCardIds={skillCardIds}
           probability={probability}
+          idolId={idolId}
         />
       ))}
     </div>
