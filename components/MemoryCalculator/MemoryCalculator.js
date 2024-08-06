@@ -19,6 +19,7 @@ export default function MemoryCalculator() {
     useContext(MemoryCalculatorContext);
   const [rank, setRank] = useState("A");
   const costRange = COST_RANGES_BY_RANK[rank];
+
   const possibleMemories = generatePossibleMemories(acquiredSkillCardIds, rank);
   const {
     onTargetMemories,
@@ -27,17 +28,32 @@ export default function MemoryCalculator() {
     offTargetProbability,
   } = possibleMemories.reduce(
     (acc, cur) => {
-      if (
-        targetSkillCardIds
-          .filter((id) => id)
-          .every(
-            (id, idx) =>
-              cur.skillCardIds.includes(id) ||
-              alternateSkillCardIds[idx]?.some((altId) =>
-                cur.skillCardIds.includes(altId)
-              )
-          )
-      ) {
+      // Generates all combinations of target cards
+      function generateCombinations(slots) {
+        if (slots.length === 1) {
+          return slots[0].map((card) => [card]);
+        }
+        const restCombos = generateCombinations(slots.slice(1));
+        return slots[0].reduce(
+          (acc, cur) => acc.concat(restCombos.map((c) => c.concat(cur))),
+          []
+        );
+      }
+      const slots = targetSkillCardIds
+        .map((id, idx) =>
+          [id].concat(alternateSkillCardIds[idx] || []).filter((mid) => mid)
+        )
+        .filter((slot) => slot.length);
+
+      // Combos excluding those with duplicate cards
+      const matchingCombinations = generateCombinations(slots).filter(
+        (combo) => new Set(combo).size == combo.length
+      );
+      const memoryIsOnTarget = matchingCombinations.some((combo) =>
+        combo.every((id) => cur.skillCardIds.includes(id))
+      );
+
+      if (memoryIsOnTarget) {
         acc.onTargetMemories.push(cur);
         acc.onTargetProbability += cur.probability;
       } else {
