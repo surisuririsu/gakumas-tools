@@ -1,12 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import SelectionContext from "@/contexts/SelectionContext";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const { setSelectedEntity } = useContext(SelectionContext);
-  const [plan, setPlan] = useState("sense");
-  const [idolId, setIdolId] = useState(1);
   const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState([
     [0, 0, 0, 0, 0, 0],
@@ -57,10 +55,6 @@ export function LoadoutContextProvider({ children }) {
   return (
     <LoadoutContext.Provider
       value={{
-        plan,
-        setPlan,
-        idolId,
-        setIdolId,
         pItemIds,
         setPItemIds,
         skillCardIdGroups,

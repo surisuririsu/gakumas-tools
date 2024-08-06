@@ -8,7 +8,7 @@ import styles from "./Welcome.module.scss";
 
 export default function Welcome() {
   const { toggle } = useContext(WorkspaceContext);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [showImporter, setShowImporter] = useState(false);
 
   return (

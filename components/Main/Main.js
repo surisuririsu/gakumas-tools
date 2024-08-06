@@ -25,11 +25,6 @@ export default function Home() {
           <Dex />
         </Widget>
       )}
-      {openWidgets.loadoutEditor && (
-        <Widget title="Loadout Editor" fill>
-          <LoadoutEditor />
-        </Widget>
-      )}
       {openWidgets.memoryCalculator && (
         <Widget title="Memory Calculator (In dev)" fill>
           <MemoryCalculator />
@@ -43,6 +38,11 @@ export default function Home() {
       {openWidgets.memories && (
         <Widget title="Memories">
           <Memories />
+        </Widget>
+      )}
+      {openWidgets.loadoutEditor && (
+        <Widget title="Loadout Editor" fill>
+          <LoadoutEditor />
         </Widget>
       )}
       {!Object.values(openWidgets).some((v) => v) && <Welcome />}
