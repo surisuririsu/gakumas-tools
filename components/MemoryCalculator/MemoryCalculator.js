@@ -30,8 +30,8 @@ export default function MemoryCalculator() {
     (acc, cur) => {
       // Generates all combinations of target cards
       function generateCombinations(slots) {
-        if (slots.length === 1) {
-          return slots[0].map((card) => [card]);
+        if (slots.length === 0) {
+          return [[]];
         }
         const restCombos = generateCombinations(slots.slice(1));
         return slots[0].reduce(
