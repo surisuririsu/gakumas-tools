@@ -34,9 +34,10 @@ export default function MemorySummary({ memory }) {
           <span>{name}</span>
           <span>{contestPower}</span>
         </span>
+
         <div className={styles.row}>
           {pItemIds
-            .filter((p) => !!p)
+            .filter((p) => p)
             .map(PItems.getById)
             .map((pItem, i) => (
               <Image
@@ -54,9 +55,10 @@ export default function MemorySummary({ memory }) {
             <div className={styles.visual} style={{ flex: params[2] }} />
           </div>
         </div>
+
         <div className={styles.row}>
           {skillCardIds
-            .filter((s) => !!s)
+            .filter((s) => s)
             .map(SkillCards.getById)
             .map((skillCard, i) => (
               <Image

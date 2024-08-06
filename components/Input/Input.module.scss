@@ -7,8 +7,8 @@
   border-bottom: 4px solid $gk-orange;
   padding: 8px;
   color: $gk-orange;
-  text-align: center;
   font-weight: 600;
+  text-align: center;
 
   &::placeholder {
     color: lighten($gk-orange, 15%);

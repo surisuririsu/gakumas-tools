@@ -6,7 +6,7 @@ import EntityDetails from "@/components/EntityDetails";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryContext from "@/contexts/MemoryContext";
-import SelectionContext from "@/contexts/SelectionContext";
+import EntityContext from "@/contexts/EntityContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
 import { PLANS } from "@/utils/plans";
@@ -14,11 +14,11 @@ import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./Dex.module.scss";
 
 export default function Dex() {
+  const { pIdolId } = useContext(MemoryContext);
+  const { selectedEntity, setSelectedEntity } = useContext(EntityContext);
   const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
     useContext(WorkspaceContext);
-  const { pIdolId } = useContext(MemoryContext);
-  const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
-  const [activeTab, setActiveTab] = useState("Skill cards");
+  const [activeTab, setActiveTab] = useState("スキルカード");
 
   useEffect(() => {
     setSelectedEntity(null);
@@ -33,9 +33,9 @@ export default function Dex() {
   }, [pIdolId]);
 
   let entities = [];
-  const Entities = activeTab == "Skill cards" ? SkillCards : PItems;
+  const Entities = activeTab == "スキルカード" ? SkillCards : PItems;
   const compareFn =
-    activeTab == "Skill cards" ? compareSkillCards : comparePItems;
+    activeTab == "スキルカード" ? compareSkillCards : comparePItems;
 
   if (filter) {
     const pIdolIds = PIdols.getFiltered({
@@ -67,12 +67,12 @@ export default function Dex() {
           <EntityIcon
             key={`${entity.type}_${entity.id}`}
             type={
-              activeTab == "Skill cards"
+              activeTab == "スキルカード"
                 ? EntityTypes.SKILL_CARD
                 : EntityTypes.P_ITEM
             }
             id={entity.id}
-            widget="dex"
+            region="dex"
             index={index}
             idolId={idolId}
           />
@@ -80,7 +80,7 @@ export default function Dex() {
       </div>
 
       <div className={styles.filter}>
-        <Checkbox label="Filter" checked={filter} onChange={setFilter} />
+        <Checkbox label="フィルター" checked={filter} onChange={setFilter} />
       </div>
 
       {filter && (
@@ -89,14 +89,16 @@ export default function Dex() {
             options={PLANS.map((alias) => ({
               id: alias,
               iconSrc: `/plans/${alias}.png`,
+              alt: alias,
             }))}
             selected={plan}
             onChange={setPlan}
           />
           <IconSelect
-            options={Idols.getAll().map(({ id, icon }) => ({
+            options={Idols.getAll().map(({ id, name, icon }) => ({
               id,
               iconSrc: icon,
+              alt: name,
             }))}
             selected={idolId}
             onChange={setIdolId}
@@ -107,7 +109,7 @@ export default function Dex() {
       <div className={styles.tabs}>
         <ButtonGroup
           selected={activeTab}
-          options={["Skill cards", "P-items"]}
+          options={["スキルカード", "Pアイテム"]}
           onChange={setActiveTab}
         />
       </div>

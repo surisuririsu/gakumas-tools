@@ -22,6 +22,7 @@ export default function PIdolSelect({ selected, onChange }) {
       <button className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
         <PIdol pIdolId={selected} />
       </button>
+
       {expanded && (
         <div className={styles.expander}>
           <div className={styles.filters}>
@@ -29,19 +30,22 @@ export default function PIdolSelect({ selected, onChange }) {
               options={PLANS.map((alias) => ({
                 id: alias,
                 iconSrc: `/plans/${alias}.png`,
+                alt: alias,
               }))}
               selected={plan}
               onChange={setPlan}
             />
             <IconSelect
-              options={Idols.getAll().map(({ id, icon }) => ({
+              options={Idols.getAll().map(({ id, name, icon }) => ({
                 id,
                 iconSrc: icon,
+                alt: name,
               }))}
               selected={idolId}
               onChange={setIdolId}
             />
           </div>
+
           <div className={styles.result}>
             {PIdols.getFiltered({ plans: [plan], idolIds: [idolId] }).map(
               (pIdol) => (

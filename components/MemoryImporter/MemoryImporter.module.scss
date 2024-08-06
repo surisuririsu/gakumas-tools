@@ -1,15 +1,11 @@
 @import "@/constants";
 
 .files {
-  margin-top: 16px;
   display: flex;
-
-  input {
-    flex: 1;
-    border-radius: 8px;
-    padding: 16px;
-    background-color: lighten($gk-orange, 40%);
-  }
+  margin-top: 16px;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: lighten($gk-orange, 40%);
 }
 
 .progress {

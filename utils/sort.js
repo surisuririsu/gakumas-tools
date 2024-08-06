@@ -1,3 +1,5 @@
+import { PItems, SkillCards } from "gakumas-data";
+
 const RARITY_VALUES = {
   N: 0,
   T: 1,
@@ -57,4 +59,41 @@ export function compareSkillCards(a, b) {
     return TYPE_VALUES[a.type] - TYPE_VALUES[b.type];
   }
   return 0;
+}
+
+export function getSearchScore(memory, pItemIds, skillCardIds) {
+  let score = 0;
+  pItemIds
+    .filter((i) => !!i)
+    .map(PItems.getById)
+    .forEach((pItem, i) => {
+      const multiplier = Math.pow(0.95, i);
+      if (memory.pItemIds.includes(pItem.id)) score += 1 * multiplier;
+      if (pItem.sourceType == "pIdol") {
+        if (!pItem.upgraded && memory.pItemIds.includes(pItem.id + 1))
+          score += 0.6 * multiplier;
+        if (pItem.upgraded && memory.pItemIds.includes(pItem.id - 1))
+          score += 0.5 * multiplier;
+      }
+    });
+  skillCardIds
+    .filter((i) => !!i)
+    .map(SkillCards.getById)
+    .forEach((skillCard, i) => {
+      const multiplier = Math.pow(0.95, i);
+      if (memory.skillCardIds.includes(skillCard.id)) score += 1 * multiplier;
+      if (skillCard.type != "trouble") {
+        if (
+          !skillCard.upgraded &&
+          memory.skillCardIds.includes(skillCard.id + 1)
+        )
+          score += 0.6 * multiplier;
+        if (
+          skillCard.upgraded &&
+          memory.skillCardIds.includes(skillCard.id - 1)
+        )
+          score += 0.5 * multiplier;
+      }
+    });
+  return score;
 }

@@ -4,7 +4,7 @@ import styles from "./StageSkillCards.module.scss";
 
 export default function StageSkillCards({
   skillCardIds,
-  widget,
+  region,
   idolId,
   size,
   groupIndex = 0,
@@ -16,7 +16,7 @@ export default function StageSkillCards({
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
-          widget={widget}
+          region={region}
           index={groupIndex * 6 + index}
           idolId={idolId}
           size={size}

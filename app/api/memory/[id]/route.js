@@ -9,9 +9,11 @@ export async function PUT(request, { params: routeParams }) {
     return new Response("Unauthorized", { status: 401 });
   }
   const userId = session.user.id;
+
   const id = new ObjectId(routeParams.id);
   const { name, pIdolId, params, pItemIds, skillCardIds } =
     await request.json();
+
   const { db } = await connect();
   const { updatedId } = await db
     .collection("memories")

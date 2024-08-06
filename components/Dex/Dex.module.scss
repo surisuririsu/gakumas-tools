@@ -12,16 +12,16 @@
   }
 
   .result {
-    border-top: 2px solid $gray-light;
-    border-bottom: 2px solid $gray-light;
     flex: 1;
-    overflow-y: scroll;
     display: grid;
     grid-template-columns: repeat(auto-fill, 60px);
     grid-template-rows: repeat(auto-fill, 60px);
     gap: 8px;
     justify-content: space-around;
+    border-top: 2px solid $gray-light;
+    border-bottom: 2px solid $gray-light;
     padding: 8px;
+    overflow-y: scroll;
   }
 
   .filter {

@@ -4,9 +4,9 @@
   position: relative;
   width: 60px;
   height: 60px;
-  background-color: $gray-extra-light;
   border: 4px solid $gray-light;
   border-radius: 8px;
+  background-color: $gray-extra-light;
   overflow: hidden;
   cursor: grab;
   transition: 0.2s box-shadow;

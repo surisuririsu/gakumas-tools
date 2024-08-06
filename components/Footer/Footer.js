@@ -6,6 +6,7 @@ export default function Footer() {
       <a href="https://wikiwiki.jp/gakumas/" target="_blank">
         Gakumas Contest Wiki
       </a>
+
       <span>
         Made with ☕ by{" "}
         <a href="http://www.ris.moe" target="_blank">
@@ -13,6 +14,7 @@ export default function Footer() {
         </a>{" "}
         with research from the Gakumas contest community
       </span>
+
       <a
         href="https://github.com/surisuririsu/gakumas-tools/issues/new"
         target="_blank"

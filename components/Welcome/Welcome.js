@@ -7,8 +7,8 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./Welcome.module.scss";
 
 export default function Welcome() {
-  const { toggle } = useContext(WorkspaceContext);
   const { status } = useSession();
+  const { toggle } = useContext(WorkspaceContext);
   const [showImporter, setShowImporter] = useState(false);
 
   return (
@@ -20,6 +20,7 @@ export default function Welcome() {
           P-item and skill card information, import and search memories by
           P-items and skill cards, and more.
         </p>
+
         <h3>Getting started</h3>
         <ul>
           <li>
@@ -52,6 +53,7 @@ export default function Welcome() {
             </Button>
           </li>
         </ul>
+
         <h3>Current features</h3>
         <ul>
           <li>Calculate required exam score for produce ranks</li>
@@ -71,6 +73,7 @@ export default function Welcome() {
           <li>And more</li>
         </ul>
       </div>
+
       {showImporter && (
         <MemoryImporter onClose={() => setShowImporter(false)} />
       )}

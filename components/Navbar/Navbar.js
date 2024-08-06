@@ -1,46 +1,10 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import {
-  FaBook,
-  FaCalculator,
-  FaFilm,
-  FaList,
-  FaPen,
-  FaTrophy,
-} from "react-icons/fa6";
 import Button from "@/components/Button";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import { WIDGETS } from "@/utils/widgets";
 import styles from "./Navbar.module.scss";
-
-const WIDGET_NAMES = {
-  produceRankCalculator: <FaCalculator />,
-  dex: <FaBook />,
-  memoryCalculator: (
-    <>
-      <FaFilm />
-      <FaCalculator />
-    </>
-  ),
-  memoryEditor: (
-    <>
-      <FaFilm />
-      <FaPen />
-    </>
-  ),
-  memories: (
-    <>
-      <FaFilm />
-      <FaList />
-    </>
-  ),
-  loadoutEditor: (
-    <>
-      <FaTrophy />
-      <FaPen />
-    </>
-  ),
-};
 
 export default function Navbar() {
   const { openWidgets, toggle } = useContext(WorkspaceContext);
@@ -49,18 +13,20 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <h1>Gakumas Tools (In Dev)</h1>
+      <h1>Gakumas Tools (開発中)</h1>
+
       <div className={styles.links}>
-        {Object.keys(WIDGET_NAMES).map((widget) => (
+        {Object.keys(WIDGETS).map((widget) => (
           <button
             key={widget}
             className={openWidgets[widget] ? styles.active : ""}
             onClick={() => toggle(widget)}
           >
-            {WIDGET_NAMES[widget]}
+            {WIDGETS[widget].icon}
           </button>
         ))}
       </div>
+
       {status == "unauthenticated" ? (
         <Button onClick={() => signIn("discord")}>Sign in with Discord</Button>
       ) : (

@@ -2,18 +2,18 @@
 
 .trash {
   max-width: 390px;
-  padding: 8px;
   border: 4px dashed $red-light;
   border-radius: 8px;
+  padding: 8px;
   color: $red-light;
   font-size: 24px;
   transition: 0.2s all;
 
   &:hover,
   &.hover {
-    color: $red;
     border-color: $red;
     background-color: $red-extra-light;
+    color: $red;
   }
 
   &.small {
