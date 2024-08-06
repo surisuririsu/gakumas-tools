@@ -74,7 +74,10 @@ export default function MemoryCalculator() {
 
   return (
     <div className={styles.memoryCalculator}>
-      <b>This feature is a work-in-progress! Accuracy is not guaranteed.</b>
+      <b>
+        Probabilities shown are estimates. The real skill card selection
+        algorithm is not known.
+      </b>
 
       <label>Target skill cards</label>
       <TargetSkillCards idolId={idolId} />
