@@ -42,7 +42,7 @@ export default function MemorySummary({ memory }) {
               <Image
                 key={i}
                 src={pItem.icon}
-                width={30}
+                width={35}
                 alt={pItem.name}
                 draggable={false}
               />
@@ -62,7 +62,7 @@ export default function MemorySummary({ memory }) {
               <Image
                 key={i}
                 src={skillCard.getDynamicIcon(idolId)}
-                width={40}
+                width={50}
                 alt={skillCard.name}
                 draggable={false}
               />

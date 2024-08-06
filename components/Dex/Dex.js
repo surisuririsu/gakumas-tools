@@ -1,61 +1,53 @@
 import { useContext, useEffect, useState } from "react";
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
 import ButtonGroup from "@/components/ButtonGroup";
 import Checkbox from "@/components/Checkbox";
 import EntityDetails from "@/components/EntityDetails";
 import EntityIcon from "@/components/EntityIcon";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import IconSelect from "@/components/IconSelect";
 import MemoryContext from "@/contexts/MemoryContext";
 import SelectionContext from "@/contexts/SelectionContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
+import { PLANS } from "@/utils/plans";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./Dex.module.scss";
 
 export default function Dex() {
-  const { openWidgets } = useContext(WorkspaceContext);
+  const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
+    useContext(WorkspaceContext);
   const { pIdolId } = useContext(MemoryContext);
-  const { plan, idolId } = useContext(LoadoutContext);
   const { selectedEntity, setSelectedEntity } = useContext(SelectionContext);
   const [activeTab, setActiveTab] = useState("Skill cards");
-  const [filter, setFilter] = useState(true);
 
   useEffect(() => {
     setSelectedEntity(null);
   }, [filter]);
 
-  const pIdol = PIdols.getById(pIdolId);
+  useEffect(() => {
+    const pIdol = PIdols.getById(pIdolId);
+    if (pIdol) {
+      setPlan(pIdol.plan);
+      setIdolId(pIdol.idolId);
+    }
+  }, [pIdolId]);
 
   let entities = [];
   const Entities = activeTab == "Skill cards" ? SkillCards : PItems;
   const compareFn =
     activeTab == "Skill cards" ? compareSkillCards : comparePItems;
 
-  let pIdolIds = [];
-  let plans = [];
-
   if (filter) {
-    if (openWidgets.memoryEditor && pIdolId) {
-      pIdolIds.push(pIdolId);
-      plans.push(pIdol.plan);
-    }
-    if (openWidgets.loadoutEditor) {
-      const filteredPIdols = PIdols.getFiltered({
-        idolIds: [idolId],
-        plans: [plan],
-      });
-      pIdolIds = pIdolIds.concat(filteredPIdols.map((pi) => pi.id));
-      plans.push(plan);
-    }
-  }
-
-  if (pIdolIds.length || plans.length) {
+    const pIdolIds = PIdols.getFiltered({
+      idolIds: [idolId],
+      plans: [plan],
+    }).map((pi) => pi.id);
     const signatureEntities = Entities.getFiltered({
       pIdolIds,
     });
     const nonSignatureEntities = Entities.getFiltered({
       rarities: ["R", "SR", "SSR"],
-      plans: [...plans, "free"],
+      plans: [plan, "free"],
       modes: ["stage"],
       sourceTypes: ["produce", "support"],
     }).sort(compareFn);
@@ -69,6 +61,7 @@ export default function Dex() {
       <div className={styles.details}>
         <EntityDetails type={selectedEntity?.type} id={selectedEntity?.id} />
       </div>
+
       <div className={styles.result}>
         {entities.map((entity, index) => (
           <EntityIcon
@@ -81,15 +74,36 @@ export default function Dex() {
             id={entity.id}
             widget="dex"
             index={index}
-            idolId={pIdol?.idolId}
+            idolId={idolId}
           />
         ))}
       </div>
-      {((openWidgets.memoryEditor && pIdolId) || openWidgets.loadoutEditor) && (
-        <div className={styles.filter}>
-          <Checkbox label="Filter" checked={filter} onChange={setFilter} />
+
+      <div className={styles.filter}>
+        <Checkbox label="Filter" checked={filter} onChange={setFilter} />
+      </div>
+
+      {filter && (
+        <div className={styles.selects}>
+          <IconSelect
+            options={PLANS.map((alias) => ({
+              id: alias,
+              iconSrc: `/plans/${alias}.png`,
+            }))}
+            selected={plan}
+            onChange={setPlan}
+          />
+          <IconSelect
+            options={Idols.getAll().map(({ id, icon }) => ({
+              id,
+              iconSrc: icon,
+            }))}
+            selected={idolId}
+            onChange={setIdolId}
+          />
         </div>
       )}
+
       <div className={styles.tabs}>
         <ButtonGroup
           selected={activeTab}
