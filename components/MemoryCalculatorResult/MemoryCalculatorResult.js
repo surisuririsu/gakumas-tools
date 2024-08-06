@@ -17,7 +17,7 @@ export default function MemoryCalculatorResult({
             <Image
               key={id}
               src={getDynamicIcon?.(idolId) || icon}
-              width={60}
+              width={50}
               alt={name}
               draggable={false}
             />
