@@ -2,11 +2,12 @@ import { useContext } from "react";
 import Image from "next/image";
 import { useDrag, useDrop } from "react-dnd";
 import { PItems, SkillCards } from "gakumas-data";
+import EntityContext from "@/contexts/EntityContext";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import SearchContext from "@/contexts/SearchContext";
-import EntityContext from "@/contexts/EntityContext";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
@@ -15,7 +16,8 @@ const ENTITY_DATA_BY_TYPE = {
   [EntityTypes.SKILL_CARD]: SkillCards,
 };
 
-export default function EntityIcon({ type, id, region, index, size, idolId }) {
+export default function EntityIcon({ type, id, region, index, size }) {
+  const { idolId } = useContext(WorkspaceContext);
   // TODO: refactor
   const {
     setPItemIds: setLoadoutPItemIds,

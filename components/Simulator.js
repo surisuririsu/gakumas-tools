@@ -51,6 +51,7 @@ while (state.turnsRemaining > 0) {
   } else {
     state = stageEngine.endTurn(state);
   }
+  console.log(JSON.parse(JSON.stringify(state)));
 
   if (loopCount > 100) {
     console.log("inf loop");

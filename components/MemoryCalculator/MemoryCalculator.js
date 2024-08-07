@@ -91,7 +91,7 @@ export default function MemoryCalculator() {
       </b>
 
       <label>Target skill cards</label>
-      <TargetSkillCards idolId={idolId} />
+      <TargetSkillCards />
 
       <label>Acquired skill cards</label>
       <div className={styles.skillCards}>
@@ -102,7 +102,6 @@ export default function MemoryCalculator() {
             id={skillCardId}
             region="memoryCalculator:acquired"
             index={index}
-            idolId={idolId}
           />
         ))}
       </div>

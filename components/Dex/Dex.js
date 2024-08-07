@@ -74,7 +74,6 @@ export default function Dex() {
             id={entity.id}
             region="dex"
             index={index}
-            idolId={idolId}
           />
         ))}
       </div>
