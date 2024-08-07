@@ -80,7 +80,7 @@ export default function Dex() {
       </div>
 
       <div className={styles.filter}>
-        <Checkbox label="フィルター" checked={filter} onChange={setFilter} />
+        <Checkbox label="フィルタ" checked={filter} onChange={setFilter} />
       </div>
 
       {filter && (

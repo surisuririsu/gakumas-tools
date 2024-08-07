@@ -6,6 +6,7 @@ const MemoryCalculatorContext = createContext();
 export function MemoryCalculatorContextProvider({ children }) {
   const [targetSkillCardIds, _setTargetSkillCardIds] = useState([0]);
   const [alternateSkillCardIds, _setAlternateSkillCardIds] = useState([]);
+  const [targetNegations, _setTargetNegations] = useState([]);
   const [acquiredSkillCardIds, _setAcquiredSkillCardIds] = useState([0]);
 
   function setAcquiredSkillCardIds(callback) {
@@ -25,24 +26,29 @@ export function MemoryCalculatorContextProvider({ children }) {
           if (!id) removedIndices.push(idx);
           return id;
         })
-        .concat(0)
-        .slice(0, 5);
+        .concat(0);
     });
 
-    // If target skill card is removed, also remove the associated alternates
-    _setAlternateSkillCardIds((curAlts) => {
-      const updatedCurAlts = JSON.parse(JSON.stringify(curAlts));
-      removedIndices.forEach((idx) => (updatedCurAlts[idx] = 0));
-      return updatedCurAlts.filter((alts) => alts !== 0);
+    // If target skill card is removed, also remove the associated alternates and negations
+    _setAlternateSkillCardIds((cur) => {
+      const updated = JSON.parse(JSON.stringify(cur));
+      removedIndices.forEach((idx) => (updated[idx] = 0));
+      return updated.filter((alts) => alts !== 0);
+    });
+
+    _setTargetNegations((cur) => {
+      const updated = [...cur];
+      removedIndices.forEach((idx) => (updated[idx] = 0));
+      return updated.filter((neg) => neg !== 0);
     });
   }
 
   function setAlternateSkillCardIds(callback) {
     _setAlternateSkillCardIds((cur) => {
-      const arr = cur.reduce(
-        (acc, target) => acc.concat(Array.from({ ...target, length: 10 })),
-        []
-      );
+      let arr = [];
+      for (let i = 0; i < cur.length; i++) {
+        arr = arr.concat(Array.from({ ...cur[i], length: 10 }));
+      }
 
       const updatedArr = callback(arr);
 
@@ -81,6 +87,12 @@ export function MemoryCalculatorContextProvider({ children }) {
     _setAlternateSkillCardIds(updatedAlternateSkillCardIds);
   }
 
+  function setNegation(index, value) {
+    const updatedNegations = [...targetNegations];
+    updatedNegations[index] = value;
+    _setTargetNegations(updatedNegations);
+  }
+
   return (
     <MemoryCalculatorContext.Provider
       value={{
@@ -91,6 +103,8 @@ export function MemoryCalculatorContextProvider({ children }) {
         addAlternateSkillCards,
         acquiredSkillCardIds,
         setAcquiredSkillCardIds,
+        targetNegations,
+        setNegation,
       }}
     >
       {children}

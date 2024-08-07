@@ -16,8 +16,12 @@ import styles from "./MemoryCalculator.module.scss";
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
 export default function MemoryCalculator() {
-  const { targetSkillCardIds, alternateSkillCardIds, acquiredSkillCardIds } =
-    useContext(MemoryCalculatorContext);
+  const {
+    targetSkillCardIds,
+    alternateSkillCardIds,
+    targetNegations,
+    acquiredSkillCardIds,
+  } = useContext(MemoryCalculatorContext);
   const { idolId } = useContext(WorkspaceContext);
   const [rank, setRank] = useState("A");
 
@@ -40,19 +44,26 @@ export default function MemoryCalculator() {
           []
         );
       }
+
+      // Cards for each slot
       const slots = targetSkillCardIds
         .map((id, idx) =>
           [id].concat(alternateSkillCardIds[idx] || []).filter((mid) => mid)
         )
         .filter((slot) => slot.length);
 
+      const positiveSlots = slots.filter((slot, i) => !targetNegations[i]);
+      const negativeSlots = slots.filter((slot, i) => targetNegations[i]);
+      const excludedSkillCardIds = [].concat(...negativeSlots);
+
       // Combos excluding those with duplicate cards
-      const matchingCombinations = generateCombinations(slots).filter(
+      const matchingCombinations = generateCombinations(positiveSlots).filter(
         (combo) => new Set(combo).size == combo.length
       );
-      const memoryIsOnTarget = matchingCombinations.some((combo) =>
-        combo.every((id) => cur.skillCardIds.includes(id))
-      );
+      const memoryIsOnTarget =
+        matchingCombinations.some((combo) =>
+          combo.every((id) => cur.skillCardIds.includes(id))
+        ) && !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
 
       if (memoryIsOnTarget) {
         acc.onTargetMemories.push(cur);

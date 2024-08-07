@@ -7,10 +7,38 @@
   flex-wrap: wrap;
   gap: 4px;
 
+  .slot {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .boolOp {
+    align-self: center;
+    z-index: 1;
+    border-radius: 4px;
+    padding: 4px;
+    color: $white;
+    font-size: 14px;
+    line-height: 14px;
+  }
+
+  .or {
+    @extend .boolOp;
+    margin: -11px;
+    background-color: $green;
+  }
+
+  .not {
+    @extend .boolOp;
+    margin: -3px;
+    background-color: $red;
+  }
+
   .orGroup {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 
     &.hasMultiple {
       outline: 2px solid $green;
@@ -18,20 +46,18 @@
     }
   }
 
-  .or {
-    z-index: 1;
-    margin: -11px;
-    border-radius: 4px;
-    padding: 4px;
-    background-color: $green;
-    color: $white;
-    font-size: 14px;
-    line-height: 14px;
+  .boolButton {
+    margin: 4px;
+    font-size: 16px;
   }
 
   .plus {
-    margin: 4px;
+    @extend .boolButton;
     color: $green;
-    font-size: 16px;
+  }
+
+  .minus {
+    @extend .boolButton;
+    color: $red;
   }
 }
