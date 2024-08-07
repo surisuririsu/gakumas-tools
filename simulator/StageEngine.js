@@ -1,3 +1,13 @@
+import { PItems, SkillCards } from "gakumas-data";
+
+const COST_FIELDS = [
+  "stamina",
+  "goodConditionTurns",
+  "concentration",
+  "goodImpressionTurns",
+  "motivation",
+];
+
 export default class StageEngine {
   constructor(stageConfig, idolConfig) {
     this.stageConfig = stageConfig;
@@ -21,14 +31,14 @@ export default class StageEngine {
       score: 0,
 
       // Skill card piles
-      deckCards: this.idolConfig.skillCards.slice().sort((a, b) => {
-        if (a.forceInitialHand) return 1;
-        if (b.forceInitialHand) return -1;
+      deckCardIds: this.idolConfig.skillCardIds.slice().sort((a, b) => {
+        if (SkillCards.getById(a).forceInitialHand) return 1;
+        if (SkillCards.getById(b).forceInitialHand) return -1;
         return 0.5 - Math.random();
       }),
-      handCards: [],
-      discardedCards: [],
-      removedCards: [],
+      handCardIds: [],
+      discardedCardIds: [],
+      removedCardIds: [],
 
       // Phase effects
       effectsByPhase: {},
@@ -69,12 +79,13 @@ export default class StageEngine {
     });
 
     // Set p-item effects
-    this.idolConfig.pItems.forEach((pItem) => {
+    for (let i = 0; i < this.idolConfig.pItemIds.length; i++) {
+      const pItem = PItems.getById(this.idolConfig.pItemIds[i]);
       this._log("Setting p-item effects", pItem.name, pItem.effects);
-      pItem.effects.forEach(
-        (effect) => (nextState = this._setEffect(nextState, effect))
-      );
-    });
+      for (let j = 0; j < pItem.effects.length; j++) {
+        nextState = this._setEffect(nextState, pItem.effects[j]);
+      }
+    }
 
     nextState = this._triggerEffectsForPhase("startOfStage", nextState);
 
@@ -83,23 +94,23 @@ export default class StageEngine {
     return nextState;
   }
 
-  isCardUsable(state, card) {
+  isCardUsable(state, cardId) {
+    const card = SkillCards.getById(cardId);
+
     // Check conditions
-    if (
-      !card.conditions.every((condition) =>
-        this._evaluateCondition(condition, state)
-      )
-    ) {
-      return false;
+    for (let i = 0; i < card.conditions.length; i++) {
+      if (!this._evaluateCondition(card.conditions[i], state)) {
+        return false;
+      }
     }
 
     // Check cost
     let previewState = { ...state };
-    for (let cost of card.cost) {
-      previewState = this._executeAction(cost, previewState);
+    for (let i = 0; i < card.cost.length; i++) {
+      previewState = this._executeAction(card.cost[i], previewState);
     }
-    for (let key in previewState) {
-      if (previewState[key] != state[key] && previewState[key] < 0) {
+    for (let i = 0; i < COST_FIELDS.length; i++) {
+      if (previewState[COST_FIELDS[i]] < 0) {
         return false;
       }
     }
@@ -107,7 +118,7 @@ export default class StageEngine {
     return true;
   }
 
-  useCard(state, card) {
+  useCard(state, cardId) {
     if (!state.started) {
       throw new Error("Stage not started!");
     }
@@ -117,26 +128,28 @@ export default class StageEngine {
     if (state.turnsRemaining < 1) {
       throw new Error("No turns remaining!");
     }
-    const handIndex = state.handCards.findIndex((hc) => hc.id == card.id);
+    const handIndex = state.handCardIds.indexOf(cardId);
     if (handIndex == -1) {
       throw new Error("Card is not in hand!");
     }
-    if (!this.isCardUsable(state, card)) {
+    if (!this.isCardUsable(state, cardId)) {
       throw new Error("Card is not usable!");
     }
+
+    const card = SkillCards.getById(cardId);
 
     let nextState = JSON.parse(JSON.stringify(state));
 
     this._log("Using card", card);
 
     // Apply card cost
-    for (let cost of card.cost) {
-      this._log("Applying cost", cost);
-      nextState = this._executeAction(cost, nextState);
+    for (let i = 0; i < card.cost.length; i++) {
+      this._log("Applying cost", card.cost[i]);
+      nextState = this._executeAction(card.cost[i], nextState);
     }
 
     // Remove card from hand
-    nextState.handCards.splice(handIndex, 1);
+    nextState.handCardIds.splice(handIndex, 1);
     nextState.cardUsesRemaining -= 1;
 
     // Set usedCard variables
@@ -172,9 +185,9 @@ export default class StageEngine {
 
     // Send card to discards or remove
     if (card.limit) {
-      nextState.removedCards.push(card);
+      nextState.removedCardIds.push(card.id);
     } else {
-      nextState.discardedCards.push(card);
+      nextState.discardedCardIds.push(card.id);
     }
 
     // End turn if no card uses left
@@ -204,8 +217,8 @@ export default class StageEngine {
     state = this._triggerEffectsForPhase("endOfTurn", state);
 
     // Discard hand
-    state.discardedCards = state.discardedCards.concat(state.handCards);
-    state.handCards = [];
+    state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
+    state.handCardIds = [];
 
     state.turnsElapsed += 1;
     state.turnsRemaining -= 1;
@@ -239,7 +252,7 @@ export default class StageEngine {
     // Draw more cards if turn 1 and >3 forceInitialHand
     if (state.turnsElapsed == 0) {
       for (let i = 0; i < 2; i++) {
-        if (this._peekDeck(state).forceInitialHand) {
+        if (SkillCards.getById(this._peekDeck(state)).forceInitialHand) {
           state = this._drawCard(state);
         }
       }
@@ -252,24 +265,24 @@ export default class StageEngine {
   }
 
   _peekDeck(state) {
-    return state.deckCards[state.deckCards.length - 1];
+    return state.deckCardIds[state.deckCardIds.length - 1];
   }
 
   _drawCard(state) {
-    const card = state.deckCards.pop();
-    state.handCards.push(card);
-    this._log("Drew card", card.name);
-    if (!state.deckCards.length) {
+    const cardId = state.deckCardIds.pop();
+    state.handCardIds.push(cardId);
+    this._log("Drew card", SkillCards.getById(cardId).name);
+    if (!state.deckCardIds.length) {
       state = this._recycleDiscards(state);
     }
     return state;
   }
 
   _recycleDiscards(state) {
-    state.deckCards = state.discardedCards
+    state.deckCardIds = state.discardedCardIds
       .slice()
       .sort(() => 0.5 - Math.random());
-    state.discardedCards = [];
+    state.discardedCardIds = [];
     this._log("Recycled discard pile");
     return state;
   }
@@ -290,7 +303,7 @@ export default class StageEngine {
     state = this._triggerEffects(state.effectsByPhase[phase], state);
 
     // Update remaining trigger limits
-    for (let i of state.triggeredEffects) {
+    for (let i = 0; i < state.triggeredEffects.length; i++) {
       if (state.effectsByPhase[phase][i].limit) {
         state.effectsByPhase[phase][i].limit--;
       }
@@ -305,7 +318,7 @@ export default class StageEngine {
 
     let triggeredEffects = [];
     let skipNextEffect = false;
-    for (let i in effects) {
+    for (let i = 0; i < effects.length; i++) {
       const effect = effects[i];
 
       // Skip effect if condition is not satisfied
@@ -328,9 +341,13 @@ export default class StageEngine {
 
       // Check conditions
       if (effect.conditions) {
-        const satisfied = effect.conditions.every((condition) =>
-          this._evaluateCondition(condition, state)
-        );
+        let satisfied = true;
+        for (let j = 0; j < effect.conditions.length; j++) {
+          if (!this._evaluateCondition(effect.conditions[j], state)) {
+            satisfied = false;
+            break;
+          }
+        }
         if (!satisfied) {
           if (!effect.actions) {
             skipNextEffect = true;
@@ -341,9 +358,9 @@ export default class StageEngine {
 
       // Execute actions
       if (effect.actions) {
-        for (let action of effect.actions) {
-          this._log("Executing action", action);
-          nextState = this._executeAction(action, nextState);
+        for (let j = 0; j < effect.actions.length; j++) {
+          this._log("Executing action", effect.actions[j]);
+          nextState = this._executeAction(effect.actions[j], nextState);
           if (nextState.stamina < 0) nextState.stamina = 0;
         }
 
@@ -360,8 +377,10 @@ export default class StageEngine {
   }
 
   _evaluateCondition(condition, state) {
-    const tokens = condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/);
-    const result = this._evaluateExpression(tokens, state);
+    const result = this._evaluateExpression(
+      condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/),
+      state
+    );
     this._log("Condition", condition, result);
     return result;
   }
@@ -389,23 +408,20 @@ export default class StageEngine {
       }
 
       // Set contains
-      const ampIndex = tokens.findIndex((t) => t == "&");
-      if (ampIndex != -1) {
+      if (tokens.findIndex((t) => t == "&") != -1) {
         if (tokens.length != 3) {
           console.warn("Invalid set contains");
         }
-        const [lhs, rhs] = [tokens[0], tokens[2]];
-        return variables[lhs].includes(rhs);
+        return variables[tokens[0]].includes(tokens[2]);
       }
 
       // Comparators (boolean operators)
       const cmpIndex = tokens.findIndex((t) => /[=!]=|[<>]=?/.test(t));
       if (cmpIndex != -1) {
-        const [lhs, cmp, rhs] = [
-          evaluate(tokens.slice(0, cmpIndex)),
-          tokens[cmpIndex],
-          evaluate(tokens.slice(cmpIndex + 1)),
-        ];
+        const lhs = evaluate(tokens.slice(0, cmpIndex));
+        const cmp = tokens[cmpIndex];
+        const rhs = evaluate(tokens.slice(cmpIndex + 1));
+
         if (cmp == "==") {
           return lhs == rhs;
         } else if (cmp == "!=") {
@@ -425,11 +441,10 @@ export default class StageEngine {
       // Multiply, divide, modulo
       const mdIndex = tokens.findIndex((t) => /[*/%]/.test(t));
       if (mdIndex != -1) {
-        const [lhs, op, rhs] = [
-          evaluate(tokens.slice(0, mdIndex)),
-          tokens[mdIndex],
-          evaluate(tokens.slice(mdIndex + 1)),
-        ];
+        const lhs = evaluate(tokens.slice(0, mdIndex));
+        const op = tokens[mdIndex];
+        const rhs = evaluate(tokens.slice(mdIndex + 1));
+
         if (op == "*") {
           return lhs * rhs;
         } else if (op == "/") {
@@ -443,11 +458,10 @@ export default class StageEngine {
       // Add, subtract
       const asIndex = tokens.findIndex((t) => /[+\-]/.test(t));
       if (asIndex != -1) {
-        const [lhs, op, rhs] = [
-          evaluate(tokens.slice(0, asIndex)),
-          tokens[asIndex],
-          evaluate(tokens.slice(asIndex + 1)),
-        ];
+        const lhs = evaluate(tokens.slice(0, asIndex));
+        const op = tokens[asIndex];
+        const rhs = evaluate(tokens.slice(asIndex + 1));
+
         if (op == "+") {
           return lhs + rhs;
         } else if (op == "i") {
@@ -472,11 +486,12 @@ export default class StageEngine {
     // Assignments
     const assignIndex = tokens.findIndex((t) => /[+\-*/%]?=/.test(t));
     if (assignIndex == 1) {
-      let [lhs, op, rhs] = [
-        tokens.slice(0, assignIndex),
-        tokens[assignIndex],
-        this._evaluateExpression(tokens.slice(assignIndex + 1), state),
-      ];
+      let lhs = tokens[0];
+      const op = tokens[1];
+      const rhs = this._evaluateExpression(
+        tokens.slice(assignIndex + 1),
+        state
+      );
 
       if (lhs == "score") lhs = "intermediateScore";
       if (lhs == "genki") lhs = "intermediateGenki";

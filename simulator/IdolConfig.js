@@ -1,5 +1,5 @@
 export default class IdolConfig {
-  constructor(parameters, supportBonus, criteria, pItems, skillCards) {
+  constructor(parameters, supportBonus, criteria, pItemIds, skillCardIds) {
     this.parameters = parameters;
     this.supportBonus = supportBonus;
     this.typeMultipliers = this.getTypeMultipliers(
@@ -7,8 +7,8 @@ export default class IdolConfig {
       supportBonus,
       criteria
     );
-    this.pItems = pItems;
-    this.skillCards = skillCards;
+    this.pItemIds = pItemIds;
+    this.skillCardIds = skillCardIds;
   }
 
   getTypeMultipliers(parameters, supportBonus, criteria) {
