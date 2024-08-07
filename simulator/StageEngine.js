@@ -1,9 +1,8 @@
-import { PItems, SkillCards } from "gakumas-data";
-
 export default class StageEngine {
   constructor(stageConfig, idolConfig) {
     this.stageConfig = stageConfig;
     this.idolConfig = idolConfig;
+    this.loggingEnabled = false;
   }
 
   getInitialState() {
@@ -15,6 +14,7 @@ export default class StageEngine {
       turnsRemaining: this.stageConfig.turnCount,
       cardUsesRemaining: 0,
       stamina: this.idolConfig.parameters.stamina,
+      fixedGenki: 0,
       genki: 0,
       cost: 0,
       intermediateScore: 0,
@@ -43,6 +43,10 @@ export default class StageEngine {
       permanentScoreBuff: 0,
       halfCostTurns: 0,
       doubleCostTurns: 0,
+      doubleCardEffectCards: 0,
+
+      // Effect modifiers
+      concentrationMultiplier: 1,
     };
   }
 
@@ -51,15 +55,22 @@ export default class StageEngine {
       throw new Error("Stage already started!");
     }
 
-    let nextState = JSON.parse(JSON.stringify(state));
+    let nextState = { ...state };
 
-    console.log("Starting stage...");
+    this._log("Starting stage...");
 
     nextState.started = true;
 
+    // Set default effects
+    nextState = this._setEffect(nextState, {
+      phase: "endOfTurn",
+      conditions: ["goodImpressionTurns>=1"],
+      actions: ["score+=goodImpressionTurns"],
+    });
+
     // Set p-item effects
     this.idolConfig.pItems.forEach((pItem) => {
-      console.log("Setting p-item effects", pItem.name, pItem.effects);
+      this._log("Setting p-item effects", pItem.name, pItem.effects);
       pItem.effects.forEach(
         (effect) => (nextState = this._setEffect(nextState, effect))
       );
@@ -83,7 +94,7 @@ export default class StageEngine {
     }
 
     // Check cost
-    let previewState = JSON.parse(JSON.stringify(state));
+    let previewState = { ...state };
     for (let cost of card.cost) {
       previewState = this._executeAction(cost, previewState);
     }
@@ -97,13 +108,17 @@ export default class StageEngine {
   }
 
   useCard(state, card) {
+    if (!state.started) {
+      throw new Error("Stage not started!");
+    }
     if (state.cardUsesRemaining < 1) {
       throw new Error("No card uses remaining!");
     }
     if (state.turnsRemaining < 1) {
       throw new Error("No turns remaining!");
     }
-    if (!state.handCards.includes(card)) {
+    const handIndex = state.handCards.findIndex((hc) => hc.id == card.id);
+    if (handIndex == -1) {
       throw new Error("Card is not in hand!");
     }
     if (!this.isCardUsable(state, card)) {
@@ -112,16 +127,16 @@ export default class StageEngine {
 
     let nextState = JSON.parse(JSON.stringify(state));
 
-    console.log("Using card", card);
+    this._log("Using card", card);
 
     // Apply card cost
     for (let cost of card.cost) {
-      console.log("Applying cost", cost);
+      this._log("Applying cost", cost);
       nextState = this._executeAction(cost, nextState);
     }
 
     // Remove card from hand
-    nextState.handCards.splice(nextState.handCards.indexOf(card), 1);
+    nextState.handCards.splice(handIndex, 1);
     nextState.cardUsesRemaining -= 1;
 
     // Set usedCard variables
@@ -152,6 +167,7 @@ export default class StageEngine {
       );
     }
 
+    // Reset usedCard variables
     nextState.usedCardId = null;
 
     // Send card to discards or remove
@@ -170,6 +186,13 @@ export default class StageEngine {
   }
 
   endTurn(state) {
+    if (!state.started) {
+      throw new Error("Stage not started!");
+    }
+    if (state.turnsRemaining < 1) {
+      throw new Error("No turns remaining!");
+    }
+
     // Recover stamina if turn ended by player
     if (state.cardUsesRemaining > 0) {
       state.stamina = Math.min(
@@ -179,14 +202,6 @@ export default class StageEngine {
     }
 
     state = this._triggerEffectsForPhase("endOfTurn", state);
-
-    // Reduce effect turns
-    state.goodConditionTurns = Math.max(state.goodConditionTurns - 1, 0);
-    state.perfectConditionTurns = Math.max(state.perfectConditionTurns - 1, 0);
-    state.goodImpressionTurns = Math.max(state.goodImpressionTurns - 1, 0);
-    state.halfCostTurns = Math.max(state.halfCostTurns - 1, 0);
-    state.doubleCostTurns = Math.max(state.doubleCostTurns - 1, 0);
-    state.oneTurnScoreBuff = 0;
 
     // Discard hand
     state.discardedCards = state.discardedCards.concat(state.handCards);
@@ -204,9 +219,17 @@ export default class StageEngine {
   }
 
   _startTurn(state) {
-    console.log("Starting turn", state.turnsElapsed + 1);
+    this._log("Starting turn", state.turnsElapsed + 1);
 
     state.turnType = this.stageConfig.turnTypes[state.turnsElapsed];
+
+    // Reduce effect turns
+    state.goodConditionTurns = Math.max(state.goodConditionTurns - 1, 0);
+    state.perfectConditionTurns = Math.max(state.perfectConditionTurns - 1, 0);
+    state.goodImpressionTurns = Math.max(state.goodImpressionTurns - 1, 0);
+    state.halfCostTurns = Math.max(state.halfCostTurns - 1, 0);
+    state.doubleCostTurns = Math.max(state.doubleCostTurns - 1, 0);
+    state.oneTurnScoreBuff = 0;
 
     // Draw cards
     for (let i = 0; i < 3; i++) {
@@ -235,7 +258,7 @@ export default class StageEngine {
   _drawCard(state) {
     const card = state.deckCards.pop();
     state.handCards.push(card);
-    console.log("Drew card", card.name);
+    this._log("Drew card", card.name);
     if (!state.deckCards.length) {
       state = this._recycleDiscards(state);
     }
@@ -247,7 +270,7 @@ export default class StageEngine {
       .slice()
       .sort(() => 0.5 - Math.random());
     state.discardedCards = [];
-    console.log("Recycled discard pile");
+    this._log("Recycled discard pile");
     return state;
   }
 
@@ -262,25 +285,28 @@ export default class StageEngine {
   _triggerEffectsForPhase(phase, state) {
     if (!state.effectsByPhase[phase]?.length) return state;
 
-    console.log(`Triggering effects for ${phase}`);
+    this._log(`Triggering effects for ${phase}`);
 
     state = this._triggerEffects(state.effectsByPhase[phase], state);
 
+    // Update remaining trigger limits
     for (let i of state.triggeredEffects) {
-      state.effectsByPhase[phase][i].limit--;
+      if (state.effectsByPhase[phase][i].limit) {
+        state.effectsByPhase[phase][i].limit--;
+      }
     }
+    state.triggeredEffects = [];
 
     return state;
   }
 
   _triggerEffects(effects, state) {
-    let nextState = JSON.parse(JSON.stringify(state));
+    let nextState = { ...state };
 
     let triggeredEffects = [];
     let skipNextEffect = false;
     for (let i in effects) {
       const effect = effects[i];
-      console.log("if", effect.conditions, "do", effect.actions);
 
       // Skip effect if condition is not satisfied
       if (skipNextEffect) {
@@ -294,9 +320,11 @@ export default class StageEngine {
       }
 
       // Check limit
-      if (effect.limit < 1) {
+      if (effect.limit != null && effect.limit < 1) {
         continue;
       }
+
+      this._log("if", effect.conditions, "do", effect.actions);
 
       // Check conditions
       if (effect.conditions) {
@@ -314,10 +342,13 @@ export default class StageEngine {
       // Execute actions
       if (effect.actions) {
         for (let action of effect.actions) {
-          console.log("Executing action", action);
+          this._log("Executing action", action);
           nextState = this._executeAction(action, nextState);
           if (nextState.stamina < 0) nextState.stamina = 0;
         }
+
+        // Reset modifiers
+        nextState.concentrationMultiplier = 1;
       }
 
       triggeredEffects.push(i);
@@ -331,7 +362,7 @@ export default class StageEngine {
   _evaluateCondition(condition, state) {
     const tokens = condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/);
     const result = this._evaluateExpression(tokens, state);
-    console.log("Condition", condition, result);
+    this._log("Condition", condition, result);
     return result;
   }
 
@@ -448,6 +479,7 @@ export default class StageEngine {
       ];
 
       if (lhs == "score") lhs = "intermediateScore";
+      if (lhs == "genki") lhs = "intermediateGenki";
 
       if (op == "=") {
         state[lhs] = rhs;
@@ -478,7 +510,7 @@ export default class StageEngine {
         cost -= state.costReduction;
         cost = Math.min(cost, 0);
 
-        state.genki += state.cost;
+        state.genki += cost;
         state.cost = 0;
         if (state.genki < 0) {
           state.stamina += state.genki;
@@ -491,7 +523,7 @@ export default class StageEngine {
         let score = state.intermediateScore;
 
         // Apply concentration
-        score += state.concentration * (state.concentrationMultiplier || 1);
+        score += state.concentration * state.concentrationMultiplier;
 
         // Apply good and perfect condition
         if (state.goodConditionTurns) {
@@ -506,13 +538,36 @@ export default class StageEngine {
         score *= this.idolConfig.typeMultipliers[state.turnType];
         score = Math.ceil(score);
 
-        state.score = score;
+        state.score += score;
         state.intermediateScore = 0;
+      }
+
+      // Apply genki
+      if (lhs == "intermediateGenki") {
+        let genki = state.intermediateGenki;
+
+        // Apply motivation
+        genki += state.motivation;
+
+        state.genki = genki;
+        state.intermediateGenki = 0;
+      }
+
+      // Apply fixed genki
+      if (lhs == "fixedGenki") {
+        state.genki += state.fixedGenki;
+        state.fixedGenki = 0;
       }
     } else {
       console.warn("Invalid action", action);
     }
 
     return state;
+  }
+
+  _log(...args) {
+    if (this.loggingEnabled) {
+      console.log(...args);
+    }
   }
 }
