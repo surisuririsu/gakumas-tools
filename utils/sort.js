@@ -49,6 +49,9 @@ export function compareSkillCards(a, b) {
   if (a.sourceType != b.sourceType) {
     return SOURCE_TYPE_VALUES[a.sourceType] - SOURCE_TYPE_VALUES[b.sourceType];
   }
+  if (a.unlockPlv != b.unlockPlv) {
+    return a.unlockPlv - b.unlockPlv;
+  }
   if (a.plan != b.plan) {
     return PLAN_VALUES[a.plan] - PLAN_VALUES[b.plan];
   }
