@@ -13,8 +13,10 @@ import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorCont
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
+import "@/components/Simulator";
 
 export default function Home() {
+  return <div></div>;
   return (
     <>
       <GoogleAnalytics />
