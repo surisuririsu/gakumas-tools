@@ -24,25 +24,23 @@ export default function LoadoutEditor() {
   const [params, setParams] = useState([977, 1413, 1496, 46]); //([null, null, null, null]);
 
   async function simulate() {
-    const pItems = pItemIds.filter((id) => id).map(PItems.getById);
-    const skillCards = DEFAULT_CARDS_BY_PLAN[plan]
-      .concat(...skillCardIdGroups)
-      .filter((id) => id)
-      .map(SkillCards.getById);
     const criteria = { vocal: 0.1, dance: 0.45, visual: 0.45 };
+    const [vocal, dance, visual, stamina] = params;
 
     const stageConfig = new StageConfig(
       { vocal: 2, dance: 6, visual: 4 },
       ["dance"],
       criteria
     );
-    const [vocal, dance, visual, stamina] = params;
+
     const idolConfig = new IdolConfig(
       { vocal, dance, visual, stamina },
       0,
       criteria,
-      pItems,
-      skillCards
+      pItemIds.filter((id) => id),
+      DEFAULT_CARDS_BY_PLAN[plan]
+        .concat(...skillCardIdGroups)
+        .filter((id) => id)
     );
 
     let runs = [];

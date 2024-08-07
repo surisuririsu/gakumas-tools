@@ -5,38 +5,47 @@ export default class DeepScoreStrategy {
   }
 
   chooseCard(state) {
-    const usableCards = state.handCards.filter((card) =>
-      this.engine.isCardUsable(state, card)
-    );
-    if (usableCards.length) {
-      const { card } = usableCards.reduce(
-        (acc, cur) => {
-          const score = this.predictScore(state, cur, 1);
-          if (score > acc.maxScore) {
-            return { card: cur, maxScore: score };
-          }
-          return acc;
-        },
-        { card: null, maxScore: 0 }
-      );
-      return card;
+    let usableCardIds = [];
+    for (let i = 0; i < state.handCardIds.length; i++) {
+      if (this.engine.isCardUsable(state, state.handCardIds[i])) {
+        usableCardIds.push(state.handCardIds[i]);
+      }
     }
-    return null;
+
+    if (usableCardIds.length == 0) return null;
+
+    let cardId = null;
+    let maxScore = 0;
+
+    for (let i = 0; i < usableCardIds.length; i++) {
+      const score = this.predictScore(state, usableCardIds[i], 1);
+      if (score > maxScore) {
+        cardId = usableCardIds[i];
+        maxScore = score;
+      }
+    }
+
+    return cardId;
   }
 
-  predictScore(state, card, depth) {
-    state = this.engine.useCard(state, card);
+  predictScore(state, cardId, depth) {
+    state = this.engine.useCard(state, cardId);
     if (state.turnsRemaining == 0 || depth == this.maxDepth) {
       return state.score;
     }
-    const usableCards = state.handCards.filter((card) =>
-      this.engine.isCardUsable(state, card)
-    );
-    return (
-      usableCards.reduce(
-        (acc, cur) => acc + this.predictScore(state, cur, depth + 1),
-        0
-      ) / usableCards.length
-    );
+
+    let usableCardIds = [];
+    for (let i = 0; i < state.handCardIds.length; i++) {
+      if (this.engine.isCardUsable(state, state.handCardIds[i])) {
+        usableCardIds.push(state.handCardIds[i]);
+      }
+    }
+
+    let totalScore = 0;
+    for (let i = 0; i < usableCardIds.length; i++) {
+      totalScore += this.predictScore(state, usableCardIds[i], depth + 1);
+    }
+
+    return totalScore / usableCardIds.length;
   }
 }
