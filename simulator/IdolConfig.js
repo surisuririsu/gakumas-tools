@@ -1,3 +1,5 @@
+import { SkillCards } from "gakumas-data";
+
 export default class IdolConfig {
   constructor(parameters, supportBonus, criteria, pItemIds, skillCardIds) {
     this.parameters = parameters;
@@ -7,8 +9,8 @@ export default class IdolConfig {
       supportBonus,
       criteria
     );
-    this.pItemIds = pItemIds;
-    this.skillCardIds = skillCardIds;
+    this.pItemIds = [...new Set(pItemIds)];
+    this.skillCardIds = this.getDedupedSkillCardIds(skillCardIds);
   }
 
   getTypeMultipliers(parameters, supportBonus, criteria) {
@@ -31,5 +33,32 @@ export default class IdolConfig {
       acc[cur] = multiplier / 100;
       return acc;
     }, {});
+  }
+
+  // If the loadout contains dupes of a unique skill card,
+  // keep only the most upgraded copy
+  getDedupedSkillCardIds(skillCardIds) {
+    let dedupedIds = [];
+    const sortedSkillCards = skillCardIds
+      .map(SkillCards.getById)
+      .sort((a, b) => {
+        if (a.upgraded) return -1;
+        if (b.upgraded) return 1;
+        return 0;
+      });
+    for (let i = 0; i < sortedSkillCards.length; i++) {
+      const skillCard = sortedSkillCards[i];
+      if (skillCard.unique) {
+        let baseId = skillCard.upgraded ? skillCard.id - 1 : skillCard.id;
+        if (
+          dedupedIds.indexOf(baseId) !== -1 ||
+          dedupedIds.indexOf(baseId + 1) !== -1
+        ) {
+          continue;
+        }
+      }
+      dedupedIds.push(skillCard.id);
+    }
+    return dedupedIds;
   }
 }

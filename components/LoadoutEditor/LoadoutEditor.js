@@ -46,7 +46,7 @@ export default function LoadoutEditor() {
     let runs = [];
 
     console.time("100");
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
       const stageEngine = new StageEngine(stageConfig, idolConfig);
       const strategy = new DeepScoreStrategy(stageEngine, 2);
 
