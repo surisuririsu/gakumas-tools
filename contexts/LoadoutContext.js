@@ -3,10 +3,10 @@ import { createContext, useState } from "react";
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
-  const [pItemIds, setPItemIds] = useState([0, 47, 75, 71]); //([0, 0, 0, 0]);
+  const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState([
-    [223, 45, 122, 125, 136, 181], //[(0, 0, 0, 0, 0, 0)],
-    [223, 282, 58, 88, 95, 149], //[(0, 0, 0, 0, 0, 0)],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
   ]);
 
   function setSkillCardIds(callback) {

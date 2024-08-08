@@ -24,7 +24,7 @@ const LOGGING_ENABLED = false;
 export default function LoadoutEditor() {
   const { pItemIds, skillCardIdGroups } = useContext(LoadoutContext);
   const { plan } = useContext(WorkspaceContext);
-  const [params, setParams] = useState([977, 1413, 1496, 46]); //([null, null, null, null]);
+  const [params, setParams] = useState([null, null, null, null]);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
 
@@ -73,12 +73,6 @@ export default function LoadoutEditor() {
 
       runs.push(state.score);
     }
-
-    console.log(
-      Math.min(...runs),
-      runs.reduce((acc, cur) => acc + cur, 0) / runs.length,
-      Math.max(...runs)
-    );
 
     let data = {};
     for (let i = 0; i < runs.length; i++) {
