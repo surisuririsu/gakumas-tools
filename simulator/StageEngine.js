@@ -578,6 +578,7 @@ export default class StageEngine {
       }
       if (lhs == "score") lhs = "intermediateScore";
       if (lhs == "genki") lhs = "intermediateGenki";
+      if (lhs == "stamina") lhs = "intermediateStamina";
 
       let prev = {};
       for (let i = 0; i < this.KEYS_WITH_TRIGGERS.length; i++) {
@@ -619,6 +620,12 @@ export default class StageEngine {
           state.stamina += state.genki;
           state.genki = 0;
         }
+      } else if (lhs == "stamina") {
+        let stamina = state.intermediateStamina;
+        if (state.doubleCostTurns && stamina < state.stamina) {
+          stamina -= state.stamina - stamina;
+        }
+        state.stamina = stamina;
       } else if (lhs == "intermediateScore") {
         // Apply score
         let score = state.intermediateScore;
