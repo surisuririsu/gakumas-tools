@@ -1,7 +1,15 @@
 import { SkillCards } from "gakumas-data";
 
 export default class IdolConfig {
-  constructor(parameters, supportBonus, criteria, pItemIds, skillCardIds) {
+  constructor(
+    plan,
+    parameters,
+    supportBonus,
+    criteria,
+    pItemIds,
+    skillCardIds
+  ) {
+    this.plan = plan;
     this.parameters = parameters;
     this.supportBonus = supportBonus;
     this.typeMultipliers = this.getTypeMultipliers(

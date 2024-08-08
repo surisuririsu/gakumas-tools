@@ -27,13 +27,15 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["chart.js", "npm:4.4.3"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "file:../gakumas-data#../gakumas-data::hash=14ef27&locator=gakumas-tools%40workspace%3A."],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=0a96348894725a6209e695ed274804ecf16b1778"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
           ["react", "npm:18.3.1"],\
+          ["react-chartjs-2", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0"],\
           ["react-dnd", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:16.0.1"],\
           ["react-dnd-html5-backend", "npm:16.0.1"],\
           ["react-dom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:18.3.1"],\
@@ -163,6 +165,15 @@ const RAW_RUNTIME_STATE =
             "wrap-ansi",\
             "npm:7.0.0"\
           ]]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@kurkle/color", [\
+      ["npm:0.3.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@kurkle-color-npm-0.3.2-98f2086013-10c0.zip/node_modules/@kurkle/color/",\
+        "packageDependencies": [\
+          ["@kurkle/color", "npm:0.3.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -967,6 +978,16 @@ const RAW_RUNTIME_STATE =
           ["chalk", "npm:4.1.2"],\
           ["ansi-styles", "npm:4.3.0"],\
           ["supports-color", "npm:7.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["chart.js", [\
+      ["npm:4.4.3", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/chart.js-npm-4.4.3-26ab2c8866-10c0.zip/node_modules/chart.js/",\
+        "packageDependencies": [\
+          ["chart.js", "npm:4.4.3"],\
+          ["@kurkle/color", "npm:0.3.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2096,10 +2117,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["file:../gakumas-data#../gakumas-data::hash=14ef27&locator=gakumas-tools%40workspace%3A.", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-file-2947f504f4-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=0a96348894725a6209e695ed274804ecf16b1778", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-c5c9d9620f-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "file:../gakumas-data#../gakumas-data::hash=14ef27&locator=gakumas-tools%40workspace%3A."]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=0a96348894725a6209e695ed274804ecf16b1778"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2109,13 +2130,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["gakumas-tools", "workspace:."],\
+          ["chart.js", "npm:4.4.3"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "file:../gakumas-data#../gakumas-data::hash=14ef27&locator=gakumas-tools%40workspace%3A."],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=0a96348894725a6209e695ed274804ecf16b1778"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
           ["react", "npm:18.3.1"],\
+          ["react-chartjs-2", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0"],\
           ["react-dnd", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:16.0.1"],\
           ["react-dnd-html5-backend", "npm:16.0.1"],\
           ["react-dom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:18.3.1"],\
@@ -3912,6 +3935,32 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["react", "npm:18.3.1"],\
           ["loose-envify", "npm:1.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-chartjs-2", [\
+      ["npm:5.2.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/react-chartjs-2-npm-5.2.0-03632f5179-10c0.zip/node_modules/react-chartjs-2/",\
+        "packageDependencies": [\
+          ["react-chartjs-2", "npm:5.2.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-chartjs-2-virtual-19aa50f933/4/AppData/Local/Yarn/Berry/cache/react-chartjs-2-npm-5.2.0-03632f5179-10c0.zip/node_modules/react-chartjs-2/",\
+        "packageDependencies": [\
+          ["react-chartjs-2", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0"],\
+          ["@types/chart.js", null],\
+          ["@types/react", null],\
+          ["chart.js", "npm:4.4.3"],\
+          ["react", "npm:18.3.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/chart.js",\
+          "@types/react",\
+          "chart.js",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\

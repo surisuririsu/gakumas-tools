@@ -1,10 +1,34 @@
+@import "@/constants";
+
 .loadoutEditor {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  flex-wrap: wrap;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
 
   .params {
     max-width: 400px;
+  }
+
+  .simulateButton {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 8px 0;
+  }
+
+  .loader {
+    flex: 0;
+  }
+
+  .chart {
+    flex: 1;
+    min-width: 600px;
+    max-width: 1000px;
   }
 }
