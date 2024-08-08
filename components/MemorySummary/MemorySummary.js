@@ -1,14 +1,17 @@
 import { useContext } from "react";
 import Image from "next/image";
+import { FaTrophy, FaArrowRight } from "react-icons/fa6";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
 import PIdol from "@/components/PIdol";
+import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import styles from "./MemorySummary.module.scss";
 
 export default function MemorySummary({ memory }) {
+  const { setMemory } = useContext(LoadoutContext);
   const { setAll } = useContext(MemoryContext);
   const { open } = useContext(WorkspaceContext);
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
@@ -26,6 +29,16 @@ export default function MemorySummary({ memory }) {
         <PIdol pIdolId={pIdolId} />
         <div className={styles.actions}>
           <Button onClick={editMemory}>Edit</Button>
+          <Button onClick={() => setMemory(memory, 0)}>
+            <FaTrophy />
+            1
+            <FaArrowRight />
+          </Button>
+          <Button onClick={() => setMemory(memory, 1)}>
+            <FaTrophy />
+            2
+            <FaArrowRight />
+          </Button>
         </div>
       </div>
 

@@ -22,9 +22,9 @@ const DEFAULT_CARDS_BY_PLAN = {
 const LOGGING_ENABLED = false;
 
 export default function LoadoutEditor() {
-  const { pItemIds, skillCardIdGroups } = useContext(LoadoutContext);
+  const { params, setParams, pItemIds, skillCardIdGroups, clear } =
+    useContext(LoadoutContext);
   const { plan } = useContext(WorkspaceContext);
-  const [params, setParams] = useState([null, null, null, null]);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
 
@@ -122,6 +122,16 @@ export default function LoadoutEditor() {
         <Trash />
 
         <div className={styles.simulateButton}>
+          <Button
+            style="red"
+            onClick={() => {
+              if (confirm("Are you sure you want to clear the loadout?")) {
+                clear();
+              }
+            }}
+          >
+            Clear all
+          </Button>
           <Button onClick={() => setRunning(true)} disabled={running}>
             Estimate score distribution
           </Button>
