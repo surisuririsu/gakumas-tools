@@ -23,12 +23,14 @@ export default class StageEngine {
       turnsElapsed: 0,
       turnsRemaining: this.stageConfig.turnCount,
       cardUsesRemaining: 0,
+      maxStamina: this.idolConfig.parameters.stamina,
       stamina: this.idolConfig.parameters.stamina,
       fixedGenki: 0,
       genki: 0,
       cost: 0,
       intermediateScore: 0,
       score: 0,
+      clearRatio: 0,
 
       // Skill card piles
       deckCardIds: this.idolConfig.skillCardIds.slice().sort((a, b) => {
@@ -39,6 +41,7 @@ export default class StageEngine {
       handCardIds: [],
       discardedCardIds: [],
       removedCardIds: [],
+      cardsUsed: 0,
 
       // Phase effects
       effectsByPhase: {},
@@ -54,6 +57,7 @@ export default class StageEngine {
       halfCostTurns: 0,
       doubleCostTurns: 0,
       doubleCardEffectCards: 0,
+      nullifyGenkiTurns: 0,
 
       // Effect modifiers
       concentrationMultiplier: 1,
@@ -165,6 +169,11 @@ export default class StageEngine {
 
     // Apply card effects
     nextState = this._triggerEffects(card.effects, nextState);
+    if (nextState.doubleCardEffectCards) {
+      nextState.doubleCardEffectCards--;
+      nextState = this._triggerEffects(card.effects, nextState);
+    }
+    nextState.cardsUsed++;
 
     // Trigger events after card used
     nextState = this._triggerEffectsForPhase("afterCardUsed", nextState);
@@ -234,7 +243,10 @@ export default class StageEngine {
   _startTurn(state) {
     this._log("Starting turn", state.turnsElapsed + 1);
 
-    state.turnType = this.stageConfig.turnTypes[state.turnsElapsed];
+    state.turnType =
+      this.stageConfig.turnTypes[
+        Math.min(state.turnsElapsed, this.stageConfig.turnCount - 1)
+      ];
 
     // Reduce effect turns
     state.goodConditionTurns = Math.max(state.goodConditionTurns - 1, 0);
@@ -242,7 +254,19 @@ export default class StageEngine {
     state.goodImpressionTurns = Math.max(state.goodImpressionTurns - 1, 0);
     state.halfCostTurns = Math.max(state.halfCostTurns - 1, 0);
     state.doubleCostTurns = Math.max(state.doubleCostTurns - 1, 0);
+    state.nullifyGenkiTurns = Math.max(state.nullifyGenkiTurns - 1, 0);
     state.oneTurnScoreBuff = 0;
+
+    // Decrement effect ttl and expire
+    const effectPhases = Object.keys(state.effectsByPhase);
+    for (let i = 0; i < effectPhases.length; i++) {
+      const phase = effectPhases[i];
+      const effects = state.effectsByPhase[phase];
+      for (let j = 0; j < effects.length; j++) {
+        if (effects[j].ttl == null) continue;
+        effects[j].ttl = Math.max(effects[j].ttl - 1, -1);
+      }
+    }
 
     // Draw cards
     for (let i = 0; i < 3; i++) {
@@ -287,6 +311,37 @@ export default class StageEngine {
     return state;
   }
 
+  _upgradeHand(state) {
+    for (let i = 0; i < state.handCardIds.length; i++) {
+      const card = SkillCards.getById(state.handCardIds[i]);
+      if (!card.upgraded && card.type != "trouble") {
+        state.handCardIds[i] += 1;
+      }
+    }
+    return state;
+  }
+
+  _exchangeHand(state) {
+    const numCards = state.handCardIds.length;
+    state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
+    for (let i = 0; i < numCards; i++) {
+      state = this._drawCard(state);
+    }
+    return state;
+  }
+
+  _addRandomUpgradedCardToHand(state) {
+    const validBaseCards = SkillCards.getFiltered({
+      rarities: ["R", "SR", "SSR"],
+      plans: [this.idolConfig.plan, "free"],
+      sourceTypes: ["produce"],
+    }).filter((card) => card.upgraded);
+    const randomCard =
+      validBaseCards[Math.floor(Math.random() * validBaseCards.length)];
+    state.handCardIds.push(randomCard.id);
+    return state;
+  }
+
   _setEffect(state, effect) {
     if (!state.effectsByPhase[effect.phase]) {
       state.effectsByPhase[effect.phase] = [];
@@ -300,7 +355,9 @@ export default class StageEngine {
 
     this._log(`Triggering effects for ${phase}`);
 
+    state.phase = phase;
     state = this._triggerEffects(state.effectsByPhase[phase], state);
+    state.phase = null;
 
     // Update remaining trigger limits
     for (let i = 0; i < state.triggeredEffects.length; i++) {
@@ -334,6 +391,11 @@ export default class StageEngine {
 
       // Check limit
       if (effect.limit != null && effect.limit < 1) {
+        continue;
+      }
+
+      // Check ttl
+      if (effect.ttl != null && effect.ttl < 0) {
         continue;
       }
 
@@ -391,9 +453,6 @@ export default class StageEngine {
       isVocalTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "vocal",
       isDanceTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "dance",
       isVisualTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "visual",
-      cardEffects: state.cardUsed
-        ? this.getCardEffectTypes(state.cardUsed)
-        : [],
     };
 
     function evaluate(tokens) {
@@ -474,12 +533,32 @@ export default class StageEngine {
     return evaluate(tokens);
   }
 
+  DEBUFFS = ["doubleCostTurns", "nullifyGenkiTurns"];
+  KEYS_WITH_INCREASE_TRIGGERS = [
+    "goodImpressionTurns",
+    "motivation",
+    "goodConditionTurns",
+    "concentration",
+  ];
+  KEYS_WITH_DECREASE_TRIGGERS = ["stamina"];
+  KEYS_WITH_TRIGGERS = this.KEYS_WITH_INCREASE_TRIGGERS.concat(
+    this.KEYS_WITH_DECREASE_TRIGGERS
+  );
+
   _executeAction(action, state) {
     const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
 
     // Non-assignment actions
     if (tokens.length == 1) {
-      // TODO
+      if (tokens[0] == "drawCard") {
+        state = this._drawCard(state);
+      } else if (tokens[0] == "upgradeHand") {
+        state = this._upgradeHand(state);
+      } else if (tokens[0] == "exchangeHand") {
+        state = this._exchangeHand(state);
+      } else if (tokens[0] == "addRandomUpgradedCardToHand") {
+        state = this._addRandomUpgradedCardToHand(state);
+      }
       return state;
     }
 
@@ -493,8 +572,17 @@ export default class StageEngine {
         state
       );
 
+      if (state.nullifyDebuff && DEBUFFS.includes(lhs)) {
+        state.nullifyDebuff--;
+        return state;
+      }
       if (lhs == "score") lhs = "intermediateScore";
       if (lhs == "genki") lhs = "intermediateGenki";
+
+      let prev = {};
+      for (let i = 0; i < this.KEYS_WITH_TRIGGERS.length; i++) {
+        prev[this.KEYS_WITH_TRIGGERS[i]] = state[this.KEYS_WITH_TRIGGERS[i]];
+      }
 
       if (op == "=") {
         state[lhs] = rhs;
@@ -512,8 +600,8 @@ export default class StageEngine {
         console.warn("Unrecognized assignment operator", op);
       }
 
-      // Apply cost
       if (lhs == "cost") {
+        // Apply cost
         let cost = state.cost;
         if (state.halfCostTurns) {
           cost *= 0.5;
@@ -531,10 +619,8 @@ export default class StageEngine {
           state.stamina += state.genki;
           state.genki = 0;
         }
-      }
-
-      // Apply score
-      if (lhs == "intermediateScore") {
+      } else if (lhs == "intermediateScore") {
+        // Apply score
         let score = state.intermediateScore;
 
         // Apply concentration
@@ -555,23 +641,41 @@ export default class StageEngine {
 
         state.score += score;
         state.intermediateScore = 0;
-      }
-
-      // Apply genki
-      if (lhs == "intermediateGenki") {
+      } else if (lhs == "intermediateGenki") {
+        // Apply genki
         let genki = state.intermediateGenki;
 
         // Apply motivation
         genki += state.motivation;
 
+        if (state.nullifyGenkiTurns) {
+          genki = 0;
+        }
+
         state.genki = genki;
         state.intermediateGenki = 0;
-      }
-
-      // Apply fixed genki
-      if (lhs == "fixedGenki") {
+      } else if (lhs == "fixedGenki") {
+        // Apply fixed genki
         state.genki += state.fixedGenki;
         state.fixedGenki = 0;
+      }
+
+      // Trigger increase effects
+      for (let i = 0; i < this.KEYS_WITH_INCREASE_TRIGGERS.length; i++) {
+        const key = this.KEYS_WITH_INCREASE_TRIGGERS[i];
+        if (state.phase == `${key}Increased`) continue;
+        if (state[key] > prev[key]) {
+          state = this._triggerEffectsForPhase(`${key}Increased`, state);
+        }
+      }
+
+      // Trigger decrease effects
+      for (let i = 0; i < this.KEYS_WITH_DECREASE_TRIGGERS.length; i++) {
+        const key = this.KEYS_WITH_DECREASE_TRIGGERS[i];
+        if (state.phase == `${key}Increased`) continue;
+        if (state[key] > prev[key]) {
+          state = this._triggerEffectsForPhase(`${key}Increased`, state);
+        }
       }
     } else {
       console.warn("Invalid action", action);

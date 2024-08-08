@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "gakumas-data": "../gakumas-data",
+    "chart.js": "^4.4.3",
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data.git#v1.0.0",
     "mongodb": "^6.8.0",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",

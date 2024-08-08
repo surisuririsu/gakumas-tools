@@ -95,6 +95,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@kurkle/color@npm:0.3.2"
+  checksum: 10c0/a9e8e3e35dcd59dec4dd4f0105919c05e24823a96347bcf152965c29e48d6290b66d5fb96c071875db752e10930724c48ce6d338fefbd65e0ce5082d5c78970e
+  languageName: node
+  linkType: hard
+
 "@mongodb-js/saslprep@npm:^1.1.5":
   version: 1.1.8
   resolution: "@mongodb-js/saslprep@npm:1.1.8"
@@ -760,6 +767,15 @@ __metadata:
     ansi-styles: "npm:^4.1.0"
     supports-color: "npm:^7.1.0"
   checksum: 10c0/4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "chart.js@npm:4.4.3"
+  dependencies:
+    "@kurkle/color": "npm:^0.3.0"
+  checksum: 10c0/910113b07983d1b2f52689afcd88d0c5fecbd30fbbe89f4e122d78397fd4521e1563fd6d80f7742a391abe7cfbfa8deaf12c58b83c9636431fa77e7285d85c2e
   languageName: node
   linkType: hard
 
@@ -1655,10 +1671,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@file:../gakumas-data::locator=gakumas-tools%40workspace%3A.":
-  version: 0.6.1
-  resolution: "gakumas-data@file:../gakumas-data#../gakumas-data::hash=14ef27&locator=gakumas-tools%40workspace%3A."
-  checksum: 10c0/a03334d6a2a9c91c582c02b34596f1426e0eb94959a0c1e750181e8ad15fb29263bcdffdb9e6320bbb280cdc6402f60c0c2c31be6aeef9069adc6faa0856a344
+"gakumas-data@https://github.com/surisuririsu/gakumas-data.git#v1.0.0":
+  version: 1.0.0
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=0a96348894725a6209e695ed274804ecf16b1778"
+  checksum: 10c0/d226c3fbcf66372a590a5252edd2beb2d215d8f6e750726264f12fa0d1f16c7fb6fa3e238e83f0668dbd44e0dfc083128478af695ed05714f465fc290d77bc6c
   languageName: node
   linkType: hard
 
@@ -1666,13 +1682,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "gakumas-tools@workspace:."
   dependencies:
+    chart.js: "npm:^4.4.3"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.5"
-    gakumas-data: ../gakumas-data
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data.git#v1.0.0"
     mongodb: "npm:^6.8.0"
     next: "npm:14.2.5"
     next-auth: "npm:^4.24.7"
     react: "npm:^18"
+    react-chartjs-2: "npm:^5.2.0"
     react-dnd: "npm:^16.0.1"
     react-dnd-html5-backend: "npm:^16.0.1"
     react-dom: "npm:^18"
@@ -3231,6 +3249,16 @@ __metadata:
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: 10c0/900a93d3cdae3acd7d16f642c29a642aea32c2026446151f0778c62ac089d4b8e6c986811076e1ae180a694cedf077d453a11b58ff0a865629a4f82ab558e102
+  languageName: node
+  linkType: hard
+
+"react-chartjs-2@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-chartjs-2@npm:5.2.0"
+  peerDependencies:
+    chart.js: ^4.1.1
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/437e443a268b7eebab3f1a6f0f5d936e58caf650fca55f568a612a46c563d22af683a64185eac8005aa644e4960a5a72cc1075a2574b89ec46c7653aaf4025e2
   languageName: node
   linkType: hard
 
