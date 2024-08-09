@@ -1,5 +1,10 @@
 import { SkillCards } from "gakumas-data";
 
+const DEFAULT_CARDS_BY_PLAN = {
+  sense: [5, 7, 1, 1, 15, 15, 17, 17],
+  logic: [9, 11, 19, 19, 21, 21, 13, 13],
+};
+
 export default class IdolConfig {
   constructor(
     plan,
@@ -18,7 +23,9 @@ export default class IdolConfig {
       criteria
     );
     this.pItemIds = [...new Set(pItemIds)];
-    this.skillCardIds = this.getDedupedSkillCardIds(skillCardIds);
+    this.skillCardIds = this.getDedupedSkillCardIds(
+      skillCardIds.concat(DEFAULT_CARDS_BY_PLAN[plan])
+    );
   }
 
   getTypeMultipliers(parameters, supportBonus, criteria) {

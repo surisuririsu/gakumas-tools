@@ -1,0 +1,55 @@
+@import "@/constants";
+
+.select {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid $gray-light;
+  border-radius: 4px;
+  padding: 4px;
+
+  .options {
+    max-height: 200px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  button {
+    gap: 6px;
+    padding: 6px;
+    color: $gray-dark;
+    font-weight: 600;
+
+    .status {
+      flex: 1;
+      display: flex;
+      height: 100%;
+      border: 2px solid $gray-extra-light;
+      border-radius: 4px;
+      overflow: hidden;
+
+      div:nth-child(1) {
+        background-color: #f23584;
+      }
+      div:nth-child(2) {
+        background-color: #1c85ed;
+      }
+      div:nth-child(3) {
+        background-color: #f7b12e;
+      }
+    }
+  }
+
+  .placeholder {
+    flex: 1;
+  }
+
+  .option {
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: $gk-orange;
+      color: $white;
+    }
+  }
+}
