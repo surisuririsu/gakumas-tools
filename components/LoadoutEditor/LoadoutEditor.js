@@ -44,9 +44,9 @@ export default function LoadoutEditor() {
   const turnCounts = stage?.turnCounts || { vocal: 4, dance: 4, visual: 4 };
   const firstTurns = stage?.firstTurns || ["vocal", "dance", "visual"];
   const criteria = stage?.criteria || {
-    vocal: 0.33,
-    dance: 0.33,
-    visual: 0.33,
+    vocal: 0,
+    dance: 0,
+    visual: 0,
   };
   const effects = stage?.effects || [];
   const plan = inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan);
