@@ -1,27 +1,25 @@
 export default class StagePlayer {
-  constructor(engine, strategy, loggingEnabled = false) {
+  constructor(engine, strategy, debug = false) {
     this.engine = engine;
     this.strategy = strategy;
-    this.loggingEnabled = loggingEnabled;
+    this.debug = debug;
   }
 
   play() {
-    this.engine.loggingEnabled = this.loggingEnabled;
+    this.engine.debug = this.debug;
     let state = this.engine.getInitialState();
     state = this.engine.startStage(state);
-    this.engine.loggingEnabled = false;
+    this.engine.debug = false;
 
     while (state.turnsRemaining > 0) {
       const cardToUse = this.strategy.chooseCard(state);
-      this.engine.loggingEnabled = this.loggingEnabled;
+      this.engine.debug = this.debug;
       if (cardToUse) {
         state = this.engine.useCard(state, cardToUse);
       } else {
         state = this.engine.endTurn(state);
       }
-      this.engine.loggingEnabled = false;
-
-      console.log(state.score);
+      this.engine.debug = false;
     }
 
     return state.score;

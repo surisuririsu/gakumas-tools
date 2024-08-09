@@ -41,7 +41,8 @@ export default class StageEngine {
   constructor(stageConfig, idolConfig) {
     this.stageConfig = stageConfig;
     this.idolConfig = idolConfig;
-    this.loggingEnabled = false;
+    this.debug = false;
+    this.logs = [];
   }
 
   getInitialState() {
@@ -75,6 +76,7 @@ export default class StageEngine {
 
       // Phase effects
       effectsByPhase: {},
+      effects: [],
 
       // Buffs and debuffs
       goodConditionTurns: 0,
@@ -105,30 +107,30 @@ export default class StageEngine {
 
     let nextState = { ...state };
 
-    this._log("Starting stage...");
+    this._debug("Starting stage...");
 
     nextState.started = true;
 
     // Set default effects
-    nextState = this._setEffect(nextState, {
+    nextState = this._setEffect(nextState, null, null, {
       phase: "endOfTurn",
       conditions: ["goodImpressionTurns>=1"],
       actions: ["score+=goodImpressionTurns"],
     });
 
     // Set stage effects
-    this._log("Setting stage effects", this.stageConfig.effects);
-    for (let i = 0; i < this.stageConfig.effects.length; i++) {
-      nextState = this._setEffect(nextState, this.stageConfig.effects[i]);
-    }
+    this._debug("Setting stage effects", this.stageConfig.effects);
+    this.stageConfig.effects.forEach((effect) => {
+      nextState = this._setEffect(nextState, "stage", null, effect);
+    });
 
     // Set p-item effects
     for (let i = 0; i < this.idolConfig.pItemIds.length; i++) {
       const pItem = PItems.getById(this.idolConfig.pItemIds[i]);
-      this._log("Setting p-item effects", pItem.name, pItem.effects);
-      for (let j = 0; j < pItem.effects.length; j++) {
-        nextState = this._setEffect(nextState, pItem.effects[j]);
-      }
+      this._debug("Setting p-item effects", pItem.name, pItem.effects);
+      pItem.effects.forEach((effect) => {
+        nextState = this._setEffect(nextState, "pItem", pItem.id, effect);
+      });
     }
 
     nextState = this._triggerEffectsForPhase("startOfStage", nextState);
@@ -150,16 +152,10 @@ export default class StageEngine {
 
     // Check cost
     let previewState = { ...state };
-    for (let i = 0; i < card.cost.length; i++) {
-      previewState = this._executeAction(card.cost[i], previewState);
-    }
-    for (let i = 0; i < COST_FIELDS.length; i++) {
-      if (previewState[COST_FIELDS[i]] < 0) {
-        return false;
-      }
-    }
-
-    return true;
+    card.cost.forEach((cost) => {
+      previewState = this._executeAction(cost, previewState);
+    });
+    return !COST_FIELDS.some((field) => previewState[field] < 0);
   }
 
   useCard(state, cardId) {
@@ -184,13 +180,11 @@ export default class StageEngine {
 
     let nextState = JSON.parse(JSON.stringify(state));
 
-    this._log("Using card", card);
+    this._debug("Using card", card);
 
     // Apply card cost
-    for (let i = 0; i < card.cost.length; i++) {
-      this._log("Applying cost", card.cost[i]);
-      nextState = this._executeAction(card.cost[i], nextState);
-    }
+    this._debug("Applying cost", card.cost);
+    nextState = this._executeActions(card.cost, nextState);
 
     // Remove card from hand
     nextState.handCardIds.splice(handIndex, 1);
@@ -279,15 +273,10 @@ export default class StageEngine {
     state.oneTurnScoreBuff = 0;
 
     // Decrement effect ttl and expire
-    const effectPhases = Object.keys(state.effectsByPhase);
-    for (let i = 0; i < effectPhases.length; i++) {
-      const phase = effectPhases[i];
-      const effects = state.effectsByPhase[phase];
-      for (let j = 0; j < effects.length; j++) {
-        if (effects[j].ttl == null) continue;
-        effects[j].ttl = Math.max(effects[j].ttl - 1, -1);
-      }
-    }
+    state.effects.forEach((effect) => {
+      if (effect.ttl == null) return;
+      effect.ttl = Math.max(effect.ttl - 1, -1);
+    });
 
     // Discard hand
     state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
@@ -305,7 +294,7 @@ export default class StageEngine {
   }
 
   _startTurn(state) {
-    this._log("Starting turn", state.turnsElapsed + 1);
+    this._debug("Starting turn", state.turnsElapsed + 1);
 
     state.turnType =
       this.stageConfig.turnTypes[
@@ -339,7 +328,7 @@ export default class StageEngine {
   _drawCard(state) {
     const cardId = state.deckCardIds.pop();
     state.handCardIds.push(cardId);
-    this._log("Drew card", SkillCards.getById(cardId).name);
+    this._debug("Drew card", SkillCards.getById(cardId).name);
     if (!state.deckCardIds.length) {
       state = this._recycleDiscards(state);
     }
@@ -351,7 +340,7 @@ export default class StageEngine {
       .slice()
       .sort(() => 0.5 - Math.random());
     state.discardedCardIds = [];
-    this._log("Recycled discard pile");
+    this._debug("Recycled discard pile");
     return state;
   }
 
@@ -386,30 +375,33 @@ export default class StageEngine {
     return state;
   }
 
-  _setEffect(state, effect) {
-    if (!state.effectsByPhase[effect.phase]) {
-      state.effectsByPhase[effect.phase] = [];
-    }
-    state.effectsByPhase[effect.phase].push({ ...effect, phase: null });
+  _setEffect(state, sourceType, sourceId, effect) {
+    state.effects.push({ ...effect, sourceType, sourceId });
     return state;
   }
 
   _triggerEffectsForPhase(phase, state) {
-    if (!state.effectsByPhase[phase]?.length) return state;
-
-    this._log(`Triggering effects for ${phase}`);
-
     state.phase = phase;
-    state = this._triggerEffects(state.effectsByPhase[phase], state);
+
+    let phaseEffects = [];
+    for (let i = 0; i < state.effects.length; i++) {
+      const effect = state.effects[i];
+      if (effect.phase != phase) continue;
+      phaseEffects.push({ ...effect, phase: null, index: i });
+    }
+
+    this._debug(phase, phaseEffects);
+
+    state = this._triggerEffects(phaseEffects, state);
+
     state.phase = null;
 
-    // Update remaining trigger limits
-    for (let i = 0; i < state.triggeredEffects.length; i++) {
-      const triggeredEffectIndex = state.triggeredEffects[i];
-      if (state.effectsByPhase[phase][triggeredEffectIndex].limit) {
-        state.effectsByPhase[phase][triggeredEffectIndex].limit--;
+    state.triggeredEffects.forEach((idx) => {
+      const effectIndex = phaseEffects[idx].index;
+      if (state.effects[effectIndex].limit) {
+        state.effects[effectIndex].limit--;
       }
-    }
+    });
     state.triggeredEffects = [];
 
     return state;
@@ -430,7 +422,12 @@ export default class StageEngine {
       }
 
       if (effect.phase) {
-        nextState = this._setEffect(nextState, effect);
+        nextState = this._setEffect(
+          nextState,
+          nextState.usedCardId ? "skillCard" : null,
+          nextState.usedCardId,
+          effect
+        );
         continue;
       }
 
@@ -443,8 +440,6 @@ export default class StageEngine {
       if (effect.ttl != null && effect.ttl < 0) {
         continue;
       }
-
-      this._log("if", effect.conditions, "do", effect.actions);
 
       // Check conditions
       if (effect.conditions) {
@@ -465,11 +460,8 @@ export default class StageEngine {
 
       // Execute actions
       if (effect.actions) {
-        for (let j = 0; j < effect.actions.length; j++) {
-          this._log("Executing action", effect.actions[j]);
-          nextState = this._executeAction(effect.actions[j], nextState);
-          if (nextState.stamina < 0) nextState.stamina = 0;
-        }
+        this._debug("Executing actions", effect.actions);
+        nextState = this._executeActions(effect.actions, nextState);
 
         // Reset modifiers
         nextState.concentrationMultiplier = 1;
@@ -488,7 +480,7 @@ export default class StageEngine {
       condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/),
       state
     );
-    this._log("Condition", condition, result);
+    this._debug("Condition", condition, result);
     return result;
   }
 
@@ -578,6 +570,46 @@ export default class StageEngine {
     return evaluate(tokens);
   }
 
+  _executeActions(actions, state) {
+    let prev = {};
+    for (let i = 0; i < KEYS_WITH_TRIGGERS.length; i++) {
+      prev[KEYS_WITH_TRIGGERS[i]] = state[KEYS_WITH_TRIGGERS[i]];
+    }
+
+    actions.forEach((action) => {
+      state = this._executeAction(action, state);
+      if (state.stamina < 0) state.stamina = 0;
+    });
+
+    // Protect fresh stats from decrement
+    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+      const key = EOT_DECREMENT_FIELDS[i];
+      if (state[key] > 0 && prev[key] == 0) {
+        state.freshBuffs[key] = true;
+      }
+    }
+
+    // Trigger increase effects
+    for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+      const key = INCREASE_TRIGGER_FIELDS[i];
+      if (state.phase == `${key}Increased`) continue;
+      if (state[key] > prev[key]) {
+        state = this._triggerEffectsForPhase(`${key}Increased`, state);
+      }
+    }
+
+    // Trigger decrease effects
+    for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+      const key = DECREASE_TRIGGER_FIELDS[i];
+      if (state.phase == `${key}Increased`) continue;
+      if (state[key] > prev[key]) {
+        state = this._triggerEffectsForPhase(`${key}Increased`, state);
+      }
+    }
+
+    return state;
+  }
+
   _executeAction(action, state) {
     const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
 
@@ -613,11 +645,6 @@ export default class StageEngine {
       if (lhs == "genki") lhs = "intermediateGenki";
       if (lhs == "stamina") lhs = "intermediateStamina";
 
-      let prev = {};
-      for (let i = 0; i < KEYS_WITH_TRIGGERS.length; i++) {
-        prev[KEYS_WITH_TRIGGERS[i]] = state[KEYS_WITH_TRIGGERS[i]];
-      }
-
       if (op == "=") {
         state[lhs] = rhs;
       } else if (op == "+=") {
@@ -644,7 +671,7 @@ export default class StageEngine {
           cost *= 2;
         }
         cost = Math.ceil(cost);
-        cost -= state.costReduction;
+        cost += state.costReduction;
         cost = Math.min(cost, 0);
 
         state.genki += cost;
@@ -660,8 +687,17 @@ export default class StageEngine {
         }
         state.stamina = stamina;
       } else if (lhs == "intermediateScore") {
+        let score = state.intermediateScore;
+        // Apply concentration
+        score += state.concentration * state.concentrationMultiplier;
+
+        // Apply good and perfect condition
+        if (state.goodConditionTurns) {
+          score *= 1.5 + state.perfectConditionTurns * 0.1;
+        }
+
         state.score += this._calculateTrueScore(
-          state.intermediateScore,
+          score,
           state,
           this.idolConfig.typeMultipliers[state.turnType]
         );
@@ -677,38 +713,12 @@ export default class StageEngine {
           genki = 0;
         }
 
-        state.genki = genki;
+        state.genki += genki;
         state.intermediateGenki = 0;
       } else if (lhs == "fixedGenki") {
         // Apply fixed genki
         state.genki += state.fixedGenki;
         state.fixedGenki = 0;
-      }
-
-      // Protect fresh stats from decrement
-      for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
-        const key = EOT_DECREMENT_FIELDS[i];
-        if (state[key] > 0 && prev[key] == 0) {
-          state.freshBuffs[key] = true;
-        }
-      }
-
-      // Trigger increase effects
-      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-        const key = INCREASE_TRIGGER_FIELDS[i];
-        if (state.phase == `${key}Increased`) continue;
-        if (state[key] > prev[key]) {
-          state = this._triggerEffectsForPhase(`${key}Increased`, state);
-        }
-      }
-
-      // Trigger decrease effects
-      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-        const key = DECREASE_TRIGGER_FIELDS[i];
-        if (state.phase == `${key}Increased`) continue;
-        if (state[key] > prev[key]) {
-          state = this._triggerEffectsForPhase(`${key}Increased`, state);
-        }
       }
     } else {
       console.warn("Invalid action", action);
@@ -721,14 +731,6 @@ export default class StageEngine {
     // Apply score
     let trueScore = score;
 
-    // Apply concentration
-    trueScore += state.concentration * state.concentrationMultiplier;
-
-    // Apply good and perfect condition
-    if (state.goodConditionTurns) {
-      trueScore *= 1.5 + state.perfectConditionTurns * 0.1;
-    }
-
     // Score buff effects
     trueScore *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
     trueScore = Math.ceil(trueScore);
@@ -740,9 +742,44 @@ export default class StageEngine {
     return trueScore;
   }
 
-  _log(...args) {
-    if (this.loggingEnabled) {
+  _debug(...args) {
+    if (this.debug) {
       console.log(...args);
     }
   }
+
+  _logEntity(entityType, entityId) {
+    this.logs.push({
+      logType: "entity",
+      entityType,
+      entityId,
+    });
+  }
+
+  _logAction(actionType, prev, next) {
+    this.logs.push({
+      logType: "action",
+      prev,
+      next,
+    });
+  }
+
+  _log(logType, sourceType, sourceId, prevState, state) {
+    const diffs = LOGGED_FIELDS.filter(
+      (key) => state[key] != prevState[key]
+    ).map((key) => ({
+      field: key,
+      prev: prevState[key],
+      next: state[key],
+    }));
+
+    this.logs.push({
+      logType,
+      sourceType,
+      sourceId,
+      diffs,
+    });
+  }
 }
+
+const LOGGED_FIELDS = ["score"];

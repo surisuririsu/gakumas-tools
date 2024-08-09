@@ -1,8 +1,42 @@
-import { SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
+
+const PHASE_FREQUENCY_ESTIMATES = {
+  startOfStage: 0,
+  startOfTurn: 1,
+  cardUsed: 0.5,
+  activeCardUsed: 0.2,
+  mentalCardUsed: 0.3,
+  afterCardUsed: 0.5,
+  afterActiveCardUsed: 0.2,
+  afterMentalCardUsed: 0.3,
+  endOfTurn: 1,
+  goodImpressionTurnsIncreased: 0.2,
+  motivationIncreased: 0.2,
+  goodConditionTurnsIncreased: 0.2,
+  concentrationIncreased: 0.2,
+};
 
 export default class HeuristicStrategy {
   constructor(engine) {
     this.engine = engine;
+    this.recommendedEffect = this.inferRecommendedEffect(
+      this.engine.idolConfig.pItemIds,
+      this.engine.idolConfig.skillCardIds
+    );
+  }
+
+  inferRecommendedEffect(pItemIds, skillCardIds) {
+    const signaturePItem = pItemIds
+      .map(PItems.getById)
+      .find((p) => p?.sourceType == "pIdol");
+    if (signaturePItem)
+      return PIdols.getById(signaturePItem.pIdolId).recommendedEffect;
+    const signatureSkillCard = skillCardIds
+      .map(SkillCards.getById)
+      .find((s) => s?.sourceType == "pIdol");
+    if (signatureSkillCard)
+      return PIdols.getById(signatureSkillCard.pIdolId).recommendedEffect;
+    return null;
   }
 
   chooseCard(state) {
@@ -18,18 +52,30 @@ export default class HeuristicStrategy {
     const maxHeuristicScore = Math.max(...heuristicScores);
     const maxIndex = heuristicScores.indexOf(maxHeuristicScore);
 
-    console.log(
-      usableCardIds.map(SkillCards.getById).map(({ name }) => name),
-      heuristicScores
-    );
+    // console.log(
+    //   usableCardIds.map(SkillCards.getById).map(({ name }) => name),
+    //   heuristicScores
+    // );
 
     return usableCardIds[maxIndex];
   }
 
-  getHeuristicScore(state, cardId) {
+  getHeuristicScore(prevState, cardId) {
+    let state = JSON.parse(JSON.stringify(prevState));
     state = this.engine.useCard(state, cardId);
-    Object.values(state.effectsByPhase).forEach((effects) => {
-      state = this.engine._triggerEffects(effects, state);
+
+    // Predict score after effects
+    state.effects.forEach((effect) => {
+      const limit = Math.ceil(
+        Math.min(effect.limit || state.turnsRemaining, state.turnsRemaining) *
+          PHASE_FREQUENCY_ESTIMATES[effect.phase]
+      );
+      for (let i = 0; i < limit; i++) {
+        state = this.engine._triggerEffects(
+          [{ ...effect, phase: null }],
+          state
+        );
+      }
     });
 
     const { vocal, dance, visual } = this.engine.idolConfig.typeMultipliers;
@@ -43,72 +89,83 @@ export default class HeuristicStrategy {
       );
     };
 
-    let score = state.score;
+    const goodConditionTurnsMultiplier =
+      this.recommendedEffect == "goodConditionTurns" ? 5 : 1;
+    const concentrationMultiplier =
+      this.recommendedEffect == "concentration" ? 4 : 1;
+    const goodImpressionTurnsMultiplier =
+      this.recommendedEffect == "goodImpressionTurns" ? 3 : 1;
+    const motivationMultiplier = this.recommendedEffect == "motivation" ? 5 : 1;
+
+    let score = 0;
 
     // Turns remaining
-    score += state.turnsRemaining * getTrueScore(50);
+    score += state.turnsRemaining * 100;
 
     // Card uses remaining
-    score += state.cardUsesRemaining * getTrueScore(50);
+    score += state.cardUsesRemaining * 50;
 
     // Stamina
-    score += (state.stamina / (state.turnsRemaining + 1)) * getTrueScore(2);
+    score += (Math.log(state.stamina) / (state.turnsRemaining + 1)) * 0.5;
 
     // Genki
-    score +=
-      (state.genki + state.genki / (state.turnsRemaining + 1)) *
-      getTrueScore(3);
+    score += state.genki * 4;
 
     // Good condition turns
     score +=
       Math.min(state.goodConditionTurns, state.turnsRemaining) *
-      getTrueScore(4.5);
+      4.5 *
+      goodConditionTurnsMultiplier;
 
     // Perfect condition turns
     score +=
       Math.min(state.perfectConditionTurns, state.turnsRemaining) *
       state.goodConditionTurns *
-      0.1 *
-      getTrueScore(9);
+      goodConditionTurnsMultiplier;
 
     // Concentration
     score +=
       state.concentration *
       state.turnsRemaining *
       state.goodConditionTurns *
-      0.5 *
-      getTrueScore(1);
+      concentrationMultiplier;
 
     // Good impression turns
     score +=
       state.goodImpressionTurns *
-      Math.min(state.goodImpressionTurns, state.turnsRemaining) *
-      getTrueScore(1);
+      state.turnsRemaining *
+      1.5 *
+      goodImpressionTurnsMultiplier;
 
     // Motivation
-    score += state.motivation * state.turnsRemaining * getTrueScore(2.5);
+    score +=
+      state.motivation * state.turnsRemaining * 0.5 * motivationMultiplier;
 
     // One turn score buff
-    score += state.oneTurnScoreBuff * getTrueScore(9);
+    score += state.oneTurnScoreBuff * 20;
 
     // Permament score buff
-    score += state.permanentScoreBuff * state.turnsRemaining * getTrueScore(9);
+    score += state.permanentScoreBuff * state.turnsRemaining * 20;
 
     // Half cost turns
-    score += state.halfCostTurns * getTrueScore(4.5);
+    score += state.halfCostTurns * 4.5;
 
     // Double cost turns
-    score += state.doubleCostTurns * getTrueScore(-9);
+    score += state.doubleCostTurns * -9;
 
     // Cost reduction
-    score += state.costReduction * state.turnsRemaining * getTrueScore(2);
+    score += state.costReduction * state.turnsRemaining * 2;
 
     // Double card effect cards
-    score += state.doubleCardEffectCards * getTrueScore(9);
+    score += state.doubleCardEffectCards * 9;
 
     // Nullify genki turns
-    score += state.nullifyGenkiTurns * getTrueScore(-9);
+    score += state.nullifyGenkiTurns * -9;
 
-    return Math.floor(score);
+    return Math.floor(
+      getTrueScore(score) +
+        state.score +
+        state.score / (state.turnsRemaining + 1)
+    );
   }
 }

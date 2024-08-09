@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { PItems, SkillCards, Stages } from "gakumas-data";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import DistributionPlot from "@/components/DistributionPlot";
 import Loader from "@/components/Loader";
@@ -12,45 +12,29 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import IdolConfig from "@/simulator/IdolConfig";
 import StageConfig from "@/simulator/StageConfig";
-import StageEngine from "@/simulator/StageEngine";
-import StagePlayer from "@/simulator/StagePlayer";
-import HeuristicStrategy from "@/simulator/strategies/HeuristicStrategy";
-import { NUM_RUNS, BUCKET_SIZE } from "@/utils/simulator";
+import { BUCKET_SIZE, FALLBACK_STAGE, inferPlan } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
 
-function inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan) {
-  const signaturePItem = pItemIds
-    .map(PItems.getById)
-    .find((p) => p?.sourceType == "pIdol");
-  if (signaturePItem) return signaturePItem.plan;
-  const signatureSkillCard = skillCardIdGroups[0]
-    .map(SkillCards.getById)
-    .find((s) => s?.sourceType == "pIdol");
-  if (signatureSkillCard) return signatureSkillCard.plan;
-  const stage = Stages.getById(stageId);
-  if (stage) return stage.plan;
-  return workspacePlan;
-}
-
 export default function LoadoutEditor() {
-  const { params, setParams, pItemIds, skillCardIdGroups, clear } =
-    useContext(LoadoutContext);
+  const {
+    stageId,
+    setStageId,
+    params,
+    setParams,
+    pItemIds,
+    skillCardIdGroups,
+    clear,
+  } = useContext(LoadoutContext);
   const { plan: workspacePlan } = useContext(WorkspaceContext);
-  const [stageId, setStageId] = useState(null);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
+  const workerRef = useRef();
 
-  const stage = Stages.getById(stageId);
-  const turnCounts = stage?.turnCounts || { vocal: 4, dance: 4, visual: 4 };
-  const firstTurns = stage?.firstTurns || ["vocal", "dance", "visual"];
-  const criteria = stage?.criteria || {
-    vocal: 0,
-    dance: 0,
-    visual: 0,
-  };
-  const effects = stage?.effects || [];
+  const stage = Stages.getById(stageId) || FALLBACK_STAGE;
+  const { turnCounts, firstTurns, criteria, effects } = stage;
   const plan = inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan);
   const [vocal, dance, visual, stamina] = params;
+
   const stageConfig = new StageConfig(
     turnCounts,
     firstTurns,
@@ -66,36 +50,37 @@ export default function LoadoutEditor() {
     [].concat(...skillCardIdGroups).filter((id) => id)
   );
 
-  function simulate() {
-    const engine = new StageEngine(stageConfig, idolConfig);
-    const strategy = new HeuristicStrategy(engine);
-
-    let runs = [];
-    for (let i = 0; i < NUM_RUNS; i++) {
-      const score = new StagePlayer(engine, strategy, true).play();
-      runs.push(score);
-    }
-
-    let data = {};
-    for (let i = 0; i < runs.length; i++) {
-      const bucket = Math.floor(runs[i] / BUCKET_SIZE);
-      data[bucket] = (data[bucket] || 0) + 1;
-    }
-    const minKey = Math.min(...Object.keys(data));
-    const maxKey = Math.max(...Object.keys(data));
-    for (let i = minKey - 1; i <= maxKey + 1; i++) {
-      if (!data[i]) data[i] = 0;
-    }
-
-    setSimulatorData(data);
-    setRunning(false);
-  }
-
   useEffect(() => {
-    if (running) {
-      setTimeout(simulate, 10);
-    }
-  }, [running]);
+    workerRef.current = new Worker(
+      new URL("../../simulator/worker.js", import.meta.url)
+    );
+
+    workerRef.current.onmessage = (e) => {
+      let data = {};
+      for (let i = 0; i < e.data.length; i++) {
+        const bucket = Math.floor(e.data[i] / BUCKET_SIZE);
+        data[bucket] = (data[bucket] || 0) + 1;
+      }
+
+      const minKey = Math.min(...Object.keys(data));
+      const maxKey = Math.max(...Object.keys(data));
+      for (let i = minKey - 1; i <= maxKey + 1; i++) {
+        if (!data[i]) data[i] = 0;
+      }
+
+      setSimulatorData(data);
+      setRunning(false);
+    };
+
+    return () => {
+      workerRef.current?.terminate();
+    };
+  }, []);
+
+  const simulate = useCallback(async () => {
+    setRunning(true);
+    workerRef.current?.postMessage({ stageConfig, idolConfig });
+  }, [stageConfig, idolConfig]);
 
   return (
     <div className={styles.loadoutEditor}>
@@ -145,7 +130,7 @@ export default function LoadoutEditor() {
           >
             Clear all
           </Button>
-          {/* <Button onClick={() => setRunning(true)} disabled={running}>
+          {/* <Button onClick={simulate} disabled={running}>
             Estimate score distribution
           </Button> */}
           {running && (

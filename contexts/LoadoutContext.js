@@ -1,18 +1,49 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
 import DataContext from "@/contexts/DataContext";
+
+const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const { memories } = useContext(DataContext);
+  const [loaded, setLoaded] = useState(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
+  const [stageId, setStageId] = useState(null);
   const [params, setParams] = useState([null, null, null, null]);
   const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState([
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
   ]);
+
+  useEffect(() => {
+    const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
+    if (loadoutString) {
+      const data = JSON.parse(loadoutString);
+      if (data.memoryIds) setMemoryIds(data.memoryIds);
+      if (data.stageId) setStageId(data.stageId);
+      if (data.params) setParams(data.params);
+      if (data.pItemIds) setPItemIds(data.pItemIds);
+      if (data.skillCardIdGroups) setSkillCardIdGroups(data.skillCardIdGroups);
+    }
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(
+      LOADOUT_STORAGE_KEY,
+      JSON.stringify({
+        memoryIds,
+        stageId,
+        params,
+        pItemIds,
+        skillCardIdGroups,
+      })
+    );
+  }, [memoryIds, stageId, params, pItemIds, skillCardIdGroups]);
 
   function setSkillCardIds(callback) {
     setSkillCardIdGroups((cur) => {
@@ -101,6 +132,8 @@ export function LoadoutContextProvider({ children }) {
     <LoadoutContext.Provider
       value={{
         setMemory,
+        stageId,
+        setStageId,
         params,
         setParams,
         pItemIds,
