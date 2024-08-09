@@ -15,6 +15,26 @@
     max-width: 400px;
   }
 
+  .typeMultipliers {
+    display: flex;
+
+    & > div {
+      flex: 1;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    div:nth-child(1) {
+      color: #f23584;
+    }
+    div:nth-child(2) {
+      color: #1c85ed;
+    }
+    div:nth-child(3) {
+      color: #f7b12e;
+    }
+  }
+
   .simulateButton {
     display: flex;
     align-items: flex-start;

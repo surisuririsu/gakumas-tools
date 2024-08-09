@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
+import { PItems, SkillCards, Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import DistributionPlot from "@/components/DistributionPlot";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
 import StagePItems from "@/components/StagePItems";
+import StageSelect from "@/components/StageSelect";
 import Trash from "@/components/Trash";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -15,46 +17,63 @@ import DeepScoreStrategy from "@/simulator/strategies/DeepScoreStrategy";
 import { NUM_RUNS, BUCKET_SIZE } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
 
-const DEFAULT_CARDS_BY_PLAN = {
-  sense: [5, 7, 1, 1, 15, 15, 17, 17],
-  logic: [9, 11, 19, 19, 21, 21, 13, 13],
-};
 const LOGGING_ENABLED = false;
+
+function inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan) {
+  const signaturePItem = pItemIds
+    .map(PItems.getById)
+    .find((p) => p?.sourceType == "pIdol");
+  if (signaturePItem) return signaturePItem.plan;
+  const signatureSkillCard = skillCardIdGroups[0]
+    .map(SkillCards.getById)
+    .find((s) => s?.sourceType == "pIdol");
+  if (signatureSkillCard) return signatureSkillCard.plan;
+  const stage = Stages.getById(stageId);
+  if (stage) return stage.plan;
+  return workspacePlan;
+}
 
 export default function LoadoutEditor() {
   const { params, setParams, pItemIds, skillCardIdGroups, clear } =
     useContext(LoadoutContext);
-  const { plan } = useContext(WorkspaceContext);
+  const { plan: workspacePlan } = useContext(WorkspaceContext);
+  const [stageId, setStageId] = useState(null);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
 
+  const stage = Stages.getById(stageId);
+  const turnCounts = stage?.turnCounts || { vocal: 4, dance: 4, visual: 4 };
+  const firstTurns = stage?.firstTurns || ["vocal", "dance", "visual"];
+  const criteria = stage?.criteria || {
+    vocal: 0.33,
+    dance: 0.33,
+    visual: 0.33,
+  };
+  const effects = stage?.effects || [];
+  const plan = inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan);
+  const [vocal, dance, visual, stamina] = params;
+  const stageConfig = new StageConfig(
+    turnCounts,
+    firstTurns,
+    criteria,
+    effects
+  );
+  const idolConfig = new IdolConfig(
+    plan,
+    { vocal, dance, visual, stamina },
+    0,
+    criteria,
+    pItemIds.filter((id) => id),
+    [].concat(...skillCardIdGroups).filter((id) => id)
+  );
+
   function simulate() {
-    const criteria = { vocal: 0.1, dance: 0.45, visual: 0.45 };
-    const [vocal, dance, visual, stamina] = params;
-
-    const stageConfig = new StageConfig(
-      { vocal: 2, dance: 6, visual: 4 },
-      ["dance"],
-      criteria
-    );
-
-    const idolConfig = new IdolConfig(
-      plan,
-      { vocal, dance, visual, stamina },
-      0,
-      criteria,
-      pItemIds.filter((id) => id),
-      DEFAULT_CARDS_BY_PLAN[plan]
-        .concat(...skillCardIdGroups)
-        .filter((id) => id)
-    );
-
     let runs = [];
 
-    for (let i = 0; i < NUM_RUNS; i++) {
-      const stageEngine = new StageEngine(stageConfig, idolConfig);
-      const strategy = new DeepScoreStrategy(stageEngine, 2);
+    const stageEngine = new StageEngine(stageConfig, idolConfig);
+    const strategy = new DeepScoreStrategy(stageEngine, 2);
 
+    for (let i = 0; i < NUM_RUNS; i++) {
       stageEngine.loggingEnabled = LOGGING_ENABLED;
       let state = stageEngine.getInitialState();
       state = stageEngine.startStage(state);
@@ -98,6 +117,8 @@ export default function LoadoutEditor() {
   return (
     <div className={styles.loadoutEditor}>
       <div>
+        <label>Stage</label>
+        <StageSelect stageId={stageId} setStageId={setStageId} />
         <label>Parameters</label>
         <div className={styles.params}>
           <ParametersInput
@@ -105,6 +126,14 @@ export default function LoadoutEditor() {
             onChange={setParams}
             withStamina
           />
+          <div className={styles.typeMultipliers}>
+            {Object.keys(idolConfig.typeMultipliers).map((param) => (
+              <div key={param}>
+                {Math.round(idolConfig.typeMultipliers[param] * 100)}%
+              </div>
+            ))}
+            <div />
+          </div>
         </div>
 
         <label>P-items</label>
@@ -127,6 +156,7 @@ export default function LoadoutEditor() {
             onClick={() => {
               if (confirm("Are you sure you want to clear the loadout?")) {
                 clear();
+                setStageId(null);
               }
             }}
           >

@@ -8,6 +8,35 @@ const COST_FIELDS = [
   "motivation",
 ];
 
+const DEBUFF_FIELDS = ["doubleCostTurns", "nullifyGenkiTurns"];
+
+const EOT_DECREMENT_FIELDS = [
+  "goodConditionTurns",
+  "perfectConditionTurns",
+  "goodImpressionTurns",
+  "halfCostTurns",
+  "doubleCostTurns",
+  "nullifyGenkiTurns",
+];
+
+const INCREASE_TRIGGER_FIELDS = [
+  "goodImpressionTurns",
+  "motivation",
+  "goodConditionTurns",
+  "concentration",
+];
+
+const DECREASE_TRIGGER_FIELDS = ["stamina"];
+
+const KEYS_WITH_TRIGGERS = [
+  ...new Set(
+    EOT_DECREMENT_FIELDS.concat(
+      INCREASE_TRIGGER_FIELDS,
+      DECREASE_TRIGGER_FIELDS
+    )
+  ),
+];
+
 export default class StageEngine {
   constructor(stageConfig, idolConfig) {
     this.stageConfig = stageConfig;
@@ -56,8 +85,12 @@ export default class StageEngine {
       permanentScoreBuff: 0,
       halfCostTurns: 0,
       doubleCostTurns: 0,
+      costReduction: 0,
       doubleCardEffectCards: 0,
       nullifyGenkiTurns: 0,
+
+      // Buffs/debuffs protected from decrement when fresh
+      freshBuffs: {},
 
       // Effect modifiers
       concentrationMultiplier: 1,
@@ -81,6 +114,12 @@ export default class StageEngine {
       conditions: ["goodImpressionTurns>=1"],
       actions: ["score+=goodImpressionTurns"],
     });
+
+    // Set stage effects
+    this._log("Setting stage effects", this.stageConfig.effects);
+    for (let i = 0; i < this.stageConfig.effects.length; i++) {
+      nextState = this._setEffect(nextState, this.stageConfig.effects[i]);
+    }
 
     // Set p-item effects
     for (let i = 0; i < this.idolConfig.pItemIds.length; i++) {
@@ -225,6 +264,30 @@ export default class StageEngine {
 
     state = this._triggerEffectsForPhase("endOfTurn", state);
 
+    // Reduce buff turns
+    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+      const key = EOT_DECREMENT_FIELDS[i];
+      if (state.freshBuffs[key]) {
+        delete state.freshBuffs[key];
+      } else {
+        state[key] = Math.max(state[key] - 1, 0);
+      }
+    }
+
+    // Reset one turn buffs
+    state.oneTurnScoreBuff = 0;
+
+    // Decrement effect ttl and expire
+    const effectPhases = Object.keys(state.effectsByPhase);
+    for (let i = 0; i < effectPhases.length; i++) {
+      const phase = effectPhases[i];
+      const effects = state.effectsByPhase[phase];
+      for (let j = 0; j < effects.length; j++) {
+        if (effects[j].ttl == null) continue;
+        effects[j].ttl = Math.max(effects[j].ttl - 1, -1);
+      }
+    }
+
     // Discard hand
     state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
     state.handCardIds = [];
@@ -247,26 +310,6 @@ export default class StageEngine {
       this.stageConfig.turnTypes[
         Math.min(state.turnsElapsed, this.stageConfig.turnCount - 1)
       ];
-
-    // Reduce effect turns
-    state.goodConditionTurns = Math.max(state.goodConditionTurns - 1, 0);
-    state.perfectConditionTurns = Math.max(state.perfectConditionTurns - 1, 0);
-    state.goodImpressionTurns = Math.max(state.goodImpressionTurns - 1, 0);
-    state.halfCostTurns = Math.max(state.halfCostTurns - 1, 0);
-    state.doubleCostTurns = Math.max(state.doubleCostTurns - 1, 0);
-    state.nullifyGenkiTurns = Math.max(state.nullifyGenkiTurns - 1, 0);
-    state.oneTurnScoreBuff = 0;
-
-    // Decrement effect ttl and expire
-    const effectPhases = Object.keys(state.effectsByPhase);
-    for (let i = 0; i < effectPhases.length; i++) {
-      const phase = effectPhases[i];
-      const effects = state.effectsByPhase[phase];
-      for (let j = 0; j < effects.length; j++) {
-        if (effects[j].ttl == null) continue;
-        effects[j].ttl = Math.max(effects[j].ttl - 1, -1);
-      }
-    }
 
     // Draw cards
     for (let i = 0; i < 3; i++) {
@@ -361,8 +404,9 @@ export default class StageEngine {
 
     // Update remaining trigger limits
     for (let i = 0; i < state.triggeredEffects.length; i++) {
-      if (state.effectsByPhase[phase][i].limit) {
-        state.effectsByPhase[phase][i].limit--;
+      const triggeredEffectIndex = state.triggeredEffects[i];
+      if (state.effectsByPhase[phase][triggeredEffectIndex].limit) {
+        state.effectsByPhase[phase][triggeredEffectIndex].limit--;
       }
     }
     state.triggeredEffects = [];
@@ -533,18 +577,6 @@ export default class StageEngine {
     return evaluate(tokens);
   }
 
-  DEBUFFS = ["doubleCostTurns", "nullifyGenkiTurns"];
-  KEYS_WITH_INCREASE_TRIGGERS = [
-    "goodImpressionTurns",
-    "motivation",
-    "goodConditionTurns",
-    "concentration",
-  ];
-  KEYS_WITH_DECREASE_TRIGGERS = ["stamina"];
-  KEYS_WITH_TRIGGERS = this.KEYS_WITH_INCREASE_TRIGGERS.concat(
-    this.KEYS_WITH_DECREASE_TRIGGERS
-  );
-
   _executeAction(action, state) {
     const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
 
@@ -572,7 +604,7 @@ export default class StageEngine {
         state
       );
 
-      if (state.nullifyDebuff && DEBUFFS.includes(lhs)) {
+      if (state.nullifyDebuff && DEBUFF_FIELDS.includes(lhs)) {
         state.nullifyDebuff--;
         return state;
       }
@@ -581,8 +613,8 @@ export default class StageEngine {
       if (lhs == "stamina") lhs = "intermediateStamina";
 
       let prev = {};
-      for (let i = 0; i < this.KEYS_WITH_TRIGGERS.length; i++) {
-        prev[this.KEYS_WITH_TRIGGERS[i]] = state[this.KEYS_WITH_TRIGGERS[i]];
+      for (let i = 0; i < KEYS_WITH_TRIGGERS.length; i++) {
+        prev[KEYS_WITH_TRIGGERS[i]] = state[KEYS_WITH_TRIGGERS[i]];
       }
 
       if (op == "=") {
@@ -667,9 +699,17 @@ export default class StageEngine {
         state.fixedGenki = 0;
       }
 
+      // Protect fresh stats from decrement
+      for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+        const key = EOT_DECREMENT_FIELDS[i];
+        if (state[key] > 0 && prev[key] == 0) {
+          state.freshBuffs[key] = true;
+        }
+      }
+
       // Trigger increase effects
-      for (let i = 0; i < this.KEYS_WITH_INCREASE_TRIGGERS.length; i++) {
-        const key = this.KEYS_WITH_INCREASE_TRIGGERS[i];
+      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+        const key = INCREASE_TRIGGER_FIELDS[i];
         if (state.phase == `${key}Increased`) continue;
         if (state[key] > prev[key]) {
           state = this._triggerEffectsForPhase(`${key}Increased`, state);
@@ -677,8 +717,8 @@ export default class StageEngine {
       }
 
       // Trigger decrease effects
-      for (let i = 0; i < this.KEYS_WITH_DECREASE_TRIGGERS.length; i++) {
-        const key = this.KEYS_WITH_DECREASE_TRIGGERS[i];
+      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+        const key = DECREASE_TRIGGER_FIELDS[i];
         if (state.phase == `${key}Increased`) continue;
         if (state[key] > prev[key]) {
           state = this._triggerEffectsForPhase(`${key}Increased`, state);

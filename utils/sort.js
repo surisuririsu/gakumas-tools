@@ -64,6 +64,13 @@ export function compareSkillCards(a, b) {
   return 0;
 }
 
+export function compareStages(a, b) {
+  if (a.season != b.season) {
+    return b.season - a.season;
+  }
+  return a.id - b.id;
+}
+
 export function getSearchScore(memory, pItemIds, skillCardIds) {
   let score = 0;
   pItemIds
