@@ -13,12 +13,10 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import IdolConfig from "@/simulator/IdolConfig";
 import StageConfig from "@/simulator/StageConfig";
 import StageEngine from "@/simulator/StageEngine";
-import DeepScoreStrategy from "@/simulator/strategies/DeepScoreStrategy";
-import DeepRandomScoreStrategy from "@/simulator/strategies/DeepRandomScoreStrategy";
+import StagePlayer from "@/simulator/StagePlayer";
+import HeuristicStrategy from "@/simulator/strategies/HeuristicStrategy";
 import { NUM_RUNS, BUCKET_SIZE } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
-
-const LOGGING_ENABLED = false;
 
 function inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan) {
   const signaturePItem = pItemIds
@@ -69,29 +67,13 @@ export default function LoadoutEditor() {
   );
 
   function simulate() {
+    const engine = new StageEngine(stageConfig, idolConfig);
+    const strategy = new HeuristicStrategy(engine);
+
     let runs = [];
-
-    const stageEngine = new StageEngine(stageConfig, idolConfig);
-    const strategy = new DeepRandomScoreStrategy(stageEngine, 4);
-
     for (let i = 0; i < NUM_RUNS; i++) {
-      stageEngine.loggingEnabled = LOGGING_ENABLED;
-      let state = stageEngine.getInitialState();
-      state = stageEngine.startStage(state);
-      stageEngine.loggingEnabled = false;
-
-      while (state.turnsRemaining > 0) {
-        const cardToUse = strategy.chooseCard(state);
-        stageEngine.loggingEnabled = LOGGING_ENABLED;
-        if (cardToUse) {
-          state = stageEngine.useCard(state, cardToUse);
-        } else {
-          state = stageEngine.endTurn(state);
-        }
-        stageEngine.loggingEnabled = false;
-      }
-
-      runs.push(state.score);
+      const score = new StagePlayer(engine, strategy, true).play();
+      runs.push(score);
     }
 
     let data = {};
@@ -163,9 +145,9 @@ export default function LoadoutEditor() {
           >
             Clear all
           </Button>
-          <Button onClick={() => setRunning(true)} disabled={running}>
+          {/* <Button onClick={() => setRunning(true)} disabled={running}>
             Estimate score distribution
-          </Button>
+          </Button> */}
           {running && (
             <div className={styles.loader}>
               <Loader />
