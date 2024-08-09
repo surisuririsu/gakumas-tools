@@ -55,6 +55,7 @@ export default class StageEngine {
       maxStamina: this.idolConfig.parameters.stamina,
       stamina: this.idolConfig.parameters.stamina,
       fixedGenki: 0,
+      intermediateGenki: 0,
       genki: 0,
       cost: 0,
       intermediateScore: 0,
@@ -494,9 +495,9 @@ export default class StageEngine {
   _evaluateExpression(tokens, state) {
     const variables = {
       ...state,
-      isVocalTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "vocal",
-      isDanceTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "dance",
-      isVisualTurn: this.stageConfig.turnTypes[state.turnsElapsed] == "visual",
+      isVocalTurn: state.turnType == "vocal",
+      isDanceTurn: state.turnType == "dance",
+      isVisualTurn: state.turnType == "visual",
     };
 
     function evaluate(tokens) {
@@ -659,26 +660,11 @@ export default class StageEngine {
         }
         state.stamina = stamina;
       } else if (lhs == "intermediateScore") {
-        // Apply score
-        let score = state.intermediateScore;
-
-        // Apply concentration
-        score += state.concentration * state.concentrationMultiplier;
-
-        // Apply good and perfect condition
-        if (state.goodConditionTurns) {
-          score *= 1.5 + state.perfectConditionTurns * 0.1;
-        }
-
-        // Score buff effects
-        score *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
-        score = Math.ceil(score);
-
-        // Turn type multiplier
-        score *= this.idolConfig.typeMultipliers[state.turnType];
-        score = Math.ceil(score);
-
-        state.score += score;
+        state.score += this._calculateTrueScore(
+          state.intermediateScore,
+          state,
+          this.idolConfig.typeMultipliers[state.turnType]
+        );
         state.intermediateScore = 0;
       } else if (lhs == "intermediateGenki") {
         // Apply genki
@@ -729,6 +715,29 @@ export default class StageEngine {
     }
 
     return state;
+  }
+
+  _calculateTrueScore(score, state, typeMultiplier) {
+    // Apply score
+    let trueScore = score;
+
+    // Apply concentration
+    trueScore += state.concentration * state.concentrationMultiplier;
+
+    // Apply good and perfect condition
+    if (state.goodConditionTurns) {
+      trueScore *= 1.5 + state.perfectConditionTurns * 0.1;
+    }
+
+    // Score buff effects
+    trueScore *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
+    trueScore = Math.ceil(trueScore);
+
+    // Turn type multiplier
+    trueScore *= typeMultiplier;
+    trueScore = Math.ceil(trueScore);
+
+    return trueScore;
   }
 
   _log(...args) {

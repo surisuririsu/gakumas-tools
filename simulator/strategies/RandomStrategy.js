@@ -4,8 +4,8 @@ export default class RandomStrategy {
   }
 
   chooseCard(state) {
-    const usableCards = state.handCards.filter((card) =>
-      this.engine.isCardUsable(state, card)
+    const usableCards = state.handCardIds.filter((cardId) =>
+      this.engine.isCardUsable(state, cardId)
     );
     if (usableCards.length) {
       return usableCards[Math.floor(Math.random() * usableCards.length)];
