@@ -23,18 +23,23 @@ export default function MemorySummary({ memory }) {
     open("memoryEditor");
   }
 
+  function useMemory(index) {
+    setMemory(memory, index);
+    open("loadoutEditor");
+  }
+
   return (
     <div className={styles.memorySummary}>
       <div className={styles.left}>
         <PIdol pIdolId={pIdolId} />
         <div className={styles.actions}>
           <Button onClick={editMemory}>Edit</Button>
-          <Button onClick={() => setMemory(memory, 0)}>
+          <Button onClick={() => useMemory(0)}>
             <FaTrophy />
             1
             <FaArrowRight />
           </Button>
-          <Button onClick={() => setMemory(memory, 1)}>
+          <Button onClick={() => useMemory(1)}>
             <FaTrophy />
             2
             <FaArrowRight />
