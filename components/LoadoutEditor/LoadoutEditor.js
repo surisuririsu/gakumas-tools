@@ -14,6 +14,7 @@ import IdolConfig from "@/simulator/IdolConfig";
 import StageConfig from "@/simulator/StageConfig";
 import StageEngine from "@/simulator/StageEngine";
 import DeepScoreStrategy from "@/simulator/strategies/DeepScoreStrategy";
+import DeepRandomScoreStrategy from "@/simulator/strategies/DeepRandomScoreStrategy";
 import { NUM_RUNS, BUCKET_SIZE } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
 
@@ -71,7 +72,7 @@ export default function LoadoutEditor() {
     let runs = [];
 
     const stageEngine = new StageEngine(stageConfig, idolConfig);
-    const strategy = new DeepScoreStrategy(stageEngine, 2);
+    const strategy = new DeepRandomScoreStrategy(stageEngine, 4);
 
     for (let i = 0; i < NUM_RUNS; i++) {
       stageEngine.loggingEnabled = LOGGING_ENABLED;

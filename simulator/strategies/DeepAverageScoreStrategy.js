@@ -1,10 +1,10 @@
-export default class DeepScoreStrategy {
+export default class DeepAverageScoreStrategy {
   constructor(engine, maxDepth) {
     this.engine = engine;
     this.maxDepth = maxDepth;
   }
 
-  chooseCard(state, depth = 1) {
+  chooseCard(state) {
     let usableCardIds = [];
     for (let i = 0; i < state.handCardIds.length; i++) {
       if (this.engine.isCardUsable(state, state.handCardIds[i])) {
@@ -18,7 +18,7 @@ export default class DeepScoreStrategy {
     let maxScore = 0;
 
     for (let i = 0; i < usableCardIds.length; i++) {
-      const score = this.predictScore(state, usableCardIds[i], depth);
+      const score = this.predictScore(state, usableCardIds[i], 1);
       if (score > maxScore) {
         cardId = usableCardIds[i];
         maxScore = score;
@@ -30,17 +30,22 @@ export default class DeepScoreStrategy {
 
   predictScore(state, cardId, depth) {
     state = this.engine.useCard(state, cardId);
-    if (state.turnsRemaining == 0 || depth >= this.maxDepth) {
+    if (state.turnsRemaining == 0 || depth == this.maxDepth) {
       return state.score;
     }
-    while (state.turnsRemaining > 0) {
-      const cardToUse = this.chooseCard(state, depth + 1);
-      if (cardToUse) {
-        state = this.engine.useCard(state, cardToUse);
-      } else {
-        state = this.engine.endTurn(state);
+
+    let usableCardIds = [];
+    for (let i = 0; i < state.handCardIds.length; i++) {
+      if (this.engine.isCardUsable(state, state.handCardIds[i])) {
+        usableCardIds.push(state.handCardIds[i]);
       }
     }
-    return state.score;
+
+    let totalScore = 0;
+    for (let i = 0; i < usableCardIds.length; i++) {
+      totalScore += this.predictScore(state, usableCardIds[i], depth + 1);
+    }
+
+    return totalScore / usableCardIds.length;
   }
 }
