@@ -1,6 +1,4 @@
 import { useContext, useState } from "react";
-import { useSession, signIn } from "next-auth/react";
-import { FaCheck, FaFilm, FaPen } from "react-icons/fa6";
 import Button from "@/components/Button";
 import MemoryImporter from "@/components/MemoryImporter";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -8,7 +6,6 @@ import { WIDGETS } from "@/utils/widgets";
 import styles from "./Welcome.module.scss";
 
 export default function Welcome() {
-  const { status } = useSession();
   const { open } = useContext(WorkspaceContext);
   const [showImporter, setShowImporter] = useState(false);
 
@@ -28,7 +25,9 @@ export default function Welcome() {
             const { title, icon, description } = WIDGETS[widget];
             return (
               <li key={widget} className={styles.feature}>
-                <Button onClick={() => open(widget)}>{icon}</Button>
+                <Button ariaLabel={title} onClick={() => open(widget)}>
+                  {icon}
+                </Button>
                 {description}
               </li>
             );

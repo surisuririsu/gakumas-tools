@@ -20,6 +20,7 @@ export default function Navbar() {
           <button
             key={widget}
             className={openWidgets[widget] ? styles.active : ""}
+            ariaLabel={widget.title}
             onClick={() => toggle(widget)}
           >
             {WIDGETS[widget].icon}
