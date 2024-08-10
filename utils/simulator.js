@@ -1,7 +1,7 @@
 import { PItems, SkillCards, Stages } from "gakumas-data";
 
 export const DEBUG = false;
-export const NUM_RUNS = 2000;
+export const NUM_RUNS = 1000;
 export const BUCKET_SIZE = 1000;
 export const FALLBACK_STAGE = {
   turnCounts: { vocal: 4, dance: 4, visual: 4 },

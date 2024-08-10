@@ -40,27 +40,33 @@ export default class HeuristicStrategy {
   }
 
   chooseCard(state) {
-    const usableCardIds = state.handCardIds.filter((cardId) =>
-      this.engine.isCardUsable(state, cardId)
-    );
-
-    if (usableCardIds.length == 0) return null;
-
-    const heuristicScores = usableCardIds.map((id) =>
+    this.engine.logger.disabled = true;
+    const heuristicScores = state.handCardIds.map((id) =>
       this.getHeuristicScore(state, id)
     );
+    this.engine.logger.disabled = false;
+
+    let cardToUse = null;
     const maxHeuristicScore = Math.max(...heuristicScores);
-    const maxIndex = heuristicScores.indexOf(maxHeuristicScore);
+    if (maxHeuristicScore > 0) {
+      const maxIndex = heuristicScores.indexOf(maxHeuristicScore);
+      cardToUse = state.handCardIds[maxIndex];
+    }
 
-    // console.log(
-    //   usableCardIds.map(SkillCards.getById).map(({ name }) => name),
-    //   heuristicScores
-    // );
+    this.engine.logger.log("hand", {
+      handCardIds: [...state.handCardIds],
+      scores: heuristicScores,
+      selectedCardId: cardToUse,
+    });
 
-    return usableCardIds[maxIndex];
+    return cardToUse;
   }
 
   getHeuristicScore(prevState, cardId) {
+    if (!this.engine.isCardUsable(prevState, cardId)) {
+      return -Infinity;
+    }
+
     let state = JSON.parse(JSON.stringify(prevState));
     state = this.engine.useCard(state, cardId);
 
@@ -89,13 +95,14 @@ export default class HeuristicStrategy {
       );
     };
 
+    const recommendedEffect = this.engine.idolConfig.recommendedEffect;
     const goodConditionTurnsMultiplier =
-      this.recommendedEffect == "goodConditionTurns" ? 5 : 1;
+      recommendedEffect == "goodConditionTurns" ? 5 : 1;
     const concentrationMultiplier =
-      this.recommendedEffect == "concentration" ? 4 : 1;
+      recommendedEffect == "concentration" ? 4 : 1;
     const goodImpressionTurnsMultiplier =
-      this.recommendedEffect == "goodImpressionTurns" ? 3 : 1;
-    const motivationMultiplier = this.recommendedEffect == "motivation" ? 5 : 1;
+      recommendedEffect == "goodImpressionTurns" ? 3 : 1;
+    const motivationMultiplier = recommendedEffect == "motivation" ? 5 : 1;
 
     let score = 0;
 
@@ -109,7 +116,14 @@ export default class HeuristicStrategy {
     score += (Math.log(state.stamina) / (state.turnsRemaining + 1)) * 0.5;
 
     // Genki
-    score += state.genki * 4;
+    score +=
+      (state.genki /
+        Math.pow(
+          state.turnsRemaining - this.engine.stageConfig.turnCount / 2,
+          2
+        )) *
+      0.5 *
+      motivationMultiplier;
 
     // Good condition turns
     score +=
@@ -125,10 +139,7 @@ export default class HeuristicStrategy {
 
     // Concentration
     score +=
-      state.concentration *
-      state.turnsRemaining *
-      state.goodConditionTurns *
-      concentrationMultiplier;
+      state.concentration * state.turnsRemaining * concentrationMultiplier;
 
     // Good impression turns
     score +=

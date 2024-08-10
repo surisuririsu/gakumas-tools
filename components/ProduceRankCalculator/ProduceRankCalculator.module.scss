@@ -13,7 +13,7 @@
 
   .result {
     thead {
-      background-color: $gk-orange;
+      background-color: lighten($gk-orange, 20%);
     }
 
     tbody {

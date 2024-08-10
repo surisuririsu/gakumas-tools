@@ -8,7 +8,7 @@ const COST_FIELDS = [
   "motivation",
 ];
 
-const DEBUFF_FIELDS = ["doubleCostTurns", "nullifyGenkiTurns"];
+export const DEBUFF_FIELDS = ["doubleCostTurns", "nullifyGenkiTurns"];
 
 const EOT_DECREMENT_FIELDS = [
   "goodConditionTurns",
@@ -28,21 +28,51 @@ const INCREASE_TRIGGER_FIELDS = [
 
 const DECREASE_TRIGGER_FIELDS = ["stamina"];
 
-const KEYS_WITH_TRIGGERS = [
+const LOGGED_FIELDS = [
+  "turnsRemaining",
+  "cardUsesRemaining",
+  "stamina",
+  "genki",
+  "score",
+  "goodConditionTurns",
+  "perfectConditionTurns",
+  "concentration",
+  "goodImpressionTurns",
+  "motivation",
+  "oneTurnScoreBuff",
+  "permanentScoreBuff",
+  "halfCostTurns",
+  "doubleCostTurns",
+  "costReduction",
+  "doubleCardEffectCards",
+  "nullifyGenkiTurns",
+];
+
+const KEYS_TO_DIFF = [
   ...new Set(
-    EOT_DECREMENT_FIELDS.concat(
+    LOGGED_FIELDS.concat(
       INCREASE_TRIGGER_FIELDS,
-      DECREASE_TRIGGER_FIELDS
+      DECREASE_TRIGGER_FIELDS,
+      EOT_DECREMENT_FIELDS
     )
   ),
 ];
 
+const WHOLE_FIELDS = [
+  "stamina",
+  "genki",
+  "goodConditionTurns",
+  "perfectConditionTurns",
+  "concentration",
+  "goodImpressionTurns",
+  "motivation",
+];
+
 export default class StageEngine {
-  constructor(stageConfig, idolConfig) {
+  constructor(stageConfig, idolConfig, logger) {
     this.stageConfig = stageConfig;
     this.idolConfig = idolConfig;
-    this.debug = false;
-    this.logs = [];
+    this.logger = logger;
   }
 
   getInitialState() {
@@ -105,21 +135,14 @@ export default class StageEngine {
       throw new Error("Stage already started!");
     }
 
-    let nextState = { ...state };
+    this.logger.clear();
 
-    this._debug("Starting stage...");
+    let nextState = { ...state };
 
     nextState.started = true;
 
-    // Set default effects
-    nextState = this._setEffect(nextState, null, null, {
-      phase: "endOfTurn",
-      conditions: ["goodImpressionTurns>=1"],
-      actions: ["score+=goodImpressionTurns"],
-    });
-
     // Set stage effects
-    this._debug("Setting stage effects", this.stageConfig.effects);
+    this.logger.debug("Setting stage effects", this.stageConfig.effects);
     this.stageConfig.effects.forEach((effect) => {
       nextState = this._setEffect(nextState, "stage", null, effect);
     });
@@ -127,7 +150,7 @@ export default class StageEngine {
     // Set p-item effects
     for (let i = 0; i < this.idolConfig.pItemIds.length; i++) {
       const pItem = PItems.getById(this.idolConfig.pItemIds[i]);
-      this._debug("Setting p-item effects", pItem.name, pItem.effects);
+      this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
       pItem.effects.forEach((effect) => {
         nextState = this._setEffect(nextState, "pItem", pItem.id, effect);
       });
@@ -180,18 +203,19 @@ export default class StageEngine {
 
     let nextState = JSON.parse(JSON.stringify(state));
 
-    this._debug("Using card", card);
+    this.logger.debug("Using card", cardId, card.name);
+    this.logger.log("entityStart", { type: "skillCard", id: cardId });
+
+    // Set usedCard variables
+    nextState.usedCardId = card.upgraded ? card.id - 1 : card.id;
 
     // Apply card cost
-    this._debug("Applying cost", card.cost);
+    this.logger.debug("Applying cost", card.cost);
     nextState = this._executeActions(card.cost, nextState);
 
     // Remove card from hand
     nextState.handCardIds.splice(handIndex, 1);
     nextState.cardUsesRemaining -= 1;
-
-    // Set usedCard variables
-    nextState.usedCardId = card.upgraded ? card.id - 1 : card.id;
 
     // Trigger events on card used
     nextState = this._triggerEffectsForPhase("cardUsed", nextState);
@@ -202,11 +226,12 @@ export default class StageEngine {
     }
 
     // Apply card effects
-    nextState = this._triggerEffects(card.effects, nextState);
     if (nextState.doubleCardEffectCards) {
       nextState.doubleCardEffectCards--;
       nextState = this._triggerEffects(card.effects, nextState);
     }
+    nextState = this._triggerEffects(card.effects, nextState);
+
     nextState.cardsUsed++;
 
     // Trigger events after card used
@@ -225,6 +250,8 @@ export default class StageEngine {
 
     // Reset usedCard variables
     nextState.usedCardId = null;
+
+    this.logger.log("entityEnd", { type: "skillCard", id: cardId });
 
     // Send card to discards or remove
     if (card.limit) {
@@ -258,6 +285,19 @@ export default class StageEngine {
     }
 
     state = this._triggerEffectsForPhase("endOfTurn", state);
+
+    // Default effects
+    state = this._triggerEffects(
+      [
+        {
+          conditions: ["goodImpressionTurns>=1"],
+          actions: ["score+=goodImpressionTurns"],
+          sourceType: "default",
+          sourceId: "好印象",
+        },
+      ],
+      state
+    );
 
     // Reduce buff turns
     for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
@@ -294,12 +334,18 @@ export default class StageEngine {
   }
 
   _startTurn(state) {
-    this._debug("Starting turn", state.turnsElapsed + 1);
+    this.logger.debug("Starting turn", state.turnsElapsed + 1);
 
     state.turnType =
       this.stageConfig.turnTypes[
         Math.min(state.turnsElapsed, this.stageConfig.turnCount - 1)
       ];
+
+    this.logger.log("startTurn", {
+      num: state.turnsElapsed + 1,
+      type: state.turnType,
+      multiplier: this.idolConfig.typeMultipliers[state.turnType],
+    });
 
     // Draw cards
     for (let i = 0; i < 3; i++) {
@@ -328,7 +374,8 @@ export default class StageEngine {
   _drawCard(state) {
     const cardId = state.deckCardIds.pop();
     state.handCardIds.push(cardId);
-    this._debug("Drew card", SkillCards.getById(cardId).name);
+    this.logger.debug("Drew card", SkillCards.getById(cardId).name);
+    this.logger.log("drawCard", { type: "skillCard", id: cardId });
     if (!state.deckCardIds.length) {
       state = this._recycleDiscards(state);
     }
@@ -340,7 +387,7 @@ export default class StageEngine {
       .slice()
       .sort(() => 0.5 - Math.random());
     state.discardedCardIds = [];
-    this._debug("Recycled discard pile");
+    this.logger.debug("Recycled discard pile");
     return state;
   }
 
@@ -351,6 +398,7 @@ export default class StageEngine {
         state.handCardIds[i] += 1;
       }
     }
+    this.logger.log("upgradeHand");
     return state;
   }
 
@@ -360,6 +408,7 @@ export default class StageEngine {
     for (let i = 0; i < numCards; i++) {
       state = this._drawCard(state);
     }
+    this.logger.log("exchangeHand");
     return state;
   }
 
@@ -372,6 +421,10 @@ export default class StageEngine {
     const randomCard =
       validBaseCards[Math.floor(Math.random() * validBaseCards.length)];
     state.handCardIds.push(randomCard.id);
+    this.logger.log("addRandomUpgradedCardToHand", {
+      type: "skillCard",
+      id: randomCard.id,
+    });
     return state;
   }
 
@@ -390,7 +443,7 @@ export default class StageEngine {
       phaseEffects.push({ ...effect, phase: null, index: i });
     }
 
-    this._debug(phase, phaseEffects);
+    this.logger.debug(phase, phaseEffects);
 
     state = this._triggerEffects(phaseEffects, state);
 
@@ -424,7 +477,7 @@ export default class StageEngine {
       if (effect.phase) {
         nextState = this._setEffect(
           nextState,
-          nextState.usedCardId ? "skillCard" : null,
+          nextState.usedCardId ? "skillCardEffect" : null,
           nextState.usedCardId,
           effect
         );
@@ -460,11 +513,25 @@ export default class StageEngine {
 
       // Execute actions
       if (effect.actions) {
-        this._debug("Executing actions", effect.actions);
+        this.logger.debug("Executing actions", effect.actions);
+        if (effect.sourceType) {
+          this.logger.log("entityStart", {
+            type: effect.sourceType,
+            id: effect.sourceId,
+          });
+        }
+
         nextState = this._executeActions(effect.actions, nextState);
 
         // Reset modifiers
         nextState.concentrationMultiplier = 1;
+
+        if (effect.sourceType) {
+          this.logger.log("entityEnd", {
+            type: effect.sourceType,
+            id: effect.sourceId,
+          });
+        }
       }
 
       triggeredEffects.push(i);
@@ -480,7 +547,7 @@ export default class StageEngine {
       condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/),
       state
     );
-    this._debug("Condition", condition, result);
+    this.logger.debug("Condition", condition, result);
     return result;
   }
 
@@ -572,13 +639,24 @@ export default class StageEngine {
 
   _executeActions(actions, state) {
     let prev = {};
-    for (let i = 0; i < KEYS_WITH_TRIGGERS.length; i++) {
-      prev[KEYS_WITH_TRIGGERS[i]] = state[KEYS_WITH_TRIGGERS[i]];
+    for (let i = 0; i < KEYS_TO_DIFF.length; i++) {
+      prev[KEYS_TO_DIFF[i]] = state[KEYS_TO_DIFF[i]];
     }
 
     actions.forEach((action) => {
       state = this._executeAction(action, state);
       if (state.stamina < 0) state.stamina = 0;
+    });
+
+    // Log changed fields
+    LOGGED_FIELDS.forEach((key) => {
+      if (state[key] != prev[key]) {
+        this.logger.log("diff", {
+          field: key,
+          prev: parseFloat(prev[key].toFixed(2)),
+          next: parseFloat(state[key].toFixed(2)),
+        });
+      }
     });
 
     // Protect fresh stats from decrement
@@ -641,9 +719,9 @@ export default class StageEngine {
         state.nullifyDebuff--;
         return state;
       }
-      if (lhs == "score") lhs = "intermediateScore";
-      if (lhs == "genki") lhs = "intermediateGenki";
-      if (lhs == "stamina") lhs = "intermediateStamina";
+      if (lhs == "score" && op == "+=") lhs = "intermediateScore";
+      if (lhs == "genki" && op == "+=") lhs = "intermediateGenki";
+      if (lhs == "stamina" && op == "-=") lhs = "intermediateStamina";
 
       if (op == "=") {
         state[lhs] = rhs;
@@ -682,10 +760,13 @@ export default class StageEngine {
         }
       } else if (lhs == "stamina") {
         let stamina = state.intermediateStamina;
-        if (state.doubleCostTurns && stamina < state.stamina) {
-          stamina -= state.stamina - stamina;
+        if (state.halfCostTurns) {
+          stamina *= 0.5;
         }
-        state.stamina = stamina;
+        if (state.doubleCostTurns) {
+          stamina *= 2;
+        }
+        state.stamina += stamina;
       } else if (lhs == "intermediateScore") {
         let score = state.intermediateScore;
         // Apply concentration
@@ -720,6 +801,10 @@ export default class StageEngine {
         state.genki += state.fixedGenki;
         state.fixedGenki = 0;
       }
+
+      for (let key of WHOLE_FIELDS) {
+        state[key] = Math.round(state[key]);
+      }
     } else {
       console.warn("Invalid action", action);
     }
@@ -741,45 +826,4 @@ export default class StageEngine {
 
     return trueScore;
   }
-
-  _debug(...args) {
-    if (this.debug) {
-      console.log(...args);
-    }
-  }
-
-  _logEntity(entityType, entityId) {
-    this.logs.push({
-      logType: "entity",
-      entityType,
-      entityId,
-    });
-  }
-
-  _logAction(actionType, prev, next) {
-    this.logs.push({
-      logType: "action",
-      prev,
-      next,
-    });
-  }
-
-  _log(logType, sourceType, sourceId, prevState, state) {
-    const diffs = LOGGED_FIELDS.filter(
-      (key) => state[key] != prevState[key]
-    ).map((key) => ({
-      field: key,
-      prev: prevState[key],
-      next: state[key],
-    }));
-
-    this.logs.push({
-      logType,
-      sourceType,
-      sourceId,
-      diffs,
-    });
-  }
 }
-
-const LOGGED_FIELDS = ["score"];

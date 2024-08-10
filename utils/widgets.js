@@ -57,13 +57,8 @@ export const WIDGETS = {
     Component: Memories,
   },
   loadoutEditor: {
-    title: "ステージ編成",
-    icon: (
-      <>
-        <FaTrophy />
-        <FaPen />
-      </>
-    ),
+    title: "ステージ",
+    icon: <FaTrophy />,
     Component: LoadoutEditor,
     fill: true,
   },
