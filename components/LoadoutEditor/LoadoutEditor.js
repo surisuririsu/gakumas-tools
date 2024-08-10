@@ -104,6 +104,7 @@ export default function LoadoutEditor() {
             parameters={params}
             onChange={setParams}
             withStamina
+            max={10000}
           />
           <div className={styles.typeMultipliers}>
             {Object.keys(idolConfig.typeMultipliers).map((param) => (

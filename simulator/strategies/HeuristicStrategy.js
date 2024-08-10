@@ -107,7 +107,7 @@ export default class HeuristicStrategy {
     let score = 0;
 
     // Turns remaining
-    score += state.turnsRemaining * 100;
+    score += state.turnsRemaining == prevState.turnsRemaining ? 1000 : 0;
 
     // Card uses remaining
     score += state.cardUsesRemaining * 50;
@@ -118,11 +118,12 @@ export default class HeuristicStrategy {
     // Genki
     score +=
       (state.genki /
-        Math.pow(
+        (Math.pow(
           state.turnsRemaining - this.engine.stageConfig.turnCount / 2,
           2
-        )) *
-      0.5 *
+        ) +
+          2)) *
+      3 *
       motivationMultiplier;
 
     // Good condition turns

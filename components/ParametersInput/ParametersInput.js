@@ -4,7 +4,12 @@ const PARAMETER_NAMES = ["Vocal", "Dance", "Visual"];
 const MIN = 0;
 const MAX = 1500;
 
-export default function ParametersInput({ parameters, onChange, withStamina }) {
+export default function ParametersInput({
+  parameters,
+  onChange,
+  withStamina,
+  max = MAX,
+}) {
   return (
     <div className={styles.parameters}>
       {PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []).map((name, i) => (
@@ -15,7 +20,7 @@ export default function ParametersInput({ parameters, onChange, withStamina }) {
           onChange={(e) =>
             onChange([
               ...parameters.slice(0, i),
-              Math.min(Math.max(parseInt(e.target.value, 10), MIN), MAX),
+              Math.min(Math.max(parseInt(e.target.value, 10), MIN), max),
               ...parameters.slice(i + 1),
             ])
           }
