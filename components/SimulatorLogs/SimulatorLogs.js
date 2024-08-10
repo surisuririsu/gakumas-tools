@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
 import styles from "./SimulatorLogs.module.scss";
 import Logs from "./Logs";
@@ -48,6 +49,11 @@ export default function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
         onChange={(value) => setRunToShow(value == runToShow ? null : value)}
       />
       {structuredLogs && <Logs logs={structuredLogs} idolId={idolId} />}
+
+      <a className={styles.toTop} href="#loadout_editor">
+        Top
+        <FaCircleArrowUp />
+      </a>
     </div>
   );
 }

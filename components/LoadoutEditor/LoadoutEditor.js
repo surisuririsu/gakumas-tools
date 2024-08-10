@@ -109,8 +109,8 @@ export default function LoadoutEditor() {
   }, [stageConfig, idolConfig]);
 
   return (
-    <div className={styles.loadoutEditor}>
-      <div>
+    <div id="loadout_editor" className={styles.loadoutEditor}>
+      <div className={styles.configurator}>
         <label>Stage</label>
         <StageSelect stageId={stageId} setStageId={setStageId} />
         <label>Parameters</label>
