@@ -22,8 +22,20 @@
       color: $gk-orange;
     }
 
+    ul {
+      list-style-type: none;
+      display: grid;
+      gap: 8px;
+    }
+
     li {
-      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      button {
+        min-width: 48px;
+      }
     }
 
     button {
