@@ -122,6 +122,10 @@ export default class StageEngine {
       doubleCardEffectCards: 0,
       nullifyGenkiTurns: 0,
 
+      // Used card
+      usedCardId: null,
+      cardEffects: [],
+
       // Buffs/debuffs protected from decrement when fresh
       freshBuffs: {},
 
@@ -208,6 +212,7 @@ export default class StageEngine {
 
     // Set usedCard variables
     nextState.usedCardId = card.upgraded ? card.id - 1 : card.id;
+    nextState.cardEffects = this._getCardEffects(card);
 
     // Apply card cost
     this.logger.debug("Applying cost", card.cost);
@@ -250,6 +255,7 @@ export default class StageEngine {
 
     // Reset usedCard variables
     nextState.usedCardId = null;
+    nextState.cardEffects = [];
 
     this.logger.log("entityEnd", { type: "skillCard", id: cardId });
 
@@ -426,6 +432,19 @@ export default class StageEngine {
       id: randomCard.id,
     });
     return state;
+  }
+
+  _getCardEffects(card) {
+    let cardEffects = [];
+    for (let effect of card.effects) {
+      for (let action of effect.actions) {
+        const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
+        if (tokens.length && tokens[0].length) {
+          cardEffects.push(tokens[0]);
+        }
+      }
+    }
+    return cardEffects;
   }
 
   _setEffect(state, sourceType, sourceId, effect) {
