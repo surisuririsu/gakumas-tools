@@ -46,6 +46,12 @@
   overflow: hidden;
 }
 
+.defaultTile {
+  @extend .tile;
+  padding: 8px;
+  background-color: $gray-extra-light;
+}
+
 .drawCard {
   @extend .tile;
   align-self: flex-start;

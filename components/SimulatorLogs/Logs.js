@@ -3,6 +3,7 @@ import Diff from "./Diff";
 import AddCard from "./AddCard";
 import Group from "./Group";
 import StartTurn from "./StartTurn";
+import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
 
 export default function Logs({ logs, idolId }) {
