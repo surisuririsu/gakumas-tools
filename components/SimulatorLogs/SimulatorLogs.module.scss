@@ -1,0 +1,103 @@
+@import "@/constants";
+
+.simulatorLogs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.startTurn {
+  border-radius: 4px;
+  padding: 6px;
+  color: $gray-dark;
+  font-weight: 600;
+  border: 2px solid;
+  border-left: 8px solid;
+
+  &.vocal {
+    border-color: $vocal;
+    .multiplier {
+      color: $vocal;
+    }
+  }
+  &.dance {
+    border-color: $dance;
+    .multiplier {
+      color: $dance;
+    }
+  }
+  &.visual {
+    border-color: $visual;
+    .multiplier {
+      color: $visual;
+    }
+  }
+}
+
+.tile {
+  margin: 0 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.drawCard {
+  @extend .tile;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background-color: $gray-extra-light;
+  font-size: 14px;
+}
+
+.group {
+  @extend .tile;
+  border: 2px solid $gray-extra-light;
+
+  .entity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background-color: $gray-extra-light;
+  }
+
+  .childLogs {
+    padding: 16px 8px;
+  }
+
+  .effect {
+    width: 17px;
+    height: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transform: rotate(-45deg);
+
+    img {
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.diff {
+  @extend .tile;
+
+  .positive {
+    color: $blue;
+    font-weight: 600;
+  }
+
+  .negative {
+    color: $red;
+    font-weight: 600;
+  }
+}

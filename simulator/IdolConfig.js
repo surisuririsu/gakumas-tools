@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
 
 const DEFAULT_CARDS_BY_PLAN = {
   sense: [5, 7, 1, 1, 15, 15, 17, 17],
@@ -26,6 +26,26 @@ export default class IdolConfig {
     this.skillCardIds = this.getDedupedSkillCardIds(
       skillCardIds.concat(DEFAULT_CARDS_BY_PLAN[plan])
     );
+    this.pIdolId = this.inferPIdolId();
+    this.idolId = this.pIdolId && PIdols.getById(this.pIdolId)?.idolId;
+    this.recommendedEffect = this.inferRecommendedEffect();
+  }
+
+  inferPIdolId() {
+    const signaturePItem = this.pItemIds
+      .map(PItems.getById)
+      .find((p) => p?.sourceType == "pIdol");
+    if (signaturePItem) return signaturePItem.pIdolId;
+    const signatureSkillCard = this.skillCardIds
+      .map(SkillCards.getById)
+      .find((s) => s?.sourceType == "pIdol");
+    if (signatureSkillCard) return signatureSkillCard.pIdolId;
+    return null;
+  }
+
+  inferRecommendedEffect() {
+    if (this.pIdolId) return PIdols.getById(this.pIdolId)?.recommendedEffect;
+    return null;
   }
 
   getTypeMultipliers(parameters, supportBonus, criteria) {

@@ -5,6 +5,7 @@ import DistributionPlot from "@/components/DistributionPlot";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
+import SimulatorLogs from "@/components/SimulatorLogs";
 import StagePItems from "@/components/StagePItems";
 import StageSelect from "@/components/StageSelect";
 import Trash from "@/components/Trash";
@@ -56,19 +57,29 @@ export default function LoadoutEditor() {
     );
 
     workerRef.current.onmessage = (e) => {
+      const { minRun, averageRun, maxRun, averageScore, scores } = e.data;
+
       let data = {};
-      for (let i = 0; i < e.data.length; i++) {
-        const bucket = Math.floor(e.data[i] / BUCKET_SIZE);
+      for (let i = 0; i < scores.length; i++) {
+        const bucket = Math.floor(scores[i] / BUCKET_SIZE);
         data[bucket] = (data[bucket] || 0) + 1;
       }
 
-      const minKey = Math.min(...Object.keys(data));
-      const maxKey = Math.max(...Object.keys(data));
+      const minKey = Math.floor(minRun.score / BUCKET_SIZE);
+      const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
       for (let i = minKey - 1; i <= maxKey + 1; i++) {
         if (!data[i]) data[i] = 0;
       }
 
-      setSimulatorData(data);
+      setSimulatorData({
+        buckets: data,
+        minScore: minRun.score,
+        maxScore: maxRun.score,
+        averageScore,
+        minRun,
+        maxRun,
+        averageRun,
+      });
       setRunning(false);
     };
 
@@ -130,9 +141,9 @@ export default function LoadoutEditor() {
           >
             Clear all
           </Button>
-          {/* <Button onClick={simulate} disabled={running}>
-            Estimate score distribution
-          </Button> */}
+          <Button onClick={simulate} disabled={running}>
+            Simulate
+          </Button>
           {running && (
             <div className={styles.loader}>
               <Loader />
@@ -142,12 +153,38 @@ export default function LoadoutEditor() {
       </div>
 
       {simulatorData && (
-        <div className={styles.chart}>
-          <DistributionPlot data={simulatorData} />
+        <div className={styles.result}>
+          <DistributionPlot data={simulatorData.buckets} />
+          <table className={styles.stats}>
+            <thead>
+              <tr>
+                <th>Min</th>
+                <th>Average</th>
+                <th>Max</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{simulatorData.minScore}</td>
+                <td>{simulatorData.averageScore}</td>
+                <td>{simulatorData.maxScore}</td>
+              </tr>
+            </tbody>
+          </table>
           <b>
-            This feature is in development. Statistics and logs will be added in
-            the future.
+            This feature is in development. Simulator behavior differs from the
+            real game.
           </b>
+          <b>
+            このプログラムは開発中のものです。ゲーム内のAIと挙動が異なります。
+          </b>
+          <label>Logs</label>
+          <SimulatorLogs
+            minRun={simulatorData.minRun}
+            averageRun={simulatorData.averageRun}
+            maxRun={simulatorData.maxRun}
+            idolId={idolConfig.idolId}
+          />
         </div>
       )}
     </div>

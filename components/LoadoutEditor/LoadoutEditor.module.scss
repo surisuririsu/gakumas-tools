@@ -5,6 +5,7 @@
   flex-wrap: wrap;
 
   & > div {
+    max-width: 100vw;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -46,9 +47,28 @@
     flex: 0;
   }
 
-  .chart {
+  .result {
     flex: 1;
-    min-width: 600px;
+    width: 600px;
     max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stats {
+    text-align: center;
+
+    thead {
+      background-color: lighten($gk-orange, 20%);
+    }
+
+    tbody {
+      background-color: lighten($gk-orange, 40%);
+    }
+
+    th {
+      width: 33%;
+    }
   }
 }

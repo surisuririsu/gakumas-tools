@@ -5,30 +5,33 @@ export default class DeepScoreStrategy {
   }
 
   chooseCard(state, depth = 1) {
-    let usableCardIds = [];
-    for (let i = 0; i < state.handCardIds.length; i++) {
-      if (this.engine.isCardUsable(state, state.handCardIds[i])) {
-        usableCardIds.push(state.handCardIds[i]);
-      }
+    this.engine.logger.disabled = true;
+    const scores = state.handCardIds.map((id) =>
+      this.predictScore(state, id, depth)
+    );
+    this.engine.logger.disabled = false;
+
+    let cardToUse = null;
+    const maxScore = Math.max(...scores);
+    if (maxScore > 0) {
+      const maxIndex = scores.indexOf(maxScore);
+      cardToUse = state.handCardIds[maxIndex];
     }
 
-    if (usableCardIds.length == 0) return null;
+    this.engine.logger.log("hand", {
+      handCardIds: [...state.handCardIds],
+      scores,
+      selectedCardId: cardToUse,
+    });
 
-    let cardId = null;
-    let maxScore = 0;
-
-    for (let i = 0; i < usableCardIds.length; i++) {
-      const score = this.predictScore(state, usableCardIds[i], depth);
-      if (score > maxScore) {
-        cardId = usableCardIds[i];
-        maxScore = score;
-      }
-    }
-
-    return cardId;
+    return cardToUse;
   }
 
   predictScore(state, cardId, depth) {
+    if (!this.engine.isCardUsable(state, cardId)) {
+      return -Infinity;
+    }
+
     state = this.engine.useCard(state, cardId);
     if (state.turnsRemaining == 0 || depth >= this.maxDepth) {
       return state.score;

@@ -23,7 +23,7 @@ export default function MemorySummary({ memory }) {
     open("memoryEditor");
   }
 
-  function useMemory(index) {
+  function loadMemory(index) {
     setMemory(memory, index);
     open("loadoutEditor");
   }
@@ -34,12 +34,12 @@ export default function MemorySummary({ memory }) {
         <PIdol pIdolId={pIdolId} />
         <div className={styles.actions}>
           <Button onClick={editMemory}>Edit</Button>
-          <Button onClick={() => useMemory(0)}>
+          <Button onClick={() => loadMemory(0)}>
             <FaTrophy />
             1
             <FaArrowRight />
           </Button>
-          <Button onClick={() => useMemory(1)}>
+          <Button onClick={() => loadMemory(1)}>
             <FaTrophy />
             2
             <FaArrowRight />

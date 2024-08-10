@@ -1,0 +1,37 @@
+import { DEBUFF_FIELDS } from "@/simulator/StageEngine";
+import styles from "./SimulatorLogs.module.scss";
+
+const STRINGS = {
+  turnsRemaining: "残りターン数",
+  cardUsesRemaining: "スキルカード使用数",
+  stamina: "体力",
+  genki: "元気",
+  score: "スコア",
+  goodConditionTurns: "好調",
+  perfectConditionTurns: "絶好調",
+  concentration: "集中",
+  goodImpressionTurns: "好印象",
+  motivation: "やる気",
+  oneTurnScoreBuff: "スコア上昇量（1ターン）",
+  permanentScoreBuff: "スコア上昇量",
+  halfCostTurns: "消費体力減少",
+  doubleCostTurns: "消費体力増加",
+  costReduction: "消費体力削減",
+  doubleCardEffectCards: "スキルカード追加発動",
+  nullifyGenkiTurns: "元気増加無効",
+};
+
+export default function Diff({ field, next, prev }) {
+  let diffDir = "positive";
+  if (DEBUFF_FIELDS.includes(field) == next > prev) {
+    diffDir = "negative";
+  }
+  return (
+    <div className={styles.diff}>
+      {STRINGS[field] || field}{" "}
+      <span className={styles[diffDir]}>
+        {prev} → {next}
+      </span>
+    </div>
+  );
+}
