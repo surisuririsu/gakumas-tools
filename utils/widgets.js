@@ -18,11 +18,14 @@ export const WIDGETS = {
     title: "プロデュース評価計算機",
     icon: <FaCalculator />,
     Component: ProduceRankCalculator,
+    description:
+      "Calculate final exam score needed to achieve each produce rank based on pre-exam parameters",
   },
   dex: {
     title: "P図鑑",
     icon: <FaBook />,
     Component: Dex,
+    description: "Filter and view p-item and skill card information",
   },
   memoryCalculator: {
     title: "メモリー計算機",
@@ -34,6 +37,8 @@ export const WIDGETS = {
     ),
     Component: MemoryCalculator,
     fill: true,
+    description:
+      "Calculate probability of getting desired skill card combinations in memories",
   },
   memoryEditor: {
     title: "メモリー編集",
@@ -45,6 +50,7 @@ export const WIDGETS = {
     ),
     Component: MemoryEditor,
     fill: true,
+    description: "Create, edit, and save memories",
   },
   memories: {
     title: "メモリー一覧",
@@ -55,11 +61,14 @@ export const WIDGETS = {
       </>
     ),
     Component: Memories,
+    description:
+      "Import memories from screenshots and search by p-items and skill cards",
   },
   loadoutEditor: {
     title: "ステージ",
     icon: <FaTrophy />,
     Component: LoadoutEditor,
     fill: true,
+    description: "Create and simulate contest loadouts",
   },
 };

@@ -110,12 +110,19 @@
 
 .hand {
   @extend .tile;
-  display: flex;
-  align-items: center;
-  border: 4px solid $gray-light;
-  padding: 16px 8px 8px;
-  background-color: $gray-extra-light;
+  border: 2px solid $gray-extra-light;
   overflow: visible;
+
+  .handTitle {
+    padding: 8px;
+    background-color: $gray-extra-light;
+  }
+
+  .handCards {
+    display: flex;
+    align-items: center;
+    padding: 16px 8px 8px;
+  }
 
   .handCard {
     flex: 1;
@@ -125,7 +132,7 @@
     gap: 4px;
   }
 
-  .selected {
+  .selected img {
     display: flex;
     border-radius: 4px;
     box-shadow: 0 0 24px $gk-red-orange;
