@@ -71,7 +71,7 @@ export default class HeuristicStrategy {
     state = this.engine.useCard(state, cardId);
 
     // Predict score after effects
-    state.effects.forEach((effect) => {
+    for (let effect of state.effects) {
       const limit = Math.ceil(
         Math.min(effect.limit || state.turnsRemaining, state.turnsRemaining) *
           PHASE_FREQUENCY_ESTIMATES[effect.phase]
@@ -82,7 +82,7 @@ export default class HeuristicStrategy {
           state
         );
       }
-    });
+    }
 
     const { vocal, dance, visual } = this.engine.idolConfig.typeMultipliers;
     const averageTypeMultiplier = (vocal + dance + visual) / 3;

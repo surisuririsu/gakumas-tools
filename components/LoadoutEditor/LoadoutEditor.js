@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import DistributionPlot from "@/components/DistributionPlot";
@@ -13,10 +13,17 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import IdolConfig from "@/simulator/IdolConfig";
 import StageConfig from "@/simulator/StageConfig";
-import { BUCKET_SIZE, FALLBACK_STAGE, inferPlan } from "@/utils/simulator";
+import {
+  BUCKET_SIZE,
+  FALLBACK_STAGE,
+  MAX_WORKERS,
+  NUM_RUNS,
+  SYNC,
+} from "@/simulator/constants";
+import { simulate } from "@/simulator/worker";
+import { getPlannerUrl } from "@/utils/planner";
+import { inferPlan } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
-
-const PLANNER_BASE_URL = "https://gkcontest.ris.moe";
 
 export default function LoadoutEditor() {
   const {
@@ -32,19 +39,6 @@ export default function LoadoutEditor() {
     useContext(WorkspaceContext);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
-  const workerRef = useRef();
-
-  function getPlannerUrl() {
-    const params = new URLSearchParams();
-    params.set("plan", workspacePlan);
-    params.set("idol", workspaceIdolId);
-    params.set("items", pItemIds.join("-"));
-    params.set(
-      "cards",
-      skillCardIdGroups.map((group) => group.join("-")).join("_")
-    );
-    return `${PLANNER_BASE_URL}/?${params.toString()}`;
-  }
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const { turnCounts, firstTurns, criteria, effects } = stage;
@@ -57,6 +51,7 @@ export default function LoadoutEditor() {
     criteria,
     effects
   );
+
   const idolConfig = new IdolConfig(
     plan,
     { vocal, dance, visual, stamina },
@@ -66,46 +61,100 @@ export default function LoadoutEditor() {
     [].concat(...skillCardIdGroups).filter((id) => id)
   );
 
-  useEffect(() => {
-    workerRef.current = new Worker(
-      new URL("../../simulator/worker.js", import.meta.url)
-    );
+  function setResult(result) {
+    const { minRun, averageRun, maxRun, averageScore, scores } = result;
 
-    workerRef.current.onmessage = (e) => {
-      const { minRun, averageRun, maxRun, averageScore, scores } = e.data;
+    let data = {};
+    for (let i = 0; i < scores.length; i++) {
+      const bucket = Math.floor(scores[i] / BUCKET_SIZE);
+      data[bucket] = (data[bucket] || 0) + 1;
+    }
 
-      let data = {};
-      for (let i = 0; i < scores.length; i++) {
-        const bucket = Math.floor(scores[i] / BUCKET_SIZE);
-        data[bucket] = (data[bucket] || 0) + 1;
-      }
+    const minKey = Math.floor(minRun.score / BUCKET_SIZE);
+    const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
+    for (let i = minKey - 1; i <= maxKey + 1; i++) {
+      if (!data[i]) data[i] = 0;
+    }
 
-      const minKey = Math.floor(minRun.score / BUCKET_SIZE);
-      const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
-      for (let i = minKey - 1; i <= maxKey + 1; i++) {
-        if (!data[i]) data[i] = 0;
-      }
+    setSimulatorData({
+      buckets: data,
+      minScore: minRun.score,
+      maxScore: maxRun.score,
+      averageScore,
+      minRun,
+      maxRun,
+      averageRun,
+    });
+    setRunning(false);
+  }
 
-      setSimulatorData({
-        buckets: data,
-        minScore: minRun.score,
-        maxScore: maxRun.score,
-        averageScore,
-        minRun,
-        maxRun,
-        averageRun,
-      });
-      setRunning(false);
-    };
-
-    return () => {
-      workerRef.current?.terminate();
-    };
-  }, []);
-
-  const simulate = useCallback(async () => {
+  const runSimulation = useCallback(async () => {
     setRunning(true);
-    workerRef.current?.postMessage({ stageConfig, idolConfig });
+    if (SYNC) {
+      const result = simulate(stageConfig, idolConfig, NUM_RUNS);
+      setResult(result);
+    } else {
+      let numWorkers = 1;
+      if (navigator.hardwareConcurrency) {
+        numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
+      }
+      const runsPerWorker = Math.round(NUM_RUNS / numWorkers);
+
+      const promises = Array(numWorkers)
+        .fill()
+        .map(
+          () =>
+            new Promise((resolve) => {
+              const worker = new Worker(
+                new URL("../../simulator/worker.js", import.meta.url)
+              );
+              worker.onmessage = (e) => {
+                resolve(e.data);
+                worker.terminate();
+              };
+              worker.postMessage({
+                stageConfig,
+                idolConfig,
+                numRuns: runsPerWorker,
+              });
+            })
+        );
+
+      Promise.all(promises).then((results) => {
+        let scores = [];
+        for (let result of results) {
+          scores = scores.concat(result.scores);
+        }
+        const averageScore = Math.round(
+          scores.reduce((acc, cur) => acc + cur, 0) / scores.length
+        );
+
+        let minRun, averageRun, maxRun;
+        for (let result of results) {
+          if (!minRun || result.minRun.score < minRun.score) {
+            minRun = result.minRun;
+          }
+          if (!maxRun || result.maxRun.score > maxRun.score) {
+            maxRun = result.maxRun;
+          }
+          if (
+            !averageRun ||
+            Math.abs(result.averageRun.score - averageScore) <
+              Math.abs(averageRun.score - averageScore)
+          ) {
+            averageRun = result.averageRun;
+          }
+        }
+
+        setResult({
+          minRun,
+          averageRun,
+          maxRun,
+          averageScore,
+          scores,
+        });
+      });
+    }
   }, [stageConfig, idolConfig]);
 
   return (
@@ -113,6 +162,7 @@ export default function LoadoutEditor() {
       <div className={styles.configurator}>
         <label>Stage</label>
         <StageSelect stageId={stageId} setStageId={setStageId} />
+
         <label>Parameters</label>
         <div className={styles.params}>
           <ParametersInput
@@ -147,7 +197,12 @@ export default function LoadoutEditor() {
 
         <a
           className={styles.plannerLink}
-          href={getPlannerUrl()}
+          href={getPlannerUrl(
+            workspacePlan,
+            workspaceIdolId,
+            pItemIds,
+            skillCardIdGroups
+          )}
           target="_blank"
         >
           Open in Gakumas Contest Planner
@@ -165,9 +220,11 @@ export default function LoadoutEditor() {
           >
             Clear all
           </Button>
-          <Button onClick={simulate} disabled={running}>
+
+          <Button onClick={runSimulation} disabled={running}>
             Simulate
           </Button>
+
           {running && (
             <div className={styles.loader}>
               <Loader />
@@ -179,6 +236,7 @@ export default function LoadoutEditor() {
       {simulatorData && (
         <div className={styles.result}>
           <DistributionPlot data={simulatorData.buckets} />
+
           <table className={styles.stats}>
             <thead>
               <tr>
@@ -195,6 +253,7 @@ export default function LoadoutEditor() {
               </tr>
             </tbody>
           </table>
+
           <b>
             This feature is in development. Simulator behavior differs from the
             real game.
@@ -202,6 +261,7 @@ export default function LoadoutEditor() {
           <b>
             このプログラムは開発中のものです。ゲーム内のAIと挙動が異なります。
           </b>
+
           <label>Logs</label>
           <SimulatorLogs
             minRun={simulatorData.minRun}
