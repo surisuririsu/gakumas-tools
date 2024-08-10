@@ -107,3 +107,32 @@
     font-weight: 600;
   }
 }
+
+.hand {
+  @extend .tile;
+  display: flex;
+  align-items: center;
+  border: 4px solid $gray-light;
+  padding: 16px 8px 8px;
+  background-color: $gray-extra-light;
+  overflow: visible;
+
+  .handCard {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .selected {
+    display: flex;
+    border-radius: 4px;
+    box-shadow: 0 0 24px $gk-red-orange;
+    overflow: hidden;
+  }
+
+  .cardScore {
+    font-size: 12px;
+  }
+}

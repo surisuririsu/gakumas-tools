@@ -1,7 +1,8 @@
 import React from "react";
-import Diff from "./Diff";
 import AddCard from "./AddCard";
+import Diff from "./Diff";
 import Group from "./Group";
+import Hand from "./Hand";
 import StartTurn from "./StartTurn";
 import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
@@ -40,6 +41,7 @@ export default function Logs({ logs, idolId }) {
               text="スキルカードを手札に生成"
             />
           )}
+          {line.logType == "hand" && <Hand {...line.data} idolId={idolId} />}
         </React.Fragment>
       ))}
     </div>
