@@ -16,6 +16,8 @@ import StageConfig from "@/simulator/StageConfig";
 import { BUCKET_SIZE, FALLBACK_STAGE, inferPlan } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
 
+const PLANNER_BASE_URL = "https://gkcontest.ris.moe";
+
 export default function LoadoutEditor() {
   const {
     stageId,
@@ -26,10 +28,23 @@ export default function LoadoutEditor() {
     skillCardIdGroups,
     clear,
   } = useContext(LoadoutContext);
-  const { plan: workspacePlan } = useContext(WorkspaceContext);
+  const { plan: workspacePlan, idolId: workspaceIdolId } =
+    useContext(WorkspaceContext);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
   const workerRef = useRef();
+
+  function getPlannerUrl() {
+    const params = new URLSearchParams();
+    params.set("plan", workspacePlan);
+    params.set("idol", workspaceIdolId);
+    params.set("items", pItemIds.join("-"));
+    params.set(
+      "cards",
+      skillCardIdGroups.map((group) => group.join("-")).join("_")
+    );
+    return `${PLANNER_BASE_URL}/?${params.toString()}`;
+  }
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const { turnCounts, firstTurns, criteria, effects } = stage;
@@ -129,6 +144,14 @@ export default function LoadoutEditor() {
         ))}
 
         <Trash />
+
+        <a
+          className={styles.plannerLink}
+          href={getPlannerUrl()}
+          target="_blank"
+        >
+          Open in Gakumas Contest Planner
+        </a>
 
         <div className={styles.simulateButton}>
           <Button
