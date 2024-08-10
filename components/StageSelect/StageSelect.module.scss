@@ -22,8 +22,8 @@
 
     .status {
       flex: 1;
+      align-self: stretch;
       display: flex;
-      height: 100%;
       border: 2px solid $gray-extra-light;
       border-radius: 4px;
       overflow: hidden;
