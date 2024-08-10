@@ -34,7 +34,7 @@ export default function LoadoutEditor() {
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const { turnCounts, firstTurns, criteria, effects } = stage;
   const plan = inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan);
-  const [vocal, dance, visual, stamina] = params;
+  const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
 
   const stageConfig = new StageConfig(
     turnCounts,
