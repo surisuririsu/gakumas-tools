@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { NUM_RUNS, BUCKET_SIZE } from "@/utils/simulator";
+import { NUM_RUNS, BUCKET_SIZE } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,

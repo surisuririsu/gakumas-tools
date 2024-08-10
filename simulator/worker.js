@@ -2,10 +2,9 @@ import StageEngine from "@/simulator/StageEngine";
 import StageLogger from "@/simulator/StageLogger";
 import StagePlayer from "@/simulator/StagePlayer";
 import HeuristicStrategy from "@/simulator/strategies/HeuristicStrategy";
-import { DEBUG, NUM_RUNS } from "@/utils/simulator";
+import { DEBUG } from "@/simulator/constants";
 
-addEventListener("message", (e) => {
-  const { stageConfig, idolConfig } = e.data;
+export function simulate(stageConfig, idolConfig, numRuns) {
   const logger = new StageLogger(DEBUG);
   const engine = new StageEngine(stageConfig, idolConfig, logger);
   const strategy = new HeuristicStrategy(engine);
@@ -14,7 +13,9 @@ addEventListener("message", (e) => {
   let averageScore = 0;
   let minRun, averageRun, maxRun;
   let scores = [];
-  for (let i = 0; i < NUM_RUNS; i++) {
+
+  console.time("work");
+  for (let i = 0; i < numRuns; i++) {
     const result = new StagePlayer(engine, strategy).play();
 
     if (!minRun || result.score < minRun.score) {
@@ -35,12 +36,19 @@ addEventListener("message", (e) => {
 
     scores.push(result.score);
   }
+  console.timeEnd("work");
 
-  postMessage({
+  return {
     minRun,
     averageRun,
     maxRun,
     averageScore,
     scores,
-  });
+  };
+}
+
+addEventListener("message", (e) => {
+  const { stageConfig, idolConfig, numRuns } = e.data;
+  const result = simulate(stageConfig, idolConfig, numRuns);
+  postMessage(result);
 });

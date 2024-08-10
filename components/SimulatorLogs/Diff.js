@@ -1,4 +1,4 @@
-import { DEBUFF_FIELDS } from "@/simulator/StageEngine";
+import { DEBUFF_FIELDS } from "@/simulator/constants";
 import styles from "./SimulatorLogs.module.scss";
 
 const STRINGS = {

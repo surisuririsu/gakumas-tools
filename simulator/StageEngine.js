@@ -1,52 +1,14 @@
 import { PItems, SkillCards } from "gakumas-data";
-
-const COST_FIELDS = [
-  "stamina",
-  "goodConditionTurns",
-  "concentration",
-  "goodImpressionTurns",
-  "motivation",
-];
-
-export const DEBUFF_FIELDS = ["doubleCostTurns", "nullifyGenkiTurns"];
-
-const EOT_DECREMENT_FIELDS = [
-  "goodConditionTurns",
-  "perfectConditionTurns",
-  "goodImpressionTurns",
-  "halfCostTurns",
-  "doubleCostTurns",
-  "nullifyGenkiTurns",
-];
-
-const INCREASE_TRIGGER_FIELDS = [
-  "goodImpressionTurns",
-  "motivation",
-  "goodConditionTurns",
-  "concentration",
-];
-
-const DECREASE_TRIGGER_FIELDS = ["stamina"];
-
-const LOGGED_FIELDS = [
-  "turnsRemaining",
-  "cardUsesRemaining",
-  "stamina",
-  "genki",
-  "score",
-  "goodConditionTurns",
-  "perfectConditionTurns",
-  "concentration",
-  "goodImpressionTurns",
-  "motivation",
-  "oneTurnScoreBuff",
-  "permanentScoreBuff",
-  "halfCostTurns",
-  "doubleCostTurns",
-  "costReduction",
-  "doubleCardEffectCards",
-  "nullifyGenkiTurns",
-];
+import {
+  DEBUG,
+  DEBUFF_FIELDS,
+  COST_FIELDS,
+  EOT_DECREMENT_FIELDS,
+  INCREASE_TRIGGER_FIELDS,
+  DECREASE_TRIGGER_FIELDS,
+  LOGGED_FIELDS,
+  WHOLE_FIELDS,
+} from "./constants";
 
 const KEYS_TO_DIFF = [
   ...new Set(
@@ -56,16 +18,6 @@ const KEYS_TO_DIFF = [
       EOT_DECREMENT_FIELDS
     )
   ),
-];
-
-const WHOLE_FIELDS = [
-  "stamina",
-  "genki",
-  "goodConditionTurns",
-  "perfectConditionTurns",
-  "concentration",
-  "goodImpressionTurns",
-  "motivation",
 ];
 
 export default class StageEngine {
@@ -135,7 +87,7 @@ export default class StageEngine {
   }
 
   startStage(state) {
-    if (state.started) {
+    if (DEBUG && state.started) {
       throw new Error("Stage already started!");
     }
 
@@ -147,17 +99,17 @@ export default class StageEngine {
 
     // Set stage effects
     this.logger.debug("Setting stage effects", this.stageConfig.effects);
-    this.stageConfig.effects.forEach((effect) => {
+    for (let effect of this.stageConfig.effects) {
       nextState = this._setEffect(nextState, "stage", null, effect);
-    });
+    }
 
     // Set p-item effects
-    for (let i = 0; i < this.idolConfig.pItemIds.length; i++) {
-      const pItem = PItems.getById(this.idolConfig.pItemIds[i]);
-      this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
-      pItem.effects.forEach((effect) => {
-        nextState = this._setEffect(nextState, "pItem", pItem.id, effect);
-      });
+    for (let id of this.idolConfig.pItemIds) {
+      const { effects, name } = PItems.getById(id);
+      this.logger.debug("Setting p-item effects", name, effects);
+      for (let effect of effects) {
+        nextState = this._setEffect(nextState, "pItem", id, effect);
+      }
     }
 
     nextState = this._triggerEffectsForPhase("startOfStage", nextState);
@@ -171,36 +123,41 @@ export default class StageEngine {
     const card = SkillCards.getById(cardId);
 
     // Check conditions
-    for (let i = 0; i < card.conditions.length; i++) {
-      if (!this._evaluateCondition(card.conditions[i], state)) {
-        return false;
-      }
+    for (let condition of card.conditions) {
+      if (!this._evaluateCondition(condition, state)) return false;
     }
 
     // Check cost
     let previewState = { ...state };
-    card.cost.forEach((cost) => {
+    for (let cost of card.cost) {
       previewState = this._executeAction(cost, previewState);
-    });
-    return !COST_FIELDS.some((field) => previewState[field] < 0);
+    }
+    for (let field of COST_FIELDS) {
+      if (previewState[field] < 0) return false;
+    }
+
+    return true;
   }
 
   useCard(state, cardId) {
-    if (!state.started) {
-      throw new Error("Stage not started!");
-    }
-    if (state.cardUsesRemaining < 1) {
-      throw new Error("No card uses remaining!");
-    }
-    if (state.turnsRemaining < 1) {
-      throw new Error("No turns remaining!");
-    }
     const handIndex = state.handCardIds.indexOf(cardId);
-    if (handIndex == -1) {
-      throw new Error("Card is not in hand!");
-    }
-    if (!this.isCardUsable(state, cardId)) {
-      throw new Error("Card is not usable!");
+
+    if (DEBUG) {
+      if (!state.started) {
+        throw new Error("Stage not started!");
+      }
+      if (state.cardUsesRemaining < 1) {
+        throw new Error("No card uses remaining!");
+      }
+      if (state.turnsRemaining < 1) {
+        throw new Error("No turns remaining!");
+      }
+      if (handIndex == -1) {
+        throw new Error("Card is not in hand!");
+      }
+      if (!this.isCardUsable(state, cardId)) {
+        throw new Error("Card is not usable!");
+      }
     }
 
     const card = SkillCards.getById(cardId);
@@ -275,11 +232,13 @@ export default class StageEngine {
   }
 
   endTurn(state) {
-    if (!state.started) {
-      throw new Error("Stage not started!");
-    }
-    if (state.turnsRemaining < 1) {
-      throw new Error("No turns remaining!");
+    if (DEBUG) {
+      if (!state.started) {
+        throw new Error("Stage not started!");
+      }
+      if (state.turnsRemaining < 1) {
+        throw new Error("No turns remaining!");
+      }
     }
 
     // Recover stamina if turn ended by player
@@ -306,8 +265,7 @@ export default class StageEngine {
     );
 
     // Reduce buff turns
-    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
-      const key = EOT_DECREMENT_FIELDS[i];
+    for (let key of EOT_DECREMENT_FIELDS) {
       if (state.freshBuffs[key]) {
         delete state.freshBuffs[key];
       } else {
@@ -319,10 +277,10 @@ export default class StageEngine {
     state.oneTurnScoreBuff = 0;
 
     // Decrement effect ttl and expire
-    state.effects.forEach((effect) => {
-      if (effect.ttl == null) return;
-      effect.ttl = Math.max(effect.ttl - 1, -1);
-    });
+    for (let i in state.effects) {
+      if (state.effects[i].ttl == null) break;
+      state.effects[i].ttl = Math.max(state.effects[i].ttl - 1, -1);
+    }
 
     // Discard hand
     state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
@@ -389,16 +347,14 @@ export default class StageEngine {
   }
 
   _recycleDiscards(state) {
-    state.deckCardIds = state.discardedCardIds
-      .slice()
-      .sort(() => 0.5 - Math.random());
+    state.deckCardIds = state.discardedCardIds.sort(() => 0.5 - Math.random());
     state.discardedCardIds = [];
     this.logger.debug("Recycled discard pile");
     return state;
   }
 
   _upgradeHand(state) {
-    for (let i = 0; i < state.handCardIds.length; i++) {
+    for (let i in state.handCardIds) {
       const card = SkillCards.getById(state.handCardIds[i]);
       if (!card.upgraded && card.type != "trouble") {
         state.handCardIds[i] += 1;
@@ -411,6 +367,7 @@ export default class StageEngine {
   _exchangeHand(state) {
     const numCards = state.handCardIds.length;
     state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
+    state.handCardIds = [];
     for (let i = 0; i < numCards; i++) {
       state = this._drawCard(state);
     }
@@ -437,11 +394,11 @@ export default class StageEngine {
   _getCardEffects(card) {
     let cardEffects = [];
     for (let effect of card.effects) {
+      if (effect.phase) continue;
       for (let action of effect.actions) {
         const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
-        if (tokens.length && tokens[0].length) {
-          cardEffects.push(tokens[0]);
-        }
+        if (!tokens?.[0]?.length) continue;
+        cardEffects.push(tokens[0]);
       }
     }
     return cardEffects;
@@ -456,7 +413,7 @@ export default class StageEngine {
     state.phase = phase;
 
     let phaseEffects = [];
-    for (let i = 0; i < state.effects.length; i++) {
+    for (let i in state.effects) {
       const effect = state.effects[i];
       if (effect.phase != phase) continue;
       phaseEffects.push({ ...effect, phase: null, index: i });
@@ -468,23 +425,21 @@ export default class StageEngine {
 
     state.phase = null;
 
-    state.triggeredEffects.forEach((idx) => {
+    for (let idx of state.triggeredEffects) {
       const effectIndex = phaseEffects[idx].index;
       if (state.effects[effectIndex].limit) {
         state.effects[effectIndex].limit--;
       }
-    });
+    }
     state.triggeredEffects = [];
 
     return state;
   }
 
   _triggerEffects(effects, state) {
-    let nextState = { ...state };
-
     let triggeredEffects = [];
     let skipNextEffect = false;
-    for (let i = 0; i < effects.length; i++) {
+    for (let i in effects) {
       const effect = effects[i];
 
       // Skip effect if condition is not satisfied
@@ -494,10 +449,10 @@ export default class StageEngine {
       }
 
       if (effect.phase) {
-        nextState = this._setEffect(
-          nextState,
-          nextState.usedCardId ? "skillCardEffect" : null,
-          nextState.usedCardId,
+        state = this._setEffect(
+          state,
+          state.usedCardId ? "skillCardEffect" : null,
+          state.usedCardId,
           effect
         );
         continue;
@@ -516,8 +471,8 @@ export default class StageEngine {
       // Check conditions
       if (effect.conditions) {
         let satisfied = true;
-        for (let j = 0; j < effect.conditions.length; j++) {
-          if (!this._evaluateCondition(effect.conditions[j], state)) {
+        for (let condition of effect.conditions) {
+          if (!this._evaluateCondition(condition, state)) {
             satisfied = false;
             break;
           }
@@ -540,10 +495,10 @@ export default class StageEngine {
           });
         }
 
-        nextState = this._executeActions(effect.actions, nextState);
+        state = this._executeActions(effect.actions, state);
 
         // Reset modifiers
-        nextState.concentrationMultiplier = 1;
+        state.concentrationMultiplier = 1;
 
         if (effect.sourceType) {
           this.logger.log("entityEnd", {
@@ -556,9 +511,9 @@ export default class StageEngine {
       triggeredEffects.push(i);
     }
 
-    nextState.triggeredEffects = triggeredEffects;
+    state.triggeredEffects = triggeredEffects;
 
-    return nextState;
+    return state;
   }
 
   _evaluateCondition(condition, state) {
@@ -590,7 +545,7 @@ export default class StageEngine {
       }
 
       // Set contains
-      if (tokens.findIndex((t) => t == "&") != -1) {
+      if (tokens.indexOf("&") != -1) {
         if (tokens.length != 3) {
           console.warn("Invalid set contains");
         }
@@ -658,17 +613,17 @@ export default class StageEngine {
 
   _executeActions(actions, state) {
     let prev = {};
-    for (let i = 0; i < KEYS_TO_DIFF.length; i++) {
-      prev[KEYS_TO_DIFF[i]] = state[KEYS_TO_DIFF[i]];
+    for (let key of KEYS_TO_DIFF) {
+      prev[key] = state[key];
     }
 
-    actions.forEach((action) => {
+    for (let action of actions) {
       state = this._executeAction(action, state);
       if (state.stamina < 0) state.stamina = 0;
-    });
+    }
 
     // Log changed fields
-    LOGGED_FIELDS.forEach((key) => {
+    for (let key of LOGGED_FIELDS) {
       if (state[key] != prev[key]) {
         this.logger.log("diff", {
           field: key,
@@ -676,19 +631,17 @@ export default class StageEngine {
           next: parseFloat(state[key].toFixed(2)),
         });
       }
-    });
+    }
 
     // Protect fresh stats from decrement
-    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
-      const key = EOT_DECREMENT_FIELDS[i];
+    for (let key of EOT_DECREMENT_FIELDS) {
       if (state[key] > 0 && prev[key] == 0) {
         state.freshBuffs[key] = true;
       }
     }
 
     // Trigger increase effects
-    for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-      const key = INCREASE_TRIGGER_FIELDS[i];
+    for (let key of INCREASE_TRIGGER_FIELDS) {
       if (state.phase == `${key}Increased`) continue;
       if (state[key] > prev[key]) {
         state = this._triggerEffectsForPhase(`${key}Increased`, state);
@@ -696,8 +649,7 @@ export default class StageEngine {
     }
 
     // Trigger decrease effects
-    for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-      const key = DECREASE_TRIGGER_FIELDS[i];
+    for (let key of DECREASE_TRIGGER_FIELDS) {
       if (state.phase == `${key}Increased`) continue;
       if (state[key] > prev[key]) {
         state = this._triggerEffectsForPhase(`${key}Increased`, state);
