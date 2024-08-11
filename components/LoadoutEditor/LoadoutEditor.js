@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
@@ -19,6 +19,7 @@ import {
   NUM_RUNS,
   SYNC,
 } from "@/simulator/constants";
+import STRATEGIES from "@/simulator/strategies";
 import { simulate } from "@/simulator/worker";
 import { getPlannerUrl } from "@/utils/planner";
 import styles from "./LoadoutEditor.module.scss";
@@ -34,8 +35,10 @@ export default function LoadoutEditor() {
     clear,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
+  const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
+  const workersRef = useRef();
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const idolConfig = new IdolConfig(
@@ -46,6 +49,24 @@ export default function LoadoutEditor() {
     stage,
     plan
   );
+
+  useEffect(() => {
+    let numWorkers = 1;
+    if (navigator.hardwareConcurrency) {
+      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
+    }
+
+    workersRef.current = [];
+    for (let i = 0; i < numWorkers; i++) {
+      workersRef.current.push(
+        new Worker(new URL("../../simulator/worker.js", import.meta.url))
+      );
+    }
+
+    return () => {
+      workersRef.current?.forEach((worker) => worker.terminate());
+    };
+  }, []);
 
   function setResult(result) {
     const { minRun, averageRun, maxRun, averageScore, scores } = result;
@@ -83,30 +104,22 @@ export default function LoadoutEditor() {
 
     const stageConfig = new StageConfig(stage);
 
-    if (SYNC) {
-      const result = simulate(stageConfig, idolConfig, NUM_RUNS);
+    if (SYNC || !workersRef.current) {
+      const result = simulate(stageConfig, idolConfig, strategy, NUM_RUNS);
       setResult(result);
     } else {
-      let numWorkers = 1;
-      if (navigator.hardwareConcurrency) {
-        numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
-      }
+      const numWorkers = workersRef.current.length;
       const runsPerWorker = Math.round(NUM_RUNS / numWorkers);
 
       let promises = [];
       for (let i = 0; i < numWorkers; i++) {
         promises.push(
           new Promise((resolve) => {
-            const worker = new Worker(
-              new URL("../../simulator/worker.js", import.meta.url)
-            );
-            worker.onmessage = (e) => {
-              resolve(e.data);
-              worker.terminate();
-            };
-            worker.postMessage({
+            workersRef.current[i].onmessage = (e) => resolve(e.data);
+            workersRef.current[i].postMessage({
               stageConfig,
               idolConfig,
+              strategy,
               numRuns: runsPerWorker,
             });
           })
@@ -195,6 +208,19 @@ export default function LoadoutEditor() {
         >
           Open in Gakumas Contest Planner
         </a>
+
+        <label>Simulator strategy</label>
+        <select
+          className={styles.strategySelect}
+          value={strategy}
+          onChange={(e) => setStrategy(e.target.value)}
+        >
+          {Object.keys(STRATEGIES).map((strategy) => (
+            <option key={strategy} value={strategy}>
+              {strategy}
+            </option>
+          ))}
+        </select>
 
         <div className={styles.simulateButton}>
           <Button
