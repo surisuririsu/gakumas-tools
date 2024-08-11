@@ -20,7 +20,7 @@ import {
   SYNC,
 } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
-import { simulate } from "@/simulator/worker";
+import { simulate } from "@/simulator";
 import { getPlannerUrl } from "@/utils/planner";
 import styles from "./LoadoutEditor.module.scss";
 
