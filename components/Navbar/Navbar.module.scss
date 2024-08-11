@@ -1,6 +1,7 @@
 @import "@/constants";
 
 .navbar {
+  min-height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -10,10 +11,6 @@
 
   h1 {
     margin: 0 8px;
-
-    @media only screen and (max-width: 600px) {
-      display: none;
-    }
   }
 
   .links {
@@ -57,5 +54,12 @@
     border: 2px solid $gk-orange;
     border-top: none;
     background-color: $white;
+  }
+
+  @media only screen and (max-width: 600px) {
+    h1,
+    .auth {
+      display: none;
+    }
   }
 }
