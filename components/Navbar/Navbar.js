@@ -1,30 +1,33 @@
-import { useContext, useState } from "react";
+"use client";
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Button from "@/components/Button";
-import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { WIDGETS } from "@/utils/widgets";
+import { TOOLS } from "@/utils/tools";
 import styles from "./Navbar.module.scss";
 
 export default function Navbar() {
-  const { openWidgets, toggle } = useContext(WorkspaceContext);
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const [showMenu, setShowMenu] = useState(false);
 
   return (
     <nav className={styles.navbar}>
-      <h1>Gakumas Tools (開発中)</h1>
+      <h1>Gakumas Tools</h1>
 
       <div className={styles.links}>
-        {Object.keys(WIDGETS).map((widget) => (
-          <button
-            key={widget}
-            className={openWidgets[widget] ? styles.active : ""}
-            aria-label={widget.title}
-            onClick={() => toggle(widget)}
+        {TOOLS.map(({ icon, path }) => (
+          <Link
+            key={path}
+            className={`${styles.link} ${
+              pathname == path ? styles.active : ""
+            }`}
+            href={`${path}`}
           >
-            {WIDGETS[widget].icon}
-          </button>
+            {icon}
+          </Link>
         ))}
       </div>
 

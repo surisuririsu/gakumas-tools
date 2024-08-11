@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import DataContext from "@/contexts/DataContext";
 
@@ -55,12 +56,27 @@ export function MemoryContextProvider({ children }) {
     setSkillCardIds(memory.skillCardIds);
   }
 
+  function replacePItemId(index, itemId) {
+    setPItemIds((cur) => {
+      const next = [...cur];
+      next[index] = itemId;
+      return next;
+    });
+  }
+
+  function replaceSkillCardId(index, cardId) {
+    setSkillCardIds((cur) => {
+      const next = [...cur];
+      next[index] = cardId;
+      return next;
+    });
+  }
+
   return (
     <MemoryContext.Provider
       value={{
         saveState,
         id,
-        setId,
         name,
         setName,
         pIdolId,
@@ -68,9 +84,9 @@ export function MemoryContextProvider({ children }) {
         params,
         setParams,
         pItemIds,
-        setPItemIds,
         skillCardIds,
-        setSkillCardIds,
+        replacePItemId,
+        replaceSkillCardId,
         setAll,
         save,
       }}

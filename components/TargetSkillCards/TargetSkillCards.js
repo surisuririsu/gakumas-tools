@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
+import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
@@ -12,7 +13,10 @@ export default function TargetSkillCards() {
     addAlternateSkillCards,
     targetNegations,
     setNegation,
+    replaceTargetCardId,
+    replaceAlternateCardId,
   } = useContext(MemoryCalculatorContext);
+  const { pickSkillCardModal } = useContext(ModalContext);
 
   return (
     <div className={styles.targetSkillCards}>
@@ -28,6 +32,7 @@ export default function TargetSkillCards() {
               <FaCircleMinus />
             )}
           </button>
+
           <div
             key={`${index}_${skillCardId}`}
             className={`${styles.orGroup} ${
@@ -37,8 +42,11 @@ export default function TargetSkillCards() {
             <EntityIcon
               type={EntityTypes.SKILL_CARD}
               id={skillCardId}
-              region="memoryCalculator:target"
-              index={index}
+              onClick={() =>
+                pickSkillCardModal((entity) =>
+                  replaceTargetCardId(index, entity.id)
+                )
+              }
             />
 
             {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
@@ -49,8 +57,11 @@ export default function TargetSkillCards() {
                 <EntityIcon
                   type={EntityTypes.SKILL_CARD}
                   id={altSkillCardId}
-                  region="memoryCalculator:alternate"
-                  index={index * 10 + altIndex}
+                  onClick={() =>
+                    pickSkillCardModal((entity) =>
+                      replaceAlternateCardId(index * 10 + altIndex, entity.id)
+                    )
+                  }
                 />
               </React.Fragment>
             ))}
