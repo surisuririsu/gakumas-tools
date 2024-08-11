@@ -1,5 +1,3 @@
-import { SkillCards } from "gakumas-data";
-
 export default class StagePlayer {
   constructor(engine, strategy) {
     this.engine = engine;
@@ -13,11 +11,19 @@ export default class StagePlayer {
     let usedOrder = [];
 
     while (state.turnsRemaining > 0) {
-      const cardToUse = this.strategy.chooseCard(state);
+      this.engine.logger.disable();
+      const { scores, selectedCardId } = this.strategy.evaluate(state);
+      this.engine.logger.enable();
 
-      if (cardToUse) {
-        state = this.engine.useCard(state, cardToUse);
-        usedOrder.push(cardToUse);
+      this.engine.logger.log("hand", {
+        handCardIds: [...state.handCardIds],
+        scores,
+        selectedCardId: selectedCardId,
+      });
+
+      if (selectedCardId) {
+        state = this.engine.useCard(state, selectedCardId);
+        usedOrder.push(selectedCardId);
       } else {
         state = this.engine.endTurn(state);
       }

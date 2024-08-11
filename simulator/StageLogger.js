@@ -1,8 +1,17 @@
+import { DEBUG } from "./constants";
+
 export default class StageLogger {
-  constructor(debugging) {
-    this.debugging = debugging;
+  constructor() {
     this.disabled = false;
     this.logs = [];
+  }
+
+  disable() {
+    this.disabled = true;
+  }
+
+  enable() {
+    this.disabled = false;
   }
 
   log(logType, data) {
@@ -11,7 +20,7 @@ export default class StageLogger {
   }
 
   debug(...args) {
-    if (this.disabled || !this.debugging) return;
+    if (!DEBUG || this.disabled) return;
     console.log(...args);
   }
 

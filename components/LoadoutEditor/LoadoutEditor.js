@@ -1,11 +1,10 @@
-import { useCallback, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
-import DistributionPlot from "@/components/DistributionPlot";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
-import SimulatorLogs from "@/components/SimulatorLogs";
+import SimulatorResult from "@/components/SimulatorResult";
 import StagePItems from "@/components/StagePItems";
 import StageSelect from "@/components/StageSelect";
 import Trash from "@/components/Trash";
@@ -22,7 +21,6 @@ import {
 } from "@/simulator/constants";
 import { simulate } from "@/simulator/worker";
 import { getPlannerUrl } from "@/utils/planner";
-import { inferPlan } from "@/utils/simulator";
 import styles from "./LoadoutEditor.module.scss";
 
 export default function LoadoutEditor() {
@@ -35,38 +33,26 @@ export default function LoadoutEditor() {
     skillCardIdGroups,
     clear,
   } = useContext(LoadoutContext);
-  const { plan: workspacePlan, idolId: workspaceIdolId } =
-    useContext(WorkspaceContext);
+  const { plan, idolId } = useContext(WorkspaceContext);
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
-  const { turnCounts, firstTurns, criteria, effects } = stage;
-  const plan = inferPlan(pItemIds, skillCardIdGroups, stageId, workspacePlan);
-  const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
-
-  const stageConfig = new StageConfig(
-    turnCounts,
-    firstTurns,
-    criteria,
-    effects
-  );
-
   const idolConfig = new IdolConfig(
-    plan,
-    { vocal, dance, visual, stamina },
+    params,
     0,
-    criteria,
-    pItemIds.filter((id) => id),
-    [].concat(...skillCardIdGroups).filter((id) => id)
+    pItemIds,
+    skillCardIdGroups,
+    stage,
+    plan
   );
 
   function setResult(result) {
     const { minRun, averageRun, maxRun, averageScore, scores } = result;
 
     let data = {};
-    for (let i = 0; i < scores.length; i++) {
-      const bucket = Math.floor(scores[i] / BUCKET_SIZE);
+    for (let score of scores) {
+      const bucket = Math.floor(score / BUCKET_SIZE);
       data[bucket] = (data[bucket] || 0) + 1;
     }
 
@@ -75,6 +61,8 @@ export default function LoadoutEditor() {
     for (let i = minKey - 1; i <= maxKey + 1; i++) {
       if (!data[i]) data[i] = 0;
     }
+
+    console.timeEnd("simulation");
 
     setSimulatorData({
       buckets: data,
@@ -88,8 +76,13 @@ export default function LoadoutEditor() {
     setRunning(false);
   }
 
-  const runSimulation = useCallback(async () => {
+  function runSimulation() {
     setRunning(true);
+
+    console.time("simulation");
+
+    const stageConfig = new StageConfig(stage);
+
     if (SYNC) {
       const result = simulate(stageConfig, idolConfig, NUM_RUNS);
       setResult(result);
@@ -100,25 +93,25 @@ export default function LoadoutEditor() {
       }
       const runsPerWorker = Math.round(NUM_RUNS / numWorkers);
 
-      const promises = Array(numWorkers)
-        .fill()
-        .map(
-          () =>
-            new Promise((resolve) => {
-              const worker = new Worker(
-                new URL("../../simulator/worker.js", import.meta.url)
-              );
-              worker.onmessage = (e) => {
-                resolve(e.data);
-                worker.terminate();
-              };
-              worker.postMessage({
-                stageConfig,
-                idolConfig,
-                numRuns: runsPerWorker,
-              });
-            })
+      let promises = [];
+      for (let i = 0; i < numWorkers; i++) {
+        promises.push(
+          new Promise((resolve) => {
+            const worker = new Worker(
+              new URL("../../simulator/worker.js", import.meta.url)
+            );
+            worker.onmessage = (e) => {
+              resolve(e.data);
+              worker.terminate();
+            };
+            worker.postMessage({
+              stageConfig,
+              idolConfig,
+              numRuns: runsPerWorker,
+            });
+          })
         );
+      }
 
       Promise.all(promises).then((results) => {
         let scores = [];
@@ -155,7 +148,7 @@ export default function LoadoutEditor() {
         });
       });
     }
-  }, [stageConfig, idolConfig]);
+  }
 
   return (
     <div id="loadout_editor" className={styles.loadoutEditor}>
@@ -197,12 +190,7 @@ export default function LoadoutEditor() {
 
         <a
           className={styles.plannerLink}
-          href={getPlannerUrl(
-            workspacePlan,
-            workspaceIdolId,
-            pItemIds,
-            skillCardIdGroups
-          )}
+          href={getPlannerUrl(plan, idolId, pItemIds, skillCardIdGroups)}
           target="_blank"
         >
           Open in Gakumas Contest Planner
@@ -234,42 +222,7 @@ export default function LoadoutEditor() {
       </div>
 
       {simulatorData && (
-        <div className={styles.result}>
-          <DistributionPlot data={simulatorData.buckets} />
-
-          <table className={styles.stats}>
-            <thead>
-              <tr>
-                <th>Min</th>
-                <th>Average</th>
-                <th>Max</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{simulatorData.minScore}</td>
-                <td>{simulatorData.averageScore}</td>
-                <td>{simulatorData.maxScore}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <b>
-            This feature is in development. Simulator behavior differs from the
-            real game.
-          </b>
-          <b>
-            このプログラムは開発中のものです。ゲーム内のAIと挙動が異なります。
-          </b>
-
-          <label>Logs</label>
-          <SimulatorLogs
-            minRun={simulatorData.minRun}
-            averageRun={simulatorData.averageRun}
-            maxRun={simulatorData.maxRun}
-            idolId={idolConfig.idolId}
-          />
-        </div>
+        <SimulatorResult data={simulatorData} idolId={idolConfig.idolId} />
       )}
     </div>
   );

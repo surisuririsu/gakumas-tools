@@ -2,7 +2,7 @@ import BaseStrategy from "./BaseStrategy";
 
 const MAX_DEPTH = 2;
 
-export default class DeepRandomScoreStrategy extends BaseStrategy {
+export default class DeepShallowScoreStrategy extends BaseStrategy {
   depth = 0;
 
   getScore(state, cardId) {
@@ -15,7 +15,7 @@ export default class DeepRandomScoreStrategy extends BaseStrategy {
 
     if (this.depth >= MAX_DEPTH) {
       this.depth--;
-      return Math.random();
+      return state.score;
     }
 
     while (state.turnsRemaining > 0) {

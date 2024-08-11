@@ -2,7 +2,7 @@ import BaseStrategy from "./BaseStrategy";
 
 const MAX_DEPTH = 3;
 
-export default class DeepAverageScoreStrategy extends BaseStrategy {
+export default class DeepScoreStrategy extends BaseStrategy {
   depth = 0;
 
   getScore(state, cardId) {
@@ -19,12 +19,8 @@ export default class DeepAverageScoreStrategy extends BaseStrategy {
     }
 
     const { scores } = this.evaluate(state);
-    let total = 0;
-    for (let score of scores) {
-      if (score != -Infinity) total += score;
-    }
 
     this.depth--;
-    return Math.round(total / scores.length);
+    return Math.max(...scores);
   }
 }
