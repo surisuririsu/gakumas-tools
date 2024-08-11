@@ -9,24 +9,28 @@ import {
 import { useSession, signIn } from "next-auth/react";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
-import MemoryImporter from "@/components//MemoryImporter";
+import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemorySummary from "@/components/MemorySummary";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
-import Trash from "@/components/Trash";
 import DataContext from "@/contexts/DataContext";
 import SearchContext from "@/contexts/SearchContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import { getSearchScore } from "@/utils/sort";
 import styles from "./Memories.module.scss";
+import ModalContext from "@/contexts/ModalContext";
+
+const PAGE_SIZE = 30;
 
 export default function Memories() {
   const { status } = useSession();
   const { memories, fetchMemories, memoriesLoading } = useContext(DataContext);
-  const { pItemIds, skillCardIds } = useContext(SearchContext);
+  const { setModal } = useContext(ModalContext);
+  const { pItemIds, skillCardIds, replacePItemId, replaceSkillCardId } =
+    useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
-  const [maxToShow, setMaxToShow] = useState(50);
+  const [maxToShow, setMaxToShow] = useState(PAGE_SIZE);
 
   useEffect(() => {
     if (status == "authenticated" && !memories.length) {
@@ -99,7 +103,7 @@ export default function Memories() {
                 />
                 <IconButton
                   icon={FaFileImport}
-                  onClick={() => setAction("import")}
+                  onClick={() => setModal(<MemoryImporterModal />)}
                 />
                 <IconButton
                   icon={FaRegTrashCan}
@@ -119,20 +123,15 @@ export default function Memories() {
               <div className={styles.search}>
                 <StagePItems
                   pItemIds={pItemIds}
-                  region="memories"
+                  replacePItemId={replacePItemId}
                   size="small"
                 />
                 <StageSkillCards
                   skillCardIds={skillCardIds}
-                  region="memories"
+                  replaceSkillCardId={replaceSkillCardId}
                   size="medium"
                 />
-                <Trash size="small" />
               </div>
-            )}
-
-            {action == "import" && (
-              <MemoryImporter onClose={() => setAction(null)} />
             )}
 
             {action == "delete" && (
@@ -163,7 +162,6 @@ export default function Memories() {
                           [memory._id]: e.target.checked,
                         }))
                       }
-                      readOnly
                     />
                   </div>
                 )}
@@ -173,7 +171,7 @@ export default function Memories() {
 
             <div className={styles.nudge}>
               {filteredMemories.length > maxToShow && (
-                <Button onClick={() => setMaxToShow(maxToShow + 50)}>
+                <Button onClick={() => setMaxToShow(maxToShow + PAGE_SIZE)}>
                   Show more memories
                 </Button>
               )}

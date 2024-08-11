@@ -20,6 +20,11 @@ body {
   flex-direction: column;
 }
 
+main {
+  flex: 1;
+  overflow: auto;
+}
+
 a {
   color: inherit;
   text-decoration: none;

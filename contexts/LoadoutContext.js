@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useEffect } from "react";
 import { createContext, useState } from "react";
 import DataContext from "@/contexts/DataContext";
@@ -118,6 +119,22 @@ export function LoadoutContextProvider({ children }) {
     });
   }
 
+  function replacePItemId(index, itemId) {
+    setPItemIds((cur) => {
+      const next = [...cur];
+      next[index] = itemId;
+      return next;
+    });
+  }
+
+  function replaceSkillCardId(index, cardId) {
+    setSkillCardIds((cur) => {
+      const next = [...cur];
+      next[index] = cardId;
+      return next;
+    });
+  }
+
   function clear() {
     setMemoryIds([null, null]);
     setParams([null, null, null, null]);
@@ -137,10 +154,9 @@ export function LoadoutContextProvider({ children }) {
         params,
         setParams,
         pItemIds,
-        setPItemIds,
         skillCardIdGroups,
-        setSkillCardIdGroups,
-        setSkillCardIds,
+        replacePItemId,
+        replaceSkillCardId,
         insertSkillCardIdGroup,
         deleteSkillCardIdGroup,
         swapSkillCardIdGroups,

@@ -1,4 +1,15 @@
 import { Inter } from "next/font/google";
+import Footer from "@/components/Footer";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import Navbar from "@/components/Navbar";
+import { DataContextProvider } from "@/contexts/DataContext";
+import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
+import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
+import { MemoryContextProvider } from "@/contexts/MemoryContext";
+import { ModalContextProvider } from "@/contexts/ModalContext";
+import { SearchContextProvider } from "@/contexts/SearchContext";
+import { SessionContextProvider } from "@/contexts/SessionContext";
+import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,10 +26,31 @@ export const viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <GoogleAnalytics />
+        <SessionContextProvider>
+          <Navbar />
+          <WorkspaceContextProvider>
+            <DataContextProvider>
+              <MemoryCalculatorContextProvider>
+                <MemoryContextProvider>
+                  <SearchContextProvider>
+                    <LoadoutContextProvider>
+                      <ModalContextProvider>
+                        <main>{children}</main>
+                      </ModalContextProvider>
+                    </LoadoutContextProvider>
+                  </SearchContextProvider>
+                </MemoryContextProvider>
+              </MemoryCalculatorContextProvider>
+            </DataContextProvider>
+          </WorkspaceContextProvider>
+        </SessionContextProvider>
+        <Footer />
+      </body>
     </html>
   );
 }

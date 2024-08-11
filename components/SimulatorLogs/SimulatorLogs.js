@@ -50,7 +50,7 @@ export default function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
       />
       {structuredLogs && <Logs logs={structuredLogs} idolId={idolId} />}
 
-      <a className={styles.toTop} href="#loadout_editor">
+      <a className={styles.toTop} href="#simulator_loadout">
         Top
         <FaCircleArrowUp />
       </a>
