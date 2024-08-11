@@ -28,31 +28,35 @@ export default function Navbar() {
         ))}
       </div>
 
-      {status == "unauthenticated" ? (
-        <Button onClick={() => signIn("discord")}>Sign in with Discord</Button>
-      ) : (
-        <>
-          <button
-            className={styles.avatar}
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            {status == "authenticated" && (
-              <Image
-                src={session.user.image}
-                fill
-                alt=""
-                sizes="32px"
-                draggable={false}
-              />
+      <div className={styles.auth}>
+        {status == "unauthenticated" ? (
+          <Button onClick={() => signIn("discord")}>
+            Sign in with Discord
+          </Button>
+        ) : (
+          <>
+            <button
+              className={styles.avatar}
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              {status == "authenticated" && (
+                <Image
+                  src={session.user.image}
+                  fill
+                  alt=""
+                  sizes="32px"
+                  draggable={false}
+                />
+              )}
+            </button>
+            {showMenu && (
+              <div className={styles.menu}>
+                <Button onClick={() => signOut()}>Sign out</Button>
+              </div>
             )}
-          </button>
-          {showMenu && (
-            <div className={styles.menu}>
-              <Button onClick={() => signOut()}>Sign out</Button>
-            </div>
-          )}
-        </>
-      )}
+          </>
+        )}
+      </div>
     </nav>
   );
 }
