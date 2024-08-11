@@ -35,8 +35,9 @@ export default class StageEngine {
       turnsElapsed: 0,
       turnsRemaining: this.stageConfig.turnCount,
       cardUsesRemaining: 0,
-      maxStamina: this.idolConfig.parameters.stamina,
-      stamina: this.idolConfig.parameters.stamina,
+      maxStamina: this.idolConfig.params.stamina,
+      intermediateStamina: 0,
+      stamina: this.idolConfig.params.stamina,
       fixedGenki: 0,
       intermediateGenki: 0,
       genki: 0,
@@ -98,7 +99,8 @@ export default class StageEngine {
     nextState.started = true;
 
     // Set stage effects
-    this.logger.debug("Setting stage effects", this.stageConfig.effects);
+    DEBUG &&
+      this.logger.debug("Setting stage effects", this.stageConfig.effects);
     for (let effect of this.stageConfig.effects) {
       nextState = this._setEffect(nextState, "stage", null, effect);
     }
@@ -106,7 +108,7 @@ export default class StageEngine {
     // Set p-item effects
     for (let id of this.idolConfig.pItemIds) {
       const { effects, name } = PItems.getById(id);
-      this.logger.debug("Setting p-item effects", name, effects);
+      DEBUG && this.logger.debug("Setting p-item effects", name, effects);
       for (let effect of effects) {
         nextState = this._setEffect(nextState, "pItem", id, effect);
       }
@@ -164,7 +166,7 @@ export default class StageEngine {
 
     let nextState = JSON.parse(JSON.stringify(state));
 
-    this.logger.debug("Using card", cardId, card.name);
+    DEBUG && this.logger.debug("Using card", cardId, card.name);
     this.logger.log("entityStart", { type: "skillCard", id: cardId });
 
     // Set usedCard variables
@@ -172,7 +174,7 @@ export default class StageEngine {
     nextState.cardEffects = this._getCardEffects(card);
 
     // Apply card cost
-    this.logger.debug("Applying cost", card.cost);
+    DEBUG && this.logger.debug("Applying cost", card.cost);
     nextState = this._executeActions(card.cost, nextState);
 
     // Remove card from hand
@@ -245,7 +247,7 @@ export default class StageEngine {
     if (state.cardUsesRemaining > 0) {
       state.stamina = Math.min(
         state.stamina + 2,
-        this.idolConfig.parameters.stamina
+        this.idolConfig.params.stamina
       );
     }
 
@@ -298,7 +300,7 @@ export default class StageEngine {
   }
 
   _startTurn(state) {
-    this.logger.debug("Starting turn", state.turnsElapsed + 1);
+    DEBUG && this.logger.debug("Starting turn", state.turnsElapsed + 1);
 
     state.turnType =
       this.stageConfig.turnTypes[
@@ -338,7 +340,7 @@ export default class StageEngine {
   _drawCard(state) {
     const cardId = state.deckCardIds.pop();
     state.handCardIds.push(cardId);
-    this.logger.debug("Drew card", SkillCards.getById(cardId).name);
+    DEBUG && this.logger.debug("Drew card", SkillCards.getById(cardId).name);
     this.logger.log("drawCard", { type: "skillCard", id: cardId });
     if (!state.deckCardIds.length) {
       state = this._recycleDiscards(state);
@@ -349,7 +351,7 @@ export default class StageEngine {
   _recycleDiscards(state) {
     state.deckCardIds = state.discardedCardIds.sort(() => 0.5 - Math.random());
     state.discardedCardIds = [];
-    this.logger.debug("Recycled discard pile");
+    DEBUG && this.logger.debug("Recycled discard pile");
     return state;
   }
 
@@ -419,7 +421,7 @@ export default class StageEngine {
       phaseEffects.push({ ...effect, phase: null, index: i });
     }
 
-    this.logger.debug(phase, phaseEffects);
+    DEBUG && this.logger.debug(phase, phaseEffects);
 
     state = this._triggerEffects(phaseEffects, state);
 
@@ -487,7 +489,7 @@ export default class StageEngine {
 
       // Execute actions
       if (effect.actions) {
-        this.logger.debug("Executing actions", effect.actions);
+        DEBUG && this.logger.debug("Executing actions", effect.actions);
         if (effect.sourceType) {
           this.logger.log("entityStart", {
             type: effect.sourceType,
@@ -521,7 +523,7 @@ export default class StageEngine {
       condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/),
       state
     );
-    this.logger.debug("Condition", condition, result);
+    DEBUG && this.logger.debug("Condition", condition, result);
     return result;
   }
 
@@ -690,6 +692,7 @@ export default class StageEngine {
         state.nullifyDebuff--;
         return state;
       }
+
       if (lhs == "score" && op == "+=") lhs = "intermediateScore";
       if (lhs == "genki" && op == "+=") lhs = "intermediateGenki";
       if (lhs == "stamina" && op == "-=") lhs = "intermediateStamina";
@@ -729,7 +732,7 @@ export default class StageEngine {
           state.stamina += state.genki;
           state.genki = 0;
         }
-      } else if (lhs == "stamina") {
+      } else if (lhs == "intermediateStamina") {
         let stamina = state.intermediateStamina;
         if (state.halfCostTurns) {
           stamina *= 0.5;
@@ -738,6 +741,7 @@ export default class StageEngine {
           stamina *= 2;
         }
         state.stamina += stamina;
+        state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
         let score = state.intermediateScore;
         // Apply concentration

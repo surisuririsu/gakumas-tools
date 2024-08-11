@@ -1,20 +1,23 @@
-import StageEngine from "@/simulator/StageEngine";
-import StageLogger from "@/simulator/StageLogger";
-import StagePlayer from "@/simulator/StagePlayer";
-import HeuristicStrategy from "@/simulator/strategies/HeuristicStrategy";
-import { DEBUG } from "@/simulator/constants";
+import StageEngine from "./StageEngine";
+import StageLogger from "./StageLogger";
+import StagePlayer from "./StagePlayer";
+import DeepRandomScoreStrategy from "./strategies/DeepRandomScoreStrategy";
+import DeepShallowScoreStrategy from "./strategies/DeepShallowScoreStrategy";
+import DeepMaxScoreStrategy from "./strategies/DeepMaxScoreStrategy";
+import HeuristicStrategy from "./strategies/HeuristicStrategy";
+import DeepAverageScoreStrategy from "./strategies/DeepAverageScoreStrategy";
+import RandomStrategy from "./strategies/RandomStrategy";
 
 export function simulate(stageConfig, idolConfig, numRuns) {
-  const logger = new StageLogger(DEBUG);
+  const logger = new StageLogger();
   const engine = new StageEngine(stageConfig, idolConfig, logger);
-  const strategy = new HeuristicStrategy(engine);
+  const strategy = new DeepRandomScoreStrategy(engine);
 
   let totalScore = 0;
   let averageScore = 0;
   let minRun, averageRun, maxRun;
   let scores = [];
 
-  console.time("work");
   for (let i = 0; i < numRuns; i++) {
     const result = new StagePlayer(engine, strategy).play();
 
@@ -36,7 +39,6 @@ export function simulate(stageConfig, idolConfig, numRuns) {
 
     scores.push(result.score);
   }
-  console.timeEnd("work");
 
   return {
     minRun,

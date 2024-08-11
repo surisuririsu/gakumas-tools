@@ -1,7 +1,8 @@
 export default class StageConfig {
-  constructor(turns, firstTurns, criteria, effects) {
-    this.turnCount = turns.vocal + turns.dance + turns.visual;
-    this.turnTypes = this.generateTurnTypes(turns, firstTurns, criteria);
+  constructor(stage) {
+    const { turnCounts, firstTurns, criteria, effects } = stage;
+    this.turnCount = turnCounts.vocal + turnCounts.dance + turnCounts.visual;
+    this.turnTypes = this.generateTurnTypes(turnCounts, firstTurns, criteria);
     this.criteria = criteria;
     this.effects = effects;
   }

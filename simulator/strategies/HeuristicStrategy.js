@@ -1,4 +1,4 @@
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import BaseStrategy from "./BaseStrategy";
 
 const PHASE_FREQUENCY_ESTIMATES = {
   startOfStage: 0,
@@ -16,70 +16,27 @@ const PHASE_FREQUENCY_ESTIMATES = {
   concentrationIncreased: 0.2,
 };
 
-export default class HeuristicStrategy {
-  constructor(engine) {
-    this.engine = engine;
-    this.recommendedEffect = this.inferRecommendedEffect(
-      this.engine.idolConfig.pItemIds,
-      this.engine.idolConfig.skillCardIds
-    );
-  }
-
-  inferRecommendedEffect(pItemIds, skillCardIds) {
-    const signaturePItem = pItemIds
-      .map(PItems.getById)
-      .find((p) => p?.sourceType == "pIdol");
-    if (signaturePItem)
-      return PIdols.getById(signaturePItem.pIdolId).recommendedEffect;
-    const signatureSkillCard = skillCardIds
-      .map(SkillCards.getById)
-      .find((s) => s?.sourceType == "pIdol");
-    if (signatureSkillCard)
-      return PIdols.getById(signatureSkillCard.pIdolId).recommendedEffect;
-    return null;
-  }
-
-  chooseCard(state) {
-    this.engine.logger.disabled = true;
-    const heuristicScores = state.handCardIds.map((id) =>
-      this.getHeuristicScore(state, id)
-    );
-    this.engine.logger.disabled = false;
-
-    let cardToUse = null;
-    const maxHeuristicScore = Math.max(...heuristicScores);
-    if (maxHeuristicScore > 0) {
-      const maxIndex = heuristicScores.indexOf(maxHeuristicScore);
-      cardToUse = state.handCardIds[maxIndex];
-    }
-
-    this.engine.logger.log("hand", {
-      handCardIds: [...state.handCardIds],
-      scores: heuristicScores,
-      selectedCardId: cardToUse,
-    });
-
-    return cardToUse;
-  }
-
-  getHeuristicScore(prevState, cardId) {
-    if (!this.engine.isCardUsable(prevState, cardId)) {
+export default class HeuristicStrategy extends BaseStrategy {
+  getScore(state, cardId) {
+    if (!this.engine.isCardUsable(state, cardId)) {
       return -Infinity;
     }
 
-    let state = JSON.parse(JSON.stringify(prevState));
-    state = this.engine.useCard(state, cardId);
+    let previewState = JSON.parse(JSON.stringify(state));
+    previewState = this.engine.useCard(previewState, cardId);
 
     // Predict score after effects
-    for (let effect of state.effects) {
+    for (let effect of previewState.effects) {
       const limit = Math.ceil(
-        Math.min(effect.limit || state.turnsRemaining, state.turnsRemaining) *
-          PHASE_FREQUENCY_ESTIMATES[effect.phase]
+        Math.min(
+          effect.limit || previewState.turnsRemaining,
+          previewState.turnsRemaining
+        ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
       );
       for (let i = 0; i < limit; i++) {
-        state = this.engine._triggerEffects(
+        previewState = this.engine._triggerEffects(
           [{ ...effect, phase: null }],
-          state
+          previewState
         );
       }
     }
@@ -90,7 +47,7 @@ export default class HeuristicStrategy {
     const getTrueScore = (score) => {
       return this.engine._calculateTrueScore(
         score,
-        state,
+        previewState,
         averageTypeMultiplier
       );
     };
@@ -107,19 +64,21 @@ export default class HeuristicStrategy {
     let score = 0;
 
     // Turns remaining
-    score += state.turnsRemaining == prevState.turnsRemaining ? 1000 : 0;
+    score += previewState.turnsRemaining == state.turnsRemaining ? 1000 : 0;
 
     // Card uses remaining
-    score += state.cardUsesRemaining * 50;
+    score += previewState.cardUsesRemaining * 50;
 
     // Stamina
-    score += (Math.log(state.stamina) / (state.turnsRemaining + 1)) * 0.5;
+    score +=
+      (Math.log(previewState.stamina) / (previewState.turnsRemaining + 1)) *
+      0.5;
 
     // Genki
     score +=
-      (state.genki /
+      (previewState.genki /
         (Math.pow(
-          state.turnsRemaining - this.engine.stageConfig.turnCount / 2,
+          previewState.turnsRemaining - this.engine.stageConfig.turnCount / 2,
           2
         ) +
           2)) *
@@ -128,56 +87,64 @@ export default class HeuristicStrategy {
 
     // Good condition turns
     score +=
-      Math.min(state.goodConditionTurns, state.turnsRemaining) *
+      Math.min(previewState.goodConditionTurns, previewState.turnsRemaining) *
       4.5 *
       goodConditionTurnsMultiplier;
 
     // Perfect condition turns
     score +=
-      Math.min(state.perfectConditionTurns, state.turnsRemaining) *
-      state.goodConditionTurns *
+      Math.min(
+        previewState.perfectConditionTurns,
+        previewState.turnsRemaining
+      ) *
+      previewState.goodConditionTurns *
       goodConditionTurnsMultiplier;
 
     // Concentration
     score +=
-      state.concentration * state.turnsRemaining * concentrationMultiplier;
+      previewState.concentration *
+      previewState.turnsRemaining *
+      concentrationMultiplier;
 
     // Good impression turns
     score +=
-      state.goodImpressionTurns *
-      state.turnsRemaining *
+      previewState.goodImpressionTurns *
+      previewState.turnsRemaining *
       1.5 *
       goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
-      state.motivation * state.turnsRemaining * 0.5 * motivationMultiplier;
+      previewState.motivation *
+      previewState.turnsRemaining *
+      0.5 *
+      motivationMultiplier;
 
     // One turn score buff
-    score += state.oneTurnScoreBuff * 20;
+    score += previewState.oneTurnScoreBuff * 20;
 
     // Permament score buff
-    score += state.permanentScoreBuff * state.turnsRemaining * 20;
+    score += previewState.permanentScoreBuff * previewState.turnsRemaining * 20;
 
     // Half cost turns
-    score += state.halfCostTurns * 4.5;
+    score += previewState.halfCostTurns * 4.5;
 
     // Double cost turns
-    score += state.doubleCostTurns * -9;
+    score += previewState.doubleCostTurns * -9;
 
     // Cost reduction
-    score += state.costReduction * state.turnsRemaining * 2;
+    score += previewState.costReduction * previewState.turnsRemaining * 2;
 
     // Double card effect cards
-    score += state.doubleCardEffectCards * 9;
+    score += previewState.doubleCardEffectCards * 9;
 
     // Nullify genki turns
-    score += state.nullifyGenkiTurns * -9;
+    score += previewState.nullifyGenkiTurns * -9;
 
     return Math.floor(
       getTrueScore(score) +
-        state.score +
-        state.score / (state.turnsRemaining + 1)
+        previewState.score +
+        previewState.score / (previewState.turnsRemaining + 1)
     );
   }
 }

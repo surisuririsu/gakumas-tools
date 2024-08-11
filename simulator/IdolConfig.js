@@ -7,73 +7,101 @@ const DEFAULT_CARDS_BY_PLAN = {
 
 export default class IdolConfig {
   constructor(
-    plan,
-    parameters,
+    params,
     supportBonus,
-    criteria,
     pItemIds,
-    skillCardIds
+    skillCardIdGroups,
+    stage,
+    workspacePlan
   ) {
-    this.plan = plan;
-    this.parameters = parameters;
+    const skillCardIds = [].concat(...skillCardIdGroups).filter((id) => id);
+
+    this.pIdolId = this.inferPIdolId(pItemIds, skillCardIds);
+    this.idolId = PIdols.getById(this.pIdolId)?.idolId;
+    this.plan = this.inferPlan(this.pIdolId, stage.plan, workspacePlan);
+    this.recommendedEffect = this.inferRecommendedEffect(this.pIdolId);
+
+    const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
+    this.params = { vocal, dance, visual, stamina };
     this.supportBonus = supportBonus;
     this.typeMultipliers = this.getTypeMultipliers(
-      parameters,
+      this.params,
       supportBonus,
-      criteria
+      stage.criteria
     );
-    this.pItemIds = [...new Set(pItemIds)];
+
+    this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
     this.skillCardIds = this.getDedupedSkillCardIds(
-      skillCardIds.concat(DEFAULT_CARDS_BY_PLAN[plan])
+      skillCardIds.concat(DEFAULT_CARDS_BY_PLAN[this.plan])
     );
-    this.pIdolId = this.inferPIdolId();
-    this.idolId = this.pIdolId && PIdols.getById(this.pIdolId)?.idolId;
-    this.recommendedEffect = this.inferRecommendedEffect();
   }
 
-  inferPIdolId() {
-    const signaturePItem = this.pItemIds
+  inferPIdolId(pItemIds, skillCardIds) {
+    const signaturePItem = pItemIds
       .map(PItems.getById)
       .find((p) => p?.sourceType == "pIdol");
     if (signaturePItem) return signaturePItem.pIdolId;
-    const signatureSkillCard = this.skillCardIds
+
+    const signatureSkillCard = skillCardIds
       .map(SkillCards.getById)
       .find((s) => s?.sourceType == "pIdol");
     if (signatureSkillCard) return signatureSkillCard.pIdolId;
+
     return null;
   }
 
-  inferRecommendedEffect() {
-    if (this.pIdolId) return PIdols.getById(this.pIdolId)?.recommendedEffect;
+  inferPlan(pIdolId, stagePlan, workspacePlan) {
+    if (pIdolId) {
+      const pIdol = PIdols.getById(pIdolId);
+      return pIdol.plan;
+    }
+
+    if (stagePlan && stagePlan != "free") return stagePlan;
+
+    return workspacePlan;
+  }
+
+  inferRecommendedEffect(pIdolId) {
+    if (pIdolId) {
+      const pIdol = PIdols.getById(pIdolId);
+      return pIdol.recommendedEffect;
+    }
+
     return null;
   }
 
-  getTypeMultipliers(parameters, supportBonus, criteria) {
-    return Object.keys(criteria).reduce((acc, cur) => {
+  getTypeMultipliers(params, supportBonus, criteria) {
+    let multipliers = {};
+
+    for (let key of Object.keys(criteria)) {
+      const param = params[key];
+      const criterion = criteria[key];
+
       let multiplier = 0;
-      if (parameters[cur] > 1200) {
-        multiplier = parameters[cur] * 1 + 300 * 10;
-      } else if (parameters[cur] > 900) {
-        multiplier = parameters[cur] * 2 + 300 * 6;
-      } else if (parameters[cur] > 600) {
-        multiplier = parameters[cur] * 3 + 300 * 3;
-      } else if (parameters[cur] > 300) {
-        multiplier = parameters[cur] * 4 + 300 * 1;
-      } else if (parameters[cur] > 0) {
-        multiplier = parameters[cur] * 5 + 1;
+
+      if (param > 1200) {
+        multiplier = param * 1 + 300 * 10;
+      } else if (param > 900) {
+        multiplier = param * 2 + 300 * 6;
+      } else if (param > 600) {
+        multiplier = param * 3 + 300 * 3;
+      } else if (param > 300) {
+        multiplier = param * 4 + 300 * 1;
+      } else if (param > 0) {
+        multiplier = param * 5 + 1;
       }
-      multiplier = multiplier * criteria[cur] + 100;
+      multiplier = multiplier * criterion + 100;
       multiplier = Math.ceil(multiplier) * (1 + supportBonus);
       multiplier = Math.ceil(Math.floor(multiplier * 10) / 10);
-      acc[cur] = multiplier / 100;
-      return acc;
-    }, {});
+      multipliers[key] = multiplier / 100;
+    }
+
+    return multipliers;
   }
 
   // If the loadout contains dupes of a unique skill card,
   // keep only the most upgraded copy
   getDedupedSkillCardIds(skillCardIds) {
-    let dedupedIds = [];
     const sortedSkillCards = skillCardIds
       .map(SkillCards.getById)
       .sort((a, b) => {
@@ -81,8 +109,10 @@ export default class IdolConfig {
         if (b.upgraded) return 1;
         return 0;
       });
-    for (let i = 0; i < sortedSkillCards.length; i++) {
-      const skillCard = sortedSkillCards[i];
+
+    let dedupedIds = [];
+
+    for (let skillCard of sortedSkillCards) {
       if (skillCard.unique) {
         let baseId = skillCard.upgraded ? skillCard.id - 1 : skillCard.id;
         if (
@@ -94,6 +124,7 @@ export default class IdolConfig {
       }
       dedupedIds.push(skillCard.id);
     }
+
     return dedupedIds;
   }
 }
