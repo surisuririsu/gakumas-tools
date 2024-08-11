@@ -1,17 +1,12 @@
 import StageEngine from "./StageEngine";
 import StageLogger from "./StageLogger";
 import StagePlayer from "./StagePlayer";
-import DeepRandomScoreStrategy from "./strategies/DeepRandomScoreStrategy";
-import DeepShallowScoreStrategy from "./strategies/DeepShallowScoreStrategy";
-import DeepMaxScoreStrategy from "./strategies/DeepMaxScoreStrategy";
-import HeuristicStrategy from "./strategies/HeuristicStrategy";
-import DeepAverageScoreStrategy from "./strategies/DeepAverageScoreStrategy";
-import RandomStrategy from "./strategies/RandomStrategy";
+import STRATEGIES from "./strategies";
 
-export function simulate(stageConfig, idolConfig, numRuns) {
+export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
   const logger = new StageLogger();
   const engine = new StageEngine(stageConfig, idolConfig, logger);
-  const strategy = new DeepRandomScoreStrategy(engine);
+  const strategy = new STRATEGIES[strategyName](engine);
 
   let totalScore = 0;
   let averageScore = 0;
@@ -50,7 +45,7 @@ export function simulate(stageConfig, idolConfig, numRuns) {
 }
 
 addEventListener("message", (e) => {
-  const { stageConfig, idolConfig, numRuns } = e.data;
-  const result = simulate(stageConfig, idolConfig, numRuns);
+  const { stageConfig, idolConfig, strategy, numRuns } = e.data;
+  const result = simulate(stageConfig, idolConfig, strategy, numRuns);
   postMessage(result);
 });

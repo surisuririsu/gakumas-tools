@@ -1,6 +1,6 @@
 import BaseStrategy from "./BaseStrategy";
 
-const MAX_DEPTH = 3;
+export const MAX_DEPTH = 4;
 
 export default class DeepScoreStrategy extends BaseStrategy {
   depth = 0;
