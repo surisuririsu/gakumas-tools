@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -30,26 +31,28 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <GoogleAnalytics />
-        <SessionContextProvider>
-          <Navbar />
-          <WorkspaceContextProvider>
-            <DataContextProvider>
-              <MemoryCalculatorContextProvider>
-                <MemoryContextProvider>
-                  <SearchContextProvider>
-                    <LoadoutContextProvider>
-                      <ModalContextProvider>
-                        <main>{children}</main>
-                      </ModalContextProvider>
-                    </LoadoutContextProvider>
-                  </SearchContextProvider>
-                </MemoryContextProvider>
-              </MemoryCalculatorContextProvider>
-            </DataContextProvider>
-          </WorkspaceContextProvider>
-        </SessionContextProvider>
-        <Footer />
+        <Suspense>
+          <GoogleAnalytics />
+          <SessionContextProvider>
+            <Navbar />
+            <WorkspaceContextProvider>
+              <DataContextProvider>
+                <MemoryCalculatorContextProvider>
+                  <MemoryContextProvider>
+                    <SearchContextProvider>
+                      <LoadoutContextProvider>
+                        <ModalContextProvider>
+                          <main>{children}</main>
+                        </ModalContextProvider>
+                      </LoadoutContextProvider>
+                    </SearchContextProvider>
+                  </MemoryContextProvider>
+                </MemoryCalculatorContextProvider>
+              </DataContextProvider>
+            </WorkspaceContextProvider>
+          </SessionContextProvider>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );
