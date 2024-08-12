@@ -68,7 +68,7 @@ export function compareStages(a, b) {
   if (a.season != b.season) {
     return b.season - a.season;
   }
-  return a.id - b.id;
+  return a.stage - b.stage;
 }
 
 export function getSearchScore(memory, pItemIds, skillCardIds) {
