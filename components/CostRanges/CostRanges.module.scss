@@ -1,0 +1,13 @@
+@import "@/constants";
+
+.costRanges {
+  text-align: center;
+
+  thead {
+    background-color: lighten($gk-orange, 20%);
+  }
+
+  tbody {
+    background-color: lighten($gk-orange, 40%);
+  }
+}

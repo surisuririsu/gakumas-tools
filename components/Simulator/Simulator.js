@@ -2,6 +2,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
+import CostRanges from "@/components/CostRanges";
+import DefaultCards from "@/components/DefaultCards";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
@@ -21,7 +23,7 @@ import {
 } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
 import { simulate } from "@/simulator";
-import { getPlannerUrl } from "@/utils/planner";
+import { generateKafeUrl } from "@/utils/kafeSimulator";
 import styles from "./Simulator.module.scss";
 
 export default function Simulator() {
@@ -35,10 +37,11 @@ export default function Simulator() {
     replacePItemId,
     clear,
   } = useContext(LoadoutContext);
-  const { plan, idolId } = useContext(WorkspaceContext);
+  const { plan } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
+  const [activeSubTool, setActiveSubTool] = useState(null);
   const workersRef = useRef();
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
@@ -50,6 +53,7 @@ export default function Simulator() {
     stage,
     plan
   );
+  const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
 
   useEffect(() => {
     let numWorkers = 1;
@@ -175,10 +179,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <label>Stage</label>
+        <label>ステージ</label>
         <StageSelect stageId={stageId} setStageId={setStageId} />
 
-        <label>Parameters</label>
+        <label>パラメータ</label>
         <div className={styles.params}>
           <ParametersInput
             parameters={params}
@@ -196,14 +200,14 @@ export default function Simulator() {
           </div>
         </div>
 
-        <label>P-items</label>
+        <label>Pアイテム</label>
         <StagePItems
           pItemIds={pItemIds}
           replacePItemId={replacePItemId}
           size="small"
         />
 
-        <label>Skill cards</label>
+        <label>スキルカード</label>
         {skillCardIdGroups.map((skillCardIdGroup, i) => (
           <LoadoutSkillCardGroup
             key={i}
@@ -212,15 +216,38 @@ export default function Simulator() {
           />
         ))}
 
-        <a
-          className={styles.plannerLink}
-          href={getPlannerUrl(plan, idolId, pItemIds, skillCardIdGroups)}
-          target="_blank"
-        >
-          Open in Gakumas Contest Planner
-        </a>
+        <div className={styles.expanderButtons}>
+          <button
+            onClick={() =>
+              setActiveSubTool(
+                activeSubTool == "costRanges" ? null : "costRanges"
+              )
+            }
+          >
+            コスト範囲
+          </button>
+          <a href={kafeUrl} target="_blank">
+            コンテストシミュレーター
+            <br />
+            (@かふぇもっと)
+          </a>
+          <button
+            onClick={() =>
+              setActiveSubTool(
+                activeSubTool == "defaultCards" ? null : "defaultCards"
+              )
+            }
+          >
+            基本カード
+          </button>
+        </div>
 
-        <label>Simulator strategy</label>
+        {activeSubTool == "costRanges" && <CostRanges />}
+        {activeSubTool == "defaultCards" && (
+          <DefaultCards plan={idolConfig.plan} idolId={idolConfig.idolId} />
+        )}
+
+        <label>シミュレーター (@risりす)</label>
         <select
           className={styles.strategySelect}
           value={strategy}
@@ -243,11 +270,11 @@ export default function Simulator() {
               }
             }}
           >
-            Clear all
+            クリア
           </Button>
 
           <Button onClick={runSimulation} disabled={running}>
-            Simulate
+            シミュレート
           </Button>
 
           {running && (

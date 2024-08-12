@@ -41,6 +41,18 @@
       }
     }
 
+    .expanderButtons {
+      display: flex;
+      font-size: 14px;
+
+      button,
+      a {
+        margin: 0 auto;
+        color: $blue;
+        text-align: center;
+      }
+    }
+
     .plannerLink {
       margin: 8px auto;
       color: $blue;

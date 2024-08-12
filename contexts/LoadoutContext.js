@@ -1,6 +1,12 @@
 "use client";
-import { useContext, useEffect } from "react";
-import { createContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import DataContext from "@/contexts/DataContext";
 
 const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
@@ -8,18 +14,76 @@ const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  let initialStageId = searchParams.get("stage");
+  let initialParams = searchParams.get("params");
+  let initialPItemIds = searchParams.get("items");
+  let initialSkillCardIdGroups = searchParams.get("cards");
+  const hasDataFromParams =
+    initialStageId ||
+    initialParams ||
+    initialPItemIds ||
+    initialSkillCardIdGroups;
+
+  initialStageId = initialStageId || "16";
+  initialParams = initialParams || "1000-1000-1000-40";
+  initialPItemIds = initialPItemIds || "0-0-0-0";
+  initialSkillCardIdGroups =
+    initialSkillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
+
+  initialStageId = parseInt(initialStageId, 10) || null;
+  initialParams = initialParams.split("-").map((n) => parseInt(n, 10) || 0);
+  initialPItemIds = initialPItemIds.split("-").map((n) => parseInt(n, 10) || 0);
+  initialSkillCardIdGroups = initialSkillCardIdGroups
+    .split("_")
+    .map((group) => group.split("-").map((n) => parseInt(n, 10) || 0));
+
   const { memories } = useContext(DataContext);
   const [loaded, setLoaded] = useState(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
-  const [stageId, setStageId] = useState(null);
-  const [params, setParams] = useState([null, null, null, null]);
-  const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
-  const [skillCardIdGroups, setSkillCardIdGroups] = useState([
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-  ]);
+  const [stageId, setStageId] = useState(initialStageId);
+  const [params, setParams] = useState(initialParams);
+  const [pItemIds, setPItemIds] = useState(initialPItemIds);
+  const [skillCardIdGroups, setSkillCardIdGroups] = useState(
+    initialSkillCardIdGroups
+  );
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   useEffect(() => {
+    router.push(`/simulator?${createQueryString("stage", stageId)}`);
+  }, [stageId]);
+
+  useEffect(() => {
+    router.push(`/simulator?${createQueryString("params", params.join("-"))}`);
+  }, [params]);
+
+  useEffect(() => {
+    router.push(`/simulator?${createQueryString("items", pItemIds.join("-"))}`);
+  }, [pItemIds]);
+
+  useEffect(() => {
+    router.push(
+      `/simulator?${createQueryString(
+        "cards",
+        skillCardIdGroups.map((group) => group.join("-")).join("_")
+      )}`
+    );
+  }, [skillCardIdGroups]);
+
+  useEffect(() => {
+    if (hasDataFromParams) {
+      setLoaded(true);
+      return;
+    }
     const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
     if (loadoutString) {
       const data = JSON.parse(loadoutString);
