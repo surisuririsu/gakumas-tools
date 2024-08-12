@@ -1,5 +1,6 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
+import { FaCheck, FaRegCopy } from "react-icons/fa6";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import CostRanges from "@/components/CostRanges";
@@ -36,12 +37,14 @@ export default function Simulator() {
     skillCardIdGroups,
     replacePItemId,
     clear,
+    simulatorUrl,
   } = useContext(LoadoutContext);
   const { plan } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
   const [activeSubTool, setActiveSubTool] = useState(null);
+  const [linkCopied, setLinkCopied] = useState(false);
   const workersRef = useRef();
 
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
@@ -275,6 +278,23 @@ export default function Simulator() {
 
           <Button onClick={runSimulation} disabled={running}>
             シミュレート
+          </Button>
+
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(simulatorUrl);
+              setLinkCopied(true);
+              setTimeout(() => setLinkCopied(false), 3000);
+            }}
+          >
+            {linkCopied ? (
+              <FaCheck />
+            ) : (
+              <>
+                <FaRegCopy />
+                URL
+              </>
+            )}
           </Button>
 
           {running && (

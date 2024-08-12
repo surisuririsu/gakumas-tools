@@ -66,9 +66,13 @@
 
     .simulateButton {
       display: flex;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 8px;
       margin: 8px 0;
+
+      button {
+        min-width: 60px;
+      }
     }
 
     .loader {

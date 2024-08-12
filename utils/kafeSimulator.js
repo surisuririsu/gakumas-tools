@@ -78,8 +78,6 @@ const KAFE_STAGE_MAP = Stages.getAll().reduce((acc, cur) => {
   return acc;
 }, {});
 
-console.log(KAFE_CONTEST_STAGES, KAFE_STAGES_BY_SEASON_STAGE, KAFE_STAGE_MAP);
-
 const MISMATCHED_ITEMS = PItems.getAll().filter(
   (item) => KAFE_ITEM_MAP[item.id] === -1
 );
