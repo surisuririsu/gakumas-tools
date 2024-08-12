@@ -20,7 +20,7 @@ export default function EntityIcon({
           src={entity.getDynamicIcon?.(idolId) || entity.icon}
           alt={entity.name}
           fill
-          sizes="52px"
+          sizes="64px"
         />
       )}
     </button>

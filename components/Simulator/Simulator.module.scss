@@ -16,9 +16,10 @@
     flex-direction: column;
     gap: 8px;
     padding: 16px;
+    overflow: auto;
 
     .params {
-      max-width: 400px;
+      max-width: 500px;
     }
 
     .typeMultipliers {
