@@ -57,6 +57,7 @@ export default function EntityBank({
             id={entity.id}
             idolId={idolId}
             onClick={() => onClick(entity)}
+            size="fill"
           />
         ))}
       </div>
