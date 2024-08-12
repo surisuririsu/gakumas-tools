@@ -3,7 +3,6 @@ import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
 import TargetSkillCards from "@/components/TargetSkillCards";
-import Trash from "@/components/Trash";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
@@ -12,6 +11,7 @@ import {
   generatePossibleMemories,
 } from "@/utils/skillCardLottery";
 import styles from "./MemoryCalculator.module.scss";
+import ModalContext from "@/contexts/ModalContext";
 
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
@@ -21,7 +21,9 @@ export default function MemoryCalculator() {
     alternateSkillCardIds,
     targetNegations,
     acquiredSkillCardIds,
+    replaceAcquiredCardId,
   } = useContext(MemoryCalculatorContext);
+  const { pickSkillCardModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);
   const [rank, setRank] = useState("A");
 
@@ -100,13 +102,14 @@ export default function MemoryCalculator() {
             key={`${index}_${skillCardId}`}
             type={EntityTypes.SKILL_CARD}
             id={skillCardId}
-            region="memoryCalculator:acquired"
-            index={index}
+            onClick={() =>
+              pickSkillCardModal((entity) =>
+                replaceAcquiredCardId(index, entity.id)
+              )
+            }
           />
         ))}
       </div>
-
-      <Trash />
 
       <label>Produce rank</label>
       <div className={styles.rankSelect}>

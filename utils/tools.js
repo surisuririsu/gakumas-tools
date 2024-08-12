@@ -2,32 +2,33 @@ import {
   FaBook,
   FaCalculator,
   FaFilm,
+  FaHouse,
   FaList,
   FaPen,
   FaTrophy,
 } from "react-icons/fa6";
-import Dex from "@/components/Dex";
-import LoadoutEditor from "@/components/LoadoutEditor";
-import Memories from "@/components/Memories";
-import MemoryCalculator from "@/components/MemoryCalculator";
-import MemoryEditor from "@/components/MemoryEditor";
-import ProduceRankCalculator from "@/components/ProduceRankCalculator";
 
-export const WIDGETS = {
-  produceRankCalculator: {
+export const TOOLS = [
+  {
+    title: "ホーム",
+    icon: <FaHouse />,
+    description: "Home page with overview of available tools",
+    path: "/",
+  },
+  {
     title: "プロデュース評価計算機",
     icon: <FaCalculator />,
-    Component: ProduceRankCalculator,
     description:
       "Calculate final exam score needed to achieve each produce rank based on pre-exam parameters",
+    path: "/produce-rank-calculator",
   },
-  dex: {
+  {
     title: "P図鑑",
     icon: <FaBook />,
-    Component: Dex,
     description: "Filter and view p-item and skill card information",
+    path: "/dex",
   },
-  memoryCalculator: {
+  {
     title: "メモリー計算機",
     icon: (
       <>
@@ -35,12 +36,12 @@ export const WIDGETS = {
         <FaCalculator />
       </>
     ),
-    Component: MemoryCalculator,
     fill: true,
     description:
       "Calculate probability of getting desired skill card combinations in memories",
+    path: "/memory-calculator",
   },
-  memoryEditor: {
+  {
     title: "メモリー編集",
     icon: (
       <>
@@ -48,11 +49,11 @@ export const WIDGETS = {
         <FaPen />
       </>
     ),
-    Component: MemoryEditor,
     fill: true,
     description: "Create, edit, and save memories",
+    path: "/memory-editor",
   },
-  memories: {
+  {
     title: "メモリー一覧",
     icon: (
       <>
@@ -60,15 +61,15 @@ export const WIDGETS = {
         <FaList />
       </>
     ),
-    Component: Memories,
     description:
       "Import memories from screenshots and search by p-items and skill cards",
+    path: "/memories",
   },
-  loadoutEditor: {
-    title: "ステージ",
+  {
+    title: "シミュレーター",
     icon: <FaTrophy />,
-    Component: LoadoutEditor,
     fill: true,
     description: "Create and simulate contest loadouts",
+    path: "/simulator",
   },
-};
+];

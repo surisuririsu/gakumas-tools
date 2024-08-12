@@ -20,8 +20,11 @@
     gap: 4px;
     align-items: stretch;
 
-    button {
+    .link {
       min-width: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin: 0;
       color: $white;
       font-size: 16px;

@@ -1,18 +1,16 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Button from "@/components/Button";
-import MemoryImporter from "@/components/MemoryImporter";
-import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { WIDGETS } from "@/utils/widgets";
+import MemoryImporter from "@/components/MemoryImporterModal";
+import { TOOLS } from "@/utils/tools";
 import styles from "./Welcome.module.scss";
 
 export default function Welcome() {
-  const { open } = useContext(WorkspaceContext);
   const [showImporter, setShowImporter] = useState(false);
 
   return (
     <div className={styles.welcome}>
       <div className={styles.content}>
-        <h2>Welcome to Gakumas Tools (In Development)!</h2>
+        <h2>Welcome to Gakumas Tools!</h2>
         <p>
           Calculate the exam score required to achieve produce ranks, view
           P-item and skill card information, import and search memories by
@@ -21,11 +19,10 @@ export default function Welcome() {
 
         <h3>Features</h3>
         <ul>
-          {Object.keys(WIDGETS).map((widget) => {
-            const { title, icon, description } = WIDGETS[widget];
+          {TOOLS.map(({ title, icon, description, path }) => {
             return (
-              <li key={widget} className={styles.feature}>
-                <Button ariaLabel={title} onClick={() => open(widget)}>
+              <li key={path} className={styles.feature}>
+                <Button ariaLabel={title} href={path}>
                   {icon}
                 </Button>
                 {description}

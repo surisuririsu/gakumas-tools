@@ -17,9 +17,9 @@ import {
   getNonSignatureSkillCardsImageData,
   getPItemsImageData,
 } from "@/utils/memoryFromImage";
-import styles from "./MemoryImporter.module.scss";
+import styles from "./MemoryImporterModal.module.scss";
 
-export default function MemoryImporter({ onClose }) {
+export default function MemoryImporterModal() {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const { fetchMemories } = useContext(DataContext);
@@ -128,7 +128,7 @@ export default function MemoryImporter({ onClose }) {
   }
 
   return (
-    <Modal onClose={onClose}>
+    <Modal>
       <h3>Import memories from screenshots</h3>
       <div className={styles.help}>
         <NextImage
