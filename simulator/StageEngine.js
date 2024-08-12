@@ -277,6 +277,7 @@ export default class StageEngine {
 
     // Reset one turn buffs
     state.oneTurnScoreBuff = 0;
+    state.cardUsesRemaining = 0;
 
     // Decrement effect ttl and expire
     for (let i in state.effects) {

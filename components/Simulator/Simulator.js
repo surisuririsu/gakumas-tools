@@ -249,6 +249,37 @@ export default function Simulator() {
         {activeSubTool == "defaultCards" && (
           <DefaultCards plan={idolConfig.plan} idolId={idolConfig.idolId} />
         )}
+        <div className={styles.simulateButton}>
+          <Button
+            style="red-secondary"
+            onClick={() => {
+              if (confirm("Are you sure you want to clear the loadout?")) {
+                clear();
+                setStageId(null);
+              }
+            }}
+          >
+            クリア
+          </Button>
+
+          <Button
+            style="secondary"
+            onClick={() => {
+              navigator.clipboard.writeText(simulatorUrl);
+              setLinkCopied(true);
+              setTimeout(() => setLinkCopied(false), 3000);
+            }}
+          >
+            {linkCopied ? (
+              <FaCheck />
+            ) : (
+              <>
+                <FaRegCopy />
+                URL
+              </>
+            )}
+          </Button>
+        </div>
 
         <label>シミュレーター (@risりす)</label>
         <select
@@ -264,37 +295,8 @@ export default function Simulator() {
         </select>
 
         <div className={styles.simulateButton}>
-          <Button
-            style="red"
-            onClick={() => {
-              if (confirm("Are you sure you want to clear the loadout?")) {
-                clear();
-                setStageId(null);
-              }
-            }}
-          >
-            クリア
-          </Button>
-
           <Button onClick={runSimulation} disabled={running}>
             シミュレート
-          </Button>
-
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(simulatorUrl);
-              setLinkCopied(true);
-              setTimeout(() => setLinkCopied(false), 3000);
-            }}
-          >
-            {linkCopied ? (
-              <FaCheck />
-            ) : (
-              <>
-                <FaRegCopy />
-                URL
-              </>
-            )}
           </Button>
 
           {running && (
