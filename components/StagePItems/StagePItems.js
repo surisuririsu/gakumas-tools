@@ -1,8 +1,11 @@
+import { useContext } from "react";
 import EntityIcon from "@/components/EntityIcon";
+import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StagePItems.module.scss";
 
-export default function StagePItems({ pItemIds, region, size }) {
+export default function StagePItems({ pItemIds, replacePItemId, size }) {
+  const { pickPItemModal } = useContext(ModalContext);
   return (
     <div className={styles.stagePItems}>
       {pItemIds.map((pItemId, index) => (
@@ -10,8 +13,11 @@ export default function StagePItems({ pItemIds, region, size }) {
           key={`${index}_${pItemId}`}
           type={EntityTypes.P_ITEM}
           id={pItemId}
-          region={region}
-          index={index}
+          onClick={() =>
+            pickPItemModal((entity) => replacePItemId(index, entity.id), {
+              sourceTypes: ["support"],
+            })
+          }
           size={size}
         />
       ))}

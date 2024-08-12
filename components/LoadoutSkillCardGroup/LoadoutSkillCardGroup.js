@@ -7,15 +7,14 @@ import {
 } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
 import StageSkillCards from "@/components/StageSkillCards";
-import EntityContext from "@/contexts/EntityContext";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
 export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
-  const { setSelectedEntity } = useContext(EntityContext);
   const {
     idolId,
     skillCardIdGroups,
+    replaceSkillCardId,
     insertSkillCardIdGroup,
     deleteSkillCardIdGroup,
     swapSkillCardIdGroups,
@@ -33,7 +32,7 @@ export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
     <div className={styles.loadoutSkillCardGroup}>
       <StageSkillCards
         skillCardIds={skillCardIds}
-        region="loadoutEditor"
+        replaceSkillCardId={replaceSkillCardId}
         idolId={idolId}
         groupIndex={groupIndex}
       />
@@ -43,20 +42,14 @@ export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
         <div className={styles.buttonGroup}>
           <button
             className={styles.addButton}
-            onClick={() => {
-              setSelectedEntity(null);
-              insertSkillCardIdGroup(groupIndex + 1);
-            }}
+            onClick={() => insertSkillCardIdGroup(groupIndex + 1)}
           >
             <FaCirclePlus />
           </button>
 
           <button
             className={styles.moveButton}
-            onClick={() => {
-              setSelectedEntity(null);
-              swapSkillCardIdGroups(groupIndex, groupIndex - 1);
-            }}
+            onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex - 1)}
             disabled={groupIndex < 1}
           >
             <FaCircleArrowUp />
@@ -64,10 +57,7 @@ export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
 
           <button
             className={styles.moveButton}
-            onClick={() => {
-              setSelectedEntity(null);
-              swapSkillCardIdGroups(groupIndex, groupIndex + 1);
-            }}
+            onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex + 1)}
             disabled={groupIndex >= skillCardIdGroups.length - 1}
           >
             <FaCircleArrowDown />
@@ -75,10 +65,7 @@ export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
 
           <button
             className={styles.deleteButton}
-            onClick={() => {
-              setSelectedEntity(null);
-              deleteSkillCardIdGroup(groupIndex);
-            }}
+            onClick={() => deleteSkillCardIdGroup(groupIndex)}
             disabled={skillCardIdGroups.length < 2}
           >
             <FaCircleXmark />

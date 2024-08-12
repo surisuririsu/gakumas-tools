@@ -21,13 +21,17 @@
     flex-direction: column;
     box-shadow: 0 0 16px $gray-dark;
     border-radius: 16px;
-    padding: 32px;
+    padding: 64px 32px 32px;
     background-color: $white;
+
+    @media only screen and (max-width: 600px) {
+      padding: 64px 16px 16px;
+    }
 
     .close {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 8px;
+      right: 8px;
     }
 
     h3 {

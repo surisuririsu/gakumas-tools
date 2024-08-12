@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
@@ -7,7 +8,6 @@ import ParametersInput from "@/components/ParametersInput";
 import SimulatorResult from "@/components/SimulatorResult";
 import StagePItems from "@/components/StagePItems";
 import StageSelect from "@/components/StageSelect";
-import Trash from "@/components/Trash";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import IdolConfig from "@/simulator/IdolConfig";
@@ -22,9 +22,9 @@ import {
 import STRATEGIES from "@/simulator/strategies";
 import { simulate } from "@/simulator";
 import { getPlannerUrl } from "@/utils/planner";
-import styles from "./LoadoutEditor.module.scss";
+import styles from "./Simulator.module.scss";
 
-export default function LoadoutEditor() {
+export default function Simulator() {
   const {
     stageId,
     setStageId,
@@ -32,6 +32,7 @@ export default function LoadoutEditor() {
     setParams,
     pItemIds,
     skillCardIdGroups,
+    replacePItemId,
     clear,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
@@ -95,6 +96,14 @@ export default function LoadoutEditor() {
       averageRun,
     });
     setRunning(false);
+
+    setTimeout(
+      () =>
+        document.getElementById("simulator_result").scrollIntoView({
+          behavior: "smooth",
+        }),
+      100
+    );
   }
 
   function runSimulation() {
@@ -164,7 +173,7 @@ export default function LoadoutEditor() {
   }
 
   return (
-    <div id="loadout_editor" className={styles.loadoutEditor}>
+    <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <label>Stage</label>
         <StageSelect stageId={stageId} setStageId={setStageId} />
@@ -188,7 +197,11 @@ export default function LoadoutEditor() {
         </div>
 
         <label>P-items</label>
-        <StagePItems pItemIds={pItemIds} region="loadoutEditor" size="small" />
+        <StagePItems
+          pItemIds={pItemIds}
+          replacePItemId={replacePItemId}
+          size="small"
+        />
 
         <label>Skill cards</label>
         {skillCardIdGroups.map((skillCardIdGroup, i) => (
@@ -198,8 +211,6 @@ export default function LoadoutEditor() {
             groupIndex={i}
           />
         ))}
-
-        <Trash />
 
         <a
           className={styles.plannerLink}

@@ -1,31 +1,31 @@
 import { useContext } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FaTrophy, FaArrowRight } from "react-icons/fa6";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
 import PIdol from "@/components/PIdol";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
-import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import styles from "./MemorySummary.module.scss";
 
 export default function MemorySummary({ memory }) {
+  const router = useRouter();
   const { setMemory } = useContext(LoadoutContext);
   const { setAll } = useContext(MemoryContext);
-  const { open } = useContext(WorkspaceContext);
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
 
   function editMemory() {
     setAll(memory);
-    open("memoryEditor");
+    router.push("/memory-editor");
   }
 
   function loadMemory(index) {
     setMemory(memory, index);
-    open("loadoutEditor");
+    router.push("/simulator");
   }
 
   return (

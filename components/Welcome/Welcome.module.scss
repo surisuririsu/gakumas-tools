@@ -2,6 +2,7 @@
 
 .welcome {
   width: 100%;
+  height: 100%;
   display: flex;
   padding: 32px;
   overflow: auto;
@@ -33,8 +34,10 @@
       align-items: center;
       gap: 8px;
 
-      button {
-        min-width: 48px;
+      a {
+        display: flex;
+        justify-content: center;
+        min-width: 52px;
       }
     }
 

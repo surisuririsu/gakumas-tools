@@ -1,3 +1,4 @@
+"use client";
 import { createContext, useState } from "react";
 import { SkillCards } from "gakumas-data";
 
@@ -8,14 +9,6 @@ export function MemoryCalculatorContextProvider({ children }) {
   const [alternateSkillCardIds, _setAlternateSkillCardIds] = useState([]);
   const [targetNegations, _setTargetNegations] = useState([]);
   const [acquiredSkillCardIds, _setAcquiredSkillCardIds] = useState([0]);
-
-  function setAcquiredSkillCardIds(callback) {
-    _setAcquiredSkillCardIds((cur) => {
-      return callback(cur)
-        .filter((id) => id)
-        .concat(0);
-    });
-  }
 
   function setTargetSkillCardIds(callback) {
     let removedIndices = [];
@@ -93,18 +86,50 @@ export function MemoryCalculatorContextProvider({ children }) {
     _setTargetNegations(updatedNegations);
   }
 
+  function setAcquiredSkillCardIds(callback) {
+    _setAcquiredSkillCardIds((cur) => {
+      return callback(cur)
+        .filter((id) => id)
+        .concat(0);
+    });
+  }
+
+  function replaceTargetCardId(index, cardId) {
+    setTargetSkillCardIds((cur) => {
+      const next = [...cur];
+      next[index] = cardId;
+      return next;
+    });
+  }
+
+  function replaceAlternateCardId(index, cardId) {
+    setAlternateSkillCardIds((cur) => {
+      const next = [...cur];
+      next[index] = cardId;
+      return next;
+    });
+  }
+
+  function replaceAcquiredCardId(index, cardId) {
+    setAcquiredSkillCardIds((cur) => {
+      const next = [...cur];
+      next[index] = cardId;
+      return next;
+    });
+  }
+
   return (
     <MemoryCalculatorContext.Provider
       value={{
         targetSkillCardIds,
-        setTargetSkillCardIds,
         alternateSkillCardIds,
-        setAlternateSkillCardIds,
-        addAlternateSkillCards,
         acquiredSkillCardIds,
-        setAcquiredSkillCardIds,
         targetNegations,
+        addAlternateSkillCards,
         setNegation,
+        replaceTargetCardId,
+        replaceAlternateCardId,
+        replaceAcquiredCardId,
       }}
     >
       {children}

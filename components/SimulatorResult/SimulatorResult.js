@@ -4,7 +4,7 @@ import styles from "./SimulatorResult.module.scss";
 
 export default function SimulatorResult({ data, idolId }) {
   return (
-    <div className={styles.result}>
+    <div id="simulator_result" className={styles.result}>
       <DistributionPlot data={data.buckets} />
 
       <table className={styles.stats}>

@@ -6,8 +6,6 @@ import ParametersInput from "@/components/ParametersInput";
 import PIdolSelect from "@/components/PIdolSelect";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
-import Trash from "@/components/Trash";
-import EntityContext from "@/contexts/EntityContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import {
   calculateContestPower,
@@ -24,19 +22,17 @@ export default function MemoryEditor() {
     params,
     setParams,
     pItemIds,
+    replacePItemId,
     skillCardIds,
+    replaceSkillCardId,
   } = useContext(MemoryContext);
-  const { setSelectedEntity } = useContext(EntityContext);
 
   const idolId = PIdols.getById(pIdolId)?.idolId;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
   const skillCardCost = calculateSkillCardCost(skillCardIds);
 
   return (
-    <div
-      className={styles.memoryEditor}
-      onClick={() => setSelectedEntity(null)}
-    >
+    <div className={styles.memoryEditor}>
       <label>Name</label>
       <div className={styles.name}>
         <Input placeholder="Name" value={name} onChange={setName} />
@@ -54,17 +50,19 @@ export default function MemoryEditor() {
       </div>
 
       <label>P-items</label>
-      <StagePItems pItemIds={pItemIds} region="memoryEditor" size="small" />
+      <StagePItems
+        pItemIds={pItemIds}
+        replacePItemId={replacePItemId}
+        size="small"
+      />
 
       <label>Skill cards</label>
       <StageSkillCards
         skillCardIds={skillCardIds}
-        region="memoryEditor"
+        replaceSkillCardId={replaceSkillCardId}
         idolId={idolId}
       />
       <div>Cost: {skillCardCost}</div>
-
-      <Trash />
 
       <MemorySave />
     </div>

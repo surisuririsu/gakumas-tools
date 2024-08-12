@@ -1,7 +1,11 @@
 @import "@/constants";
 
 .loadoutEditor {
+  max-width: 1000px;
+  margin: 0 auto;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   .configurator {
     position: sticky;
@@ -60,11 +64,12 @@
     }
   }
 
-  @container (max-width: 1050px) {
+  @media only screen and (max-width: 1050px) {
     flex-direction: column;
 
     .configurator {
       position: relative;
+      align-self: center;
     }
   }
 }
