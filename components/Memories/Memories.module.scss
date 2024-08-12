@@ -12,6 +12,8 @@
     padding: 6px;
 
     .search {
+      flex: 1;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       gap: 4px;

@@ -6,16 +6,20 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DataContext from "@/contexts/DataContext";
+import { getSimulatorUrl } from "@/utils/simulator";
 
 const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const isSimulatorOpen = pathname == "/simulator";
   let initialStageId = searchParams.get("stage");
   let initialParams = searchParams.get("params");
   let initialPItemIds = searchParams.get("items");
@@ -59,24 +63,36 @@ export function LoadoutContextProvider({ children }) {
   );
 
   useEffect(() => {
-    router.push(`/simulator?${createQueryString("stage", stageId)}`);
+    if (isSimulatorOpen) {
+      router.push(`/simulator?${createQueryString("stage", stageId)}`);
+    }
   }, [stageId]);
 
   useEffect(() => {
-    router.push(`/simulator?${createQueryString("params", params.join("-"))}`);
+    if (isSimulatorOpen) {
+      router.push(
+        `/simulator?${createQueryString("params", params.join("-"))}`
+      );
+    }
   }, [params]);
 
   useEffect(() => {
-    router.push(`/simulator?${createQueryString("items", pItemIds.join("-"))}`);
+    if (isSimulatorOpen) {
+      router.push(
+        `/simulator?${createQueryString("items", pItemIds.join("-"))}`
+      );
+    }
   }, [pItemIds]);
 
   useEffect(() => {
-    router.push(
-      `/simulator?${createQueryString(
-        "cards",
-        skillCardIdGroups.map((group) => group.join("-")).join("_")
-      )}`
-    );
+    if (isSimulatorOpen) {
+      router.push(
+        `/simulator?${createQueryString(
+          "cards",
+          skillCardIdGroups.map((group) => group.join("-")).join("_")
+        )}`
+      );
+    }
   }, [skillCardIdGroups]);
 
   useEffect(() => {
@@ -209,6 +225,13 @@ export function LoadoutContextProvider({ children }) {
     ]);
   }
 
+  const simulatorUrl = getSimulatorUrl(
+    stageId,
+    params,
+    pItemIds,
+    skillCardIdGroups
+  );
+
   return (
     <LoadoutContext.Provider
       value={{
@@ -225,6 +248,7 @@ export function LoadoutContextProvider({ children }) {
         deleteSkillCardIdGroup,
         swapSkillCardIdGroups,
         clear,
+        simulatorUrl,
       }}
     >
       {children}

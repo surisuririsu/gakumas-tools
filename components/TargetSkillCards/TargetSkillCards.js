@@ -47,6 +47,7 @@ export default function TargetSkillCards() {
                   replaceTargetCardId(index, entity.id)
                 )
               }
+              size="fill"
             />
 
             {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
@@ -62,6 +63,7 @@ export default function TargetSkillCards() {
                       replaceAlternateCardId(index * 10 + altIndex, entity.id)
                     )
                   }
+                  size="fill"
                 />
               </React.Fragment>
             ))}
