@@ -1,26 +1,17 @@
 @import "@/constants";
 
 .loadoutEditor {
-  max-width: 1000px;
-  margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
 
   .configurator {
-    position: sticky;
-    top: 0;
-    max-width: 100vw;
-    align-self: flex-start;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 16px;
     overflow: auto;
-
-    .params {
-      max-width: 500px;
-    }
 
     .typeMultipliers {
       display: flex;
@@ -78,15 +69,6 @@
 
     .loader {
       flex: 0;
-    }
-  }
-
-  @media only screen and (max-width: 1050px) {
-    flex-direction: column;
-
-    .configurator {
-      position: relative;
-      align-self: center;
     }
   }
 }
