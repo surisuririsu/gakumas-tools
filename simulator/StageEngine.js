@@ -603,7 +603,7 @@ export default class StageEngine {
 
         if (op == "+") {
           return lhs + rhs;
-        } else if (op == "i") {
+        } else if (op == "-") {
           return lhs - rhs;
         }
         console.warn("Unrecognized operator", op);
