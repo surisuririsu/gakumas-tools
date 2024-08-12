@@ -103,11 +103,12 @@ export function LoadoutContextProvider({ children }) {
     const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
     if (loadoutString) {
       const data = JSON.parse(loadoutString);
-      if (data.memoryIds) setMemoryIds(data.memoryIds);
+      if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
       if (data.stageId) setStageId(data.stageId);
-      if (data.params) setParams(data.params);
-      if (data.pItemIds) setPItemIds(data.pItemIds);
-      if (data.skillCardIdGroups) setSkillCardIdGroups(data.skillCardIdGroups);
+      if (data.params?.some((id) => id)) setParams(data.params);
+      if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
+      if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
+        setSkillCardIdGroups(data.skillCardIdGroups);
     }
     setLoaded(true);
   }, []);
