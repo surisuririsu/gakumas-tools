@@ -396,7 +396,7 @@ export default class StageEngine {
   _getCardEffects(card) {
     let cardEffects = [];
     for (let effect of card.effects) {
-      if (effect.phase) continue;
+      if (effect.phase || !effect.actions) continue;
       for (let action of effect.actions) {
         const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
         if (!tokens?.[0]?.length) continue;
