@@ -44,7 +44,7 @@ export default function EntityBank({
   }
 
   if (includeNull) {
-    entities.unshift({});
+    entities = [{}, ...entities];
   }
 
   return (
