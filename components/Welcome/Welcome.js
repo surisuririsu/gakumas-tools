@@ -1,12 +1,8 @@
-import { useState } from "react";
 import Button from "@/components/Button";
-import MemoryImporter from "@/components/MemoryImporterModal";
 import { TOOLS } from "@/utils/tools";
 import styles from "./Welcome.module.scss";
 
 export default function Welcome() {
-  const [showImporter, setShowImporter] = useState(false);
-
   return (
     <div className={styles.welcome}>
       <div className={styles.content}>
@@ -31,10 +27,6 @@ export default function Welcome() {
           })}
         </ul>
       </div>
-
-      {showImporter && (
-        <MemoryImporter onClose={() => setShowImporter(false)} />
-      )}
     </div>
   );
 }
