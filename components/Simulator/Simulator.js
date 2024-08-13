@@ -39,7 +39,7 @@ export default function Simulator() {
     clear,
     simulatorUrl,
   } = useContext(LoadoutContext);
-  const { plan } = useContext(WorkspaceContext);
+  const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
@@ -54,7 +54,8 @@ export default function Simulator() {
     pItemIds,
     skillCardIdGroups,
     stage,
-    plan
+    plan,
+    idolId
   );
   const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
 
@@ -216,6 +217,7 @@ export default function Simulator() {
             key={i}
             skillCardIds={skillCardIdGroup}
             groupIndex={i}
+            idolId={idolConfig.idolId}
           />
         ))}
 

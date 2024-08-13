@@ -10,9 +10,12 @@ import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
-export default function LoadoutSkillCardGroup({ skillCardIds, groupIndex }) {
+export default function LoadoutSkillCardGroup({
+  skillCardIds,
+  groupIndex,
+  idolId,
+}) {
   const {
-    idolId,
     skillCardIdGroups,
     replaceSkillCardId,
     insertSkillCardIdGroup,
