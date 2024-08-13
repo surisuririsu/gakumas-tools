@@ -64,14 +64,19 @@ export function LoadoutContextProvider({ children }) {
 
   useEffect(() => {
     if (isSimulatorOpen) {
-      router.push(`/simulator?${createQueryString("stage", stageId)}`);
+      router.push(`/simulator?${createQueryString("stage", stageId)}`, {
+        scroll: false,
+      });
     }
   }, [stageId]);
 
   useEffect(() => {
     if (isSimulatorOpen) {
       router.push(
-        `/simulator?${createQueryString("params", params.join("-"))}`
+        `/simulator?${createQueryString("params", params.join("-"))}`,
+        {
+          scroll: false,
+        }
       );
     }
   }, [params]);
@@ -79,7 +84,10 @@ export function LoadoutContextProvider({ children }) {
   useEffect(() => {
     if (isSimulatorOpen) {
       router.push(
-        `/simulator?${createQueryString("items", pItemIds.join("-"))}`
+        `/simulator?${createQueryString("items", pItemIds.join("-"))}`,
+        {
+          scroll: false,
+        }
       );
     }
   }, [pItemIds]);
@@ -90,7 +98,10 @@ export function LoadoutContextProvider({ children }) {
         `/simulator?${createQueryString(
           "cards",
           skillCardIdGroups.map((group) => group.join("-")).join("_")
-        )}`
+        )}`,
+        {
+          scroll: false,
+        }
       );
     }
   }, [skillCardIdGroups]);
