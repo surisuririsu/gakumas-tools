@@ -12,12 +12,13 @@ export default class IdolConfig {
     pItemIds,
     skillCardIdGroups,
     stage,
-    workspacePlan
+    workspacePlan,
+    workspaceIdolId
   ) {
     const skillCardIds = [].concat(...skillCardIdGroups).filter((id) => id);
 
     this.pIdolId = this.inferPIdolId(pItemIds, skillCardIds);
-    this.idolId = PIdols.getById(this.pIdolId)?.idolId;
+    this.idolId = PIdols.getById(this.pIdolId)?.idolId || workspaceIdolId;
     this.plan = this.inferPlan(this.pIdolId, stage.plan, workspacePlan);
     this.recommendedEffect = this.inferRecommendedEffect(this.pIdolId);
 
