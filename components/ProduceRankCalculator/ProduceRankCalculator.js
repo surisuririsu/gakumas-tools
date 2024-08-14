@@ -32,7 +32,7 @@ const TARGET_RATING_BY_RANK = {
 const REVERSE_RATING_REGIMES = [
   { threshold: 3650, base: 40000, multiplier: 0.01 },
   { threshold: 3450, base: 30000, multiplier: 0.02 },
-  { threshold: 3050, base: 30000, multiplier: 0.04 },
+  { threshold: 3050, base: 20000, multiplier: 0.04 },
   { threshold: 2250, base: 10000, multiplier: 0.08 },
   { threshold: 1500, base: 5000, multiplier: 0.15 },
   { threshold: 0, base: 0, multiplier: 0.3 },
