@@ -1,64 +1,16 @@
 @import "@/constants";
 
 .navbar {
-  z-index: 1;
   min-height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 0 4px $gray;
+  gap: 4px;
   background-color: $gk-orange;
   color: $white;
 
   h1 {
     margin: 0 8px;
-  }
-
-  .links {
-    flex: 1;
-    align-self: stretch;
-    display: flex;
-    gap: 4px;
-    align-items: stretch;
-
-    .link {
-      min-width: 48px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0;
-      color: $white;
-      font-size: 16px;
-      transition: all 0.2s;
-
-      &.active {
-        background-color: darken($gk-red-orange, 15%);
-      }
-    }
-  }
-
-  .avatar {
-    position: relative;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-  }
-
-  button {
-    margin: 8px;
-  }
-
-  .menu {
-    position: absolute;
-    right: 0;
-    top: 48px;
-    border: 2px solid $gk-orange;
-    border-top: none;
-    background-color: $white;
   }
 
   @media only screen and (max-width: 600px) {
@@ -67,4 +19,48 @@
       display: none;
     }
   }
+}
+
+.links {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+}
+
+.link {
+  min-width: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: lighten($gk-orange, 10%);
+  }
+
+  &.active {
+    background-color: darken($gk-red-orange, 15%);
+  }
+}
+
+.menu {
+  margin: 0 8px;
+}
+
+.avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  border: 2px solid $gk-orange;
+  border-top: none;
+  padding: 8px;
+  background-color: $white;
 }

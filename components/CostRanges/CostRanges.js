@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styles from "./CostRanges.module.scss";
 
 const RANGES = [
@@ -8,7 +9,7 @@ const RANGES = [
   { rank: "B", min: 306, max: 363 },
 ];
 
-export default function CostRanges() {
+function CostRanges() {
   return (
     <table className={styles.costRanges}>
       <thead>
@@ -30,3 +31,5 @@ export default function CostRanges() {
     </table>
   );
 }
+
+export default memo(CostRanges);

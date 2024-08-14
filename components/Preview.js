@@ -1,6 +1,11 @@
 import { PItems, SkillCards } from "gakumas-data";
 
-export default function Preview({ baseUrl, items, cardGroups, empty }) {
+export default function Preview({
+  baseUrl,
+  itemIds,
+  skillCardIdGroups,
+  isEmpty,
+}) {
   const styles = {
     preview: {
       width: "100%",
@@ -39,13 +44,13 @@ export default function Preview({ baseUrl, items, cardGroups, empty }) {
       backgroundColor: "#ddd",
       overflow: "hidden",
     },
-    cost: { display: "flex", height: empty ? 0 : "8px", color: "#444" },
+    cost: { display: "flex", height: isEmpty ? 0 : "8px", color: "#444" },
   };
 
   return (
     <div style={styles.preview}>
       <div style={styles.row}>
-        {items
+        {itemIds
           .slice(0, 4)
           .map(PItems.getById)
           .map((item, index) => (
@@ -61,7 +66,7 @@ export default function Preview({ baseUrl, items, cardGroups, empty }) {
           ))}
         <div style={styles.url}>gkcontest.ris.moe</div>
       </div>
-      {cardGroups.slice(0, 4).map((cards, groupIndex) => (
+      {skillCardIdGroups.slice(0, 4).map((cards, groupIndex) => (
         <div key={groupIndex} style={styles.cardGroup}>
           <div style={styles.row}>
             {cards
@@ -80,7 +85,7 @@ export default function Preview({ baseUrl, items, cardGroups, empty }) {
               ))}
           </div>
           <div style={styles.cost}>
-            {!empty && (
+            {!isEmpty && (
               <>
                 Cost:{" "}
                 {cards

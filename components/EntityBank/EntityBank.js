@@ -1,13 +1,12 @@
 import { useContext } from "react";
-import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
-import IconSelect from "@/components/IconSelect";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
-import { PLANS } from "@/utils/plans";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
+import PlanIdolSelects from "../PlanIdolSelects";
 
 export default function EntityBank({
   type,
@@ -67,26 +66,12 @@ export default function EntityBank({
       </div>
 
       {filter && (
-        <div className={styles.selects}>
-          <IconSelect
-            options={PLANS.map((alias) => ({
-              id: alias,
-              iconSrc: `/plans/${alias}.png`,
-              alt: alias,
-            }))}
-            selected={plan}
-            onChange={setPlan}
-          />
-          <IconSelect
-            options={Idols.getAll().map(({ id, name, icon }) => ({
-              id,
-              iconSrc: icon,
-              alt: name,
-            }))}
-            selected={idolId}
-            onChange={setIdolId}
-          />
-        </div>
+        <PlanIdolSelects
+          plan={plan}
+          idolId={idolId}
+          setPlan={setPlan}
+          setIdolId={setIdolId}
+        />
       )}
     </>
   );

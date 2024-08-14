@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
-import { connect } from "@/utils/mongodb";
 import { authOptions } from "@/utils/auth";
+import { connect } from "@/utils/mongodb";
 
 export async function GET() {
   const session = await getServerSession(authOptions);

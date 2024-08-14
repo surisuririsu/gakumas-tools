@@ -1,4 +1,3 @@
-"use client";
 import Dex from "@/components/Dex";
 
 export default function DexPage() {

@@ -1,6 +1,7 @@
+import { memo } from "react";
 import styles from "./ButtonGroup.module.scss";
 
-export default function ButtonGroup({ selected, options, onChange }) {
+function ButtonGroup({ selected, options, onChange }) {
   return (
     <div className={styles.buttonGroup}>
       {options.map((option) => (
@@ -15,3 +16,5 @@ export default function ButtonGroup({ selected, options, onChange }) {
     </div>
   );
 }
+
+export default memo(ButtonGroup);

@@ -1,3 +1,4 @@
+"use client";
 import { useContext, useEffect, useState } from "react";
 import {
   FaCircleXmark,
