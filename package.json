@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "chart.js": "^4.4.3",
-    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v1.3.0",
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v1.3.2",
     "gakumas_contest_simulator": "https://github.com/katabami83/gakumas_contest_simulator",
     "mongodb": "^6.8.0",
     "next": "14.2.5",
