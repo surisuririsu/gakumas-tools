@@ -1,3 +1,4 @@
+"use client";
 import React, { useContext, useState } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";

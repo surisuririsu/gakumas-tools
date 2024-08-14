@@ -1,7 +1,8 @@
+import { memo } from "react";
 import Link from "next/link";
 import styles from "./Button.module.scss";
 
-export default function Button({
+function Button({
   children,
   onClick,
   href,
@@ -9,22 +10,21 @@ export default function Button({
   disabled,
   ariaLabel,
 }) {
-  if (href) {
-    return (
-      <Link
-        className={styles[disabled ? "disabled" : style]}
-        href={href}
-        onClick={onClick}
-        disabled={disabled}
-        aria-label={ariaLabel}
-      >
-        {children}
-      </Link>
-    );
-  }
-  return (
+  const className = `${styles.button} ${styles[disabled ? "disabled" : style]}`;
+
+  return href ? (
+    <Link
+      className={className}
+      href={href}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+    >
+      {children}
+    </Link>
+  ) : (
     <button
-      className={styles[disabled ? "disabled" : style]}
+      className={className}
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -33,3 +33,5 @@ export default function Button({
     </button>
   );
 }
+
+export default memo(Button);

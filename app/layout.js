@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
+import { getServerSession } from "next-auth";
 import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
@@ -12,6 +13,7 @@ import { ModalContextProvider } from "@/contexts/ModalContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SessionContextProvider } from "@/contexts/SessionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
+import { authOptions } from "@/utils/auth";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,18 +31,20 @@ export const viewport = {
 };
 
 export default async function RootLayout({ children }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Suspense>
-          <GoogleAnalytics />
-          <SessionContextProvider>
-            <Navbar />
-            <WorkspaceContextProvider>
-              <DataContextProvider>
-                <MemoryCalculatorContextProvider>
-                  <MemoryContextProvider>
-                    <SearchContextProvider>
+        <GoogleAnalytics />
+        <SessionContextProvider session={session}>
+          <Navbar />
+          <WorkspaceContextProvider>
+            <DataContextProvider>
+              <MemoryCalculatorContextProvider>
+                <MemoryContextProvider>
+                  <SearchContextProvider>
+                    <Suspense>
                       <LoadoutContextProvider>
                         <ModalContextProvider>
                           <div id="tools">
@@ -49,14 +53,14 @@ export default async function RootLayout({ children }) {
                           </div>
                         </ModalContextProvider>
                       </LoadoutContextProvider>
-                    </SearchContextProvider>
-                  </MemoryContextProvider>
-                </MemoryCalculatorContextProvider>
-              </DataContextProvider>
-            </WorkspaceContextProvider>
-          </SessionContextProvider>
-          <Footer />
-        </Suspense>
+                    </Suspense>
+                  </SearchContextProvider>
+                </MemoryContextProvider>
+              </MemoryCalculatorContextProvider>
+            </DataContextProvider>
+          </WorkspaceContextProvider>
+        </SessionContextProvider>
+        <Footer />
       </body>
     </html>
   );

@@ -1,7 +1,8 @@
+import { memo } from "react";
 import Image from "next/image";
 import styles from "./IconSelect.module.scss";
 
-export default function IconSelect({ options, selected, onChange }) {
+function IconSelect({ options, selected, onChange }) {
   return (
     <div className={styles.iconSelect}>
       {options.map(({ id, iconSrc, alt }) => (
@@ -24,3 +25,5 @@ export default function IconSelect({ options, selected, onChange }) {
     </div>
   );
 }
+
+export default memo(IconSelect);

@@ -2,9 +2,10 @@ import Simulator from "@/components/Simulator";
 
 export async function generateMetadata({ searchParams }) {
   const query = new URLSearchParams(searchParams).toString();
+
   return {
-    title: "Gakumas Contest Planner",
-    description: "Plan Gakumas contest loadouts",
+    title: "Gakumas Tools - Simulator",
+    description: "Plan and simulate Gakumas contest loadouts",
     openGraph: {
       images: [`/api/preview/?${query}`],
     },

@@ -1,3 +1,4 @@
+"use client";
 import { useContext } from "react";
 import { PIdols } from "gakumas-data";
 import Input from "@/components/Input";
