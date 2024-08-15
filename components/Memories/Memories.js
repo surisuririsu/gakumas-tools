@@ -178,7 +178,7 @@ export default function Memories() {
               )}
 
               {action != "import" && !memoriesLoading && (
-                <Button onClick={() => setAction("import")}>
+                <Button onClick={() => setModal(<MemoryImporterModal />)}>
                   Import memories from screenshots
                 </Button>
               )}

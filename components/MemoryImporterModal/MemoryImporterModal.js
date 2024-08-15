@@ -35,8 +35,9 @@ export default function MemoryImporterModal() {
     console.time("All memories parsed");
 
     // Set up workers and entity image data promises
-    let worker;
-    const workerPromise = createWorker("eng");
+    let engWorker, jpnWorker;
+    const engWorkerPromise = createWorker("eng", 1);
+    const jpnWorkerPromise = createWorker("jpn", 1);
     const signatureSkillCardsImageDataPromise =
       getSignatureSkillCardsImageData();
     const nonSignatureSkillCardsImageDataPromise =
@@ -53,11 +54,17 @@ export default function MemoryImporterModal() {
             const blackCanvas = getBlackCanvas(img);
             const whiteCanvas = getWhiteCanvas(img);
 
-            worker = await workerPromise;
-            const engWhitePromise = worker.recognize(whiteCanvas);
-            const engBlackPromise = worker.recognize(blackCanvas);
+            engWorker = await engWorkerPromise;
+            jpnWorker = await jpnWorkerPromise;
+            const engWhitePromise = engWorker.recognize(whiteCanvas);
+            const engBlackPromise = engWorker.recognize(blackCanvas);
+            const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
+
+            const powerCandidates = extractPower(await engWhitePromise);
+            const params = extractParams(await engBlackPromise);
 
             const items = extractItems(
+              await jpnBlackPromise,
               img,
               blackCanvas,
               await itemImageDataPromise
@@ -68,6 +75,7 @@ export default function MemoryImporterModal() {
               .find((item) => item.pIdolId)?.pIdolId;
 
             const cards = extractCards(
+              await jpnBlackPromise,
               img,
               blackCanvas,
               await signatureSkillCardsImageDataPromise,
@@ -86,9 +94,6 @@ export default function MemoryImporterModal() {
             while (cards.length < 6) {
               cards.push(0);
             }
-
-            const powerCandidates = extractPower(await engWhitePromise);
-            const params = extractParams(await engBlackPromise);
 
             // Calculate contest power and flag those that are mismatched with the screenshot
             const calculatedPower = calculateContestPower(params, items, cards);
@@ -115,7 +120,8 @@ export default function MemoryImporterModal() {
     Promise.all(promises).then(async (res) => {
       console.timeEnd("All memories parsed");
 
-      worker.terminate();
+      engWorker.terminate();
+      jpnWorker.terminate();
 
       await fetch("/api/memory", {
         method: "POST",

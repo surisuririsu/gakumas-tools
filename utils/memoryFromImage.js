@@ -1,6 +1,8 @@
 import { getImageProps } from "next/image";
 import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
 
+const DEBUG = false;
+
 export function getGameRegion(img) {
   let width = img.width;
   const height = img.height;
@@ -91,7 +93,7 @@ export function extractParams(result) {
 
 // Size and bounds of images to compare
 // Downsize images to sample surrounding colors
-const COMP_SIZE = 32;
+const COMP_SIZE = 40;
 const DRAW_AREA = [0, 0, COMP_SIZE, COMP_SIZE];
 const COMP_AREA = [2, 2, COMP_SIZE - 4, COMP_SIZE - 4];
 
@@ -107,8 +109,8 @@ export async function getEntityImageData(entityData, idolId) {
           const icon = idolId ? entity.getDynamicIcon(idolId) : entity.icon;
           entImg.src = getImageProps({
             ...icon,
-            width: 32,
-            height: 32,
+            width: COMP_SIZE,
+            height: COMP_SIZE,
           }).props.src;
           entImg.onload = async () => {
             entCtx.drawImage(entImg, ...DRAW_AREA);
@@ -174,7 +176,7 @@ export async function getPItemsImageData() {
 }
 
 // Search for rows of black pixels marking edge of item/card
-function countEntities(canvas, searchArea, threshold) {
+function locateEntities(canvas, searchArea, threshold) {
   const ctx = canvas.getContext("2d");
   const d = ctx.getImageData(
     searchArea.x,
@@ -183,8 +185,8 @@ function countEntities(canvas, searchArea, threshold) {
     searchArea.height
   );
 
-  let numEntities = 0;
   let consecutivePixels = 0;
+  let coords = [];
   for (let i = 0; i < searchArea.height; i++) {
     for (let j = 0; j < searchArea.width; j++) {
       const dIndex = (i * searchArea.width + j) * 4;
@@ -194,15 +196,15 @@ function countEntities(canvas, searchArea, threshold) {
       } else {
         // If we have enough consecutive pixels, increment detected entities
         if (consecutivePixels > threshold) {
-          numEntities++;
+          coords.push({ x: searchArea.x + j, y: searchArea.y + i });
         }
         consecutivePixels = 0;
       }
     }
-    if (numEntities) break;
+    if (coords.length) break;
   }
 
-  return numEntities;
+  return coords;
 }
 
 // Compare detected areas with item/card icons to find most similar
@@ -215,6 +217,15 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
     const [x, y] = coords[index];
     memCtx.drawImage(img, x, y, width, width, ...DRAW_AREA);
     const d = memCtx.getImageData(...COMP_AREA);
+
+    if (DEBUG) {
+      const nc = document.createElement("canvas");
+      nc.width = width;
+      nc.height = width;
+      const nctx = nc.getContext("2d");
+      nctx.drawImage(img, x, y, width, width, ...DRAW_AREA);
+      document.body.append(nc);
+    }
 
     const filtered = entityData.filter(
       (entity) => !(index > 0 && entity.pIdolId)
@@ -229,7 +240,7 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
           sum +
           (i % 4
             ? 0
-            : deltaEFast(
+            : dColor(
                 d.data[i],
                 entity.data[i],
                 d.data[i + 1],
@@ -263,39 +274,60 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
   return detectedEntities;
 }
 
-export function extractItems(img, blackCanvas, itemImageData) {
-  // Determine number of items
-  const [x, _, width] = getGameRegion(img);
-  const whiteTop = getWhiteAreaTop(img);
-  const searchArea = {
-    x: Math.round(width * 0.07),
-    y: whiteTop + Math.round(width * 0.6167),
-    width: Math.round(width * 0.86),
-    height: 8,
-  };
-  const numItems = countEntities(
-    blackCanvas,
-    searchArea,
-    Math.floor(width * 0.05)
+export function extractItems(result, img, blackCanvas, itemImageData) {
+  // Find p-items label
+  const labelLine = result.data.lines.find(({ text }) =>
+    text.replaceAll(" ", "").startsWith("Pアイテム")
   );
+  if (!labelLine) return [];
+  const labelBounds = labelLine.bbox;
+  const labelWidth = labelBounds.x1 - labelBounds.x0;
+  const labelHeight = labelBounds.y1 - labelBounds.y0;
+
+  // Locate items and calculate width
+  const searchAreaTop = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1,
+    width: Math.floor(labelWidth * 4),
+    height: labelHeight * 2,
+  };
+  const searchAreaBottom = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1 + labelWidth,
+    width: Math.floor(labelWidth * 4),
+    height: labelHeight * 2,
+  };
+  const topCoords = locateEntities(
+    blackCanvas,
+    searchAreaTop,
+    Math.floor(labelWidth * 0.3)
+  );
+  const bottomCoords = locateEntities(
+    blackCanvas,
+    searchAreaBottom,
+    Math.floor(labelWidth * 0.5)
+  );
+  if (!topCoords.length || !bottomCoords.length) {
+    return [];
+  }
+  const itemWidth = bottomCoords[0].y - topCoords[0].y;
 
   // Generate item coordinates
+  const [x, y] = getGameRegion(img);
   let itemCoords = [];
-  for (let i = 0; i < numItems; i++) {
-    itemCoords.push([
-      x + Math.round(width * 0.07) + Math.round(width * 0.137) * i,
-      whiteTop + Math.round(width * 0.5),
-    ]);
+  for (let coord of bottomCoords) {
+    itemCoords.push([x + coord.x - itemWidth * 0.9, y + coord.y - itemWidth]);
   }
 
   // Identify items
   const plusIndex =
-    (Math.round(COMP_SIZE * 0.08) * COMP_SIZE + Math.round(COMP_SIZE * 0.85)) *
+    (Math.round(COMP_SIZE * 0.0625) * COMP_SIZE +
+      Math.round(COMP_SIZE * 0.85)) *
     4;
   const detectedItems = identifyEntities(
     img,
     itemCoords,
-    Math.round(width * 0.1185),
+    itemWidth,
     itemImageData,
     plusIndex
   );
@@ -304,65 +336,80 @@ export function extractItems(img, blackCanvas, itemImageData) {
 }
 
 export function extractCards(
+  result,
   img,
   blackCanvas,
   signatureSkillCardsImageData,
   nonSignatureSkillCardsImageData,
   itemsPIdolId
 ) {
-  // Determine number of items
-  const [x, _, width] = getGameRegion(img);
-  const whiteTop = getWhiteAreaTop(img);
-  const searchArea = {
-    x: Math.round(width * 0.07),
-    y: whiteTop + Math.round(width * 0.718),
-    width: Math.round(width * 0.86),
-    height: 16,
-  };
-  const numCards1 = countEntities(
-    blackCanvas,
-    searchArea,
-    Math.floor(width * 0.12)
+  // Find skill cards label
+  const labelLine = result.data.lines.find(({ text }) =>
+    text.replaceAll(" ", "").startsWith("スキルカード")
   );
-  const searchArea2 = {
-    x: Math.round(width * 0.07),
-    y: whiteTop + Math.round(width * 0.9725),
-    width: Math.round(width * 0.86),
-    height: 16,
+  if (!labelLine) return [];
+  const labelBounds = labelLine.bbox;
+  const labelWidth = labelBounds.x1 - labelBounds.x0;
+  const labelHeight = labelBounds.y1 - labelBounds.y0;
+
+  // Locate cards and calculate width
+  const searchArea1Top = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1,
+    width: Math.floor(labelWidth * 5.5),
+    height: labelHeight * 2,
   };
-  const numCards2 = countEntities(
+  const searchArea1Bottom = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1 + labelWidth,
+    width: Math.floor(labelWidth * 4),
+    height: labelHeight * 2,
+  };
+  const searchArea2Top = {
+    x: labelBounds.x0 - labelHeight,
+    y: labelBounds.y1 + labelWidth * 1.35,
+    width: Math.floor(labelWidth * 5.5),
+    height: labelHeight * 2,
+  };
+  const topCoords1 = locateEntities(
     blackCanvas,
-    searchArea2,
-    Math.floor(width * 0.12)
+    searchArea1Top,
+    Math.floor(labelWidth * 0.7)
   );
-
-  // Generate card coordinates
-  let cardCoords = [];
-  for (let i = 0; i < numCards1; i++) {
-    cardCoords.push([
-      x + Math.round(width * 0.07) + Math.round(width * 0.218) * i,
-      whiteTop + Math.round(width * 0.718),
-    ]);
-  }
-  for (let j = 0; j < numCards2; j++) {
-    cardCoords.push([
-      x + Math.round(width * 0.07) + Math.round(width * 0.218) * j,
-      whiteTop + Math.round(width * 0.9725),
-    ]);
-  }
-
-  if (!cardCoords.length) {
+  const bottomCoords1 = locateEntities(
+    blackCanvas,
+    searchArea1Bottom,
+    Math.floor(labelWidth * 0.7)
+  );
+  const topCoords2 = locateEntities(
+    blackCanvas,
+    searchArea2Top,
+    Math.floor(labelWidth * 0.7)
+  );
+  if (!topCoords1.length || !bottomCoords1.length) {
     return [];
+  }
+  const cardWidth = bottomCoords1[0].y - topCoords1[0].y;
+
+  // Generate card coordinates 1
+  const [x, y] = getGameRegion(img);
+  let cardCoords = [];
+  for (let coord of topCoords1) {
+    cardCoords.push([x + coord.x - cardWidth * 0.931, y + coord.y]);
+  }
+  for (let coord of topCoords2) {
+    cardCoords.push([x + coord.x - cardWidth * 0.931, y + coord.y]);
   }
 
   // Identify signature card
   const plusIndex =
-    (Math.round(COMP_SIZE * 0.45) * COMP_SIZE + Math.round(COMP_SIZE * 0.875)) *
+    (Math.round(COMP_SIZE * 0.4375) * COMP_SIZE +
+      Math.round(COMP_SIZE * 0.85)) *
     4;
   const detectedSignatureCard = identifyEntities(
     img,
     [cardCoords[0]],
-    Math.round(width * 0.2),
+    cardWidth,
     signatureSkillCardsImageData,
     plusIndex
   )[0];
@@ -376,7 +423,7 @@ export function extractCards(
     const detectedNonSignatureCards = identifyEntities(
       img,
       cardCoords.slice(1),
-      Math.round(width * 0.2),
+      cardWidth,
       nonSignatureSkillCardsImageData[idolId],
       plusIndex
     );
@@ -397,7 +444,7 @@ export function extractCards(
 }
 
 // Euclidean distance between colors
-function deltaEFast(r1, r2, g1, g2, b1, b2) {
+function dColor(r1, r2, g1, g2, b1, b2) {
   return Math.sqrt(
     Math.pow(r2 - r1, 2) + Math.pow(g2 - g1, 2) + Math.pow(b2 - b1, 2)
   );
