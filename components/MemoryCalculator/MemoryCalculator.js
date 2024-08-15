@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
@@ -30,7 +30,10 @@ export default function MemoryCalculator() {
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
-  const possibleMemories = generatePossibleMemories(acquiredSkillCardIds, rank);
+  const possibleMemories = useMemo(
+    () => generatePossibleMemories(acquiredSkillCardIds, rank),
+    [acquiredSkillCardIds, rank]
+  );
   const {
     onTargetMemories,
     offTargetMemories,

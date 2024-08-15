@@ -4,9 +4,10 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 8px;
+  padding: 4px;
   background-color: $gk-orange;
   color: $white;
+  font-size: 14px;
 
   a {
     text-decoration: underline;

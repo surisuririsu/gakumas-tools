@@ -118,6 +118,11 @@ export function MemoryCalculatorContextProvider({ children }) {
     });
   }
 
+  function clearTargetCardIds() {
+    _setTargetSkillCardIds([0]);
+    _setAlternateSkillCardIds([]);
+  }
+
   return (
     <MemoryCalculatorContext.Provider
       value={{
@@ -130,6 +135,7 @@ export function MemoryCalculatorContextProvider({ children }) {
         replaceTargetCardId,
         replaceAlternateCardId,
         replaceAcquiredCardId,
+        clearTargetCardIds,
       }}
     >
       {children}

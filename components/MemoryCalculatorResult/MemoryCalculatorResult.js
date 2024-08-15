@@ -10,21 +10,21 @@ export default function MemoryCalculatorResult({
 }) {
   return (
     <div className={styles.result}>
-      <div className={styles.cards}>
-        {skillCardIds
-          .map(SkillCards.getById)
-          .map(({ id, icon, getDynamicIcon, name }) => (
+      {skillCardIds
+        .map(SkillCards.getById)
+        .map(({ id, icon, getDynamicIcon, name }) => (
+          <div key={id} className={styles.card}>
             <Image
-              key={id}
               src={getDynamicIcon?.(idolId) || icon}
-              width={50}
+              fill
+              sizes="64px"
               alt={name}
               draggable={false}
             />
-          ))}
-        {calculateSkillCardCost(skillCardIds)}
-      </div>
-      <div>{(probability * 100).toFixed(2)}%</div>
+          </div>
+        ))}
+      {calculateSkillCardCost(skillCardIds)}
+      <span>({(probability * 100).toFixed(2)}%)</span>
     </div>
   );
 }

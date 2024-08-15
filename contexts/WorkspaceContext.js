@@ -10,10 +10,7 @@ export function WorkspaceContextProvider({ children }) {
   const [filter, setFilter] = useState(true);
   const [plan, setPlan] = useState("sense");
   const [idolId, setIdolId] = useState(1);
-  const [pinnedTools, setPinnedTools] = useState([
-    "dex",
-    "produceRankCalculator",
-  ]);
+  const [pinnedTools, setPinnedTools] = useState([]);
 
   useEffect(() => {
     const workspaceString = localStorage.getItem(WORKSPACE_STORAGE_KEY);
@@ -22,6 +19,7 @@ export function WorkspaceContextProvider({ children }) {
       if (data.filter) setFilter(data.filter);
       if (data.plan) setPlan(data.plan);
       if (data.idolId) setIdolId(data.idolId);
+      if (data.pinnedTools) setPinnedTools(data.pinnedTools);
     }
     setLoaded(true);
   }, []);
@@ -30,9 +28,9 @@ export function WorkspaceContextProvider({ children }) {
     if (!loaded) return;
     localStorage.setItem(
       WORKSPACE_STORAGE_KEY,
-      JSON.stringify({ filter, plan, idolId })
+      JSON.stringify({ filter, plan, idolId, pinnedTools })
     );
-  }, [filter, plan, idolId]);
+  }, [filter, plan, idolId, pinnedTools]);
 
   const pin = useCallback(
     (tool) => {

@@ -4,16 +4,22 @@
   display: flex;
 }
 
-.tool {
-  flex: 1;
+.container {
   display: flex;
   flex-direction: column;
-  max-width: 340px;
-  border-right: 1px solid darken($gk-orange, 15%);
+  width: 350px;
+  border-right: 2px solid darken($gk-red-orange, 15%);
 }
 
-.toolHeader {
+.header {
+  display: flex;
+  justify-content: space-between;
   padding: 8px;
   background-color: $gk-orange;
   color: $white;
+}
+
+.tool {
+  flex: 1;
+  overflow: auto;
 }

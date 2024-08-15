@@ -3,9 +3,9 @@
 .navbar {
   min-height: 48px;
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 4px;
+  border-bottom: 4px solid darken($gk-red-orange, 15%);
   background-color: $gk-orange;
   color: $white;
 

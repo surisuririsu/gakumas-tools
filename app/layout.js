@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
+import ToolHeader from "@/components/ToolHeader";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
@@ -14,6 +15,7 @@ import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SessionContextProvider } from "@/contexts/SessionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { authOptions } from "@/utils/auth";
+import styles from "./layout.module.scss";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -47,9 +49,14 @@ export default async function RootLayout({ children }) {
                     <Suspense>
                       <LoadoutContextProvider>
                         <ModalContextProvider>
-                          <div id="tools">
+                          <div className={styles.tools}>
                             <PinnedTools />
-                            <main>{children}</main>
+                            <main>
+                              <ToolHeader />
+                              <div className={styles.mainContent}>
+                                {children}
+                              </div>
+                            </main>
                           </div>
                         </ModalContextProvider>
                       </LoadoutContextProvider>

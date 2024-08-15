@@ -15,7 +15,7 @@ export default function Welcome() {
 
         <h3>Features</h3>
         <ul>
-          {TOOLS.map(({ title, icon, description, path }) => {
+          {Object.values(TOOLS).map(({ title, icon, description, path }) => {
             return (
               <li key={path} className={styles.feature}>
                 <Button ariaLabel={title} href={path}>

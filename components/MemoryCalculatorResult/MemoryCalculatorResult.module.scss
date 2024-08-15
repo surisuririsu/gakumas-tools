@@ -1,18 +1,14 @@
 @import "@/constants";
 
 .result {
-  align-self: flex-start;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+}
 
-  .cards {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    border: 4px solid $gray-light;
-    border-radius: 8px;
-    padding: 2px;
-    background-color: $gray-extra-light;
-  }
+.card {
+  position: relative;
+  width: 16%;
+  max-width: 64px;
+  aspect-ratio: 1;
 }
