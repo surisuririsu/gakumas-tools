@@ -21,12 +21,14 @@ export const TOOLS = {
     description:
       "Calculate final exam score needed to achieve each produce rank based on pre-exam parameters",
     path: "/produce-rank-calculator",
+    pinnable: true,
   },
   dex: {
     title: "P図鑑",
     icon: <FaBook />,
     description: "Filter and view p-item and skill card information",
     path: "/dex",
+    pinnable: true,
   },
   memoryCalculator: {
     title: "メモリー計算機",
@@ -40,6 +42,7 @@ export const TOOLS = {
     description:
       "Calculate probability of getting desired skill card combinations in memories",
     path: "/memory-calculator",
+    pinnable: true,
   },
   memoryEditor: {
     title: "メモリー編集",
@@ -52,6 +55,7 @@ export const TOOLS = {
     fill: true,
     description: "Create, edit, and save memories",
     path: "/memory-editor",
+    pinnable: true,
   },
   memories: {
     title: "メモリー一覧",
@@ -64,6 +68,7 @@ export const TOOLS = {
     description:
       "Import memories from screenshots and search by p-items and skill cards",
     path: "/memories",
+    pinnable: true,
   },
   simulator: {
     title: "シミュレーター",
@@ -71,5 +76,6 @@ export const TOOLS = {
     fill: true,
     description: "Create and simulate contest loadouts",
     path: "/simulator",
+    pinnable: true,
   },
 };
