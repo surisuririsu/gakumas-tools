@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
@@ -20,9 +20,28 @@ import {
 import styles from "./MemoryImporterModal.module.scss";
 
 export default function MemoryImporterModal() {
+  const { fetchMemories } = useContext(DataContext);
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
-  const { fetchMemories } = useContext(DataContext);
+  const engWorker = useRef();
+  const jpnWorker = useRef();
+  const signatureSkillCardsImageData = useRef();
+  const nonSignatureSkillCardsImageData = useRef();
+  const itemImageData = useRef();
+
+  useEffect(() => {
+    engWorker.current = createWorker("eng", 1);
+    jpnWorker.current = createWorker("jpn", 1);
+    signatureSkillCardsImageData.current = getSignatureSkillCardsImageData();
+    nonSignatureSkillCardsImageData.current =
+      getNonSignatureSkillCardsImageData();
+    itemImageData.current = getPItemsImageData();
+
+    return () => {
+      engWorker.current?.terminate?.();
+      jpnWorker.current?.terminate?.();
+    };
+  }, []);
 
   async function handleFiles(e) {
     // Get files and reset progress
@@ -34,16 +53,6 @@ export default function MemoryImporterModal() {
 
     console.time("All memories parsed");
 
-    // Set up workers and entity image data promises
-    let engWorker, jpnWorker;
-    const engWorkerPromise = createWorker("eng", 1);
-    const jpnWorkerPromise = createWorker("jpn", 1);
-    const signatureSkillCardsImageDataPromise =
-      getSignatureSkillCardsImageData();
-    const nonSignatureSkillCardsImageDataPromise =
-      getNonSignatureSkillCardsImageData();
-    const itemImageDataPromise = getPItemsImageData();
-
     const promises = files.map(
       (file) =>
         new Promise((resolve) => {
@@ -54,11 +63,15 @@ export default function MemoryImporterModal() {
             const blackCanvas = getBlackCanvas(img);
             const whiteCanvas = getWhiteCanvas(img);
 
-            engWorker = await engWorkerPromise;
-            jpnWorker = await jpnWorkerPromise;
-            const engWhitePromise = engWorker.recognize(whiteCanvas);
-            const engBlackPromise = engWorker.recognize(blackCanvas);
-            const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
+            const engWhitePromise = (await engWorker.current).recognize(
+              whiteCanvas
+            );
+            const engBlackPromise = (await engWorker.current).recognize(
+              blackCanvas
+            );
+            const jpnBlackPromise = (await jpnWorker.current).recognize(
+              blackCanvas
+            );
 
             const powerCandidates = extractPower(await engWhitePromise);
             const params = extractParams(await engBlackPromise);
@@ -67,7 +80,7 @@ export default function MemoryImporterModal() {
               await jpnBlackPromise,
               img,
               blackCanvas,
-              await itemImageDataPromise
+              await itemImageData.current
             );
             const itemsPIdolId = items
               .filter((c) => !!c)
@@ -78,8 +91,8 @@ export default function MemoryImporterModal() {
               await jpnBlackPromise,
               img,
               blackCanvas,
-              await signatureSkillCardsImageDataPromise,
-              await nonSignatureSkillCardsImageDataPromise,
+              await signatureSkillCardsImageData.current,
+              await nonSignatureSkillCardsImageData.current,
               itemsPIdolId
             );
             const cardsPIdolId = cards
@@ -119,9 +132,6 @@ export default function MemoryImporterModal() {
 
     Promise.all(promises).then(async (res) => {
       console.timeEnd("All memories parsed");
-
-      engWorker.terminate();
-      jpnWorker.terminate();
 
       await fetch("/api/memory", {
         method: "POST",
