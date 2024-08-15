@@ -17,7 +17,7 @@ export default function PinnedTools() {
   return (
     <div className={styles.pinnedTools}>
       {pinnedTools.map((tool) => (
-        <div className={styles.container}>
+        <div key={tool} className={styles.container}>
           <div className={styles.header}>
             <span>{TOOLS[tool].icon}</span>
             <button onClick={() => unpin(tool)}>
