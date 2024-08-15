@@ -15,74 +15,78 @@
       opacity: 1;
     }
   }
+}
 
-  .left {
-    position: relative;
+.left {
+  position: relative;
+}
 
-    .actions {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      transition: 0.2s all;
+.actions {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: 0.2s all;
 
-      button {
-        transform: scale(0.8);
-      }
-    }
+  button {
+    transform: scale(0.8);
   }
+}
 
-  .details {
-    flex: 1;
-    min-width: 0;
-    padding: 4px;
-  }
+.details {
+  flex: 1;
+  min-width: 0;
+  padding: 4px;
+}
 
-  .text {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    font-size: 16px;
-  }
+.text {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 16px;
+}
 
-  .row {
-    display: flex;
-    gap: 2px;
+.row {
+  display: flex;
+  gap: 2px;
+}
 
-    img {
-      border: 2px solid $gray-light;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-  }
+.imageWrapper {
+  position: relative;
+  width: 16%;
+  max-width: 50px;
+  aspect-ratio: 1;
+  border: 2px solid $gray-light;
+  border-radius: 4px;
+  overflow: hidden;
+}
 
-  .filler {
-    flex: 1;
-  }
+.filler {
+  flex: 1;
+}
 
-  .parameters {
-    width: 100px;
-    display: flex;
-    gap: 1px;
-    margin: 8px;
-    border-radius: 4px;
-    overflow: hidden;
+.parameters {
+  width: 120px;
+  display: flex;
+  gap: 1px;
+  margin: 8px 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
 
-    .vocal {
-      background-color: $vocal;
-    }
+.vocal {
+  background-color: $vocal;
+}
 
-    .dance {
-      background-color: $dance;
-    }
+.dance {
+  background-color: $dance;
+}
 
-    .visual {
-      background-color: $visual;
-    }
-  }
+.visual {
+  background-color: $visual;
 }
