@@ -5,6 +5,7 @@ import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import CostRanges from "@/components/CostRanges";
 import DefaultCards from "@/components/DefaultCards";
+import Input from "@/components/Input";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
@@ -31,6 +32,8 @@ export default function Simulator() {
   const {
     stageId,
     setStageId,
+    supportBonus,
+    setSupportBonus,
     params,
     setParams,
     pItemIds,
@@ -50,7 +53,7 @@ export default function Simulator() {
   const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const idolConfig = new IdolConfig(
     params,
-    0,
+    supportBonus,
     pItemIds,
     skillCardIdGroups,
     stage,
@@ -185,6 +188,17 @@ export default function Simulator() {
       <div className={styles.configurator}>
         <label>ステージ</label>
         <StageSelect stageId={stageId} setStageId={setStageId} />
+
+        <label>サポートボーナス%</label>
+        <div className={styles.supportBonusInput}>
+          <Input
+            type="number"
+            value={parseFloat(((supportBonus || 0) * 100).toFixed(2))}
+            onChange={(value) =>
+              setSupportBonus(parseFloat((value / 100).toFixed(4)))
+            }
+          />
+        </div>
 
         <label>パラメータ</label>
         <div className={styles.params}>

@@ -21,6 +21,7 @@ export function LoadoutContextProvider({ children }) {
 
   const isSimulatorOpen = pathname == "/simulator";
   let initialStageId = searchParams.get("stage");
+  let initialSupportBonus = searchParams.get("support_bonus");
   let initialParams = searchParams.get("params");
   let initialPItemIds = searchParams.get("items");
   let initialSkillCardIdGroups = searchParams.get("cards");
@@ -37,6 +38,7 @@ export function LoadoutContextProvider({ children }) {
     initialSkillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
 
   initialStageId = parseInt(initialStageId, 10) || null;
+  initialSupportBonus = parseFloat(initialSupportBonus) || null;
   initialParams = initialParams.split("-").map((n) => parseInt(n, 10) || 0);
   initialPItemIds = initialPItemIds.split("-").map((n) => parseInt(n, 10) || 0);
   initialSkillCardIdGroups = initialSkillCardIdGroups
@@ -47,6 +49,7 @@ export function LoadoutContextProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
   const [stageId, setStageId] = useState(initialStageId);
+  const [supportBonus, setSupportBonus] = useState(initialSupportBonus);
   const [params, setParams] = useState(initialParams);
   const [pItemIds, setPItemIds] = useState(initialPItemIds);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
@@ -239,6 +242,7 @@ export function LoadoutContextProvider({ children }) {
 
   const simulatorUrl = getSimulatorUrl(
     stageId,
+    supportBonus,
     params,
     pItemIds,
     skillCardIdGroups
@@ -250,6 +254,8 @@ export function LoadoutContextProvider({ children }) {
         setMemory,
         stageId,
         setStageId,
+        supportBonus,
+        setSupportBonus,
         params,
         setParams,
         pItemIds,

@@ -63,7 +63,7 @@ export default function MemoryEditor() {
         replaceSkillCardId={replaceSkillCardId}
         idolId={idolId}
       />
-      <div>Cost: {skillCardCost}</div>
+      <div>コスト: {skillCardCost}</div>
 
       <MemorySave />
     </div>

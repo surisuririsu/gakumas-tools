@@ -1,21 +1,13 @@
-import { useEffect, useState } from "react";
-import { Idols, PIdols } from "gakumas-data";
-import IconSelect from "@/components/IconSelect";
+import { useContext, useState } from "react";
+import { PIdols } from "gakumas-data";
+import PlanIdolSelects from "@/components/PlanIdolSelects";
 import PIdol from "@/components/PIdol";
-import { PLANS } from "@/utils/plans";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./PIdolSelect.module.scss";
 
 export default function PIdolSelect({ selected, onChange }) {
+  const { plan, setPlan, idolId, setIdolId } = useContext(WorkspaceContext);
   const [expanded, setExpanded] = useState(!selected);
-  const [plan, setPlan] = useState("sense");
-  const [idolId, setIdolId] = useState(1);
-
-  useEffect(() => {
-    const pIdol = PIdols.getById(selected);
-    if (!pIdol) return;
-    setPlan(pIdol.plan);
-    setIdolId(pIdol.idolId);
-  }, [selected]);
 
   return (
     <div className={styles.pIdolSelect}>
@@ -25,26 +17,12 @@ export default function PIdolSelect({ selected, onChange }) {
 
       {expanded && (
         <div className={styles.expander}>
-          <div className={styles.filters}>
-            <IconSelect
-              options={PLANS.map((alias) => ({
-                id: alias,
-                iconSrc: `/plans/${alias}.png`,
-                alt: alias,
-              }))}
-              selected={plan}
-              onChange={setPlan}
-            />
-            <IconSelect
-              options={Idols.getAll().map(({ id, name, icon }) => ({
-                id,
-                iconSrc: icon,
-                alt: name,
-              }))}
-              selected={idolId}
-              onChange={setIdolId}
-            />
-          </div>
+          <PlanIdolSelects
+            plan={plan}
+            idolId={idolId}
+            setPlan={setPlan}
+            setIdolId={setIdolId}
+          />
 
           <div className={styles.result}>
             {PIdols.getFiltered({ plans: [plan], idolIds: [idolId] }).map(

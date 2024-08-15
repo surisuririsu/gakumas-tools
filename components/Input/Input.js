@@ -29,9 +29,7 @@ export default function Input({
       placeholder={placeholder}
       onChange={(e) =>
         onChange(
-          type == "number"
-            ? clamp(parseInt(e.target.value, 10))
-            : e.target.value
+          type == "number" ? clamp(parseFloat(e.target.value)) : e.target.value
         )
       }
     />
