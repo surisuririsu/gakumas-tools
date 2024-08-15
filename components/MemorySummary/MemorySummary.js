@@ -79,13 +79,15 @@ export default function MemorySummary({ memory }) {
             .filter((s) => s)
             .map(SkillCards.getById)
             .map((skillCard, i) => (
-              <Image
-                key={i}
-                src={skillCard.getDynamicIcon(idolId)}
-                width={50}
-                alt={skillCard.name}
-                draggable={false}
-              />
+              <div key={i} className={styles.imageWrapper}>
+                <Image
+                  src={skillCard.getDynamicIcon(idolId)}
+                  fill
+                  sizes="50px"
+                  alt={skillCard.name}
+                  draggable={false}
+                />
+              </div>
             ))}
         </div>
       </div>
