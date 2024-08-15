@@ -20,6 +20,11 @@ body {
   flex-direction: column;
 }
 
+#tools {
+  display: flex;
+  overflow: auto;
+}
+
 main {
   flex: 1;
   overflow: auto;

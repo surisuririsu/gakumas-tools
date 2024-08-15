@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
+import PinnedTools from "@/components/PinnedTools";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
@@ -42,7 +43,10 @@ export default async function RootLayout({ children }) {
                     <SearchContextProvider>
                       <LoadoutContextProvider>
                         <ModalContextProvider>
-                          <main>{children}</main>
+                          <div id="tools">
+                            <PinnedTools />
+                            <main>{children}</main>
+                          </div>
                         </ModalContextProvider>
                       </LoadoutContextProvider>
                     </SearchContextProvider>

@@ -18,7 +18,7 @@ export default function Navbar() {
       <h1>Gakumas Tools</h1>
 
       <div className={styles.links}>
-        {TOOLS.map(({ icon, path }) => (
+        {Object.values(TOOLS).map(({ icon, path }) => (
           <Link
             key={path}
             className={`${styles.link} ${

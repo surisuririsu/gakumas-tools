@@ -8,27 +8,27 @@ import {
   FaTrophy,
 } from "react-icons/fa6";
 
-export const TOOLS = [
-  {
+export const TOOLS = {
+  home: {
     title: "ホーム",
     icon: <FaHouse />,
     description: "Home page with overview of available tools",
     path: "/",
   },
-  {
+  produceRankCalculator: {
     title: "プロデュース評価計算機",
     icon: <FaCalculator />,
     description:
       "Calculate final exam score needed to achieve each produce rank based on pre-exam parameters",
     path: "/produce-rank-calculator",
   },
-  {
+  dex: {
     title: "P図鑑",
     icon: <FaBook />,
     description: "Filter and view p-item and skill card information",
     path: "/dex",
   },
-  {
+  memoryCalculator: {
     title: "メモリー計算機",
     icon: (
       <>
@@ -41,7 +41,7 @@ export const TOOLS = [
       "Calculate probability of getting desired skill card combinations in memories",
     path: "/memory-calculator",
   },
-  {
+  memoryEditor: {
     title: "メモリー編集",
     icon: (
       <>
@@ -53,7 +53,7 @@ export const TOOLS = [
     description: "Create, edit, and save memories",
     path: "/memory-editor",
   },
-  {
+  memories: {
     title: "メモリー一覧",
     icon: (
       <>
@@ -65,11 +65,11 @@ export const TOOLS = [
       "Import memories from screenshots and search by p-items and skill cards",
     path: "/memories",
   },
-  {
+  simulator: {
     title: "シミュレーター",
     icon: <FaTrophy />,
     fill: true,
     description: "Create and simulate contest loadouts",
     path: "/simulator",
   },
-];
+};
