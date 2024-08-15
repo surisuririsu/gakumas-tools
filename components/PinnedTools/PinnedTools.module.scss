@@ -1,0 +1,19 @@
+@import "@/constants";
+
+.pinnedTools {
+  display: flex;
+}
+
+.tool {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 340px;
+  border-right: 1px solid darken($gk-orange, 15%);
+}
+
+.toolHeader {
+  padding: 8px;
+  background-color: $gk-orange;
+  color: $white;
+}

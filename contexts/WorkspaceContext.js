@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 const WORKSPACE_STORAGE_KEY = "gakumas-tools.workspace";
 
@@ -10,6 +10,10 @@ export function WorkspaceContextProvider({ children }) {
   const [filter, setFilter] = useState(true);
   const [plan, setPlan] = useState("sense");
   const [idolId, setIdolId] = useState(1);
+  const [pinnedTools, setPinnedTools] = useState([
+    "dex",
+    "produceRankCalculator",
+  ]);
 
   useEffect(() => {
     const workspaceString = localStorage.getItem(WORKSPACE_STORAGE_KEY);
@@ -30,6 +34,20 @@ export function WorkspaceContextProvider({ children }) {
     );
   }, [filter, plan, idolId]);
 
+  const pin = useCallback(
+    (tool) => {
+      setPinnedTools([...pinnedTools, tool]);
+    },
+    [pinnedTools]
+  );
+
+  const unpin = useCallback(
+    (tool) => {
+      setPinnedTools(pinnedTools.filter((t) => t != tool));
+    },
+    [pinnedTools]
+  );
+
   return (
     <WorkspaceContext.Provider
       value={{
@@ -39,6 +57,9 @@ export function WorkspaceContextProvider({ children }) {
         setPlan,
         idolId,
         setIdolId,
+        pinnedTools,
+        pin,
+        unpin,
       }}
     >
       {children}
