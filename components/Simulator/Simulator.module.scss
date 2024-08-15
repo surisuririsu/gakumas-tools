@@ -13,6 +13,11 @@
     padding: 16px;
     overflow: auto;
 
+    .supportBonusInput {
+      width: 80px;
+      display: flex;
+    }
+
     .typeMultipliers {
       display: flex;
       font-size: 14px;

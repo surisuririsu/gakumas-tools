@@ -24,10 +24,10 @@ export default class IdolConfig {
 
     const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
     this.params = { vocal, dance, visual, stamina };
-    this.supportBonus = supportBonus;
+    this.supportBonus = supportBonus || 0;
     this.typeMultipliers = this.getTypeMultipliers(
       this.params,
-      supportBonus,
+      this.supportBonus,
       stage.criteria
     );
 
