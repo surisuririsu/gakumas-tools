@@ -1,10 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
 import { createWorker } from "tesseract.js";
 import Modal from "@/components/Modal";
-import DataContext from "@/contexts/DataContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import {
   extractPower,
@@ -19,8 +18,7 @@ import {
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporterModal.module.scss";
 
-export default function MemoryImporterModal() {
-  const { fetchMemories } = useContext(DataContext);
+export default function MemoryImporterModal({ onSuccess }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const engWorker = useRef();
@@ -132,14 +130,7 @@ export default function MemoryImporterModal() {
 
     Promise.all(promises).then(async (res) => {
       console.timeEnd("All memories parsed");
-
-      await fetch("/api/memory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ memories: res }),
-      });
-
-      fetchMemories();
+      onSuccess(res);
     });
   }
 
@@ -156,16 +147,15 @@ export default function MemoryImporterModal() {
 
         <div>
           <p>
-            Contest power, parameters, P-items, and skill card icons must be
-            visible in each screenshot. The top of the white section must also
-            be visible, and the bottom section must not be scrolled down.
+            Contest power, parameters, p-items, and skill card icons must be
+            visible in each screenshot.
           </p>
           <p>
-            Importing may take several minutes or longer depending on the number
-            of memories imported and your device&apos;s processor and memory.
-            Your browser may crash if you try to import too many memories at
-            once. The recommended limit is 50 memories per batch. Use on a
-            smartphone is not recommended.
+            Importing may take several seconds or minutes depending on the
+            number of memories imported and your device&apos;s processor and
+            memory. Your browser may crash if you try to import too many
+            memories at once. The recommended limit is 50 memories per batch.
+            Use on a smartphone is not recommended.
           </p>
           <p>
             Some memories may fail to parse correctly, and require fixing after

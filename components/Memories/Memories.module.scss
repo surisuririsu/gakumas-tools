@@ -4,68 +4,68 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
 
-  .header {
-    display: flex;
-    gap: 6px;
-    border-bottom: 2px solid $gray-light;
-    padding: 6px;
+.nudge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+}
 
-    .search {
-      flex: 1;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+.header {
+  display: flex;
+  gap: 6px;
+  border-bottom: 2px solid $gray-light;
+  padding: 6px;
+}
 
-    .delete {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.fill {
+  flex: 1;
+}
 
-    .fill {
-      flex: 1;
-    }
+.count {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  color: $gk-orange;
+}
 
-    .count {
-      align-self: flex-end;
-      display: flex;
-      align-items: center;
-      color: $gk-orange;
-    }
-  }
+.search {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-  .list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
+.delete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  .memoryTile {
-    display: flex;
-    border-bottom: 1px solid $gk-orange;
+.list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
 
-    .check {
-      display: flex;
-      background-color: $red-extra-light;
+.memoryTile {
+  display: flex;
+  border-bottom: 1px solid $gk-orange;
+}
 
-      input {
-        width: 16px;
-        margin: 8px;
-        accent-color: $red-dark;
-        cursor: pointer;
-      }
-    }
-  }
+.check {
+  display: flex;
+  background-color: $red-extra-light;
 
-  .nudge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 32px;
+  input {
+    width: 16px;
+    margin: 8px;
+    accent-color: $red-dark;
+    cursor: pointer;
   }
 }
