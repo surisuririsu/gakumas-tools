@@ -33,7 +33,7 @@ export function LoadoutContextProvider({ children }) {
 
   initialStageId = initialStageId || "16";
   initialParams = initialParams || "1000-1000-1000-40";
-  initialPItemIds = initialPItemIds || "0-0-0-0";
+  initialPItemIds = initialPItemIds || "0-0-0";
   initialSkillCardIdGroups =
     initialSkillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
 
@@ -233,7 +233,7 @@ export function LoadoutContextProvider({ children }) {
   function clear() {
     setMemoryIds([null, null]);
     setParams([null, null, null, null]);
-    setPItemIds([0, 0, 0, 0]);
+    setPItemIds([0, 0, 0]);
     setSkillCardIdGroups([
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
