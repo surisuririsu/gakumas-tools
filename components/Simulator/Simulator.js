@@ -33,7 +33,7 @@ import STRATEGIES from "@/simulator/strategies";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
-function Simulator() {
+export default function Simulator() {
   const {
     stageId,
     setStageId,
@@ -308,5 +308,3 @@ function Simulator() {
     </div>
   );
 }
-
-export default memo(Simulator);
