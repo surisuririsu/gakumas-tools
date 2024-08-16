@@ -14,11 +14,12 @@ function Navbar() {
       <h1>Gakumas Tools</h1>
 
       <div className={styles.links}>
-        {Object.values(TOOLS).map(({ icon, path }) => (
+        {Object.values(TOOLS).map(({ icon, path, title }) => (
           <NavbarLink
             key={path}
-            path={path}
             icon={icon}
+            path={path}
+            title={title}
             active={path == pathname}
           />
         ))}
