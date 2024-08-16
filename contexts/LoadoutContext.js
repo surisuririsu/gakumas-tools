@@ -1,12 +1,6 @@
 "use client";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import DataContext from "@/contexts/DataContext";
 import { getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
@@ -16,11 +10,8 @@ const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
-  const pathname = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
 
-  const isSimulatorOpen = pathname == "/simulator";
   let initialStageId = searchParams.get("stage");
   let initialSupportBonus = searchParams.get("support_bonus");
   let initialParams = searchParams.get("params");
@@ -56,41 +47,6 @@ export function LoadoutContextProvider({ children }) {
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
     initialSkillCardIdGroups
   );
-
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      return params.toString();
-    },
-    [searchParams]
-  );
-
-  function addSimulatorParam(key, value) {
-    if (!isSimulatorOpen) return;
-    router.push(`/simulator?${createQueryString(key, value)}`, {
-      scroll: false,
-    });
-  }
-
-  useEffect(() => {
-    addSimulatorParam("stage", stageId);
-  }, [stageId]);
-  useEffect(() => {
-    addSimulatorParam("support_bonus", supportBonus);
-  }, [supportBonus]);
-  useEffect(() => {
-    addSimulatorParam("params", params.join("-"));
-  }, [params]);
-  useEffect(() => {
-    addSimulatorParam("items", pItemIds.join("-"));
-  }, [pItemIds]);
-  useEffect(() => {
-    addSimulatorParam(
-      "cards",
-      skillCardIdGroups.map((group) => group.join("-")).join("_")
-    );
-  }, [skillCardIdGroups]);
 
   useEffect(() => {
     if (hasDataFromParams) {
