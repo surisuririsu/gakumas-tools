@@ -1,10 +1,15 @@
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FaCheck, FaRegCopy } from "react-icons/fa6";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
-import CostRanges from "@/components/CostRanges";
-import DefaultCards from "@/components/DefaultCards";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
@@ -14,8 +19,7 @@ import StagePItems from "@/components/StagePItems";
 import StageSelect from "@/components/StageSelect";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import IdolConfig from "@/simulator/IdolConfig";
-import StageConfig from "@/simulator/StageConfig";
+import { simulate } from "@/simulator";
 import {
   BUCKET_SIZE,
   FALLBACK_STAGE,
@@ -23,12 +27,13 @@ import {
   NUM_RUNS,
   SYNC,
 } from "@/simulator/constants";
+import IdolConfig from "@/simulator/IdolConfig";
+import StageConfig from "@/simulator/StageConfig";
 import STRATEGIES from "@/simulator/strategies";
-import { simulate } from "@/simulator";
-import { generateKafeUrl } from "@/utils/kafeSimulator";
+import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
-export default function Simulator() {
+function Simulator() {
   const {
     stageId,
     setStageId,
@@ -46,7 +51,6 @@ export default function Simulator() {
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
-  const [activeSubTool, setActiveSubTool] = useState(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const workersRef = useRef();
 
@@ -60,8 +64,8 @@ export default function Simulator() {
     plan,
     idolId
   );
-  const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
 
+  // Set up web workers on mount
   useEffect(() => {
     let numWorkers = 1;
     if (navigator.hardwareConcurrency) {
@@ -80,42 +84,45 @@ export default function Simulator() {
     };
   }, []);
 
-  function setResult(result) {
-    const { minRun, averageRun, maxRun, averageScore, scores } = result;
+  const setResult = useCallback(
+    (result) => {
+      const { minRun, averageRun, maxRun, averageScore, scores } = result;
 
-    let data = {};
-    for (let score of scores) {
-      const bucket = Math.floor(score / BUCKET_SIZE);
-      data[bucket] = (data[bucket] || 0) + 1;
-    }
+      let data = {};
+      for (let score of scores) {
+        const bucket = Math.floor(score / BUCKET_SIZE);
+        data[bucket] = (data[bucket] || 0) + 1;
+      }
 
-    const minKey = Math.floor(minRun.score / BUCKET_SIZE);
-    const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
-    for (let i = minKey - 1; i <= maxKey + 1; i++) {
-      if (!data[i]) data[i] = 0;
-    }
+      const minKey = Math.floor(minRun.score / BUCKET_SIZE);
+      const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
+      for (let i = minKey - 1; i <= maxKey + 1; i++) {
+        if (!data[i]) data[i] = 0;
+      }
 
-    console.timeEnd("simulation");
+      console.timeEnd("simulation");
 
-    setSimulatorData({
-      buckets: data,
-      minScore: minRun.score,
-      maxScore: maxRun.score,
-      averageScore,
-      minRun,
-      maxRun,
-      averageRun,
-    });
-    setRunning(false);
+      setSimulatorData({
+        buckets: data,
+        minScore: minRun.score,
+        maxScore: maxRun.score,
+        averageScore,
+        minRun,
+        maxRun,
+        averageRun,
+      });
+      setRunning(false);
 
-    setTimeout(
-      () =>
-        document.getElementById("simulator_result").scrollIntoView({
-          behavior: "smooth",
-        }),
-      100
-    );
-  }
+      setTimeout(
+        () =>
+          document.getElementById("simulator_result").scrollIntoView({
+            behavior: "smooth",
+          }),
+        100
+      );
+    },
+    [setSimulatorData, setRunning]
+  );
 
   function runSimulation() {
     setRunning(true);
@@ -235,36 +242,8 @@ export default function Simulator() {
           />
         ))}
 
-        <div className={styles.expanderButtons}>
-          <button
-            onClick={() =>
-              setActiveSubTool(
-                activeSubTool == "costRanges" ? null : "costRanges"
-              )
-            }
-          >
-            コスト範囲
-          </button>
-          <a href={kafeUrl} target="_blank">
-            コンテストシミュレーター
-            <br />
-            (@かふぇもっと)
-          </a>
-          <button
-            onClick={() =>
-              setActiveSubTool(
-                activeSubTool == "defaultCards" ? null : "defaultCards"
-              )
-            }
-          >
-            基本カード
-          </button>
-        </div>
+        <SimulatorSubTools plan={idolConfig.plan} idolId={idolConfig.idolId} />
 
-        {activeSubTool == "costRanges" && <CostRanges />}
-        {activeSubTool == "defaultCards" && (
-          <DefaultCards plan={idolConfig.plan} idolId={idolConfig.idolId} />
-        )}
         <div className={styles.simulateButton}>
           <Button
             style="red-secondary"
@@ -329,3 +308,5 @@ export default function Simulator() {
     </div>
   );
 }
+
+export default memo(Simulator);

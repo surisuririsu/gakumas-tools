@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { DEBUFF_FIELDS } from "@/simulator/constants";
 import styles from "./SimulatorLogs.module.scss";
 
@@ -21,7 +22,7 @@ const STRINGS = {
   nullifyGenkiTurns: "元気増加無効",
 };
 
-export default function Diff({ field, next, prev }) {
+function Diff({ field, next, prev }) {
   let diffDir = "positive";
   if (DEBUFF_FIELDS.includes(field) == next > prev) {
     diffDir = "negative";
@@ -35,3 +36,5 @@ export default function Diff({ field, next, prev }) {
     </div>
   );
 }
+
+export default memo(Diff);

@@ -1,7 +1,8 @@
+import { memo } from "react";
 import Image from "next/image";
 import styles from "./StageSelect.module.scss";
 
-export default function StageSummary({ stage }) {
+function StageSummary({ stage }) {
   return (
     <>
       {stage.name}
@@ -14,3 +15,5 @@ export default function StageSummary({ stage }) {
     </>
   );
 }
+
+export default memo(StageSummary);

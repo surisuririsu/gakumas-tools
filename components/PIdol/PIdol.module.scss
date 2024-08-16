@@ -5,29 +5,29 @@
   width: 81px;
   height: 108px;
   background-color: $gray-extra-light;
+}
 
-  .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 2px;
-    background: linear-gradient(rgba(0, 0, 0, 0) 0 65%, rgba(0, 0, 0, 0.75));
-    color: $white;
-    font-size: 10px;
-    font-weight: 600;
-    text-wrap: balance;
-    text-align: left;
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2px;
+  background: linear-gradient(rgba(0, 0, 0, 0) 0 65%, rgba(0, 0, 0, 0.75));
+  color: $white;
+  font-size: 10px;
+  font-weight: 600;
+  text-wrap: balance;
+  text-align: left;
+}
 
-    .attributes {
-      display: flex;
+.attributes {
+  display: flex;
 
-      img {
-        object-fit: contain;
-        object-position: left;
-      }
-    }
+  img {
+    object-fit: contain;
+    object-position: left;
   }
 }

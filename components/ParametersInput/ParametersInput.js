@@ -1,18 +1,19 @@
+import { memo, useMemo } from "react";
 import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vocal", "Dance", "Visual"];
 const MIN = 0;
 const MAX = 1500;
 
-export default function ParametersInput({
-  parameters,
-  onChange,
-  withStamina,
-  max = MAX,
-}) {
+function ParametersInput({ parameters, onChange, withStamina, max = MAX }) {
+  const parameterNames = useMemo(
+    () => PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []),
+    [withStamina]
+  );
+
   return (
     <div className={styles.parameters}>
-      {PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []).map((name, i) => (
+      {parameterNames.map((name, i) => (
         <input
           key={name}
           type="number"
@@ -30,3 +31,5 @@ export default function ParametersInput({
     </div>
   );
 }
+
+export default memo(ParametersInput);

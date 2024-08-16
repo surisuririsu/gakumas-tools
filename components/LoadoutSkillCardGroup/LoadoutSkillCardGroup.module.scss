@@ -6,17 +6,6 @@
   align-items: center;
   margin-top: 4px;
 
-  .buttonGroup {
-    display: flex;
-    gap: 4px;
-    opacity: 0;
-    transition: all 0.3s;
-
-    @media only screen and (max-width: 600px) {
-      opacity: 1;
-    }
-  }
-
   &:hover,
   &:focus-within {
     .buttonGroup {
@@ -32,16 +21,27 @@
       cursor: not-allowed;
     }
   }
+}
 
-  .addButton {
-    color: $green;
-  }
+.buttonGroup {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: all 0.3s;
 
-  .moveButton {
-    color: $blue;
+  @media only screen and (max-width: 600px) {
+    opacity: 1;
   }
+}
 
-  .deleteButton {
-    color: $red;
-  }
+.addButton {
+  color: $green;
+}
+
+.moveButton {
+  color: $blue;
+}
+
+.deleteButton {
+  color: $red;
 }

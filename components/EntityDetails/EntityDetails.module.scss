@@ -7,13 +7,13 @@
   img {
     object-fit: contain;
   }
+}
 
-  .placeholder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: $gray-light;
-    font-size: 60px;
-  }
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: $gray-light;
+  font-size: 60px;
 }

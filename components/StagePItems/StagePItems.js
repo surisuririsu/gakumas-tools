@@ -1,11 +1,13 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import EntityIcon from "@/components/EntityIcon";
+import EntityPickerModal from "@/components/EntityPickerModal";
 import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StagePItems.module.scss";
 
-export default function StagePItems({ pItemIds, replacePItemId, size }) {
-  const { pickPItemModal } = useContext(ModalContext);
+function StagePItems({ pItemIds, replacePItemId, size }) {
+  const { setModal } = useContext(ModalContext);
+
   return (
     <div className={styles.stagePItems}>
       {pItemIds.map((pItemId, index) => (
@@ -14,9 +16,13 @@ export default function StagePItems({ pItemIds, replacePItemId, size }) {
           type={EntityTypes.P_ITEM}
           id={pItemId}
           onClick={() =>
-            pickPItemModal((entity) => replacePItemId(index, entity.id), {
-              sourceTypes: ["support"],
-            })
+            setModal(
+              <EntityPickerModal
+                type={EntityTypes.P_ITEM}
+                onPick={(card) => replacePItemId(index, card.id)}
+                filters={{ sourceTypes: ["support"] }}
+              />
+            )
           }
           size={size}
         />
@@ -24,3 +30,5 @@ export default function StagePItems({ pItemIds, replacePItemId, size }) {
     </div>
   );
 }
+
+export default memo(StagePItems);

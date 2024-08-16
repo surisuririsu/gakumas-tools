@@ -1,13 +1,18 @@
-import { useContext, useState } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import { PIdols } from "gakumas-data";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import PIdol from "@/components/PIdol";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./PIdolSelect.module.scss";
 
-export default function PIdolSelect({ selected, onChange }) {
+function PIdolSelect({ selected, onChange }) {
   const { plan, setPlan, idolId, setIdolId } = useContext(WorkspaceContext);
   const [expanded, setExpanded] = useState(!selected);
+
+  const pIdols = useMemo(
+    () => PIdols.getFiltered({ plans: [plan], idolIds: [idolId] }),
+    [plan, idolId]
+  );
 
   return (
     <div className={styles.pIdolSelect}>
@@ -25,23 +30,23 @@ export default function PIdolSelect({ selected, onChange }) {
           />
 
           <div className={styles.result}>
-            {PIdols.getFiltered({ plans: [plan], idolIds: [idolId] }).map(
-              (pIdol) => (
-                <button
-                  key={pIdol.id}
-                  className={styles.pIdolButton}
-                  onClick={() => {
-                    onChange(pIdol.id);
-                    setExpanded(false);
-                  }}
-                >
-                  <PIdol pIdolId={pIdol.id} />
-                </button>
-              )
-            )}
+            {pIdols.map((pIdol) => (
+              <button
+                key={pIdol.id}
+                className={styles.pIdolButton}
+                onClick={() => {
+                  onChange(pIdol.id);
+                  setExpanded(false);
+                }}
+              >
+                <PIdol pIdolId={pIdol.id} />
+              </button>
+            ))}
           </div>
         </div>
       )}
     </div>
   );
 }
+
+export default memo(PIdolSelect);

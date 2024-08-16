@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { memo, useState } from "react";
 import ButtonGroup from "@/components/ButtonGroup";
 import EntityBank from "@/components/EntityBank";
 import EntityDetails from "@/components/EntityDetails";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./Dex.module.scss";
 
-export default function Dex() {
+function Dex() {
   const [activeTab, setActiveTab] = useState("スキルカード");
   const [selectedEntity, setSelectedEntity] = useState(null);
 
@@ -33,3 +33,5 @@ export default function Dex() {
     </div>
   );
 }
+
+export default memo(Dex);

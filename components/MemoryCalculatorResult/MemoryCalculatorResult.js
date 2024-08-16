@@ -1,13 +1,10 @@
+import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import { calculateSkillCardCost } from "@/utils/contestPower";
 import styles from "./MemoryCalculatorResult.module.scss";
 
-export default function MemoryCalculatorResult({
-  skillCardIds,
-  probability,
-  idolId,
-}) {
+function MemoryCalculatorResult({ skillCardIds, probability, idolId }) {
   return (
     <div className={styles.result}>
       {skillCardIds
@@ -28,3 +25,5 @@ export default function MemoryCalculatorResult({
     </div>
   );
 }
+
+export default memo(MemoryCalculatorResult);

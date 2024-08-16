@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import {
   FaCirclePlus,
   FaCircleArrowUp,
@@ -10,11 +10,7 @@ import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
-export default function LoadoutSkillCardGroup({
-  skillCardIds,
-  groupIndex,
-  idolId,
-}) {
+function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
   const {
     skillCardIdGroups,
     replaceSkillCardId,
@@ -32,7 +28,7 @@ export default function LoadoutSkillCardGroup({
     );
 
   return (
-    <div className={styles.loadoutSkillCardGroup}>
+    <div>
       <StageSkillCards
         skillCardIds={skillCardIds}
         replaceSkillCardId={replaceSkillCardId}
@@ -78,3 +74,5 @@ export default function LoadoutSkillCardGroup({
     </div>
   );
 }
+
+export default memo(LoadoutSkillCardGroup);

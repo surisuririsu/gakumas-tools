@@ -1,17 +1,18 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StageSkillCards.module.scss";
+import EntityPickerModal from "../EntityPickerModal";
 
-export default function StageSkillCards({
+function StageSkillCards({
   skillCardIds,
   replaceSkillCardId,
   idolId,
   size,
   groupIndex = 0,
 }) {
-  const { pickSkillCardModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
 
   return (
     <div className={styles.stageSkillCards}>
@@ -21,8 +22,13 @@ export default function StageSkillCards({
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
           onClick={() =>
-            pickSkillCardModal((entity) =>
-              replaceSkillCardId(groupIndex * 6 + index, entity.id)
+            setModal(
+              <EntityPickerModal
+                type={EntityTypes.SKILL_CARD}
+                onPick={(card) =>
+                  replaceSkillCardId(groupIndex * 6 + index, card.id)
+                }
+              />
             )
           }
           idolId={idolId}
@@ -32,3 +38,5 @@ export default function StageSkillCards({
     </div>
   );
 }
+
+export default memo(StageSkillCards);

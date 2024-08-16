@@ -6,20 +6,20 @@
   flex-direction: column;
   gap: 8px;
   padding: 16px;
+}
 
-  .stats {
-    text-align: center;
+.stats {
+  text-align: center;
 
-    thead {
-      background-color: lighten($gk-orange, 20%);
-    }
+  thead {
+    background-color: lighten($gk-orange, 20%);
+  }
 
-    tbody {
-      background-color: lighten($gk-orange, 40%);
-    }
+  tbody {
+    background-color: lighten($gk-orange, 40%);
+  }
 
-    th {
-      width: 33%;
-    }
+  th {
+    width: 33%;
   }
 }

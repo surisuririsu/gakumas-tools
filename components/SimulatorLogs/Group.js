@@ -1,15 +1,17 @@
+import { memo } from "react";
 import Image from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
 
-export default function Group({ entity, childLogs, idolId }) {
+function Group({ entity, childLogs, idolId }) {
   let resolvedEntity = null;
   if (entity.type == "skillCard" || entity.type == "skillCardEffect") {
     resolvedEntity = SkillCards.getById(entity.id);
   } else if (entity.type == "pItem") {
     resolvedEntity = PItems.getById(entity.id);
   }
+
   return (
     <div className={styles.group}>
       <div className={styles.entity}>
@@ -52,3 +54,5 @@ export default function Group({ entity, childLogs, idolId }) {
     </div>
   );
 }
+
+export default memo(Group);

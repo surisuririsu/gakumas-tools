@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-export default function DistributionPlot({ data }) {
+function DistributionPlot({ data }) {
   const formattedData = {
     labels: Object.keys(data).map((k) => k * BUCKET_SIZE),
     datasets: [
@@ -33,3 +33,5 @@ export default function DistributionPlot({ data }) {
   };
   return <Bar data={formattedData} />;
 }
+
+export default memo(DistributionPlot);

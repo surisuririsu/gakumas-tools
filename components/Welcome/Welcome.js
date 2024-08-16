@@ -1,8 +1,9 @@
+import { memo } from "react";
 import Button from "@/components/Button";
 import { TOOLS } from "@/utils/tools";
 import styles from "./Welcome.module.scss";
 
-export default function Welcome() {
+function Welcome() {
   return (
     <div className={styles.welcome}>
       <div className={styles.content}>
@@ -30,3 +31,5 @@ export default function Welcome() {
     </div>
   );
 }
+
+export default memo(Welcome);

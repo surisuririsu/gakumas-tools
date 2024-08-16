@@ -1,10 +1,11 @@
 "use client";
-import React, { useContext, useMemo, useState } from "react";
+import React, { memo, useContext, useMemo, useState } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
 import TargetSkillCards from "@/components/TargetSkillCards";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
+import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
 import {
@@ -12,11 +13,21 @@ import {
   generatePossibleMemories,
 } from "@/utils/skillCardLottery";
 import styles from "./MemoryCalculator.module.scss";
-import ModalContext from "@/contexts/ModalContext";
+import EntityPickerModal from "../EntityPickerModal";
 
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
-export default function MemoryCalculator() {
+// Generates all combinations of target cards
+function generateCombinations(slots) {
+  if (slots.length === 0) return [[]];
+  const restCombos = generateCombinations(slots.slice(1));
+  return slots[0].reduce(
+    (acc, cur) => acc.concat(restCombos.map((c) => c.concat(cur))),
+    []
+  );
+}
+
+function MemoryCalculator() {
   const {
     targetSkillCardIds,
     alternateSkillCardIds,
@@ -24,7 +35,7 @@ export default function MemoryCalculator() {
     acquiredSkillCardIds,
     replaceAcquiredCardId,
   } = useContext(MemoryCalculatorContext);
-  const { pickSkillCardModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);
   const [rank, setRank] = useState("A");
 
@@ -39,54 +50,56 @@ export default function MemoryCalculator() {
     offTargetMemories,
     onTargetProbability,
     offTargetProbability,
-  } = possibleMemories.reduce(
-    (acc, cur) => {
-      // Generates all combinations of target cards
-      function generateCombinations(slots) {
-        if (slots.length === 0) return [[]];
-        const restCombos = generateCombinations(slots.slice(1));
-        return slots[0].reduce(
-          (acc, cur) => acc.concat(restCombos.map((c) => c.concat(cur))),
-          []
-        );
-      }
+  } = useMemo(
+    () =>
+      possibleMemories.reduce(
+        (acc, cur) => {
+          // Cards for each slot
+          const slots = targetSkillCardIds
+            .map((id, idx) =>
+              [id].concat(alternateSkillCardIds[idx] || []).filter((mid) => mid)
+            )
+            .filter((slot) => slot.length);
 
-      // Cards for each slot
-      const slots = targetSkillCardIds
-        .map((id, idx) =>
-          [id].concat(alternateSkillCardIds[idx] || []).filter((mid) => mid)
-        )
-        .filter((slot) => slot.length);
+          const positiveSlots = slots.filter((_, i) => !targetNegations[i]);
+          const negativeSlots = slots.filter((_, i) => targetNegations[i]);
+          const excludedSkillCardIds = [].concat(...negativeSlots);
 
-      const positiveSlots = slots.filter((slot, i) => !targetNegations[i]);
-      const negativeSlots = slots.filter((slot, i) => targetNegations[i]);
-      const excludedSkillCardIds = [].concat(...negativeSlots);
+          // Combos excluding those with duplicate cards
+          const matchingCombinations = generateCombinations(
+            positiveSlots
+          ).filter((combo) => new Set(combo).size == combo.length);
 
-      // Combos excluding those with duplicate cards
-      const matchingCombinations = generateCombinations(positiveSlots).filter(
-        (combo) => new Set(combo).size == combo.length
-      );
-      const memoryIsOnTarget =
-        matchingCombinations.some((combo) =>
-          combo.every((id) => cur.skillCardIds.includes(id))
-        ) && !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
+          // Classify on/off-target
+          const memoryIsOnTarget =
+            matchingCombinations.some((combo) =>
+              combo.every((id) => cur.skillCardIds.includes(id))
+            ) &&
+            !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
 
-      if (memoryIsOnTarget) {
-        acc.onTargetMemories.push(cur);
-        acc.onTargetProbability += cur.probability;
-      } else {
-        acc.offTargetMemories.push(cur);
-        acc.offTargetProbability += cur.probability;
-      }
+          if (memoryIsOnTarget) {
+            acc.onTargetMemories.push(cur);
+            acc.onTargetProbability += cur.probability;
+          } else {
+            acc.offTargetMemories.push(cur);
+            acc.offTargetProbability += cur.probability;
+          }
 
-      return acc;
-    },
-    {
-      onTargetMemories: [],
-      offTargetMemories: [],
-      onTargetProbability: 0,
-      offTargetProbability: 0,
-    }
+          return acc;
+        },
+        {
+          onTargetMemories: [],
+          offTargetMemories: [],
+          onTargetProbability: 0,
+          offTargetProbability: 0,
+        }
+      ),
+    [
+      possibleMemories,
+      targetSkillCardIds,
+      alternateSkillCardIds,
+      targetNegations,
+    ]
   );
 
   return (
@@ -107,8 +120,11 @@ export default function MemoryCalculator() {
             type={EntityTypes.SKILL_CARD}
             id={skillCardId}
             onClick={() =>
-              pickSkillCardModal((entity) =>
-                replaceAcquiredCardId(index, entity.id)
+              setModal(
+                <EntityPickerModal
+                  type={EntityTypes.SKILL_CARD}
+                  onPick={(card) => replaceAcquiredCardId(index, card.id)}
+                />
               )
             }
           />
@@ -159,3 +175,5 @@ export default function MemoryCalculator() {
     </div>
   );
 }
+
+export default memo(MemoryCalculator);

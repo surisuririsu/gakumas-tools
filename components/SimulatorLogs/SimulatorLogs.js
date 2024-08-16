@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
 import styles from "./SimulatorLogs.module.scss";
 import Logs from "./Logs";
 
-export default function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
+function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
   const [runToShow, setRunToShow] = useState("Average");
 
   let logs, structuredLogs;
@@ -48,6 +48,7 @@ export default function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
         options={["Min", "Average", "Max"]}
         onChange={(value) => setRunToShow(value == runToShow ? null : value)}
       />
+
       {structuredLogs && <Logs logs={structuredLogs} idolId={idolId} />}
 
       <a className={styles.toTop} href="#simulator_loadout">
@@ -57,3 +58,5 @@ export default function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
     </div>
   );
 }
+
+export default memo(SimulatorLogs);

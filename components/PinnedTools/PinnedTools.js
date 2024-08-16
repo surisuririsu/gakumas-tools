@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Dex from "@/components/Dex";
 import MemoryCalculator from "@/components/MemoryCalculator";
@@ -11,7 +11,7 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { TOOLS } from "@/utils/tools";
 import styles from "./PinnedTools.module.scss";
 
-export default function PinnedTools() {
+function PinnedTools() {
   const { pinnedTools, unpin } = useContext(WorkspaceContext);
 
   return (
@@ -37,3 +37,5 @@ export default function PinnedTools() {
     </div>
   );
 }
+
+export default memo(PinnedTools);

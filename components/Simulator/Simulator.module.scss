@@ -4,77 +4,72 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
 
-  .configurator {
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px;
-    overflow: auto;
+.configurator {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  overflow: auto;
+}
 
-    .supportBonusInput {
-      width: 80px;
-      display: flex;
-    }
+.supportBonusInput {
+  width: 80px;
+  display: flex;
+}
 
-    .typeMultipliers {
-      display: flex;
-      font-size: 14px;
+.typeMultipliers {
+  display: flex;
+  font-size: 14px;
 
-      & > div {
-        flex: 1;
-        text-align: center;
-      }
-
-      div:nth-child(1) {
-        color: #f23584;
-      }
-      div:nth-child(2) {
-        color: #1c85ed;
-      }
-      div:nth-child(3) {
-        color: #f7b12e;
-      }
-    }
-
-    .expanderButtons {
-      display: flex;
-      font-size: 14px;
-
-      button,
-      a {
-        margin: 0 auto;
-        color: $blue;
-        text-align: center;
-      }
-    }
-
-    .plannerLink {
-      margin: 8px auto;
-      color: $blue;
-    }
-
-    .strategySelect {
-      border: 2px solid $gray-light;
-      border-radius: 4px;
-      padding: 4px;
-      display: none;
-    }
-
-    .simulateButton {
-      display: flex;
-      align-items: stretch;
-      gap: 8px;
-      margin: 8px 0;
-
-      button {
-        min-width: 60px;
-      }
-    }
-
-    .loader {
-      flex: 0;
-    }
+  & > div {
+    flex: 1;
+    text-align: center;
   }
+
+  div:nth-child(1) {
+    color: #f23584;
+  }
+  div:nth-child(2) {
+    color: #1c85ed;
+  }
+  div:nth-child(3) {
+    color: #f7b12e;
+  }
+}
+
+.expanderButtons {
+  display: flex;
+  font-size: 14px;
+
+  button,
+  a {
+    margin: 0 auto;
+    color: $blue;
+    text-align: center;
+  }
+}
+
+.strategySelect {
+  border: 2px solid $gray-light;
+  border-radius: 4px;
+  padding: 4px;
+  display: none;
+}
+
+.simulateButton {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  margin: 8px 0;
+
+  button {
+    min-width: 60px;
+  }
+}
+
+.loader {
+  flex: 0;
 }

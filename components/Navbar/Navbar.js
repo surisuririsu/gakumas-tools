@@ -1,11 +1,12 @@
 "use client";
+import { memo } from "react";
 import { usePathname } from "next/navigation";
 import { TOOLS } from "@/utils/tools";
 import NavbarLink from "./NavbarLink";
 import NavbarMenu from "./NavbarMenu";
 import styles from "./Navbar.module.scss";
 
-export default function Navbar() {
+function Navbar() {
   const pathname = usePathname();
 
   return (
@@ -27,3 +28,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+export default memo(Navbar);

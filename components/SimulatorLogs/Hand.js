@@ -1,9 +1,11 @@
+import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import styles from "./SimulatorLogs.module.scss";
 
-export default function Hand({ handCardIds, scores, selectedCardId, idolId }) {
+function Hand({ handCardIds, scores, selectedCardId, idolId }) {
   const selectedIndex = handCardIds.indexOf(selectedCardId);
+
   return (
     <div className={styles.hand}>
       <div className={styles.handTitle}>手札</div>
@@ -29,3 +31,5 @@ export default function Hand({ handCardIds, scores, selectedCardId, idolId }) {
     </div>
   );
 }
+
+export default memo(Hand);

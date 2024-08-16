@@ -1,15 +1,11 @@
+import { memo } from "react";
 import Image from "next/image";
 import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
-export default function EntityIcon({
-  type,
-  id,
-  idolId,
-  size = "large",
-  onClick,
-}) {
+function EntityIcon({ type, id, idolId, size = "large", onClick }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
+
   return (
     <button
       className={`${styles.entityIcon} ${styles[size] || ""}`}
@@ -26,3 +22,5 @@ export default function EntityIcon({
     </button>
   );
 }
+
+export default memo(EntityIcon);
