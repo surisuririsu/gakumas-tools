@@ -3,6 +3,12 @@ import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
 
 const DEBUG = false;
 
+// Size and bounds of images to compare
+// Downsize images to sample surrounding colors
+const COMP_SIZE = 40;
+const DRAW_AREA = [0, 0, COMP_SIZE, COMP_SIZE];
+const COMP_AREA = [2, 2, COMP_SIZE - 4, COMP_SIZE - 4];
+
 export function getGameRegion(img) {
   let width = img.width;
   const height = img.height;
@@ -49,27 +55,6 @@ export function getWhiteCanvas(img) {
   );
 }
 
-// Find y-value of the top of the white section
-export function getWhiteAreaTop(img) {
-  const canvas = getPreprocessedCanvas(img, (r, g, b) =>
-    [r, g, b].every((v) => v > 245)
-  );
-  const ctx = canvas.getContext("2d");
-  const d = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < canvas.height; i++) {
-    let whitePixelCount = 0;
-    for (let j = 0; j < canvas.width * 4; j += 4) {
-      if (d.data[i * canvas.width * 4 + j] == 0) {
-        whitePixelCount++;
-      }
-    }
-    if (whitePixelCount > canvas.width * 0.98) {
-      return i;
-    }
-  }
-  return 0;
-}
-
 // Read contest power from OCR result
 const POWER_REGEXP = new RegExp(/\d+/gm);
 export function extractPower(result) {
@@ -91,12 +76,6 @@ export function extractParams(result) {
   return params;
 }
 
-// Size and bounds of images to compare
-// Downsize images to sample surrounding colors
-const COMP_SIZE = 40;
-const DRAW_AREA = [0, 0, COMP_SIZE, COMP_SIZE];
-const COMP_AREA = [2, 2, COMP_SIZE - 4, COMP_SIZE - 4];
-
 // Get image data for items/cards
 export async function getEntityImageData(entityData, idolId) {
   const data = await Promise.all(
@@ -117,7 +96,6 @@ export async function getEntityImageData(entityData, idolId) {
             resolve({
               id: entity.id,
               name: entity.name,
-              idolId: idolId,
               pIdolId: entity.pIdolId,
               data: entCtx.getImageData(...COMP_AREA).data,
             });
@@ -162,7 +140,7 @@ export async function getNonSignatureSkillCardsImageData() {
   );
 }
 
-// Items
+// P-items
 export async function getPItemsImageData() {
   return (
     await getEntityImageData(
@@ -235,21 +213,19 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
       id: entity.id,
       name: entity.name,
       // Sum color difference of each pixel
-      score: entity.data.reduce(
-        (sum, _, i) =>
-          sum +
-          (i % 4
-            ? 0
-            : dColor(
-                d.data[i],
-                entity.data[i],
-                d.data[i + 1],
-                entity.data[i + 1],
-                d.data[i + 2],
-                entity.data[i + 2]
-              )),
-        0
-      ),
+      score: entity.data.reduce((sum, _, i) => {
+        if (i % 4) return sum;
+        return (
+          dColor(
+            d.data[i],
+            entity.data[i],
+            d.data[i + 1],
+            entity.data[i + 1],
+            d.data[i + 2],
+            entity.data[i + 2]
+          ) + sum
+        );
+      }, 0),
     }));
 
     const sorted = diffScores.sort((a, b) => a.score - b.score);
