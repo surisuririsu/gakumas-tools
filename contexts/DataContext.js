@@ -19,8 +19,36 @@ export function DataContextProvider({ children }) {
     }
   }
 
+  async function uploadMemories(memories) {
+    await fetch("/api/memory", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ memories }),
+    });
+
+    fetchMemories();
+  }
+
+  async function deleteMemories(memoryIds) {
+    await fetch("/api/memory/bulk_delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: memoryIds }),
+    });
+
+    fetchMemories();
+  }
+
   return (
-    <DataContext.Provider value={{ memories, fetchMemories, memoriesLoading }}>
+    <DataContext.Provider
+      value={{
+        memories,
+        fetchMemories,
+        uploadMemories,
+        deleteMemories,
+        memoriesLoading,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );
