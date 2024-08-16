@@ -6,59 +6,59 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 4px;
+}
 
-  .slot {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 16%;
-  }
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 16%;
+}
 
-  .boolOp {
-    align-self: center;
-    z-index: 1;
-    border-radius: 4px;
-    padding: 4px;
-    color: $white;
-    font-size: 14px;
-    line-height: 14px;
-  }
+%boolOp {
+  align-self: center;
+  z-index: 1;
+  border-radius: 4px;
+  padding: 4px;
+  color: $white;
+  font-size: 14px;
+  line-height: 14px;
+}
 
-  .or {
-    @extend .boolOp;
-    margin: -11px;
-    background-color: $green;
-  }
+.or {
+  @extend %boolOp;
+  margin: -11px;
+  background-color: $green;
+}
 
-  .not {
-    @extend .boolOp;
-    margin: -3px;
-    background-color: $red;
-  }
+.not {
+  @extend %boolOp;
+  margin: -3px;
+  background-color: $red;
+}
 
-  .orGroup {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+.orGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
-    &.hasMultiple {
-      outline: 2px solid $green;
-      border-radius: 8px;
-    }
-  }
+.hasMultiple {
+  outline: 2px solid $green;
+  border-radius: 8px;
+}
 
-  .boolButton {
-    margin: 4px;
-    font-size: 16px;
-  }
+%boolButton {
+  margin: 4px;
+  font-size: 16px;
+}
 
-  .plus {
-    @extend .boolButton;
-    color: $green;
-  }
+.plus {
+  @extend %boolButton;
+  color: $green;
+}
 
-  .minus {
-    @extend .boolButton;
-    color: $red;
-  }
+.minus {
+  @extend %boolButton;
+  color: $red;
 }

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
+import { memo, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { default as NextImage } from "next/image";
 import { PItems, SkillCards } from "gakumas-data";
@@ -18,7 +19,7 @@ import {
 } from "@/utils/memoryFromImage";
 import styles from "./MemoryImporterModal.module.scss";
 
-export default function MemoryImporterModal({ onSuccess }) {
+function MemoryImporterModal({ onSuccess }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const engWorker = useRef();
@@ -181,3 +182,5 @@ export default function MemoryImporterModal({ onSuccess }) {
     </Modal>
   );
 }
+
+export default memo(MemoryImporterModal);

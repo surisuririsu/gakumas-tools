@@ -9,6 +9,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DataContext from "@/contexts/DataContext";
 import { getSimulatorUrl } from "@/utils/simulator";
+import { generateKafeUrl } from "@/utils/kafeSimulator";
 
 const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 
@@ -65,48 +66,30 @@ export function LoadoutContextProvider({ children }) {
     [searchParams]
   );
 
+  function addSimulatorParam(key, value) {
+    if (!isSimulatorOpen) return;
+    router.push(`/simulator?${createQueryString(key, value)}`, {
+      scroll: false,
+    });
+  }
+
   useEffect(() => {
-    if (isSimulatorOpen) {
-      router.push(`/simulator?${createQueryString("stage", stageId)}`, {
-        scroll: false,
-      });
-    }
+    addSimulatorParam("stage", stageId);
   }, [stageId]);
-
   useEffect(() => {
-    if (isSimulatorOpen) {
-      router.push(
-        `/simulator?${createQueryString("params", params.join("-"))}`,
-        {
-          scroll: false,
-        }
-      );
-    }
+    addSimulatorParam("support_bonus", supportBonus);
+  }, [supportBonus]);
+  useEffect(() => {
+    addSimulatorParam("params", params.join("-"));
   }, [params]);
-
   useEffect(() => {
-    if (isSimulatorOpen) {
-      router.push(
-        `/simulator?${createQueryString("items", pItemIds.join("-"))}`,
-        {
-          scroll: false,
-        }
-      );
-    }
+    addSimulatorParam("items", pItemIds.join("-"));
   }, [pItemIds]);
-
   useEffect(() => {
-    if (isSimulatorOpen) {
-      router.push(
-        `/simulator?${createQueryString(
-          "cards",
-          skillCardIdGroups.map((group) => group.join("-")).join("_")
-        )}`,
-        {
-          scroll: false,
-        }
-      );
-    }
+    addSimulatorParam(
+      "cards",
+      skillCardIdGroups.map((group) => group.join("-")).join("_")
+    );
   }, [skillCardIdGroups]);
 
   useEffect(() => {
@@ -119,6 +102,7 @@ export function LoadoutContextProvider({ children }) {
       const data = JSON.parse(loadoutString);
       if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
       if (data.stageId) setStageId(data.stageId);
+      if (data.supportBonus) setSupportBonus(data.supportBonus);
       if (data.params?.some((id) => id)) setParams(data.params);
       if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
       if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
@@ -134,12 +118,13 @@ export function LoadoutContextProvider({ children }) {
       JSON.stringify({
         memoryIds,
         stageId,
+        supportBonus,
         params,
         pItemIds,
         skillCardIdGroups,
       })
     );
-  }, [memoryIds, stageId, params, pItemIds, skillCardIdGroups]);
+  }, [memoryIds, stageId, supportBonus, params, pItemIds, skillCardIdGroups]);
 
   function setSkillCardIds(callback) {
     setSkillCardIdGroups((cur) => {
@@ -209,8 +194,9 @@ export function LoadoutContextProvider({ children }) {
       setPItemIds(memory.pItemIds);
     }
     setSkillCardIdGroups((cur) => {
-      cur[index] = memory.skillCardIds;
-      return cur;
+      const next = [...cur];
+      next[index] = memory.skillCardIds;
+      return next;
     });
   }
 
@@ -247,6 +233,7 @@ export function LoadoutContextProvider({ children }) {
     pItemIds,
     skillCardIdGroups
   );
+  const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
 
   return (
     <LoadoutContext.Provider
@@ -267,6 +254,7 @@ export function LoadoutContextProvider({ children }) {
         swapSkillCardIdGroups,
         clear,
         simulatorUrl,
+        kafeUrl,
       }}
     >
       {children}

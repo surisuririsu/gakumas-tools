@@ -1,7 +1,7 @@
+import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import styles from "./DefaultCards.module.scss";
-import { memo } from "react";
 
 const DEFAULT_CARDS_BY_PLAN = {
   sense: [5, 7, 1, 1, 15, 15, 17, 17],

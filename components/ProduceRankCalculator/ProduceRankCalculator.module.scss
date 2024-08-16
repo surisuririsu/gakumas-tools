@@ -8,23 +8,23 @@
   margin: 0 auto;
   padding: 16px;
   color: $black;
+}
 
-  .bonus {
-    font-size: 0.8em;
+.bonus {
+  font-size: 0.8em;
+}
+
+.result {
+  thead {
+    background-color: lighten($gk-orange, 20%);
   }
 
-  .result {
-    thead {
-      background-color: lighten($gk-orange, 20%);
-    }
+  tbody {
+    background-color: lighten($gk-orange, 40%);
+  }
 
-    tbody {
-      background-color: lighten($gk-orange, 40%);
-    }
-
-    th,
-    td {
-      padding: 8px;
-    }
+  th,
+  td {
+    padding: 8px;
   }
 }

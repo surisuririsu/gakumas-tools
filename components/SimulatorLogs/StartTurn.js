@@ -1,6 +1,7 @@
+import { memo } from "react";
 import styles from "./SimulatorLogs.module.scss";
 
-export default function StartTurn({ num, type, multiplier }) {
+function StartTurn({ num, type, multiplier }) {
   return (
     <div className={`${styles.startTurn} ${styles[type]}`}>
       {num}ターン目{" "}
@@ -8,3 +9,5 @@ export default function StartTurn({ num, type, multiplier }) {
     </div>
   );
 }
+
+export default memo(StartTurn);

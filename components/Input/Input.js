@@ -1,14 +1,7 @@
+import { memo } from "react";
 import styles from "./Input.module.scss";
 
-export default function Input({
-  type,
-  name,
-  value,
-  min,
-  max,
-  placeholder,
-  onChange,
-}) {
+function Input({ type, name, value, min, max, placeholder, onChange }) {
   function clamp(value) {
     let clampedValue = value;
     if (min != null) {
@@ -35,3 +28,5 @@ export default function Input({
     />
   );
 }
+
+export default memo(Input);

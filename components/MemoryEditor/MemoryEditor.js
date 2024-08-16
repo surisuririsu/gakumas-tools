@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { PIdols } from "gakumas-data";
 import Input from "@/components/Input";
 import MemorySave from "@/components/MemorySave";
@@ -14,7 +14,7 @@ import {
 } from "@/utils/contestPower";
 import styles from "./MemoryEditor.module.scss";
 
-export default function MemoryEditor() {
+function MemoryEditor() {
   const {
     name,
     setName,
@@ -69,3 +69,5 @@ export default function MemoryEditor() {
     </div>
   );
 }
+
+export default memo(MemoryEditor);

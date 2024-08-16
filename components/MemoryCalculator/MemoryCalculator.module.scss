@@ -7,16 +7,16 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
 
-  .skillCards {
-    max-width: 420px;
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
+.skillCards {
+  max-width: 420px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 4px;
+}
 
-  .rankSelect {
-    align-self: flex-start;
-  }
+.rankSelect {
+  align-self: flex-start;
 }

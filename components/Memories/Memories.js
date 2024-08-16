@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Button from "@/components/Button";
 import DataContext from "@/contexts/DataContext";
@@ -7,7 +7,7 @@ import styles from "./Memories.module.scss";
 import MemoriesHeader from "./MemoriesHeader";
 import MemoriesList from "./MemoriesList";
 
-export default function Memories() {
+function Memories() {
   const { status } = useSession();
   const { memories, fetchMemories } = useContext(DataContext);
   const [action, setAction] = useState(null);
@@ -49,3 +49,5 @@ export default function Memories() {
     </div>
   );
 }
+
+export default memo(Memories);

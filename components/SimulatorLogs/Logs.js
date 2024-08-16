@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import AddCard from "./AddCard";
 import Diff from "./Diff";
 import Group from "./Group";
@@ -7,7 +7,7 @@ import StartTurn from "./StartTurn";
 import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
 
-export default function Logs({ logs, idolId }) {
+function Logs({ logs, idolId }) {
   return (
     <div className={styles.logs}>
       {logs.map((line, i) => (
@@ -47,3 +47,5 @@ export default function Logs({ logs, idolId }) {
     </div>
   );
 }
+
+export default memo(Logs);

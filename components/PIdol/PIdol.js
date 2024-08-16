@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { PIdols } from "gakumas-data";
 import styles from "./PIdol.module.scss";
+import { memo } from "react";
 
-export default function PIdol({ pIdolId }) {
+function PIdol({ pIdolId }) {
   const pIdol = PIdols.getById(pIdolId);
+
   return (
     <div className={styles.pIdol}>
       {pIdol?.icon && <Image src={pIdol.icon} sizes="81px" fill alt="" />}
@@ -29,3 +31,5 @@ export default function PIdol({ pIdolId }) {
     </div>
   );
 }
+
+export default memo(PIdol);

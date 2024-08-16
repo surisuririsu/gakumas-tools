@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
+import EntityPickerModal from "@/components/EntityPickerModal";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
-export default function TargetSkillCards() {
+function TargetSkillCards() {
   const {
     targetSkillCardIds,
     alternateSkillCardIds,
@@ -16,7 +17,7 @@ export default function TargetSkillCards() {
     replaceTargetCardId,
     replaceAlternateCardId,
   } = useContext(MemoryCalculatorContext);
-  const { pickSkillCardModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
 
   return (
     <div className={styles.targetSkillCards}>
@@ -34,7 +35,6 @@ export default function TargetSkillCards() {
           </button>
 
           <div
-            key={`${index}_${skillCardId}`}
             className={`${styles.orGroup} ${
               alternateSkillCardIds[index]?.length ? styles.hasMultiple : ""
             }`}
@@ -43,8 +43,11 @@ export default function TargetSkillCards() {
               type={EntityTypes.SKILL_CARD}
               id={skillCardId}
               onClick={() =>
-                pickSkillCardModal((entity) =>
-                  replaceTargetCardId(index, entity.id)
+                setModal(
+                  <EntityPickerModal
+                    type={EntityTypes.SKILL_CARD}
+                    onPick={(card) => replaceTargetCardId(index, card.id)}
+                  />
                 )
               }
               size="fill"
@@ -59,8 +62,13 @@ export default function TargetSkillCards() {
                   type={EntityTypes.SKILL_CARD}
                   id={altSkillCardId}
                   onClick={() =>
-                    pickSkillCardModal((entity) =>
-                      replaceAlternateCardId(index * 10 + altIndex, entity.id)
+                    setModal(
+                      <EntityPickerModal
+                        type={EntityTypes.SKILL_CARD}
+                        onPick={(card) =>
+                          replaceAlternateCardId(index * 10 + altIndex, card.id)
+                        }
+                      />
                     )
                   }
                   size="fill"
@@ -85,3 +93,5 @@ export default function TargetSkillCards() {
     </div>
   );
 }
+
+export default memo(TargetSkillCards);

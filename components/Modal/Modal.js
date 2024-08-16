@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { FaXmark } from "react-icons/fa6";
 import IconButton from "@/components/IconButton";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Modal.module.scss";
 
-export default function Modal({ children }) {
+function Modal({ children }) {
   const { closeModal } = useContext(ModalContext);
 
   return (
@@ -18,3 +18,5 @@ export default function Modal({ children }) {
     </div>
   );
 }
+
+export default memo(Modal);

@@ -60,7 +60,7 @@ function MemoriesList({
         .sort(
           hasSearchQuery ? compareFilteredMemories : compareUnfilteredMemories
         ),
-    [memories, pItemIds, skillCardIds]
+    [memories, pItemIds, skillCardIds, hasSearchQuery]
   );
   const displayedMemories = useMemo(
     () => filteredMemories.slice(0, maxToShow),

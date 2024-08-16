@@ -1,50 +1,30 @@
-import { useContext } from "react";
+import { memo, useMemo } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { FaTrophy, FaArrowRight } from "react-icons/fa6";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
-import Button from "@/components/Button";
 import PIdol from "@/components/PIdol";
-import LoadoutContext from "@/contexts/LoadoutContext";
-import MemoryContext from "@/contexts/MemoryContext";
 import { calculateContestPower } from "@/utils/contestPower";
+import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
 
-export default function MemorySummary({ memory }) {
-  const router = useRouter();
-  const { setMemory } = useContext(LoadoutContext);
-  const { setAll } = useContext(MemoryContext);
+function MemorySummary({ memory }) {
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
 
-  function editMemory() {
-    setAll(memory);
-    router.push("/memory-editor");
-  }
-
-  function loadMemory(index) {
-    setMemory(memory, index);
-    router.push("/simulator");
-  }
+  const pItems = useMemo(
+    () => pItemIds.filter((p) => p).map(PItems.getById),
+    [pItemIds]
+  );
+  const skillCards = useMemo(
+    () => skillCardIds.filter((s) => s).map(SkillCards.getById),
+    [skillCardIds]
+  );
 
   return (
     <div className={styles.memorySummary}>
       <div className={styles.left}>
         <PIdol pIdolId={pIdolId} />
-        <div className={styles.actions}>
-          <Button onClick={editMemory}>Edit</Button>
-          <Button onClick={() => loadMemory(0)}>
-            <FaTrophy />
-            1
-            <FaArrowRight />
-          </Button>
-          <Button onClick={() => loadMemory(1)}>
-            <FaTrophy />
-            2
-            <FaArrowRight />
-          </Button>
-        </div>
+        <MemorySummaryActionButtons memory={memory} />
       </div>
 
       <div className={styles.details}>
@@ -54,18 +34,15 @@ export default function MemorySummary({ memory }) {
         </span>
 
         <div className={styles.row}>
-          {pItemIds
-            .filter((p) => p)
-            .map(PItems.getById)
-            .map((pItem, i) => (
-              <Image
-                key={i}
-                src={pItem.icon}
-                width={35}
-                alt={pItem.name}
-                draggable={false}
-              />
-            ))}
+          {pItems.map((pItem, i) => (
+            <Image
+              key={i}
+              src={pItem.icon}
+              width={35}
+              alt={pItem.name}
+              draggable={false}
+            />
+          ))}
           <div className={styles.filler} />
           <div className={styles.parameters}>
             <div className={styles.vocal} style={{ flex: params[0] }} />
@@ -75,22 +52,21 @@ export default function MemorySummary({ memory }) {
         </div>
 
         <div className={styles.row}>
-          {skillCardIds
-            .filter((s) => s)
-            .map(SkillCards.getById)
-            .map((skillCard, i) => (
-              <div key={i} className={styles.imageWrapper}>
-                <Image
-                  src={skillCard.getDynamicIcon(idolId)}
-                  fill
-                  sizes="50px"
-                  alt={skillCard.name}
-                  draggable={false}
-                />
-              </div>
-            ))}
+          {skillCards.map((skillCard, i) => (
+            <div key={i} className={styles.imageWrapper}>
+              <Image
+                src={skillCard.getDynamicIcon(idolId)}
+                fill
+                sizes="50px"
+                alt={skillCard.name}
+                draggable={false}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
+export default memo(MemorySummary);

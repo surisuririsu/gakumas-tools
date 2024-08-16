@@ -1,11 +1,11 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { FaCheck } from "react-icons/fa6";
 import Button from "@/components/Button";
 import MemoryContext from "@/contexts/MemoryContext";
 import styles from "./MemorySave.module.scss";
 
-export default function MemorySave() {
+function MemorySave() {
   const { status } = useSession();
   const { id, save, saveState } = useContext(MemoryContext);
 
@@ -40,3 +40,5 @@ export default function MemorySave() {
     </div>
   );
 }
+
+export default memo(MemorySave);

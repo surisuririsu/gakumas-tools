@@ -7,49 +7,49 @@
   border-radius: 4px;
   padding: 4px;
 
-  .options {
-    max-height: 200px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
   button {
     gap: 6px;
     padding: 6px;
     color: $gray-dark;
     font-weight: 600;
-
-    .status {
-      flex: 1;
-      align-self: stretch;
-      display: flex;
-      border: 2px solid $gray-extra-light;
-      border-radius: 4px;
-      overflow: hidden;
-
-      div:nth-child(1) {
-        background-color: #f23584;
-      }
-      div:nth-child(2) {
-        background-color: #1c85ed;
-      }
-      div:nth-child(3) {
-        background-color: #f7b12e;
-      }
-    }
   }
+}
 
-  .placeholder {
-    flex: 1;
+.options {
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.status {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  border: 2px solid $gray-extra-light;
+  border-radius: 4px;
+  overflow: hidden;
+
+  div:nth-child(1) {
+    background-color: #f23584;
   }
+  div:nth-child(2) {
+    background-color: #1c85ed;
+  }
+  div:nth-child(3) {
+    background-color: #f7b12e;
+  }
+}
 
-  .option {
-    transition: all 0.2s;
+.placeholder {
+  flex: 1;
+}
 
-    &:hover {
-      background-color: $gk-orange;
-      color: $white;
-    }
+.option {
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $gk-orange;
+    color: $white;
   }
 }

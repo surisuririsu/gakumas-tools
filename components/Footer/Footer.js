@@ -1,6 +1,7 @@
+import { memo } from "react";
 import styles from "./Footer.module.scss";
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className={styles.footer}>
       <a href="https://wikiwiki.jp/gakumas/" target="_blank">
@@ -24,3 +25,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default memo(Footer);

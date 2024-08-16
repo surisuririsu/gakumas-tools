@@ -4,47 +4,36 @@
   display: flex;
   gap: 4px;
   user-select: none;
+}
 
-  .pIdol {
-    min-width: 89px;
-    height: fit-content;
-    border: 4px solid $gray-light;
-    border-radius: 8px;
-    overflow: hidden;
-  }
+.pIdol {
+  min-width: 89px;
+  height: fit-content;
+  border: 4px solid $gray-light;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  .expander {
-    min-width: 0;
-    margin-left: 8px;
-    border: 2px solid $gray-light;
-    border-radius: 4px;
-    padding: 4px;
-  }
+.expander {
+  min-width: 0;
+  margin-left: 8px;
+  border: 2px solid $gray-light;
+  border-radius: 4px;
+  padding: 4px;
+}
 
-  .result {
-    display: flex;
-    gap: 4px;
-    padding: 4px;
-    overflow-x: auto;
-  }
+.result {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  overflow-x: auto;
+}
 
-  .pIdolButton {
-    transition: 0.2s all;
+.pIdolButton {
+  transition: 0.2s all;
 
-    &:hover,
-    &:focus {
-      transform: scale(1.05);
-    }
-  }
-
-  .filters {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    padding: 4px;
-  }
-
-  .option {
-    display: block;
+  &:hover,
+  &:focus {
+    transform: scale(1.05);
   }
 }

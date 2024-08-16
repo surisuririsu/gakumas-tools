@@ -1,19 +1,14 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
+import PlanIdolSelects from "@/components/PlanIdolSelects";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { EntityTypes } from "@/utils/entities";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
-import PlanIdolSelects from "../PlanIdolSelects";
 
-export default function EntityBank({
-  type,
-  onClick,
-  filters = {},
-  includeNull = true,
-}) {
+function EntityBank({ type, onClick, filters = {}, includeNull = true }) {
   const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
     useContext(WorkspaceContext);
 
@@ -76,3 +71,5 @@ export default function EntityBank({
     </>
   );
 }
+
+export default memo(EntityBank);

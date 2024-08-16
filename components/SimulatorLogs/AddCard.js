@@ -1,8 +1,9 @@
+import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import styles from "./SimulatorLogs.module.scss";
 
-export default function AddCard({ id, idolId, text }) {
+function AddCard({ id, idolId, text }) {
   const skillCard = SkillCards.getById(id);
   return (
     <div className={styles.drawCard}>
@@ -17,3 +18,5 @@ export default function AddCard({ id, idolId, text }) {
     </div>
   );
 }
+
+export default memo(AddCard);

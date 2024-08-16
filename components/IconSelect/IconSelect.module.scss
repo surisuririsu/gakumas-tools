@@ -7,14 +7,14 @@
   border-radius: 20px;
   border: 2px solid $gray-light;
   padding: 4px;
+}
 
-  .option {
-    border-radius: 16px;
-    padding: 4px;
-    transition: all 0.2s;
+.option {
+  border-radius: 16px;
+  padding: 4px;
+  transition: all 0.2s;
+}
 
-    &.selected {
-      box-shadow: 0 0 4px $gray-dark;
-    }
-  }
+.selected {
+  box-shadow: 0 0 4px $gray-dark;
 }

@@ -1,9 +1,10 @@
+import { memo } from "react";
 import Image from "next/image";
 import { FaRegRectangleList } from "react-icons/fa6";
 import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./EntityDetails.module.scss";
 
-export default function EntityDetails({ type, id }) {
+function EntityDetails({ type, id }) {
   const entity = ENTITY_DATA_BY_TYPE[type]?.getById(id);
 
   return (
@@ -24,3 +25,5 @@ export default function EntityDetails({ type, id }) {
     </div>
   );
 }
+
+export default memo(EntityDetails);
