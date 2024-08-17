@@ -750,7 +750,9 @@ export default class StageEngine {
 
         // Apply good and perfect condition
         if (state.goodConditionTurns) {
-          score *= 1.5 + state.perfectConditionTurns * 0.1;
+          score *=
+            1.5 +
+            (state.perfectConditionTurns ? state.goodConditionTurns * 0.1 : 0);
         }
 
         state.score += this._calculateTrueScore(
