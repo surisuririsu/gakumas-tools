@@ -37,7 +37,7 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
       />
 
       <div className={styles.sub}>
-        <div>Cost: {cost}</div>
+        <div>コスト: {cost}</div>
         <div className={styles.buttonGroup}>
           <button
             className={styles.addButton}

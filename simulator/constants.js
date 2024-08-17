@@ -1,6 +1,6 @@
 export const SYNC = false;
 export const DEBUG = false;
-export const NUM_RUNS = 1000;
+export const NUM_RUNS = 2000;
 export const BUCKET_SIZE = 1000;
 export const MAX_WORKERS = 8;
 export const FALLBACK_STAGE = {
