@@ -25,7 +25,7 @@ function DistributionPlot({ data }) {
     labels: Object.keys(data).map((k) => k * BUCKET_SIZE),
     datasets: [
       {
-        label: `Score (n=${NUM_RUNS})`,
+        label: `スコア (n=${NUM_RUNS})`,
         data: Object.values(data),
         backgroundColor: "rgba(255, 118, 0, 0.5)",
       },

@@ -42,12 +42,12 @@
 
 .expanderButtons {
   display: flex;
-  font-size: 14px;
 
   button,
   a {
     margin: 0 auto;
     color: $blue;
+    font-size: 14px;
     text-align: center;
   }
 }
@@ -59,7 +59,7 @@
   display: none;
 }
 
-.simulateButton {
+.buttons {
   display: flex;
   align-items: stretch;
   gap: 8px;

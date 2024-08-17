@@ -25,13 +25,13 @@ function SimulatorResult({ data, idolId }) {
         </tbody>
       </table>
 
-      <b>
+      {/* <b>
+        {" "}
         This feature is in development. Simulator behavior differs from the real
         game.
-      </b>
-      <b>このプログラムは開発中のものです。ゲーム内のAIと挙動が異なります。</b>
+      </b> */}
 
-      <label>Logs</label>
+      <label>ログ</label>
       <SimulatorLogs
         minRun={data.minRun}
         averageRun={data.averageRun}

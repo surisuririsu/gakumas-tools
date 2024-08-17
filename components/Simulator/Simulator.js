@@ -244,7 +244,7 @@ export default function Simulator() {
 
         <SimulatorSubTools plan={idolConfig.plan} idolId={idolConfig.idolId} />
 
-        <div className={styles.simulateButton}>
+        <div className={styles.buttons}>
           <Button
             style="red-secondary"
             onClick={() => {
@@ -276,7 +276,7 @@ export default function Simulator() {
           </Button>
         </div>
 
-        <label>シミュレーター (@risりす)</label>
+        <label>シミュレーター</label>
         <select
           className={styles.strategySelect}
           value={strategy}
@@ -289,17 +289,9 @@ export default function Simulator() {
           ))}
         </select>
 
-        <div className={styles.simulateButton}>
-          <Button onClick={runSimulation} disabled={running}>
-            シミュレート
-          </Button>
-
-          {running && (
-            <div className={styles.loader}>
-              <Loader />
-            </div>
-          )}
-        </div>
+        <Button onClick={runSimulation} disabled={running}>
+          {running ? <Loader /> : "実行"}
+        </Button>
       </div>
 
       {simulatorData && (

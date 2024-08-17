@@ -1,6 +1,7 @@
 @import "@/constants";
 
 .result {
+  flex: 1;
   max-width: Min(100%, 800px);
   display: flex;
   flex-direction: column;

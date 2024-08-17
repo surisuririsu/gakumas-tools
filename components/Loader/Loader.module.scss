@@ -1,32 +1,17 @@
 @import "@/constants";
 
 .loader {
-  margin: -3px;
-  aspect-ratio: 1;
-  display: grid;
-  border: 3px solid #0000;
+  width: calc(1em + 8px);
+  height: calc(1em + 8px);
+  border: 2px solid $gk-orange;
+  border-bottom-color: transparent;
   border-radius: 50%;
-  border-right-color: $gk-orange;
-  animation: l15 1s infinite linear;
-
-  &::before,
-  &::after {
-    content: "";
-    grid-area: 1/1;
-    margin: 4px;
-    border: inherit;
-    border-radius: 50%;
-    animation: l15 1.5s infinite;
-  }
-
-  &::after {
-    margin: 10px;
-    padding: 6px;
-    animation-duration: 2s;
-  }
+  display: inline-block;
+  box-sizing: border-box;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes l15 {
+@keyframes spin {
   100% {
     transform: rotate(1turn);
   }
