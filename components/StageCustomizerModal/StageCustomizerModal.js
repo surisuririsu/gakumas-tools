@@ -47,7 +47,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
       },
       firstTurns: Object.keys(firstTurns).filter((k) => firstTurns[k]),
       criteria: normalizeCriteria(criteria),
-      effects: deserializeEffectSequence(effects),
+      effects: deserializeEffectSequence(effects.replace(/\s/g, "")),
     });
     closeModal();
   }
