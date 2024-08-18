@@ -1,4 +1,4 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useMemo } from "react";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
@@ -7,7 +7,7 @@ import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
-function TargetSkillCards() {
+function TargetSkillCards({ idolId }) {
   const {
     targetSkillCardIds,
     alternateSkillCardIds,
@@ -19,6 +19,17 @@ function TargetSkillCards() {
     replaceAlternateCardId,
   } = useContext(MemoryCalculatorContext);
   const { setModal } = useContext(ModalContext);
+
+  const filters = useMemo(
+    () => [
+      {
+        label: "取得済み",
+        callback: (e) => acquiredSkillCardIds.includes(e.id),
+        default: acquiredSkillCardIds.some((id) => id),
+      },
+    ],
+    [acquiredSkillCardIds]
+  );
 
   return (
     <div className={styles.targetSkillCards}>
@@ -48,16 +59,11 @@ function TargetSkillCards() {
                   <EntityPickerModal
                     type={EntityTypes.SKILL_CARD}
                     onPick={(card) => replaceTargetCardId(index, card.id)}
-                    filters={[
-                      {
-                        label: "取得済み",
-                        callback: (e) => acquiredSkillCardIds.includes(e.id),
-                        default: acquiredSkillCardIds.some((id) => id),
-                      },
-                    ]}
+                    filters={filters}
                   />
                 )
               }
+              idolId={idolId}
               size="fill"
             />
 
@@ -76,9 +82,11 @@ function TargetSkillCards() {
                         onPick={(card) =>
                           replaceAlternateCardId(index * 10 + altIndex, card.id)
                         }
+                        filters={filters}
                       />
                     )
                   }
+                  idolId={idolId}
                   size="fill"
                 />
               </React.Fragment>
