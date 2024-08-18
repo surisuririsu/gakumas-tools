@@ -73,11 +73,19 @@ function StageCustomizerModal({ initialStage, onApply }) {
           round={false}
         />
 
-        <label>ステージ効果（後日ドキュメント追加します）</label>
-        <textarea
-          defaultValue={effects}
-          onChange={(e) => setEffects(e.target.value)}
-        />
+        <label>ステージ効果</label>
+        <div className={styles.effects}>
+          <textarea
+            defaultValue={effects}
+            onChange={(e) => setEffects(e.target.value)}
+          />
+          <a
+            href="https://github.com/surisuririsu/gakumas-data/blob/master/Effects.md"
+            target="_blank"
+          >
+            エフェクト形式
+          </a>
+        </div>
 
         <Button onClick={apply}>適用</Button>
       </div>
