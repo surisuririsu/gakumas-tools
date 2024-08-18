@@ -19,8 +19,18 @@ const idols = Idols.getAll().map(({ id, name, icon }) => ({
 function PlanIdolSelects({ plan, idolId, setPlan, setIdolId }) {
   return (
     <div className={styles.selects}>
-      <IconSelect options={plans} selected={plan} onChange={setPlan} />
-      <IconSelect options={idols} selected={idolId} onChange={setIdolId} />
+      <IconSelect
+        options={plans}
+        selected={plan}
+        onChange={setPlan}
+        collapsable
+      />
+      <IconSelect
+        options={idols}
+        selected={idolId}
+        onChange={setIdolId}
+        collapsable
+      />
     </div>
   );
 }

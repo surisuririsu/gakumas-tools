@@ -1,4 +1,5 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useMemo, useState } from "react";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
@@ -8,9 +9,15 @@ import { EntityTypes } from "@/utils/entities";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
 
-function EntityBank({ type, onClick, filters = {}, includeNull = true }) {
+function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
     useContext(WorkspaceContext);
+  const [enabledCustomFilters, setEnabledCustomFilters] = useState(
+    filters.reduce(
+      (acc, cur) => ({ ...acc, [cur.label]: !cur.label || cur.default }),
+      {}
+    )
+  );
 
   let entities = [];
   const Entities = type == EntityTypes.SKILL_CARD ? SkillCards : PItems;
@@ -37,9 +44,20 @@ function EntityBank({ type, onClick, filters = {}, includeNull = true }) {
     entities = Entities.getAll().sort(compareFn);
   }
 
+  for (let customFilter of filters) {
+    if (!customFilter.label || enabledCustomFilters[customFilter.label]) {
+      entities = entities.filter(customFilter.callback);
+    }
+  }
+
   if (includeNull) {
     entities = [{}, ...entities];
   }
+
+  const toggleableFilters = useMemo(
+    () => filters.filter((f) => f.label),
+    [filters]
+  );
 
   return (
     <>
@@ -57,17 +75,45 @@ function EntityBank({ type, onClick, filters = {}, includeNull = true }) {
       </div>
 
       <div className={styles.filter}>
-        <Checkbox label="フィルタ" checked={filter} onChange={setFilter} />
-      </div>
+        <div className={styles.defaultFilters}>
+          <Checkbox
+            label={filter ? "" : "フィルタ"}
+            checked={filter}
+            onChange={setFilter}
+          />
 
-      {filter && (
-        <PlanIdolSelects
-          plan={plan}
-          idolId={idolId}
-          setPlan={setPlan}
-          setIdolId={setIdolId}
-        />
-      )}
+          {filter && (
+            <PlanIdolSelects
+              plan={plan}
+              idolId={idolId}
+              setPlan={setPlan}
+              setIdolId={setIdolId}
+            />
+          )}
+        </div>
+
+        <div className={styles.fill}></div>
+
+        <div className={styles.customFilters}>
+          {toggleableFilters.map((f) => (
+            <button
+              key={f.label}
+              className={`${styles.toggle} ${
+                enabledCustomFilters[f.label] ? styles.enabled : ""
+              }`}
+              onClick={() =>
+                setEnabledCustomFilters({
+                  ...enabledCustomFilters,
+                  [f.label]: !enabledCustomFilters[f.label],
+                })
+              }
+            >
+              {enabledCustomFilters[f.label] ? <FaCheck /> : <FaXmark />}
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </>
   );
 }
