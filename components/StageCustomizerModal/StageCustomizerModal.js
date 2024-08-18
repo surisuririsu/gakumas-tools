@@ -11,11 +11,12 @@ import ModalContext from "@/contexts/ModalContext";
 import styles from "./StageCustomizerModal.module.scss";
 
 function normalizeCriteria(criteria) {
-  const total = criteria[0] + criteria[1] + criteria[2] || 1;
+  const nums = criteria.map((c) => c || 0);
+  const total = nums[0] + nums[1] + nums[2] || 1;
   return {
-    vocal: Math.round((100 * criteria[0]) / total) / 100,
-    dance: Math.round((100 * criteria[1]) / total) / 100,
-    visual: Math.round((100 * criteria[2]) / total) / 100,
+    vocal: Math.round((100 * nums[0]) / total) / 100,
+    dance: Math.round((100 * nums[1]) / total) / 100,
+    visual: Math.round((100 * nums[2]) / total) / 100,
   };
 }
 
