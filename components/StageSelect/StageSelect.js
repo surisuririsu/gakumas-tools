@@ -1,44 +1,69 @@
-import { memo, useState } from "react";
+import { memo, useContext, useState } from "react";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import { Stages } from "gakumas-data";
-import StageSummary from "./StageSummary";
+import Button from "@/components/Button";
+import StageCustomizerModal from "@/components/StageCustomizerModal";
+import LoadoutContext from "@/contexts/LoadoutContext";
+import ModalContext from "@/contexts/ModalContext";
 import { compareStages } from "@/utils/sort";
+import StageSummary from "./StageSummary";
 import styles from "./StageSelect.module.scss";
 
 const stages = Stages.getAll().sort(compareStages);
 
-function StageSelect({ stageId, setStageId }) {
+function StageSelect() {
+  const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
+  const { setModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
-  const selectedStage = Stages.getById(stageId);
+
+  function applyCustomStage(value) {
+    setStageId("custom");
+    setCustomStage(value);
+  }
 
   return (
-    <div className={styles.select}>
-      <button onClick={() => setExpanded(!expanded)}>
-        {selectedStage ? (
-          <StageSummary stage={selectedStage} />
-        ) : (
-          <div className={styles.placeholder}>ステージ選択</div>
-        )}
-        {expanded ? <FaChevronUp /> : <FaChevronDown />}
-      </button>
+    <div className={styles.stageSelect}>
+      <div className={styles.select}>
+        <button onClick={() => setExpanded(!expanded)}>
+          {stage.id ? (
+            <StageSummary stage={stage} />
+          ) : (
+            <div className={styles.placeholder}>ステージ選択</div>
+          )}
+          {expanded ? <FaChevronUp /> : <FaChevronDown />}
+        </button>
 
-      {expanded && (
-        <div className={styles.options}>
-          {stages.map((stage) => (
-            <button
-              key={stage.id}
-              className={styles.option}
-              value={stage.id}
-              onClick={() => {
-                setStageId(stage.id);
-                setExpanded(false);
-              }}
-            >
-              <StageSummary stage={stage} />
-            </button>
-          ))}
-        </div>
-      )}
+        {expanded && (
+          <div className={styles.options}>
+            {stages.map((stage) => (
+              <button
+                key={stage.id}
+                className={styles.option}
+                value={stage.id}
+                onClick={() => {
+                  setStageId(stage.id);
+                  setExpanded(false);
+                }}
+              >
+                <StageSummary stage={stage} />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <Button
+        onClick={() =>
+          setModal(
+            <StageCustomizerModal
+              initialStage={stage}
+              onApply={applyCustomStage}
+            />
+          )
+        }
+      >
+        カスタマイズ
+      </Button>
     </div>
   );
 }

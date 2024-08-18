@@ -18,7 +18,7 @@ function Input({ type, name, value, min, max, placeholder, onChange }) {
       className={styles.input}
       type={type}
       name={name}
-      value={value ?? ""}
+      defaultValue={value ?? ""}
       placeholder={placeholder}
       onChange={(e) =>
         onChange(

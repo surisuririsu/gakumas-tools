@@ -1,6 +1,13 @@
 @import "@/constants";
 
+.stageSelect {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
 .select {
+  flex: 1;
   display: flex;
   flex-direction: column;
   border: 2px solid $gray-light;
@@ -8,6 +15,7 @@
   padding: 4px;
 
   button {
+    height: 28px;
     gap: 6px;
     padding: 6px;
     color: $gray-dark;

@@ -1,14 +1,6 @@
 "use client";
-import {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FaCheck, FaRegCopy } from "react-icons/fa6";
-import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
@@ -20,23 +12,17 @@ import StageSelect from "@/components/StageSelect";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
-import {
-  BUCKET_SIZE,
-  FALLBACK_STAGE,
-  MAX_WORKERS,
-  NUM_RUNS,
-  SYNC,
-} from "@/simulator/constants";
+import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import IdolConfig from "@/simulator/IdolConfig";
 import StageConfig from "@/simulator/StageConfig";
 import STRATEGIES from "@/simulator/strategies";
+import { bucketScores, mergeResults } from "@/utils/simulator";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
 export default function Simulator() {
   const {
-    stageId,
-    setStageId,
+    stage,
     supportBonus,
     setSupportBonus,
     params,
@@ -54,7 +40,6 @@ export default function Simulator() {
   const [linkCopied, setLinkCopied] = useState(false);
   const workersRef = useRef();
 
-  const stage = Stages.getById(stageId) || FALLBACK_STAGE;
   const idolConfig = new IdolConfig(
     params,
     supportBonus,
@@ -79,31 +64,18 @@ export default function Simulator() {
       );
     }
 
-    return () => {
-      workersRef.current?.forEach((worker) => worker.terminate());
-    };
+    return () => workersRef.current?.forEach((worker) => worker.terminate());
   }, []);
 
   const setResult = useCallback(
     (result) => {
       const { minRun, averageRun, maxRun, averageScore, scores } = result;
-
-      let data = {};
-      for (let score of scores) {
-        const bucket = Math.floor(score / BUCKET_SIZE);
-        data[bucket] = (data[bucket] || 0) + 1;
-      }
-
-      const minKey = Math.floor(minRun.score / BUCKET_SIZE);
-      const maxKey = Math.floor(maxRun.score / BUCKET_SIZE);
-      for (let i = minKey - 1; i <= maxKey + 1; i++) {
-        if (!data[i]) data[i] = 0;
-      }
+      const bucketedScores = bucketScores(scores);
 
       console.timeEnd("simulation");
 
       setSimulatorData({
-        buckets: data,
+        bucketedScores,
         minScore: minRun.score,
         maxScore: maxRun.score,
         averageScore,
@@ -154,38 +126,8 @@ export default function Simulator() {
       }
 
       Promise.all(promises).then((results) => {
-        let scores = [];
-        for (let result of results) {
-          scores = scores.concat(result.scores);
-        }
-        const averageScore = Math.round(
-          scores.reduce((acc, cur) => acc + cur, 0) / scores.length
-        );
-
-        let minRun, averageRun, maxRun;
-        for (let result of results) {
-          if (!minRun || result.minRun.score < minRun.score) {
-            minRun = result.minRun;
-          }
-          if (!maxRun || result.maxRun.score > maxRun.score) {
-            maxRun = result.maxRun;
-          }
-          if (
-            !averageRun ||
-            Math.abs(result.averageRun.score - averageScore) <
-              Math.abs(averageRun.score - averageScore)
-          ) {
-            averageRun = result.averageRun;
-          }
-        }
-
-        setResult({
-          minRun,
-          averageRun,
-          maxRun,
-          averageScore,
-          scores,
-        });
+        const mergedResults = mergeResults(results);
+        setResult(mergedResults);
       });
     }
   }
@@ -194,7 +136,7 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <label>ステージ</label>
-        <StageSelect stageId={stageId} setStageId={setStageId} />
+        <StageSelect />
 
         <label>サポートボーナス%</label>
         <div className={styles.supportBonusInput}>
@@ -250,7 +192,6 @@ export default function Simulator() {
             onClick={() => {
               if (confirm("Are you sure you want to clear the loadout?")) {
                 clear();
-                setStageId(null);
               }
             }}
           >
@@ -289,7 +230,7 @@ export default function Simulator() {
           ))}
         </select>
 
-        <Button onClick={runSimulation} disabled={running}>
+        <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : "実行"}
         </Button>
       </div>

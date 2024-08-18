@@ -92,7 +92,10 @@ export default class StageEngine {
     const { turnCounts, firstTurns, criteria } = this.stageConfig;
     const remainingTurns = { ...turnCounts };
 
-    const firstTurn = firstTurns[Math.floor(Math.random() * firstTurns.length)];
+    let firstTurn = "vocal";
+    if (firstTurns.length) {
+      firstTurn = firstTurns[Math.floor(Math.random() * firstTurns.length)];
+    }
     remainingTurns[firstTurn] -= 1;
 
     const sortedTypes = Object.keys(criteria).sort(
@@ -102,7 +105,8 @@ export default class StageEngine {
     lastThreeTurns.forEach((t) => (remainingTurns[t] -= 1));
 
     let turnPool = Object.keys(remainingTurns).reduce(
-      (acc, cur) => acc.concat(new Array(remainingTurns[cur]).fill(cur)),
+      (acc, cur) =>
+        acc.concat(new Array(Math.max(remainingTurns[cur], 0)).fill(cur)),
       []
     );
     let randomTurns = [];

@@ -5,11 +5,28 @@ const PARAMETER_NAMES = ["Vocal", "Dance", "Visual"];
 const MIN = 0;
 const MAX = 1500;
 
-function ParametersInput({ parameters, onChange, withStamina, max = MAX }) {
+function ParametersInput({
+  parameters,
+  onChange,
+  withStamina,
+  max = MAX,
+  round = true,
+}) {
   const parameterNames = useMemo(
     () => PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []),
     [withStamina]
   );
+
+  function handleChange(value, index) {
+    let next = [...parameters];
+    if (round) {
+      value = parseInt(value, 10);
+    } else {
+      value = parseFloat(value);
+    }
+    next[index] = Math.min(Math.max(value, MIN), max);
+    onChange(next);
+  }
 
   return (
     <div className={styles.parameters}>
@@ -18,15 +35,9 @@ function ParametersInput({ parameters, onChange, withStamina, max = MAX }) {
           key={name}
           type="number"
           placeholder={name}
-          onChange={(e) =>
-            onChange([
-              ...parameters.slice(0, i),
-              Math.min(Math.max(parseInt(e.target.value, 10), MIN), max),
-              ...parameters.slice(i + 1),
-            ])
-          }
+          onChange={(e) => handleChange(e.target.value, i)}
           value={parameters[i] ?? ""}
-        ></input>
+        />
       ))}
     </div>
   );

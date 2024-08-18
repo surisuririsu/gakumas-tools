@@ -6,7 +6,7 @@ import styles from "./SimulatorResult.module.scss";
 function SimulatorResult({ data, idolId }) {
   return (
     <div id="simulator_result" className={styles.result}>
-      <DistributionPlot data={data.buckets} />
+      <DistributionPlot data={data.bucketedScores} />
 
       <table className={styles.stats}>
         <thead>
@@ -24,12 +24,6 @@ function SimulatorResult({ data, idolId }) {
           </tr>
         </tbody>
       </table>
-
-      {/* <b>
-        {" "}
-        This feature is in development. Simulator behavior differs from the real
-        game.
-      </b> */}
 
       <label>ログ</label>
       <SimulatorLogs

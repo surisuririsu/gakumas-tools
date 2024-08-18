@@ -10,6 +10,7 @@ function ToolHeader() {
   const pathname = usePathname();
   const { pinnedTools, pin } = useContext(WorkspaceContext);
   const tool = Object.keys(TOOLS).find((t) => TOOLS[t].path == pathname);
+  if (!tool) return null;
   const { title, pinnable } = TOOLS[tool];
 
   return (

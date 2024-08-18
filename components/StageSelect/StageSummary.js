@@ -9,7 +9,7 @@ function StageSummary({ stage }) {
       <Image src={`/plans/${stage.plan}.png`} width={20} height={20} alt="" />
       <div className={styles.status}>
         {Object.values(stage.criteria).map((c, i) => (
-          <div key={i} style={{ flex: c }}></div>
+          <div key={i} style={{ flex: c * 100 }}></div>
         ))}
       </div>
     </>
