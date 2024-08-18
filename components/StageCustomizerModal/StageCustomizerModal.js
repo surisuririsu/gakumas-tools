@@ -41,9 +41,9 @@ function StageCustomizerModal({ initialStage, onApply }) {
       name: "カスタム",
       plan: "free",
       turnCounts: {
-        vocal: turnCounts[0],
-        dance: turnCounts[1],
-        visual: turnCounts[2],
+        vocal: turnCounts[0] || 0,
+        dance: turnCounts[1] || 0,
+        visual: turnCounts[2] || 0,
       },
       firstTurns: Object.keys(firstTurns).filter((k) => firstTurns[k]),
       criteria: normalizeCriteria(criteria),
