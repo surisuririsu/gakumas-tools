@@ -8,6 +8,7 @@ import PIdolSelect from "@/components/PIdolSelect";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import MemoryContext from "@/contexts/MemoryContext";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import {
   calculateContestPower,
   calculateSkillCardCost,
