@@ -37,7 +37,6 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
       plans: [plan, "free"],
       modes: ["stage"],
       sourceTypes: ["produce", "support"],
-      ...filters,
     }).sort(compareFn);
     entities = signatureEntities.concat(nonSignatureEntities);
   } else {
