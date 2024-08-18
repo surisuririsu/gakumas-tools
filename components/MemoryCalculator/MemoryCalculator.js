@@ -110,7 +110,7 @@ function MemoryCalculator() {
       </b>
 
       <label>Target skill cards</label>
-      <TargetSkillCards />
+      <TargetSkillCards idolId={idolId} />
 
       <label>Acquired skill cards</label>
       <div className={styles.skillCards}>
