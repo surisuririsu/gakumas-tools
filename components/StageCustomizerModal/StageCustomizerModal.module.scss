@@ -1,0 +1,16 @@
+@import "@/constants";
+
+.stageCustomizer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+    font-size: 16px;
+    border: 2px solid $gk-orange;
+    border-radius: 4px;
+    padding: 8px;
+  }
+}

@@ -22,11 +22,11 @@
   flex-direction: column;
   box-shadow: 0 0 16px $gray-dark;
   border-radius: 16px;
-  padding: 64px 32px 32px;
+  padding: 48px 32px 32px;
   background-color: $white;
 
   @media only screen and (max-width: 600px) {
-    padding: 64px 16px 16px;
+    padding: 48px 16px 16px;
   }
 
   h3 {
@@ -41,6 +41,8 @@
 
 .close {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
+  color: $gk-orange;
+  font-size: 24px;
 }

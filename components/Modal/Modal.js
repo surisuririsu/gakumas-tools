@@ -10,9 +10,9 @@ function Modal({ children }) {
   return (
     <div className={styles.overlay} onClick={closeModal}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.close}>
-          <IconButton icon={FaXmark} onClick={closeModal} />
-        </div>
+        <button className={styles.close} onClick={closeModal}>
+          <FaXmark />
+        </button>
         {children}
       </div>
     </div>

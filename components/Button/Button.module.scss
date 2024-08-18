@@ -52,6 +52,17 @@
   }
 }
 
+.blue {
+  border-color: $blue;
+  background-color: $blue;
+
+  &:hover,
+  &:focus {
+    background-color: $white;
+    color: $blue;
+  }
+}
+
 .disabled {
   border-color: $gray-light;
   background-color: $gray-extra-light;

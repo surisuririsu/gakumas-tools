@@ -1,9 +1,11 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Stages } from "gakumas-data";
 import DataContext from "@/contexts/DataContext";
-import { getSimulatorUrl } from "@/utils/simulator";
+import { getLoadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
+import { FALLBACK_STAGE } from "@/simulator/constants";
 
 const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 
@@ -11,45 +13,22 @@ const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const searchParams = useSearchParams();
-
-  let initialStageId = searchParams.get("stage");
-  let initialSupportBonus = searchParams.get("support_bonus");
-  let initialParams = searchParams.get("params");
-  let initialPItemIds = searchParams.get("items");
-  let initialSkillCardIdGroups = searchParams.get("cards");
-  const hasDataFromParams =
-    initialStageId ||
-    initialParams ||
-    initialPItemIds ||
-    initialSkillCardIdGroups;
-
-  initialStageId = initialStageId || "16";
-  initialParams = initialParams || "1000-1000-1000-40";
-  initialPItemIds = initialPItemIds || "0-0-0";
-  initialSkillCardIdGroups =
-    initialSkillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
-
-  initialStageId = parseInt(initialStageId, 10) || null;
-  initialSupportBonus = parseFloat(initialSupportBonus) || null;
-  initialParams = initialParams.split("-").map((n) => parseInt(n, 10) || 0);
-  initialPItemIds = initialPItemIds.split("-").map((n) => parseInt(n, 10) || 0);
-  initialSkillCardIdGroups = initialSkillCardIdGroups
-    .split("_")
-    .map((group) => group.split("-").map((n) => parseInt(n, 10) || 0));
+  const initial = getLoadoutFromSearchParams(searchParams);
 
   const { memories } = useContext(DataContext);
   const [loaded, setLoaded] = useState(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
-  const [stageId, setStageId] = useState(initialStageId);
-  const [supportBonus, setSupportBonus] = useState(initialSupportBonus);
-  const [params, setParams] = useState(initialParams);
-  const [pItemIds, setPItemIds] = useState(initialPItemIds);
+  const [stageId, setStageId] = useState(initial.stageId);
+  const [customStage, setCustomStage] = useState(null);
+  const [supportBonus, setSupportBonus] = useState(initial.supportBonus);
+  const [params, setParams] = useState(initial.params);
+  const [pItemIds, setPItemIds] = useState(initial.pItemIds);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
-    initialSkillCardIdGroups
+    initial.skillCardIdGroups
   );
 
   useEffect(() => {
-    if (hasDataFromParams) {
+    if (initial.hasDataFromParams) {
       setLoaded(true);
       return;
     }
@@ -58,6 +37,7 @@ export function LoadoutContextProvider({ children }) {
       const data = JSON.parse(loadoutString);
       if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
       if (data.stageId) setStageId(data.stageId);
+      if (data.customStage) setCustomStage(data.customStage);
       if (data.supportBonus) setSupportBonus(data.supportBonus);
       if (data.params?.some((id) => id)) setParams(data.params);
       if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
@@ -74,13 +54,22 @@ export function LoadoutContextProvider({ children }) {
       JSON.stringify({
         memoryIds,
         stageId,
+        customStage,
         supportBonus,
         params,
         pItemIds,
         skillCardIdGroups,
       })
     );
-  }, [memoryIds, stageId, supportBonus, params, pItemIds, skillCardIdGroups]);
+  }, [
+    memoryIds,
+    stageId,
+    customStage,
+    supportBonus,
+    params,
+    pItemIds,
+    skillCardIdGroups,
+  ]);
 
   function setSkillCardIds(callback) {
     setSkillCardIdGroups((cur) => {
@@ -191,12 +180,22 @@ export function LoadoutContextProvider({ children }) {
   );
   const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
 
+  let stage = FALLBACK_STAGE;
+  if (stageId == "custom") {
+    stage = customStage;
+  } else if (stageId) {
+    stage = Stages.getById(stageId);
+  }
+
   return (
     <LoadoutContext.Provider
       value={{
         setMemory,
         stageId,
         setStageId,
+        customStage,
+        setCustomStage,
+        stage,
         supportBonus,
         setSupportBonus,
         params,
