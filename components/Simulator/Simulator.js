@@ -142,14 +142,14 @@ export default function Simulator() {
             withStamina
             max={10000}
           />
-          <div className={styles.typeMultipliers}>
+          {/* <div className={styles.typeMultipliers}>
             {Object.keys(idolConfig.typeMultipliers).map((param) => (
               <div key={param}>
                 {Math.round(idolConfig.typeMultipliers[param] * 100)}%
               </div>
             ))}
             <div />
-          </div>
+          </div> */}
         </div>
         <StagePItems
           pItemIds={loadout.pItemIds}
