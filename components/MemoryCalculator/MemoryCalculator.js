@@ -127,6 +127,7 @@ function MemoryCalculator() {
                 />
               )
             }
+            idolId={idolId}
           />
         ))}
       </div>
