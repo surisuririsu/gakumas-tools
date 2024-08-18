@@ -21,11 +21,13 @@ function SimulatorSubTools({ plan, idolId }) {
           コスト範囲
         </button>
 
-        <a href={kafeUrl} target="_blank">
-          コンテストシミュレーター
-          <br />
-          (@かふぇもっと)
-        </a>
+        {kafeUrl && (
+          <a href={kafeUrl} target="_blank">
+            コンテストシミュレーター
+            <br />
+            (@かふぇもっと)
+          </a>
+        )}
 
         <button
           onClick={() =>
