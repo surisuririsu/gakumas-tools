@@ -20,7 +20,7 @@ function StagePItems({ pItemIds, replacePItemId, size }) {
               <EntityPickerModal
                 type={EntityTypes.P_ITEM}
                 onPick={(card) => replacePItemId(index, card.id)}
-                filters={{ sourceTypes: ["support"] }}
+                filters={[{ callback: (e) => e.sourceType == "support" }]}
               />
             )
           }

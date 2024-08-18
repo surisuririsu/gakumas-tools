@@ -14,6 +14,7 @@ function TargetSkillCards() {
     addAlternateSkillCards,
     targetNegations,
     setNegation,
+    acquiredSkillCardIds,
     replaceTargetCardId,
     replaceAlternateCardId,
   } = useContext(MemoryCalculatorContext);
@@ -47,6 +48,13 @@ function TargetSkillCards() {
                   <EntityPickerModal
                     type={EntityTypes.SKILL_CARD}
                     onPick={(card) => replaceTargetCardId(index, card.id)}
+                    filters={[
+                      {
+                        label: "取得済み",
+                        callback: (e) => acquiredSkillCardIds.includes(e.id),
+                        default: acquiredSkillCardIds.some((id) => id),
+                      },
+                    ]}
                   />
                 )
               }

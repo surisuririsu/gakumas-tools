@@ -1,4 +1,4 @@
-@import '@/constants';
+@import "@/constants";
 
 .entities {
   flex: 1;
@@ -12,5 +12,37 @@
 }
 
 .filter {
-  margin: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 4px;
+}
+
+.defaultFilters {
+  display: flex;
+}
+
+.fill {
+  flex: 1;
+}
+
+.customFilters {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle {
+  gap: 4px;
+  border: 2px solid $gray-light;
+  border-radius: 22px;
+  padding: 8px;
+  color: $gray;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.enabled {
+  border-color: darken($gk-red-orange, 10%);
+  background-color: lighten($gk-orange, 30%);
+  color: darken($gk-red-orange, 10%);
 }
