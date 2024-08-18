@@ -178,7 +178,11 @@ export function LoadoutContextProvider({ children }) {
     pItemIds,
     skillCardIdGroups
   );
-  const kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
+
+  let kafeUrl = null;
+  if (stageId && stageId != "custom") {
+    kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
+  }
 
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
