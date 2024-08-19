@@ -59,7 +59,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
         <ParametersInput
           parameters={turnCounts}
           onChange={setTurnCounts}
-          max={20}
+          max={100}
         />
 
         <label>初手ターン</label>
