@@ -180,15 +180,18 @@ export function LoadoutContextProvider({ children }) {
   );
 
   let kafeUrl = null;
-  if (stageId && stageId != "custom") {
-    kafeUrl = generateKafeUrl(pItemIds, skillCardIdGroups, stageId, params);
-  }
-
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
     stage = customStage;
   } else if (stageId) {
     stage = Stages.getById(stageId);
+    kafeUrl = generateKafeUrl(
+      stage,
+      supportBonus,
+      params,
+      pItemIds,
+      skillCardIdGroups
+    );
   }
 
   return (

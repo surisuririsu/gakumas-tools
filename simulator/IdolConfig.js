@@ -104,6 +104,7 @@ export default class IdolConfig {
   // keep only the most upgraded copy
   getDedupedSkillCardIds(skillCardIds) {
     const sortedSkillCards = skillCardIds
+      .filter((id) => id)
       .map(SkillCards.getById)
       .sort((a, b) => {
         if (a.upgraded) return -1;
