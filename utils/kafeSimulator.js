@@ -1,9 +1,9 @@
-import IdolConfig from "@/simulator/IdolConfig";
 import { PItems, SkillCards, Stages } from "gakumas-data";
 import { ContestData } from "gakumas_contest_simulator/scripts/simulator/data/contestData";
 import { PIdolData as SimulatorPIdols } from "gakumas_contest_simulator/scripts/simulator/data/pIdolData";
 import { PItemData as SimulatorPItems } from "gakumas_contest_simulator/scripts/simulator/data/pItemData";
 import { SkillCardData as SimulatorSkillCards } from "gakumas_contest_simulator/scripts/simulator/data/skillCardData";
+import IdolConfig from "@/simulator/IdolConfig";
 
 export const KAFE_CONTEST_STAGES = ContestData.getAll().reduce((acc, cur) => {
   const stages = cur.stages
@@ -104,7 +104,7 @@ export function generateKafeUrl(
     stage
   );
   const status = Object.values(idolConfig.typeMultipliers)
-    .map((s) => s * 100)
+    .map((s) => Math.round(s * 100))
     .concat(idolConfig.params.stamina);
   const itemSimulatorIds = pItemIds
     .filter((i) => PItems.getById(i) && PItems.getById(i).sourceType != "pIdol")
