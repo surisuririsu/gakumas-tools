@@ -1,3 +1,4 @@
+import IdolConfig from "@/simulator/IdolConfig";
 import { PItems, SkillCards, Stages } from "gakumas-data";
 import { ContestData } from "gakumas_contest_simulator/scripts/simulator/data/contestData";
 import { PIdolData as SimulatorPIdols } from "gakumas_contest_simulator/scripts/simulator/data/pIdolData";
@@ -87,9 +88,28 @@ const MISMATCHED_CARDS = SkillCards.getAll().filter(
 
 const KAFE_URL_BASE = "https://katabami83.github.io/gakumas_contest_simulator";
 
-export function generateKafeUrl(items, cardGroups, stage, status) {
-  const kafeStage = KAFE_STAGE_MAP[stage];
-  const groups = cardGroups.slice();
+export function generateKafeUrl(
+  stage,
+  supportBonus,
+  params,
+  pItemIds,
+  skillCardIdGroups
+) {
+  const kafeStage = KAFE_STAGE_MAP[stage.id];
+  const idolConfig = new IdolConfig(
+    params,
+    supportBonus,
+    pItemIds,
+    skillCardIdGroups,
+    stage
+  );
+  const status = Object.values(idolConfig.typeMultipliers)
+    .map((s) => s * 100)
+    .concat(idolConfig.params.stamina);
+  const itemSimulatorIds = pItemIds
+    .filter((i) => PItems.getById(i) && PItems.getById(i).sourceType != "pIdol")
+    .map((i) => KAFE_ITEM_MAP[i] || -1);
+  const groups = skillCardIdGroups.slice();
   while (groups.length < 2) {
     groups.push([0, 0, 0, 0, 0, 0]);
   }
@@ -101,11 +121,6 @@ export function generateKafeUrl(items, cardGroups, stage, status) {
     .find((c) => c?.sourceType == "pIdol");
   const mainIdolCardSimulatorId = KAFE_CARD_MAP[mainIdolCard?.id] || -1;
   const subIdolCardSimulatorId = KAFE_CARD_MAP[subIdolCard?.id] || -1;
-
-  const itemSimulatorIds = items
-    .filter((i) => PItems.getById(i) && PItems.getById(i).sourceType != "pIdol")
-    .map((i) => KAFE_ITEM_MAP[i] || -1);
-
   const cardSimulatorIds = groups
     .slice(0, 2)
     .map((cg, idx) =>
