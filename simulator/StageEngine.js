@@ -772,6 +772,12 @@ export default class StageEngine {
         if (state.doubleCostTurns) {
           stamina *= 2;
         }
+        stamina = Math.ceil(stamina);
+        if (stamina < 0) {
+          stamina += state.costReduction;
+          stamina = Math.min(stamina, 0);
+        }
+
         state.stamina += stamina;
         state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
