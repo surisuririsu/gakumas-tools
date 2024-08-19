@@ -71,7 +71,7 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     // Stamina
     score +=
-      (Math.log(previewState.stamina) / (previewState.turnsRemaining + 1)) *
+      (Math.log(previewState.stamina + 1) / (previewState.turnsRemaining + 1)) *
       0.5;
 
     // Genki
