@@ -4,17 +4,21 @@ import { createContext, useState } from "react";
 const ModalContext = createContext();
 
 export function ModalContextProvider({ children }) {
-  const [modal, setModal] = useState(null);
+  const [modals, _setModals] = useState([]);
 
   function closeModal() {
-    setModal(null);
+    _setModals(modals.slice(0, modals.length - 1));
+  }
+
+  function setModal(modal) {
+    _setModals(modals.concat(modal));
   }
 
   return (
     <ModalContext.Provider value={{ setModal, closeModal }}>
       <>
         {children}
-        {modal}
+        {!!modals.length && modals[modals.length - 1]}
       </>
     </ModalContext.Provider>
   );
