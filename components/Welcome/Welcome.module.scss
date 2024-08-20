@@ -36,9 +36,12 @@
     gap: 8px;
 
     a {
+      min-width: 52px;
+    }
+
+    span {
       display: flex;
       justify-content: center;
-      min-width: 52px;
     }
   }
 }
