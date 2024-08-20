@@ -20,7 +20,7 @@ function Welcome() {
             return (
               <li key={path} className={styles.feature}>
                 <Button ariaLabel={title} href={path}>
-                  {icon}
+                  <span>{icon}</span>
                 </Button>
                 {description}
               </li>

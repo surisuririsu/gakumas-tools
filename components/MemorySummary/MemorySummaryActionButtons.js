@@ -2,18 +2,21 @@ import { memo, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { FaTrophy, FaArrowRight } from "react-icons/fa6";
 import Button from "@/components/Button";
+import MemoryEditorModal from "@/components/MemoryEditorModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
+import ModalContext from "@/contexts/ModalContext";
 import styles from "./MemorySummary.module.scss";
 
 function MemorySummaryActionButtons({ memory }) {
   const router = useRouter();
   const { setMemory } = useContext(LoadoutContext);
   const { setAll } = useContext(MemoryContext);
+  const { setModal } = useContext(ModalContext);
 
   function editMemory() {
     setAll(memory);
-    router.push("/memory-editor");
+    setModal(<MemoryEditorModal />);
   }
 
   function loadMemory(index) {

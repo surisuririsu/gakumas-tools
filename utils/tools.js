@@ -44,29 +44,11 @@ export const TOOLS = {
     path: "/memory-calculator",
     pinnable: true,
   },
-  memoryEditor: {
-    title: "メモリー編集",
-    icon: (
-      <>
-        <FaFilm />
-        <FaPen />
-      </>
-    ),
-    fill: true,
-    description: "Create, edit, and save memories",
-    path: "/memory-editor",
-    pinnable: true,
-  },
   memories: {
-    title: "メモリー一覧",
-    icon: (
-      <>
-        <FaFilm />
-        <FaList />
-      </>
-    ),
+    title: "メモリー",
+    icon: <FaFilm />,
     description:
-      "Import memories from screenshots and search by p-items and skill cards",
+      "Create or import memories, and search by p-items and skill cards",
     path: "/memories",
     pinnable: true,
   },
