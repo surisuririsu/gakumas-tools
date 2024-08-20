@@ -1859,10 +1859,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v2.0.0":
-  version: 2.0.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=666528900ada1cdf8da48e9afc84fe9525e74030"
-  checksum: 10c0/af45d517ea3deced980be82a7ecdf9965c3837195d7d0d6ebb923924ed62e3d19b20c6e89359080a6705544cf624ebfee9d15feb21012d870a4ea2190e3982ed
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v2.0.1":
+  version: 2.0.1
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=6ec946022643e0aa86541b600157e04b5b6fe157"
+  checksum: 10c0/8c497595b836905afa015dacc2c514f2312c699b04554496c01e1f466dadfb287e397cd9447f1d85e7eeb254a26752177ab91ecef8a1e0800f6542a6bd832f53
   languageName: node
   linkType: hard
 
@@ -1873,7 +1873,7 @@ __metadata:
     chart.js: "npm:^4.4.3"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.5"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.0.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.0.1"
     gakumas_contest_simulator: "https://github.com/surisuririsu/gakumas_contest_simulator#v"
     mongodb: "npm:^6.8.0"
     next: "npm:14.2.5"
