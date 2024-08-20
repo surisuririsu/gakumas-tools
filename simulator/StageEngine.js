@@ -775,7 +775,7 @@ export default class StageEngine {
           stamina *= 2;
         }
         stamina = Math.ceil(stamina);
-        if (stamina < 0) {
+        if (stamina <= 0) {
           stamina += state.costReduction;
           stamina -= state.costIncrease;
           stamina = Math.min(stamina, 0);
