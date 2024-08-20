@@ -37,6 +37,7 @@ export default class StageEngine {
       turnsRemaining: this.stageConfig.turnCount,
       cardUsesRemaining: 0,
       maxStamina: this.idolConfig.params.stamina,
+      fixedStamina: 0,
       intermediateStamina: 0,
       stamina: this.idolConfig.params.stamina,
       fixedGenki: 0,
@@ -818,6 +819,10 @@ export default class StageEngine {
         // Apply fixed genki
         state.genki += state.fixedGenki;
         state.fixedGenki = 0;
+      } else if (lhs == "fixedStamina") {
+        // Apply fixed stamina
+        state.stamina += state.fixedStamina;
+        state.fixedStamina = 0;
       }
 
       for (let key of WHOLE_FIELDS) {
