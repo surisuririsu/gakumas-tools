@@ -786,21 +786,28 @@ export default class StageEngine {
         state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
         let score = state.intermediateScore;
-        // Apply concentration
-        score += state.concentration * state.concentrationMultiplier;
 
-        // Apply good and perfect condition
-        if (state.goodConditionTurns) {
-          score *=
-            1.5 +
-            (state.perfectConditionTurns ? state.goodConditionTurns * 0.1 : 0);
+        if (score > 0) {
+          // Apply concentration
+          score += state.concentration * state.concentrationMultiplier;
+
+          // Apply good and perfect condition
+          if (state.goodConditionTurns) {
+            score *=
+              1.5 +
+              (state.perfectConditionTurns
+                ? state.goodConditionTurns * 0.1
+                : 0);
+          }
+
+          score = this._calculateTrueScore(
+            score,
+            state,
+            this.idolConfig.typeMultipliers[state.turnType]
+          );
         }
 
-        state.score += this._calculateTrueScore(
-          score,
-          state,
-          this.idolConfig.typeMultipliers[state.turnType]
-        );
+        state.score += score;
         state.intermediateScore = 0;
       } else if (lhs == "intermediateGenki") {
         // Apply genki
