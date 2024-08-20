@@ -1,4 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data";
+import { shuffle } from "@/utils/simulator";
 import {
   DEBUG,
   DEBUFF_FIELDS,
@@ -49,10 +50,10 @@ export default class StageEngine {
       clearRatio: 0,
 
       // Skill card piles
-      deckCardIds: this.idolConfig.skillCardIds.slice().sort((a, b) => {
+      deckCardIds: shuffle(this.idolConfig.skillCardIds).sort((a, b) => {
         if (SkillCards.getById(a).forceInitialHand) return 1;
         if (SkillCards.getById(b).forceInitialHand) return -1;
-        return 0.5 - Math.random();
+        return 0;
       }),
       handCardIds: [],
       discardedCardIds: [],
@@ -383,7 +384,7 @@ export default class StageEngine {
   }
 
   _recycleDiscards(state) {
-    state.deckCardIds = state.discardedCardIds.sort(() => 0.5 - Math.random());
+    state.deckCardIds = shuffle(state.discardedCardIds);
     state.discardedCardIds = [];
     DEBUG && this.logger.debug("Recycled discard pile");
     return state;
