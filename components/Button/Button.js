@@ -6,6 +6,7 @@ function Button({
   children,
   onClick,
   href,
+  target,
   style = "primary",
   disabled,
   ariaLabel,
@@ -16,6 +17,7 @@ function Button({
     <Link
       className={className}
       href={href}
+      target={target}
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
