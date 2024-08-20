@@ -9,7 +9,7 @@ export const KAFE_CONTEST_STAGES = ContestData.getAll().reduce((acc, cur) => {
   const stages = cur.stages
     .map((stage, stageIdx) => {
       const normalizedName = `${cur.name} ${stage.name}`.normalize("NFKC");
-      const match = normalizedName.match(/第(\d+)回.*ステージ(\d+)/);
+      const match = normalizedName.match(/第(\d+)期コンテスト.*ステージ(\d+)/);
       if (!match) return null;
       return {
         id: `${cur.id}:${stageIdx}`,
@@ -73,17 +73,9 @@ const KAFE_CARD_MAP = SkillCards.getAll().reduce((acc, cur) => {
   return acc;
 }, {});
 
-const KAFE_STAGE_ID_FIXUPS_TEMP = {
-  19: "240822:0",
-  20: "240822:1",
-  21: "240822:2",
-};
-
 const KAFE_STAGE_MAP = Stages.getAll().reduce((acc, cur) => {
   acc[cur.id] =
-    KAFE_STAGE_ID_FIXUPS_TEMP[cur.id] ||
-    KAFE_STAGES_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] ||
-    "-1:-1";
+    KAFE_STAGES_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] || "-1:-1";
   return acc;
 }, {});
 

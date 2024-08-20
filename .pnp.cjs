@@ -31,7 +31,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=5827cf9297c7b91151bf273d3adf3a5cd558313c"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=3dc578e8bee6a82a32cd1f52d3e990a6fff45223"],\
+          ["gakumas_contest_simulator", "https://github.com/surisuririsu/gakumas_contest_simulator.git#commit=9539d86f02358981522c6a9c804c6b9402e98396"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
@@ -45,12 +45,52 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
+    ["@babel/helper-string-parser", [\
+      ["npm:7.24.8", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-helper-string-parser-npm-7.24.8-133b2e71e1-10c0.zip/node_modules/@babel/helper-string-parser/",\
+        "packageDependencies": [\
+          ["@babel/helper-string-parser", "npm:7.24.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@babel/helper-validator-identifier", [\
+      ["npm:7.24.7", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-helper-validator-identifier-npm-7.24.7-748889c8d2-10c0.zip/node_modules/@babel/helper-validator-identifier/",\
+        "packageDependencies": [\
+          ["@babel/helper-validator-identifier", "npm:7.24.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@babel/parser", [\
+      ["npm:7.25.3", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-parser-npm-7.25.3-e33bb4a0e6-10c0.zip/node_modules/@babel/parser/",\
+        "packageDependencies": [\
+          ["@babel/parser", "npm:7.25.3"],\
+          ["@babel/types", "npm:7.25.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@babel/runtime", [\
       ["npm:7.24.8", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-runtime-npm-7.24.8-89166d937e-10c0.zip/node_modules/@babel/runtime/",\
         "packageDependencies": [\
           ["@babel/runtime", "npm:7.24.8"],\
           ["regenerator-runtime", "npm:0.14.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@babel/types", [\
+      ["npm:7.25.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-types-npm-7.25.2-7d3fc0ed1e-10c0.zip/node_modules/@babel/types/",\
+        "packageDependencies": [\
+          ["@babel/types", "npm:7.25.2"],\
+          ["@babel/helper-string-parser", "npm:7.24.8"],\
+          ["@babel/helper-validator-identifier", "npm:7.24.7"],\
+          ["to-fast-properties", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -114,6 +154,70 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@fortawesome/fontawesome-common-types", [\
+      ["npm:6.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@fortawesome-fontawesome-common-types-npm-6.6.0-3591635037-10c0.zip/node_modules/@fortawesome/fontawesome-common-types/",\
+        "packageDependencies": [\
+          ["@fortawesome/fontawesome-common-types", "npm:6.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@fortawesome/fontawesome-free", [\
+      ["npm:6.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@fortawesome-fontawesome-free-npm-6.6.0-fa479c2269-10c0.zip/node_modules/@fortawesome/fontawesome-free/",\
+        "packageDependencies": [\
+          ["@fortawesome/fontawesome-free", "npm:6.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@fortawesome/fontawesome-svg-core", [\
+      ["npm:6.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@fortawesome-fontawesome-svg-core-npm-6.6.0-fc6ee66860-10c0.zip/node_modules/@fortawesome/fontawesome-svg-core/",\
+        "packageDependencies": [\
+          ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
+          ["@fortawesome/fontawesome-common-types", "npm:6.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@fortawesome/free-solid-svg-icons", [\
+      ["npm:6.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@fortawesome-free-solid-svg-icons-npm-6.6.0-e36bbcdb92-10c0.zip/node_modules/@fortawesome/free-solid-svg-icons/",\
+        "packageDependencies": [\
+          ["@fortawesome/free-solid-svg-icons", "npm:6.6.0"],\
+          ["@fortawesome/fontawesome-common-types", "npm:6.6.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@fortawesome/vue-fontawesome", [\
+      ["npm:3.0.8", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
+        "packageDependencies": [\
+          ["@fortawesome/vue-fontawesome", "npm:3.0.8"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.0.8", {\
+        "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-f180e3683b/4/AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
+        "packageDependencies": [\
+          ["@fortawesome/vue-fontawesome", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.0.8"],\
+          ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
+          ["@types/fortawesome__fontawesome-svg-core", null],\
+          ["@types/vue", null],\
+          ["vue", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38"]\
+        ],\
+        "packagePeers": [\
+          "@fortawesome/fontawesome-svg-core",\
+          "@types/fortawesome__fontawesome-svg-core",\
+          "@types/vue",\
+          "vue"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@humanwhocodes/config-array", [\
       ["npm:0.11.14", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@humanwhocodes-config-array-npm-0.11.14-94a02fcc87-10c0.zip/node_modules/@humanwhocodes/config-array/",\
@@ -168,11 +272,29 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@jridgewell/sourcemap-codec", [\
+      ["npm:1.5.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@jridgewell-sourcemap-codec-npm-1.5.0-dfd9126d71-10c0.zip/node_modules/@jridgewell/sourcemap-codec/",\
+        "packageDependencies": [\
+          ["@jridgewell/sourcemap-codec", "npm:1.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@kurkle/color", [\
       ["npm:0.3.2", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@kurkle-color-npm-0.3.2-98f2086013-10c0.zip/node_modules/@kurkle/color/",\
         "packageDependencies": [\
           ["@kurkle/color", "npm:0.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mdi/font", [\
+      ["npm:7.4.47", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@mdi-font-npm-7.4.47-4b1c2f0954-10c0.zip/node_modules/@mdi/font/",\
+        "packageDependencies": [\
+          ["@mdi/font", "npm:7.4.47"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -514,6 +636,127 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@ungap-structured-clone-npm-1.2.0-648f0b82e0-10c0.zip/node_modules/@ungap/structured-clone/",\
         "packageDependencies": [\
           ["@ungap/structured-clone", "npm:1.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/compiler-core", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-compiler-core-npm-3.4.38-edcb5af593-10c0.zip/node_modules/@vue/compiler-core/",\
+        "packageDependencies": [\
+          ["@vue/compiler-core", "npm:3.4.38"],\
+          ["@babel/parser", "npm:7.25.3"],\
+          ["@vue/shared", "npm:3.4.38"],\
+          ["entities", "npm:4.5.0"],\
+          ["estree-walker", "npm:2.0.2"],\
+          ["source-map-js", "npm:1.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/compiler-dom", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-compiler-dom-npm-3.4.38-4f66a1ffb0-10c0.zip/node_modules/@vue/compiler-dom/",\
+        "packageDependencies": [\
+          ["@vue/compiler-dom", "npm:3.4.38"],\
+          ["@vue/compiler-core", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/compiler-sfc", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-compiler-sfc-npm-3.4.38-7e5032742e-10c0.zip/node_modules/@vue/compiler-sfc/",\
+        "packageDependencies": [\
+          ["@vue/compiler-sfc", "npm:3.4.38"],\
+          ["@babel/parser", "npm:7.25.3"],\
+          ["@vue/compiler-core", "npm:3.4.38"],\
+          ["@vue/compiler-dom", "npm:3.4.38"],\
+          ["@vue/compiler-ssr", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"],\
+          ["estree-walker", "npm:2.0.2"],\
+          ["magic-string", "npm:0.30.11"],\
+          ["postcss", "npm:8.4.41"],\
+          ["source-map-js", "npm:1.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/compiler-ssr", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-compiler-ssr-npm-3.4.38-5b5a2087ac-10c0.zip/node_modules/@vue/compiler-ssr/",\
+        "packageDependencies": [\
+          ["@vue/compiler-ssr", "npm:3.4.38"],\
+          ["@vue/compiler-dom", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/reactivity", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-reactivity-npm-3.4.38-ab1d7a0f77-10c0.zip/node_modules/@vue/reactivity/",\
+        "packageDependencies": [\
+          ["@vue/reactivity", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/runtime-core", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-runtime-core-npm-3.4.38-3387080b95-10c0.zip/node_modules/@vue/runtime-core/",\
+        "packageDependencies": [\
+          ["@vue/runtime-core", "npm:3.4.38"],\
+          ["@vue/reactivity", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/runtime-dom", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-runtime-dom-npm-3.4.38-4bd5f673b5-10c0.zip/node_modules/@vue/runtime-dom/",\
+        "packageDependencies": [\
+          ["@vue/runtime-dom", "npm:3.4.38"],\
+          ["@vue/reactivity", "npm:3.4.38"],\
+          ["@vue/runtime-core", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"],\
+          ["csstype", "npm:3.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/server-renderer", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.4.38-01286b9c85-10c0.zip/node_modules/@vue/server-renderer/",\
+        "packageDependencies": [\
+          ["@vue/server-renderer", "npm:3.4.38"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:ab2d8e0d10f867836281e2df11349b616ad94feff04379d3788d9fbcbde746e5ff37ca45aa0af14a6c076e3fa10340b3b099cca039825387bb90b44cfd5c587d#npm:3.4.38", {\
+        "packageLocation": "./.yarn/__virtual__/@vue-server-renderer-virtual-67621dfa28/4/AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.4.38-01286b9c85-10c0.zip/node_modules/@vue/server-renderer/",\
+        "packageDependencies": [\
+          ["@vue/server-renderer", "virtual:ab2d8e0d10f867836281e2df11349b616ad94feff04379d3788d9fbcbde746e5ff37ca45aa0af14a6c076e3fa10340b3b099cca039825387bb90b44cfd5c587d#npm:3.4.38"],\
+          ["@types/vue", null],\
+          ["@vue/compiler-ssr", "npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"],\
+          ["vue", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38"]\
+        ],\
+        "packagePeers": [\
+          "@types/vue",\
+          "vue"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@vue/shared", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@vue-shared-npm-3.4.38-d2a2d22fd7-10c0.zip/node_modules/@vue/shared/",\
+        "packageDependencies": [\
+          ["@vue/shared", "npm:3.4.38"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1045,6 +1288,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["core-js", [\
+      ["npm:3.38.0", {\
+        "packageLocation": "./.yarn/unplugged/core-js-npm-3.38.0-3f7d7cec9a/node_modules/core-js/",\
+        "packageDependencies": [\
+          ["core-js", "npm:3.38.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["cross-spawn", [\
       ["npm:7.0.3", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/cross-spawn-npm-7.0.3-e4ff3e65b3-10c0.zip/node_modules/cross-spawn/",\
@@ -1053,6 +1305,15 @@ const RAW_RUNTIME_STATE =
           ["path-key", "npm:3.1.1"],\
           ["shebang-command", "npm:2.0.0"],\
           ["which", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["csstype", [\
+      ["npm:3.1.3", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/csstype-npm-3.1.3-e9a1c85013-10c0.zip/node_modules/csstype/",\
+        "packageDependencies": [\
+          ["csstype", "npm:3.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1276,6 +1537,15 @@ const RAW_RUNTIME_STATE =
           ["enhanced-resolve", "npm:5.17.0"],\
           ["graceful-fs", "npm:4.2.11"],\
           ["tapable", "npm:2.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["entities", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/entities-npm-4.5.0-7cdb83b832-10c0.zip/node_modules/entities/",\
+        "packageDependencies": [\
+          ["entities", "npm:4.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1866,6 +2136,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["estree-walker", [\
+      ["npm:2.0.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/estree-walker-npm-2.0.2-dfab42f65c-10c0.zip/node_modules/estree-walker/",\
+        "packageDependencies": [\
+          ["estree-walker", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["esutils", [\
       ["npm:2.0.3", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/esutils-npm-2.0.3-f865beafd5-10c0.zip/node_modules/esutils/",\
@@ -2094,7 +2373,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=5827cf9297c7b91151bf273d3adf3a5cd558313c"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=3dc578e8bee6a82a32cd1f52d3e990a6fff45223"],\
+          ["gakumas_contest_simulator", "https://github.com/surisuririsu/gakumas_contest_simulator.git#commit=9539d86f02358981522c6a9c804c6b9402e98396"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
@@ -2109,10 +2388,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas_contest_simulator", [\
-      ["https://github.com/katabami83/gakumas_contest_simulator.git#commit=3dc578e8bee6a82a32cd1f52d3e990a6fff45223", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-6e1b86c948-10c0.zip/node_modules/gakumas_contest_simulator/",\
+      ["https://github.com/surisuririsu/gakumas_contest_simulator.git#commit=9539d86f02358981522c6a9c804c6b9402e98396", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-75bf5fdefd-10c0.zip/node_modules/gakumas_contest_simulator/",\
         "packageDependencies": [\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=3dc578e8bee6a82a32cd1f52d3e990a6fff45223"]\
+          ["gakumas_contest_simulator", "https://github.com/surisuririsu/gakumas_contest_simulator.git#commit=9539d86f02358981522c6a9c804c6b9402e98396"],\
+          ["@fortawesome/fontawesome-free", "npm:6.6.0"],\
+          ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
+          ["@fortawesome/free-solid-svg-icons", "npm:6.6.0"],\
+          ["@fortawesome/vue-fontawesome", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.0.8"],\
+          ["@mdi/font", "npm:7.4.47"],\
+          ["chart.js", "npm:4.4.3"],\
+          ["core-js", "npm:3.38.0"],\
+          ["roboto-fontface", "npm:0.10.0"],\
+          ["vue", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38"],\
+          ["vuetify", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.7.0"],\
+          ["webfontloader", "npm:1.6.28"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3026,6 +3316,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["magic-string", [\
+      ["npm:0.30.11", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/magic-string-npm-0.30.11-4e76dc2f30-10c0.zip/node_modules/magic-string/",\
+        "packageDependencies": [\
+          ["magic-string", "npm:0.30.11"],\
+          ["@jridgewell/sourcemap-codec", "npm:1.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["make-fetch-happen", [\
       ["npm:13.0.1", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/make-fetch-happen-npm-13.0.1-4180f2aaa8-10c0.zip/node_modules/make-fetch-happen/",\
@@ -3785,6 +4085,16 @@ const RAW_RUNTIME_STATE =
           ["source-map-js", "npm:1.2.0"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:8.4.41", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/postcss-npm-8.4.41-1607021b28-10c0.zip/node_modules/postcss/",\
+        "packageDependencies": [\
+          ["postcss", "npm:8.4.41"],\
+          ["nanoid", "npm:3.3.7"],\
+          ["picocolors", "npm:1.0.1"],\
+          ["source-map-js", "npm:1.2.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["preact", [\
@@ -4097,6 +4407,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["rimraf", "npm:3.0.2"],\
           ["glob", "npm:7.2.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["roboto-fontface", [\
+      ["npm:0.10.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/roboto-fontface-npm-0.10.0-6476b79561-10c0.zip/node_modules/roboto-fontface/",\
+        "packageDependencies": [\
+          ["roboto-fontface", "npm:0.10.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4599,6 +4918,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["to-fast-properties", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/to-fast-properties-npm-2.0.0-0dc60cc481-10c0.zip/node_modules/to-fast-properties/",\
+        "packageDependencies": [\
+          ["to-fast-properties", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["to-regex-range", [\
       ["npm:5.0.1", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/to-regex-range-npm-5.0.1-f1e8263b00-10c0.zip/node_modules/to-regex-range/",\
@@ -4797,11 +5125,85 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["vue", [\
+      ["npm:3.4.38", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/vue-npm-3.4.38-6c7150367a-10c0.zip/node_modules/vue/",\
+        "packageDependencies": [\
+          ["vue", "npm:3.4.38"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38", {\
+        "packageLocation": "./.yarn/__virtual__/vue-virtual-ab2d8e0d10/4/AppData/Local/Yarn/Berry/cache/vue-npm-3.4.38-6c7150367a-10c0.zip/node_modules/vue/",\
+        "packageDependencies": [\
+          ["vue", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38"],\
+          ["@types/typescript", null],\
+          ["@vue/compiler-dom", "npm:3.4.38"],\
+          ["@vue/compiler-sfc", "npm:3.4.38"],\
+          ["@vue/runtime-dom", "npm:3.4.38"],\
+          ["@vue/server-renderer", "virtual:ab2d8e0d10f867836281e2df11349b616ad94feff04379d3788d9fbcbde746e5ff37ca45aa0af14a6c076e3fa10340b3b099cca039825387bb90b44cfd5c587d#npm:3.4.38"],\
+          ["@vue/shared", "npm:3.4.38"],\
+          ["typescript", null]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "typescript"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["vuetify", [\
+      ["npm:3.7.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.0-e603851f8b-10c0.zip/node_modules/vuetify/",\
+        "packageDependencies": [\
+          ["vuetify", "npm:3.7.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.7.0", {\
+        "packageLocation": "./.yarn/__virtual__/vuetify-virtual-5b48b8df9f/4/AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.0-e603851f8b-10c0.zip/node_modules/vuetify/",\
+        "packageDependencies": [\
+          ["vuetify", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.7.0"],\
+          ["@types/typescript", null],\
+          ["@types/vite-plugin-vuetify", null],\
+          ["@types/vue", null],\
+          ["@types/vue-i18n", null],\
+          ["@types/webpack-plugin-vuetify", null],\
+          ["typescript", null],\
+          ["vite-plugin-vuetify", null],\
+          ["vue", "virtual:75bf5fdefd94c952922f196c202ba789d20fd2397c399de15b1ecdd113d63b8efa5908b35876c95647316ef374ca0099135122a800323336ee560782f5fe4327#npm:3.4.38"],\
+          ["vue-i18n", null],\
+          ["webpack-plugin-vuetify", null]\
+        ],\
+        "packagePeers": [\
+          "@types/typescript",\
+          "@types/vite-plugin-vuetify",\
+          "@types/vue-i18n",\
+          "@types/vue",\
+          "@types/webpack-plugin-vuetify",\
+          "typescript",\
+          "vite-plugin-vuetify",\
+          "vue-i18n",\
+          "vue",\
+          "webpack-plugin-vuetify"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["wasm-feature-detect", [\
       ["npm:1.6.2", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/wasm-feature-detect-npm-1.6.2-447301c00a-10c0.zip/node_modules/wasm-feature-detect/",\
         "packageDependencies": [\
           ["wasm-feature-detect", "npm:1.6.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["webfontloader", [\
+      ["npm:1.6.28", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/webfontloader-npm-1.6.28-5e6803960c-10c0.zip/node_modules/webfontloader/",\
+        "packageDependencies": [\
+          ["webfontloader", "npm:1.6.28"]\
         ],\
         "linkType": "HARD"\
       }]\
