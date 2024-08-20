@@ -78,6 +78,7 @@ export default class StageEngine {
       costIncrease: 0,
       doubleCardEffectCards: 0,
       nullifyGenkiTurns: 0,
+      nullifyDebuff: 0,
 
       // Used card
       usedCardId: null,
@@ -801,11 +802,13 @@ export default class StageEngine {
                 : 0);
           }
 
-          score = this._calculateTrueScore(
-            score,
-            state,
-            this.idolConfig.typeMultipliers[state.turnType]
-          );
+          // Score buff effects
+          score *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
+          score = Math.ceil(score);
+
+          // Turn type multiplier
+          score *= this.idolConfig.typeMultipliers[state.turnType];
+          score = Math.ceil(score);
         }
 
         state.score += score;
@@ -841,20 +844,5 @@ export default class StageEngine {
     }
 
     return state;
-  }
-
-  _calculateTrueScore(score, state, typeMultiplier) {
-    // Apply score
-    let trueScore = score;
-
-    // Score buff effects
-    trueScore *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
-    trueScore = Math.ceil(trueScore);
-
-    // Turn type multiplier
-    trueScore *= typeMultiplier;
-    trueScore = Math.ceil(trueScore);
-
-    return trueScore;
   }
 }

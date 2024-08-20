@@ -45,11 +45,15 @@ export default class HeuristicStrategy extends BaseStrategy {
     const averageTypeMultiplier = (vocal + dance + visual) / 3;
 
     const getTrueScore = (score) => {
-      return this.engine._calculateTrueScore(
-        score,
-        previewState,
-        averageTypeMultiplier
-      );
+      // Score buff effects
+      score *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
+      score = Math.ceil(score);
+
+      // Turn type multiplier
+      score *= averageTypeMultiplier;
+      score = Math.ceil(score);
+
+      return score;
     };
 
     const recommendedEffect = this.engine.idolConfig.recommendedEffect;
