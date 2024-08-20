@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  box-shadow: 0 0 4px transparentize($black, 0.8);
   padding: 4px;
   background-color: $gk-orange;
   color: $white;

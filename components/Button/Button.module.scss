@@ -1,11 +1,16 @@
 @import "@/constants";
 
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 8px;
+  box-shadow: 0 0 4px transparentize($black, 0.8);
   border: 2px solid $gk-orange;
   border-radius: 4px;
   padding: 8px;
   color: $white;
+  font-size: 14px;
   font-weight: 600;
   transition: all 0.2s;
 }
@@ -61,6 +66,18 @@
   &:focus {
     background-color: $white;
     color: $blue;
+  }
+}
+
+.blue-secondary {
+  border-color: $blue;
+  background-color: $white;
+  color: $blue;
+
+  &:hover,
+  &:focus {
+    background-color: $blue-extra-light;
+    color: $blue-dark;
   }
 }
 
