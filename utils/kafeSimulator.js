@@ -73,9 +73,17 @@ const KAFE_CARD_MAP = SkillCards.getAll().reduce((acc, cur) => {
   return acc;
 }, {});
 
+const KAFE_STAGE_ID_FIXUPS_TEMP = {
+  19: "240822:0",
+  20: "240822:1",
+  21: "240822:2",
+};
+
 const KAFE_STAGE_MAP = Stages.getAll().reduce((acc, cur) => {
   acc[cur.id] =
-    KAFE_STAGES_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] || "-1:-1";
+    KAFE_STAGE_ID_FIXUPS_TEMP[cur.id] ||
+    KAFE_STAGES_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] ||
+    "-1:-1";
   return acc;
 }, {});
 
