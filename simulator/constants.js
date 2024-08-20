@@ -14,7 +14,11 @@ export const FALLBACK_STAGE = {
   effects: [],
 };
 
-export const DEBUFF_FIELDS = ["doubleCostTurns", "nullifyGenkiTurns"];
+export const DEBUFF_FIELDS = [
+  "doubleCostTurns",
+  "costIncrease",
+  "nullifyGenkiTurns",
+];
 
 export const COST_FIELDS = [
   "stamina",
@@ -58,6 +62,7 @@ export const LOGGED_FIELDS = [
   "halfCostTurns",
   "doubleCostTurns",
   "costReduction",
+  "costIncrease",
   "doubleCardEffectCards",
   "nullifyGenkiTurns",
 ];

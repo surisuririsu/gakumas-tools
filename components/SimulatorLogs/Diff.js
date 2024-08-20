@@ -18,6 +18,7 @@ const STRINGS = {
   halfCostTurns: "消費体力減少",
   doubleCostTurns: "消費体力増加",
   costReduction: "消費体力削減",
+  costIncrease: "消費体力追加",
   doubleCardEffectCards: "スキルカード追加発動",
   nullifyGenkiTurns: "元気増加無効",
 };
