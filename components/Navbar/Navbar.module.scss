@@ -1,10 +1,12 @@
 @import "@/constants";
 
 .navbar {
+  z-index: 1;
   min-height: 48px;
   display: flex;
   align-items: center;
   gap: 4px;
+  box-shadow: 0 0 4px transparentize($black, 0.8);
   border-bottom: 4px solid darken($gk-red-orange, 15%);
   background-color: $gk-orange;
   color: $white;

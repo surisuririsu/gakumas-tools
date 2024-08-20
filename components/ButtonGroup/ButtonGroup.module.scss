@@ -3,6 +3,7 @@
 .buttonGroup {
   display: flex;
   flex-direction: row;
+  box-shadow: 0 0 4px transparentize($black, 0.8);
   border: 2px solid $gk-orange;
   border-radius: 4px;
   overflow: hidden;

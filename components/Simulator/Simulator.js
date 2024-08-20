@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { FaCheck, FaRegCopy } from "react-icons/fa6";
+import { FaArrowUpRightFromSquare, FaCheck, FaRegCopy } from "react-icons/fa6";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
@@ -32,6 +32,7 @@ export default function Simulator() {
     replacePItemId,
     clear,
     simulatorUrl,
+    kafeUrl,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
@@ -233,6 +234,12 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : "実行"}
         </Button>
+
+        {kafeUrl && (
+          <Button style="blue-secondary" href={kafeUrl} target="_blank">
+            @かふぇもっと <FaArrowUpRightFromSquare />
+          </Button>
+        )}
       </div>
 
       {simulatorData && (

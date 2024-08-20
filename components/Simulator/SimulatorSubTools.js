@@ -1,11 +1,9 @@
-import { memo, useContext, useState } from "react";
+import { memo, useState } from "react";
 import CostRanges from "@/components/CostRanges";
 import DefaultCards from "@/components/DefaultCards";
-import LoadoutContext from "@/contexts/LoadoutContext";
 import styles from "./Simulator.module.scss";
 
 function SimulatorSubTools({ plan, idolId }) {
-  const { kafeUrl } = useContext(LoadoutContext);
   const [activeSubTool, setActiveSubTool] = useState(null);
 
   return (
@@ -20,14 +18,6 @@ function SimulatorSubTools({ plan, idolId }) {
         >
           コスト範囲
         </button>
-
-        {kafeUrl && (
-          <a href={kafeUrl} target="_blank">
-            コンテストシミュレーター
-            <br />
-            (@かふぇもっと)
-          </a>
-        )}
 
         <button
           onClick={() =>
