@@ -8,8 +8,7 @@
 
   &:hover,
   &:focus-within {
-    background-color: lighten($gk-orange, 15%);
-    color: $white;
+    background-color: lighten($gk-orange, 30%);
 
     .left .actions {
       opacity: 1;

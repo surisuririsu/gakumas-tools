@@ -1,17 +1,20 @@
 import { memo, useContext, useMemo } from "react";
 import {
   FaCircleXmark,
-  FaMagnifyingGlass,
   FaFileImport,
-  FaRegTrashCan,
   FaFilm,
+  FaMagnifyingGlass,
+  FaPen,
+  FaRegTrashCan,
 } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
+import MemoryEditorModal from "@/components/MemoryEditorModal";
 import MemoryImporterModal from "@/components/MemoryImporterModal";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import DataContext from "@/contexts/DataContext";
+import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import SearchContext from "@/contexts/SearchContext";
 import styles from "./Memories.module.scss";
@@ -25,6 +28,7 @@ function MemoriesHeader({
 }) {
   const { uploadMemories, deleteMemories, memoriesLoading } =
     useContext(DataContext);
+  const { setAll } = useContext(MemoryContext);
   const { setModal } = useContext(ModalContext);
   const { pItemIds, skillCardIds, replacePItemId, replaceSkillCardId } =
     useContext(SearchContext);
@@ -43,6 +47,13 @@ function MemoriesHeader({
           <IconButton
             icon={FaMagnifyingGlass}
             onClick={() => setAction("search")}
+          />
+          <IconButton
+            icon={FaPen}
+            onClick={() => {
+              setAll({});
+              setModal(<MemoryEditorModal />);
+            }}
           />
           <IconButton
             icon={FaFileImport}
