@@ -73,6 +73,7 @@ export default class StageEngine {
       halfCostTurns: 0,
       doubleCostTurns: 0,
       costReduction: 0,
+      costIncrease: 0,
       doubleCardEffectCards: 0,
       nullifyGenkiTurns: 0,
 
@@ -756,6 +757,7 @@ export default class StageEngine {
         }
         cost = Math.ceil(cost);
         cost += state.costReduction;
+        cost -= state.costIncrease;
         cost = Math.min(cost, 0);
 
         state.genki += cost;
@@ -775,6 +777,7 @@ export default class StageEngine {
         stamina = Math.ceil(stamina);
         if (stamina < 0) {
           stamina += state.costReduction;
+          stamina -= state.costIncrease;
           stamina = Math.min(stamina, 0);
         }
 
