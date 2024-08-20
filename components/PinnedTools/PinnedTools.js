@@ -3,7 +3,6 @@ import { memo, useContext } from "react";
 import { FaXmark } from "react-icons/fa6";
 import Dex from "@/components/Dex";
 import MemoryCalculator from "@/components/MemoryCalculator";
-import MemoryEditor from "@/components/MemoryEditor";
 import Memories from "@/components/Memories";
 import ProduceRankCalculator from "@/components/ProduceRankCalculator";
 import Simulator from "@/components/Simulator";
@@ -28,7 +27,6 @@ function PinnedTools() {
             {tool == "produceRankCalculator" && <ProduceRankCalculator />}
             {tool == "dex" && <Dex />}
             {tool == "memoryCalculator" && <MemoryCalculator />}
-            {tool == "memoryEditor" && <MemoryEditor />}
             {tool == "memories" && <Memories />}
             {tool == "simulator" && <Simulator />}
           </div>

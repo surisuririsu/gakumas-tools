@@ -48,12 +48,12 @@ export function MemoryContextProvider({ children }) {
   }
 
   async function setAll(memory) {
-    setId(memory._id);
-    setName(memory.name);
-    setPIdolId(memory.pIdolId);
-    setParams(memory.params);
-    setPItemIds(memory.pItemIds);
-    setSkillCardIds(memory.skillCardIds);
+    setId(memory._id || null);
+    setName(memory.name || null);
+    setPIdolId(memory.pIdolId || null);
+    setParams(memory.params || [null, null, null, null]);
+    setPItemIds(memory.pItemIds || [0, 0, 0]);
+    setSkillCardIds(memory.skillCardIds || [0, 0, 0, 0, 0, 0]);
   }
 
   function replacePItemId(index, itemId) {
