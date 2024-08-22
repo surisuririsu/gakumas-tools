@@ -590,6 +590,29 @@ export default class StageEngine {
         return variables[tokens[0]].includes(tokens[2]);
       }
 
+      // Comparators (boolean operators)
+      const cmpIndex = tokens.findIndex((t) => /[=!]=|[<>]=?/.test(t));
+      if (cmpIndex != -1) {
+        const lhs = evaluate(tokens.slice(0, cmpIndex));
+        const cmp = tokens[cmpIndex];
+        const rhs = evaluate(tokens.slice(cmpIndex + 1));
+
+        if (cmp == "==") {
+          return lhs == rhs;
+        } else if (cmp == "!=") {
+          return lhs != rhs;
+        } else if (cmp == "<") {
+          return lhs < rhs;
+        } else if (cmp == "<=") {
+          return lhs <= rhs;
+        } else if (cmp == ">") {
+          return lhs > rhs;
+        } else if (cmp == ">=") {
+          return lhs >= rhs;
+        }
+        console.warn("Unrecognized comparator", cmp);
+      }
+
       // Add, subtract
       const asIndex = tokens.findIndex((t) => /[+\-]/.test(t));
       if (asIndex != -1) {
@@ -620,29 +643,6 @@ export default class StageEngine {
           return lhs % rhs;
         }
         console.warn("Unrecognized operator", op);
-      }
-
-      // Comparators (boolean operators)
-      const cmpIndex = tokens.findIndex((t) => /[=!]=|[<>]=?/.test(t));
-      if (cmpIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, cmpIndex));
-        const cmp = tokens[cmpIndex];
-        const rhs = evaluate(tokens.slice(cmpIndex + 1));
-
-        if (cmp == "==") {
-          return lhs == rhs;
-        } else if (cmp == "!=") {
-          return lhs != rhs;
-        } else if (cmp == "<") {
-          return lhs < rhs;
-        } else if (cmp == "<=") {
-          return lhs <= rhs;
-        } else if (cmp == ">") {
-          return lhs > rhs;
-        } else if (cmp == ">=") {
-          return lhs >= rhs;
-        }
-        console.warn("Unrecognized comparator", cmp);
       }
     }
 
