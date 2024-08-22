@@ -107,7 +107,9 @@ function Rehearsal({ onSuccess }) {
           <Button style="blue" onClick={download}>
             <FaDownload /> CSV
           </Button>
-          <RehearsalTable data={data} />
+          <div className={styles.tableWrapper}>
+            <RehearsalTable data={data} />
+          </div>
         </>
       )}
     </div>
