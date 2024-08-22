@@ -1859,10 +1859,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v2.1.0":
-  version: 2.1.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=48e4faa73d8a5ef40158274ea6cee2dbd7c98775"
-  checksum: 10c0/53de48192cdbee2d311ac220ebedc139f3c1958506644516f93ef49c19a0f3ce7a78ba3ebd2f7308f176a1688113105c7ec6fa715a56251b2588871465431690
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v2.1.1":
+  version: 2.1.1
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=2c7d662e4eab2fc5516147847b4c83b248358b5a"
+  checksum: 10c0/de09fe8fb4bff30d87589819fe0f98d7d5e3fcd297d51b836013fa03ec021b0db264b99bbd0f4dc8e553371b773ae6f6adad740cc860c5139613506ea55dac7d
   languageName: node
   linkType: hard
 
@@ -1873,7 +1873,7 @@ __metadata:
     chart.js: "npm:^4.4.3"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.5"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.1.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.1.1"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     mongodb: "npm:^6.8.0"
     next: "npm:14.2.5"
@@ -1889,7 +1889,7 @@ __metadata:
 
 "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator":
   version: 0.1.0
-  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=ee5b9624ef3a0f6f81d51260c39408786e220ab7"
+  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=93a2b4f722552a0644e78fc735c68286b7d52e65"
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.6.0"
     "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
@@ -1902,7 +1902,7 @@ __metadata:
     vue: "npm:^3.4.37"
     vuetify: "npm:^3.6.14"
     webfontloader: "npm:^1.6.28"
-  checksum: 10c0/317b29a4006911dca16b8ee2af01d6c7853f0b09e58284babe3e9a05fa29c99724a112cd200ccead83bd6c1b50b835d1f5d72978516c71ea818044ec135608b5
+  checksum: 10c0/e8e7f9f608fd86d28effa8010e2cac8d36ddcc960042772710009a64a1e4fd6e9e18b7add97f41076fe26fd845701f26d29e65263b80a6f3f3c392dd2bc16718
   languageName: node
   linkType: hard
 
