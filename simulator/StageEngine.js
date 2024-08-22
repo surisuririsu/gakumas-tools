@@ -590,6 +590,38 @@ export default class StageEngine {
         return variables[tokens[0]].includes(tokens[2]);
       }
 
+      // Add, subtract
+      const asIndex = tokens.findIndex((t) => /[+\-]/.test(t));
+      if (asIndex != -1) {
+        const lhs = evaluate(tokens.slice(0, asIndex));
+        const op = tokens[asIndex];
+        const rhs = evaluate(tokens.slice(asIndex + 1));
+
+        if (op == "+") {
+          return lhs + rhs;
+        } else if (op == "-") {
+          return lhs - rhs;
+        }
+        console.warn("Unrecognized operator", op);
+      }
+
+      // Multiply, divide, modulo
+      const mdIndex = tokens.findIndex((t) => /[*/%]/.test(t));
+      if (mdIndex != -1) {
+        const lhs = evaluate(tokens.slice(0, mdIndex));
+        const op = tokens[mdIndex];
+        const rhs = evaluate(tokens.slice(mdIndex + 1));
+
+        if (op == "*") {
+          return lhs * rhs;
+        } else if (op == "/") {
+          return lhs / rhs;
+        } else if (op == "%") {
+          return lhs % rhs;
+        }
+        console.warn("Unrecognized operator", op);
+      }
+
       // Comparators (boolean operators)
       const cmpIndex = tokens.findIndex((t) => /[=!]=|[<>]=?/.test(t));
       if (cmpIndex != -1) {
@@ -611,38 +643,6 @@ export default class StageEngine {
           return lhs >= rhs;
         }
         console.warn("Unrecognized comparator", cmp);
-      }
-
-      // Multiply, divide, modulo
-      const mdIndex = tokens.findIndex((t) => /[*/%]/.test(t));
-      if (mdIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, mdIndex));
-        const op = tokens[mdIndex];
-        const rhs = evaluate(tokens.slice(mdIndex + 1));
-
-        if (op == "*") {
-          return lhs * rhs;
-        } else if (op == "/") {
-          return lhs / rhs;
-        } else if (op == "%") {
-          return lhs % rhs;
-        }
-        console.warn("Unrecognized operator", op);
-      }
-
-      // Add, subtract
-      const asIndex = tokens.findIndex((t) => /[+\-]/.test(t));
-      if (asIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, asIndex));
-        const op = tokens[asIndex];
-        const rhs = evaluate(tokens.slice(asIndex + 1));
-
-        if (op == "+") {
-          return lhs + rhs;
-        } else if (op == "-") {
-          return lhs - rhs;
-        }
-        console.warn("Unrecognized operator", op);
       }
     }
 
