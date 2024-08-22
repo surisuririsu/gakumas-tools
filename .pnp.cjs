@@ -30,7 +30,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2c7d662e4eab2fc5516147847b4c83b248358b5a"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=93a2b4f722552a0644e78fc735c68286b7d52e65"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
@@ -2356,10 +2356,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=2c7d662e4eab2fc5516147847b4c83b248358b5a", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-32d073974e-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-33d13c95f5-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2c7d662e4eab2fc5516147847b4c83b248358b5a"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2372,7 +2372,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2c7d662e4eab2fc5516147847b4c83b248358b5a"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=93a2b4f722552a0644e78fc735c68286b7d52e65"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
