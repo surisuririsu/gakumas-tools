@@ -1,9 +1,8 @@
 import React from "react";
-import styles from "./Rehearsal.module.scss";
 
 export default function RehearsalTable({ data }) {
   return (
-    <table className={styles.result}>
+    <table>
       <thead>
         <tr>
           <th colSpan="3">ステージ1</th>

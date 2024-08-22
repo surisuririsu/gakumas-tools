@@ -23,7 +23,13 @@
   color: $gk-orange;
 }
 
-.result {
+.tableWrapper {
+  overflow: auto;
+
+  table {
+    width: 100%;
+  }
+
   thead {
     background-color: lighten($gk-orange, 20%);
   }
