@@ -18,26 +18,45 @@ import {
 } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
+const MAX_WORKERS = 4;
+
 function MemoryImporterModal({ onSuccess }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
-  const engWorker = useRef();
-  const jpnWorker = useRef();
+  const engWorkersRef = useRef();
+  const jpnWorkersRef = useRef();
   const signatureSkillCardsImageData = useRef();
   const nonSignatureSkillCardsImageData = useRef();
   const itemImageData = useRef();
 
   useEffect(() => {
-    engWorker.current = createWorker("eng", 1);
-    jpnWorker.current = createWorker("jpn", 1);
+    let numWorkers = 1;
+    if (navigator.hardwareConcurrency) {
+      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
+    }
+
+    engWorkersRef.current = [];
+    for (let i = 0; i < numWorkers; i++) {
+      engWorkersRef.current.push(createWorker("eng", 1));
+    }
+
+    jpnWorkersRef.current = [];
+    for (let i = 0; i < numWorkers; i++) {
+      jpnWorkersRef.current.push(createWorker("jpn", 1));
+    }
+
     signatureSkillCardsImageData.current = getSignatureSkillCardsImageData();
     nonSignatureSkillCardsImageData.current =
       getNonSignatureSkillCardsImageData();
     itemImageData.current = getPItemsImageData();
 
     return () => {
-      engWorker.current?.terminate?.();
-      jpnWorker.current?.terminate?.();
+      engWorkersRef.current?.forEach(async (worker) =>
+        (await worker).terminate()
+      );
+      jpnWorkersRef.current?.forEach(async (worker) =>
+        (await worker).terminate()
+      );
     };
   }, []);
 
@@ -52,7 +71,7 @@ function MemoryImporterModal({ onSuccess }) {
     console.time("All memories parsed");
 
     const promises = files.map(
-      (file) =>
+      (file, i) =>
         new Promise((resolve) => {
           const blobURL = URL.createObjectURL(file);
           const img = new Image();
@@ -61,15 +80,16 @@ function MemoryImporterModal({ onSuccess }) {
             const blackCanvas = getBlackCanvas(img);
             const whiteCanvas = getWhiteCanvas(img);
 
-            const engWhitePromise = (await engWorker.current).recognize(
-              whiteCanvas
-            );
-            const engBlackPromise = (await engWorker.current).recognize(
-              blackCanvas
-            );
-            const jpnBlackPromise = (await jpnWorker.current).recognize(
-              blackCanvas
-            );
+            const engWorker = await engWorkersRef.current[
+              i % engWorkersRef.current.length
+            ];
+            const jpnWorker = await jpnWorkersRef.current[
+              i % jpnWorkersRef.current.length
+            ];
+
+            const engWhitePromise = engWorker.recognize(whiteCanvas);
+            const engBlackPromise = engWorker.recognize(blackCanvas);
+            const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
 
             const powerCandidates = extractPower(await engWhitePromise);
             const params = extractParams(await engBlackPromise);
