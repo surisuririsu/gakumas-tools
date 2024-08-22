@@ -1,0 +1,39 @@
+@import "@/constants";
+
+.rehearsal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 32px;
+}
+
+.files {
+  display: flex;
+  margin-top: 16px;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: lighten($gk-orange, 40%);
+}
+
+.progress {
+  margin-top: 4px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  color: $gk-orange;
+}
+
+.result {
+  thead {
+    background-color: lighten($gk-orange, 20%);
+  }
+
+  tbody {
+    background-color: lighten($gk-orange, 40%);
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}

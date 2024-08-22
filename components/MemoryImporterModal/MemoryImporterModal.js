@@ -6,17 +6,16 @@ import { PItems, SkillCards } from "gakumas-data";
 import { createWorker } from "tesseract.js";
 import Modal from "@/components/Modal";
 import { calculateContestPower } from "@/utils/contestPower";
+import { getBlackCanvas, getWhiteCanvas } from "@/utils/imageProcessing";
 import {
   extractPower,
   extractParams,
   extractCards,
-  getBlackCanvas,
-  getWhiteCanvas,
   extractItems,
   getSignatureSkillCardsImageData,
   getNonSignatureSkillCardsImageData,
   getPItemsImageData,
-} from "@/utils/memoryFromImage";
+} from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
 function MemoryImporterModal({ onSuccess }) {

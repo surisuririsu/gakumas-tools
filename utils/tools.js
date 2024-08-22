@@ -1,10 +1,9 @@
 import {
   FaBook,
   FaCalculator,
+  FaChartSimple,
   FaFilm,
   FaHouse,
-  FaList,
-  FaPen,
   FaTrophy,
 } from "react-icons/fa6";
 
@@ -58,6 +57,14 @@ export const TOOLS = {
     fill: true,
     description: "Create and simulate contest loadouts",
     path: "/simulator",
+    pinnable: true,
+  },
+  rehearsal: {
+    title: "Rehearsal Parser β",
+    icon: <FaChartSimple />,
+    fill: true,
+    description: "Parse scores from rehearsal screenshots",
+    path: "/rehearsal",
     pinnable: true,
   },
 };
