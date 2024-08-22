@@ -1,7 +1,6 @@
 "use client";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { FaCheck, FaDownload } from "react-icons/fa6";
-import { default as NextImage } from "next/image";
 import { createWorker } from "tesseract.js";
 import Button from "@/components/Button";
 import { getWhiteCanvas } from "@/utils/imageProcessing";
@@ -9,18 +8,27 @@ import { extractScores } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
 
+const MAX_WORKERS = 8;
+
 function Rehearsal({ onSuccess }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const [data, setData] = useState([]);
-  const engWorker = useRef();
+  const workersRef = useRef();
 
   useEffect(() => {
-    engWorker.current = createWorker("eng", 1);
+    let numWorkers = 1;
+    if (navigator.hardwareConcurrency) {
+      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
+    }
 
-    return () => {
-      engWorker.current?.terminate?.();
-    };
+    workersRef.current = [];
+    for (let i = 0; i < numWorkers; i++) {
+      workersRef.current.push(createWorker("eng", 1));
+    }
+
+    return () =>
+      workersRef.current?.forEach(async (worker) => (await worker).terminate());
   }, []);
 
   async function handleFiles(e) {
@@ -34,18 +42,17 @@ function Rehearsal({ onSuccess }) {
     console.time("All results parsed");
 
     const promises = files.map(
-      (file) =>
+      (file, i) =>
         new Promise((resolve) => {
           const blobURL = URL.createObjectURL(file);
           const img = new Image();
           img.src = blobURL;
           img.onload = async () => {
             const whiteCanvas = getWhiteCanvas(img, 180);
-
-            const engWhitePromise = (await engWorker.current).recognize(
-              whiteCanvas
-            );
-
+            const worker = await workersRef.current[
+              i % workersRef.current.length
+            ];
+            const engWhitePromise = worker.recognize(whiteCanvas);
             const scores = extractScores(await engWhitePromise);
 
             setProgress((p) => p + 1);
