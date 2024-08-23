@@ -90,7 +90,7 @@ function AreaPlot({ data }) {
   };
 
   const formattedData = {
-    labels: data.score.map((_, i) => i + 1),
+    labels: data.score.map((_, i) => i),
     datasets: Object.keys(FIELDS)
       .filter((f) => activeFields[f])
       .map((field) => ({
