@@ -85,6 +85,9 @@ function AreaPlot({ data }) {
         display: activeFields.score,
         position: "right",
         beginAtZero: true,
+        grid: {
+          display: false,
+        },
       },
     },
   };
