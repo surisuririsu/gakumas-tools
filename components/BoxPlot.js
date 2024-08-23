@@ -47,6 +47,7 @@ function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
               `median: ${Math.round(median)}`,
               `q1: ${Math.round(q1)}`,
               `min: ${Math.round(min)}`,
+              "(k=3)",
             ];
           },
         },
@@ -59,9 +60,10 @@ function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
     datasets: data.map((d) => ({
       label: d.label,
       data: d.data,
-      coef: 0,
+      coef: 3,
       backgroundColor: "rgba(255, 118, 0, 0.5)",
       borderColor: "rgb(255, 118, 0)",
+      outlierBorderColor: "rgb(255, 118, 0)",
       meanRadius: 0,
       maxBarThickness: 60,
     })),
