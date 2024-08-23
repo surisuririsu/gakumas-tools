@@ -50,7 +50,7 @@ function Rehearsal() {
           const img = new Image();
           img.src = blobURL;
           img.onload = async () => {
-            const whiteCanvas = getWhiteCanvas(img, 180);
+            const whiteCanvas = getWhiteCanvas(img, 190);
             const worker = await workersRef.current[
               i % workersRef.current.length
             ];
