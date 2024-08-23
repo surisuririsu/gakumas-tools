@@ -20,33 +20,33 @@ __metadata:
   linkType: hard
 
 "@babel/parser@npm:^7.24.7":
-  version: 7.25.3
-  resolution: "@babel/parser@npm:7.25.3"
+  version: 7.25.4
+  resolution: "@babel/parser@npm:7.25.4"
   dependencies:
-    "@babel/types": "npm:^7.25.2"
+    "@babel/types": "npm:^7.25.4"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: 10c0/874b01349aedb805d6694f867a752fdc7469778fad76aca4548d2cc6ce96087c3ba5fb917a6f8d05d2d1a74aae309b5f50f1a4dba035f5a2c9fcfe6e106d2c4e
+  checksum: 10c0/bdada5662f15d1df11a7266ec3bc9bb769bf3637ecf3d051eafcfc8f576dcf5a3ac1007c5e059db4a1e1387db9ae9caad239fc4f79e4c2200930ed610e779993
   languageName: node
   linkType: hard
 
 "@babel/runtime@npm:^7.20.13":
-  version: 7.25.0
-  resolution: "@babel/runtime@npm:7.25.0"
+  version: 7.25.4
+  resolution: "@babel/runtime@npm:7.25.4"
   dependencies:
     regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/bd3faf246170826cef2071a94d7b47b49d532351360ecd17722d03f6713fd93a3eb3dbd9518faa778d5e8ccad7392a7a604e56bd37aaad3f3aa68d619ccd983d
+  checksum: 10c0/33e937e685f0bfc2d40c219261e2e50d0df7381a6e7cbf56b770e0c5d77cb0c21bf4d97da566cf0164317ed7508e992082c7b6cce7aaa3b17da5794f93fbfb46
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.25.2":
-  version: 7.25.2
-  resolution: "@babel/types@npm:7.25.2"
+"@babel/types@npm:^7.25.4":
+  version: 7.25.4
+  resolution: "@babel/types@npm:7.25.4"
   dependencies:
     "@babel/helper-string-parser": "npm:^7.24.8"
     "@babel/helper-validator-identifier": "npm:^7.24.7"
     to-fast-properties: "npm:^2.0.0"
-  checksum: 10c0/e489435856be239f8cc1120c90a197e4c2865385121908e5edb7223cfdff3768cba18f489adfe0c26955d9e7bbb1fb10625bc2517505908ceb0af848989bd864
+  checksum: 10c0/9aa25dfcd89cc4e4dde3188091c34398a005a49e2c2b069d0367b41e1122c91e80fd92998c52a90f2fb500f7e897b6090ec8be263d9cb53d0d75c756f44419f2
   languageName: node
   linkType: hard
 
@@ -1908,7 +1908,7 @@ __metadata:
 
 "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator":
   version: 0.1.0
-  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=93a2b4f722552a0644e78fc735c68286b7d52e65"
+  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=f56065bd86bc2f7ab2e2216c6536e2b381cea2f7"
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.6.0"
     "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
@@ -1921,7 +1921,7 @@ __metadata:
     vue: "npm:^3.4.37"
     vuetify: "npm:^3.6.14"
     webfontloader: "npm:^1.6.28"
-  checksum: 10c0/e8e7f9f608fd86d28effa8010e2cac8d36ddcc960042772710009a64a1e4fd6e9e18b7add97f41076fe26fd845701f26d29e65263b80a6f3f3c392dd2bc16718
+  checksum: 10c0/2ef5ff6d69ca13c842e1752c7a4dcf8a01c83f4374d9b36d904a9bfa1b12541031badb6f0eae9022060ef36c004d557987cf24997adf120439c6e7cdf8bfae01
   languageName: node
   linkType: hard
 
@@ -2778,12 +2778,12 @@ __metadata:
   linkType: hard
 
 "micromatch@npm:^4.0.4":
-  version: 4.0.7
-  resolution: "micromatch@npm:4.0.7"
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
   dependencies:
     braces: "npm:^3.0.3"
     picomatch: "npm:^2.3.1"
-  checksum: 10c0/58fa99bc5265edec206e9163a1d2cec5fabc46a5b473c45f4a700adce88c2520456ae35f2b301e4410fb3afb27e9521fb2813f6fc96be0a48a89430e0916a772
+  checksum: 10c0/166fa6eb926b9553f32ef81f5f531d27b4ce7da60e5baf8c021d043b27a388fb95e46a8038d5045877881e673f8134122b59624d5cecbd16eb50a42e7a6b5ca8
   languageName: node
   linkType: hard
 
