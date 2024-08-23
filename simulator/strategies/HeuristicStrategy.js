@@ -3,17 +3,17 @@ import BaseStrategy from "./BaseStrategy";
 const PHASE_FREQUENCY_ESTIMATES = {
   startOfStage: 0,
   startOfTurn: 1,
-  cardUsed: 0.5,
-  activeCardUsed: 0.2,
-  mentalCardUsed: 0.3,
-  afterCardUsed: 0.5,
-  afterActiveCardUsed: 0.2,
-  afterMentalCardUsed: 0.3,
+  cardUsed: 1.2,
+  activeCardUsed: 0.8,
+  mentalCardUsed: 0.8,
+  afterCardUsed: 1.2,
+  afterActiveCardUsed: 0.8,
+  afterMentalCardUsed: 0.8,
   endOfTurn: 1,
-  goodImpressionTurnsIncreased: 0.2,
-  motivationIncreased: 0.2,
-  goodConditionTurnsIncreased: 0.2,
-  concentrationIncreased: 0.2,
+  goodImpressionTurnsIncreased: 0.5,
+  motivationIncreased: 0.5,
+  goodConditionTurnsIncreased: 0.5,
+  concentrationIncreased: 0.5,
 };
 
 export default class HeuristicStrategy extends BaseStrategy {
