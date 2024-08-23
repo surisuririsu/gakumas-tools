@@ -4,16 +4,16 @@ const PHASE_FREQUENCY_ESTIMATES = {
   startOfStage: 0,
   startOfTurn: 1,
   cardUsed: 1.2,
-  activeCardUsed: 0.8,
-  mentalCardUsed: 0.8,
+  activeCardUsed: 1,
+  mentalCardUsed: 1,
   afterCardUsed: 1.2,
-  afterActiveCardUsed: 0.8,
-  afterMentalCardUsed: 0.8,
+  afterActiveCardUsed: 1,
+  afterMentalCardUsed: 1,
   endOfTurn: 1,
-  goodImpressionTurnsIncreased: 0.5,
-  motivationIncreased: 0.5,
-  goodConditionTurnsIncreased: 0.5,
-  concentrationIncreased: 0.5,
+  goodImpressionTurnsIncreased: 0.75,
+  motivationIncreased: 0.75,
+  goodConditionTurnsIncreased: 0.75,
+  concentrationIncreased: 0.75,
 };
 
 export default class HeuristicStrategy extends BaseStrategy {
@@ -27,12 +27,13 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     // Predict score after effects
     for (let effect of previewState.effects) {
-      const limit = Math.ceil(
-        Math.min(
-          effect.limit || previewState.turnsRemaining,
-          previewState.turnsRemaining
-        ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
-      );
+      const limit =
+        Math.ceil(
+          Math.min(
+            effect.limit || previewState.turnsRemaining,
+            previewState.turnsRemaining
+          ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
+        ) * 1.5;
       for (let i = 0; i < limit; i++) {
         previewState = this.engine._triggerEffects(
           [{ ...effect, phase: null }],
@@ -58,9 +59,9 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     const recommendedEffect = this.engine.idolConfig.recommendedEffect;
     const goodConditionTurnsMultiplier =
-      recommendedEffect == "goodConditionTurns" ? 5 : 1;
+      recommendedEffect == "goodConditionTurns" ? 5 : 2;
     const concentrationMultiplier =
-      recommendedEffect == "concentration" ? 4 : 1;
+      recommendedEffect == "concentration" ? 4 : 2;
     const goodImpressionTurnsMultiplier =
       recommendedEffect == "goodImpressionTurns" ? 3 : 1;
     const motivationMultiplier = recommendedEffect == "motivation" ? 5 : 1;
