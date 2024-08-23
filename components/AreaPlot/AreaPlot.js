@@ -78,11 +78,13 @@ function AreaPlot({ data }) {
         type: "linear",
         display: true,
         position: "left",
+        beginAtZero: true,
       },
       y1: {
         type: "linear",
         display: activeFields.score,
         position: "right",
+        beginAtZero: true,
       },
     },
   };
