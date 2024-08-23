@@ -1,9 +1,9 @@
 import { memo } from "react";
 import styles from "./ButtonGroup.module.scss";
 
-function ButtonGroup({ selected, options, onChange }) {
+function ButtonGroup({ className, selected, options, onChange }) {
   return (
-    <div className={styles.buttonGroup}>
+    <div className={`${styles.buttonGroup} ${className}`}>
       {options.map(({ value, label }) => (
         <button
           key={value}

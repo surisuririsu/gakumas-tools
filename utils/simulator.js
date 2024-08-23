@@ -1,4 +1,4 @@
-import { BUCKET_SIZE } from "@/simulator/constants";
+import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
 
 const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
 
@@ -95,7 +95,19 @@ export function mergeResults(results) {
     }
   }
 
+  let graphData = {};
+  for (let field of GRAPHED_FIELDS) {
+    graphData[field] = [];
+    for (let result of results) {
+      for (let i = 0; i < result.graphData[field].length; i++) {
+        if (!graphData[field][i]) graphData[field][i] = 0;
+        graphData[field][i] += result.graphData[field][i] / results.length;
+      }
+    }
+  }
+
   return {
+    graphData,
     minRun,
     averageRun,
     maxRun,

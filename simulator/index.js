@@ -1,3 +1,4 @@
+import { GRAPHED_FIELDS } from "./constants";
 import StageEngine from "./StageEngine";
 import StageLogger from "./StageLogger";
 import StagePlayer from "./StagePlayer";
@@ -12,6 +13,7 @@ export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
   let averageScore = 0;
   let minRun, averageRun, maxRun;
   let scores = [];
+  let graphDatas = [];
 
   for (let i = 0; i < numRuns; i++) {
     const result = new StagePlayer(engine, strategy).play();
@@ -33,9 +35,22 @@ export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
     }
 
     scores.push(result.score);
+    graphDatas.push(result.graphData);
+  }
+
+  let mergedGraphData = {};
+  for (let field of GRAPHED_FIELDS) {
+    mergedGraphData[field] = [];
+    for (let graphData of graphDatas) {
+      for (let i = 0; i < graphData.length; i++) {
+        if (!mergedGraphData[field][i]) mergedGraphData[field][i] = 0;
+        mergedGraphData[field][i] += graphData[i][field] / numRuns;
+      }
+    }
   }
 
   return {
+    graphData: mergedGraphData,
     minRun,
     averageRun,
     maxRun,
