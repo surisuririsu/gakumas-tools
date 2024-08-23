@@ -76,3 +76,13 @@ export const WHOLE_FIELDS = [
   "goodImpressionTurns",
   "motivation",
 ];
+
+export const GRAPHED_FIELDS = [
+  "stamina",
+  "genki",
+  "score",
+  "goodConditionTurns",
+  "concentration",
+  "goodImpressionTurns",
+  "motivation",
+];

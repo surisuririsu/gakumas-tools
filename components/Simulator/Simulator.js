@@ -70,7 +70,8 @@ export default function Simulator() {
 
   const setResult = useCallback(
     (result) => {
-      const { minRun, averageRun, maxRun, averageScore, scores } = result;
+      const { minRun, averageRun, maxRun, averageScore, scores, graphData } =
+        result;
       const bucketedScores = bucketScores(scores);
 
       console.timeEnd("simulation");
@@ -84,6 +85,7 @@ export default function Simulator() {
         minRun,
         maxRun,
         averageRun,
+        graphData,
       });
       setRunning(false);
 
