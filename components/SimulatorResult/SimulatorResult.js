@@ -1,12 +1,12 @@
 import { memo } from "react";
-import DistributionPlot from "@/components/DistributionPlot";
 import SimulatorLogs from "@/components/SimulatorLogs";
+import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 
 function SimulatorResult({ data, idolId }) {
   return (
     <div id="simulator_result" className={styles.result}>
-      <DistributionPlot data={data.bucketedScores} />
+      <SimulatorResultGraphs data={data} />
 
       <table className={styles.stats}>
         <thead>

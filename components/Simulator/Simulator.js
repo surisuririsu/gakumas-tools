@@ -76,6 +76,7 @@ export default function Simulator() {
       console.timeEnd("simulation");
 
       setSimulatorData({
+        scores,
         bucketedScores,
         minScore: minRun.score,
         maxScore: maxRun.score,

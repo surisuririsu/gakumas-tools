@@ -2,6 +2,7 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
+import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
 import { getWhiteCanvas } from "@/utils/imageProcessing";
 import { extractScores } from "@/utils/imageProcessing/rehearsal";
@@ -10,7 +11,7 @@ import styles from "./Rehearsal.module.scss";
 
 const MAX_WORKERS = 8;
 
-function Rehearsal({ onSuccess }) {
+function Rehearsal() {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const [data, setData] = useState([]);
@@ -36,6 +37,7 @@ function Rehearsal({ onSuccess }) {
     const files = Array.from(e.target.files);
     setProgress(null);
     if (!files.length) return;
+    setData([]);
     setTotal(files.length);
     setProgress(0);
 
@@ -79,6 +81,18 @@ function Rehearsal({ onSuccess }) {
     a.click();
   }
 
+  const boxPlotData = data.reduce(
+    (acc, cur) => {
+      for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (cur[i][j]) acc[j].data[i].push(cur[i][j]);
+        }
+      }
+      return acc;
+    },
+    [{ data: [[], [], []] }, { data: [[], [], []] }, { data: [[], [], []] }]
+  );
+
   return (
     <div className={styles.rehearsal}>
       <label>Parse rehearsal results from screenshots</label>
@@ -107,6 +121,11 @@ function Rehearsal({ onSuccess }) {
           <Button style="blue" onClick={download}>
             <FaDownload /> CSV
           </Button>
+          <BoxPlot
+            labels={["ステージ1", "ステージ2", "ステージ3"]}
+            data={boxPlotData}
+            showLegend={false}
+          />
           <div className={styles.tableWrapper}>
             <RehearsalTable data={data} />
           </div>
