@@ -66,6 +66,7 @@ function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
       maxBarThickness: 60,
     })),
   };
+
   return <Chart type="boxplot" data={formattedData} options={options} />;
 }
 

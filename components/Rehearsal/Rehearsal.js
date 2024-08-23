@@ -2,12 +2,12 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
+import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
 import { getWhiteCanvas } from "@/utils/imageProcessing";
 import { extractScores } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
-import BoxPlot from "../BoxPlot";
 
 const MAX_WORKERS = 8;
 
