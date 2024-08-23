@@ -5,14 +5,14 @@ import styles from "./SimulatorLogs.module.scss";
 import Logs from "./Logs";
 
 function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
-  const [runToShow, setRunToShow] = useState("Average");
+  const [runToShow, setRunToShow] = useState("average");
 
   let logs, structuredLogs;
-  if (runToShow == "Min") {
+  if (runToShow == "min") {
     logs = minRun.logs;
-  } else if (runToShow == "Average") {
+  } else if (runToShow == "average") {
     logs = averageRun.logs;
-  } else if (runToShow == "Max") {
+  } else if (runToShow == "max") {
     logs = maxRun.logs;
   }
 
