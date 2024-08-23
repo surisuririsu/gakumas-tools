@@ -13,6 +13,12 @@ export default class StagePlayer {
     let state = this.engine.getInitialState();
     state = this.engine.startStage(state);
 
+    let turnGraphData = {};
+    for (let field of GRAPHED_FIELDS) {
+      turnGraphData[field] = state[field];
+    }
+    graphData.push(turnGraphData);
+
     while (state.turnsRemaining > 0) {
       this.engine.logger.disable();
       const { scores, selectedCardId } = this.strategy.evaluate(state);
