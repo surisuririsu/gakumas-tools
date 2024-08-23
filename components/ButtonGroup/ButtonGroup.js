@@ -4,13 +4,13 @@ import styles from "./ButtonGroup.module.scss";
 function ButtonGroup({ selected, options, onChange }) {
   return (
     <div className={styles.buttonGroup}>
-      {options.map((option) => (
+      {options.map(({ value, label }) => (
         <button
-          key={option}
-          className={option == selected ? styles.selected : null}
-          onClick={() => onChange(option)}
+          key={value}
+          className={value == selected ? styles.selected : null}
+          onClick={() => onChange(value)}
         >
-          {option}
+          {label}
         </button>
       ))}
     </div>
