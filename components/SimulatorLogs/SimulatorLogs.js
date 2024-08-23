@@ -45,7 +45,11 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
     <div className={styles.simulatorLogs}>
       <ButtonGroup
         selected={runToShow}
-        options={["Min", "Average", "Max"]}
+        options={[
+          { value: "min", label: "Min" },
+          { value: "average", label: "Average" },
+          { value: "max", label: "Max" },
+        ]}
         onChange={(value) => setRunToShow(value == runToShow ? null : value)}
       />
 

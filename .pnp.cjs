@@ -27,6 +27,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@sgratzl/chartjs-chart-boxplot", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1"],\
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
@@ -487,6 +488,38 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@rushstack-eslint-patch-npm-1.10.4-a760e177e3-10c0.zip/node_modules/@rushstack/eslint-patch/",\
         "packageDependencies": [\
           ["@rushstack/eslint-patch", "npm:1.10.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sgratzl/boxplots", [\
+      ["npm:1.3.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@sgratzl-boxplots-npm-1.3.2-8d60ee4abc-10c0.zip/node_modules/@sgratzl/boxplots/",\
+        "packageDependencies": [\
+          ["@sgratzl/boxplots", "npm:1.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@sgratzl/chartjs-chart-boxplot", [\
+      ["npm:4.4.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@sgratzl-chartjs-chart-boxplot-npm-4.4.1-222b290676-10c0.zip/node_modules/@sgratzl/chartjs-chart-boxplot/",\
+        "packageDependencies": [\
+          ["@sgratzl/chartjs-chart-boxplot", "npm:4.4.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1", {\
+        "packageLocation": "./.yarn/__virtual__/@sgratzl-chartjs-chart-boxplot-virtual-ab3e66bbbf/4/AppData/Local/Yarn/Berry/cache/@sgratzl-chartjs-chart-boxplot-npm-4.4.1-222b290676-10c0.zip/node_modules/@sgratzl/chartjs-chart-boxplot/",\
+        "packageDependencies": [\
+          ["@sgratzl/chartjs-chart-boxplot", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1"],\
+          ["@sgratzl/boxplots", "npm:1.3.2"],\
+          ["@types/chart.js", null],\
+          ["chart.js", "npm:4.4.4"]\
+        ],\
+        "packagePeers": [\
+          "@types/chart.js",\
+          "chart.js"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2369,6 +2402,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["gakumas-tools", "workspace:."],\
+          ["@sgratzl/chartjs-chart-boxplot", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1"],\
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\

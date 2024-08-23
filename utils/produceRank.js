@@ -1,15 +1,15 @@
 export const PARAM_BONUS_BY_PLACE = {
-  "1st": 30,
-  "2nd": 20,
-  "3rd": 10,
-  Other: 0,
+  1: 30,
+  2: 20,
+  3: 10,
+  4: 0,
 };
 
 export const RATING_BY_PLACE = {
-  "1st": 1700,
-  "2nd": 900,
-  "3rd": 500,
-  Other: 0,
+  1: 1700,
+  2: 900,
+  3: 500,
+  4: 0,
 };
 
 export const TARGET_RATING_BY_RANK = {

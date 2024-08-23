@@ -12,7 +12,7 @@ import {
 import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
-  const [place, setPlace] = useState("1st");
+  const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
   const [actualScore, setActualScore] = useState(null);
 
@@ -68,7 +68,12 @@ function ProduceRankCalculator() {
     <div className={styles.produceRankCalculator}>
       <label>Final exam placement</label>
       <ButtonGroup
-        options={["1st", "2nd", "3rd", "Other"]}
+        options={[
+          { value: 1, label: "1st" },
+          { value: 2, label: "2nd" },
+          { value: 3, label: "3rd" },
+          { value: 4, label: "Other" },
+        ]}
         selected={place}
         onChange={setPlace}
       />
