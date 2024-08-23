@@ -7,26 +7,26 @@ import { EntityTypes } from "@/utils/entities";
 import styles from "./Dex.module.scss";
 
 function Dex() {
-  const [activeTab, setActiveTab] = useState("スキルカード");
+  const [activeTab, setActiveTab] = useState(EntityTypes.SKILL_CARD);
   const [selectedEntity, setSelectedEntity] = useState(null);
-
-  const type =
-    activeTab == "スキルカード" ? EntityTypes.SKILL_CARD : EntityTypes.P_ITEM;
 
   return (
     <div className={styles.dex}>
       <EntityDetails type={selectedEntity?.type} id={selectedEntity?.id} />
 
       <EntityBank
-        type={type}
-        onClick={({ id }) => setSelectedEntity({ type, id })}
+        type={activeTab}
+        onClick={({ id }) => setSelectedEntity({ type: activeTab, id })}
         includeNull={false}
       />
 
       <div className={styles.tabs}>
         <ButtonGroup
           selected={activeTab}
-          options={["スキルカード", "Pアイテム"]}
+          options={[
+            { value: EntityTypes.SKILL_CARD, label: "スキルカード" },
+            { value: EntityTypes.P_ITEM, label: "Pアイテム" },
+          ]}
           onChange={setActiveTab}
         />
       </div>

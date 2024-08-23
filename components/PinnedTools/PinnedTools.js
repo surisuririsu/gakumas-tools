@@ -5,6 +5,7 @@ import Dex from "@/components/Dex";
 import MemoryCalculator from "@/components/MemoryCalculator";
 import Memories from "@/components/Memories";
 import ProduceRankCalculator from "@/components/ProduceRankCalculator";
+import Rehearsal from "@/components/Rehearsal";
 import Simulator from "@/components/Simulator";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { TOOLS } from "@/utils/tools";
@@ -29,6 +30,7 @@ function PinnedTools() {
             {tool == "memoryCalculator" && <MemoryCalculator />}
             {tool == "memories" && <Memories />}
             {tool == "simulator" && <Simulator />}
+            {tool == "rehearsal" && <Rehearsal />}
           </div>
         </div>
       ))}
