@@ -85,7 +85,7 @@ function Rehearsal() {
     (acc, cur) => {
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          if (cur[i][j]) acc[j].data[i].push(cur[i][j]);
+          if (cur[i]?.[j]) acc[j].data[i].push(cur[i][j]);
         }
       }
       return acc;

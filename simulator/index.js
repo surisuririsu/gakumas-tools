@@ -1,4 +1,4 @@
-import { GRAPHED_FIELDS } from "./constants";
+import { mergeGraphDatas } from "@/utils/simulator";
 import StageEngine from "./StageEngine";
 import StageLogger from "./StageLogger";
 import StagePlayer from "./StagePlayer";
@@ -38,16 +38,7 @@ export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
     graphDatas.push(result.graphData);
   }
 
-  let mergedGraphData = {};
-  for (let field of GRAPHED_FIELDS) {
-    mergedGraphData[field] = [];
-    for (let graphData of graphDatas) {
-      for (let i = 0; i < graphData.length; i++) {
-        if (!mergedGraphData[field][i]) mergedGraphData[field][i] = 0;
-        mergedGraphData[field][i] += graphData[i][field] / numRuns;
-      }
-    }
-  }
+  const mergedGraphData = mergeGraphDatas(graphDatas);
 
   return {
     graphData: mergedGraphData,

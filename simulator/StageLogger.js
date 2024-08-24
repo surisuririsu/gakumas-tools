@@ -1,9 +1,9 @@
-import { DEBUG } from "./constants";
+import { DEBUG, GRAPHED_FIELDS } from "./constants";
 
 export default class StageLogger {
   constructor() {
     this.disabled = false;
-    this.logs = [];
+    this.clear();
   }
 
   disable() {
@@ -24,7 +24,18 @@ export default class StageLogger {
     console.log(...args);
   }
 
+  pushGraphData(state) {
+    if (this.disabled) return;
+    for (let field of GRAPHED_FIELDS) {
+      this.graphData[field].push(state[field]);
+    }
+  }
+
   clear() {
     this.logs = [];
+    this.graphData = GRAPHED_FIELDS.reduce((acc, cur) => {
+      acc[cur] = [];
+      return acc;
+    }, {});
   }
 }
