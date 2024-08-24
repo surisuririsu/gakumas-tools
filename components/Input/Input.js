@@ -1,9 +1,18 @@
 import { memo } from "react";
 import styles from "./Input.module.scss";
 
-function Input({ type, name, value, min, max, placeholder, onChange }) {
-  function clamp(value) {
-    let clampedValue = value;
+function Input({
+  type,
+  name,
+  defaultValue,
+  value,
+  min,
+  max,
+  placeholder,
+  onChange,
+}) {
+  function clamp(val) {
+    let clampedValue = val;
     if (min != null) {
       clampedValue = Math.max(clampedValue, min);
     }
@@ -18,7 +27,8 @@ function Input({ type, name, value, min, max, placeholder, onChange }) {
       className={styles.input}
       type={type}
       name={name}
-      defaultValue={value ?? ""}
+      defaultValue={defaultValue}
+      value={value}
       placeholder={placeholder}
       onChange={(e) =>
         onChange(
