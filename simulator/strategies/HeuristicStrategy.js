@@ -148,7 +148,7 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     return Math.floor(
       getTrueScore(score) +
-        previewState.score +
+        previewState.score * 0.33 +
         previewState.score / (previewState.turnsRemaining + 1)
     );
   }

@@ -95,25 +95,43 @@ export function mergeResults(results) {
     }
   }
 
-  let graphData = {};
-  for (let field of GRAPHED_FIELDS) {
-    graphData[field] = [];
-    for (let result of results) {
-      for (let i = 0; i < result.graphData[field].length; i++) {
-        if (!graphData[field][i]) graphData[field][i] = 0;
-        graphData[field][i] += result.graphData[field][i] / results.length;
-      }
-    }
-  }
+  const graphDatas = results.map((result) => result.graphData);
+  const mergedGraphData = mergeGraphDatas(graphDatas);
 
   return {
-    graphData,
+    graphData: mergedGraphData,
     minRun,
     averageRun,
     maxRun,
     averageScore,
     scores,
   };
+}
+
+export function mergeGraphDatas(graphDatas) {
+  let mergedGraphData = GRAPHED_FIELDS.reduce((acc, cur) => {
+    acc[cur] = [];
+    return acc;
+  }, {});
+
+  for (let graphData of graphDatas) {
+    for (let field of GRAPHED_FIELDS) {
+      for (let i = 0; i < graphData[field].length; i++) {
+        if (!mergedGraphData[field][i]) mergedGraphData[field][i] = [];
+        mergedGraphData[field][i].push(graphData[field][i]);
+      }
+    }
+  }
+
+  for (let field of GRAPHED_FIELDS) {
+    for (let i = 0; i < mergedGraphData[field].length; i++) {
+      mergedGraphData[field][i] =
+        mergedGraphData[field][i].reduce((acc, cur) => acc + cur, 0) /
+        mergedGraphData[field][i].length;
+    }
+  }
+
+  return mergedGraphData;
 }
 
 export function shuffle(arr) {

@@ -151,6 +151,8 @@ export default class StageEngine {
 
     nextState = this._triggerEffectsForPhase("startOfStage", nextState);
 
+    this.logger.pushGraphData(nextState);
+
     nextState = this._startTurn(nextState);
 
     return nextState;
@@ -326,6 +328,8 @@ export default class StageEngine {
 
     state.turnsElapsed += 1;
     state.turnsRemaining -= 1;
+
+    this.logger.pushGraphData(state);
 
     // Start next turn
     if (state.turnsRemaining > 0) {

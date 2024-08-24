@@ -1,5 +1,3 @@
-import { GRAPHED_FIELDS } from "./constants";
-
 export default class StagePlayer {
   constructor(engine, strategy) {
     this.engine = engine;
@@ -7,17 +5,8 @@ export default class StagePlayer {
   }
 
   play() {
-    let turnsElapsed = 0;
-    let graphData = [];
-
     let state = this.engine.getInitialState();
     state = this.engine.startStage(state);
-
-    let turnGraphData = {};
-    for (let field of GRAPHED_FIELDS) {
-      turnGraphData[field] = state[field];
-    }
-    graphData.push(turnGraphData);
 
     while (state.turnsRemaining > 0) {
       this.engine.logger.disable();
@@ -35,21 +24,12 @@ export default class StagePlayer {
       } else {
         state = this.engine.endTurn(state);
       }
-
-      if (state.turnsElapsed > turnsElapsed) {
-        let turnGraphData = {};
-        for (let field of GRAPHED_FIELDS) {
-          turnGraphData[field] = state[field];
-        }
-        graphData.push(turnGraphData);
-        turnsElapsed = state.turnsElapsed;
-      }
     }
 
     return {
-      logs: this.engine.logger.logs,
       score: state.score,
-      graphData,
+      logs: this.engine.logger.logs,
+      graphData: this.engine.logger.graphData,
     };
   }
 }
