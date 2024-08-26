@@ -11,7 +11,7 @@
     "@sgratzl/chartjs-chart-boxplot": "^4.4.1",
     "chart.js": "^4.4.4",
     "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v2.1.2",
-    "gakumas-engine": "https://github.com/surisuririsu/gakumas-engine#v0.1.0",
+    "gakumas-engine": "https://github.com/surisuririsu/gakumas-engine#v0.1.1",
     "gakumas_contest_simulator": "https://github.com/katabami83/gakumas_contest_simulator",
     "mongodb": "^6.8.0",
     "next": "14.2.6",
