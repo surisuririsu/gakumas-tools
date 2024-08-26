@@ -1,5 +1,7 @@
 "use client";
-import { memo, useContext, useMemo, useState } from "react";
+import { memo, useContext, useMemo } from "react";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList as List } from "react-window";
 import Button from "@/components/Button";
 import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemorySummary from "@/components/MemorySummary";
@@ -9,8 +11,6 @@ import SearchContext from "@/contexts/SearchContext";
 import { calculateContestPower } from "@/utils/contestPower";
 import { getSearchScore } from "@/utils/sort";
 import styles from "./Memories.module.scss";
-
-const PAGE_SIZE = 30;
 
 function compareFilteredMemories(a, b) {
   if (b.searchScore != a.searchScore) {
@@ -39,7 +39,6 @@ function MemoriesList({
   const { uploadMemories, memoriesLoading } = useContext(DataContext);
   const { setModal } = useContext(ModalContext);
   const { pItemIds, skillCardIds } = useContext(SearchContext);
-  const [maxToShow, setMaxToShow] = useState(PAGE_SIZE);
 
   const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
   const filteredMemories = useMemo(
@@ -62,50 +61,58 @@ function MemoriesList({
         ),
     [memories, pItemIds, skillCardIds, hasSearchQuery]
   );
-  const displayedMemories = useMemo(
-    () => filteredMemories.slice(0, maxToShow),
-    [filteredMemories, maxToShow]
-  );
+
+  const Row = ({ index, style }) => {
+    const memory = filteredMemories[index];
+    return (
+      <div className={styles.memoryTile} style={style}>
+        {action == "delete" && (
+          <div className={styles.check}>
+            <input
+              type="checkbox"
+              checked={selectedMemories[memory._id]}
+              onChange={(e) =>
+                setSelectedMemories((prev) => ({
+                  ...prev,
+                  [memory._id]: e.target.checked,
+                }))
+              }
+            />
+          </div>
+        )}
+        <MemorySummary memory={memory} />
+      </div>
+    );
+  };
 
   return (
     <div className={styles.list}>
-      {displayedMemories.map((memory) => (
-        <div key={memory._id} className={styles.memoryTile}>
-          {action == "delete" && (
-            <div className={styles.check}>
-              <input
-                type="checkbox"
-                checked={selectedMemories[memory._id]}
-                onChange={(e) =>
-                  setSelectedMemories((prev) => ({
-                    ...prev,
-                    [memory._id]: e.target.checked,
-                  }))
-                }
-              />
-            </div>
+      {filteredMemories.length ? (
+        <AutoSizer>
+          {({ width, height }) => (
+            <List
+              height={height}
+              itemCount={filteredMemories.length}
+              itemSize={115}
+              width={width}
+            >
+              {Row}
+            </List>
           )}
-          <MemorySummary memory={memory} />
+        </AutoSizer>
+      ) : (
+        <div className={styles.nudge}>
+          {action != "import" && !memoriesLoading && (
+            <Button
+              onClick={() =>
+                setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
+              }
+            >
+              Import memories from screenshots
+            </Button>
+          )}
         </div>
-      ))}
-
-      <div className={styles.nudge}>
-        {filteredMemories.length > maxToShow && (
-          <Button onClick={() => setMaxToShow(maxToShow + PAGE_SIZE)}>
-            Show more memories
-          </Button>
-        )}
-
-        {action != "import" && !memoriesLoading && (
-          <Button
-            onClick={() =>
-              setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
-            }
-          >
-            Import memories from screenshots
-          </Button>
-        )}
-      </div>
+      )}
     </div>
   );
 }
