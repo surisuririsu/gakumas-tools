@@ -286,7 +286,6 @@ async function copySymlink(prelayout, postlayout, destinationFs, destination, de
 }
 
 class FakeFS {
-  pathUtils;
   constructor(pathUtils) {
     this.pathUtils = pathUtils;
   }
@@ -895,7 +894,6 @@ class ProxiedFS extends FakeFS {
   watch(p, a, b) {
     return this.baseFs.watch(
       this.mapToBase(p),
-      // @ts-expect-error
       a,
       b
     );
@@ -903,7 +901,6 @@ class ProxiedFS extends FakeFS {
   watchFile(p, a, b) {
     return this.baseFs.watchFile(
       this.mapToBase(p),
-      // @ts-expect-error
       a,
       b
     );
@@ -927,7 +924,6 @@ function direntToPortable(dirent) {
   return portableDirent;
 }
 class NodeFS extends BasePortableFakeFS {
-  realFs;
   constructor(realFs = fs) {
     super();
     this.realFs = realFs;
@@ -1323,7 +1319,6 @@ class NodeFS extends BasePortableFakeFS {
   watch(p, a, b) {
     return this.realFs.watch(
       npath.fromPortablePath(p),
-      // @ts-expect-error
       a,
       b
     );
@@ -1331,7 +1326,6 @@ class NodeFS extends BasePortableFakeFS {
   watchFile(p, a, b) {
     return this.realFs.watchFile(
       npath.fromPortablePath(p),
-      // @ts-expect-error
       a,
       b
     );
@@ -1354,7 +1348,10 @@ const NUMBER_REGEXP = /^[0-9]+$/;
 const VIRTUAL_REGEXP = /^(\/(?:[^/]+\/)*?(?:\$\$virtual|__virtual__))((?:\/((?:[^/]+-)?[a-f0-9]+)(?:\/([^/]+))?)?((?:\/.*)?))$/;
 const VALID_COMPONENT = /^([^/]+-)?[a-f0-9]+$/;
 class VirtualFS extends ProxiedFS {
-  baseFs;
+  constructor({ baseFs = new NodeFS() } = {}) {
+    super(ppath);
+    this.baseFs = baseFs;
+  }
   static makeVirtualPath(base, component, to) {
     if (ppath.basename(base) !== `__virtual__`)
       throw new Error(`Assertion failed: Virtual folders must be named "__virtual__"`);
@@ -1383,10 +1380,6 @@ class VirtualFS extends ProxiedFS {
     const backstep = `../`.repeat(depth);
     const subpath = match[5] || `.`;
     return VirtualFS.resolveVirtual(ppath.join(target, backstep, subpath));
-  }
-  constructor({ baseFs = new NodeFS() } = {}) {
-    super(ppath);
-    this.baseFs = baseFs;
   }
   getExtractHint(hints) {
     return this.baseFs.getExtractHint(hints);
@@ -1784,7 +1777,8 @@ function resolvePackageTargetString(target, subpath, match, packageJSONUrl, base
   const packagePath = new URL(".", packageJSONUrl).pathname;
   if (!StringPrototypeStartsWith(resolvedPath, packagePath))
     throwInvalidPackageTarget(match, target, packageJSONUrl, internal, base);
-  if (subpath === "") return resolved;
+  if (subpath === "")
+    return resolved;
   if (RegExpPrototypeExec(invalidSegmentRegEx, subpath) !== null) {
     const request = pattern ? StringPrototypeReplace(match, "*", () => subpath) : match + subpath;
     throwInvalidSubpath(request, packageJSONUrl, internal, base);
@@ -1798,7 +1792,8 @@ function resolvePackageTargetString(target, subpath, match, packageJSONUrl, base
 }
 function isArrayIndex(key) {
   const keyNum = +key;
-  if (`${keyNum}` !== key) return false;
+  if (`${keyNum}` !== key)
+    return false;
   return keyNum >= 0 && keyNum < 4294967295;
 }
 function resolvePackageTarget(packageJSONUrl, target, subpath, packageSubpath, base, pattern, internal, conditions) {
@@ -1875,7 +1870,8 @@ function resolvePackageTarget(packageJSONUrl, target, subpath, packageSubpath, b
           internal,
           conditions
         );
-        if (resolveResult === void 0) continue;
+        if (resolveResult === void 0)
+          continue;
         return resolveResult;
       }
     }
@@ -1896,12 +1892,18 @@ function patternKeyCompare(a, b) {
   const bPatternIndex = StringPrototypeIndexOf(b, "*");
   const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
   const baseLenB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
-  if (baseLenA > baseLenB) return -1;
-  if (baseLenB > baseLenA) return 1;
-  if (aPatternIndex === -1) return 1;
-  if (bPatternIndex === -1) return -1;
-  if (a.length > b.length) return -1;
-  if (b.length > a.length) return 1;
+  if (baseLenA > baseLenB)
+    return -1;
+  if (baseLenB > baseLenA)
+    return 1;
+  if (aPatternIndex === -1)
+    return 1;
+  if (bPatternIndex === -1)
+    return -1;
+  if (a.length > b.length)
+    return -1;
+  if (b.length > a.length)
+    return 1;
   return 0;
 }
 function packageImportsResolve({ name, base, conditions, readFileSyncFn }) {
@@ -2042,7 +2044,6 @@ async function resolve$1(originalSpecifier, context, nextResolve) {
   try {
     result = pnpapi.resolveRequest(specifier, issuer, {
       conditions: new Set(conditions),
-      // TODO: Handle --experimental-specifier-resolution=node
       extensions: allowLegacyResolve ? void 0 : []
     });
   } catch (err) {
@@ -2073,9 +2074,6 @@ if (!HAS_LAZY_LOADED_TRANSLATORS) {
       try {
         return fs.readFileSync(args[0], {
           encoding: `utf8`,
-          // @ts-expect-error - The docs says it needs to be a string but
-          // links to https://nodejs.org/dist/latest-v20.x/docs/api/fs.html#file-system-flags
-          // which says it can be a number which matches the implementation.
           flag: args[1]
         });
       } catch {
@@ -2103,14 +2101,6 @@ if (!HAS_LAZY_LOADED_TRANSLATORS) {
             stats.ino,
             stats.size,
             stats.blocks
-            // atime sec
-            // atime ns
-            // mtime sec
-            // mtime ns
-            // ctime sec
-            // ctime ns
-            // birthtime sec
-            // birthtime ns
           ]);
         } catch {
         }
