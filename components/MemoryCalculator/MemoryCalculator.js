@@ -1,8 +1,9 @@
 "use client";
 import React, { memo, useContext, useMemo, useState } from "react";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
+import EntityPickerModal from "@/components/EntityPickerModal";
 import IconSelect from "@/components/IconSelect";
-import MemoryCalculatorResult from "@/components/MemoryCalculatorResult";
 import TargetSkillCards from "@/components/TargetSkillCards";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -12,8 +13,8 @@ import {
   COST_RANGES_BY_RANK,
   generatePossibleMemories,
 } from "@/utils/skillCardLottery";
+import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
 import styles from "./MemoryCalculator.module.scss";
-import EntityPickerModal from "../EntityPickerModal";
 
 const RANKS = ["B", "B+", "A", "A+", "S"];
 
@@ -38,6 +39,8 @@ function MemoryCalculator() {
   const { setModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);
   const [rank, setRank] = useState("A");
+  const [showOnTargetResults, setShowOnTargetResults] = useState(true);
+  const [showOffTargetResults, setShowOffTargetResults] = useState(false);
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
@@ -150,29 +153,33 @@ function MemoryCalculator() {
         {costRange.min} ~ {costRange.max}
       </div>
 
-      <label>
-        On-target memories ({(onTargetProbability * 100).toFixed(2)}%)
-      </label>
-      {onTargetMemories.map(({ skillCardIds, probability }) => (
-        <MemoryCalculatorResult
-          key={skillCardIds}
-          skillCardIds={skillCardIds}
-          probability={probability}
+      <button
+        className={styles.resultsToggle}
+        onClick={() => setShowOnTargetResults(!showOnTargetResults)}
+      >
+        <label>Success ({(onTargetProbability * 100).toFixed(2)}%)</label>
+        {showOnTargetResults ? <FaChevronUp /> : <FaChevronDown />}
+      </button>
+      {showOnTargetResults && (
+        <MemoryCalculatorResultList
+          memories={onTargetMemories}
           idolId={idolId}
         />
-      ))}
+      )}
 
-      <label>
-        Off-target memories ({(offTargetProbability * 100).toFixed(2)}%)
-      </label>
-      {offTargetMemories.map(({ skillCardIds, probability }) => (
-        <MemoryCalculatorResult
-          key={skillCardIds}
-          skillCardIds={skillCardIds}
-          probability={probability}
+      <button
+        className={styles.resultsToggle}
+        onClick={() => setShowOffTargetResults(!showOffTargetResults)}
+      >
+        <label>Failure ({(offTargetProbability * 100).toFixed(2)}%)</label>
+        {showOffTargetResults ? <FaChevronUp /> : <FaChevronDown />}
+      </button>
+      {showOffTargetResults && (
+        <MemoryCalculatorResultList
+          memories={offTargetMemories}
           idolId={idolId}
         />
-      ))}
+      )}
     </div>
   );
 }
