@@ -1,7 +1,10 @@
 import { StageStrategy } from "gakumas-engine";
 
 export default class RandomStrategy extends StageStrategy {
-  getScore() {
+  getScore(state, cardId) {
+    if (!this.engine.isCardUsable(state, cardId)) {
+      return -Infinity;
+    }
     return Math.round(Math.random() * 10000);
   }
 }
