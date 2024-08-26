@@ -7,7 +7,7 @@ const ROW_HEIGHT = 72;
 const WINDOW_SIZE = 8;
 
 function MemoryCalculatorResultList({ memories, idolId }) {
-  const Row = memo(({ index, style }) => {
+  const Row = ({ index, style }) => {
     const { skillCardIds, probability } = memories[index];
     return (
       <MemoryCalculatorResult
@@ -18,7 +18,7 @@ function MemoryCalculatorResultList({ memories, idolId }) {
         idolId={idolId}
       />
     );
-  });
+  };
 
   return (
     <div
@@ -32,7 +32,7 @@ function MemoryCalculatorResultList({ memories, idolId }) {
             itemSize={ROW_HEIGHT}
             width={width}
           >
-            {Row}
+            {memo(Row)}
           </List>
         )}
       </AutoSizer>

@@ -96,7 +96,7 @@ function MemoriesList({
               itemSize={115}
               width={width}
             >
-              {Row}
+              {memo(Row)}
             </List>
           )}
         </AutoSizer>
