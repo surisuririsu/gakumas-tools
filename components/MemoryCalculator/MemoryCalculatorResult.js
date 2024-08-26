@@ -2,11 +2,11 @@ import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import { calculateSkillCardCost } from "@/utils/contestPower";
-import styles from "./MemoryCalculatorResult.module.scss";
+import styles from "./MemoryCalculator.module.scss";
 
-function MemoryCalculatorResult({ skillCardIds, probability, idolId }) {
+function MemoryCalculatorResult({ skillCardIds, probability, idolId, style }) {
   return (
-    <div className={styles.result}>
+    <div className={styles.result} style={style}>
       {skillCardIds
         .map(SkillCards.getById)
         .map(({ id, icon, getDynamicIcon, name }) => (
