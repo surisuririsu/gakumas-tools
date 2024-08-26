@@ -52,10 +52,10 @@ export default class HeuristicStrategy extends BaseStrategy {
     let score = 0;
 
     // Turns remaining
-    score += previewState.turnsRemaining == state.turnsRemaining ? 500 : 0;
+    score += previewState.turnsRemaining == state.turnsRemaining ? 2000 : 0;
 
     // Card uses remaining
-    score += previewState.cardUsesRemaining * 500;
+    score += previewState.cardUsesRemaining * 2000;
 
     // Cards in hand
     score += previewState.handCardIds.length * 5;
