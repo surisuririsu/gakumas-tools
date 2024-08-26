@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FaArrowUpRightFromSquare, FaCheck, FaRegCopy } from "react-icons/fa6";
+import { IdolConfig, StageConfig } from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
@@ -13,8 +14,6 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
-import IdolConfig from "@/simulator/IdolConfig";
-import StageConfig from "@/simulator/StageConfig";
 import STRATEGIES from "@/simulator/strategies";
 import { bucketScores, mergeResults } from "@/utils/simulator";
 import SimulatorSubTools from "./SimulatorSubTools";
@@ -50,6 +49,7 @@ export default function Simulator() {
     plan,
     idolId
   );
+  const stageConfig = new StageConfig(stage);
 
   // Set up web workers on mount
   useEffect(() => {
@@ -104,8 +104,6 @@ export default function Simulator() {
     setRunning(true);
 
     console.time("simulation");
-
-    const stageConfig = new StageConfig(stage);
 
     if (SYNC || !workersRef.current) {
       const result = simulate(stageConfig, idolConfig, strategy, NUM_RUNS);

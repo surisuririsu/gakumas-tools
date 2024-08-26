@@ -1,8 +1,8 @@
-import BaseStrategy from "./BaseStrategy";
+import { StageStrategy } from "gakumas-engine";
 
 export const MAX_DEPTH = 2;
 
-export default class DeepShallowScoreStrategy extends BaseStrategy {
+export default class DeepShallowScoreStrategy extends StageStrategy {
   depth = 0;
 
   getScore(state, cardId) {

@@ -1,6 +1,7 @@
 import { memo } from "react";
-import { DEBUFF_FIELDS } from "@/simulator/constants";
 import styles from "./SimulatorLogs.module.scss";
+
+const DEBUFF_FIELDS = ["doubleCostTurns", "costIncrease", "nullifyGenkiTurns"];
 
 const STRINGS = {
   turnsRemaining: "残りターン数",

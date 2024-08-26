@@ -1,7 +1,5 @@
+import { StageEngine, StageLogger, StagePlayer } from "gakumas-engine";
 import { mergeGraphDatas } from "@/utils/simulator";
-import StageEngine from "./StageEngine";
-import StageLogger from "./StageLogger";
-import StagePlayer from "./StagePlayer";
 import STRATEGIES from "./strategies";
 
 export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
