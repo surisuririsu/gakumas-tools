@@ -30,18 +30,19 @@ const RAW_RUNTIME_STATE =
           ["@sgratzl/chartjs-chart-boxplot", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1"],\
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
-          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
+          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"],\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=4df627861dcf5b40e8837267292a92241125b262"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=f56065bd86bc2f7ab2e2216c6536e2b381cea2f7"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
-          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
+          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
           ["react", "npm:18.3.1"],\
           ["react-chartjs-2", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0"],\
           ["react-dom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:18.3.1"],\
           ["react-icons", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.3.0"],\
           ["sass", "npm:1.77.8"],\
-          ["tesseract.js", "npm:5.1.0"]\
+          ["tesseract.js", "npm:5.1.1"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -311,101 +312,101 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@next/env", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@next-env-npm-14.2.5-49076f5af2-10c0.zip/node_modules/@next/env/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@next-env-npm-14.2.6-2b38a32159-10c0.zip/node_modules/@next/env/",\
         "packageDependencies": [\
-          ["@next/env", "npm:14.2.5"]\
+          ["@next/env", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/eslint-plugin-next", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@next-eslint-plugin-next-npm-14.2.5-2a3008d970-10c0.zip/node_modules/@next/eslint-plugin-next/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@next-eslint-plugin-next-npm-14.2.6-95441f6d64-10c0.zip/node_modules/@next/eslint-plugin-next/",\
         "packageDependencies": [\
-          ["@next/eslint-plugin-next", "npm:14.2.5"],\
+          ["@next/eslint-plugin-next", "npm:14.2.6"],\
           ["glob", "npm:10.3.10"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-darwin-arm64", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-darwin-arm64-npm-14.2.5-30baab3764/node_modules/@next/swc-darwin-arm64/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-darwin-arm64-npm-14.2.6-9e26d8180e/node_modules/@next/swc-darwin-arm64/",\
         "packageDependencies": [\
-          ["@next/swc-darwin-arm64", "npm:14.2.5"]\
+          ["@next/swc-darwin-arm64", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-darwin-x64", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-darwin-x64-npm-14.2.5-01db35822e/node_modules/@next/swc-darwin-x64/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-darwin-x64-npm-14.2.6-71ce77cfe2/node_modules/@next/swc-darwin-x64/",\
         "packageDependencies": [\
-          ["@next/swc-darwin-x64", "npm:14.2.5"]\
+          ["@next/swc-darwin-x64", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-linux-arm64-gnu", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-linux-arm64-gnu-npm-14.2.5-c0be37ef87/node_modules/@next/swc-linux-arm64-gnu/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-linux-arm64-gnu-npm-14.2.6-3387736586/node_modules/@next/swc-linux-arm64-gnu/",\
         "packageDependencies": [\
-          ["@next/swc-linux-arm64-gnu", "npm:14.2.5"]\
+          ["@next/swc-linux-arm64-gnu", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-linux-arm64-musl", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-linux-arm64-musl-npm-14.2.5-f4a01bd5a0/node_modules/@next/swc-linux-arm64-musl/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-linux-arm64-musl-npm-14.2.6-cf6683bd39/node_modules/@next/swc-linux-arm64-musl/",\
         "packageDependencies": [\
-          ["@next/swc-linux-arm64-musl", "npm:14.2.5"]\
+          ["@next/swc-linux-arm64-musl", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-linux-x64-gnu", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-linux-x64-gnu-npm-14.2.5-cc62fe9948/node_modules/@next/swc-linux-x64-gnu/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-linux-x64-gnu-npm-14.2.6-a3a6919049/node_modules/@next/swc-linux-x64-gnu/",\
         "packageDependencies": [\
-          ["@next/swc-linux-x64-gnu", "npm:14.2.5"]\
+          ["@next/swc-linux-x64-gnu", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-linux-x64-musl", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-linux-x64-musl-npm-14.2.5-d22cf441bd/node_modules/@next/swc-linux-x64-musl/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-linux-x64-musl-npm-14.2.6-2a9418d1bb/node_modules/@next/swc-linux-x64-musl/",\
         "packageDependencies": [\
-          ["@next/swc-linux-x64-musl", "npm:14.2.5"]\
+          ["@next/swc-linux-x64-musl", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-win32-arm64-msvc", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-win32-arm64-msvc-npm-14.2.5-28a30fb16b/node_modules/@next/swc-win32-arm64-msvc/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-win32-arm64-msvc-npm-14.2.6-adb806f0d0/node_modules/@next/swc-win32-arm64-msvc/",\
         "packageDependencies": [\
-          ["@next/swc-win32-arm64-msvc", "npm:14.2.5"]\
+          ["@next/swc-win32-arm64-msvc", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-win32-ia32-msvc", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-win32-ia32-msvc-npm-14.2.5-3ac8c1c5b4/node_modules/@next/swc-win32-ia32-msvc/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-win32-ia32-msvc-npm-14.2.6-2613e0825a/node_modules/@next/swc-win32-ia32-msvc/",\
         "packageDependencies": [\
-          ["@next/swc-win32-ia32-msvc", "npm:14.2.5"]\
+          ["@next/swc-win32-ia32-msvc", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@next/swc-win32-x64-msvc", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "./.yarn/unplugged/@next-swc-win32-x64-msvc-npm-14.2.5-fd8931986f/node_modules/@next/swc-win32-x64-msvc/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "./.yarn/unplugged/@next-swc-win32-x64-msvc-npm-14.2.6-01aa6b7d1d/node_modules/@next/swc-win32-x64-msvc/",\
         "packageDependencies": [\
-          ["@next/swc-win32-x64-msvc", "npm:14.2.5"]\
+          ["@next/swc-win32-x64-msvc", "npm:14.2.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -580,15 +581,15 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.2.0", {\
-        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-parser-virtual-43ee4deeac/4/AppData/Local/Yarn/Berry/cache/@typescript-eslint-parser-npm-7.2.0-6d77f6601f-10c0.zip/node_modules/@typescript-eslint/parser/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-parser-virtual-744873cb58/4/AppData/Local/Yarn/Berry/cache/@typescript-eslint-parser-npm-7.2.0-6d77f6601f-10c0.zip/node_modules/@typescript-eslint/parser/",\
         "packageDependencies": [\
-          ["@typescript-eslint/parser", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.2.0"],\
+          ["@typescript-eslint/parser", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.2.0"],\
           ["@types/eslint", null],\
           ["@types/typescript", null],\
           ["@typescript-eslint/scope-manager", "npm:7.2.0"],\
           ["@typescript-eslint/types", "npm:7.2.0"],\
-          ["@typescript-eslint/typescript-estree", "virtual:43ee4deeacc8769fdc2c3af7305e94c4d18f1f7f774d2f65063e70c9b019de4457af54d1a74cca2e418275fde74a3ac3dd8bb4202e8c421e7fc43d3d902799e1#npm:7.2.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:744873cb58f36e26b87eb2246d2aeb23f545b4981acc00bdfb6ffd9b7cfedba5fb89644a5dc344a406a5170fb6f5a3a96e0dee3a9d5d48d980eb105d2988fc9c#npm:7.2.0"],\
           ["@typescript-eslint/visitor-keys", "npm:7.2.0"],\
           ["debug", "virtual:1ff4b5f90832ba0a9c93ba1223af226e44ba70c1126a3740d93562b97bc36544e896a5e95908196f7458713e6a6089a34bfc67362fc6df7fa093bd06c878be47#npm:4.3.6"],\
           ["eslint", "npm:8.57.0"],\
@@ -631,10 +632,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:43ee4deeacc8769fdc2c3af7305e94c4d18f1f7f774d2f65063e70c9b019de4457af54d1a74cca2e418275fde74a3ac3dd8bb4202e8c421e7fc43d3d902799e1#npm:7.2.0", {\
-        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-typescript-estree-virtual-46b06deced/4/AppData/Local/Yarn/Berry/cache/@typescript-eslint-typescript-estree-npm-7.2.0-2bddb1cc32-10c0.zip/node_modules/@typescript-eslint/typescript-estree/",\
+      ["virtual:744873cb58f36e26b87eb2246d2aeb23f545b4981acc00bdfb6ffd9b7cfedba5fb89644a5dc344a406a5170fb6f5a3a96e0dee3a9d5d48d980eb105d2988fc9c#npm:7.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/@typescript-eslint-typescript-estree-virtual-7723a02d3b/4/AppData/Local/Yarn/Berry/cache/@typescript-eslint-typescript-estree-npm-7.2.0-2bddb1cc32-10c0.zip/node_modules/@typescript-eslint/typescript-estree/",\
         "packageDependencies": [\
-          ["@typescript-eslint/typescript-estree", "virtual:43ee4deeacc8769fdc2c3af7305e94c4d18f1f7f774d2f65063e70c9b019de4457af54d1a74cca2e418275fde74a3ac3dd8bb4202e8c421e7fc43d3d902799e1#npm:7.2.0"],\
+          ["@typescript-eslint/typescript-estree", "virtual:744873cb58f36e26b87eb2246d2aeb23f545b4981acc00bdfb6ffd9b7cfedba5fb89644a5dc344a406a5170fb6f5a3a96e0dee3a9d5d48d980eb105d2988fc9c#npm:7.2.0"],\
           ["@types/typescript", null],\
           ["@typescript-eslint/types", "npm:7.2.0"],\
           ["@typescript-eslint/visitor-keys", "npm:7.2.0"],\
@@ -643,7 +644,7 @@ const RAW_RUNTIME_STATE =
           ["is-glob", "npm:4.0.3"],\
           ["minimatch", "npm:9.0.3"],\
           ["semver", "npm:7.6.3"],\
-          ["ts-api-utils", "virtual:46b06deced65a242f4591d94fb8b9fbbe3e64737b66de0b7a59b7a9047aa517f1e8d09c6b72f5c8beb9b2edea257b08dc8a2653900044fe2dacd99eb0d5451dc#npm:1.3.0"],\
+          ["ts-api-utils", "virtual:7723a02d3b769d3e897473c1311a3f6f1eccefb475bea77b082c09cd81bad4aba4265c529eef08cfce5a30a665c5aabbeaf003ed9510eb3c658fc2bba27a349d#npm:1.3.0"],\
           ["typescript", null]\
         ],\
         "packagePeers": [\
@@ -1817,29 +1818,29 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["eslint-config-next", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/eslint-config-next-npm-14.2.5-a433909ffa-10c0.zip/node_modules/eslint-config-next/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/eslint-config-next-npm-14.2.6-654a05c65e-10c0.zip/node_modules/eslint-config-next/",\
         "packageDependencies": [\
-          ["eslint-config-next", "npm:14.2.5"]\
+          ["eslint-config-next", "npm:14.2.6"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-config-next-virtual-23ffeca5e8/4/AppData/Local/Yarn/Berry/cache/eslint-config-next-npm-14.2.5-a433909ffa-10c0.zip/node_modules/eslint-config-next/",\
+      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-config-next-virtual-2736b4550f/4/AppData/Local/Yarn/Berry/cache/eslint-config-next-npm-14.2.6-654a05c65e-10c0.zip/node_modules/eslint-config-next/",\
         "packageDependencies": [\
-          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["@next/eslint-plugin-next", "npm:14.2.5"],\
+          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
+          ["@next/eslint-plugin-next", "npm:14.2.6"],\
           ["@rushstack/eslint-patch", "npm:1.10.4"],\
           ["@types/eslint", null],\
           ["@types/typescript", null],\
-          ["@typescript-eslint/parser", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.2.0"],\
+          ["@typescript-eslint/parser", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.2.0"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-import-resolver-node", "npm:0.3.9"],\
-          ["eslint-import-resolver-typescript", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:3.6.1"],\
-          ["eslint-plugin-import", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:2.29.1"],\
-          ["eslint-plugin-jsx-a11y", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:6.9.0"],\
-          ["eslint-plugin-react", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.35.0"],\
-          ["eslint-plugin-react-hooks", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:5.0.0-canary-7118f5dd7-20230705"],\
+          ["eslint-import-resolver-typescript", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:3.6.1"],\
+          ["eslint-plugin-import", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:2.29.1"],\
+          ["eslint-plugin-jsx-a11y", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:6.9.0"],\
+          ["eslint-plugin-react", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.35.0"],\
+          ["eslint-plugin-react-hooks", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:5.0.0-canary-7118f5dd7-20230705"],\
           ["typescript", null]\
         ],\
         "packagePeers": [\
@@ -1871,17 +1872,17 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:3.6.1", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-import-resolver-typescript-virtual-2145be5cea/4/AppData/Local/Yarn/Berry/cache/eslint-import-resolver-typescript-npm-3.6.1-994bbf65fc-10c0.zip/node_modules/eslint-import-resolver-typescript/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:3.6.1", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-import-resolver-typescript-virtual-16330440de/4/AppData/Local/Yarn/Berry/cache/eslint-import-resolver-typescript-npm-3.6.1-994bbf65fc-10c0.zip/node_modules/eslint-import-resolver-typescript/",\
         "packageDependencies": [\
-          ["eslint-import-resolver-typescript", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:3.6.1"],\
+          ["eslint-import-resolver-typescript", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:3.6.1"],\
           ["@types/eslint", null],\
           ["@types/eslint-plugin-import", null],\
           ["debug", "virtual:1ff4b5f90832ba0a9c93ba1223af226e44ba70c1126a3740d93562b97bc36544e896a5e95908196f7458713e6a6089a34bfc67362fc6df7fa093bd06c878be47#npm:4.3.6"],\
           ["enhanced-resolve", "npm:5.17.1"],\
           ["eslint", "npm:8.57.0"],\
-          ["eslint-module-utils", "virtual:2145be5cea65b3d1884dee9d7064f1ca677db28e8df20b03f90db77a499fe043df10fc8dfd0977f09aa7ea610d6d095977e19daaf478412401daa4a362286a13#npm:2.8.1"],\
-          ["eslint-plugin-import", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:2.29.1"],\
+          ["eslint-module-utils", "virtual:16330440dedd5c421050b2cbdf80933df2c879814f1ae67b7832346a84e8c750a9e35be431eb6b10f09336b50aea2fbfefb31354fdb4ff57763168c9c53628c3#npm:2.8.1"],\
+          ["eslint-plugin-import", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:2.29.1"],\
           ["fast-glob", "npm:3.3.2"],\
           ["get-tsconfig", "npm:4.7.6"],\
           ["is-core-module", "npm:2.15.1"],\
@@ -1904,10 +1905,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2145be5cea65b3d1884dee9d7064f1ca677db28e8df20b03f90db77a499fe043df10fc8dfd0977f09aa7ea610d6d095977e19daaf478412401daa4a362286a13#npm:2.8.1", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-module-utils-virtual-91462a151c/4/AppData/Local/Yarn/Berry/cache/eslint-module-utils-npm-2.8.1-c9aeb3ec2c-10c0.zip/node_modules/eslint-module-utils/",\
+      ["virtual:16330440dedd5c421050b2cbdf80933df2c879814f1ae67b7832346a84e8c750a9e35be431eb6b10f09336b50aea2fbfefb31354fdb4ff57763168c9c53628c3#npm:2.8.1", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-module-utils-virtual-5f1209bf2a/4/AppData/Local/Yarn/Berry/cache/eslint-module-utils-npm-2.8.1-c9aeb3ec2c-10c0.zip/node_modules/eslint-module-utils/",\
         "packageDependencies": [\
-          ["eslint-module-utils", "virtual:2145be5cea65b3d1884dee9d7064f1ca677db28e8df20b03f90db77a499fe043df10fc8dfd0977f09aa7ea610d6d095977e19daaf478412401daa4a362286a13#npm:2.8.1"],\
+          ["eslint-module-utils", "virtual:16330440dedd5c421050b2cbdf80933df2c879814f1ae67b7832346a84e8c750a9e35be431eb6b10f09336b50aea2fbfefb31354fdb4ff57763168c9c53628c3#npm:2.8.1"],\
           ["@types/eslint", null],\
           ["@types/eslint-import-resolver-node", null],\
           ["@types/eslint-import-resolver-typescript", null],\
@@ -1917,7 +1918,7 @@ const RAW_RUNTIME_STATE =
           ["debug", "virtual:2a426afc4b2eef43db12a540d29c2b5476640459bfcd5c24f86bb401cf8cce97e63bd81794d206a5643057e7f662643afd5ce3dfc4d4bfd8e706006c6309c5fa#npm:3.2.7"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-import-resolver-node", null],\
-          ["eslint-import-resolver-typescript", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:3.6.1"],\
+          ["eslint-import-resolver-typescript", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:3.6.1"],\
           ["eslint-import-resolver-webpack", null]\
         ],\
         "packagePeers": [\
@@ -1934,16 +1935,16 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:c4d53a65b1fb4cc9be29487389d80c081b8eb436450700df962a0a0537d7062fd5716dcfb3a4172a8a7b7c2f7ae41f391c747778a512a577fbb5940c99555e0b#npm:2.8.1", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-module-utils-virtual-6af3f1dc8a/4/AppData/Local/Yarn/Berry/cache/eslint-module-utils-npm-2.8.1-c9aeb3ec2c-10c0.zip/node_modules/eslint-module-utils/",\
+      ["virtual:1b33c18e92f9912373c25ee41f035897e7313cb3cb2271b3278b89c77c9afa10814f95f0417cad6641e457d80991fd64cd4db07442608ebdf0401488b704cbf1#npm:2.8.1", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-module-utils-virtual-7901f13749/4/AppData/Local/Yarn/Berry/cache/eslint-module-utils-npm-2.8.1-c9aeb3ec2c-10c0.zip/node_modules/eslint-module-utils/",\
         "packageDependencies": [\
-          ["eslint-module-utils", "virtual:c4d53a65b1fb4cc9be29487389d80c081b8eb436450700df962a0a0537d7062fd5716dcfb3a4172a8a7b7c2f7ae41f391c747778a512a577fbb5940c99555e0b#npm:2.8.1"],\
+          ["eslint-module-utils", "virtual:1b33c18e92f9912373c25ee41f035897e7313cb3cb2271b3278b89c77c9afa10814f95f0417cad6641e457d80991fd64cd4db07442608ebdf0401488b704cbf1#npm:2.8.1"],\
           ["@types/eslint", null],\
           ["@types/eslint-import-resolver-node", null],\
           ["@types/eslint-import-resolver-typescript", null],\
           ["@types/eslint-import-resolver-webpack", null],\
           ["@types/typescript-eslint__parser", null],\
-          ["@typescript-eslint/parser", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.2.0"],\
+          ["@typescript-eslint/parser", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.2.0"],\
           ["debug", "virtual:2a426afc4b2eef43db12a540d29c2b5476640459bfcd5c24f86bb401cf8cce97e63bd81794d206a5643057e7f662643afd5ce3dfc4d4bfd8e706006c6309c5fa#npm:3.2.7"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-import-resolver-node", "npm:0.3.9"],\
@@ -1973,13 +1974,13 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:2.29.1", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-plugin-import-virtual-c4d53a65b1/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-import-npm-2.29.1-b94305f7dc-10c0.zip/node_modules/eslint-plugin-import/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:2.29.1", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-import-virtual-1b33c18e92/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-import-npm-2.29.1-b94305f7dc-10c0.zip/node_modules/eslint-plugin-import/",\
         "packageDependencies": [\
-          ["eslint-plugin-import", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:2.29.1"],\
+          ["eslint-plugin-import", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:2.29.1"],\
           ["@types/eslint", null],\
           ["@types/typescript-eslint__parser", null],\
-          ["@typescript-eslint/parser", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.2.0"],\
+          ["@typescript-eslint/parser", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.2.0"],\
           ["array-includes", "npm:3.1.8"],\
           ["array.prototype.findlastindex", "npm:1.2.5"],\
           ["array.prototype.flat", "npm:1.3.2"],\
@@ -1988,7 +1989,7 @@ const RAW_RUNTIME_STATE =
           ["doctrine", "npm:2.1.0"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-import-resolver-node", "npm:0.3.9"],\
-          ["eslint-module-utils", "virtual:c4d53a65b1fb4cc9be29487389d80c081b8eb436450700df962a0a0537d7062fd5716dcfb3a4172a8a7b7c2f7ae41f391c747778a512a577fbb5940c99555e0b#npm:2.8.1"],\
+          ["eslint-module-utils", "virtual:1b33c18e92f9912373c25ee41f035897e7313cb3cb2271b3278b89c77c9afa10814f95f0417cad6641e457d80991fd64cd4db07442608ebdf0401488b704cbf1#npm:2.8.1"],\
           ["hasown", "npm:2.0.2"],\
           ["is-core-module", "npm:2.15.1"],\
           ["is-glob", "npm:4.0.3"],\
@@ -2016,10 +2017,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:6.9.0", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-plugin-jsx-a11y-virtual-af9930fbd9/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-jsx-a11y-npm-6.9.0-be49ca57a2-10c0.zip/node_modules/eslint-plugin-jsx-a11y/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:6.9.0", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-jsx-a11y-virtual-e29cd643b0/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-jsx-a11y-npm-6.9.0-be49ca57a2-10c0.zip/node_modules/eslint-plugin-jsx-a11y/",\
         "packageDependencies": [\
-          ["eslint-plugin-jsx-a11y", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:6.9.0"],\
+          ["eslint-plugin-jsx-a11y", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:6.9.0"],\
           ["@types/eslint", null],\
           ["aria-query", "npm:5.1.3"],\
           ["array-includes", "npm:3.1.8"],\
@@ -2054,10 +2055,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.35.0", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-virtual-cfe3c55093/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-react-npm-7.35.0-ce51a7759c-10c0.zip/node_modules/eslint-plugin-react/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.35.0", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-virtual-dfc6fa5de4/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-react-npm-7.35.0-ce51a7759c-10c0.zip/node_modules/eslint-plugin-react/",\
         "packageDependencies": [\
-          ["eslint-plugin-react", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:7.35.0"],\
+          ["eslint-plugin-react", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:7.35.0"],\
           ["@types/eslint", null],\
           ["array-includes", "npm:3.1.8"],\
           ["array.prototype.findlast", "npm:1.2.5"],\
@@ -2094,10 +2095,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:5.0.0-canary-7118f5dd7-20230705", {\
-        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-hooks-virtual-556c70a601/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-react-hooks-npm-5.0.0-canary-7118f5dd7-20230705-2292094517-10c0.zip/node_modules/eslint-plugin-react-hooks/",\
+      ["virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:5.0.0-canary-7118f5dd7-20230705", {\
+        "packageLocation": "./.yarn/__virtual__/eslint-plugin-react-hooks-virtual-2f5a6f7fe2/4/AppData/Local/Yarn/Berry/cache/eslint-plugin-react-hooks-npm-5.0.0-canary-7118f5dd7-20230705-2292094517-10c0.zip/node_modules/eslint-plugin-react-hooks/",\
         "packageDependencies": [\
-          ["eslint-plugin-react-hooks", "virtual:23ffeca5e844e25324811c9ec2c262763e6ecc34473cfaeacaebdf9df4cea2a4980127ddc3b03dbe6eabebabc9cd6a591bae59ded77a3e4ec748a6a0a2e9d691#npm:5.0.0-canary-7118f5dd7-20230705"],\
+          ["eslint-plugin-react-hooks", "virtual:2736b4550f716b526a41d86f9114e84704981a4efefff812c987e0b05750eab05b107e784483d7e1628d40c449ca97f3d17edb00561f754a573d3b6babfcab84#npm:5.0.0-canary-7118f5dd7-20230705"],\
           ["@types/eslint", null],\
           ["eslint", "npm:8.57.0"]\
         ],\
@@ -2397,6 +2398,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["gakumas-engine", [\
+      ["https://github.com/surisuririsu/gakumas-engine.git#commit=4df627861dcf5b40e8837267292a92241125b262", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-engine-https-a746f978e6-10c0.zip/node_modules/gakumas-engine/",\
+        "packageDependencies": [\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=4df627861dcf5b40e8837267292a92241125b262"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["gakumas-tools", [\
       ["workspace:.", {\
         "packageLocation": "./",\
@@ -2405,18 +2416,19 @@ const RAW_RUNTIME_STATE =
           ["@sgratzl/chartjs-chart-boxplot", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.4.1"],\
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
-          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
+          ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"],\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=4df627861dcf5b40e8837267292a92241125b262"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=f56065bd86bc2f7ab2e2216c6536e2b381cea2f7"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
-          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
+          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["next-auth", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:4.24.7"],\
           ["react", "npm:18.3.1"],\
           ["react-chartjs-2", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.2.0"],\
           ["react-dom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:18.3.1"],\
           ["react-icons", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:5.3.0"],\
           ["sass", "npm:1.77.8"],\
-          ["tesseract.js", "npm:5.1.0"]\
+          ["tesseract.js", "npm:5.1.1"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -3646,27 +3658,27 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["next", [\
-      ["npm:14.2.5", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/next-npm-14.2.5-ce63d89d89-10c0.zip/node_modules/next/",\
+      ["npm:14.2.6", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/next-npm-14.2.6-247a03170d-10c0.zip/node_modules/next/",\
         "packageDependencies": [\
-          ["next", "npm:14.2.5"]\
+          ["next", "npm:14.2.6"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5", {\
-        "packageLocation": "./.yarn/__virtual__/next-virtual-1a149f9222/4/AppData/Local/Yarn/Berry/cache/next-npm-14.2.5-ce63d89d89-10c0.zip/node_modules/next/",\
+      ["virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6", {\
+        "packageLocation": "./.yarn/__virtual__/next-virtual-fdf4dac56e/4/AppData/Local/Yarn/Berry/cache/next-npm-14.2.6-247a03170d-10c0.zip/node_modules/next/",\
         "packageDependencies": [\
-          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
-          ["@next/env", "npm:14.2.5"],\
-          ["@next/swc-darwin-arm64", "npm:14.2.5"],\
-          ["@next/swc-darwin-x64", "npm:14.2.5"],\
-          ["@next/swc-linux-arm64-gnu", "npm:14.2.5"],\
-          ["@next/swc-linux-arm64-musl", "npm:14.2.5"],\
-          ["@next/swc-linux-x64-gnu", "npm:14.2.5"],\
-          ["@next/swc-linux-x64-musl", "npm:14.2.5"],\
-          ["@next/swc-win32-arm64-msvc", "npm:14.2.5"],\
-          ["@next/swc-win32-ia32-msvc", "npm:14.2.5"],\
-          ["@next/swc-win32-x64-msvc", "npm:14.2.5"],\
+          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
+          ["@next/env", "npm:14.2.6"],\
+          ["@next/swc-darwin-arm64", "npm:14.2.6"],\
+          ["@next/swc-darwin-x64", "npm:14.2.6"],\
+          ["@next/swc-linux-arm64-gnu", "npm:14.2.6"],\
+          ["@next/swc-linux-arm64-musl", "npm:14.2.6"],\
+          ["@next/swc-linux-x64-gnu", "npm:14.2.6"],\
+          ["@next/swc-linux-x64-musl", "npm:14.2.6"],\
+          ["@next/swc-win32-arm64-msvc", "npm:14.2.6"],\
+          ["@next/swc-win32-ia32-msvc", "npm:14.2.6"],\
+          ["@next/swc-win32-x64-msvc", "npm:14.2.6"],\
           ["@opentelemetry/api", null],\
           ["@playwright/test", null],\
           ["@swc/helpers", "npm:0.5.5"],\
@@ -3682,7 +3694,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:18.3.1"],\
           ["sass", "npm:1.77.8"],\
-          ["styled-jsx", "virtual:1a149f922293d9e6f54771f039b602be93e8f627a5a652a295fdc8ac303bdadcec22ba582bfafab0094334f54a785ef66534ff596d846be2b0488d4a2ca7b3de#npm:5.1.1"]\
+          ["styled-jsx", "virtual:fdf4dac56eadfea953dbe1794ab2df0e753b4924d9e48424103f3e1d451738ac9b4906b08e8edac14c6b9ad4e4afe135afebbd79b12c8cfb9c04c302036cbb3c#npm:5.1.1"]\
         ],\
         "packagePeers": [\
           "@opentelemetry/api",\
@@ -3719,7 +3731,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", null],\
           ["cookie", "npm:0.5.0"],\
           ["jose", "npm:4.15.9"],\
-          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.5"],\
+          ["next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["nodemailer", null],\
           ["oauth", "npm:0.9.15"],\
           ["openid-client", "npm:5.6.5"],\
@@ -3750,10 +3762,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:dea9b99e61f95e137a8dc2efef0cafd84bfd2c6f77972a40e3c13520cc375d139b2034045f8c794cb3b3214fe17da39ee7df75ea3eb4d75809c68b7bc4cb8117#npm:2.7.0", {\
-        "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-e71cb5fea1/4/AppData/Local/Yarn/Berry/cache/node-fetch-npm-2.7.0-587d57004e-10c0.zip/node_modules/node-fetch/",\
+      ["virtual:edda97a0a9e6d09c9a187e442b88aa2bef9ec195d7e2f9869d3f0800e07ce10044ad0a9f81b03c7a11289717a339a1bffdbcfbb36d26ebf71dd4ac5d5b2008ce#npm:2.7.0", {\
+        "packageLocation": "./.yarn/__virtual__/node-fetch-virtual-4bcde22dcb/4/AppData/Local/Yarn/Berry/cache/node-fetch-npm-2.7.0-587d57004e-10c0.zip/node_modules/node-fetch/",\
         "packageDependencies": [\
-          ["node-fetch", "virtual:dea9b99e61f95e137a8dc2efef0cafd84bfd2c6f77972a40e3c13520cc375d139b2034045f8c794cb3b3214fe17da39ee7df75ea3eb4d75809c68b7bc4cb8117#npm:2.7.0"],\
+          ["node-fetch", "virtual:edda97a0a9e6d09c9a187e442b88aa2bef9ec195d7e2f9869d3f0800e07ce10044ad0a9f81b03c7a11289717a339a1bffdbcfbb36d26ebf71dd4ac5d5b2008ce#npm:2.7.0"],\
           ["@types/encoding", null],\
           ["encoding", null],\
           ["whatwg-url", "npm:5.0.0"]\
@@ -4849,10 +4861,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:1a149f922293d9e6f54771f039b602be93e8f627a5a652a295fdc8ac303bdadcec22ba582bfafab0094334f54a785ef66534ff596d846be2b0488d4a2ca7b3de#npm:5.1.1", {\
-        "packageLocation": "./.yarn/__virtual__/styled-jsx-virtual-0043fcdb58/4/AppData/Local/Yarn/Berry/cache/styled-jsx-npm-5.1.1-2557a209ba-10c0.zip/node_modules/styled-jsx/",\
+      ["virtual:fdf4dac56eadfea953dbe1794ab2df0e753b4924d9e48424103f3e1d451738ac9b4906b08e8edac14c6b9ad4e4afe135afebbd79b12c8cfb9c04c302036cbb3c#npm:5.1.1", {\
+        "packageLocation": "./.yarn/__virtual__/styled-jsx-virtual-7c79f30748/4/AppData/Local/Yarn/Berry/cache/styled-jsx-npm-5.1.1-2557a209ba-10c0.zip/node_modules/styled-jsx/",\
         "packageDependencies": [\
-          ["styled-jsx", "virtual:1a149f922293d9e6f54771f039b602be93e8f627a5a652a295fdc8ac303bdadcec22ba582bfafab0094334f54a785ef66534ff596d846be2b0488d4a2ca7b3de#npm:5.1.1"],\
+          ["styled-jsx", "virtual:fdf4dac56eadfea953dbe1794ab2df0e753b4924d9e48424103f3e1d451738ac9b4906b08e8edac14c6b9ad4e4afe135afebbd79b12c8cfb9c04c302036cbb3c#npm:5.1.1"],\
           ["@babel/core", null],\
           ["@types/babel-plugin-macros", null],\
           ["@types/babel__core", null],\
@@ -4916,18 +4928,18 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["tesseract.js", [\
-      ["npm:5.1.0", {\
-        "packageLocation": "./.yarn/unplugged/tesseract.js-npm-5.1.0-dea9b99e61/node_modules/tesseract.js/",\
+      ["npm:5.1.1", {\
+        "packageLocation": "./.yarn/unplugged/tesseract.js-npm-5.1.1-edda97a0a9/node_modules/tesseract.js/",\
         "packageDependencies": [\
-          ["tesseract.js", "npm:5.1.0"],\
+          ["tesseract.js", "npm:5.1.1"],\
           ["bmp-js", "npm:0.1.0"],\
           ["idb-keyval", "npm:6.2.1"],\
           ["is-electron", "npm:2.2.2"],\
           ["is-url", "npm:1.2.4"],\
-          ["node-fetch", "virtual:dea9b99e61f95e137a8dc2efef0cafd84bfd2c6f77972a40e3c13520cc375d139b2034045f8c794cb3b3214fe17da39ee7df75ea3eb4d75809c68b7bc4cb8117#npm:2.7.0"],\
+          ["node-fetch", "virtual:edda97a0a9e6d09c9a187e442b88aa2bef9ec195d7e2f9869d3f0800e07ce10044ad0a9f81b03c7a11289717a339a1bffdbcfbb36d26ebf71dd4ac5d5b2008ce#npm:2.7.0"],\
           ["opencollective-postinstall", "npm:2.0.3"],\
           ["regenerator-runtime", "npm:0.13.11"],\
-          ["tesseract.js-core", "npm:5.1.0"],\
+          ["tesseract.js-core", "npm:5.1.1"],\
           ["wasm-feature-detect", "npm:1.6.2"],\
           ["zlibjs", "npm:0.3.1"]\
         ],\
@@ -4935,10 +4947,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["tesseract.js-core", [\
-      ["npm:5.1.0", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/tesseract.js-core-npm-5.1.0-a140d66e90-10c0.zip/node_modules/tesseract.js-core/",\
+      ["npm:5.1.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/tesseract.js-core-npm-5.1.1-44292bf887-10c0.zip/node_modules/tesseract.js-core/",\
         "packageDependencies": [\
-          ["tesseract.js-core", "npm:5.1.0"]\
+          ["tesseract.js-core", "npm:5.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4996,10 +5008,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:46b06deced65a242f4591d94fb8b9fbbe3e64737b66de0b7a59b7a9047aa517f1e8d09c6b72f5c8beb9b2edea257b08dc8a2653900044fe2dacd99eb0d5451dc#npm:1.3.0", {\
-        "packageLocation": "./.yarn/__virtual__/ts-api-utils-virtual-04bd7f23f2/4/AppData/Local/Yarn/Berry/cache/ts-api-utils-npm-1.3.0-33457908f8-10c0.zip/node_modules/ts-api-utils/",\
+      ["virtual:7723a02d3b769d3e897473c1311a3f6f1eccefb475bea77b082c09cd81bad4aba4265c529eef08cfce5a30a665c5aabbeaf003ed9510eb3c658fc2bba27a349d#npm:1.3.0", {\
+        "packageLocation": "./.yarn/__virtual__/ts-api-utils-virtual-59391ae592/4/AppData/Local/Yarn/Berry/cache/ts-api-utils-npm-1.3.0-33457908f8-10c0.zip/node_modules/ts-api-utils/",\
         "packageDependencies": [\
-          ["ts-api-utils", "virtual:46b06deced65a242f4591d94fb8b9fbbe3e64737b66de0b7a59b7a9047aa517f1e8d09c6b72f5c8beb9b2edea257b08dc8a2653900044fe2dacd99eb0d5451dc#npm:1.3.0"],\
+          ["ts-api-utils", "virtual:7723a02d3b769d3e897473c1311a3f6f1eccefb475bea77b082c09cd81bad4aba4265c529eef08cfce5a30a665c5aabbeaf003ed9510eb3c658fc2bba27a349d#npm:1.3.0"],\
           ["@types/typescript", null],\
           ["typescript", null]\
         ],\
@@ -5524,26 +5536,24 @@ function ERR_DIR_CLOSED() {
 
 const DEFAULT_MODE = S_IFREG | 420;
 class StatEntry {
-  constructor() {
-    this.uid = 0;
-    this.gid = 0;
-    this.size = 0;
-    this.blksize = 0;
-    this.atimeMs = 0;
-    this.mtimeMs = 0;
-    this.ctimeMs = 0;
-    this.birthtimeMs = 0;
-    this.atime = new Date(0);
-    this.mtime = new Date(0);
-    this.ctime = new Date(0);
-    this.birthtime = new Date(0);
-    this.dev = 0;
-    this.ino = 0;
-    this.mode = DEFAULT_MODE;
-    this.nlink = 1;
-    this.rdev = 0;
-    this.blocks = 1;
-  }
+  uid = 0;
+  gid = 0;
+  size = 0;
+  blksize = 0;
+  atimeMs = 0;
+  mtimeMs = 0;
+  ctimeMs = 0;
+  birthtimeMs = 0;
+  atime = /* @__PURE__ */ new Date(0);
+  mtime = /* @__PURE__ */ new Date(0);
+  ctime = /* @__PURE__ */ new Date(0);
+  birthtime = /* @__PURE__ */ new Date(0);
+  dev = 0;
+  ino = 0;
+  mode = DEFAULT_MODE;
+  nlink = 1;
+  rdev = 0;
+  blocks = 1;
   isBlockDevice() {
     return false;
   }
@@ -5567,30 +5577,28 @@ class StatEntry {
   }
 }
 class BigIntStatsEntry {
-  constructor() {
-    this.uid = BigInt(0);
-    this.gid = BigInt(0);
-    this.size = BigInt(0);
-    this.blksize = BigInt(0);
-    this.atimeMs = BigInt(0);
-    this.mtimeMs = BigInt(0);
-    this.ctimeMs = BigInt(0);
-    this.birthtimeMs = BigInt(0);
-    this.atimeNs = BigInt(0);
-    this.mtimeNs = BigInt(0);
-    this.ctimeNs = BigInt(0);
-    this.birthtimeNs = BigInt(0);
-    this.atime = new Date(0);
-    this.mtime = new Date(0);
-    this.ctime = new Date(0);
-    this.birthtime = new Date(0);
-    this.dev = BigInt(0);
-    this.ino = BigInt(0);
-    this.mode = BigInt(DEFAULT_MODE);
-    this.nlink = BigInt(1);
-    this.rdev = BigInt(0);
-    this.blocks = BigInt(1);
-  }
+  uid = BigInt(0);
+  gid = BigInt(0);
+  size = BigInt(0);
+  blksize = BigInt(0);
+  atimeMs = BigInt(0);
+  mtimeMs = BigInt(0);
+  ctimeMs = BigInt(0);
+  birthtimeMs = BigInt(0);
+  atimeNs = BigInt(0);
+  mtimeNs = BigInt(0);
+  ctimeNs = BigInt(0);
+  birthtimeNs = BigInt(0);
+  atime = /* @__PURE__ */ new Date(0);
+  mtime = /* @__PURE__ */ new Date(0);
+  ctime = /* @__PURE__ */ new Date(0);
+  birthtime = /* @__PURE__ */ new Date(0);
+  dev = BigInt(0);
+  ino = BigInt(0);
+  mode = BigInt(DEFAULT_MODE);
+  nlink = BigInt(1);
+  rdev = BigInt(0);
+  blocks = BigInt(1);
   isBlockDevice() {
     return false;
   }
@@ -5625,7 +5633,7 @@ function clearStats(stats) {
       } else if (typeof element === `bigint`) {
         stats[key] = BigInt(0);
       } else if (nodeUtils__namespace.types.isDate(element)) {
-        stats[key] = new Date(0);
+        stats[key] = /* @__PURE__ */ new Date(0);
       }
     }
   }
@@ -5716,6 +5724,9 @@ const Filename = {
   manifest: `package.json`,
   lockfile: `yarn.lock`,
   virtual: `__virtual__`,
+  /**
+   * @deprecated
+   */
   pnpJs: `.pnp.js`,
   pnpCjs: `.pnp.cjs`,
   pnpData: `.pnp.data.json`,
@@ -5997,8 +6008,8 @@ class CustomDir {
     this.path = path;
     this.nextDirent = nextDirent;
     this.opts = opts;
-    this.closed = false;
   }
+  closed = false;
   throwIfClosed() {
     if (this.closed) {
       throw ERR_DIR_CLOSED();
@@ -6056,20 +6067,24 @@ function assertStatus(current, expected) {
   }
 }
 class CustomStatWatcher extends events.EventEmitter {
-  constructor(fakeFs, path, { bigint = false } = {}) {
-    super();
-    this.status = "ready" /* Ready */;
-    this.changeListeners = /* @__PURE__ */ new Map();
-    this.startTimeout = null;
-    this.fakeFs = fakeFs;
-    this.path = path;
-    this.bigint = bigint;
-    this.lastStats = this.stat();
-  }
+  fakeFs;
+  path;
+  bigint;
+  status = "ready" /* Ready */;
+  changeListeners = /* @__PURE__ */ new Map();
+  lastStats;
+  startTimeout = null;
   static create(fakeFs, path, opts) {
     const statWatcher = new CustomStatWatcher(fakeFs, path, opts);
     statWatcher.start();
     return statWatcher;
+  }
+  constructor(fakeFs, path, { bigint = false } = {}) {
+    super();
+    this.fakeFs = fakeFs;
+    this.path = path;
+    this.bigint = bigint;
+    this.lastStats = this.stat();
   }
   start() {
     assertStatus(this.status, "ready" /* Ready */);
@@ -6098,6 +6113,11 @@ class CustomStatWatcher extends events.EventEmitter {
       return clearStats(statInstance);
     }
   }
+  /**
+   * Creates an interval whose callback compares the current stats with the previous stats and notifies all listeners in case of changes.
+   *
+   * @param opts.persistent Decides whether the interval should be immediately unref-ed.
+   */
   makeInterval(opts) {
     const interval = setInterval(() => {
       const currentStats = this.stat();
@@ -6109,10 +6129,16 @@ class CustomStatWatcher extends events.EventEmitter {
     }, opts.interval);
     return opts.persistent ? interval : interval.unref();
   }
+  /**
+   * Registers a listener and assigns it an interval.
+   */
   registerChangeListener(listener, opts) {
     this.addListener("change" /* Change */, listener);
     this.changeListeners.set(listener, this.makeInterval(opts));
   }
+  /**
+   * Unregisters the listener and clears the assigned interval.
+   */
   unregisterChangeListener(listener) {
     this.removeListener("change" /* Change */, listener);
     const interval = this.changeListeners.get(listener);
@@ -6120,6 +6146,9 @@ class CustomStatWatcher extends events.EventEmitter {
       clearInterval(interval);
     this.changeListeners.delete(listener);
   }
+  /**
+   * Unregisters all listeners and clears all assigned intervals.
+   */
   unregisterAllChangeListeners() {
     for (const listener of this.changeListeners.keys()) {
       this.unregisterChangeListener(listener);
@@ -6128,11 +6157,17 @@ class CustomStatWatcher extends events.EventEmitter {
   hasChangeListeners() {
     return this.changeListeners.size > 0;
   }
+  /**
+   * Refs all stored intervals.
+   */
   ref() {
     for (const interval of this.changeListeners.values())
       interval.ref();
     return this;
   }
+  /**
+   * Unrefs all stored intervals.
+   */
   unref() {
     for (const interval of this.changeListeners.values())
       interval.unref();
@@ -6203,6 +6238,7 @@ function unwatchAllFiles(fakeFs) {
 }
 
 class FakeFS {
+  pathUtils;
   constructor(pathUtils) {
     this.pathUtils = pathUtils;
   }
@@ -6811,6 +6847,7 @@ class ProxiedFS extends FakeFS {
   watch(p, a, b) {
     return this.baseFs.watch(
       this.mapToBase(p),
+      // @ts-expect-error
       a,
       b
     );
@@ -6818,6 +6855,7 @@ class ProxiedFS extends FakeFS {
   watchFile(p, a, b) {
     return this.baseFs.watchFile(
       this.mapToBase(p),
+      // @ts-expect-error
       a,
       b
     );
@@ -6841,6 +6879,7 @@ function direntToPortable(dirent) {
   return portableDirent;
 }
 class NodeFS extends BasePortableFakeFS {
+  realFs;
   constructor(realFs = fs__default.default) {
     super();
     this.realFs = realFs;
@@ -7236,6 +7275,7 @@ class NodeFS extends BasePortableFakeFS {
   watch(p, a, b) {
     return this.realFs.watch(
       npath.fromPortablePath(p),
+      // @ts-expect-error
       a,
       b
     );
@@ -7243,6 +7283,7 @@ class NodeFS extends BasePortableFakeFS {
   watchFile(p, a, b) {
     return this.realFs.watchFile(
       npath.fromPortablePath(p),
+      // @ts-expect-error
       a,
       b
     );
@@ -7263,16 +7304,25 @@ class NodeFS extends BasePortableFakeFS {
 
 const MOUNT_MASK = 4278190080;
 class MountFS extends BasePortableFakeFS {
+  baseFs;
+  mountInstances;
+  fdMap = /* @__PURE__ */ new Map();
+  nextFd = 3;
+  factoryPromise;
+  factorySync;
+  filter;
+  getMountPoint;
+  magic;
+  maxAge;
+  maxOpenFiles;
+  typeCheck;
+  isMount = /* @__PURE__ */ new Set();
+  notMount = /* @__PURE__ */ new Set();
+  realPaths = /* @__PURE__ */ new Map();
   constructor({ baseFs = new NodeFS(), filter = null, magicByte = 42, maxOpenFiles = Infinity, useCache = true, maxAge = 5e3, typeCheck = fs.constants.S_IFREG, getMountPoint, factoryPromise, factorySync }) {
     if (Math.floor(magicByte) !== magicByte || !(magicByte > 1 && magicByte <= 127))
       throw new Error(`The magic byte must be set to a round value between 1 and 127 included`);
     super();
-    this.fdMap = /* @__PURE__ */ new Map();
-    this.nextFd = 3;
-    this.isMount = /* @__PURE__ */ new Set();
-    this.notMount = /* @__PURE__ */ new Set();
-    this.realPaths = /* @__PURE__ */ new Map();
-    this.limitOpenFilesTimeout = null;
     this.baseFs = baseFs;
     this.mountInstances = useCache ? /* @__PURE__ */ new Map() : null;
     this.factoryPromise = factoryPromise;
@@ -7928,12 +7978,14 @@ class MountFS extends BasePortableFakeFS {
     return this.makeCallSync(p, () => {
       return this.baseFs.watch(
         p,
+        // @ts-expect-error
         a,
         b
       );
     }, (mountFs, { subPath }) => {
       return mountFs.watch(
         subPath,
+        // @ts-expect-error
         a,
         b
       );
@@ -7943,6 +7995,7 @@ class MountFS extends BasePortableFakeFS {
     return this.makeCallSync(p, () => {
       return this.baseFs.watchFile(
         p,
+        // @ts-expect-error
         a,
         b
       );
@@ -8008,6 +8061,7 @@ class MountFS extends BasePortableFakeFS {
       };
     }
   }
+  limitOpenFilesTimeout = null;
   limitOpenFiles(max) {
     if (this.mountInstances === null)
       return;
@@ -8097,6 +8151,7 @@ class MountFS extends BasePortableFakeFS {
 }
 
 class PosixFS extends ProxiedFS {
+  baseFs;
   constructor(baseFs) {
     super(npath);
     this.baseFs = baseFs;
@@ -8113,10 +8168,7 @@ const NUMBER_REGEXP = /^[0-9]+$/;
 const VIRTUAL_REGEXP = /^(\/(?:[^/]+\/)*?(?:\$\$virtual|__virtual__))((?:\/((?:[^/]+-)?[a-f0-9]+)(?:\/([^/]+))?)?((?:\/.*)?))$/;
 const VALID_COMPONENT = /^([^/]+-)?[a-f0-9]+$/;
 class VirtualFS extends ProxiedFS {
-  constructor({ baseFs = new NodeFS() } = {}) {
-    super(ppath);
-    this.baseFs = baseFs;
-  }
+  baseFs;
   static makeVirtualPath(base, component, to) {
     if (ppath.basename(base) !== `__virtual__`)
       throw new Error(`Assertion failed: Virtual folders must be named "__virtual__"`);
@@ -8145,6 +8197,10 @@ class VirtualFS extends ProxiedFS {
     const backstep = `../`.repeat(depth);
     const subpath = match[5] || `.`;
     return VirtualFS.resolveVirtual(ppath.join(target, backstep, subpath));
+  }
+  constructor({ baseFs = new NodeFS() } = {}) {
+    super(ppath);
+    this.baseFs = baseFs;
   }
   getExtractHint(hints) {
     return this.baseFs.getExtractHint(hints);
@@ -8187,6 +8243,7 @@ class VirtualFS extends ProxiedFS {
 const URL = Number(process.versions.node.split('.', 1)[0]) < 20 ? url.URL : globalThis.URL;
 
 class NodePathFS extends ProxiedFS {
+  baseFs;
   constructor(baseFs) {
     super(npath);
     this.baseFs = baseFs;
@@ -8214,7 +8271,6 @@ function isUtf8(buf, str) {
   return Buffer.byteLength(str) === buf.byteLength;
 }
 
-var _a, _b, _c, _d;
 const kBaseFs = Symbol(`kBaseFs`);
 const kFd = Symbol(`kFd`);
 const kClosePromise = Symbol(`kClosePromise`);
@@ -8224,11 +8280,13 @@ const kRefs = Symbol(`kRefs`);
 const kRef = Symbol(`kRef`);
 const kUnref = Symbol(`kUnref`);
 class FileHandle {
+  [kBaseFs];
+  [kFd];
+  [kRefs] = 1;
+  [kClosePromise] = void 0;
+  [kCloseResolve] = void 0;
+  [kCloseReject] = void 0;
   constructor(fd, baseFs) {
-    this[_a] = 1;
-    this[_b] = void 0;
-    this[_c] = void 0;
-    this[_d] = void 0;
     this[kBaseFs] = baseFs;
     this[kFd] = fd;
   }
@@ -8266,9 +8324,11 @@ class FileHandle {
   createWriteStream(options) {
     return this[kBaseFs].createWriteStream(null, { ...options, fd: this.fd });
   }
+  // FIXME: Missing FakeFS version
   datasync() {
     throw new Error(`Method not implemented.`);
   }
+  // FIXME: Missing FakeFS version
   sync() {
     throw new Error(`Method not implemented.`);
   }
@@ -8333,6 +8393,7 @@ class FileHandle {
       this[kUnref]();
     }
   }
+  // FIXME: Missing FakeFS version
   utimes(atime, mtime) {
     throw new Error(`Method not implemented.`);
   }
@@ -8361,6 +8422,7 @@ class FileHandle {
       this[kUnref]();
     }
   }
+  // TODO: Use writev from FakeFS when that is implemented
   async writev(buffers, position) {
     try {
       this[kRef](this.writev);
@@ -8385,14 +8447,13 @@ class FileHandle {
       this[kUnref]();
     }
   }
+  // FIXME: Missing FakeFS version
   readv(buffers, position) {
     throw new Error(`Method not implemented.`);
   }
   close() {
-    if (this[kFd] === -1)
-      return Promise.resolve();
-    if (this[kClosePromise])
-      return this[kClosePromise];
+    if (this[kFd] === -1) return Promise.resolve();
+    if (this[kClosePromise]) return this[kClosePromise];
     this[kRefs]--;
     if (this[kRefs] === 0) {
       const fd = this[kFd];
@@ -8412,7 +8473,7 @@ class FileHandle {
     }
     return this[kClosePromise];
   }
-  [(_a = kRefs, _b = kClosePromise, _c = kCloseResolve, _d = kCloseReject, kRef)](caller) {
+  [kRef](caller) {
     if (this[kFd] === -1) {
       const err = new Error(`file closed`);
       err.code = `EBADF`;
@@ -8672,8 +8733,7 @@ var libzipSync = {exports: {}};
 var frozenFs = Object.assign({}, fs__default.default);
 var createModule = function() {
   var _scriptDir = void 0;
-  if (typeof __filename !== "undefined")
-    _scriptDir = _scriptDir || __filename;
+  if (typeof __filename !== "undefined") _scriptDir = _scriptDir || __filename;
   return function(createModule2) {
     createModule2 = createModule2 || {};
     var Module = typeof createModule2 !== "undefined" ? createModule2 : {};
@@ -8708,10 +8768,8 @@ var createModule = function() {
         if (ret) {
           return binary ? ret : ret.toString();
         }
-        if (!nodeFS)
-          nodeFS = frozenFs;
-        if (!nodePath)
-          nodePath = path__default.default;
+        if (!nodeFS) nodeFS = frozenFs;
+        if (!nodePath) nodePath = path__default.default;
         filename = nodePath["normalize"](filename);
         return nodeFS["readFileSync"](filename, binary ? null : "utf8");
       };
@@ -8739,23 +8797,18 @@ var createModule = function() {
       }
     }
     moduleOverrides = null;
-    if (Module["arguments"])
-      ;
-    if (Module["thisProgram"])
-      ;
-    if (Module["quit"])
-      ;
+    if (Module["arguments"]) ;
+    if (Module["thisProgram"]) ;
+    if (Module["quit"]) ;
     var wasmBinary;
-    if (Module["wasmBinary"])
-      wasmBinary = Module["wasmBinary"];
+    if (Module["wasmBinary"]) wasmBinary = Module["wasmBinary"];
     Module["noExitRuntime"] || true;
     if (typeof WebAssembly !== "object") {
       abort("no native wasm support detected");
     }
     function getValue(ptr, type, noSafe) {
       type = type || "i8";
-      if (type.charAt(type.length - 1) === "*")
-        type = "i32";
+      if (type.charAt(type.length - 1) === "*") type = "i32";
       switch (type) {
         case "i1":
           return HEAP8[ptr >> 0];
@@ -8809,10 +8862,8 @@ var createModule = function() {
         }
       };
       function convertReturnValue(ret2) {
-        if (returnType === "string")
-          return UTF8ToString(ret2);
-        if (returnType === "boolean")
-          return Boolean(ret2);
+        if (returnType === "string") return UTF8ToString(ret2);
+        if (returnType === "boolean") return Boolean(ret2);
         return ret2;
       }
       var func = getCFunc(ident);
@@ -8822,8 +8873,7 @@ var createModule = function() {
         for (var i = 0; i < args.length; i++) {
           var converter = toC[argTypes[i]];
           if (converter) {
-            if (stack === 0)
-              stack = stackSave();
+            if (stack === 0) stack = stackSave();
             cArgs[i] = converter(args[i]);
           } else {
             cArgs[i] = args[i];
@@ -8832,8 +8882,7 @@ var createModule = function() {
       }
       var ret = func.apply(null, cArgs);
       ret = convertReturnValue(ret);
-      if (stack !== 0)
-        stackRestore(stack);
+      if (stack !== 0) stackRestore(stack);
       return ret;
     }
     function cwrap(ident, returnType, argTypes, opts) {
@@ -8851,16 +8900,13 @@ var createModule = function() {
     }
     var UTF8Decoder = new TextDecoder("utf8");
     function UTF8ToString(ptr, maxBytesToRead) {
-      if (!ptr)
-        return "";
+      if (!ptr) return "";
       var maxPtr = ptr + maxBytesToRead;
-      for (var end = ptr; !(end >= maxPtr) && HEAPU8[end]; )
-        ++end;
+      for (var end = ptr; !(end >= maxPtr) && HEAPU8[end]; ) ++end;
       return UTF8Decoder.decode(HEAPU8.subarray(ptr, end));
     }
     function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
-      if (!(maxBytesToWrite > 0))
-        return 0;
+      if (!(maxBytesToWrite > 0)) return 0;
       var startIdx = outIdx;
       var endIdx = outIdx + maxBytesToWrite - 1;
       for (var i = 0; i < str.length; ++i) {
@@ -8870,23 +8916,19 @@ var createModule = function() {
           u = 65536 + ((u & 1023) << 10) | u1 & 1023;
         }
         if (u <= 127) {
-          if (outIdx >= endIdx)
-            break;
+          if (outIdx >= endIdx) break;
           heap[outIdx++] = u;
         } else if (u <= 2047) {
-          if (outIdx + 1 >= endIdx)
-            break;
+          if (outIdx + 1 >= endIdx) break;
           heap[outIdx++] = 192 | u >> 6;
           heap[outIdx++] = 128 | u & 63;
         } else if (u <= 65535) {
-          if (outIdx + 2 >= endIdx)
-            break;
+          if (outIdx + 2 >= endIdx) break;
           heap[outIdx++] = 224 | u >> 12;
           heap[outIdx++] = 128 | u >> 6 & 63;
           heap[outIdx++] = 128 | u & 63;
         } else {
-          if (outIdx + 3 >= endIdx)
-            break;
+          if (outIdx + 3 >= endIdx) break;
           heap[outIdx++] = 240 | u >> 18;
           heap[outIdx++] = 128 | u >> 12 & 63;
           heap[outIdx++] = 128 | u >> 6 & 63;
@@ -8905,22 +8947,17 @@ var createModule = function() {
         var u = str.charCodeAt(i);
         if (u >= 55296 && u <= 57343)
           u = 65536 + ((u & 1023) << 10) | str.charCodeAt(++i) & 1023;
-        if (u <= 127)
-          ++len;
-        else if (u <= 2047)
-          len += 2;
-        else if (u <= 65535)
-          len += 3;
-        else
-          len += 4;
+        if (u <= 127) ++len;
+        else if (u <= 2047) len += 2;
+        else if (u <= 65535) len += 3;
+        else len += 4;
       }
       return len;
     }
     function allocateUTF8(str) {
       var size = lengthBytesUTF8(str) + 1;
       var ret = _malloc(size);
-      if (ret)
-        stringToUTF8Array(str, HEAP8, ret, size);
+      if (ret) stringToUTF8Array(str, HEAP8, ret, size);
       return ret;
     }
     function writeArrayToMemory(array, buffer2) {
@@ -9137,8 +9174,7 @@ var createModule = function() {
       var start = Date.UTC(date.getUTCFullYear(), 0, 1, 0, 0, 0, 0);
       var yday = (date.getTime() - start) / (1e3 * 60 * 60 * 24) | 0;
       LE_HEAP_STORE_I32((tmPtr + 28 >> 2) * 4, yday);
-      if (!_gmtime_r.GMTString)
-        _gmtime_r.GMTString = allocateUTF8("GMT");
+      if (!_gmtime_r.GMTString) _gmtime_r.GMTString = allocateUTF8("GMT");
       LE_HEAP_STORE_I32((tmPtr + 40 >> 2) * 4, _gmtime_r.GMTString);
       return tmPtr;
     }
@@ -9190,10 +9226,9 @@ var createModule = function() {
       return ret;
     }
     function _tzset() {
-      if (_tzset.called)
-        return;
+      if (_tzset.called) return;
       _tzset.called = true;
-      var currentYear = new Date().getFullYear();
+      var currentYear = (/* @__PURE__ */ new Date()).getFullYear();
       var winter = new Date(currentYear, 0, 1);
       var summer = new Date(currentYear, 6, 1);
       var winterOffset = winter.getTimezoneOffset();
@@ -9321,10 +9356,8 @@ var createModule = function() {
     Module["getValue"] = getValue;
     var calledRun;
     dependenciesFulfilled = function runCaller() {
-      if (!calledRun)
-        run();
-      if (!calledRun)
-        dependenciesFulfilled = runCaller;
+      if (!calledRun) run();
+      if (!calledRun) dependenciesFulfilled = runCaller;
     };
     function run(args) {
       if (runDependencies > 0) {
@@ -9335,16 +9368,13 @@ var createModule = function() {
         return;
       }
       function doRun() {
-        if (calledRun)
-          return;
+        if (calledRun) return;
         calledRun = true;
         Module["calledRun"] = true;
-        if (ABORT)
-          return;
+        if (ABORT) return;
         initRuntime();
         readyPromiseResolve(Module);
-        if (Module["onRuntimeInitialized"])
-          Module["onRuntimeInitialized"]();
+        if (Module["onRuntimeInitialized"]) Module["onRuntimeInitialized"]();
         postRun();
       }
       if (Module["setStatus"]) {
@@ -9378,7 +9408,9 @@ const createModule = libzipSync.exports;
 
 const number64 = [
   `number`,
+  // low
   `number`
+  // high
 ];
 var Errors = /* @__PURE__ */ ((Errors2) => {
   Errors2[Errors2["ZIP_ER_OK"] = 0] = "ZIP_ER_OK";
@@ -9416,6 +9448,7 @@ var Errors = /* @__PURE__ */ ((Errors2) => {
   return Errors2;
 })(Errors || {});
 const makeInterface = (emZip) => ({
+  // Those are getters because they can change after memory growth
   get HEAPU8() {
     return emZip.HEAPU8;
   },
@@ -9618,6 +9651,7 @@ function makeEmptyArchive() {
   ]);
 }
 class LibzipError extends Error {
+  code;
   constructor(message, code) {
     super(message);
     this.name = `Libzip Error`;
@@ -9625,15 +9659,28 @@ class LibzipError extends Error {
   }
 }
 class ZipFS extends BasePortableFakeFS {
+  libzip;
+  baseFs;
+  path;
+  stats;
+  zip;
+  lzSource;
+  level;
+  listings = /* @__PURE__ */ new Map();
+  entries = /* @__PURE__ */ new Map();
+  /**
+   * A cache of indices mapped to file sources.
+   * Populated by `setFileSource` calls.
+   * Required for supporting read after write.
+   */
+  fileSources = /* @__PURE__ */ new Map();
+  symlinkCount;
+  fds = /* @__PURE__ */ new Map();
+  nextFd = 0;
+  ready = false;
+  readOnly = false;
   constructor(source, opts = {}) {
     super();
-    this.listings = /* @__PURE__ */ new Map();
-    this.entries = /* @__PURE__ */ new Map();
-    this.fileSources = /* @__PURE__ */ new Map();
-    this.fds = /* @__PURE__ */ new Map();
-    this.nextFd = 0;
-    this.ready = false;
-    this.readOnly = false;
     const pathOptions = opts;
     this.level = typeof pathOptions.level !== `undefined` ? pathOptions.level : DEFAULT_COMPRESSION_LEVEL;
     source ??= makeEmptyArchive();
@@ -9882,6 +9929,7 @@ class ZipFS extends BasePortableFakeFS {
         },
         bytesRead: 0,
         path: p,
+        // "This property is `true` if the underlying file has not been opened yet"
         pending: false
       }
     );
@@ -9928,6 +9976,7 @@ class ZipFS extends BasePortableFakeFS {
         },
         bytesWritten: 0,
         path: p,
+        // "This property is `true` if the underlying file has not been opened yet"
         pending: false
       }
     );
@@ -11067,6 +11116,8 @@ function hydrateRuntimeState(data, { basePath }) {
         packagePeers: new Set(packageInformationData.packagePeers),
         linkType: packageInformationData.linkType,
         discardFromLookup,
+        // we only need this for packages that are used by the currently running script
+        // this is a lazy getter because `ppath.join` has some overhead
         get packageLocation() {
           return resolvedPackageLocation || (resolvedPackageLocation = ppath.join(absolutePortablePath, packageInformationData.packageLocation));
         }
@@ -11328,8 +11379,7 @@ function resolvePackageTargetString(target, subpath, match, packageJSONUrl, base
   const packagePath = new URL(".", packageJSONUrl).pathname;
   if (!StringPrototypeStartsWith(resolvedPath, packagePath))
     throwInvalidPackageTarget(match, target, packageJSONUrl, internal, base);
-  if (subpath === "")
-    return resolved;
+  if (subpath === "") return resolved;
   if (RegExpPrototypeExec(invalidSegmentRegEx, subpath) !== null) {
     const request = pattern ? StringPrototypeReplace(match, "*", () => subpath) : match + subpath;
     throwInvalidSubpath(request, packageJSONUrl, internal, base);
@@ -11343,8 +11393,7 @@ function resolvePackageTargetString(target, subpath, match, packageJSONUrl, base
 }
 function isArrayIndex(key) {
   const keyNum = +key;
-  if (`${keyNum}` !== key)
-    return false;
+  if (`${keyNum}` !== key) return false;
   return keyNum >= 0 && keyNum < 4294967295;
 }
 function resolvePackageTarget(packageJSONUrl, target, subpath, packageSubpath, base, pattern, internal, conditions) {
@@ -11421,8 +11470,7 @@ function resolvePackageTarget(packageJSONUrl, target, subpath, packageSubpath, b
           internal,
           conditions
         );
-        if (resolveResult === void 0)
-          continue;
+        if (resolveResult === void 0) continue;
         return resolveResult;
       }
     }
@@ -11443,25 +11491,17 @@ function patternKeyCompare(a, b) {
   const bPatternIndex = StringPrototypeIndexOf(b, "*");
   const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
   const baseLenB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
-  if (baseLenA > baseLenB)
-    return -1;
-  if (baseLenB > baseLenA)
-    return 1;
-  if (aPatternIndex === -1)
-    return 1;
-  if (bPatternIndex === -1)
-    return -1;
-  if (a.length > b.length)
-    return -1;
-  if (b.length > a.length)
-    return 1;
+  if (baseLenA > baseLenB) return -1;
+  if (baseLenB > baseLenA) return 1;
+  if (aPatternIndex === -1) return 1;
+  if (bPatternIndex === -1) return -1;
+  if (a.length > b.length) return -1;
+  if (b.length > a.length) return 1;
   return 0;
 }
 function isConditionalExportsMainSugar(exports, packageJSONUrl, base) {
-  if (typeof exports === "string" || ArrayIsArray(exports))
-    return true;
-  if (typeof exports !== "object" || exports === null)
-    return false;
+  if (typeof exports === "string" || ArrayIsArray(exports)) return true;
+  if (typeof exports !== "object" || exports === null) return false;
   const keys = ObjectGetOwnPropertyNames(exports);
   let isConditionalSugar = false;
   let i = 0;
@@ -11490,8 +11530,7 @@ function throwExportsNotFound(subpath, packageJSONUrl, base) {
 const emittedPackageWarnings = /* @__PURE__ */ new Set();
 function emitTrailingSlashPatternDeprecation(match, pjsonUrl, base) {
   const pjsonPath = url.fileURLToPath(pjsonUrl);
-  if (emittedPackageWarnings.has(pjsonPath + "|" + match))
-    return;
+  if (emittedPackageWarnings.has(pjsonPath + "|" + match)) return;
   emittedPackageWarnings.add(pjsonPath + "|" + match);
   process.emitWarning(
     `Use of deprecated trailing slash pattern mapping "${match}" in the "exports" field module resolution of the package at ${pjsonPath}${base ? ` imported from ${url.fileURLToPath(base)}` : ""}. Mapping specifiers ending in "/" is no longer supported.`,
@@ -12760,9 +12799,9 @@ const defaultFsLayer = new VirtualFS({
   })
 });
 class DynamicFS extends ProxiedFS {
+  baseFs = defaultFsLayer;
   constructor() {
     super(ppath);
-    this.baseFs = defaultFsLayer;
   }
   mapToBase(p) {
     return p;
@@ -12777,6 +12816,11 @@ const defaultApi = Object.assign(makeApi(defaultRuntimeState, {
   fakeFs: dynamicFsLayer,
   pnpapiResolution: defaultPnpapiResolution
 }), {
+  /**
+   * Can be used to generate a different API than the default one (for example
+   * to map it on `/` rather than the local directory path, or to use a
+   * different FS layer than the default one).
+   */
   makeApi: ({
     basePath = void 0,
     fakeFs = dynamicFsLayer,
@@ -12790,6 +12834,10 @@ const defaultApi = Object.assign(makeApi(defaultRuntimeState, {
       ...rest
     });
   },
+  /**
+   * Will inject the specified API into the environment, monkey-patching FS. Is
+   * automatically called when the hook is loaded through `--require`.
+   */
   setup: (api) => {
     applyPatch(api || defaultApi, {
       fakeFs: defaultFsLayer,

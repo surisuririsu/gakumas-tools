@@ -1,4 +1,4 @@
-import BaseStrategy from "./BaseStrategy";
+import { StageStrategy } from "gakumas-engine";
 
 const PHASE_FREQUENCY_ESTIMATES = {
   startOfStage: 0,
@@ -16,7 +16,7 @@ const PHASE_FREQUENCY_ESTIMATES = {
   concentrationIncreased: 0.75,
 };
 
-export default class HeuristicStrategy extends BaseStrategy {
+export default class HeuristicStrategy extends StageStrategy {
   getScore(state, cardId) {
     if (!this.engine.isCardUsable(state, cardId)) {
       return -Infinity;

@@ -1,9 +1,9 @@
 import { PItems, SkillCards, Stages } from "gakumas-data";
+import { IdolConfig } from "gakumas-engine";
 import { ContestData } from "gakumas_contest_simulator/scripts/simulator/data/contestData";
 import { PIdolData as SimulatorPIdols } from "gakumas_contest_simulator/scripts/simulator/data/pIdolData";
 import { PItemData as SimulatorPItems } from "gakumas_contest_simulator/scripts/simulator/data/pItemData";
 import { SkillCardData as SimulatorSkillCards } from "gakumas_contest_simulator/scripts/simulator/data/skillCardData";
-import IdolConfig from "@/simulator/IdolConfig";
 
 export const KAFE_CONTEST_STAGES = ContestData.getAll().reduce((acc, cur) => {
   const stages = cur.stages
