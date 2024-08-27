@@ -51,11 +51,14 @@ export default class HeuristicStrategy extends StageStrategy {
 
     let score = 0;
 
-    // Turns remaining
-    score += previewState.turnsRemaining == state.turnsRemaining ? 2000 : 0;
-
-    // Card uses remaining
-    score += previewState.cardUsesRemaining * 2000;
+    // More actions
+    if (
+      previewState.turnsRemaining >= state.turnsRemaining &&
+      previewState.cardUsesRemaining >= state.cardUsesRemaining &&
+      state.cardUsesRemaining == 1
+    ) {
+      score += 5000;
+    }
 
     // Cards in hand
     score += previewState.handCardIds.length * 5;
