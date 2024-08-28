@@ -60,7 +60,7 @@ export const TOOLS = {
     pinnable: true,
   },
   rehearsal: {
-    title: "Rehearsal Parser β",
+    title: "Rehearsal Parser",
     icon: <FaChartSimple />,
     fill: true,
     description: "Parse scores from rehearsal screenshots",
