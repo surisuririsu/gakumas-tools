@@ -1,10 +1,11 @@
 "use client";
 import React, { memo, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
-import { getWhiteCanvas } from "@/utils/imageProcessing";
+import { getWhiteCanvas, loadImageFromFile } from "@/utils/imageProcessing";
 import { extractScores } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
@@ -43,24 +44,16 @@ function Rehearsal() {
 
     console.time("All results parsed");
 
-    const promises = files.map(
-      (file, i) =>
-        new Promise((resolve) => {
-          const blobURL = URL.createObjectURL(file);
-          const img = new Image();
-          img.src = blobURL;
-          img.onload = async () => {
-            const whiteCanvas = getWhiteCanvas(img, 190);
-            const worker = await workersRef.current[
-              i % workersRef.current.length
-            ];
-            const engWhitePromise = worker.recognize(whiteCanvas);
-            const scores = extractScores(await engWhitePromise);
+    const promises = files.map((file, i) =>
+      loadImageFromFile(file).then(async (img) => {
+        const whiteCanvas = getWhiteCanvas(img, 190);
+        const worker = await workersRef.current[i % workersRef.current.length];
+        const engWhitePromise = worker.recognize(whiteCanvas);
+        const scores = extractScores(await engWhitePromise);
 
-            setProgress((p) => p + 1);
-            resolve(scores);
-          };
-        })
+        setProgress((p) => p + 1);
+        return scores;
+      })
     );
 
     Promise.all(promises).then(async (res) => {
@@ -95,11 +88,21 @@ function Rehearsal() {
 
   return (
     <div className={styles.rehearsal}>
-      <label>Parse rehearsal results from screenshots</label>
-      <p>
-        Accuracy is not guaranteed. It is recommended to manually verify the
-        results by comparing with your screenshots.
-      </p>
+      <div className={styles.help}>
+        <Image
+          src="/rehearsal_parser_reference.png"
+          width={120}
+          height={120}
+          alt=""
+        />
+        <p>
+          Add screenshots of the rehearsal result screen to parse scores from.
+          <br />
+          <br />
+          Accuracy is not guaranteed. It is recommended to manually verify the
+          results by comparing with your screenshots.
+        </p>
+      </div>
       <div>
         <input
           className={styles.files}
