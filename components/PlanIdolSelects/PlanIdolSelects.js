@@ -16,19 +16,21 @@ const idols = Idols.getAll().map(({ id, name, icon }) => ({
   alt: name,
 }));
 
-function PlanIdolSelects({ plan, idolId, setPlan, setIdolId }) {
+function PlanIdolSelects({ plan, idolId, setPlan, setIdolId, includeAll }) {
   return (
     <div className={styles.selects}>
       <IconSelect
         options={plans}
         selected={plan}
         onChange={setPlan}
+        includeAll={includeAll}
         collapsable
       />
       <IconSelect
         options={idols}
         selected={idolId}
         onChange={setIdolId}
+        includeAll={includeAll}
         collapsable
       />
     </div>

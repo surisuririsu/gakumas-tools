@@ -31,7 +31,15 @@
 
   @media only screen and (max-width: 600px) {
     opacity: 1;
+
+    button {
+      font-size: 20px;
+    }
   }
+}
+
+.pickButton {
+  color: $gk-orange;
 }
 
 .addButton {

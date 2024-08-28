@@ -112,8 +112,12 @@ export function LoadoutContextProvider({ children }) {
   function setMemory(memory, index) {
     const multiplier = index ? 0.2 : 1;
 
-    // If there is currently a memory in that slot, remove its params
+    if (!memoryIds.some((i) => i)) {
+      setParams([0, 0, 0, 0]);
+    }
+
     if (memoryIds[index]) {
+      // If there is currently a memory in that slot, remove its params
       const curMemory = memories.find((mem) => mem._id == memoryIds[index]);
       if (curMemory) {
         setParams((curParams) =>

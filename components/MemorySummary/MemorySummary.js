@@ -6,7 +6,7 @@ import { calculateContestPower } from "@/utils/contestPower";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
 
-function MemorySummary({ memory }) {
+function MemorySummary({ memory, action, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds } = memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
   const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
@@ -20,11 +20,11 @@ function MemorySummary({ memory }) {
     [skillCardIds]
   );
 
-  return (
-    <div className={styles.memorySummary}>
+  const summaryContent = (
+    <>
       <div className={styles.left}>
         <PIdol pIdolId={pIdolId} />
-        <MemorySummaryActionButtons memory={memory} />
+        {action != "pick" && <MemorySummaryActionButtons memory={memory} />}
       </div>
 
       <div className={styles.details}>
@@ -65,8 +65,18 @@ function MemorySummary({ memory }) {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
+
+  if (action == "pick") {
+    return (
+      <button className={styles.memorySummary} onClick={onClick}>
+        {summaryContent}
+      </button>
+    );
+  } else {
+    return <div className={styles.memorySummary}>{summaryContent}</div>;
+  }
 }
 
 export default memo(MemorySummary);

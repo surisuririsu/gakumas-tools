@@ -107,3 +107,21 @@ export function getSearchScore(memory, pItemIds, skillCardIds) {
     });
   return score;
 }
+
+export function compareFilteredMemories(a, b) {
+  if (b.searchScore != a.searchScore) {
+    return b.searchScore - a.searchScore;
+  } else {
+    return b.contestPower - a.contestPower;
+  }
+}
+
+export function compareUnfilteredMemories(a, b) {
+  if (b.name?.indexOf("(FIXME)") > -1) {
+    return 1;
+  } else if (a.name?.indexOf("(FIXME)") > -1) {
+    return -1;
+  } else {
+    return b.contestPower - a.contestPower;
+  }
+}

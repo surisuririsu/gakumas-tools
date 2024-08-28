@@ -1,11 +1,14 @@
 "use client";
-import { memo, useContext, useEffect, useState } from "react";
-import { FaPen } from "react-icons/fa6";
+import { memo, useContext, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
-import Button from "@/components/Button";
-import MemoryEditorModal from "@/components/MemoryEditorModal";
 import DataContext from "@/contexts/DataContext";
-import ModalContext from "@/contexts/ModalContext";
+import SearchContext from "@/contexts/SearchContext";
+import { calculateContestPower } from "@/utils/contestPower";
+import {
+  compareFilteredMemories,
+  compareUnfilteredMemories,
+  getSearchScore,
+} from "@/utils/sort";
 import MemoriesHeader from "./MemoriesHeader";
 import MemoriesList from "./MemoriesList";
 import styles from "./Memories.module.scss";
@@ -13,7 +16,7 @@ import styles from "./Memories.module.scss";
 function Memories() {
   const { status } = useSession();
   const { memories, fetchMemories } = useContext(DataContext);
-  const { setModal } = useContext(ModalContext);
+  const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
 
@@ -23,33 +26,43 @@ function Memories() {
     }
   }, [status]);
 
+  const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
+  const filteredMemories = useMemo(
+    () =>
+      memories
+        .map((memory) => {
+          memory.searchScore = hasSearchQuery
+            ? getSearchScore(memory, pItemIds, skillCardIds)
+            : 1;
+          memory.contestPower = calculateContestPower(
+            memory.params,
+            memory.pItemIds,
+            memory.skillCardIds
+          );
+          return memory;
+        })
+        .filter((memory) => memory.searchScore)
+        .sort(
+          hasSearchQuery ? compareFilteredMemories : compareUnfilteredMemories
+        ),
+    [memories, pItemIds, skillCardIds, hasSearchQuery]
+  );
+
   return (
     <div className={styles.memories}>
-      {status == "authenticated" && (
-        <>
-          <MemoriesHeader
-            numMemories={memories.length}
-            action={action}
-            setAction={setAction}
-            selectedMemories={selectedMemories}
-            setSelectedMemories={setSelectedMemories}
-          />
-          <MemoriesList
-            memories={memories}
-            action={action}
-            selectedMemories={selectedMemories}
-            setSelectedMemories={setSelectedMemories}
-          />
-        </>
-      )}
-
-      {status == "unauthenticated" && (
-        <div className={styles.nudge}>
-          <Button onClick={() => setModal(<MemoryEditorModal />)}>
-            <FaPen /> Create a memory
-          </Button>
-        </div>
-      )}
+      <MemoriesHeader
+        numMemories={filteredMemories.length}
+        action={action}
+        setAction={setAction}
+        selectedMemories={selectedMemories}
+        setSelectedMemories={setSelectedMemories}
+      />
+      <MemoriesList
+        memories={filteredMemories}
+        action={action}
+        selectedMemories={selectedMemories}
+        setSelectedMemories={setSelectedMemories}
+      />
     </div>
   );
 }

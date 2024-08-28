@@ -1,10 +1,23 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import Image from "next/image";
 import styles from "./IconSelect.module.scss";
 
-function IconSelect({ options, selected, onChange, collapsable }) {
+const ALL_OPTION = {
+  id: null,
+  iconSrc: "/all.png",
+  alt: "All",
+};
+
+function IconSelect({ options, selected, onChange, collapsable, includeAll }) {
   const [expanded, setExpanded] = useState(!collapsable);
-  const selectedOption = options.find((opt) => opt.id == selected);
+  const selectedOption =
+    includeAll && !selected
+      ? ALL_OPTION
+      : options.find((opt) => opt.id == selected);
+  const displayedOptions = useMemo(
+    () => (includeAll ? [ALL_OPTION, ...options] : options),
+    [includeAll, options]
+  );
 
   return (
     <div className={styles.iconSelect}>
@@ -20,7 +33,7 @@ function IconSelect({ options, selected, onChange, collapsable }) {
         </button>
       )}
       {expanded &&
-        options.map(({ id, iconSrc, alt }) => (
+        displayedOptions.map(({ id, iconSrc, alt }) => (
           <button
             key={id}
             className={`${styles.option} ${
