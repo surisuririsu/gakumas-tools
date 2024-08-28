@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo } from "react";
+import { useSession } from "next-auth/react";
 import {
   FaCircleXmark,
   FaFileImport,
@@ -26,6 +27,7 @@ function MemoriesHeader({
   selectedMemories,
   setSelectedMemories,
 }) {
+  const { status } = useSession();
   const { uploadMemories, deleteMemories, memoriesLoading } =
     useContext(DataContext);
   const { setAll } = useContext(MemoryContext);
@@ -55,12 +57,14 @@ function MemoriesHeader({
               setModal(<MemoryEditorModal />);
             }}
           />
-          <IconButton
-            icon={FaFileImport}
-            onClick={() =>
-              setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
-            }
-          />
+          {status == "authenticated" && (
+            <IconButton
+              icon={FaFileImport}
+              onClick={() =>
+                setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
+              }
+            />
+          )}
           <IconButton
             icon={FaRegTrashCan}
             onClick={() => setAction("delete")}

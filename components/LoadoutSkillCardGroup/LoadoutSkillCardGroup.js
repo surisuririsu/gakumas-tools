@@ -1,13 +1,16 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useMemo } from "react";
 import {
   FaCirclePlus,
   FaCircleArrowUp,
   FaCircleArrowDown,
   FaCircleXmark,
+  FaFilm,
 } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
+import MemoryPickerModal from "@/components/MemoryPickerModal";
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import ModalContext from "@/contexts/ModalContext";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
 function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
@@ -18,14 +21,20 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
     deleteSkillCardIdGroup,
     swapSkillCardIdGroups,
   } = useContext(LoadoutContext);
+  const { setModal } = useContext(ModalContext);
 
-  const cost = skillCardIds
-    .filter((id) => id)
-    .map(SkillCards.getById)
-    .reduce(
-      (acc, cur) => acc + (cur.sourceType == "pIdol" ? 0 : cur.contestPower),
-      0
-    );
+  const cost = useMemo(
+    () =>
+      skillCardIds
+        .filter((id) => id)
+        .map(SkillCards.getById)
+        .reduce(
+          (acc, cur) =>
+            acc + (cur.sourceType == "pIdol" ? 0 : cur.contestPower),
+          0
+        ),
+    [skillCardIds]
+  );
 
   return (
     <div>
@@ -39,6 +48,13 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
       <div className={styles.sub}>
         <div>コスト: {cost}</div>
         <div className={styles.buttonGroup}>
+          <button
+            className={styles.pickButton}
+            onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
+          >
+            <FaFilm />
+          </button>
+
           <button
             className={styles.addButton}
             onClick={() => insertSkillCardIdGroup(groupIndex + 1)}

@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { FaArrowUpRightFromSquare, FaCheck, FaRegCopy } from "react-icons/fa6";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { IdolConfig, StageConfig } from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -16,6 +16,7 @@ import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
 import { bucketScores, mergeResults } from "@/utils/simulator";
+import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
@@ -29,15 +30,12 @@ export default function Simulator() {
     pItemIds,
     skillCardIdGroups,
     replacePItemId,
-    clear,
-    simulatorUrl,
     kafeUrl,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
   const workersRef = useRef();
 
   const idolConfig = new IdolConfig(
@@ -188,36 +186,7 @@ export default function Simulator() {
 
         <SimulatorSubTools plan={idolConfig.plan} idolId={idolConfig.idolId} />
 
-        <div className={styles.buttons}>
-          <Button
-            style="red-secondary"
-            onClick={() => {
-              if (confirm("Are you sure you want to clear the loadout?")) {
-                clear();
-              }
-            }}
-          >
-            クリア
-          </Button>
-
-          <Button
-            style="secondary"
-            onClick={() => {
-              navigator.clipboard.writeText(simulatorUrl);
-              setLinkCopied(true);
-              setTimeout(() => setLinkCopied(false), 3000);
-            }}
-          >
-            {linkCopied ? (
-              <FaCheck />
-            ) : (
-              <>
-                <FaRegCopy />
-                URL
-              </>
-            )}
-          </Button>
-        </div>
+        <SimulatorButtons />
 
         <label>シミュレーター</label>
         <select
