@@ -22,8 +22,7 @@ import {
 } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
-const BATCH_SIZE = 4;
-const MAX_WORKERS = 4;
+const MAX_WORKERS = 8;
 
 function MemoryImporterModal({ onSuccess }) {
   const [total, setTotal] = useState("?");
@@ -37,7 +36,9 @@ function MemoryImporterModal({ onSuccess }) {
   useEffect(() => {
     let numWorkers = 1;
     if (navigator.hardwareConcurrency) {
-      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
+      numWorkers = Math.ceil(
+        Math.min(navigator.hardwareConcurrency, MAX_WORKERS) / 2
+      );
     }
 
     engWorkersRef.current = [];
@@ -76,8 +77,9 @@ function MemoryImporterModal({ onSuccess }) {
     console.time("All memories parsed");
 
     let results = [];
-    for (let i = 0; i < files.length; i += BATCH_SIZE) {
-      const batch = files.slice(i, i + BATCH_SIZE);
+    const batchSize = engWorkersRef.current.length;
+    for (let i = 0; i < files.length; i += batchSize) {
+      const batch = files.slice(i, i + batchSize);
       const promises = batch.map((file, i) =>
         loadImageFromFile(file).then(async (img) => {
           const blackCanvas = getBlackCanvas(img);

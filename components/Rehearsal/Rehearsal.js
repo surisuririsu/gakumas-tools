@@ -10,7 +10,6 @@ import { extractScores } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
 
-const BATCH_SIZE = 8;
 const MAX_WORKERS = 8;
 
 function Rehearsal() {
@@ -46,8 +45,9 @@ function Rehearsal() {
     console.time("All results parsed");
 
     let results = [];
-    for (let i = 0; i < files.length; i += BATCH_SIZE) {
-      const batch = files.slice(i, i + BATCH_SIZE);
+    const batchSize = workersRef.current.length;
+    for (let i = 0; i < files.length; i += batchSize) {
+      const batch = files.slice(i, i + batchSize);
       const promises = batch.map((file, i) =>
         loadImageFromFile(file).then(async (img) => {
           const whiteCanvas = getWhiteCanvas(img, 190);
