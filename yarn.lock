@@ -20,33 +20,33 @@ __metadata:
   linkType: hard
 
 "@babel/parser@npm:^7.24.7":
-  version: 7.25.4
-  resolution: "@babel/parser@npm:7.25.4"
+  version: 7.25.6
+  resolution: "@babel/parser@npm:7.25.6"
   dependencies:
-    "@babel/types": "npm:^7.25.4"
+    "@babel/types": "npm:^7.25.6"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: 10c0/bdada5662f15d1df11a7266ec3bc9bb769bf3637ecf3d051eafcfc8f576dcf5a3ac1007c5e059db4a1e1387db9ae9caad239fc4f79e4c2200930ed610e779993
+  checksum: 10c0/f88a0e895dbb096fd37c4527ea97d12b5fc013720602580a941ac3a339698872f0c911e318c292b184c36b5fbe23b612f05aff9d24071bc847c7b1c21552c41d
   languageName: node
   linkType: hard
 
 "@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.20.13":
-  version: 7.25.4
-  resolution: "@babel/runtime@npm:7.25.4"
+  version: 7.25.6
+  resolution: "@babel/runtime@npm:7.25.6"
   dependencies:
     regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/33e937e685f0bfc2d40c219261e2e50d0df7381a6e7cbf56b770e0c5d77cb0c21bf4d97da566cf0164317ed7508e992082c7b6cce7aaa3b17da5794f93fbfb46
+  checksum: 10c0/d6143adf5aa1ce79ed374e33fdfd74fa975055a80bc6e479672ab1eadc4e4bfd7484444e17dd063a1d180e051f3ec62b357c7a2b817e7657687b47313158c3d2
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.25.4":
-  version: 7.25.4
-  resolution: "@babel/types@npm:7.25.4"
+"@babel/types@npm:^7.25.6":
+  version: 7.25.6
+  resolution: "@babel/types@npm:7.25.6"
   dependencies:
     "@babel/helper-string-parser": "npm:^7.24.8"
     "@babel/helper-validator-identifier": "npm:^7.24.7"
     to-fast-properties: "npm:^2.0.0"
-  checksum: 10c0/9aa25dfcd89cc4e4dde3188091c34398a005a49e2c2b069d0367b41e1122c91e80fd92998c52a90f2fb500f7e897b6090ec8be263d9cb53d0d75c756f44419f2
+  checksum: 10c0/89d45fbee24e27a05dca2d08300a26b905bd384a480448823f6723c72d3a30327c517476389b7280ce8cb9a2c48ef8f47da7f9f6d326faf6f53fd6b68237bdc4
   languageName: node
   linkType: hard
 
@@ -1898,12 +1898,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.1.1":
-  version: 0.1.1
-  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=e8aa462654e31f72f15373b0b9cb03da972fc9a9"
+"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.2.0":
+  version: 0.2.0
+  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=4dddaf684c4c4b2f29cfd3ebec6c68e38dc82796"
   dependencies:
     gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.1.2"
-  checksum: 10c0/6f705b39e7845cd8dfbc26e9f6da371b954427d31932d1952a67d33a7b11c3e0d7534cf37c979e36c2a7bde0ef984e06ee8ba0c31aa4ee5e9274917481af97d3
+  checksum: 10c0/d25530dbb021eb2e58734c3ccd381b870a58e2ec2de8d73b17851d3fefdd750f6ce5efd5e158c5afb4a462697adb61bfc266b42e8c3aa1bd8fa94c782eee599f
   languageName: node
   linkType: hard
 
@@ -1916,7 +1916,7 @@ __metadata:
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.6"
     gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.1.2"
-    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.1.1"
+    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.2.0"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     mongodb: "npm:^6.8.0"
     next: "npm:14.2.6"
@@ -1934,7 +1934,7 @@ __metadata:
 
 "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator":
   version: 0.1.0
-  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=f56065bd86bc2f7ab2e2216c6536e2b381cea2f7"
+  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f"
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.6.0"
     "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
@@ -1947,7 +1947,7 @@ __metadata:
     vue: "npm:^3.4.37"
     vuetify: "npm:^3.6.14"
     webfontloader: "npm:^1.6.28"
-  checksum: 10c0/2ef5ff6d69ca13c842e1752c7a4dcf8a01c83f4374d9b36d904a9bfa1b12541031badb6f0eae9022060ef36c004d557987cf24997adf120439c6e7cdf8bfae01
+  checksum: 10c0/89d00fef20dadade111165e56610aa931ac1f2f36ea2740924d64d8b2012d833f1b4bd53ec112bd8766c8e6ff8c8b3710f169a684b41647fff5340ff9060e983
   languageName: node
   linkType: hard
 
@@ -1976,11 +1976,11 @@ __metadata:
   linkType: hard
 
 "get-tsconfig@npm:^4.7.5":
-  version: 4.7.6
-  resolution: "get-tsconfig@npm:4.7.6"
+  version: 4.8.0
+  resolution: "get-tsconfig@npm:4.8.0"
   dependencies:
     resolve-pkg-maps: "npm:^1.0.0"
-  checksum: 10c0/2240e1b13e996dfbb947d177f422f83d09d1f93c9ce16959ebb3c2bdf8bdf4f04f98eba043859172da1685f9c7071091f0acfa964ebbe4780394d83b7dc3f58a
+  checksum: 10c0/943721c996d9a77351aa7c07956de77baece97f997bd30f3247f46907e4b743f7b9da02c7b3692a36f0884d3724271faeb88ed1c3aca3aba2afe3f27d6c4aeb3
   languageName: node
   linkType: hard
 
@@ -4379,24 +4379,21 @@ __metadata:
   linkType: hard
 
 "vuetify@npm:^3.6.14":
-  version: 3.7.0
-  resolution: "vuetify@npm:3.7.0"
+  version: 3.7.1
+  resolution: "vuetify@npm:3.7.1"
   peerDependencies:
     typescript: ">=4.7"
     vite-plugin-vuetify: ">=1.0.0"
     vue: ^3.3.0
-    vue-i18n: ^9.0.0
     webpack-plugin-vuetify: ">=2.0.0"
   peerDependenciesMeta:
     typescript:
       optional: true
     vite-plugin-vuetify:
       optional: true
-    vue-i18n:
-      optional: true
     webpack-plugin-vuetify:
       optional: true
-  checksum: 10c0/c591a36fc12d4631778f8a5a57b6cfdeb4753e4c025e3ac79beb0752027f451266a09d5c1bd9da2ae42829124768ee20b108046dfb84f50bc6271a82756f7203
+  checksum: 10c0/ec110618d052512ca169b2f6269fcf6101504dc4fade95c3b517b9d64f1ff89af62ea24243ed5d119c1430a7bb086220648106dcac68239424af6e4a5c33bf71
   languageName: node
   linkType: hard
 
