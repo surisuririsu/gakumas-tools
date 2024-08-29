@@ -31,12 +31,13 @@ export function extractParams(result) {
 
 // Get image data for items/cards
 export async function getEntityImageData(entityData, idolId) {
+  const entCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
+  const entCtx = entCanvas.getContext("2d");
+
   const data = await Promise.all(
     entityData.map(
       (entity) =>
         new Promise((resolve) => {
-          const entCanvas = new OffscreenCanvas(COMP_SIZE, COMP_SIZE);
-          const entCtx = entCanvas.getContext("2d");
           const entImg = new Image();
           const icon = idolId ? entity.getDynamicIcon(idolId) : entity.icon;
           entImg.src = getImageProps({
