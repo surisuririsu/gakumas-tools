@@ -22,6 +22,7 @@ import {
 } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
+const BATCH_SIZE = 4;
 const MAX_WORKERS = 4;
 
 function MemoryImporterModal({ onSuccess }) {
@@ -74,80 +75,85 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.time("All memories parsed");
 
-    const promises = files.map((file, i) =>
-      loadImageFromFile(file).then(async (img) => {
-        const blackCanvas = getBlackCanvas(img);
-        const whiteCanvas = getWhiteCanvas(img);
+    let results = [];
+    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+      const batch = files.slice(i, i + BATCH_SIZE);
+      const promises = batch.map((file, i) =>
+        loadImageFromFile(file).then(async (img) => {
+          const blackCanvas = getBlackCanvas(img);
+          const whiteCanvas = getWhiteCanvas(img, 240);
 
-        const engWorker = await engWorkersRef.current[
-          i % engWorkersRef.current.length
-        ];
-        const jpnWorker = await jpnWorkersRef.current[
-          i % jpnWorkersRef.current.length
-        ];
+          const engWorker = await engWorkersRef.current[
+            i % engWorkersRef.current.length
+          ];
+          const jpnWorker = await jpnWorkersRef.current[
+            i % jpnWorkersRef.current.length
+          ];
 
-        const engWhitePromise = engWorker.recognize(whiteCanvas);
-        const engBlackPromise = engWorker.recognize(blackCanvas);
-        const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
+          const engWhitePromise = engWorker.recognize(whiteCanvas);
+          const engBlackPromise = engWorker.recognize(blackCanvas);
+          const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
 
-        const powerCandidates = extractPower(await engWhitePromise);
-        const params = extractParams(await engBlackPromise);
+          const powerCandidates = extractPower(await engWhitePromise);
+          const params = extractParams(await engBlackPromise);
 
-        const items = extractItems(
-          await jpnBlackPromise,
-          img,
-          blackCanvas,
-          await itemImageData.current
-        );
-        const itemsPIdolId = items
-          .filter((c) => !!c)
-          .map(PItems.getById)
-          .find((item) => item.pIdolId)?.pIdolId;
+          const items = extractItems(
+            await jpnBlackPromise,
+            img,
+            blackCanvas,
+            await itemImageData.current
+          );
+          const itemsPIdolId = items
+            .filter((c) => !!c)
+            .map(PItems.getById)
+            .find((item) => item.pIdolId)?.pIdolId;
 
-        const cards = extractCards(
-          await jpnBlackPromise,
-          img,
-          blackCanvas,
-          await signatureSkillCardsImageData.current,
-          await nonSignatureSkillCardsImageData.current,
-          itemsPIdolId
-        );
-        const cardsPIdolId = cards
-          .filter((c) => !!c)
-          .map(SkillCards.getById)
-          .find((card) => card.pIdolId)?.pIdolId;
+          const cards = extractCards(
+            await jpnBlackPromise,
+            img,
+            blackCanvas,
+            await signatureSkillCardsImageData.current,
+            await nonSignatureSkillCardsImageData.current,
+            itemsPIdolId
+          );
+          const cardsPIdolId = cards
+            .filter((c) => !!c)
+            .map(SkillCards.getById)
+            .find((card) => card.pIdolId)?.pIdolId;
 
-        // Pad items and cards to fixed number
-        while (items.length < 3) {
-          items.push(0);
-        }
-        while (cards.length < 6) {
-          cards.push(0);
-        }
+          // Pad items and cards to fixed number
+          while (items.length < 3) {
+            items.push(0);
+          }
+          while (cards.length < 6) {
+            cards.push(0);
+          }
 
-        // Calculate contest power and flag those that are mismatched with the screenshot
-        const calculatedPower = calculateContestPower(params, items, cards);
-        const flag =
-          !powerCandidates.includes(calculatedPower) ||
-          itemsPIdolId != cardsPIdolId;
+          // Calculate contest power and flag those that are mismatched with the screenshot
+          const calculatedPower = calculateContestPower(params, items, cards);
+          const flag =
+            !powerCandidates.includes(calculatedPower) ||
+            itemsPIdolId != cardsPIdolId;
 
-        const memory = {
-          name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
-          pIdolId: cardsPIdolId,
-          params,
-          pItemIds: items,
-          skillCardIds: cards,
-        };
+          const memory = {
+            name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
+            pIdolId: cardsPIdolId,
+            params,
+            pItemIds: items,
+            skillCardIds: cards,
+          };
 
-        setProgress((p) => p + 1);
-        return memory;
-      })
-    );
+          setProgress((p) => p + 1);
+          return memory;
+        })
+      );
 
-    Promise.all(promises).then(async (res) => {
-      console.timeEnd("All memories parsed");
-      onSuccess(res);
-    });
+      const res = await Promise.all(promises);
+      results = results.concat(res);
+    }
+
+    console.timeEnd("All memories parsed");
+    onSuccess(results);
   }
 
   return (
