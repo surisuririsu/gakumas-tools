@@ -10,6 +10,7 @@ import { extractScores } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
 
+const BATCH_SIZE = 8;
 const MAX_WORKERS = 8;
 
 function Rehearsal() {
@@ -44,22 +45,28 @@ function Rehearsal() {
 
     console.time("All results parsed");
 
-    const promises = files.map((file, i) =>
-      loadImageFromFile(file).then(async (img) => {
-        const whiteCanvas = getWhiteCanvas(img, 190);
-        const worker = await workersRef.current[i % workersRef.current.length];
-        const engWhitePromise = worker.recognize(whiteCanvas);
-        const scores = extractScores(await engWhitePromise);
+    let results = [];
+    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+      const batch = files.slice(i, i + BATCH_SIZE);
+      const promises = batch.map((file, i) =>
+        loadImageFromFile(file).then(async (img) => {
+          const whiteCanvas = getWhiteCanvas(img, 190);
+          const worker = await workersRef.current[
+            i % workersRef.current.length
+          ];
+          const engWhitePromise = worker.recognize(whiteCanvas);
+          const scores = extractScores(await engWhitePromise);
 
-        setProgress((p) => p + 1);
-        return scores;
-      })
-    );
+          setProgress((p) => p + 1);
+          return scores;
+        })
+      );
+      const res = await Promise.all(promises);
+      results = results.concat(res);
+    }
 
-    Promise.all(promises).then(async (res) => {
-      console.timeEnd("All results parsed");
-      setData(res);
-    });
+    console.timeEnd("All results parsed");
+    setData(results);
   }
 
   function download() {
