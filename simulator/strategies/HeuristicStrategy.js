@@ -51,7 +51,20 @@ export default class HeuristicStrategy extends StageStrategy {
 
     let score = 0;
 
-    // More actions
+    // Effects
+    const effectsDiff = previewState.effects.length - state.effects.length;
+    for (let i = 0; i < effectsDiff; i++) {
+      const effect = previewState.effects[previewState.effects.length - i - 1];
+      const limit = Math.ceil(
+        Math.min(
+          effect.limit || previewState.turnsRemaining,
+          previewState.turnsRemaining
+        ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
+      );
+      score += 300 * limit;
+    }
+
+    // Additional actions
     if (
       previewState.turnsRemaining >= state.turnsRemaining &&
       previewState.cardUsesRemaining >= state.cardUsesRemaining &&
@@ -76,27 +89,10 @@ export default class HeuristicStrategy extends StageStrategy {
       Math.log(previewState.turnsRemaining + 1) *
       0.5;
 
-    // Predict score after effects
-    for (let effect of previewState.effects) {
-      const limit =
-        Math.ceil(
-          Math.min(
-            effect.limit || previewState.turnsRemaining,
-            previewState.turnsRemaining
-          ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
-        ) * 2;
-      for (let i = 0; i < limit; i++) {
-        previewState = this.engine._triggerEffects(
-          [{ ...effect, phase: null }],
-          previewState
-        );
-      }
-    }
-
     // Genki
     score +=
       previewState.genki *
-      Math.log(previewState.turnsRemaining + 1) *
+      Math.tanh(previewState.turnsRemaining) *
       0.33 *
       motivationMultiplier;
 
