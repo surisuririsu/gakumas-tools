@@ -1,9 +1,9 @@
 import { memo, useMemo } from "react";
 import styles from "./ParametersInput.module.scss";
 
-const PARAMETER_NAMES = ["Vocal", "Dance", "Visual"];
+const PARAMETER_NAMES = ["ボーカル", "ダンス", "ビジュアル"];
 const MIN = 0;
-const MAX = 1500;
+const MAX = 1800;
 
 function ParametersInput({
   parameters,
@@ -13,7 +13,7 @@ function ParametersInput({
   round = true,
 }) {
   const parameterNames = useMemo(
-    () => PARAMETER_NAMES.concat(withStamina ? ["Stamina"] : []),
+    () => PARAMETER_NAMES.concat(withStamina ? ["体力"] : []),
     [withStamina]
   );
 
