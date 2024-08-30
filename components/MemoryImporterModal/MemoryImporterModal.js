@@ -83,7 +83,7 @@ function MemoryImporterModal({ onSuccess }) {
       const promises = batch.map((file, i) =>
         loadImageFromFile(file).then(async (img) => {
           const blackCanvas = getBlackCanvas(img);
-          const whiteCanvas = getWhiteCanvas(img, 240);
+          const whiteCanvas = getWhiteCanvas(img);
 
           const engWorker = await engWorkersRef.current[
             i % engWorkersRef.current.length
