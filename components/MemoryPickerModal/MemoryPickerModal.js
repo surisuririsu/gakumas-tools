@@ -23,7 +23,7 @@ function MemoryPickerModal({ index }) {
     if (status == "authenticated" && !memories.length) {
       fetchMemories();
     }
-  }, [status, memories]);
+  }, [status]);
 
   const filteredMemories = useMemo(
     () =>
