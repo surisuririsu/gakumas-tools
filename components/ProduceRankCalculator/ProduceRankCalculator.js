@@ -4,92 +4,81 @@ import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import ParametersInput from "@/components/ParametersInput";
 import {
+  calculateActualRating,
+  calculateRatingExExamScore,
+  calculateTargetScores,
+  getRank,
+  MAX_PARAMS_BY_DIFFICULTY,
   PARAM_BONUS_BY_PLACE,
-  RATING_BY_PLACE,
-  REVERSE_RATING_REGIMES,
-  TARGET_RATING_BY_RANK,
 } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
+  const [difficulty, setDifficulty] = useState("pro");
   const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
   const [actualScore, setActualScore] = useState(null);
 
-  const placeRating = RATING_BY_PLACE[place];
+  const maxParams = MAX_PARAMS_BY_DIFFICULTY[difficulty];
   const placeParamBonus = PARAM_BONUS_BY_PLACE[place];
-  const paramRating = Math.floor(
-    params.reduce(
-      (acc, cur) => acc + Math.min(cur + placeParamBonus, 1500),
-      0
-    ) * 2.3
+  const ratingExExamScore = calculateRatingExExamScore(
+    place,
+    params,
+    maxParams
   );
+
   const targetScores = useMemo(
-    () =>
-      Object.keys(TARGET_RATING_BY_RANK)
-        .map((rank) => {
-          const targetRating =
-            TARGET_RATING_BY_RANK[rank] - placeRating - paramRating;
-          for (let { threshold, base, multiplier } of REVERSE_RATING_REGIMES) {
-            if (targetRating <= threshold) continue;
-            return {
-              rank,
-              score: Math.floor(base + (targetRating - threshold) / multiplier),
-            };
-          }
-          return { rank, score: 0 };
-        })
-        .filter((target) => !!target),
-    [placeRating, paramRating]
+    () => calculateTargetScores(ratingExExamScore),
+    [ratingExExamScore]
   );
-
-  const actualRating = useMemo(() => {
-    let calcScore = actualScore;
-    let actualRating = 0;
-    for (let i = 0; calcScore > 0; i++) {
-      const regimeAmount = i < 2 ? 5000 : 10000;
-      actualRating +=
-        (Math.min(calcScore, regimeAmount) *
-          Math.round((0.3 * 100) / Math.pow(2, i))) /
-        100;
-      calcScore -= regimeAmount;
-    }
-    return Math.round(actualRating) + placeRating + paramRating;
-  }, [actualScore, placeRating, paramRating]);
-
-  const actualRank = useMemo(() => {
-    for (let rank in TARGET_RATING_BY_RANK) {
-      if (actualRating >= TARGET_RATING_BY_RANK[rank]) return rank;
-    }
-    return null;
-  }, [actualRating]);
+  const actualRating = useMemo(
+    () => calculateActualRating(actualScore, ratingExExamScore),
+    [actualScore, ratingExExamScore]
+  );
+  const actualRank = useMemo(() => getRank(actualRating), [actualRating]);
 
   return (
     <div className={styles.produceRankCalculator}>
-      <label>Final exam placement</label>
+      <label>難易度</label>
       <ButtonGroup
         options={[
-          { value: 1, label: "1st" },
-          { value: 2, label: "2nd" },
-          { value: 3, label: "3rd" },
-          { value: 4, label: "Other" },
+          { value: "regular", label: "レギュラー" },
+          { value: "pro", label: "プロ" },
+          { value: "master", label: "マスター" },
+        ]}
+        selected={difficulty}
+        onChange={setDifficulty}
+      />
+      <div className={styles.bonus}>パラメータ上限: {maxParams}</div>
+
+      <label>最終試験順位</label>
+      <ButtonGroup
+        options={[
+          { value: 1, label: "1位" },
+          { value: 2, label: "2位" },
+          { value: 3, label: "3位" },
+          { value: 4, label: "4位以下" },
         ]}
         selected={place}
         onChange={setPlace}
       />
-      <div className={styles.bonus}>Bonus parameter: +{placeParamBonus}</div>
+      <div className={styles.bonus}>パラメータ: +{placeParamBonus}</div>
 
-      <label>Parameters</label>
-      <ParametersInput parameters={params} onChange={setParams} />
+      <label>パラメータ</label>
+      <ParametersInput
+        parameters={params}
+        max={maxParams}
+        onChange={setParams}
+      />
 
       {!!params.every((p) => !!p) && (
         <>
-          <label>Target exam scores</label>
+          <label>目標スコア</label>
           <table className={styles.result}>
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>Target exam score</th>
+                <th>評価</th>
+                <th>目標スコア</th>
               </tr>
             </thead>
             <tbody>
@@ -102,11 +91,11 @@ function ProduceRankCalculator() {
             </tbody>
           </table>
 
-          <label>Exam score</label>
+          <label>スコア</label>
           <Input
             type="number"
             value={actualScore}
-            placeholder="Exam score"
+            placeholder="スコア"
             onChange={setActualScore}
             min={0}
             max={1000000}
@@ -114,7 +103,7 @@ function ProduceRankCalculator() {
 
           {actualScore && (
             <>
-              <label>Produce rating</label>
+              <label>プロデュース評価</label>
               <span>
                 {actualRating} {actualRank ? `(${actualRank})` : null}
               </span>

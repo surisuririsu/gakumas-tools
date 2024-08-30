@@ -1,3 +1,9 @@
+export const MAX_PARAMS_BY_DIFFICULTY = {
+  regular: 1000,
+  pro: 1500,
+  master: 1800,
+};
+
 export const PARAM_BONUS_BY_PLACE = {
   1: 30,
   2: 20,
@@ -31,3 +37,50 @@ export const REVERSE_RATING_REGIMES = [
   { threshold: 1500, base: 5000, multiplier: 0.15 },
   { threshold: 0, base: 0, multiplier: 0.3 },
 ];
+
+export function calculateRatingExExamScore(place, params, maxParams) {
+  const placeParamBonus = PARAM_BONUS_BY_PLACE[place];
+  const placeRating = RATING_BY_PLACE[place];
+  const paramRating = Math.floor(
+    params.reduce(
+      (acc, cur) => acc + Math.min(cur + placeParamBonus, maxParams),
+      0
+    ) * 2.3
+  );
+  return placeRating + paramRating;
+}
+
+export function calculateTargetScores(ratingExExamScore) {
+  return Object.keys(TARGET_RATING_BY_RANK).map((rank) => {
+    const targetRating = TARGET_RATING_BY_RANK[rank] - ratingExExamScore;
+    for (let { threshold, base, multiplier } of REVERSE_RATING_REGIMES) {
+      if (targetRating <= threshold) continue;
+      return {
+        rank,
+        score: Math.floor(base + (targetRating - threshold) / multiplier),
+      };
+    }
+    return { rank, score: 0 };
+  });
+}
+
+export function calculateActualRating(actualScore, ratingExExamScore) {
+  let calcScore = actualScore;
+  let actualRating = 0;
+  for (let i = 0; calcScore > 0; i++) {
+    const regimeAmount = i < 2 ? 5000 : 10000;
+    actualRating +=
+      (Math.min(calcScore, regimeAmount) *
+        Math.round((0.3 * 100) / Math.pow(2, i))) /
+      100;
+    calcScore -= regimeAmount;
+  }
+  return Math.floor(actualRating) + ratingExExamScore;
+}
+
+export function getRank(rating) {
+  for (let rank in TARGET_RATING_BY_RANK) {
+    if (rating >= TARGET_RATING_BY_RANK[rank]) return rank;
+  }
+  return null;
+}
