@@ -117,6 +117,15 @@ function locateEntities(canvas, searchArea, threshold) {
     searchArea.height
   );
 
+  if (DEBUG) {
+    const nc = document.createElement("canvas");
+    nc.width = searchArea.width;
+    nc.height = searchArea.height;
+    const nctx = nc.getContext("2d");
+    nctx.putImageData(d, 0, 0);
+    document.body.append(nc);
+  }
+
   let consecutivePixels = 0;
   let coords = [];
   for (let i = 0; i < searchArea.height; i++) {
@@ -223,7 +232,7 @@ export function extractItems(result, img, blackCanvas, itemImageData) {
   };
   const searchAreaBottom = {
     x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelWidth,
+    y: labelBounds.y1 + labelHeight * 4,
     width: Math.floor(labelWidth * 4),
     height: labelHeight * 2,
   };
@@ -325,10 +334,10 @@ export function extractCards(
   const [x, y] = getGameRegion(img);
   let cardCoords = [];
   for (let coord of topCoords1) {
-    cardCoords.push([x + coord.x - cardWidth * 0.931, y + coord.y]);
+    cardCoords.push([x + coord.x - cardWidth * 0.935, y + coord.y]);
   }
   for (let coord of topCoords2) {
-    cardCoords.push([x + coord.x - cardWidth * 0.931, y + coord.y]);
+    cardCoords.push([x + coord.x - cardWidth * 0.935, y + coord.y + 1]);
   }
 
   // Identify signature card
