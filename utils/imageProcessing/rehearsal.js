@@ -1,3 +1,13 @@
+import { getWhiteCanvas, loadImageFromFile } from "./common";
+
+export async function getScoresFromFile(file, worker) {
+  const img = await loadImageFromFile(file);
+  const whiteCanvas = getWhiteCanvas(img, 190);
+  const engWhitePromise = worker.recognize(whiteCanvas);
+  const scores = extractScores(await engWhitePromise);
+  return scores;
+}
+
 export function extractScores(result) {
   let scores = [];
 

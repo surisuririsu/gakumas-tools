@@ -1,12 +1,18 @@
 "use client";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
-import { getWhiteCanvas, loadImageFromFile } from "@/utils/imageProcessing";
-import { extractScores } from "@/utils/imageProcessing/rehearsal";
+import { getScoresFromFile } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
 
@@ -33,7 +39,7 @@ function Rehearsal() {
       workersRef.current?.forEach(async (worker) => (await worker).terminate());
   }, []);
 
-  async function handleFiles(e) {
+  const handleFiles = useCallback(async (e) => {
     // Get files and reset progress
     const files = Array.from(e.target.files);
     setProgress(null);
@@ -48,26 +54,19 @@ function Rehearsal() {
     const batchSize = workersRef.current.length;
     for (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
-      const promises = batch.map((file, i) =>
-        loadImageFromFile(file).then(async (img) => {
-          const whiteCanvas = getWhiteCanvas(img, 190);
-          const worker = await workersRef.current[
-            i % workersRef.current.length
-          ];
-          const engWhitePromise = worker.recognize(whiteCanvas);
-          const scores = extractScores(await engWhitePromise);
-
-          setProgress((p) => p + 1);
-          return scores;
-        })
-      );
+      const promises = batch.map(async (file, j) => {
+        const worker = await workersRef.current[j % workersRef.current.length];
+        const scores = await getScoresFromFile(file, worker);
+        setProgress((p) => p + 1);
+        return scores;
+      });
       const res = await Promise.all(promises);
       results = results.concat(res);
     }
 
     console.timeEnd("All results parsed");
     setData(results);
-  }
+  }, []);
 
   function download() {
     let csvData = data
@@ -81,16 +80,20 @@ function Rehearsal() {
     a.click();
   }
 
-  const boxPlotData = data.reduce(
-    (acc, cur) => {
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          if (cur[i]?.[j]) acc[j].data[i].push(cur[i][j]);
-        }
-      }
-      return acc;
-    },
-    [{ data: [[], [], []] }, { data: [[], [], []] }, { data: [[], [], []] }]
+  const boxPlotData = useMemo(
+    () =>
+      data.reduce(
+        (acc, cur) => {
+          for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+              if (cur[i]?.[j]) acc[j].data[i].push(cur[i][j]);
+            }
+          }
+          return acc;
+        },
+        [{ data: [[], [], []] }, { data: [[], [], []] }, { data: [[], [], []] }]
+      ),
+    [data]
   );
 
   return (

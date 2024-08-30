@@ -1,24 +1,14 @@
 "use client";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FaCheck } from "react-icons/fa6";
-import { PItems, SkillCards } from "gakumas-data";
 import { createWorker } from "tesseract.js";
 import Modal from "@/components/Modal";
-import { calculateContestPower } from "@/utils/contestPower";
 import {
-  getBlackCanvas,
-  getWhiteCanvas,
-  loadImageFromFile,
-} from "@/utils/imageProcessing";
-import {
-  extractPower,
-  extractParams,
-  extractCards,
-  extractItems,
   getSignatureSkillCardsImageData,
   getNonSignatureSkillCardsImageData,
   getPItemsImageData,
+  getMemoryFromFile,
 } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
@@ -66,7 +56,7 @@ function MemoryImporterModal({ onSuccess }) {
     };
   }, []);
 
-  async function handleFiles(e) {
+  const handleFiles = useCallback(async (e) => {
     // Get files and reset progress
     const files = Array.from(e.target.files);
     setProgress(null);
@@ -76,79 +66,32 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.time("All memories parsed");
 
+    const entityImageData = {
+      signatureSkillCards: await signatureSkillCardsImageData.current,
+      nonSignatureSkillCards: await nonSignatureSkillCardsImageData.current,
+      pItems: await itemImageData.current,
+    };
+
     let results = [];
     const batchSize = engWorkersRef.current.length;
     for (let i = 0; i < files.length; i += batchSize) {
       const batch = files.slice(i, i + batchSize);
-      const promises = batch.map((file, i) =>
-        loadImageFromFile(file).then(async (img) => {
-          const blackCanvas = getBlackCanvas(img);
-          const whiteCanvas = getWhiteCanvas(img);
-
-          const engWorker = await engWorkersRef.current[
-            i % engWorkersRef.current.length
-          ];
-          const jpnWorker = await jpnWorkersRef.current[
-            i % jpnWorkersRef.current.length
-          ];
-
-          const engWhitePromise = engWorker.recognize(whiteCanvas);
-          const engBlackPromise = engWorker.recognize(blackCanvas);
-          const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
-
-          const powerCandidates = extractPower(await engWhitePromise);
-          const params = extractParams(await engBlackPromise);
-
-          const items = extractItems(
-            await jpnBlackPromise,
-            img,
-            blackCanvas,
-            await itemImageData.current
-          );
-          const itemsPIdolId = items
-            .filter((c) => !!c)
-            .map(PItems.getById)
-            .find((item) => item.pIdolId)?.pIdolId;
-
-          const cards = extractCards(
-            await jpnBlackPromise,
-            img,
-            blackCanvas,
-            await signatureSkillCardsImageData.current,
-            await nonSignatureSkillCardsImageData.current,
-            itemsPIdolId
-          );
-          const cardsPIdolId = cards
-            .filter((c) => !!c)
-            .map(SkillCards.getById)
-            .find((card) => card.pIdolId)?.pIdolId;
-
-          // Pad items and cards to fixed number
-          while (items.length < 3) {
-            items.push(0);
-          }
-          while (cards.length < 6) {
-            cards.push(0);
-          }
-
-          // Calculate contest power and flag those that are mismatched with the screenshot
-          const calculatedPower = calculateContestPower(params, items, cards);
-          const flag =
-            !powerCandidates.includes(calculatedPower) ||
-            itemsPIdolId != cardsPIdolId;
-
-          const memory = {
-            name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
-            pIdolId: cardsPIdolId,
-            params,
-            pItemIds: items,
-            skillCardIds: cards,
-          };
-
-          setProgress((p) => p + 1);
-          return memory;
-        })
-      );
+      const promises = batch.map(async (file, j) => {
+        const engWorker = await engWorkersRef.current[
+          j % engWorkersRef.current.length
+        ];
+        const jpnWorker = await jpnWorkersRef.current[
+          j % jpnWorkersRef.current.length
+        ];
+        const memory = await getMemoryFromFile(
+          file,
+          engWorker,
+          jpnWorker,
+          entityImageData
+        );
+        setProgress((p) => p + 1);
+        return memory;
+      });
 
       const res = await Promise.all(promises);
       results = results.concat(res);
@@ -156,7 +99,7 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.timeEnd("All memories parsed");
     onSuccess(results);
-  }
+  }, []);
 
   return (
     <Modal>

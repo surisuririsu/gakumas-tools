@@ -1,6 +1,77 @@
 import { getImageProps } from "next/image";
 import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
-import { getGameRegion, DEBUG } from "./";
+import {
+  DEBUG,
+  getGameRegion,
+  getBlackCanvas,
+  getWhiteCanvas,
+  loadImageFromFile,
+} from "./common";
+import { calculateContestPower } from "../contestPower";
+
+export async function getMemoryFromFile(
+  file,
+  engWorker,
+  jpnWorker,
+  entityImageData
+) {
+  const img = await loadImageFromFile(file);
+
+  const blackCanvas = getBlackCanvas(img);
+  const whiteCanvas = getWhiteCanvas(img);
+
+  const engWhitePromise = engWorker.recognize(whiteCanvas);
+  const engBlackPromise = engWorker.recognize(blackCanvas);
+  const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
+
+  const powerCandidates = extractPower(await engWhitePromise);
+  const params = extractParams(await engBlackPromise);
+
+  const items = extractItems(
+    await jpnBlackPromise,
+    img,
+    blackCanvas,
+    entityImageData.pItems
+  );
+  const itemsPIdolId = items
+    .filter((c) => !!c)
+    .map(PItems.getById)
+    .find((item) => item.pIdolId)?.pIdolId;
+
+  const cards = extractCards(
+    await jpnBlackPromise,
+    img,
+    blackCanvas,
+    entityImageData.signatureSkillCards,
+    entityImageData.nonSignatureSkillCards,
+    itemsPIdolId
+  );
+  const cardsPIdolId = cards
+    .filter((c) => !!c)
+    .map(SkillCards.getById)
+    .find((card) => card.pIdolId)?.pIdolId;
+
+  // Pad items and cards to fixed number
+  while (items.length < 3) {
+    items.push(0);
+  }
+  while (cards.length < 6) {
+    cards.push(0);
+  }
+
+  // Calculate contest power and flag those that are mismatched with the screenshot
+  const calculatedPower = calculateContestPower(params, items, cards);
+  const flag =
+    !powerCandidates.includes(calculatedPower) || itemsPIdolId != cardsPIdolId;
+
+  return {
+    name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
+    pIdolId: cardsPIdolId,
+    params,
+    pItemIds: items,
+    skillCardIds: cards,
+  };
+}
 
 // Size and bounds of images to compare
 // Downsize images to sample surrounding colors
