@@ -107,15 +107,14 @@ function MemoryCalculator() {
 
   return (
     <div className={styles.memoryCalculator}>
-      <b>
-        Probabilities shown are estimates. The real skill card selection
-        algorithm is not known.
-      </b>
+      <p>
+        ※表示される確率はあくまで全メモリーが同確立で生成されるとして求められた推測値であり、実際の確率とは異なる可能性があります。
+      </p>
 
-      <label>Target skill cards</label>
+      <label>欲しいパターン</label>
       <TargetSkillCards idolId={idolId} />
 
-      <label>Acquired skill cards</label>
+      <label>取得スキルカード（強化前後含む）</label>
       <div className={styles.skillCards}>
         {acquiredSkillCardIds.map((skillCardId, index) => (
           <EntityIcon
@@ -135,7 +134,7 @@ function MemoryCalculator() {
         ))}
       </div>
 
-      <label>Produce rank</label>
+      <label>プロデュース評価</label>
       <div className={styles.rankSelect}>
         <IconSelect
           options={RANKS.map((r) => ({
@@ -148,7 +147,7 @@ function MemoryCalculator() {
         />
       </div>
 
-      <label>Cost range</label>
+      <label>コスト範囲</label>
       <div>
         {costRange.min} ~ {costRange.max}
       </div>
@@ -157,7 +156,7 @@ function MemoryCalculator() {
         className={styles.resultsToggle}
         onClick={() => setShowOnTargetResults(!showOnTargetResults)}
       >
-        <label>Success ({(onTargetProbability * 100).toFixed(2)}%)</label>
+        <label>成功 ({(onTargetProbability * 100).toFixed(2)}%)</label>
         {showOnTargetResults ? <FaChevronUp /> : <FaChevronDown />}
       </button>
       {showOnTargetResults && (
@@ -171,7 +170,7 @@ function MemoryCalculator() {
         className={styles.resultsToggle}
         onClick={() => setShowOffTargetResults(!showOffTargetResults)}
       >
-        <label>Failure ({(offTargetProbability * 100).toFixed(2)}%)</label>
+        <label>失敗 ({(offTargetProbability * 100).toFixed(2)}%)</label>
         {showOffTargetResults ? <FaChevronUp /> : <FaChevronDown />}
       </button>
       {showOffTargetResults && (

@@ -96,7 +96,7 @@ function MemoriesHeader({
 
       {action == "delete" && (
         <div className={styles.delete}>
-          {selectedMemoryIds.length} memories selected{" "}
+          {selectedMemoryIds.length}個のメモリーを選択{" "}
           <Button
             style="red"
             onClick={() => {
@@ -105,7 +105,7 @@ function MemoriesHeader({
             }}
             disabled={!selectedMemoryIds.length}
           >
-            Delete
+            削除する
           </Button>
         </div>
       )}

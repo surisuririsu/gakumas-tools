@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import c from "@/utils/classNames";
 import styles from "./AreaPlot.module.scss";
 
 ChartJS.register(
@@ -111,7 +112,7 @@ function AreaPlot({ data }) {
         {Object.keys(FIELDS).map((field) => (
           <button
             key={field}
-            className={activeFields[field] ? styles.selected : ""}
+            className={c(activeFields[field] && styles.selected)}
             onClick={() =>
               setActiveFields({
                 ...activeFields,

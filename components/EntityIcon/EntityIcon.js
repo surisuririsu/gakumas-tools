@@ -1,5 +1,6 @@
 import { memo } from "react";
 import Image from "next/image";
+import c from "@/utils/classNames";
 import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";
 
@@ -8,7 +9,7 @@ function EntityIcon({ type, id, idolId, size = "large", onClick }) {
 
   return (
     <button
-      className={`${styles.entityIcon} ${styles[size] || ""}`}
+      className={c(styles.entityIcon, styles[size])}
       onClick={() => onClick(entity)}
     >
       {entity?.icon && (

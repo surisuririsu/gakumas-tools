@@ -5,6 +5,7 @@ import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
@@ -97,9 +98,10 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
           {toggleableFilters.map((f) => (
             <button
               key={f.label}
-              className={`${styles.toggle} ${
-                enabledCustomFilters[f.label] ? styles.enabled : ""
-              }`}
+              className={c(
+                styles.toggle,
+                enabledCustomFilters[f.label] && styles.enabled
+              )}
               onClick={() =>
                 setEnabledCustomFilters({
                   ...enabledCustomFilters,

@@ -57,3 +57,11 @@ button {
   cursor: pointer;
   user-select: none;
 }
+
+input[type="text"] {
+  border-radius: 0;
+}
+
+textarea {
+  font-family: inherit;
+}

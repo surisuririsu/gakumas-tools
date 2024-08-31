@@ -1,6 +1,5 @@
 import { memo, useContext } from "react";
 import { FaXmark } from "react-icons/fa6";
-import IconButton from "@/components/IconButton";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Modal.module.scss";
 

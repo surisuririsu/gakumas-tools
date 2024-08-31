@@ -1,5 +1,6 @@
 import { memo, useMemo, useState } from "react";
 import Image from "next/image";
+import c from "@/utils/classNames";
 import styles from "./IconSelect.module.scss";
 
 const ALL_OPTION = {
@@ -36,9 +37,7 @@ function IconSelect({ options, selected, onChange, collapsable, includeAll }) {
         displayedOptions.map(({ id, iconSrc, alt }) => (
           <button
             key={id}
-            className={`${styles.option} ${
-              selected === id ? styles.selected : ""
-            }`}
+            className={c(styles.option, selected === id && styles.selected)}
             onClick={() => {
               onChange(id);
               if (collapsable) setExpanded(false);

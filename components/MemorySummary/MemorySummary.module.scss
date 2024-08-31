@@ -76,16 +76,10 @@
   margin: 8px 0;
   border-radius: 4px;
   overflow: hidden;
-}
 
-.vocal {
-  background-color: $vocal;
-}
-
-.dance {
-  background-color: $dance;
-}
-
-.visual {
-  background-color: $visual;
+  & > div {
+    @include param-colors using ($param-color) {
+      background-color: $param-color;
+    }
+  }
 }
