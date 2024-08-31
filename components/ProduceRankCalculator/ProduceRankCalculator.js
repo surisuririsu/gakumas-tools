@@ -10,6 +10,7 @@ import {
   getRank,
   MAX_PARAMS_BY_DIFFICULTY,
   PARAM_BONUS_BY_PLACE,
+  TARGET_RATING_BY_RANK,
 } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
 
@@ -84,7 +85,9 @@ function ProduceRankCalculator() {
             <tbody>
               {targetScores.map(({ rank, score }) => (
                 <tr key={rank}>
-                  <td>{rank}</td>
+                  <td>
+                    {rank} ({TARGET_RATING_BY_RANK[rank]})
+                  </td>
                   <td>{score}</td>
                 </tr>
               ))}
