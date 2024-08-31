@@ -1,5 +1,5 @@
 import { memo, useContext, useState } from "react";
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import { FaChevronUp, FaChevronDown, FaRegPenToSquare } from "react-icons/fa6";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import StageCustomizerModal from "@/components/StageCustomizerModal";
@@ -62,7 +62,7 @@ function StageSelect() {
           )
         }
       >
-        カスタマイズ
+        <FaRegPenToSquare />
       </Button>
     </div>
   );

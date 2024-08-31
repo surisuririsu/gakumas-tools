@@ -10,7 +10,7 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   padding: 16px;
   overflow: auto;
 }
@@ -43,11 +43,10 @@
 .expanderButtons {
   display: flex;
 
-  button,
-  a {
+  button {
     margin: 0 auto;
     color: $blue;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
   }
 }
