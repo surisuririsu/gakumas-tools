@@ -8,12 +8,7 @@ function AddCard({ id, idolId, text }) {
   return (
     <div className={styles.drawCard}>
       {text}
-      <Image
-        src={skillCard.getDynamicIcon(idolId)}
-        width={24}
-        height={24}
-        alt=""
-      />
+      <Image src={skillCard.getIcon(idolId)} width={24} height={24} alt="" />
       {skillCard.name}
     </div>
   );

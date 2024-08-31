@@ -37,7 +37,7 @@ function MemorySummary({ memory, action, onClick }) {
           {pItems.map((pItem, i) => (
             <Image
               key={i}
-              src={pItem.icon}
+              src={pItem.getIcon()}
               width={35}
               alt={pItem.name}
               draggable={false}
@@ -55,7 +55,7 @@ function MemorySummary({ memory, action, onClick }) {
           {skillCards.map((skillCard, i) => (
             <div key={i} className={styles.imageWrapper}>
               <Image
-                src={skillCard.getDynamicIcon(idolId)}
+                src={skillCard.getIcon(idolId)}
                 fill
                 sizes="50px"
                 alt={skillCard.name}

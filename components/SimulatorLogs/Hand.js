@@ -20,7 +20,7 @@ function Hand({ handCardIds, scores, selectedCardId, idolId }) {
             )}
           >
             <Image
-              src={skillCard.getDynamicIcon(idolId)}
+              src={skillCard.getIcon(idolId)}
               width={60}
               height={60}
               alt=""

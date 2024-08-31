@@ -1,14 +1,15 @@
+import { memo } from "react";
 import Image from "next/image";
 import { PIdols } from "gakumas-data";
 import styles from "./PIdol.module.scss";
-import { memo } from "react";
 
 function PIdol({ pIdolId }) {
   const pIdol = PIdols.getById(pIdolId);
+  const icon = pIdol?.getIcon();
 
   return (
     <div className={styles.pIdol}>
-      {pIdol?.icon && <Image src={pIdol.icon} sizes="81px" fill alt="" />}
+      {icon && <Image src={icon} sizes="81px" fill alt="" />}
       {pIdol && (
         <div className={styles.overlay}>
           <div className={styles.attributes}>

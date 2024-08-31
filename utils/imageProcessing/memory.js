@@ -110,7 +110,7 @@ export async function getEntityImageData(entityData, idolId) {
       (entity) =>
         new Promise((resolve) => {
           const entImg = new Image();
-          const icon = idolId ? entity.getDynamicIcon(idolId) : entity.icon;
+          const icon = entity.getIcon(idolId);
           entImg.src = getImageProps({
             ...icon,
             width: COMP_SIZE,

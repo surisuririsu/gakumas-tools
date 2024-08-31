@@ -58,7 +58,7 @@ function MemoriesList({
             <List
               height={height}
               itemCount={memories.length}
-              itemSize={115}
+              itemSize={110}
               width={width}
             >
               {memo(Row)}
