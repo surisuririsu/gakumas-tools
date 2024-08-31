@@ -12,9 +12,9 @@ function EntityIcon({ type, id, idolId, size = "large", onClick }) {
       className={c(styles.entityIcon, styles[size])}
       onClick={() => onClick(entity)}
     >
-      {entity?.icon && (
+      {entity && (
         <Image
-          src={entity.getDynamicIcon?.(idolId) || entity.icon}
+          src={entity.getIcon(idolId)}
           alt={entity.name}
           fill
           sizes="64px"

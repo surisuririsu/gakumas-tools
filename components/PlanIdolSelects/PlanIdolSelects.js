@@ -10,9 +10,9 @@ const plans = PLANS.map((alias) => ({
   alt: alias,
 }));
 
-const idols = Idols.getAll().map(({ id, name, icon }) => ({
+const idols = Idols.getAll().map(({ id, name, getIcon }) => ({
   id,
-  iconSrc: icon,
+  iconSrc: getIcon(),
   alt: name,
 }));
 

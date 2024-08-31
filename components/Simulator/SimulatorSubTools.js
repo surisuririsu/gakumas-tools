@@ -3,7 +3,7 @@ import CostRanges from "@/components/CostRanges";
 import DefaultCards from "@/components/DefaultCards";
 import styles from "./Simulator.module.scss";
 
-function SimulatorSubTools({ plan, idolId }) {
+function SimulatorSubTools({ plan }) {
   const [activeSubTool, setActiveSubTool] = useState(null);
 
   return (
@@ -31,10 +31,7 @@ function SimulatorSubTools({ plan, idolId }) {
       </div>
 
       {activeSubTool == "costRanges" && <CostRanges />}
-
-      {activeSubTool == "defaultCards" && (
-        <DefaultCards plan={plan} idolId={idolId} />
-      )}
+      {activeSubTool == "defaultCards" && <DefaultCards plan={plan} />}
     </>
   );
 }

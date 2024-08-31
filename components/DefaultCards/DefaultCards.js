@@ -8,7 +8,7 @@ const DEFAULT_CARDS_BY_PLAN = {
   logic: [9, 11, 19, 19, 21, 21, 13, 13],
 };
 
-function DefaultCards({ plan, idolId }) {
+function DefaultCards({ plan }) {
   const defaultCards = DEFAULT_CARDS_BY_PLAN[plan].map(SkillCards.getById);
 
   return (
@@ -16,7 +16,7 @@ function DefaultCards({ plan, idolId }) {
       {defaultCards.map((skillCard, index) => (
         <Image
           key={`${index}_${skillCard.id}`}
-          src={skillCard.getDynamicIcon?.(idolId)}
+          src={skillCard.getIcon()}
           alt={skillCard.name}
           width={60}
           height={60}

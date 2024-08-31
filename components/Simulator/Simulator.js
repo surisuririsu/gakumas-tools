@@ -184,7 +184,7 @@ export default function Simulator() {
           />
         ))}
 
-        <SimulatorSubTools plan={idolConfig.plan} idolId={idolConfig.idolId} />
+        <SimulatorSubTools plan={idolConfig.plan} />
 
         <SimulatorButtons />
 

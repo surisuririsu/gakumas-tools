@@ -20,7 +20,7 @@ function Group({ entity, childLogs, idolId }) {
         {entity.type == "skillCard" && (
           <>
             <Image
-              src={resolvedEntity.getDynamicIcon(idolId)}
+              src={resolvedEntity.getIcon(idolId)}
               width={24}
               height={24}
               alt=""
@@ -32,7 +32,7 @@ function Group({ entity, childLogs, idolId }) {
           <>
             <div className={styles.effect}>
               <Image
-                src={resolvedEntity.getDynamicIcon(idolId)}
+                src={resolvedEntity.getIcon(idolId)}
                 width={24}
                 height={24}
                 alt=""
@@ -43,7 +43,12 @@ function Group({ entity, childLogs, idolId }) {
         )}
         {entity.type == "pItem" && (
           <>
-            <Image src={resolvedEntity.icon} width={24} height={24} alt="" />
+            <Image
+              src={resolvedEntity.getIcon()}
+              width={24}
+              height={24}
+              alt=""
+            />
             Pアイテム「{resolvedEntity.name}」
           </>
         )}
