@@ -10,21 +10,12 @@
   input {
     @extend .input;
 
-    $inputs: (
-      1: $vocal,
-      2: $dance,
-      3: $visual,
-      4: $stamina,
-    );
-
-    @each $i, $param-color in $inputs {
-      &:nth-child(#{$i}) {
-        border-color: $param-color;
-        background-color: scale-color($param-color, $lightness: 80%);
-        color: $param-color;
-        &::placeholder {
-          color: scale-color($param-color, $alpha: -50%);
-        }
+    @include param-colors using ($param-color) {
+      border-color: $param-color;
+      background-color: scale-color($param-color, $lightness: 80%);
+      color: $param-color;
+      &::placeholder {
+        color: scale-color($param-color, $alpha: -50%);
       }
     }
   }

@@ -11,21 +11,20 @@ export const TOOLS = {
   home: {
     title: "トップページ",
     icon: <FaHouse />,
-    description: "Home page with overview of available tools",
+    description: "機能一覧",
     path: "/",
   },
   produceRankCalculator: {
     title: "プロデュース評価計算機",
     icon: <FaCalculator />,
-    description:
-      "Calculate final exam score needed to achieve each produce rank based on pre-exam parameters",
+    description: "プロデュース評価に必要な最終試験スコアを計算する",
     path: "/produce-rank-calculator",
     pinnable: true,
   },
   dex: {
     title: "P図鑑",
     icon: <FaBook />,
-    description: "Filter and view p-item and skill card information",
+    description: "Pアイテムとスキルカード情報を表示する",
     path: "/dex",
     pinnable: true,
   },
@@ -38,16 +37,14 @@ export const TOOLS = {
       </>
     ),
     fill: true,
-    description:
-      "Calculate probability of getting desired skill card combinations in memories",
+    description: "欲しいメモリーの生成確率を計算する",
     path: "/memory-calculator",
     pinnable: true,
   },
   memories: {
     title: "メモリー",
     icon: <FaFilm />,
-    description:
-      "Create or import memories, and search by p-items and skill cards",
+    description: "メモリーを制作、保存、Pアイテムとスキルカードで検索する",
     path: "/memories",
     pinnable: true,
   },
@@ -55,15 +52,15 @@ export const TOOLS = {
     title: "シミュレーター",
     icon: <FaTrophy />,
     fill: true,
-    description: "Create and simulate contest loadouts",
+    description: "コンテスト編成を作成、シミュレーターでスコアを予測する",
     path: "/simulator",
     pinnable: true,
   },
   rehearsal: {
-    title: "Rehearsal Parser",
+    title: "リハーサル読み取り",
     icon: <FaChartSimple />,
     fill: true,
-    description: "Parse scores from rehearsal screenshots",
+    description: "リハーサル画面からスコアを読み取る",
     path: "/rehearsal",
     pinnable: true,
   },

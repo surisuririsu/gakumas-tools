@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import styles from "./ParametersInput.module.scss";
 
-const PARAMETER_NAMES = ["ボーカル", "ダンス", "ビジュアル"];
+const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
 const MIN = 0;
 const MAX = 1800;
 

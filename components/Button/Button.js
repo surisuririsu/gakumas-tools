@@ -1,5 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
+import c from "@/utils/classNames";
 import styles from "./Button.module.scss";
 
 function Button({
@@ -12,9 +13,11 @@ function Button({
   ariaLabel,
   fill,
 }) {
-  const className = `${styles.button} ${
-    styles[disabled ? "disabled" : style]
-  } ${fill ? styles.fill : ""}`;
+  const className = c(
+    styles.button,
+    styles[disabled ? "disabled" : style],
+    fill && styles.fill
+  );
 
   return href ? (
     <Link

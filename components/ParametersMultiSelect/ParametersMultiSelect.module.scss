@@ -7,22 +7,14 @@
   border-radius: 4px;
 
   button {
-    $params: (
-      1: $vocal,
-      2: $dance,
-      3: $visual,
-    );
+    @include param-colors using ($param-color) {
+      border-color: $param-color;
+      background-color: scale-color($param-color, $lightness: 80%);
+      color: $param-color;
 
-    @each $i, $param-color in $params {
-      &:nth-child(#{$i}) {
-        border-color: $param-color;
-        background-color: scale-color($param-color, $lightness: 80%);
-        color: $param-color;
-
-        &.selected {
-          background-color: $param-color;
-          color: $white;
-        }
+      &.selected {
+        background-color: $param-color;
+        color: $white;
       }
     }
   }

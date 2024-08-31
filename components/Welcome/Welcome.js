@@ -7,14 +7,13 @@ function Welcome() {
   return (
     <div className={styles.welcome}>
       <div className={styles.content}>
-        <h2>Welcome to Gakumas Tools!</h2>
+        <h2>Gakumas Toolsへようこそ！</h2>
         <p>
-          Calculate the exam score required to achieve produce ranks, view
-          P-item and skill card information, import and search memories by
-          P-items and skill cards, and more.
+          プロデュース評価の必要最終試験スコア計算、 メモリーの生成確率計算、
+          コンテスト編成のシミュレーションなど便利機能が揃っています。
         </p>
 
-        <h3>Features</h3>
+        <h3>機能一覧</h3>
         <ul>
           {Object.values(TOOLS).map(({ title, icon, description, path }) => {
             return (

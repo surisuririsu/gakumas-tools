@@ -4,6 +4,7 @@ import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
@@ -47,9 +48,10 @@ function TargetSkillCards({ idolId }) {
           </button>
 
           <div
-            className={`${styles.orGroup} ${
-              alternateSkillCardIds[index]?.length ? styles.hasMultiple : ""
-            }`}
+            className={c(
+              styles.orGroup,
+              alternateSkillCardIds[index]?.length && styles.hasMultiple
+            )}
           >
             <EntityIcon
               type={EntityTypes.SKILL_CARD}

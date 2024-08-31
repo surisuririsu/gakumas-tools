@@ -6,6 +6,13 @@ $dance: #1c85ed;
 $visual: #f7b12e;
 $stamina: #00d35b;
 
+$parameters: (
+  1: $vocal,
+  2: $dance,
+  3: $visual,
+  4: $stamina,
+);
+
 $white: #fefefe;
 $white-dark: #fcfcfc;
 
@@ -26,3 +33,11 @@ $blue-extra-light: lighten($blue, 25%);
 $blue-dark: darken($blue, 15%);
 
 $green: #4c4;
+
+@mixin param-colors {
+  @each $i, $param-color in $parameters {
+    &:nth-child(#{$i}) {
+      @content ($param-color);
+    }
+  }
+}

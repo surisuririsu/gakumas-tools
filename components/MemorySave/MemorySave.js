@@ -20,23 +20,17 @@ function MemorySave() {
       {status == "authenticated" && (
         <>
           <Button onClick={() => save(false)} disabled={saveState == "saving"}>
-            Save
+            保存
           </Button>
           {id && (
             <Button onClick={() => save(true)} disabled={saveState == "saving"}>
-              Save as new
+              新規保存
             </Button>
           )}
         </>
       )}
 
-      {saveState == "saving" && "Saving..."}
-
-      {saveState == "saved" && (
-        <>
-          Saved <FaCheck />
-        </>
-      )}
+      {saveState == "saved" && <FaCheck />}
     </div>
   );
 }

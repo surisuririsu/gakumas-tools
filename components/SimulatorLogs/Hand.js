@@ -1,6 +1,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import { SkillCards } from "gakumas-data";
+import c from "@/utils/classNames";
 import styles from "./SimulatorLogs.module.scss";
 
 function Hand({ handCardIds, scores, selectedCardId, idolId }) {
@@ -13,9 +14,10 @@ function Hand({ handCardIds, scores, selectedCardId, idolId }) {
         {handCardIds.map(SkillCards.getById).map((skillCard, i) => (
           <div
             key={i}
-            className={`${styles.handCard} ${
-              i == selectedIndex ? styles.selected : ""
-            }`}
+            className={c(
+              styles.handCard,
+              i === selectedIndex && styles.selected
+            )}
           >
             <Image
               src={skillCard.getDynamicIcon(idolId)}

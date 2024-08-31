@@ -22,12 +22,13 @@
 
 .dropdown {
   position: absolute;
-  right: 4px;
-  top: 52px;
+  right: 0;
+  top: 48px;
   max-width: 240px;
   box-shadow: 0 0 8px transparentize($black, 0.8);
   border: 2px solid $gk-orange;
-  border-radius: 4px;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
   background-color: $white;
   color: $black;
 
