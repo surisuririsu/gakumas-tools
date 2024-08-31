@@ -10,8 +10,11 @@ function Button({
   style = "primary",
   disabled,
   ariaLabel,
+  fill,
 }) {
-  const className = `${styles.button} ${styles[disabled ? "disabled" : style]}`;
+  const className = `${styles.button} ${
+    styles[disabled ? "disabled" : style]
+  } ${fill ? styles.fill : ""}`;
 
   return href ? (
     <Link

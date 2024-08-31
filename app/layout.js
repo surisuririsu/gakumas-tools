@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
-import Footer from "@/components/Footer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
@@ -67,7 +66,6 @@ export default async function RootLayout({ children }) {
             </DataContextProvider>
           </WorkspaceContextProvider>
         </SessionContextProvider>
-        <Footer />
       </body>
     </html>
   );
