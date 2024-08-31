@@ -9,7 +9,7 @@ import {
 
 export const TOOLS = {
   home: {
-    title: "ホーム",
+    title: "トップページ",
     icon: <FaHouse />,
     description: "Home page with overview of available tools",
     path: "/",

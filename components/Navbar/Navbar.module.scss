@@ -5,7 +5,6 @@
   min-height: 48px;
   display: flex;
   align-items: center;
-  gap: 4px;
   box-shadow: 0 0 4px transparentize($black, 0.8);
   border-bottom: 4px solid darken($gk-red-orange, 15%);
   background-color: $gk-orange;
@@ -13,11 +12,7 @@
 
   h1 {
     margin: 0 8px;
-  }
-
-  @media only screen and (max-width: 600px) {
-    h1,
-    .menu {
+    @media only screen and (max-width: 600px) {
       display: none;
     }
   }
@@ -30,7 +25,7 @@
 }
 
 .link {
-  min-width: 48px;
+  min-width: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,26 +38,4 @@
   &.active {
     background-color: darken($gk-red-orange, 15%);
   }
-}
-
-.menu {
-  margin: 0 8px;
-}
-
-.avatar {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.dropdown {
-  position: absolute;
-  right: 0;
-  top: 48px;
-  border: 2px solid $gk-orange;
-  border-top: none;
-  padding: 8px;
-  background-color: $white;
 }

@@ -1,0 +1,71 @@
+@import "@/constants";
+
+.menu {
+  margin: 0 8px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  font-size: 24px;
+  overflow: hidden;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.dropdown {
+  position: absolute;
+  right: 4px;
+  top: 52px;
+  max-width: 240px;
+  box-shadow: 0 0 8px transparentize($black, 0.8);
+  border: 2px solid $gk-orange;
+  border-radius: 4px;
+  background-color: $white;
+  color: $black;
+
+  & > * {
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid $gk-orange;
+    padding: 8px 12px;
+    transition: all 0.2s;
+
+    &:nth-last-child(1) {
+      border: none;
+    }
+  }
+
+  & > button,
+  & > a {
+    color: $gk-orange;
+    &:hover {
+      color: $gk-red-orange;
+      background-color: lighten($gk-orange, 35%);
+    }
+  }
+}
+
+.author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.socials {
+  display: flex;
+  gap: 8px;
+}
+
+.fine {
+  font-size: 12px;
+  text-align: center;
+}
