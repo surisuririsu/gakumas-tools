@@ -1,15 +1,19 @@
 "use client";
 import { memo, useContext } from "react";
+import dynamic from "next/dynamic";
 import { FaXmark } from "react-icons/fa6";
-import Dex from "@/components/Dex";
-import MemoryCalculator from "@/components/MemoryCalculator";
-import Memories from "@/components/Memories";
-import ProduceRankCalculator from "@/components/ProduceRankCalculator";
-import Rehearsal from "@/components/Rehearsal";
-import Simulator from "@/components/Simulator";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { TOOLS } from "@/utils/tools";
 import styles from "./PinnedTools.module.scss";
+
+const Dex = dynamic(() => import("@/components/Dex"));
+const MemoryCalculator = dynamic(() => import("@/components/MemoryCalculator"));
+const Memories = dynamic(() => import("@/components/Memories"));
+const ProduceRankCalculator = dynamic(() =>
+  import("@/components/ProduceRankCalculator")
+);
+const Rehearsal = dynamic(() => import("@/components/Rehearsal"));
+const Simulator = dynamic(() => import("@/components/Simulator"));
 
 function PinnedTools() {
   const { pinnedTools, unpin } = useContext(WorkspaceContext);

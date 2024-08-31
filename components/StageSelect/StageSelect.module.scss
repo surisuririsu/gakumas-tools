@@ -4,6 +4,7 @@
   display: flex;
   align-items: flex-start;
   gap: 4px;
+  font-size: 14px;
 }
 
 .select {
@@ -15,7 +16,7 @@
   padding: 4px;
 
   button {
-    height: 28px;
+    height: 24px;
     gap: 6px;
     padding: 6px;
     color: $gray-dark;

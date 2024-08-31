@@ -83,7 +83,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
             href="https://github.com/surisuririsu/gakumas-data/blob/master/Effects.md"
             target="_blank"
           >
-            エフェクト形式
+            効果形式
           </a>
         </div>
 
