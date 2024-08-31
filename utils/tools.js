@@ -29,7 +29,7 @@ export const TOOLS = {
     pinnable: true,
   },
   memoryCalculator: {
-    title: "メモリー計算機",
+    title: "メモリー生成確率計算機",
     icon: (
       <>
         <FaFilm />

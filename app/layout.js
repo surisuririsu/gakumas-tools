@@ -22,7 +22,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Gakumas Tools",
   description:
-    "Tools for playing Gakumas. Calculate the exam score required to achieve produce ranks, view P-item and skill card information, create your ideal contest loadouts, and more.",
+    "学マスツール - プロデュース評価の必要最終試験スコア計算、 メモリーの生成確率計算、 コンテスト編成のシミュレーションなど便利な機能が揃っています。",
 };
 
 export const viewport = {
