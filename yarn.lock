@@ -3562,26 +3562,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v2.1.2":
-  version: 2.1.2
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=66007398f8abc7708cf483a7135ba3d06d2348ac"
-  checksum: 10c0/7bb676f20fc418737a36f487380f80ea9d42577b9bd01d87454322a7e2a07c5d745134570ffe3acb84f28e35670c6007b84c1f990c0275f0524fcffb96f6dd03
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v3.2.0":
+  version: 3.2.0
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=c9474597794b97fcd39e68830c4f9245717df61c"
+  checksum: 10c0/839cc09857f75801760be77ebae0e338c7de7e929f1200d9692ccfc292c2115894d9a8d6306b62bc75eeb28e17f069da9ae58203fa7fde3b392466bab2da50f1
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v3.0.0":
-  version: 3.0.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=dada2e99cabb58a34e559c25a2b657cfa8165291"
-  checksum: 10c0/221abf3e0c8a52525988df5bd1a1826454dc4e5d829cdc7827704bd7d7b87ba89cc25eaccbdd4c0b69b044a2df88815a5fd0351ae800be962fd51815789d4a25
-  languageName: node
-  linkType: hard
-
-"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.2.0":
-  version: 0.2.0
-  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=4dddaf684c4c4b2f29cfd3ebec6c68e38dc82796"
+"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.3.0":
+  version: 0.3.0
+  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=159a21cdfa3241a8dd4caa3572c22c5999fd5615"
   dependencies:
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v2.1.2"
-  checksum: 10c0/d25530dbb021eb2e58734c3ccd381b870a58e2ec2de8d73b17851d3fefdd750f6ce5efd5e158c5afb4a462697adb61bfc266b42e8c3aa1bd8fa94c782eee599f
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.2.0"
+  checksum: 10c0/4fb3f76249350ebd5eedf2658aa02e59d006868604e4a20c22825f2ad6e89826ec3be15fd1c06dc7f646407a21a2b8ed6d70205c6b13e83fd48fdb07518e45bd
   languageName: node
   linkType: hard
 
@@ -3596,8 +3589,8 @@ __metadata:
     chart.js: "npm:^4.4.4"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.6"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.0.0"
-    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.2.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.2.0"
+    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.3.0"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
