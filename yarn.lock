@@ -2213,14 +2213,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001579":
-  version: 1.0.30001653
-  resolution: "caniuse-lite@npm:1.0.30001653"
-  checksum: 10c0/7aedf037541c93744148f599daea93d46d1f93ab4347997189efa2d1f003af8eadd7e1e05347ef09261ac1dc635ce375b8c6c00796245fffb4120a124824a14f
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.30001646":
+"caniuse-lite@npm:^1.0.30001579, caniuse-lite@npm:^1.0.30001646":
   version: 1.0.30001655
   resolution: "caniuse-lite@npm:1.0.30001655"
   checksum: 10c0/fff0c0c3ffcba89828bfa6b99f118e82c064f46f15bb8655b9f2a352a3f552ccac0b87a9fe9532f8c5a29e284aae5579791e196480ec717d11ef1d1a1c2e3ff9
@@ -3611,7 +3604,7 @@ __metadata:
 
 "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator":
   version: 0.1.0
-  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f"
+  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=54a44df87fbae8098aa80e92304ce074aa457818"
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.6.0"
     "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
@@ -3624,7 +3617,7 @@ __metadata:
     vue: "npm:^3.4.37"
     vuetify: "npm:^3.6.14"
     webfontloader: "npm:^1.6.28"
-  checksum: 10c0/89d00fef20dadade111165e56610aa931ac1f2f36ea2740924d64d8b2012d833f1b4bd53ec112bd8766c8e6ff8c8b3710f169a684b41647fff5340ff9060e983
+  checksum: 10c0/21aeda73c39dd4dd880a4a21d233ccb450e5cc8b132c87a295fa2fcbabdf60e1fe0125e08af02d391967a204e7123aa1458347cccb7a4c2fb38fce516212849d
   languageName: node
   linkType: hard
 
@@ -6068,13 +6061,13 @@ __metadata:
   linkType: hard
 
 "postcss@npm:^8.4.40":
-  version: 8.4.41
-  resolution: "postcss@npm:8.4.41"
+  version: 8.4.42
+  resolution: "postcss@npm:8.4.42"
   dependencies:
     nanoid: "npm:^3.3.7"
     picocolors: "npm:^1.0.1"
     source-map-js: "npm:^1.2.0"
-  checksum: 10c0/c1828fc59e7ec1a3bf52b3a42f615dba53c67960ed82a81df6441b485fe43c20aba7f4e7c55425762fd99c594ecabbaaba8cf5b30fd79dfec5b52a9f63a2d690
+  checksum: 10c0/ac4dd01b07b2b9db12c24284aed497d35436ed05e4944be6cf00eb8daa4914fd9fbc5ec729e47981b4f1a9c51847d043d1808c796b9440ae0c5e8ff7a29bc821
   languageName: node
   linkType: hard
 
