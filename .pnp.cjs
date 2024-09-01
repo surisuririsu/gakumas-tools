@@ -36,7 +36,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=c9474597794b97fcd39e68830c4f9245717df61c"],\
           ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=159a21cdfa3241a8dd4caa3572c22c5999fd5615"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=54a44df87fbae8098aa80e92304ce074aa457818"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
@@ -1039,14 +1039,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.0.8", {\
-        "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-87799b1c28/4/AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
+      ["virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.0.8", {\
+        "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-ddb8aa388e/4/AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
         "packageDependencies": [\
-          ["@fortawesome/vue-fontawesome", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.0.8"],\
+          ["@fortawesome/vue-fontawesome", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.0.8"],\
           ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
           ["@types/fortawesome__fontawesome-svg-core", null],\
           ["@types/vue", null],\
-          ["vue", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38"]\
+          ["vue", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38"]\
         ],\
         "packagePeers": [\
           "@fortawesome/fontawesome-svg-core",\
@@ -2315,7 +2315,7 @@ const RAW_RUNTIME_STATE =
           ["@vue/shared", "npm:3.4.38"],\
           ["estree-walker", "npm:2.0.2"],\
           ["magic-string", "npm:0.30.11"],\
-          ["postcss", "npm:8.4.41"],\
+          ["postcss", "npm:8.4.42"],\
           ["source-map-js", "npm:1.2.0"]\
         ],\
         "linkType": "HARD"\
@@ -2374,14 +2374,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0aa5e0234c2c13482904aec23ffebf15a00b62733d45a84e3b94df7125ce907dc2f9cf907c23ef1b56c5b74dc590d5ab46e25277bb5336fca1d3971fb289aec0#npm:3.4.38", {\
-        "packageLocation": "./.yarn/__virtual__/@vue-server-renderer-virtual-17b2439c98/4/AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.4.38-01286b9c85-10c0.zip/node_modules/@vue/server-renderer/",\
+      ["virtual:a366500f6596df1351b06659435bf2bc4d8ec56265ec656cbb53a4625238b48ac739e0ea375edb48f18509596712f89fadd946401775b16aa57cf8ab5c43725f#npm:3.4.38", {\
+        "packageLocation": "./.yarn/__virtual__/@vue-server-renderer-virtual-471997a790/4/AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.4.38-01286b9c85-10c0.zip/node_modules/@vue/server-renderer/",\
         "packageDependencies": [\
-          ["@vue/server-renderer", "virtual:0aa5e0234c2c13482904aec23ffebf15a00b62733d45a84e3b94df7125ce907dc2f9cf907c23ef1b56c5b74dc590d5ab46e25277bb5336fca1d3971fb289aec0#npm:3.4.38"],\
+          ["@vue/server-renderer", "virtual:a366500f6596df1351b06659435bf2bc4d8ec56265ec656cbb53a4625238b48ac739e0ea375edb48f18509596712f89fadd946401775b16aa57cf8ab5c43725f#npm:3.4.38"],\
           ["@types/vue", null],\
           ["@vue/compiler-ssr", "npm:3.4.38"],\
           ["@vue/shared", "npm:3.4.38"],\
-          ["vue", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38"]\
+          ["vue", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38"]\
         ],\
         "packagePeers": [\
           "@types/vue",\
@@ -3095,13 +3095,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["caniuse-lite", [\
-      ["npm:1.0.30001653", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/caniuse-lite-npm-1.0.30001653-f5f1782475-10c0.zip/node_modules/caniuse-lite/",\
-        "packageDependencies": [\
-          ["caniuse-lite", "npm:1.0.30001653"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.30001655", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/caniuse-lite-npm-1.0.30001655-a0517610a4-10c0.zip/node_modules/caniuse-lite/",\
         "packageDependencies": [\
@@ -4768,7 +4761,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
           ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=c9474597794b97fcd39e68830c4f9245717df61c"],\
           ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=159a21cdfa3241a8dd4caa3572c22c5999fd5615"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=54a44df87fbae8098aa80e92304ce074aa457818"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
@@ -4788,20 +4781,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas_contest_simulator", [\
-      ["https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-a1988cb13c-10c0.zip/node_modules/gakumas_contest_simulator/",\
+      ["https://github.com/katabami83/gakumas_contest_simulator.git#commit=54a44df87fbae8098aa80e92304ce074aa457818", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-a0d6878188-10c0.zip/node_modules/gakumas_contest_simulator/",\
         "packageDependencies": [\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=ba06502dabcb3ee2cc0a11ca531be1a613c80d6f"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=54a44df87fbae8098aa80e92304ce074aa457818"],\
           ["@fortawesome/fontawesome-free", "npm:6.6.0"],\
           ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
           ["@fortawesome/free-solid-svg-icons", "npm:6.6.0"],\
-          ["@fortawesome/vue-fontawesome", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.0.8"],\
+          ["@fortawesome/vue-fontawesome", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.0.8"],\
           ["@mdi/font", "npm:7.4.47"],\
           ["chart.js", "npm:4.4.4"],\
           ["core-js", "npm:3.38.1"],\
           ["roboto-fontface", "npm:0.10.0"],\
-          ["vue", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38"],\
-          ["vuetify", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.7.1"],\
+          ["vue", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38"],\
+          ["vuetify", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.7.1"],\
           ["webfontloader", "npm:1.6.28"]\
         ],\
         "linkType": "HARD"\
@@ -7050,7 +7043,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", null],\
           ["@types/sass", null],\
           ["busboy", "npm:1.6.0"],\
-          ["caniuse-lite", "npm:1.0.30001653"],\
+          ["caniuse-lite", "npm:1.0.30001655"],\
           ["graceful-fs", "npm:4.2.11"],\
           ["postcss", "npm:8.4.31"],\
           ["react", "npm:18.3.1"],\
@@ -7608,10 +7601,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.4.41", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/postcss-npm-8.4.41-1607021b28-10c0.zip/node_modules/postcss/",\
+      ["npm:8.4.42", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/postcss-npm-8.4.42-ae7ce97805-10c0.zip/node_modules/postcss/",\
         "packageDependencies": [\
-          ["postcss", "npm:8.4.41"],\
+          ["postcss", "npm:8.4.42"],\
           ["nanoid", "npm:3.3.7"],\
           ["picocolors", "npm:1.0.1"],\
           ["source-map-js", "npm:1.2.0"]\
@@ -9125,15 +9118,15 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38", {\
-        "packageLocation": "./.yarn/__virtual__/vue-virtual-0aa5e0234c/4/AppData/Local/Yarn/Berry/cache/vue-npm-3.4.38-6c7150367a-10c0.zip/node_modules/vue/",\
+      ["virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38", {\
+        "packageLocation": "./.yarn/__virtual__/vue-virtual-a366500f65/4/AppData/Local/Yarn/Berry/cache/vue-npm-3.4.38-6c7150367a-10c0.zip/node_modules/vue/",\
         "packageDependencies": [\
-          ["vue", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38"],\
+          ["vue", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38"],\
           ["@types/typescript", null],\
           ["@vue/compiler-dom", "npm:3.4.38"],\
           ["@vue/compiler-sfc", "npm:3.4.38"],\
           ["@vue/runtime-dom", "npm:3.4.38"],\
-          ["@vue/server-renderer", "virtual:0aa5e0234c2c13482904aec23ffebf15a00b62733d45a84e3b94df7125ce907dc2f9cf907c23ef1b56c5b74dc590d5ab46e25277bb5336fca1d3971fb289aec0#npm:3.4.38"],\
+          ["@vue/server-renderer", "virtual:a366500f6596df1351b06659435bf2bc4d8ec56265ec656cbb53a4625238b48ac739e0ea375edb48f18509596712f89fadd946401775b16aa57cf8ab5c43725f#npm:3.4.38"],\
           ["@vue/shared", "npm:3.4.38"],\
           ["typescript", null]\
         ],\
@@ -9152,17 +9145,17 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.7.1", {\
-        "packageLocation": "./.yarn/__virtual__/vuetify-virtual-ef07f1293f/4/AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.1-b6ec28240c-10c0.zip/node_modules/vuetify/",\
+      ["virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.7.1", {\
+        "packageLocation": "./.yarn/__virtual__/vuetify-virtual-d12d9af675/4/AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.1-b6ec28240c-10c0.zip/node_modules/vuetify/",\
         "packageDependencies": [\
-          ["vuetify", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.7.1"],\
+          ["vuetify", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.7.1"],\
           ["@types/typescript", null],\
           ["@types/vite-plugin-vuetify", null],\
           ["@types/vue", null],\
           ["@types/webpack-plugin-vuetify", null],\
           ["typescript", null],\
           ["vite-plugin-vuetify", null],\
-          ["vue", "virtual:a1988cb13c1249e970b6ee70ea4c5e8faaab05a6eef243f87d474f78af6fde706371ed59407faf633d116516bfe4c3e8eb34518374524c80bab1456ae86d10a0#npm:3.4.38"],\
+          ["vue", "virtual:a0d6878188fd98e5996b2b931232c44e9ed49134f4c3bfc8a75c842567fa418f5934103e626b638a059371398b0814ab48dddeeac9a8379eb7d1c0bbaa43e909#npm:3.4.38"],\
           ["webpack-plugin-vuetify", null]\
         ],\
         "packagePeers": [\
