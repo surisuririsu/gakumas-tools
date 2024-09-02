@@ -70,7 +70,7 @@ export default class HeuristicStrategy extends StageStrategy {
       previewState.cardUsesRemaining >= state.cardUsesRemaining &&
       state.cardUsesRemaining == 1
     ) {
-      score += 5000;
+      score += 420 * this.engine.stageConfig.turnCount;
     }
 
     // Cards in hand
@@ -82,12 +82,6 @@ export default class HeuristicStrategy extends StageStrategy {
         (previewState.score - state.score)) /
         averageTypeMultiplier) *
       Math.floor(previewState.turnsRemaining / 12);
-
-    // Stamina
-    score +=
-      Math.log(previewState.stamina + 1) *
-      Math.log(previewState.turnsRemaining + 1) *
-      0.5;
 
     // Genki
     score +=

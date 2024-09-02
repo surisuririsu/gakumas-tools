@@ -1643,10 +1643,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@mongodb-js/saslprep", [\
-      ["npm:1.1.8", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@mongodb-js-saslprep-npm-1.1.8-d183957f9d-10c0.zip/node_modules/@mongodb-js/saslprep/",\
+      ["npm:1.1.9", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@mongodb-js-saslprep-npm-1.1.9-33fa4a74a7-10c0.zip/node_modules/@mongodb-js/saslprep/",\
         "packageDependencies": [\
-          ["@mongodb-js/saslprep", "npm:1.1.8"],\
+          ["@mongodb-js/saslprep", "npm:1.1.9"],\
           ["sparse-bitfield", "npm:3.0.3"]\
         ],\
         "linkType": "HARD"\
@@ -2315,7 +2315,7 @@ const RAW_RUNTIME_STATE =
           ["@vue/shared", "npm:3.4.38"],\
           ["estree-walker", "npm:2.0.2"],\
           ["magic-string", "npm:0.30.11"],\
-          ["postcss", "npm:8.4.43"],\
+          ["postcss", "npm:8.4.44"],\
           ["source-map-js", "npm:1.2.0"]\
         ],\
         "linkType": "HARD"\
@@ -6922,7 +6922,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.8.0"],\
           ["@aws-sdk/credential-providers", null],\
-          ["@mongodb-js/saslprep", "npm:1.1.8"],\
+          ["@mongodb-js/saslprep", "npm:1.1.9"],\
           ["@mongodb-js/zstd", null],\
           ["@types/aws-sdk__credential-providers", null],\
           ["@types/gcp-metadata", null],\
@@ -7601,10 +7601,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:8.4.43", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/postcss-npm-8.4.43-3b7e013e4e-10c0.zip/node_modules/postcss/",\
+      ["npm:8.4.44", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/postcss-npm-8.4.44-2d4d96a81a-10c0.zip/node_modules/postcss/",\
         "packageDependencies": [\
-          ["postcss", "npm:8.4.43"],\
+          ["postcss", "npm:8.4.44"],\
           ["nanoid", "npm:3.3.7"],\
           ["picocolors", "npm:1.0.1"],\
           ["source-map-js", "npm:1.2.0"]\
