@@ -89,21 +89,24 @@ console.log(
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const generatedDir = path.join(__dirname, "../generated");
 
-fs.mkdirSync(path.join(__dirname, "../generated"));
+if (!fs.existsSync(generatedDir)) {
+  fs.mkdirSync(generatedDir);
+}
 fs.writeFileSync(
-  path.join(__dirname, "../generated/kafeStageMap.json"),
+  path.join(generatedDir, "kafeStageMap.json"),
   JSON.stringify(KAFE_STAGE_MAP)
 );
 fs.writeFileSync(
-  path.join(__dirname, "../generated/kafeItemMap.json"),
+  path.join(generatedDir, "kafeItemMap.json"),
   JSON.stringify(KAFE_ITEM_MAP)
 );
 fs.writeFileSync(
-  path.join(__dirname, "../generated/kafeCardMap.json"),
+  path.join(generatedDir, "kafeCardMap.json"),
   JSON.stringify(KAFE_CARD_MAP)
 );
 fs.writeFileSync(
-  path.join(__dirname, "../generated/kafePIdolIdsByKafeCardId.json"),
+  path.join(generatedDir, "kafePIdolIdsByKafeCardId.json"),
   JSON.stringify(KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID)
 );
