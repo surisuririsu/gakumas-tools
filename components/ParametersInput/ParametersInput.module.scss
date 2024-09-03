@@ -15,7 +15,7 @@
       background-color: scale-color($param-color, $lightness: 80%);
       color: $param-color;
       &::placeholder {
-        color: scale-color($param-color, $alpha: -50%);
+        color: scale-color($param-color, $alpha: -40%);
       }
     }
   }

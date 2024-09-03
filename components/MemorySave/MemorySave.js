@@ -12,18 +12,26 @@ function MemorySave() {
   return (
     <div className={styles.save}>
       {status == "unauthenticated" && (
-        <Button onClick={() => signIn("discord")}>
+        <Button style="primary" onClick={() => signIn("discord")}>
           Sign in with Discord to save
         </Button>
       )}
 
       {status == "authenticated" && (
         <>
-          <Button onClick={() => save(false)} disabled={saveState == "saving"}>
+          <Button
+            style="primary"
+            onClick={() => save(false)}
+            disabled={saveState == "saving"}
+          >
             保存
           </Button>
           {id && (
-            <Button onClick={() => save(true)} disabled={saveState == "saving"}>
+            <Button
+              style="primary"
+              onClick={() => save(true)}
+              disabled={saveState == "saving"}
+            >
               新規保存
             </Button>
           )}

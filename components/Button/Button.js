@@ -8,7 +8,7 @@ function Button({
   onClick,
   href,
   target,
-  style = "primary",
+  style = "default",
   disabled,
   ariaLabel,
   fill,

@@ -1,9 +1,10 @@
-import { memo, useContext, useMemo } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import {
   FaCirclePlus,
   FaCircleArrowUp,
   FaCircleArrowDown,
   FaCircleXmark,
+  FaEllipsis,
   FaFilm,
 } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
@@ -11,6 +12,7 @@ import MemoryPickerModal from "@/components/MemoryPickerModal";
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import ModalContext from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
 function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
@@ -22,6 +24,7 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
     swapSkillCardIdGroups,
   } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
+  const [expanded, setExpanded] = useState(false);
 
   const cost = useMemo(
     () =>
@@ -46,8 +49,11 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
       />
 
       <div className={styles.sub}>
-        <div>コスト: {cost}</div>
-        <div className={styles.buttonGroup}>
+        <div className={styles.cost}>コスト: {cost}</div>
+        <div
+          className={c(styles.buttonGroup, expanded && styles.expanded)}
+          onClick={() => setExpanded(false)}
+        >
           <button
             className={styles.pickButton}
             onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
@@ -86,6 +92,15 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
             <FaCircleXmark />
           </button>
         </div>
+        <button
+          className={styles.expandButton}
+          onClick={(e) => {
+            setExpanded(!expanded);
+            e.stopPropagation();
+          }}
+        >
+          <FaEllipsis />
+        </button>
       </div>
     </div>
   );

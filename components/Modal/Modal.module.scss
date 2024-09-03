@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: transparentize($black, 0.5);
 }
 
 .modal {
@@ -20,8 +20,8 @@
   max-height: 100dvh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 16px $gray-dark;
-  border-radius: 16px;
+  box-shadow: 0 0 16px transparentize($black, 0.5);
+  border-radius: 8px;
   padding: 48px 32px 32px;
   background-color: $white;
 
@@ -31,7 +31,7 @@
 
   h3 {
     margin-bottom: 24px;
-    color: $gk-red-orange;
+    color: $gk-orange;
   }
 
   p {
@@ -43,6 +43,11 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  color: $gk-orange;
   font-size: 24px;
+  color: $black;
+  transition: all 0.2s;
+
+  &:hover {
+    color: $gk-orange;
+  }
 }

@@ -4,15 +4,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 4px transparentize($black, 0.8);
+  box-shadow: 0 0 4px transparentize($black, 0.75);
   border-radius: 24px;
-  background-color: $gray-extra-light;
+  background-color: $white;
   color: $gk-orange;
   font-size: 18px;
   transition: 0.2s all;
 
   &:hover {
-    box-shadow: 0 0 4px $gk-orange;
+    box-shadow: 0 0 8px $gk-orange;
   }
 }
 

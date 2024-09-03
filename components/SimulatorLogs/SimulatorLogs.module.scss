@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  color: $black-dark;
 }
 
 .logs {
@@ -13,7 +14,7 @@
 }
 
 .startTurn {
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 6px;
   color: $gray-dark;
   font-weight: 600;
@@ -136,8 +137,13 @@
   .selected img {
     display: flex;
     border-radius: 4px;
-    box-shadow: 0 0 24px $gk-red-orange;
+    box-shadow: 0 0 8px $gk-orange;
     overflow: hidden;
+  }
+
+  .selected {
+    color: $gk-orange;
+    font-weight: 600;
   }
 
   .cardScore {

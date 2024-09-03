@@ -2,7 +2,14 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 8px;
   overflow: auto;
+}
+
+.power {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .params {

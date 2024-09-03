@@ -1,5 +1,3 @@
-@import "@/constants";
-
 .produceRankCalculator {
   max-width: 500px;
   display: flex;
@@ -7,24 +5,8 @@
   gap: 8px;
   margin: 0 auto;
   padding: 16px;
-  color: $black-dark;
 }
 
 .bonus {
   font-size: 0.8em;
-}
-
-.result {
-  thead {
-    background-color: lighten($gk-orange, 20%);
-  }
-
-  tbody {
-    background-color: lighten($gk-orange, 40%);
-  }
-
-  th,
-  td {
-    padding: 8px;
-  }
 }
