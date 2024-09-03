@@ -14,7 +14,7 @@ const STRINGS = {
   concentration: "集中",
   goodImpressionTurns: "好印象",
   motivation: "やる気",
-  oneTurnScoreBuff: "スコア上昇量（1ターン）",
+  oneTurnScoreBuff: "ターン内スコア上昇量",
   permanentScoreBuff: "スコア上昇量",
   halfCostTurns: "消費体力減少",
   doubleCostTurns: "消費体力増加",
