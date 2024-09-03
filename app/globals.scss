@@ -26,11 +26,16 @@ main {
   display: flex;
   flex-direction: column;
   background-color: $white-dark;
+  color: $black-dark;
   overflow: auto;
 }
 
-h2 {
-  font-size: 20px;
+h1,
+h2,
+h3 {
+  color: $gk-orange;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 
 label {

@@ -3,8 +3,7 @@
 .buttonGroup {
   display: flex;
   flex-direction: row;
-  box-shadow: 0 0 4px transparentize($black, 0.8);
-  border: 2px solid $gk-orange;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
   border-radius: 4px;
   overflow: hidden;
 
@@ -14,20 +13,16 @@
     color: $gk-orange;
     font-size: 14px;
     line-height: 16px;
-    font-weight: 600;
     transition: all 0.2s;
 
     &.selected {
       background-color: $gk-orange;
       color: $white;
-
-      &:hover {
-        color: $gk-red-orange;
-      }
     }
 
     &:hover {
-      background-color: lighten($gk-orange, 40%);
+      background-color: $gk-orange-extra-light;
+      color: $gk-red-orange;
     }
   }
 }

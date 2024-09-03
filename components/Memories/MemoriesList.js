@@ -68,12 +68,16 @@ function MemoriesList({
       ) : (
         <div className={styles.nudge}>
           {status == "unauthenticated" && (
-            <Button onClick={() => setModal(<MemoryEditorModal />)}>
+            <Button
+              style="primary"
+              onClick={() => setModal(<MemoryEditorModal />)}
+            >
               <FaPen /> メモリーを作成する
             </Button>
           )}
           {status == "authenticated" && !memoriesLoading && (
             <Button
+              style="primary"
               onClick={() =>
                 setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
               }

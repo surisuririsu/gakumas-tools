@@ -3,7 +3,7 @@
 .stageSelect {
   display: flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: 8px;
   font-size: 14px;
 }
 
@@ -11,12 +11,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 2px solid $gray-light;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
   border-radius: 4px;
   padding: 4px;
 
   button {
-    height: 24px;
+    height: 32px;
     gap: 6px;
     padding: 6px;
     color: $gray-dark;
@@ -35,8 +35,9 @@
   flex: 1;
   align-self: stretch;
   display: flex;
-  border: 2px solid $gray-extra-light;
-  border-radius: 4px;
+  gap: 1.5px;
+  border-radius: 2px;
+  background-color: $white;
   overflow: hidden;
 
   div:nth-child(1) {
@@ -58,7 +59,7 @@
   transition: all 0.2s;
 
   &:hover {
-    background-color: $gk-orange;
-    color: $white;
+    background-color: $gk-orange-extra-light;
+    color: $gk-red-orange;
   }
 }

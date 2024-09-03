@@ -2,7 +2,6 @@
 
 .sub {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-top: 4px;
 
@@ -23,17 +22,29 @@
   }
 }
 
+.cost {
+  flex: 1;
+}
+
 .buttonGroup {
   display: flex;
   gap: 4px;
   opacity: 0;
   transition: all 0.3s;
 
-  @media only screen and (max-width: 600px) {
+  &:hover {
     opacity: 1;
+  }
 
+  @media only screen and (max-width: 600px) {
     button {
       font-size: 20px;
+      display: none;
+    }
+
+    &.expanded button {
+      display: flex;
+      opacity: 1;
     }
   }
 }
@@ -52,4 +63,14 @@
 
 .deleteButton {
   color: $red;
+}
+
+.expandButton {
+  display: none;
+  margin-left: 4px;
+  color: $gray;
+
+  @media only screen and (max-width: 600px) {
+    display: flex;
+  }
 }

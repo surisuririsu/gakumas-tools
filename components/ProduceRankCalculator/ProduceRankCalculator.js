@@ -13,6 +13,7 @@ import {
   TARGET_RATING_BY_RANK,
 } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
+import Table from "../Table/Table";
 
 function ProduceRankCalculator() {
   const [difficulty, setDifficulty] = useState("pro");
@@ -75,24 +76,13 @@ function ProduceRankCalculator() {
       {!!params.every((p) => !!p) && (
         <>
           <label>目標スコア</label>
-          <table className={styles.result}>
-            <thead>
-              <tr>
-                <th>評価</th>
-                <th>目標スコア</th>
-              </tr>
-            </thead>
-            <tbody>
-              {targetScores.map(({ rank, score }) => (
-                <tr key={rank}>
-                  <td>
-                    {rank} ({TARGET_RATING_BY_RANK[rank]})
-                  </td>
-                  <td>{score}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table
+            headers={["評価", "目標スコア"]}
+            rows={targetScores.map(({ rank, score }) => [
+              `${rank} (${TARGET_RATING_BY_RANK[rank]})`,
+              score,
+            ])}
+          />
 
           <label>スコア</label>
           <Input

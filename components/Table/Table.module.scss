@@ -1,0 +1,19 @@
+@import "@/constants";
+
+.table {
+  color: $black-dark;
+  text-align: center;
+
+  thead {
+    background-color: $gk-orange-light;
+  }
+
+  tbody {
+    background-color: $gk-orange-extra-light;
+  }
+
+  th,
+  td {
+    padding: 4px 8px;
+  }
+}

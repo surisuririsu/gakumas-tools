@@ -5,18 +5,31 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 0 4px transparentize($black, 0.8);
-  border: 2px solid $gk-orange;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
   border-radius: 4px;
-  padding: 8px;
-  color: $white;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 12px;
+  font-size: 16px;
   transition: all 0.2s;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 8px transparentize($black, 0.5);
+  }
+}
+
+.default {
+  background-color: $white;
+  color: $black;
+
+  &:hover,
+  &:focus {
+    color: $gk-red-orange;
+  }
 }
 
 .primary {
   background-color: $gk-orange;
+  color: $white;
 
   &:hover,
   &:focus {
@@ -31,13 +44,14 @@
 
   &:hover,
   &:focus {
-    background-color: lighten($gk-orange, 40%);
+    background-color: $gk-orange-extra-light;
+    color: $gk-red-orange;
   }
 }
 
 .red {
-  border-color: $red-dark;
   background-color: $red-dark;
+  color: $white;
 
   &:hover,
   &:focus {
@@ -47,7 +61,6 @@
 }
 
 .red-secondary {
-  border-color: $red;
   background-color: $white;
   color: $red;
 
@@ -59,8 +72,8 @@
 }
 
 .blue {
-  border-color: $blue;
   background-color: $blue;
+  color: $white;
 
   &:hover,
   &:focus {
@@ -70,7 +83,6 @@
 }
 
 .blue-secondary {
-  border-color: $blue;
   background-color: $white;
   color: $blue;
 
@@ -82,7 +94,7 @@
 }
 
 .disabled {
-  border-color: $gray-light;
+  box-shadow: none !important;
   background-color: $gray-extra-light;
   color: $gray;
   cursor: default;

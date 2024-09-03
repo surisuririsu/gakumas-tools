@@ -87,7 +87,9 @@ function StageCustomizerModal({ initialStage, onApply }) {
           </a>
         </div>
 
-        <Button onClick={apply}>適用</Button>
+        <Button style="primary" onClick={apply}>
+          適用
+        </Button>
       </div>
     </Modal>
   );

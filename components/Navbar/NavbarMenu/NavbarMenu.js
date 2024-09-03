@@ -34,7 +34,7 @@ function NavbarMenu() {
           <div className={styles.dropdown} onClick={(e) => e.stopPropagation()}>
             {status == "unauthenticated" && (
               <div>
-                <Button onClick={discordSignIn} fill>
+                <Button style="primary" onClick={discordSignIn} fill>
                   Discordでログイン
                 </Button>
               </div>

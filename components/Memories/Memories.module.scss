@@ -17,6 +17,7 @@
 
 .header {
   display: flex;
+  flex-direction: row;
   gap: 6px;
   border-bottom: 2px solid $gray-light;
   padding: 6px;

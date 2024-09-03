@@ -6,7 +6,10 @@
   margin-top: 8px;
 
   button {
-    font-size: 12px;
-    padding: 4px;
+    padding: 6px;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 12px;
+    }
   }
 }

@@ -38,18 +38,17 @@ function MemoryEditorModal() {
   return (
     <Modal>
       <div className={styles.memoryEditor}>
-        <label>名前</label>
         <div>
           <Input placeholder="名前" value={name} onChange={setName} />
         </div>
 
-        <label>Pアイドル</label>
         <PIdolSelect selected={pIdolId} onChange={setPIdolId} />
 
-        <label>総合力</label>
-        {contestPower}
+        <div className={styles.power}>
+          <label>総合力</label>
+          {contestPower}
+        </div>
 
-        <label>パラメータ</label>
         <div className={styles.params}>
           <ParametersInput
             parameters={params}
@@ -58,14 +57,12 @@ function MemoryEditorModal() {
           />
         </div>
 
-        <label>Pアイテム</label>
         <StagePItems
           pItemIds={pItemIds}
           replacePItemId={replacePItemId}
-          size="small"
+          size="medium"
         />
 
-        <label>スキルカード</label>
         <StageSkillCards
           skillCardIds={skillCardIds}
           replaceSkillCardId={replaceSkillCardId}
