@@ -12,8 +12,8 @@
   "dependencies": {
     "@sgratzl/chartjs-chart-boxplot": "^4.4.1",
     "chart.js": "^4.4.4",
-    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v3.2.0",
-    "gakumas-engine": "https://github.com/surisuririsu/gakumas-engine#v0.3.0",
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v3.3.0",
+    "gakumas-engine": "https://github.com/surisuririsu/gakumas-engine#v0.4.0",
     "mongodb": "^6.8.0",
     "next": "14.2.6",
     "next-auth": "^4.24.7",
