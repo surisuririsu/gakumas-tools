@@ -11,18 +11,17 @@ function ToolHeader() {
   const { pinnedTools, pin } = useContext(WorkspaceContext);
   const tool = Object.keys(TOOLS).find((t) => TOOLS[t].path == pathname);
   if (!tool) return null;
-  const { title, pinnable } = TOOLS[tool];
+  const { pinnable } = TOOLS[tool];
 
-  return (
-    <div className={styles.toolHeader}>
-      {title}
-      {pinnable && !pinnedTools.includes(tool) && (
-        <button onClick={() => pin(tool)}>
-          <FaTableColumns />
-        </button>
-      )}
-    </div>
-  );
+  if (pinnable && !pinnedTools.includes(tool)) {
+    return (
+      <button className={styles.toolHeader} onClick={() => pin(tool)}>
+        <FaTableColumns />
+      </button>
+    );
+  }
+
+  return null;
 }
 
 export default memo(ToolHeader);

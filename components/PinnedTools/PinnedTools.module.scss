@@ -5,18 +5,19 @@
 }
 
 .container {
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: 350px;
-  border-right: 2px solid darken($gk-red-orange, 15%);
+  box-shadow: 0 0 8px transparentize($black, 0.75);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
-  background-color: $gk-orange;
-  color: $white;
+  padding: 12px;
+  color: $gk-orange;
+  border-bottom: 1px solid $gk-orange;
 }
 
 .tool {
