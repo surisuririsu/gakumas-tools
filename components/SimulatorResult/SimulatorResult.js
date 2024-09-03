@@ -6,8 +6,6 @@ import styles from "./SimulatorResult.module.scss";
 function SimulatorResult({ data, idolId }) {
   return (
     <div id="simulator_result" className={styles.result}>
-      <SimulatorResultGraphs data={data} />
-
       <table className={styles.stats}>
         <thead>
           <tr>
@@ -24,6 +22,8 @@ function SimulatorResult({ data, idolId }) {
           </tr>
         </tbody>
       </table>
+
+      <SimulatorResultGraphs data={data} />
 
       <label>ログ</label>
       <SimulatorLogs

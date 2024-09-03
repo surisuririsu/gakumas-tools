@@ -10,14 +10,18 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
   padding: 16px;
   overflow: auto;
 }
 
 .supportBonusInput {
-  width: 80px;
   display: flex;
+  align-items: center;
+
+  input {
+    width: 80px;
+  }
 }
 
 .typeMultipliers {

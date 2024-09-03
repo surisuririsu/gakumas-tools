@@ -5,13 +5,16 @@
   min-height: 48px;
   display: flex;
   align-items: center;
-  box-shadow: 0 0 4px transparentize($black, 0.8);
-  border-bottom: 4px solid darken($gk-red-orange, 15%);
-  background-color: $gk-orange;
-  color: $white;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
+  background-color: $white;
+  color: $black-light;
 
   h1 {
     margin: 0 8px;
+    color: $gk-orange;
+    font-weight: 400;
+    text-transform: uppercase;
+
     @media only screen and (max-width: 600px) {
       display: none;
     }
@@ -32,10 +35,10 @@
   transition: all 0.2s;
 
   &:hover {
-    background-color: lighten($gk-orange, 10%);
+    color: $gk-red-orange;
   }
 
   &.active {
-    background-color: darken($gk-red-orange, 15%);
+    color: $gk-orange;
   }
 }

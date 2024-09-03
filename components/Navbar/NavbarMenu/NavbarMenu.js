@@ -15,13 +15,13 @@ function NavbarMenu() {
 
   return (
     <div className={styles.menu}>
-      <button className={styles.avatar} onClick={() => setExpanded(true)}>
+      <button className={styles.avatar} onClick={() => setExpanded(!expanded)}>
         {status == "authenticated" ? (
           <Image
             src={session.user.image}
             alt=""
-            width={32}
-            height={32}
+            fill
+            sizes="32px"
             draggable={false}
           />
         ) : (
