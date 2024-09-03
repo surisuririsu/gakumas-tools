@@ -3555,19 +3555,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v3.3.0":
-  version: 3.3.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=10f322a1de4ee51d64b335f99e93d437dd1eb13f"
-  checksum: 10c0/3655820322f9712cea1490222765ec09349b5da4850cbe0bac75a1be7f8b4d40fa26803733252df921ae8997fc96bdad37f6c75c7e3284be6d8108d4bb46a372
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v3.3.1":
+  version: 3.3.1
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=26bb6db92bfb77fb07d88df82d209e3d35fc845a"
+  checksum: 10c0/aee3e73e1a76151fa367aef4771cc59f7e452f7d4a3182a3a9f5af65135f1b63b38ce985a9c61cf98146dc2888c9bd1ad8c40fa75cab5e1c5669a6d36d274d33
   languageName: node
   linkType: hard
 
-"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.4.0":
-  version: 0.4.0
-  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=64a5ccd5edd2d875356a13a2dcbe01184a280c66"
+"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.4.1":
+  version: 0.4.1
+  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=b22d229460128e8e2bea13b9154ab1f82729bda2"
   dependencies:
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.3.0"
-  checksum: 10c0/f6bd197000cea9bd6d92833053d69b1eb0e7374122347bd4b8202032399655d5bd890f42df816dcfcebd0e9abf2b2ac718dc6b75493137c48996579d9b89ea58
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.3.1"
+  checksum: 10c0/1e48d29d7bf7ad87e7cfdfc52200f1ed67169bb29a8e9fac62945c9aebabaf48eea37b87b679c2a700cb6db0a6e3b1d72acac76647c45ac93035e506d7be0532
   languageName: node
   linkType: hard
 
@@ -3582,8 +3582,8 @@ __metadata:
     chart.js: "npm:^4.4.4"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.6"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.3.0"
-    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.4.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v3.3.1"
+    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.4.1"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
