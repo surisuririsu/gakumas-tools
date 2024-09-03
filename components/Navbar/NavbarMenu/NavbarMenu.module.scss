@@ -5,6 +5,7 @@
 }
 
 .avatar {
+  position: relative;
   width: 32px;
   height: 32px;
   border-radius: 16px;
@@ -13,30 +14,26 @@
 }
 
 .overlay {
-  position: fixed;
-  top: 0;
+  position: absolute;
+  top: 48px;
   right: 0;
   bottom: 0;
   left: 0;
 }
 
 .dropdown {
-  position: absolute;
-  right: 0;
-  top: 48px;
-  max-width: 240px;
-  box-shadow: 0 0 8px transparentize($black, 0.8);
-  border: 2px solid $gk-orange;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
+  float: right;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
+  clip-path: inset(0px -8px -8px -8px);
+  border-radius: 0 0 8px 8px;
+  padding: 0 16px 8px;
   background-color: $white;
-  color: $black;
 
   & > * {
     width: 100%;
     display: block;
     border-bottom: 1px solid $gk-orange;
-    padding: 8px 12px;
+    padding: 12px 16px;
     transition: all 0.2s;
 
     &:nth-last-child(1) {
@@ -47,9 +44,10 @@
   & > button,
   & > a {
     color: $gk-orange;
+
     &:hover {
       color: $gk-red-orange;
-      background-color: lighten($gk-orange, 35%);
+      background-color: $gk-orange-extra-light;
     }
   }
 }
@@ -58,7 +56,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .socials {
@@ -69,4 +67,18 @@
 .fine {
   font-size: 12px;
   text-align: center;
+  max-width: 220px;
+}
+
+@media only screen and (max-width: 600px) {
+  .avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .dropdown {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
 }

@@ -135,11 +135,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <label>ステージ</label>
         <StageSelect />* Season 8 preview is based only on the announced
         p-items. Turn types and criteria are not yet known.
-        <label>サポートボーナス%</label>
         <div className={styles.supportBonusInput}>
+          <label>サポートボーナス%</label>
           <Input
             type="number"
             value={parseFloat(((supportBonus || 0) * 100).toFixed(2))}
@@ -148,7 +147,6 @@ export default function Simulator() {
             }
           />
         </div>
-        <label>パラメータ</label>
         <div className={styles.params}>
           <ParametersInput
             parameters={params}
@@ -165,13 +163,11 @@ export default function Simulator() {
             <div />
           </div>
         </div>
-        <label>Pアイテム</label>
         <StagePItems
           pItemIds={pItemIds}
           replacePItemId={replacePItemId}
-          size="small"
+          size="medium"
         />
-        <label>スキルカード</label>
         {skillCardIdGroups.map((skillCardIdGroup, i) => (
           <LoadoutSkillCardGroup
             key={i}
@@ -182,7 +178,6 @@ export default function Simulator() {
         ))}
         <SimulatorSubTools plan={idolConfig.plan} />
         <SimulatorButtons />
-        <label>シミュレーター</label>
         <select
           className={styles.strategySelect}
           value={strategy}
@@ -197,11 +192,6 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : "実行"}
         </Button>
-        {kafeUrl && (
-          <Button style="blue-secondary" href={kafeUrl} target="_blank">
-            @かふぇもっと <FaArrowUpRightFromSquare />
-          </Button>
-        )}
       </div>
 
       {simulatorData && (

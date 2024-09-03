@@ -1,4 +1,5 @@
 $gk-orange: #f39800;
+$gk-orange-extra-light: lighten($gk-orange, 40%);
 $gk-red-orange: #ff7600;
 
 $vocal: #f23584;
@@ -21,7 +22,9 @@ $gray-light: #ccc;
 $gray: #999;
 $gray-dark: #666;
 
-$black: #111;
+$black-light: #667;
+$black: #556;
+$black-dark: #111;
 
 $red: #f67;
 $red-extra-light: lighten($red, 20%);
