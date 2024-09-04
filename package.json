@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "generate": "node scripts/generateIdMappings.mjs"
+    "generate": "node scripts/generateIdMappings.mjs",
+    "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
     "@sgratzl/chartjs-chart-boxplot": "^4.4.1",
