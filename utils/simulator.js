@@ -29,7 +29,7 @@ export function getLoadoutFromSearchParams(searchParams) {
   let skillCardIdGroups = searchParams.get("cards");
   const hasDataFromParams = stageId || params || pItemIds || skillCardIdGroups;
 
-  stageId = stageId || "19";
+  stageId = stageId || "22";
   params = params || "1000-1000-1000-40";
   pItemIds = pItemIds || "0-0-0";
   skillCardIdGroups = skillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
