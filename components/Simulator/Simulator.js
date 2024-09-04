@@ -135,8 +135,8 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <StageSelect />* Season 8 preview is based only on the announced
-        p-items. Turn types and criteria are not yet known.
+        <StageSelect />
+
         <div className={styles.supportBonusInput}>
           <label>サポートボーナス%</label>
           <Input
