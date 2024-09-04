@@ -115,8 +115,19 @@
   overflow: visible;
 
   .handTitle {
+    display: flex;
+    justify-content: space-between;
     padding: 8px;
     background-color: $gray-extra-light;
+
+    button {
+      color: $gray-dark;
+    }
+  }
+
+  .state {
+    border-bottom: 2px solid $gray-extra-light;
+    padding: 16px;
   }
 
   .handCards {
