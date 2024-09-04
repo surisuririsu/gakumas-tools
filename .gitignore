@@ -38,5 +38,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# environment variables
-.env.local
+# db dumps
+/dump
