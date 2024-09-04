@@ -34,8 +34,8 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=e0702a3f8015d6fc80fbfedba01703a6ef9ced09"],\
-          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=ad419112872128a510ff21e90fc68eba82463bd9"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=8e919412efeda54a46ddedfb22e45fe298bd34ef"],\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=eee2b72cd957a58f94ad20ac6aa2be23a8de6f1d"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=a50b2e1e422e7874f45c2db7940accfeaa1edc61"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
@@ -4739,20 +4739,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=e0702a3f8015d6fc80fbfedba01703a6ef9ced09", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-3c1c5921a3-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=8e919412efeda54a46ddedfb22e45fe298bd34ef", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-5f47180e6a-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=e0702a3f8015d6fc80fbfedba01703a6ef9ced09"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=8e919412efeda54a46ddedfb22e45fe298bd34ef"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["gakumas-engine", [\
-      ["https://github.com/surisuririsu/gakumas-engine.git#commit=ad419112872128a510ff21e90fc68eba82463bd9", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-engine-https-62390cc083-10c0.zip/node_modules/gakumas-engine/",\
+      ["https://github.com/surisuririsu/gakumas-engine.git#commit=eee2b72cd957a58f94ad20ac6aa2be23a8de6f1d", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-engine-https-75b9ba2727-10c0.zip/node_modules/gakumas-engine/",\
         "packageDependencies": [\
-          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=ad419112872128a510ff21e90fc68eba82463bd9"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=e0702a3f8015d6fc80fbfedba01703a6ef9ced09"]\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=eee2b72cd957a58f94ad20ac6aa2be23a8de6f1d"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=8e919412efeda54a46ddedfb22e45fe298bd34ef"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4769,8 +4769,8 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.6"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=e0702a3f8015d6fc80fbfedba01703a6ef9ced09"],\
-          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=ad419112872128a510ff21e90fc68eba82463bd9"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=8e919412efeda54a46ddedfb22e45fe298bd34ef"],\
+          ["gakumas-engine", "https://github.com/surisuririsu/gakumas-engine.git#commit=eee2b72cd957a58f94ad20ac6aa2be23a8de6f1d"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=a50b2e1e422e7874f45c2db7940accfeaa1edc61"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\

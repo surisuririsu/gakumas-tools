@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import IDOLS from "gakumas-data/json/idols.json" assert { type: "json" };
+import P_IDOLS from "gakumas-data/json/p_idols.json" assert { type: "json" };
 import P_ITEMS from "gakumas-data/json/p_items.json" assert { type: "json" };
 import SKILL_CARDS from "gakumas-data/json/skill_cards.json" assert { type: "json" };
 import STAGES from "gakumas-data/json/stages.json" assert { type: "json" };
@@ -8,6 +10,27 @@ import { ContestData } from "gakumas_contest_simulator/scripts/simulator/data/co
 import { PIdolData } from "gakumas_contest_simulator/scripts/simulator/data/pIdolData.js";
 import { PItemData } from "gakumas_contest_simulator/scripts/simulator/data/pItemData.js";
 import { SkillCardData } from "gakumas_contest_simulator/scripts/simulator/data/skillCardData.js";
+
+const IDOL_NAMES_BY_ID = IDOLS.reduce(
+  (acc, cur) => ({
+    ...acc,
+    [cur.id]: cur.name,
+  }),
+  {}
+);
+
+const KAFE_P_IDOL_TITLE_FIXUPS = {
+  "Yellow Big Bang!": "Yellow Big Bang！",
+};
+
+const KAFE_CARD_NAME_FIXUPS = {
+  140: "コール＆レスポンス",
+  141: "コール＆レスポンス+",
+  148: "２００％スマイル",
+  149: "２００％スマイル+",
+  280: "ＰＯＷ！",
+  281: "ＰＯＷ！+",
+};
 
 const KAFE_STAGE_IDS_BY_SEASON_STAGE = ContestData.getAll().reduce(
   (acc, cur) => {
@@ -19,6 +42,16 @@ const KAFE_STAGE_IDS_BY_SEASON_STAGE = ContestData.getAll().reduce(
     });
     return acc;
   },
+  {}
+);
+
+const KAFE_P_IDOL_IDS_BY_NAME_TITLE = PIdolData.getAll().reduce(
+  (acc, cur) => ({
+    ...acc,
+    [`${cur.name}_${
+      KAFE_P_IDOL_TITLE_FIXUPS[cur.episode_name] || cur.episode_name
+    }`]: cur.id,
+  }),
   {}
 );
 
@@ -38,23 +71,19 @@ const KAFE_CARD_IDS_BY_NAME = SkillCardData.getAll().reduce(
   {}
 );
 
-const KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID = PIdolData.getAll().reduce(
-  (acc, cur) => ({
-    ...acc,
-    [cur.unique_skillCard_id]: cur.id,
-    [cur.unique_skillCard_id + 1]: cur.id,
-  }),
-  {}
-);
+const KAFE_STAGE_MAP = STAGES.reduce((acc, cur) => {
+  acc[cur.id] =
+    KAFE_STAGE_IDS_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] || "-1:-1";
+  return acc;
+}, {});
 
-const KAFE_ITEM_NAME_FIXUPS = {
-  140: "コール＆レスポンス",
-  141: "コール＆レスポンス+",
-  148: "２００％スマイル",
-  149: "２００％スマイル+",
-  280: "ＰＯＷ！",
-  281: "ＰＯＷ！+",
-};
+const KAFE_P_IDOL_MAP = P_IDOLS.reduce((acc, cur) => {
+  acc[cur.id] =
+    KAFE_P_IDOL_IDS_BY_NAME_TITLE[
+      `${IDOL_NAMES_BY_ID[cur.idolId].replaceAll(" ", "")}_${cur.title}`
+    ] || -1;
+  return acc;
+}, {});
 
 const KAFE_ITEM_MAP = P_ITEMS.reduce((acc, cur) => {
   acc[cur.id] = KAFE_ITEM_IDS_BY_NAME[cur.name] || -1;
@@ -63,13 +92,7 @@ const KAFE_ITEM_MAP = P_ITEMS.reduce((acc, cur) => {
 
 const KAFE_CARD_MAP = SKILL_CARDS.reduce((acc, cur) => {
   acc[cur.id] =
-    KAFE_CARD_IDS_BY_NAME[KAFE_ITEM_NAME_FIXUPS[cur.id] || cur.name] || -1;
-  return acc;
-}, {});
-
-const KAFE_STAGE_MAP = STAGES.reduce((acc, cur) => {
-  acc[cur.id] =
-    KAFE_STAGE_IDS_BY_SEASON_STAGE[`${cur.season}-${cur.stage}`] || "-1:-1";
+    KAFE_CARD_IDS_BY_NAME[KAFE_CARD_NAME_FIXUPS[cur.id] || cur.name] || -1;
   return acc;
 }, {});
 
@@ -99,14 +122,14 @@ fs.writeFileSync(
   JSON.stringify(KAFE_STAGE_MAP)
 );
 fs.writeFileSync(
+  path.join(generatedDir, "kafePIdolMap.json"),
+  JSON.stringify(KAFE_P_IDOL_MAP)
+);
+fs.writeFileSync(
   path.join(generatedDir, "kafeItemMap.json"),
   JSON.stringify(KAFE_ITEM_MAP)
 );
 fs.writeFileSync(
   path.join(generatedDir, "kafeCardMap.json"),
   JSON.stringify(KAFE_CARD_MAP)
-);
-fs.writeFileSync(
-  path.join(generatedDir, "kafePIdolIdsByKafeCardId.json"),
-  JSON.stringify(KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID)
 );
