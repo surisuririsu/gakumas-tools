@@ -3,7 +3,9 @@ import AddCard from "./AddCard";
 import Diff from "./Diff";
 import Group from "./Group";
 import Hand from "./Hand";
+import SetScoreBuff from "./SetScoreBuff";
 import StartTurn from "./StartTurn";
+import Text from "./Text";
 import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
 
@@ -27,8 +29,11 @@ function Log({ line, idolId }) {
   if (line.logType == "startTurn") {
     return <StartTurn {...line.data} />;
   }
+  if (line.logType == "setScoreBuff") {
+    return <SetScoreBuff {...line.data} />;
+  }
   if (line.logType == "setEffect") {
-    return <div className={styles.tile}>効果付与</div>;
+    return <Text>持続効果付与</Text>;
   }
   if (line.logType == "upgradeHand") {
     return <Tile text="手札をすべてレッスン中強化" />;
