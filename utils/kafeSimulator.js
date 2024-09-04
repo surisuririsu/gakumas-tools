@@ -2,7 +2,7 @@ import { PItems, SkillCards } from "gakumas-data";
 import { IdolConfig } from "gakumas-engine";
 import KAFE_CARD_MAP from "@/generated/kafeCardMap.json";
 import KAFE_ITEM_MAP from "@/generated/kafeItemMap.json";
-import KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID from "@/generated/kafePIdolIdsByKafeCardId.json";
+import KAFE_P_IDOL_MAP from "@/generated/kafePIdolMap.json";
 import KAFE_STAGE_MAP from "@/generated/kafeStageMap.json";
 import { comparePItems } from "./sort";
 
@@ -71,12 +71,7 @@ export function generateKafeUrl(
   // Build search query
   const simulatorParams = new URLSearchParams();
   simulatorParams.set("contest_stage", kafeStage);
-  simulatorParams.set(
-    "p_idol",
-    `${KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID[mainIdolCardSimulatorId] || -1}:${
-      KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID[subIdolCardSimulatorId] || -1
-    }`
-  );
+  simulatorParams.set("p_idol", KAFE_P_IDOL_MAP[idolConfig.pIdolId]);
   simulatorParams.set("status", status.join(":"));
   simulatorParams.set("p_item_ids", itemSimulatorIds.join(":"));
   simulatorParams.set(
