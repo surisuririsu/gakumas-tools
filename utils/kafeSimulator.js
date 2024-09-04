@@ -4,6 +4,7 @@ import KAFE_CARD_MAP from "@/generated/kafeCardMap.json";
 import KAFE_ITEM_MAP from "@/generated/kafeItemMap.json";
 import KAFE_P_IDOL_IDS_BY_KAFE_CARD_ID from "@/generated/kafePIdolIdsByKafeCardId.json";
 import KAFE_STAGE_MAP from "@/generated/kafeStageMap.json";
+import { comparePItems } from "./sort";
 
 const KAFE_URL_BASE = "https://katabami83.github.io/gakumas_contest_simulator";
 
@@ -32,8 +33,13 @@ export function generateKafeUrl(
 
   // Convert p-item ids
   const itemSimulatorIds = pItemIds
-    .filter((i) => PItems.getById(i) && PItems.getById(i).sourceType != "pIdol")
-    .map((i) => KAFE_ITEM_MAP[i] || -1);
+    .map(PItems.getById)
+    .filter((p) => p)
+    .sort(comparePItems)
+    .map((p) => KAFE_ITEM_MAP[p.id] || -1);
+  while (itemSimulatorIds.length < 4) {
+    itemSimulatorIds.unshift(-1);
+  }
 
   // Convert skill card ids
   const groups = skillCardIdGroups.slice();
@@ -72,7 +78,7 @@ export function generateKafeUrl(
     }`
   );
   simulatorParams.set("status", status.join(":"));
-  simulatorParams.set("p_items", itemSimulatorIds.join(":"));
+  simulatorParams.set("p_item_ids", itemSimulatorIds.join(":"));
   simulatorParams.set(
     "cards",
     cardSimulatorIds.map((cg) => cg.join(":")).join("_")
