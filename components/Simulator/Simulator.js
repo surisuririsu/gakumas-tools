@@ -99,6 +99,7 @@ export default function Simulator() {
   );
 
   function runSimulation() {
+    setSimulatorData(null);
     setRunning(true);
 
     console.time("simulation");
