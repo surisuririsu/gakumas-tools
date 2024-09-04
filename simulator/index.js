@@ -1,10 +1,11 @@
 import { StageEngine, StageLogger, StagePlayer } from "gakumas-engine";
 import { mergeGraphDatas } from "@/utils/simulator";
+import { DEBUG } from "./constants";
 import STRATEGIES from "./strategies";
 
 export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
-  const logger = new StageLogger();
-  const engine = new StageEngine(stageConfig, idolConfig, logger);
+  const logger = new StageLogger(DEBUG);
+  const engine = new StageEngine(stageConfig, idolConfig, logger, DEBUG);
   const strategy = new STRATEGIES[strategyName](engine);
 
   let totalScore = 0;

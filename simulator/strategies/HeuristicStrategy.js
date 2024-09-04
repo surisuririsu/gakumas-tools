@@ -30,7 +30,7 @@ export default class HeuristicStrategy extends StageStrategy {
 
     const getTrueScore = (score) => {
       // Score buff effects
-      score *= 1 + state.oneTurnScoreBuff + state.permanentScoreBuff;
+      score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
       score = Math.ceil(score);
 
       // Turn type multiplier
@@ -125,11 +125,13 @@ export default class HeuristicStrategy extends StageStrategy {
       0.5 *
       motivationMultiplier;
 
-    // One turn score buff
-    score += previewState.oneTurnScoreBuff * 20;
-
-    // Permament score buff
-    score += previewState.permanentScoreBuff * previewState.turnsRemaining * 20;
+    // Score buffs
+    score +=
+      previewState.scoreBuffs.reduce(
+        (acc, cur) =>
+          acc + cur.amount * (cur.turns || previewState.turnsRemaining),
+        0
+      ) * 20;
 
     // Half cost turns
     score += previewState.halfCostTurns * 9;
