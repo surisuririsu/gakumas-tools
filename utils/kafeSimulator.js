@@ -46,27 +46,17 @@ export function generateKafeUrl(
   while (groups.length < 2) {
     groups.push([0, 0, 0, 0, 0, 0]);
   }
-  const mainIdolCard = groups[0]
-    .map((cid) => SkillCards.getById(cid))
-    .find((c) => c?.sourceType == "pIdol");
-  const subIdolCard = groups[1]
-    .map((cid) => SkillCards.getById(cid))
-    .find((c) => c?.sourceType == "pIdol");
-  const mainIdolCardSimulatorId = KAFE_CARD_MAP[mainIdolCard?.id] || -1;
-  const subIdolCardSimulatorId = KAFE_CARD_MAP[subIdolCard?.id] || -1;
-  const cardSimulatorIds = groups
-    .slice(0, 2)
-    .map((cg, idx) =>
-      [idx ? subIdolCardSimulatorId : mainIdolCardSimulatorId].concat(
-        cg
-          .filter(
-            (cid) =>
-              SkillCards.getById(cid) &&
-              SkillCards.getById(cid).sourceType != "pIdol"
-          )
-          .map((cid) => KAFE_CARD_MAP[cid] || -1)
-      )
+  const cardSimulatorIds = groups.slice(0, 2).map((cg) => {
+    const cards = cg.map(SkillCards.getById);
+    const signatureCard = cards.find((c) => c?.sourceType == "pIdol");
+    const signatureCardKafeId = KAFE_CARD_MAP[signatureCard?.id] || -1;
+    const nonSignatureCardKafeIds = cards.map((c) =>
+      c?.sourceType == "pIdol" ? -1 : KAFE_CARD_MAP[c?.id] || -1
     );
+    const emptyIndex = nonSignatureCardKafeIds.indexOf(-1);
+    if (emptyIndex != -1) nonSignatureCardKafeIds.splice(emptyIndex, 1);
+    return [signatureCardKafeId, ...nonSignatureCardKafeIds];
+  });
 
   // Build search query
   const simulatorParams = new URLSearchParams();
