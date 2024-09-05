@@ -31,10 +31,10 @@ export const TOOLS = {
   memoryCalculator: {
     title: "メモリー生成確率計算機",
     icon: (
-      <>
+      <span>
         <FaFilm />
         <FaCalculator />
-      </>
+      </span>
     ),
     fill: true,
     description: "欲しいメモリーの生成確率を計算する",

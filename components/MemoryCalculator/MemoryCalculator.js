@@ -1,5 +1,6 @@
 "use client";
 import React, { memo, useContext, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
@@ -33,6 +34,8 @@ function generateCombinations(slots) {
 }
 
 function MemoryCalculator() {
+  const t = useTranslations("MemoryCalculator");
+
   const {
     targetSkillCardIds,
     alternateSkillCardIds,
@@ -111,14 +114,12 @@ function MemoryCalculator() {
 
   return (
     <div className={styles.memoryCalculator}>
-      <p>
-        ※表示される確率はあくまで全メモリーが同確立で生成されるとして求められた推測値であり、実際の確率とは異なる可能性があります。
-      </p>
+      <p>{t("note")}</p>
 
-      <label>欲しいパターン</label>
+      <label>{t("target")}</label>
       <TargetSkillCards idolId={idolId} />
 
-      <label>取得スキルカード（強化前後含む）</label>
+      <label>{t("acquired")}</label>
       <div className={styles.skillCards}>
         {useMemo(
           () =>
@@ -142,12 +143,12 @@ function MemoryCalculator() {
         )}
       </div>
 
-      <label>プロデュース評価</label>
+      <label>{t("produceRank")}</label>
       <div className={styles.rankSelect}>
         <IconSelect options={RANK_OPTIONS} selected={rank} onChange={setRank} />
       </div>
 
-      <label>コスト範囲</label>
+      <label>{t("costRange")}</label>
       <div>
         {costRange.min} ~ {costRange.max}
       </div>
@@ -156,7 +157,9 @@ function MemoryCalculator() {
         className={styles.resultsToggle}
         onClick={() => setShowOnTargetResults(!showOnTargetResults)}
       >
-        <label>成功 ({(onTargetProbability * 100).toFixed(2)}%)</label>
+        <label>
+          {t("success")} ({(onTargetProbability * 100).toFixed(2)}%)
+        </label>
         {showOnTargetResults ? <FaChevronUp /> : <FaChevronDown />}
       </button>
       {showOnTargetResults && (
@@ -170,7 +173,9 @@ function MemoryCalculator() {
         className={styles.resultsToggle}
         onClick={() => setShowOffTargetResults(!showOffTargetResults)}
       >
-        <label>失敗 ({(offTargetProbability * 100).toFixed(2)}%)</label>
+        <label>
+          {t("failure")} ({(offTargetProbability * 100).toFixed(2)}%)
+        </label>
         {showOffTargetResults ? <FaChevronUp /> : <FaChevronDown />}
       </button>
       {showOffTargetResults && (

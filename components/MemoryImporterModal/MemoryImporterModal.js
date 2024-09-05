@@ -15,6 +15,8 @@ import styles from "./MemoryImporterModal.module.scss";
 const MAX_WORKERS = 8;
 
 function MemoryImporterModal({ onSuccess }) {
+  // TODO: Add translations
+
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const engWorkersRef = useRef();

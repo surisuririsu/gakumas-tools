@@ -1,4 +1,5 @@
 import React, { memo, useContext, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
@@ -9,6 +10,8 @@ import { EntityTypes } from "@/utils/entities";
 import styles from "./TargetSkillCards.module.scss";
 
 function TargetSkillCards({ idolId }) {
+  const t = useTranslations("TargetSkillCards");
+
   const {
     targetSkillCardIds,
     alternateSkillCardIds,
@@ -24,12 +27,12 @@ function TargetSkillCards({ idolId }) {
   const filters = useMemo(
     () => [
       {
-        label: "取得済み",
+        label: t("acquired"),
         callback: (e) => acquiredSkillCardIds.includes(e.id),
         default: acquiredSkillCardIds.some((id) => id),
       },
     ],
-    [acquiredSkillCardIds]
+    [acquiredSkillCardIds, t]
   );
 
   return (

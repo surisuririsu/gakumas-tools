@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import Checkbox from "@/components/Checkbox";
@@ -11,6 +12,8 @@ import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
+  const t = useTranslations("EntityBank");
+
   const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
     useContext(WorkspaceContext);
   const [enabledCustomFilters, setEnabledCustomFilters] = useState(
@@ -77,7 +80,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
       <div className={styles.filter}>
         <div className={styles.defaultFilters}>
           <Checkbox
-            label={filter ? "" : "フィルタ"}
+            label={filter ? "" : t("filter")}
             checked={filter}
             onChange={setFilter}
           />
