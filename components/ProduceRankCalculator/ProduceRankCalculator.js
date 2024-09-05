@@ -1,5 +1,6 @@
 "use client";
 import { memo, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import ParametersInput from "@/components/ParametersInput";
@@ -15,22 +16,29 @@ import {
 } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
 
-const DIFFICULTY_OPTIONS = [
-  { value: "regular", label: "レギュラー" },
-  { value: "pro", label: "プロ" },
-  { value: "master", label: "マスター" },
-];
-
-const EXAM_PLACE_OPTIONS = [
-  { value: 1, label: "1位" },
-  { value: 2, label: "2位" },
-  { value: 3, label: "3位" },
-  { value: 4, label: "4位以下" },
-];
-
-const TABLE_HEADERS = ["評価", "目標スコア"];
-
 function ProduceRankCalculator() {
+  const t = useTranslations("ProduceRankCalculator");
+
+  const DIFFICULTY_OPTIONS = useMemo(
+    () =>
+      ["regular", "pro", "master"].map((difficulty) => ({
+        value: difficulty,
+        label: t(`difficulties.${difficulty}`),
+      })),
+    [t]
+  );
+
+  const EXAM_PLACE_OPTIONS = useMemo(
+    () =>
+      [1, 2, 3, 4].map((place) => ({
+        value: place,
+        label: t(`places.${place}`),
+      })),
+    [t]
+  );
+
+  const TABLE_HEADERS = [t("produceRank"), t("targetScore")];
+
   const [difficulty, setDifficulty] = useState("pro");
   const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
@@ -60,23 +68,27 @@ function ProduceRankCalculator() {
 
   return (
     <div className={styles.produceRankCalculator}>
-      <label>難易度</label>
+      <label>{t("difficulty")}</label>
       <ButtonGroup
         options={DIFFICULTY_OPTIONS}
         selected={difficulty}
         onChange={setDifficulty}
       />
-      <div className={styles.bonus}>パラメータ上限: {maxParams}</div>
+      <div className={styles.bonus}>
+        {t("parameterLimit")}: {maxParams}
+      </div>
 
-      <label>最終試験順位</label>
+      <label>{t("finalExamPlacement")}</label>
       <ButtonGroup
         options={EXAM_PLACE_OPTIONS}
         selected={place}
         onChange={setPlace}
       />
-      <div className={styles.bonus}>パラメータ: +{placeParamBonus}</div>
+      <div className={styles.bonus}>
+        {t("parameter")}: +{placeParamBonus}
+      </div>
 
-      <label>パラメータ</label>
+      <label>{t("parameters")}</label>
       <ParametersInput
         parameters={params}
         max={maxParams}
@@ -85,14 +97,14 @@ function ProduceRankCalculator() {
 
       {!!params.every((p) => !!p) && (
         <>
-          <label>目標スコア</label>
+          <label>{t("targetScores")}</label>
           <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
 
-          <label>スコア</label>
+          <label>{t("score")}</label>
           <Input
             type="number"
             value={actualScore}
-            placeholder="スコア"
+            placeholder={t("score")}
             onChange={setActualScore}
             min={0}
             max={1000000}
@@ -100,7 +112,7 @@ function ProduceRankCalculator() {
 
           {actualScore && (
             <>
-              <label>プロデュース評価</label>
+              <label>{t("produceRank")}</label>
               <span>
                 {actualRating} {actualRank ? `(${actualRank})` : null}
               </span>

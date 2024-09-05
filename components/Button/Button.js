@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./Button.module.scss";
 

@@ -1,5 +1,6 @@
 import { memo, useContext } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { FaPen } from "react-icons/fa6";
 import Button from "@/components/Button";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
@@ -9,6 +10,8 @@ import ModalContext from "@/contexts/ModalContext";
 import styles from "./Memories.module.scss";
 
 function MemoriesNudge() {
+  const t = useTranslations("MemoriesNudge");
+
   const { status } = useSession();
   const { uploadMemories, memoriesLoading } = useContext(DataContext);
   const { setModal } = useContext(ModalContext);
@@ -17,7 +20,7 @@ function MemoriesNudge() {
     <div className={styles.nudge}>
       {status == "unauthenticated" && (
         <Button style="primary" onClick={() => setModal(<MemoryEditorModal />)}>
-          <FaPen /> メモリーを作成する
+          <FaPen /> {t("create")}
         </Button>
       )}
       {status == "authenticated" && !memoriesLoading && (
@@ -27,7 +30,7 @@ function MemoriesNudge() {
             setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
           }
         >
-          スクショからメモリーを読み取る
+          {t("import")}
         </Button>
       )}
     </div>

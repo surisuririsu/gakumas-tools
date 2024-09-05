@@ -2,6 +2,7 @@
 import { memo, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
@@ -10,6 +11,7 @@ import styles from "./NavbarMenu.module.scss";
 const discordSignIn = () => signIn("discord");
 
 function NavbarMenu() {
+  const t = useTranslations("NavbarMenu");
   const { data: session, status } = useSession();
   const [expanded, setExpanded] = useState(false);
 
@@ -35,20 +37,20 @@ function NavbarMenu() {
             {status == "unauthenticated" && (
               <div>
                 <Button style="primary" onClick={discordSignIn} fill>
-                  Discordでログイン
+                  {t("signInWithDiscord")}
                 </Button>
               </div>
             )}
 
             <a href="https://wikiwiki.jp/gakumas/" target="_blank">
-              学マスコンテストWiki
+              {t("gakumasContestWiki")}
             </a>
 
             <a
               href="https://github.com/surisuririsu/gakumas-tools/issues/new"
               target="_blank"
             >
-              フィードバックを送信
+              {t("sendFeedback")}
             </a>
 
             <div className={styles.author}>
@@ -71,7 +73,7 @@ function NavbarMenu() {
             </div>
 
             {status == "authenticated" && (
-              <button onClick={signOut}>ログアウト</button>
+              <button onClick={signOut}>{t("signOut")}</button>
             )}
           </div>
         </div>
