@@ -68,7 +68,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
             type={type}
             id={entity.id}
             idolId={idolId}
-            onClick={() => onClick(entity)}
+            onClick={onClick}
             size="fill"
           />
         ))}

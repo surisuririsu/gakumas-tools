@@ -1,5 +1,5 @@
 "use client";
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import ButtonGroup from "@/components/ButtonGroup";
 import EntityBank from "@/components/EntityBank";
 import EntityDetails from "@/components/EntityDetails";
@@ -10,15 +10,16 @@ function Dex() {
   const [activeTab, setActiveTab] = useState(EntityTypes.SKILL_CARD);
   const [selectedEntity, setSelectedEntity] = useState(null);
 
+  const selectEntity = useCallback(
+    ({ id }) => setSelectedEntity({ type: activeTab, id }),
+    [activeTab]
+  );
+
   return (
     <div className={styles.dex}>
       <EntityDetails type={selectedEntity?.type} id={selectedEntity?.id} />
 
-      <EntityBank
-        type={activeTab}
-        onClick={({ id }) => setSelectedEntity({ type: activeTab, id })}
-        includeNull={false}
-      />
+      <EntityBank type={activeTab} onClick={selectEntity} includeNull={false} />
 
       <div className={styles.tabs}>
         <ButtonGroup
