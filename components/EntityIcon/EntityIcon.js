@@ -10,7 +10,7 @@ function EntityIcon({ type, id, idolId, size = "large", onClick }) {
   return (
     <button
       className={c(styles.entityIcon, styles[size])}
-      onClick={() => onClick(entity)}
+      onClick={() => onClick(entity || {})}
     >
       {entity && (
         <Image
