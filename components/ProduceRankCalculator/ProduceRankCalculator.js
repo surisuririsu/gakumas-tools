@@ -3,6 +3,7 @@ import { memo, useMemo, useState } from "react";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import ParametersInput from "@/components/ParametersInput";
+import Table from "@/components/Table";
 import {
   calculateActualRating,
   calculateRatingExExamScore,
@@ -13,7 +14,21 @@ import {
   TARGET_RATING_BY_RANK,
 } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
-import Table from "../Table/Table";
+
+const DIFFICULTY_OPTIONS = [
+  { value: "regular", label: "レギュラー" },
+  { value: "pro", label: "プロ" },
+  { value: "master", label: "マスター" },
+];
+
+const EXAM_PLACE_OPTIONS = [
+  { value: 1, label: "1位" },
+  { value: 2, label: "2位" },
+  { value: 3, label: "3位" },
+  { value: 4, label: "4位以下" },
+];
+
+const TABLE_HEADERS = ["評価", "目標スコア"];
 
 function ProduceRankCalculator() {
   const [difficulty, setDifficulty] = useState("pro");
@@ -29,8 +44,12 @@ function ProduceRankCalculator() {
     maxParams
   );
 
-  const targetScores = useMemo(
-    () => calculateTargetScores(ratingExExamScore),
+  const targetScoreRows = useMemo(
+    () =>
+      calculateTargetScores(ratingExExamScore).map(({ rank, score }) => [
+        `${rank} (${TARGET_RATING_BY_RANK[rank]})`,
+        score,
+      ]),
     [ratingExExamScore]
   );
   const actualRating = useMemo(
@@ -43,11 +62,7 @@ function ProduceRankCalculator() {
     <div className={styles.produceRankCalculator}>
       <label>難易度</label>
       <ButtonGroup
-        options={[
-          { value: "regular", label: "レギュラー" },
-          { value: "pro", label: "プロ" },
-          { value: "master", label: "マスター" },
-        ]}
+        options={DIFFICULTY_OPTIONS}
         selected={difficulty}
         onChange={setDifficulty}
       />
@@ -55,12 +70,7 @@ function ProduceRankCalculator() {
 
       <label>最終試験順位</label>
       <ButtonGroup
-        options={[
-          { value: 1, label: "1位" },
-          { value: 2, label: "2位" },
-          { value: 3, label: "3位" },
-          { value: 4, label: "4位以下" },
-        ]}
+        options={EXAM_PLACE_OPTIONS}
         selected={place}
         onChange={setPlace}
       />
@@ -76,13 +86,7 @@ function ProduceRankCalculator() {
       {!!params.every((p) => !!p) && (
         <>
           <label>目標スコア</label>
-          <Table
-            headers={["評価", "目標スコア"]}
-            rows={targetScores.map(({ rank, score }) => [
-              `${rank} (${TARGET_RATING_BY_RANK[rank]})`,
-              score,
-            ])}
-          />
+          <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
 
           <label>スコア</label>
           <Input
