@@ -59,7 +59,8 @@ function Memories() {
       />
       <MemoriesList
         memories={filteredMemories}
-        action={action}
+        deleting={action == "delete"}
+        picking={action == "pick"}
         selectedMemories={selectedMemories}
         setSelectedMemories={setSelectedMemories}
       />

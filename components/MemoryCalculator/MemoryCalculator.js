@@ -16,7 +16,11 @@ import {
 import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
 import styles from "./MemoryCalculator.module.scss";
 
-const RANKS = ["B", "B+", "A", "A+", "S"];
+const RANK_OPTIONS = ["B", "B+", "A", "A+", "S"].map((r) => ({
+  id: r,
+  iconSrc: `/ranks/${r}.png`,
+  alt: r,
+}));
 
 // Generates all combinations of target cards
 function generateCombinations(slots) {
@@ -116,35 +120,31 @@ function MemoryCalculator() {
 
       <label>取得スキルカード（強化前後含む）</label>
       <div className={styles.skillCards}>
-        {acquiredSkillCardIds.map((skillCardId, index) => (
-          <EntityIcon
-            key={`${index}_${skillCardId}`}
-            type={EntityTypes.SKILL_CARD}
-            id={skillCardId}
-            onClick={() =>
-              setModal(
-                <EntityPickerModal
-                  type={EntityTypes.SKILL_CARD}
-                  onPick={(card) => replaceAcquiredCardId(index, card.id)}
-                />
-              )
-            }
-            idolId={idolId}
-          />
-        ))}
+        {useMemo(
+          () =>
+            acquiredSkillCardIds.map((skillCardId, index) => (
+              <EntityIcon
+                key={`${index}_${skillCardId}`}
+                type={EntityTypes.SKILL_CARD}
+                id={skillCardId}
+                onClick={() =>
+                  setModal(
+                    <EntityPickerModal
+                      type={EntityTypes.SKILL_CARD}
+                      onPick={(card) => replaceAcquiredCardId(index, card.id)}
+                    />
+                  )
+                }
+                idolId={idolId}
+              />
+            )),
+          [acquiredSkillCardIds, idolId]
+        )}
       </div>
 
       <label>プロデュース評価</label>
       <div className={styles.rankSelect}>
-        <IconSelect
-          options={RANKS.map((r) => ({
-            id: r,
-            iconSrc: `/ranks/${r}.png`,
-            alt: r,
-          }))}
-          selected={rank}
-          onChange={setRank}
-        />
+        <IconSelect options={RANK_OPTIONS} selected={rank} onChange={setRank} />
       </div>
 
       <label>コスト範囲</label>
