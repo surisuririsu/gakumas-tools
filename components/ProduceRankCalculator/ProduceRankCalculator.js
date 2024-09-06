@@ -42,7 +42,7 @@ function ProduceRankCalculator() {
   const [difficulty, setDifficulty] = useState("pro");
   const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
-  const [actualScore, setActualScore] = useState(null);
+  const [actualScore, setActualScore] = useState("");
 
   const maxParams = MAX_PARAMS_BY_DIFFICULTY[difficulty];
   const placeParamBonus = PARAM_BONUS_BY_PLACE[place];
@@ -103,14 +103,14 @@ function ProduceRankCalculator() {
           <label>{t("score")}</label>
           <Input
             type="number"
-            value={actualScore}
+            value={actualScore || ""}
             placeholder={t("score")}
             onChange={setActualScore}
             min={0}
             max={1000000}
           />
 
-          {actualScore && (
+          {!!actualScore && (
             <>
               <label>{t("produceRank")}</label>
               <span>

@@ -1,4 +1,5 @@
 import { memo, useContext, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FaChevronUp, FaChevronDown, FaRegPenToSquare } from "react-icons/fa6";
 import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
@@ -12,6 +13,8 @@ import styles from "./StageSelect.module.scss";
 const stages = Stages.getAll().sort(compareStages);
 
 function StageSelect() {
+  const t = useTranslations("StageSelect");
+
   const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
@@ -28,7 +31,7 @@ function StageSelect() {
           {stage.id ? (
             <StageSummary stage={stage} />
           ) : (
-            <div className={styles.placeholder}>ステージ選択</div>
+            <div className={styles.placeholder}>{t("placeholder")}</div>
           )}
           {expanded ? <FaChevronUp /> : <FaChevronDown />}
         </button>

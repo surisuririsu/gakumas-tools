@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   FaCirclePlus,
   FaCircleArrowUp,
@@ -16,6 +17,7 @@ import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
 function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
+  const t = useTranslations("LoadoutSkillCardGroup");
   const {
     skillCardIdGroups,
     replaceSkillCardId,
@@ -49,7 +51,9 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
       />
 
       <div className={styles.sub}>
-        <div className={styles.cost}>コスト: {cost}</div>
+        <div className={styles.cost}>
+          {t("cost")}: {cost}
+        </div>
         <div
           className={c(styles.buttonGroup, expanded && styles.expanded)}
           onClick={() => setExpanded(false)}
