@@ -2,7 +2,11 @@ import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  unstable_setRequestLocale,
+} from "next-intl/server";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
@@ -41,6 +45,7 @@ export function generateStaticParams() {
 }
 
 export default async function RootLayout({ children, params: { locale } }) {
+  unstable_setRequestLocale(locale);
   const messages = await getMessages();
   const session = await getServerSession(authOptions);
 
