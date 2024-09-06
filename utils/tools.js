@@ -46,6 +46,7 @@ export const TOOLS = {
     icon: <FaFilm />,
     description: "メモリーを制作、保存、Pアイテムとスキルカードで検索する",
     path: "/memories",
+    pinnable: true,
   },
   simulator: {
     title: "シミュレーター",
