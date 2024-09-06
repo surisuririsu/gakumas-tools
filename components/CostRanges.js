@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useTranslations } from "next-intl";
 import Table from "@/components/Table";
 
 const RANGES = [
@@ -10,9 +11,11 @@ const RANGES = [
 ];
 
 function CostRanges() {
+  const t = useTranslations("CostRanges");
+
   return (
     <Table
-      headers={["ランク", "下限", "上限"]}
+      headers={[t("rank"), t("min"), t("max")]}
       widths={["20%", null, null]}
       rows={RANGES.map(({ rank, min, max }) => [rank, min, max])}
     />

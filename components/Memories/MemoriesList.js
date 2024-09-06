@@ -1,33 +1,24 @@
 "use client";
-import { memo, useContext } from "react";
-import { useSession } from "next-auth/react";
+import { memo } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
-import { FaPen } from "react-icons/fa6";
-import Button from "@/components/Button";
-import MemoryEditorModal from "@/components/MemoryEditorModal";
-import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemorySummary from "@/components/MemorySummary";
-import DataContext from "@/contexts/DataContext";
-import ModalContext from "@/contexts/ModalContext";
+import MemoriesNudge from "./MemoriesNudge";
 import styles from "./Memories.module.scss";
 
 function MemoriesList({
   memories,
-  action,
+  deleting,
+  picking,
   selectedMemories,
   setSelectedMemories,
   onPick,
 }) {
-  const { status } = useSession();
-  const { uploadMemories, memoriesLoading } = useContext(DataContext);
-  const { setModal } = useContext(ModalContext);
-
   const Row = ({ index, style }) => {
     const memory = memories[index];
     return (
       <div className={styles.memoryTile} style={style}>
-        {action == "delete" && (
+        {deleting && (
           <div className={styles.check}>
             <input
               type="checkbox"
@@ -43,7 +34,7 @@ function MemoriesList({
         )}
         <MemorySummary
           memory={memory}
-          action={action}
+          picking={picking}
           onClick={() => onPick(memory)}
         />
       </div>
@@ -66,26 +57,7 @@ function MemoriesList({
           )}
         </AutoSizer>
       ) : (
-        <div className={styles.nudge}>
-          {status == "unauthenticated" && (
-            <Button
-              style="primary"
-              onClick={() => setModal(<MemoryEditorModal />)}
-            >
-              <FaPen /> メモリーを作成する
-            </Button>
-          )}
-          {status == "authenticated" && !memoriesLoading && (
-            <Button
-              style="primary"
-              onClick={() =>
-                setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
-              }
-            >
-              スクショからメモリーを読み取る
-            </Button>
-          )}
-        </div>
+        <MemoriesNudge />
       )}
     </div>
   );

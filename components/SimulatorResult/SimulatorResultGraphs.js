@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   AiOutlineAreaChart,
   AiOutlineBarChart,
@@ -16,7 +17,10 @@ const BOXPLOT = <AiOutlineBoxPlot />;
 const AREA = <AiOutlineAreaChart />;
 
 export default function SimulatorResultGraphs({ data }) {
+  const t = useTranslations("SimulatorResultGraphs");
+
   const [graphType, setGraphType] = useState("histogram");
+  const label = `${t("score")} (n=${NUM_RUNS})`;
 
   return (
     <div>
@@ -31,12 +35,12 @@ export default function SimulatorResultGraphs({ data }) {
         onChange={setGraphType}
       />
       {graphType == "histogram" && (
-        <DistributionPlot data={data.bucketedScores} />
+        <DistributionPlot label={label} data={data.bucketedScores} />
       )}
       {graphType == "boxplot" && (
         <BoxPlot
-          labels={[`スコア (n=${NUM_RUNS})`]}
-          data={[{ label: `スコア (n=${NUM_RUNS})`, data: [data.scores] }]}
+          labels={[label]}
+          data={[{ label, data: [data.scores] }]}
           showXAxis={false}
         />
       )}

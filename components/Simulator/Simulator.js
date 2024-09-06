@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { useTranslations } from "next-intl";
 import { IdolConfig, StageConfig } from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -21,6 +21,8 @@ import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
 export default function Simulator() {
+  const t = useTranslations("Simulator");
+
   const {
     stage,
     supportBonus,
@@ -138,7 +140,7 @@ export default function Simulator() {
         <StageSelect />
 
         <div className={styles.supportBonusInput}>
-          <label>サポートボーナス%</label>
+          <label>{t("supportBonus")}</label>
           <Input
             type="number"
             value={parseFloat(((supportBonus || 0) * 100).toFixed(2))}
@@ -190,7 +192,7 @@ export default function Simulator() {
           ))}
         </select>
         <Button style="blue" onClick={runSimulation} disabled={running}>
-          {running ? <Loader /> : "実行"}
+          {running ? <Loader /> : t("simulate")}
         </Button>
       </div>
 
