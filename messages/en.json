@@ -1,0 +1,188 @@
+{
+  "Welcome": {
+    "title": "Gakumas Tools",
+    "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
+  },
+  "ProduceRankCalculator": {
+    "difficulties": {
+      "regular": "Regular",
+      "pro": "Pro",
+      "master": "Master"
+    },
+    "places": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd",
+      "4": "Other"
+    },
+    "difficulty": "Difficulty",
+    "parameterLimit": "Parameter limit",
+    "finalExamPlacement": "Final exam placement",
+    "parameter": "Parameter",
+    "parameters": "Parameters",
+    "targetScores": "Target scores",
+    "produceRank": "Produce rank",
+    "targetScore": "Target score",
+    "score": "Score"
+  },
+  "metadata": {
+    "title": "Gakumas Tools",
+    "description": "Gakumas Tools is a collection of useful tools for producers at Hatsuboshi Gakuen. Calculate required final exam scores for produce ranks, view p-item and skill card information, organize memories, plan and simulate contest loadouts and more. Be the best producer and help your idols shine!"
+  },
+  "tools": {
+    "home": {
+      "title": "Home",
+      "description": "Overview of available tools"
+    },
+    "produceRankCalculator": {
+      "title": "Produce Rank Calculator",
+      "description": "Calculate final exam score required to achieve each produce rank"
+    },
+    "dex": {
+      "title": "P-Index",
+      "description": "Filter and view p-item and skill card information"
+    },
+    "memoryCalculator": {
+      "title": "Memory Calculator",
+      "description": "Calculate probability of getting desired skill card combinations in memories"
+    },
+    "memories": {
+      "title": "Memories",
+      "description": "Create or import memories, and search by p-items and skill cards"
+    },
+    "simulator": {
+      "title": "Contest Simulator",
+      "description": "Create and simulate contest loadouts"
+    },
+    "rehearsal": {
+      "title": "Rehearsal Parser",
+      "description": "Parse scores from rehearsal screenshots"
+    }
+  },
+  "NavbarMenu": {
+    "signInWithDiscord": "Sign in with Discord",
+    "gakumasContestWiki": "Gakumas Contest Wiki",
+    "sendFeedback": "Send feedback",
+    "signOut": "Sign out"
+  },
+  "Dex": {
+    "skillCards": "Skill cards",
+    "pItems": "P-items"
+  },
+  "EntityBank": {
+    "filter": "Filter"
+  },
+  "MemoryCalculator": {
+    "note": "Note: Probabilities shown are estimated based on a uniform distribution. The real skill card selection algorithm is not known.",
+    "target": "Target skill cards",
+    "acquired": "Acquired skill cards (include pre/post-upgrade)",
+    "produceRank": "Produce rank",
+    "costRange": "Cost range",
+    "success": "Success",
+    "failure": "Failure"
+  },
+  "TargetSkillCards": {
+    "acquired": "Acquired"
+  },
+  "MemorySummaryActionButtons": {
+    "edit": "Edit"
+  },
+  "MemoryEditorModal": {
+    "name": "Name",
+    "contestPower": "Contest power",
+    "cost": "Cost"
+  },
+  "ParametersInput": {
+    "stamina": "Stamina"
+  },
+  "MemoriesNudge": {
+    "create": "Create a memory",
+    "import": "Import memories from screenshots"
+  },
+  "MemoriesHeader": {
+    "selected": "{num} memories selected",
+    "delete": "Delete"
+  },
+  "StageSelect": {
+    "placeholder": "Select stage"
+  },
+  "StageSummary": {
+    "stageName": "Season {season} - Stage {stage}",
+    "custom": "Custom"
+  },
+  "Simulator": {
+    "supportBonus": "Support bonus %",
+    "simulate": "Simulate"
+  },
+  "StageCustomizerModal": {
+    "turnCounts": "Turn counts",
+    "firstTurn": "First turn",
+    "criteria": "Criteria",
+    "effects": "Effects",
+    "effectFormat": "Effect format",
+    "apply": "Apply"
+  },
+  "LoadoutSkillCardGroup": {
+    "cost": "Cost"
+  },
+  "SimulatorSubTools": {
+    "costRanges": "Cost ranges",
+    "defaultCards": "Default cards"
+  },
+  "CostRanges": {
+    "rank": "Rank",
+    "min": "Min",
+    "max": "Max"
+  },
+  "SimulatorButtons": {
+    "confirm": "Are you sure you want to clear the loadout?",
+    "clear": "Clear"
+  },
+  "SimulatorResult": {
+    "min": "Min",
+    "average": "Average",
+    "max": "Max",
+    "logs": "Logs"
+  },
+  "SimulatorResultGraphs": {
+    "score": "Score"
+  },
+  "stage": {
+    "turnsRemaining": "Turns remaining",
+    "cardUsesRemaining": "Card uses remaining",
+    "stamina": "Stamina",
+    "genki": "Genki",
+    "score": "Score",
+    "goodConditionTurns": "Good condition",
+    "perfectConditionTurns": "Perfect condition",
+    "concentration": "Concentration",
+    "goodImpressionTurns": "Good impression",
+    "motivation": "Motivation",
+    "halfCostTurns": "Half cost turns",
+    "doubleCostTurns": "Double cost turns",
+    "costReduction": "Cost reduction",
+    "costIncrease": "Cost increase",
+    "doubleCardEffectCards": "Repeat card effects",
+    "nullifyGenkiTurns": "Nullify genki turns",
+    "scoreBuff": "Score increase buff",
+    "turn": "Turn",
+    "cardDrawn": "Card drawn",
+    "upgradedHand": "Upgraded all cards in hand",
+    "exchangedHand": "Exchanged all cards in hand",
+    "setEffect": "Set effect",
+    "addedCardToHand": "Added card to hand",
+    "effect": "Effect",
+    "stageEffect": "Stage effect",
+    "skillCard": "Skill card",
+    "pItem": "P-item",
+    "numTurns": "{num} {num, plural, =1 {turn} other {turns}}",
+    "hand": "Hand",
+    "turnN": "Turn {n}",
+    "average": "Average"
+  },
+  "MemorySave": {
+    "save": "Save",
+    "saveAsNew": "Save as new",
+    "signInToSave": "Sign in with Discord to save"
+  }
+}

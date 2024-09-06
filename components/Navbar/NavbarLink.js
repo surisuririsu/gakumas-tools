@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import styles from "./Navbar.module.scss";
 
 function NavbarLink({ icon, path, title, active }) {

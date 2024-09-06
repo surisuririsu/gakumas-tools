@@ -1,5 +1,6 @@
 import { memo, useContext, useMemo } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import {
   FaCircleXmark,
   FaFileImport,
@@ -27,6 +28,8 @@ function MemoriesHeader({
   selectedMemories,
   setSelectedMemories,
 }) {
+  const t = useTranslations("MemoriesHeader");
+
   const { status } = useSession();
   const { uploadMemories, deleteMemories, memoriesLoading } =
     useContext(DataContext);
@@ -96,7 +99,7 @@ function MemoriesHeader({
 
       {action == "delete" && (
         <div className={styles.delete}>
-          {selectedMemoryIds.length}個のメモリーを選択{" "}
+          {t("selected", { num: selectedMemoryIds.length })}{" "}
           <Button
             style="red"
             onClick={() => {
@@ -105,7 +108,7 @@ function MemoriesHeader({
             }}
             disabled={!selectedMemoryIds.length}
           >
-            削除する
+            {t("delete")}
           </Button>
         </div>
       )}

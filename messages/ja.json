@@ -1,0 +1,188 @@
+{
+  "Welcome": {
+    "title": "Gakumas Tools - 学マスツール",
+    "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
+  },
+  "ProduceRankCalculator": {
+    "difficulties": {
+      "regular": "レギュラー",
+      "pro": "プロ",
+      "master": "マスター"
+    },
+    "places": {
+      "1": "1位",
+      "2": "2位",
+      "3": "3位",
+      "4": "4位以下"
+    },
+    "difficulty": "難易度",
+    "parameterLimit": "パラメータ上限",
+    "finalExamPlacement": "最終試験順位",
+    "parameter": "パラメータ",
+    "parameters": "パラメータ",
+    "targetScores": "目標スコア",
+    "produceRank": "プロデュース評価",
+    "targetScore": "目標スコア",
+    "score": "スコア"
+  },
+  "metadata": {
+    "title": "Gakumas Tools - 学マスツール",
+    "description": "「Gakumas Tools（学マスツール）」は、初星学園プロデューサー科の生徒のためのツール集です。プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。アイドルたちを輝かせましょう！"
+  },
+  "tools": {
+    "home": {
+      "title": "トップページ",
+      "description": "機能一覧"
+    },
+    "produceRankCalculator": {
+      "title": "プロデュース評価計算機",
+      "description": "プロデュース評価に必要な最終試験スコアを計算する"
+    },
+    "dex": {
+      "title": "P図鑑",
+      "description": "Pアイテムとスキルカード情報を表示する"
+    },
+    "memoryCalculator": {
+      "title": "メモリー生成確率計算機",
+      "description": "欲しいメモリーの生成確率を計算する"
+    },
+    "memories": {
+      "title": "メモリー",
+      "description": "メモリーを制作、保存、Pアイテムとスキルカードで検索する"
+    },
+    "simulator": {
+      "title": "コンテストシミュレーター",
+      "description": "コンテスト編成を作成、シミュレーターでスコアを予測する"
+    },
+    "rehearsal": {
+      "title": "リハーサル読み取り",
+      "description": "リハーサル画面のスクショからスコアを読み取る"
+    }
+  },
+  "NavbarMenu": {
+    "signInWithDiscord": "Discordでログイン",
+    "gakumasContestWiki": "学マスコンテストWiki",
+    "sendFeedback": "フィードバックを送信",
+    "signOut": "ログアウト"
+  },
+  "Dex": {
+    "skillCards": "スキルカード",
+    "pItems": "Pアイテム"
+  },
+  "EntityBank": {
+    "filter": "フィルタ"
+  },
+  "MemoryCalculator": {
+    "note": "※表示される確率はあくまで全メモリーが同確立で生成されるとして求められた推測値であり、実際の確率とは異なる可能性があります。",
+    "target": "欲しいパターン",
+    "acquired": "取得スキルカード（強化前後含む）",
+    "produceRank": "プロデュース評価",
+    "costRange": "コスト範囲",
+    "success": "成功",
+    "failure": "失敗"
+  },
+  "TargetSkillCards": {
+    "acquired": "取得済み"
+  },
+  "MemorySummaryActionButtons": {
+    "edit": "編集"
+  },
+  "MemoryEditorModal": {
+    "name": "名前",
+    "contestPower": "総合力",
+    "cost": "コスト"
+  },
+  "ParametersInput": {
+    "stamina": "体力"
+  },
+  "MemoriesNudge": {
+    "create": "メモリーを作成する",
+    "import": "スクショからメモリーを読み取る"
+  },
+  "MemoriesHeader": {
+    "selected": "{num}個のメモリーを選択",
+    "delete": "削除する"
+  },
+  "StageSelect": {
+    "placeholder": "ステージ選択"
+  },
+  "StageSummary": {
+    "stageName": "シーズン{season} ステージ{stage}",
+    "custom": "カスタム"
+  },
+  "Simulator": {
+    "supportBonus": "サポートボーナス%",
+    "simulate": "実行"
+  },
+  "StageCustomizerModal": {
+    "turnCounts": "ターン数",
+    "firstTurn": "初手ターン",
+    "criteria": "審査基準",
+    "effects": "ステージ効果",
+    "effectFormat": "効果形式",
+    "apply": "適用"
+  },
+  "LoadoutSkillCardGroup": {
+    "cost": "コスト"
+  },
+  "SimulatorSubTools": {
+    "costRanges": "コスト範囲",
+    "defaultCards": "基本カード"
+  },
+  "CostRanges": {
+    "rank": "ランク",
+    "min": "下限",
+    "max": "上限"
+  },
+  "SimulatorButtons": {
+    "confirm": "編成をクリアしますか？",
+    "clear": "クリア"
+  },
+  "SimulatorResult": {
+    "min": "最小値",
+    "average": "平均値",
+    "max": "最大値",
+    "logs": "ログ"
+  },
+  "SimulatorResultGraphs": {
+    "score": "スコア"
+  },
+  "stage": {
+    "turnsRemaining": "残りターン数",
+    "cardUsesRemaining": "スキルカード使用数",
+    "stamina": "体力",
+    "genki": "元気",
+    "score": "スコア",
+    "goodConditionTurns": "好調",
+    "perfectConditionTurns": "絶好調",
+    "concentration": "集中",
+    "goodImpressionTurns": "好印象",
+    "motivation": "やる気",
+    "halfCostTurns": "消費体力減少",
+    "doubleCostTurns": "消費体力増加",
+    "costReduction": "消費体力削減",
+    "costIncrease": "消費体力追加",
+    "doubleCardEffectCards": "スキルカード追加発動",
+    "nullifyGenkiTurns": "元気増加無効",
+    "scoreBuff": "スコア上昇量増加",
+    "turn": "ターン",
+    "cardDrawn": "スキルカードを引いた",
+    "upgradedHand": "手札をすべてレッスン中強化",
+    "exchangedHand": "手札をすべて入れ替える",
+    "setEffect": "持続効果付与",
+    "addedCardToHand": "スキルカードを手札に生成",
+    "effect": "持続効果",
+    "stageEffect": "ステージ効果",
+    "skillCard": "スキルカード",
+    "pItem": "Pアイテム",
+    "numTurns": "{num}ターン",
+    "hand": "手札",
+    "turnN": "{n}ターン目",
+    "average": "平均値"
+  },
+  "MemorySave": {
+    "save": "保存",
+    "saveAsNew": "新規保存",
+    "signInToSave": "Discordでログインして保存"
+  }
+}

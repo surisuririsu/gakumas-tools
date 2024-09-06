@@ -1,5 +1,6 @@
 "use client";
 import { memo, useContext } from "react";
+import { useTranslations } from "next-intl";
 import { PIdols } from "gakumas-data";
 import Input from "@/components/Input";
 import MemorySave from "@/components/MemorySave";
@@ -17,6 +18,8 @@ import {
 import styles from "./MemoryEditorModal.module.scss";
 
 function MemoryEditorModal() {
+  const t = useTranslations("MemoryEditorModal");
+
   const {
     name,
     setName,
@@ -39,13 +42,13 @@ function MemoryEditorModal() {
     <Modal>
       <div className={styles.memoryEditor}>
         <div>
-          <Input placeholder="名前" value={name} onChange={setName} />
+          <Input placeholder={t("name")} value={name} onChange={setName} />
         </div>
 
         <PIdolSelect selected={pIdolId} onChange={setPIdolId} />
 
         <div className={styles.power}>
-          <label>総合力</label>
+          <label>{t("contestPower")}</label>
           {contestPower}
         </div>
 
@@ -68,7 +71,9 @@ function MemoryEditorModal() {
           replaceSkillCardId={replaceSkillCardId}
           idolId={idolId}
         />
-        <div>コスト: {skillCardCost}</div>
+        <div>
+          {t("cost")}: {skillCardCost}
+        </div>
 
         <MemorySave />
       </div>

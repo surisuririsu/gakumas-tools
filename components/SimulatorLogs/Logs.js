@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { useTranslations } from "next-intl";
 import AddCard from "./AddCard";
 import Diff from "./Diff";
 import Group from "./Group";
@@ -10,13 +11,13 @@ import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
 
 function Log({ line, idolId }) {
+  const t = useTranslations("stage");
+
   if (line.logType == "diff") {
     return <Diff {...line.data} />;
   }
   if (line.logType == "drawCard") {
-    return (
-      <AddCard {...line.data} idolId={idolId} text="スキルカードを引いた" />
-    );
+    return <AddCard {...line.data} idolId={idolId} text={t("cardDrawn")} />;
   }
   if (line.logType == "hand") {
     return <Hand {...line.data} idolId={idolId} />;
@@ -33,17 +34,17 @@ function Log({ line, idolId }) {
     return <SetScoreBuff {...line.data} />;
   }
   if (line.logType == "setEffect") {
-    return <Text>持続効果付与</Text>;
+    return <Text>{t("setEffect")}</Text>;
   }
   if (line.logType == "upgradeHand") {
-    return <Tile text="手札をすべてレッスン中強化" />;
+    return <Tile text={t("upgradedHand")} />;
   }
   if (line.logType == "exchangeHand") {
-    return <Tile text="手札をすべて入れ替える" />;
+    return <Tile text={t("exchangedHand")} />;
   }
   if (line.logType == "addRandomUpgradedCardToHand") {
     return (
-      <AddCard {...line.data} idolId={idolId} text="スキルカードを手札に生成" />
+      <AddCard {...line.data} idolId={idolId} text={t("addedCardToHand")} />
     );
   }
 }

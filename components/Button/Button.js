@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./Button.module.scss";
 
@@ -12,6 +12,7 @@ function Button({
   disabled,
   ariaLabel,
   fill,
+  locale,
 }) {
   const className = c(
     styles.button,
@@ -27,6 +28,7 @@ function Button({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
+      locale={locale}
     >
       {children}
     </Link>

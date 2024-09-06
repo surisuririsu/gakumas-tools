@@ -87,7 +87,7 @@ export default function Preview({
           <div style={styles.cost}>
             {!isEmpty && (
               <>
-                コスト:{" "}
+                Cost:{" "}
                 {cards
                   .slice(0, 6)
                   .filter((id) => id)

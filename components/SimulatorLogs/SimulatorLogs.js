@@ -1,10 +1,22 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
 import styles from "./SimulatorLogs.module.scss";
 import Logs from "./Logs";
 
 function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
+  const t = useTranslations("SimulatorResult");
+
+  const OPTIONS = useMemo(
+    () =>
+      ["min", "average", "max"].map((value) => ({
+        value,
+        label: t(value),
+      })),
+    [t]
+  );
+
   const [runToShow, setRunToShow] = useState("average");
 
   let logs, structuredLogs;
@@ -45,11 +57,7 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
     <div className={styles.simulatorLogs}>
       <ButtonGroup
         selected={runToShow}
-        options={[
-          { value: "min", label: "Min" },
-          { value: "average", label: "Average" },
-          { value: "max", label: "Max" },
-        ]}
+        options={OPTIONS}
         onChange={(value) => setRunToShow(value == runToShow ? null : value)}
       />
 

@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
@@ -12,9 +13,11 @@ function ParametersInput({
   max = MAX,
   round = true,
 }) {
+  const t = useTranslations("ParametersInput");
+
   const parameterNames = useMemo(
-    () => PARAMETER_NAMES.concat(withStamina ? ["体力"] : []),
-    [withStamina]
+    () => PARAMETER_NAMES.concat(withStamina ? [t("stamina")] : []),
+    [withStamina, t]
   );
 
   function handleChange(value, index) {

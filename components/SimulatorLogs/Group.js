@@ -1,10 +1,13 @@
 import { memo } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { PItems, SkillCards } from "gakumas-data";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
 
 function Group({ entity, childLogs, idolId }) {
+  const t = useTranslations("stage");
+
   let resolvedEntity = null;
   if (entity.type == "skillCard" || entity.type == "skillCardEffect") {
     resolvedEntity = SkillCards.getById(entity.id);
@@ -15,8 +18,12 @@ function Group({ entity, childLogs, idolId }) {
   return (
     <div className={styles.group}>
       <div className={styles.entity}>
-        {entity.type == "default" && <>持続効果「{entity.id}」</>}
-        {entity.type == "stage" && <>ステージ効果</>}
+        {entity.type == "default" && (
+          <>
+            {t("effect")}「{entity.id}」
+          </>
+        )}
+        {entity.type == "stage" && t("stageEffect")}
         {entity.type == "skillCard" && (
           <>
             <Image
@@ -25,7 +32,7 @@ function Group({ entity, childLogs, idolId }) {
               height={24}
               alt=""
             />
-            スキルカード「{resolvedEntity.name}」
+            {t("skillCard")}「{resolvedEntity.name}」
           </>
         )}
         {entity.type == "skillCardEffect" && (
@@ -38,7 +45,7 @@ function Group({ entity, childLogs, idolId }) {
                 alt=""
               />
             </div>
-            持続効果「{resolvedEntity.name}」
+            {t("effect")}「{resolvedEntity.name}」
           </>
         )}
         {entity.type == "pItem" && (
@@ -49,7 +56,7 @@ function Group({ entity, childLogs, idolId }) {
               height={24}
               alt=""
             />
-            Pアイテム「{resolvedEntity.name}」
+            {t("pItem")}「{resolvedEntity.name}」
           </>
         )}
       </div>

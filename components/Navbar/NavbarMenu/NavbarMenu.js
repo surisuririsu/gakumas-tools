@@ -2,14 +2,20 @@
 import { memo, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useLocale, useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
+import { Link, usePathname } from "@/i18n/routing";
 import styles from "./NavbarMenu.module.scss";
 
 const discordSignIn = () => signIn("discord");
 
 function NavbarMenu() {
+  const t = useTranslations("NavbarMenu");
+
+  const locale = useLocale();
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const [expanded, setExpanded] = useState(false);
 
@@ -35,20 +41,20 @@ function NavbarMenu() {
             {status == "unauthenticated" && (
               <div>
                 <Button style="primary" onClick={discordSignIn} fill>
-                  Discordでログイン
+                  {t("signInWithDiscord")}
                 </Button>
               </div>
             )}
 
             <a href="https://wikiwiki.jp/gakumas/" target="_blank">
-              学マスコンテストWiki
+              {t("gakumasContestWiki")}
             </a>
 
             <a
               href="https://github.com/surisuririsu/gakumas-tools/issues/new"
               target="_blank"
             >
-              フィードバックを送信
+              {t("sendFeedback")}
             </a>
 
             <div className={styles.author}>
@@ -70,8 +76,19 @@ function NavbarMenu() {
               </div>
             </div>
 
+            {locale == "ja" && (
+              <Link href={pathname} locale="en" className={styles.lang}>
+                English
+              </Link>
+            )}
+            {locale == "en" && (
+              <Link href={pathname} locale="ja" className={styles.lang}>
+                日本語
+              </Link>
+            )}
+
             {status == "authenticated" && (
-              <button onClick={signOut}>ログアウト</button>
+              <button onClick={signOut}>{t("signOut")}</button>
             )}
           </div>
         </div>
