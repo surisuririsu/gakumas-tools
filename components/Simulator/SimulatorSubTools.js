@@ -1,9 +1,11 @@
 import { memo, useState } from "react";
+import { useTranslations } from "next-intl";
 import CostRanges from "@/components/CostRanges";
 import DefaultCards from "@/components/DefaultCards";
 import styles from "./Simulator.module.scss";
 
 function SimulatorSubTools({ plan }) {
+  const t = useTranslations("SimulatorSubTools");
   const [activeSubTool, setActiveSubTool] = useState(null);
 
   return (
@@ -16,7 +18,7 @@ function SimulatorSubTools({ plan }) {
             )
           }
         >
-          コスト範囲
+          {t("costRanges")}
         </button>
 
         <button
@@ -26,7 +28,7 @@ function SimulatorSubTools({ plan }) {
             )
           }
         >
-          基本カード
+          {t("defaultCards")}
         </button>
       </div>
 

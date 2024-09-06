@@ -1,12 +1,14 @@
 import React, { memo, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
-import { STRINGS } from "@/simulator/constants";
 import c from "@/utils/classNames";
 import styles from "./SimulatorLogs.module.scss";
 
 function HandState({ state }) {
+  const t = useTranslations("stage");
+
   return (
     <div className={styles.state}>
       {Object.keys(state).map((k) => (
@@ -14,14 +16,14 @@ function HandState({ state }) {
           {k == "scoreBuff" ? (
             state[k].map(({ amount, turns }) => (
               <div key={turns}>
-                スコア上昇量増加{" "}
+                {t("scoreBuff")}{" "}
                 <span className={styles.blue}>{amount * 100}%</span>{" "}
-                {turns ? `(${turns}ターン)` : ""}
+                {turns ? `(${t("numTurns", { num: turns })})` : ""}
               </div>
             ))
           ) : (
             <div>
-              {STRINGS[k]} <span className={styles.blue}>{state[k]}</span>
+              {t(k)} <span className={styles.blue}>{state[k]}</span>
             </div>
           )}
         </React.Fragment>
@@ -31,13 +33,15 @@ function HandState({ state }) {
 }
 
 function Hand({ handCardIds, scores, selectedCardId, state, idolId }) {
+  const t = useTranslations("stage");
+
   const [expanded, setExpanded] = useState(false);
   const selectedIndex = handCardIds.indexOf(selectedCardId);
 
   return (
     <div className={styles.hand}>
       <div className={styles.handTitle}>
-        手札{" "}
+        {t("hand")}{" "}
         <button onClick={() => setExpanded(!expanded)}>
           <FaEllipsisVertical />
         </button>

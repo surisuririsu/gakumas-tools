@@ -11,12 +11,12 @@
   flex-direction: column;
   gap: 16px;
   margin: auto;
+}
 
-  ul {
-    list-style-type: none;
-    display: grid;
-    gap: 8px;
-  }
+.toolsList {
+  list-style-type: none;
+  display: grid;
+  gap: 8px;
 }
 
 .feature {

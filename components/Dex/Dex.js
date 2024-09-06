@@ -1,5 +1,6 @@
 "use client";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import EntityBank from "@/components/EntityBank";
 import EntityDetails from "@/components/EntityDetails";
@@ -7,6 +8,16 @@ import { EntityTypes } from "@/utils/entities";
 import styles from "./Dex.module.scss";
 
 function Dex() {
+  const t = useTranslations("Dex");
+
+  const OPTIONS = useMemo(
+    () => [
+      { value: EntityTypes.SKILL_CARD, label: t("skillCards") },
+      { value: EntityTypes.P_ITEM, label: t("pItems") },
+    ],
+    [t]
+  );
+
   const [activeTab, setActiveTab] = useState(EntityTypes.SKILL_CARD);
   const [selectedEntity, setSelectedEntity] = useState(null);
 
@@ -24,10 +35,7 @@ function Dex() {
       <div className={styles.tabs}>
         <ButtonGroup
           selected={activeTab}
-          options={[
-            { value: EntityTypes.SKILL_CARD, label: "スキルカード" },
-            { value: EntityTypes.P_ITEM, label: "Pアイテム" },
-          ]}
+          options={OPTIONS}
           onChange={setActiveTab}
         />
       </div>

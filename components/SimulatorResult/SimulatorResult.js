@@ -1,17 +1,20 @@
 import { memo } from "react";
+import { useTranslations } from "next-intl";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 
 function SimulatorResult({ data, idolId }) {
+  const t = useTranslations("SimulatorResult");
+
   return (
     <div id="simulator_result" className={styles.result}>
       <table className={styles.stats}>
         <thead>
           <tr>
-            <th>Min</th>
-            <th>Average</th>
-            <th>Max</th>
+            <th>{t("min")}</th>
+            <th>{t("average")}</th>
+            <th>{t("max")}</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +28,7 @@ function SimulatorResult({ data, idolId }) {
 
       <SimulatorResultGraphs data={data} />
 
-      <label>ログ</label>
+      <label>{t("logs")}</label>
       <SimulatorLogs
         minRun={data.minRun}
         averageRun={data.averageRun}
