@@ -50,7 +50,7 @@ export default async function RootLayout({ children, params: { locale } }) {
         <GoogleAnalytics />
         <SessionContextProvider session={session}>
           <NextIntlClientProvider messages={messages}>
-            <Navbar />
+            <Navbar locale={locale} />
             <WorkspaceContextProvider>
               <DataContextProvider>
                 <MemoryCalculatorContextProvider>
