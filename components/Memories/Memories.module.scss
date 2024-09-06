@@ -1,9 +1,11 @@
 @import "@/constants";
 
 .memories {
+  max-width: 560px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   overflow: hidden;
 }
 
