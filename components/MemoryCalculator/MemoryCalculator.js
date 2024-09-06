@@ -26,10 +26,13 @@ const RANK_OPTIONS = ["B", "B+", "A", "A+", "S"].map((r) => ({
 function generateCombinations(slots) {
   if (slots.length === 0) return [[]];
   const restCombos = generateCombinations(slots.slice(1));
-  return slots[0].reduce(
-    (acc, cur) => acc.concat(restCombos.map((c) => c.concat(cur))),
-    []
-  );
+  return slots[0].reduce((acc, cur) => {
+    for (let c of restCombos) {
+      if (c.includes(cur)) continue;
+      acc.push(c.concat(cur));
+    }
+    return acc;
+  }, []);
 }
 
 function MemoryCalculator() {
@@ -57,57 +60,58 @@ function MemoryCalculator() {
     offTargetMemories,
     onTargetProbability,
     offTargetProbability,
-  } = useMemo(
-    () =>
-      possibleMemories.reduce(
-        (acc, cur) => {
-          // Cards for each slot
-          const slots = targetSkillCardIds
-            .map((id, idx) =>
-              [id].concat(alternateSkillCardIds[idx] || []).filter((mid) => mid)
-            )
-            .filter((slot) => slot.length);
+  } = useMemo(() => {
+    // Cards for each slot
+    let positiveSlots = [];
+    let negativeSlots = [];
+    for (let i in targetSkillCardIds) {
+      const slot = [targetSkillCardIds[i]]
+        .concat(alternateSkillCardIds[i] || [])
+        .filter((id) => id);
+      if (!slot.length) continue;
+      if (targetNegations[i]) {
+        negativeSlots.push(slot);
+      } else {
+        positiveSlots.push(slot);
+      }
+    }
+    const excludedSkillCardIds = [].concat(...negativeSlots);
 
-          const positiveSlots = slots.filter((_, i) => !targetNegations[i]);
-          const negativeSlots = slots.filter((_, i) => targetNegations[i]);
-          const excludedSkillCardIds = [].concat(...negativeSlots);
+    // Combos excluding those with duplicate cards
+    const matchingCombinations = generateCombinations(positiveSlots);
 
-          // Combos excluding those with duplicate cards
-          const matchingCombinations = generateCombinations(
-            positiveSlots
-          ).filter((combo) => new Set(combo).size == combo.length);
+    return possibleMemories.reduce(
+      (acc, cur) => {
+        // Classify on/off-target
+        const memoryIsOnTarget =
+          matchingCombinations.some((combo) =>
+            combo.every((id) => cur.skillCardIds.includes(id))
+          ) &&
+          !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
 
-          // Classify on/off-target
-          const memoryIsOnTarget =
-            matchingCombinations.some((combo) =>
-              combo.every((id) => cur.skillCardIds.includes(id))
-            ) &&
-            !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
-
-          if (memoryIsOnTarget) {
-            acc.onTargetMemories.push(cur);
-            acc.onTargetProbability += cur.probability;
-          } else {
-            acc.offTargetMemories.push(cur);
-            acc.offTargetProbability += cur.probability;
-          }
-
-          return acc;
-        },
-        {
-          onTargetMemories: [],
-          offTargetMemories: [],
-          onTargetProbability: 0,
-          offTargetProbability: 0,
+        if (memoryIsOnTarget) {
+          acc.onTargetMemories.push(cur);
+          acc.onTargetProbability += cur.probability;
+        } else {
+          acc.offTargetMemories.push(cur);
+          acc.offTargetProbability += cur.probability;
         }
-      ),
-    [
-      possibleMemories,
-      targetSkillCardIds,
-      alternateSkillCardIds,
-      targetNegations,
-    ]
-  );
+
+        return acc;
+      },
+      {
+        onTargetMemories: [],
+        offTargetMemories: [],
+        onTargetProbability: 0,
+        offTargetProbability: 0,
+      }
+    );
+  }, [
+    possibleMemories,
+    targetSkillCardIds,
+    alternateSkillCardIds,
+    targetNegations,
+  ]);
 
   return (
     <div className={styles.memoryCalculator}>
