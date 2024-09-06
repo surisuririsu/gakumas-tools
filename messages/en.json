@@ -179,5 +179,10 @@
     "hand": "Hand",
     "turnN": "Turn {n}",
     "average": "Average"
+  },
+  "MemorySave": {
+    "save": "Save",
+    "saveAsNew": "Save as new",
+    "signInToSave": "Sign in with Discord to save"
   }
 }

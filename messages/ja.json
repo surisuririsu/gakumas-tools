@@ -179,5 +179,10 @@
     "hand": "手札",
     "turnN": "{n}ターン目",
     "average": "平均値"
+  },
+  "MemorySave": {
+    "save": "保存",
+    "saveAsNew": "新規保存",
+    "signInToSave": "Discordでログインして保存"
   }
 }
