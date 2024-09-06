@@ -12,6 +12,7 @@ function Button({
   disabled,
   ariaLabel,
   fill,
+  locale,
 }) {
   const className = c(
     styles.button,
@@ -27,6 +28,7 @@ function Button({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
+      locale={locale}
     >
       {children}
     </Link>

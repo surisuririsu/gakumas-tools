@@ -6,12 +6,15 @@ import { useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
+import { Link, usePathname } from "@/i18n/routing";
 import styles from "./NavbarMenu.module.scss";
 
 const discordSignIn = () => signIn("discord");
 
-function NavbarMenu() {
+function NavbarMenu({ locale }) {
   const t = useTranslations("NavbarMenu");
+
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const [expanded, setExpanded] = useState(false);
 
@@ -71,6 +74,17 @@ function NavbarMenu() {
                 with research from the Gakumas contest community
               </div>
             </div>
+
+            {locale == "ja" && (
+              <Link href={pathname} locale="en" className={styles.lang}>
+                English
+              </Link>
+            )}
+            {locale == "en" && (
+              <Link href={pathname} locale="ja" className={styles.lang}>
+                日本語
+              </Link>
+            )}
 
             {status == "authenticated" && (
               <button onClick={signOut}>{t("signOut")}</button>
