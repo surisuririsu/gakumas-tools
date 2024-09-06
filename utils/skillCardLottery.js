@@ -9,24 +9,43 @@ export const COST_RANGES_BY_RANK = {
   S: { min: 441, max: 642 },
 };
 
+// Recursive function to generate all combinations of a specified length
+function generateCombinations(cards, length) {
+  if (length == 0) return [[]];
+  return cards.reduce(
+    (acc, cur, i) =>
+      acc.concat(
+        generateCombinations(cards.slice(i + 1), length - 1).map(
+          (combination) => [cur].concat(combination)
+        )
+      ),
+    []
+  );
+}
+
 export function generatePossibleMemories(skillCardIds, rank) {
   // Get cost range based on rank
   const { min: minCost, max: maxCost } = COST_RANGES_BY_RANK[rank];
 
   // Get skill card data from ids
-  const skillCards = [...new Set(skillCardIds)]
-    .filter((id) => id)
-    .map(SkillCards.getById);
+  const skillCards = [...new Set(skillCardIds.filter((id) => id))].map(
+    SkillCards.getById
+  );
 
   // Separate skill cards by support/produce
-  const supportSkillCards = skillCards.filter(
-    ({ name, sourceType }) =>
-      sourceType == "support" &&
-      !skillCards.find((other) => other.name == `${name}+`)
-  );
-  const produceSkillCards = skillCards
-    .filter(({ sourceType }) => sourceType == "produce")
-    .sort((a, b) => b.contestPower - a.contestPower);
+  let supportSkillCards = [];
+  let produceSkillCards = [];
+  for (let card of skillCards) {
+    if (card.sourceType == "produce") {
+      produceSkillCards.push(card);
+    } else if (
+      card.sourceType == "support" &&
+      !skillCards.find((other) => other.name == `${card.name}+`)
+    ) {
+      supportSkillCards.push(card);
+    }
+  }
+  produceSkillCards.sort((a, b) => b.contestPower - a.contestPower);
 
   // Generate initial combinations of support cards (up to 1)
   let preLotteryCombinations = [];
@@ -46,20 +65,6 @@ export function generatePossibleMemories(skillCardIds, rank) {
       5 - preLotteryCombination.length,
       produceSkillCards.length
     );
-
-    // Recursive function to generate all combinations of a specified length
-    function generateCombinations(cards, length) {
-      if (length == 0) return [[]];
-      return cards.reduce(
-        (acc, cur, i) =>
-          acc.concat(
-            generateCombinations(cards.slice(i + 1), length - 1).map(
-              (combination) => [cur].concat(combination)
-            )
-          ),
-        []
-      );
-    }
 
     // Reduce number of lottery slots until we find a viable combination
     // or we reach 0 slots
@@ -82,10 +87,10 @@ export function generatePossibleMemories(skillCardIds, rank) {
         remainingSlots
       )) {
         // Remove combinations that contain upgraded and non-upgraded version of the same card
-        const dedupedNames = [
-          ...new Set(combination.map(({ name }) => name.replaceAll("+", ""))),
-        ];
-        if (dedupedNames.length != combination.length) continue;
+        const names = combination.map((c) => c.name);
+        if (names.some((name) => names.includes(`${name}+`))) {
+          continue;
+        }
 
         // Calculate cost of this combination
         const combinationCost = calculateSkillCardCost(
