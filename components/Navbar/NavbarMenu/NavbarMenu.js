@@ -2,7 +2,7 @@
 import { memo, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
@@ -11,9 +11,10 @@ import styles from "./NavbarMenu.module.scss";
 
 const discordSignIn = () => signIn("discord");
 
-function NavbarMenu({ locale }) {
+function NavbarMenu() {
   const t = useTranslations("NavbarMenu");
 
+  const locale = useLocale();
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const [expanded, setExpanded] = useState(false);

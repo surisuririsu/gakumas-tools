@@ -7,7 +7,7 @@ import NavbarLink from "./NavbarLink";
 import NavbarMenu from "./NavbarMenu";
 import styles from "./Navbar.module.scss";
 
-function Navbar({ locale }) {
+function Navbar() {
   const t = useTranslations("tools");
   const pathname = usePathname();
 
@@ -27,7 +27,7 @@ function Navbar({ locale }) {
         ))}
       </div>
 
-      <NavbarMenu locale={locale} />
+      <NavbarMenu />
     </nav>
   );
 }
