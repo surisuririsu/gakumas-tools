@@ -11,7 +11,6 @@ function Welcome() {
       <div className={styles.content}>
         <h2>{t("title")}</h2>
         <p>{t("introduction")}</p>
-
         <ToolsList />
       </div>
     </div>

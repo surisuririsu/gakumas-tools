@@ -1,4 +1,5 @@
 import { memo, useContext, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   serializeEffectSequence,
   deserializeEffectSequence,
@@ -21,6 +22,8 @@ function normalizeCriteria(criteria) {
 }
 
 function StageCustomizerModal({ initialStage, onApply }) {
+  const t = useTranslations("StageCustomizerModal");
+
   const { closeModal } = useContext(ModalContext);
   const [turnCounts, setTurnCounts] = useState(
     Object.values(initialStage.turnCounts)
@@ -38,7 +41,6 @@ function StageCustomizerModal({ initialStage, onApply }) {
   function apply() {
     onApply({
       id: "custom",
-      name: "カスタム",
       plan: "free",
       turnCounts: {
         vocal: turnCounts[0] || 0,
@@ -55,17 +57,17 @@ function StageCustomizerModal({ initialStage, onApply }) {
   return (
     <Modal>
       <div className={styles.stageCustomizer}>
-        <label>ターン数</label>
+        <label>{t("turnCounts")}</label>
         <ParametersInput
           parameters={turnCounts}
           onChange={setTurnCounts}
           max={100}
         />
 
-        <label>初手ターン</label>
+        <label>{t("firstTurn")}</label>
         <ParametersMultiSelect value={firstTurns} onChange={setFirstTurns} />
 
-        <label>審査基準</label>
+        <label>{t("criteria")}</label>
         <ParametersInput
           parameters={criteria}
           onChange={setCriteria}
@@ -73,7 +75,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
           round={false}
         />
 
-        <label>ステージ効果</label>
+        <label>{t("effects")}</label>
         <div className={styles.effects}>
           <textarea
             defaultValue={effects}
@@ -83,12 +85,12 @@ function StageCustomizerModal({ initialStage, onApply }) {
             href="https://github.com/surisuririsu/gakumas-data/blob/master/Effects.md"
             target="_blank"
           >
-            効果形式
+            {t("effectFormat")}
           </a>
         </div>
 
         <Button style="primary" onClick={apply}>
-          適用
+          {t("apply")}
         </Button>
       </div>
     </Modal>

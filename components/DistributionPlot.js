@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { NUM_RUNS, BUCKET_SIZE } from "@/simulator/constants";
+import { BUCKET_SIZE } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -20,12 +20,12 @@ ChartJS.register(
   Legend
 );
 
-function DistributionPlot({ data }) {
+function DistributionPlot({ label, data }) {
   const formattedData = {
     labels: Object.keys(data).map((k) => k * BUCKET_SIZE),
     datasets: [
       {
-        label: `スコア (n=${NUM_RUNS})`,
+        label,
         data: Object.values(data),
         backgroundColor: "rgba(255, 118, 0, 0.5)",
       },

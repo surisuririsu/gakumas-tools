@@ -56,7 +56,7 @@
     },
     "rehearsal": {
       "title": "リハーサル読み取り",
-      "description": "リハーサル画面からスコアを読み取る"
+      "description": "リハーサル画面のスクショからスコアを読み取る"
     }
   },
   "NavbarMenu": {
@@ -102,5 +102,82 @@
   "MemoriesHeader": {
     "selected": "{num}個のメモリーを選択",
     "delete": "削除する"
+  },
+  "StageSelect": {
+    "placeholder": "ステージ選択"
+  },
+  "StageSummary": {
+    "stageName": "シーズン{season} ステージ{stage}",
+    "custom": "カスタム"
+  },
+  "Simulator": {
+    "supportBonus": "サポートボーナス%",
+    "simulate": "実行"
+  },
+  "StageCustomizerModal": {
+    "turnCounts": "ターン数",
+    "firstTurn": "初手ターン",
+    "criteria": "審査基準",
+    "effects": "ステージ効果",
+    "effectFormat": "効果形式",
+    "apply": "適用"
+  },
+  "LoadoutSkillCardGroup": {
+    "cost": "コスト"
+  },
+  "SimulatorSubTools": {
+    "costRanges": "コスト範囲",
+    "defaultCards": "基本カード"
+  },
+  "CostRanges": {
+    "rank": "ランク",
+    "min": "下限",
+    "max": "上限"
+  },
+  "SimulatorButtons": {
+    "confirm": "編成をクリアしますか？",
+    "clear": "クリア"
+  },
+  "SimulatorResult": {
+    "min": "最小値",
+    "average": "平均値",
+    "max": "最大値",
+    "logs": "ログ"
+  },
+  "SimulatorResultGraphs": {
+    "score": "スコア"
+  },
+  "stage": {
+    "turnsRemaining": "残りターン数",
+    "cardUsesRemaining": "スキルカード使用数",
+    "stamina": "体力",
+    "genki": "元気",
+    "score": "スコア",
+    "goodConditionTurns": "好調",
+    "perfectConditionTurns": "絶好調",
+    "concentration": "集中",
+    "goodImpressionTurns": "好印象",
+    "motivation": "やる気",
+    "halfCostTurns": "消費体力減少",
+    "doubleCostTurns": "消費体力増加",
+    "costReduction": "消費体力削減",
+    "costIncrease": "消費体力追加",
+    "doubleCardEffectCards": "スキルカード追加発動",
+    "nullifyGenkiTurns": "元気増加無効",
+    "scoreBuff": "スコア上昇量増加",
+    "turn": "ターン",
+    "cardDrawn": "スキルカードを引いた",
+    "upgradedHand": "手札をすべてレッスン中強化",
+    "exchangedHand": "手札をすべて入れ替える",
+    "setEffect": "持続効果付与",
+    "addedCardToHand": "スキルカードを手札に生成",
+    "effect": "持続効果",
+    "stageEffect": "ステージ効果",
+    "skillCard": "スキルカード",
+    "pItem": "Pアイテム",
+    "numTurns": "{num}ターン",
+    "hand": "手札",
+    "turnN": "{n}ターン目",
+    "average": "平均値"
   }
 }

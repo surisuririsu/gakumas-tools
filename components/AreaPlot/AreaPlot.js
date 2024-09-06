@@ -1,4 +1,5 @@
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,39 +26,44 @@ ChartJS.register(
   Legend
 );
 
-const FIELDS = {
-  score: {
-    label: "スコア",
-    color: "rgba(68, 187, 255, 0.25)",
-    yAxisID: "y1",
-  },
-  stamina: {
-    label: "体力",
-    color: "rgba(0, 211, 91, 0.25)",
-  },
-  genki: {
-    label: "元気",
-    color: "rgba(68, 246, 255, 0.25)",
-  },
-  goodConditionTurns: {
-    label: "好調",
-    color: "rgba(255, 102, 119, 0.25)",
-  },
-  concentration: {
-    label: "集中",
-    color: "rgba(255, 118, 0, 0.25)",
-  },
-  goodImpressionTurns: {
-    label: "好印象",
-    color: "rgba(255, 243, 74, 0.25)",
-  },
-  motivation: {
-    label: "やる気",
-    color: "rgba(214, 214, 214, 0.25)",
-  },
-};
-
 function AreaPlot({ data }) {
+  const t = useTranslations("stage");
+
+  const FIELDS = useMemo(
+    () => ({
+      score: {
+        label: t("score"),
+        color: "rgba(68, 187, 255, 0.25)",
+        yAxisID: "y1",
+      },
+      stamina: {
+        label: t("stamina"),
+        color: "rgba(0, 211, 91, 0.25)",
+      },
+      genki: {
+        label: t("genki"),
+        color: "rgba(68, 246, 255, 0.25)",
+      },
+      goodConditionTurns: {
+        label: t("goodConditionTurns"),
+        color: "rgba(255, 102, 119, 0.25)",
+      },
+      concentration: {
+        label: t("concentration"),
+        color: "rgba(255, 118, 0, 0.25)",
+      },
+      goodImpressionTurns: {
+        label: t("goodImpressionTurns"),
+        color: "rgba(255, 243, 74, 0.25)",
+      },
+      motivation: {
+        label: t("motivation"),
+        color: "rgba(214, 214, 214, 0.25)",
+      },
+    }),
+    [t]
+  );
+
   const [activeFields, setActiveFields] = useState({
     stamina: true,
     score: true,
@@ -68,13 +74,13 @@ function AreaPlot({ data }) {
       x: {
         title: {
           display: true,
-          text: "ターン",
+          text: t("turn"),
         },
       },
       y: {
         title: {
           display: true,
-          text: "平均値",
+          text: t("average"),
         },
         type: "linear",
         display: true,
