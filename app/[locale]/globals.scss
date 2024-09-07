@@ -23,8 +23,6 @@ body {
 main {
   min-width: 350px;
   flex: 1;
-  display: flex;
-  flex-direction: column;
   background-color: $white-dark;
   color: $black-dark;
   overflow: auto;

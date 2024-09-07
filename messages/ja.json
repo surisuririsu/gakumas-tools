@@ -1,30 +1,4 @@
 {
-  "Welcome": {
-    "title": "Gakumas Tools - 学マスツール",
-    "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
-  },
-  "ProduceRankCalculator": {
-    "difficulties": {
-      "regular": "レギュラー",
-      "pro": "プロ",
-      "master": "マスター"
-    },
-    "places": {
-      "1": "1位",
-      "2": "2位",
-      "3": "3位",
-      "4": "4位以下"
-    },
-    "difficulty": "難易度",
-    "parameterLimit": "パラメータ上限",
-    "finalExamPlacement": "最終試験順位",
-    "parameter": "パラメータ",
-    "parameters": "パラメータ",
-    "targetScores": "目標スコア",
-    "produceRank": "プロデュース評価",
-    "targetScore": "目標スコア",
-    "score": "スコア"
-  },
   "metadata": {
     "title": "Gakumas Tools - 学マスツール",
     "description": "「Gakumas Tools（学マスツール）」は、初星学園プロデューサー科の生徒のためのツール集です。プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。アイドルたちを輝かせましょう！"
@@ -65,6 +39,32 @@
     "sendFeedback": "フィードバックを送信",
     "signOut": "ログアウト"
   },
+  "Welcome": {
+    "title": "Gakumas Tools - 学マスツール",
+    "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
+  },
+  "ProduceRankCalculator": {
+    "difficulties": {
+      "regular": "レギュラー",
+      "pro": "プロ",
+      "master": "マスター"
+    },
+    "places": {
+      "1": "1位",
+      "2": "2位",
+      "3": "3位",
+      "4": "4位以下"
+    },
+    "difficulty": "難易度",
+    "parameterLimit": "パラメータ上限",
+    "finalExamPlacement": "最終試験順位",
+    "parameter": "パラメータ",
+    "parameters": "パラメータ",
+    "targetScores": "目標スコア",
+    "produceRank": "プロデュース評価",
+    "targetScore": "目標スコア",
+    "score": "スコア"
+  },
   "Dex": {
     "skillCards": "スキルカード",
     "pItems": "Pアイテム"
@@ -99,9 +99,18 @@
     "create": "メモリーを作成する",
     "import": "スクショからメモリーを読み取る"
   },
+  "MemorySave": {
+    "save": "保存",
+    "saveAsNew": "新規保存",
+    "signInToSave": "Discordでログインして保存"
+  },
   "MemoriesHeader": {
     "selected": "{num}個のメモリーを選択",
     "delete": "削除する"
+  },
+  "Simulator": {
+    "supportBonus": "サポートボーナス%",
+    "simulate": "実行"
   },
   "StageSelect": {
     "placeholder": "ステージ選択"
@@ -109,10 +118,6 @@
   "StageSummary": {
     "stageName": "シーズン{season} ステージ{stage}",
     "custom": "カスタム"
-  },
-  "Simulator": {
-    "supportBonus": "サポートボーナス%",
-    "simulate": "実行"
   },
   "StageCustomizerModal": {
     "turnCounts": "ターン数",
@@ -179,10 +184,5 @@
     "hand": "手札",
     "turnN": "{n}ターン目",
     "average": "平均値"
-  },
-  "MemorySave": {
-    "save": "保存",
-    "saveAsNew": "新規保存",
-    "signInToSave": "Discordでログインして保存"
   }
 }

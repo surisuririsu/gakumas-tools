@@ -1,30 +1,4 @@
 {
-  "Welcome": {
-    "title": "Gakumas Tools",
-    "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
-  },
-  "ProduceRankCalculator": {
-    "difficulties": {
-      "regular": "Regular",
-      "pro": "Pro",
-      "master": "Master"
-    },
-    "places": {
-      "1": "1st",
-      "2": "2nd",
-      "3": "3rd",
-      "4": "Other"
-    },
-    "difficulty": "Difficulty",
-    "parameterLimit": "Parameter limit",
-    "finalExamPlacement": "Final exam placement",
-    "parameter": "Parameter",
-    "parameters": "Parameters",
-    "targetScores": "Target scores",
-    "produceRank": "Produce rank",
-    "targetScore": "Target score",
-    "score": "Score"
-  },
   "metadata": {
     "title": "Gakumas Tools",
     "description": "Gakumas Tools is a collection of useful tools for producers at Hatsuboshi Gakuen. Calculate required final exam scores for produce ranks, view p-item and skill card information, organize memories, plan and simulate contest loadouts and more. Be the best producer and help your idols shine!"
@@ -65,6 +39,32 @@
     "sendFeedback": "Send feedback",
     "signOut": "Sign out"
   },
+  "Welcome": {
+    "title": "Gakumas Tools",
+    "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
+  },
+  "ProduceRankCalculator": {
+    "difficulties": {
+      "regular": "Regular",
+      "pro": "Pro",
+      "master": "Master"
+    },
+    "places": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd",
+      "4": "Other"
+    },
+    "difficulty": "Difficulty",
+    "parameterLimit": "Parameter limit",
+    "finalExamPlacement": "Final exam placement",
+    "parameter": "Parameter",
+    "parameters": "Parameters",
+    "targetScores": "Target scores",
+    "produceRank": "Produce rank",
+    "targetScore": "Target score",
+    "score": "Score"
+  },
   "Dex": {
     "skillCards": "Skill cards",
     "pItems": "P-items"
@@ -95,6 +95,11 @@
   "ParametersInput": {
     "stamina": "Stamina"
   },
+  "MemorySave": {
+    "save": "Save",
+    "saveAsNew": "Save as new",
+    "signInToSave": "Sign in with Discord to save"
+  },
   "MemoriesNudge": {
     "create": "Create a memory",
     "import": "Import memories from screenshots"
@@ -103,16 +108,16 @@
     "selected": "{num} memories selected",
     "delete": "Delete"
   },
+  "Simulator": {
+    "supportBonus": "Support bonus %",
+    "simulate": "Simulate"
+  },
   "StageSelect": {
     "placeholder": "Select stage"
   },
   "StageSummary": {
     "stageName": "Season {season} - Stage {stage}",
     "custom": "Custom"
-  },
-  "Simulator": {
-    "supportBonus": "Support bonus %",
-    "simulate": "Simulate"
   },
   "StageCustomizerModal": {
     "turnCounts": "Turn counts",
@@ -179,10 +184,5 @@
     "hand": "Hand",
     "turnN": "Turn {n}",
     "average": "Average"
-  },
-  "MemorySave": {
-    "save": "Save",
-    "saveAsNew": "Save as new",
-    "signInToSave": "Sign in with Discord to save"
   }
 }

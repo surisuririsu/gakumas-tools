@@ -2,11 +2,7 @@ import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
-import {
-  getMessages,
-  getTranslations,
-  unstable_setRequestLocale,
-} from "next-intl/server";
+import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
@@ -21,17 +17,14 @@ import { SessionContextProvider } from "@/contexts/SessionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
+import { generateDefaultMetadata } from "@/utils/metadata";
 import styles from "./layout.module.scss";
 import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export async function generateMetadata({ params: { locale } }) {
-  const t = await getTranslations({ locale, namespace: "metadata" });
-  return {
-    title: t("title"),
-    description: t("description"),
-  };
+  return await generateDefaultMetadata(locale);
 }
 
 export const viewport = {
@@ -68,9 +61,7 @@ export default async function RootLayout({ children, params: { locale } }) {
                               <PinnedTools />
                               <main>
                                 <ToolHeader />
-                                <div className={styles.mainContent}>
-                                  {children}
-                                </div>
+                                {children}
                               </main>
                             </div>
                           </ModalContextProvider>

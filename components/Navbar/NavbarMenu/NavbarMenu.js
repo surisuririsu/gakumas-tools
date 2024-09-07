@@ -7,6 +7,7 @@ import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import { Link, usePathname } from "@/i18n/routing";
+import c from "@/utils/classNames";
 import styles from "./NavbarMenu.module.scss";
 
 const discordSignIn = () => signIn("discord");
@@ -35,64 +36,65 @@ function NavbarMenu() {
         )}
       </button>
 
-      {expanded && (
-        <div className={styles.overlay} onClick={() => setExpanded(false)}>
-          <div className={styles.dropdown} onClick={(e) => e.stopPropagation()}>
-            {status == "unauthenticated" && (
-              <div>
-                <Button style="primary" onClick={discordSignIn} fill>
-                  {t("signInWithDiscord")}
-                </Button>
-              </div>
-            )}
-
-            <a href="https://wikiwiki.jp/gakumas/" target="_blank">
-              {t("gakumasContestWiki")}
-            </a>
-
-            <a
-              href="https://github.com/surisuririsu/gakumas-tools/issues/new"
-              target="_blank"
-            >
-              {t("sendFeedback")}
-            </a>
-
-            <div className={styles.author}>
-              <div>Made by risりす</div>
-              <div className={styles.socials}>
-                <IconButton
-                  icon={FaXTwitter}
-                  href="https://x.com/surisuririsu"
-                  size="small"
-                />
-                <IconButton
-                  icon={FaGithub}
-                  href="https://github.com/surisuririsu/gakumas-tools"
-                  size="small"
-                />
-              </div>
-              <div className={styles.fine}>
-                with research from the Gakumas contest community
-              </div>
+      <div
+        className={c(styles.overlay, expanded && styles.expanded)}
+        onClick={() => setExpanded(false)}
+      >
+        <div className={styles.dropdown} onClick={(e) => e.stopPropagation()}>
+          {status == "unauthenticated" && (
+            <div>
+              <Button style="primary" onClick={discordSignIn} fill>
+                {t("signInWithDiscord")}
+              </Button>
             </div>
+          )}
 
-            {locale == "ja" && (
-              <Link href={pathname} locale="en" className={styles.lang}>
-                English
-              </Link>
-            )}
-            {locale == "en" && (
-              <Link href={pathname} locale="ja" className={styles.lang}>
-                日本語
-              </Link>
-            )}
+          <a href="https://wikiwiki.jp/gakumas/" target="_blank">
+            {t("gakumasContestWiki")}
+          </a>
 
-            {status == "authenticated" && (
-              <button onClick={signOut}>{t("signOut")}</button>
-            )}
+          <a
+            href="https://github.com/surisuririsu/gakumas-tools/issues/new"
+            target="_blank"
+          >
+            {t("sendFeedback")}
+          </a>
+
+          <div className={styles.author}>
+            <div>Made by risりす</div>
+            <div className={styles.socials}>
+              <IconButton
+                icon={FaXTwitter}
+                href="https://x.com/surisuririsu"
+                size="small"
+              />
+              <IconButton
+                icon={FaGithub}
+                href="https://github.com/surisuririsu/gakumas-tools"
+                size="small"
+              />
+            </div>
+            <div className={styles.fine}>
+              with research from the Gakumas contest community
+            </div>
           </div>
+
+          {locale == "ja" && (
+            <Link href={pathname} locale="en" className={styles.lang}>
+              English
+            </Link>
+          )}
+          {locale == "en" && (
+            <Link href={pathname} locale="ja" className={styles.lang}>
+              日本語
+            </Link>
+          )}
+
+          {status == "authenticated" && (
+            <button onClick={signOut}>{t("signOut")}</button>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

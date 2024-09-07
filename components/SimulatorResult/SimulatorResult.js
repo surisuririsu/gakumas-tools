@@ -19,9 +19,9 @@ function SimulatorResult({ data, idolId }) {
         </thead>
         <tbody>
           <tr>
-            <td>{data.minScore}</td>
+            <td>{data.minRun.score}</td>
             <td>{data.averageScore}</td>
-            <td>{data.maxScore}</td>
+            <td>{data.maxRun.score}</td>
           </tr>
         </tbody>
       </table>

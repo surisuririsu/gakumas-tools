@@ -32,7 +32,6 @@ export default function Simulator() {
     pItemIds,
     skillCardIdGroups,
     replacePItemId,
-    kafeUrl,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
@@ -68,34 +67,23 @@ export default function Simulator() {
     return () => workersRef.current?.forEach((worker) => worker.terminate());
   }, []);
 
+  useEffect(() => {
+    if (simulatorData) {
+      document.getElementById("simulator_result").scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [simulatorData]);
+
   const setResult = useCallback(
     (result) => {
-      const { minRun, averageRun, maxRun, averageScore, scores, graphData } =
-        result;
+      const { scores, ...rest } = result;
       const bucketedScores = bucketScores(scores);
 
       console.timeEnd("simulation");
 
-      setSimulatorData({
-        scores,
-        bucketedScores,
-        minScore: minRun.score,
-        maxScore: maxRun.score,
-        averageScore,
-        minRun,
-        maxRun,
-        averageRun,
-        graphData,
-      });
+      setSimulatorData({ bucketedScores, ...rest });
       setRunning(false);
-
-      setTimeout(
-        () =>
-          document.getElementById("simulator_result").scrollIntoView({
-            behavior: "smooth",
-          }),
-        100
-      );
     },
     [setSimulatorData, setRunning]
   );
