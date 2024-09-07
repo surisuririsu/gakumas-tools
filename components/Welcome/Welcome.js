@@ -8,11 +8,9 @@ function Welcome() {
 
   return (
     <div className={styles.welcome}>
-      <div className={styles.content}>
-        <h2>{t("title")}</h2>
-        <p>{t("introduction")}</p>
-        <ToolsList />
-      </div>
+      <h2>{t("title")}</h2>
+      <p>{t("introduction")}</p>
+      <ToolsList />
     </div>
   );
 }

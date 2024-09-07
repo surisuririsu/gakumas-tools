@@ -24,12 +24,11 @@ export const TOOLS = {
   },
   memoryCalculator: {
     icon: (
-      <span>
+      <span style={{ lineHeight: 0 }}>
         <FaFilm />
         <FaCalculator />
       </span>
     ),
-    fill: true,
     path: "/memory-calculator",
     pinnable: true,
   },
@@ -40,13 +39,11 @@ export const TOOLS = {
   },
   simulator: {
     icon: <FaTrophy />,
-    fill: true,
     path: "/simulator",
     pinnable: true,
   },
   rehearsal: {
     icon: <FaChartSimple />,
-    fill: true,
     path: "/rehearsal",
     pinnable: true,
   },
