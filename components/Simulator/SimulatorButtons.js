@@ -4,23 +4,24 @@ import { useTranslations } from "next-intl";
 import { FaCheck, FaRegCopy, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import Button from "@/components/Button";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import ModalContext from "@/contexts/ModalContext";
 import styles from "./Simulator.module.scss";
+import ConfirmModal from "../ConfirmModal";
 
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
   const { clear, simulatorUrl, kafeUrl } = useContext(LoadoutContext);
+  const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
 
   return (
     <div className={styles.buttons}>
       <Button
         style="red-secondary"
-        onClick={() => {
-          if (confirm(t("confirm"))) {
-            clear();
-          }
-        }}
+        onClick={() =>
+          setModal(<ConfirmModal message={t("confirm")} onConfirm={clear} />)
+        }
       >
         {t("clear")}
       </Button>

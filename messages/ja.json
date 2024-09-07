@@ -143,6 +143,10 @@
     "confirm": "編成をクリアしますか？",
     "clear": "クリア"
   },
+  "ConfirmModal": {
+    "cancel": "キャンセル",
+    "ok": "OK"
+  },
   "SimulatorResult": {
     "min": "最小値",
     "average": "平均値",

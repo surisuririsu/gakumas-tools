@@ -143,6 +143,10 @@
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear"
   },
+  "ConfirmModal": {
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
   "SimulatorResult": {
     "min": "Min",
     "average": "Average",
