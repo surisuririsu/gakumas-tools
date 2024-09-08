@@ -77,12 +77,11 @@ export default function Simulator() {
 
   const setResult = useCallback(
     (result) => {
-      const { scores, ...rest } = result;
-      const bucketedScores = bucketScores(scores);
+      const bucketedScores = bucketScores(result.scores);
 
       console.timeEnd("simulation");
 
-      setSimulatorData({ bucketedScores, ...rest });
+      setSimulatorData({ bucketedScores, ...result });
       setRunning(false);
     },
     [setSimulatorData, setRunning]
