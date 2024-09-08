@@ -19,7 +19,7 @@ export function LoadoutContextProvider({ children }) {
   const loadout = loadoutFromSearchParams(searchParams);
 
   const { memories } = useContext(DataContext);
-  const [loaded, setLoaded] = useState(false);
+  const loaded = useRef(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
   const [customStage, setCustomStage] = useState(null);
 
@@ -28,12 +28,12 @@ export function LoadoutContextProvider({ children }) {
     loadoutRef.current;
 
   useEffect(() => {
-    if (loaded && pathname == "/simulator") {
+    if (loaded.current && pathname == "/simulator") {
       const params = loadoutToSearchParams(loadoutRef.current);
       window.history.pushState(null, "", `?${params.toString()}`);
-      setLoaded(true);
     }
-  }, [loaded, pathname]);
+    loaded.current = true;
+  }, [pathname]);
 
   const setState = (key, value) => {
     if (typeof value == "function") {
