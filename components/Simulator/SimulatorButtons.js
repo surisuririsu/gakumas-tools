@@ -11,7 +11,7 @@ import ConfirmModal from "../ConfirmModal";
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
-  const { clear, simulatorUrl, kafeUrl } = useContext(LoadoutContext);
+  const { clear, kafeUrl } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -29,7 +29,7 @@ function SimulatorButtons() {
       <Button
         style="secondary"
         onClick={() => {
-          navigator.clipboard.writeText(simulatorUrl);
+          navigator.clipboard.writeText(window.location.href);
           setLinkCopied(true);
           setTimeout(() => setLinkCopied(false), 3000);
         }}

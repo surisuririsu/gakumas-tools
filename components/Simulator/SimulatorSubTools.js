@@ -8,26 +8,18 @@ function SimulatorSubTools({ plan }) {
   const t = useTranslations("SimulatorSubTools");
   const [activeSubTool, setActiveSubTool] = useState(null);
 
+  const toggleSubTool = (subTool) => {
+    setActiveSubTool(activeSubTool == subTool ? null : subTool);
+  };
+
   return (
     <>
       <div className={styles.expanderButtons}>
-        <button
-          onClick={() =>
-            setActiveSubTool(
-              activeSubTool == "costRanges" ? null : "costRanges"
-            )
-          }
-        >
+        <button onClick={() => toggleSubTool("costRanges")}>
           {t("costRanges")}
         </button>
 
-        <button
-          onClick={() =>
-            setActiveSubTool(
-              activeSubTool == "defaultCards" ? null : "defaultCards"
-            )
-          }
-        >
+        <button onClick={() => toggleSubTool("defaultCards")}>
           {t("defaultCards")}
         </button>
       </div>

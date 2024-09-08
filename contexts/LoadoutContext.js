@@ -1,75 +1,57 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
 import DataContext from "@/contexts/DataContext";
-import { getLoadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
-import { generateKafeUrl } from "@/utils/kafeSimulator";
+import { usePathname } from "@/i18n/routing";
 import { FALLBACK_STAGE } from "@/simulator/constants";
-
-const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
+import { generateKafeUrl } from "@/utils/kafeSimulator";
+import {
+  loadoutFromSearchParams,
+  loadoutToSearchParams,
+} from "@/utils/simulator";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const initial = getLoadoutFromSearchParams(searchParams);
+  const loadout = loadoutFromSearchParams(searchParams);
 
   const { memories } = useContext(DataContext);
-  const [loaded, setLoaded] = useState(false);
+  const loaded = useRef(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
-  const [stageId, setStageId] = useState(initial.stageId);
   const [customStage, setCustomStage] = useState(null);
-  const [supportBonus, setSupportBonus] = useState(initial.supportBonus);
-  const [params, setParams] = useState(initial.params);
-  const [pItemIds, setPItemIds] = useState(initial.pItemIds);
-  const [skillCardIdGroups, setSkillCardIdGroups] = useState(
-    initial.skillCardIdGroups
-  );
+
+  const loadoutRef = useRef(loadout);
+  const { stageId, supportBonus, params, pItemIds, skillCardIdGroups } =
+    loadoutRef.current;
 
   useEffect(() => {
-    if (initial.hasDataFromParams) {
-      setLoaded(true);
-      return;
+    if (loaded.current && pathname == "/simulator") {
+      const params = loadoutToSearchParams(loadoutRef.current);
+      window.history.pushState(null, "", `?${params.toString()}`);
     }
-    const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
-    if (loadoutString) {
-      const data = JSON.parse(loadoutString);
-      if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
-      if (data.stageId) setStageId(data.stageId);
-      if (data.customStage) setCustomStage(data.customStage);
-      if (data.supportBonus) setSupportBonus(data.supportBonus);
-      if (data.params?.some((id) => id)) setParams(data.params);
-      if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
-      if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
-        setSkillCardIdGroups(data.skillCardIdGroups);
-    }
-    setLoaded(true);
-  }, []);
+    loaded.current = true;
+  }, [pathname]);
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUT_STORAGE_KEY,
-      JSON.stringify({
-        memoryIds,
-        stageId,
-        customStage,
-        supportBonus,
-        params,
-        pItemIds,
-        skillCardIdGroups,
-      })
-    );
-  }, [
-    memoryIds,
-    stageId,
-    customStage,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-  ]);
+  const setState = (key, value) => {
+    if (typeof value == "function") {
+      loadoutRef.current[key] = value(loadoutRef.current[key]);
+    } else {
+      loadoutRef.current[key] = value;
+    }
+    if (pathname == "/simulator") {
+      const params = loadoutToSearchParams(loadoutRef.current);
+      window.history.pushState(null, "", `?${params.toString()}`);
+    }
+  };
+
+  const setStageId = (value) => setState("stageId", value);
+  const setSupportBonus = (value) => setState("supportBonus", value);
+  const setParams = (value) => setState("params", value);
+  const setPItemIds = (value) => setState("pItemIds", value);
+  const setSkillCardIdGroups = (value) => setState("skillCardIdGroups", value);
 
   function setSkillCardIds(callback) {
     setSkillCardIdGroups((cur) => {
@@ -83,23 +65,23 @@ export function LoadoutContextProvider({ children }) {
     });
   }
 
-  const insertSkillCardIdGroup = (groupIndex) => {
+  function insertSkillCardIdGroup(groupIndex) {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
       return updatedSkillCardIds;
     });
-  };
+  }
 
-  const deleteSkillCardIdGroup = (groupIndex) => {
+  function deleteSkillCardIdGroup(groupIndex) {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       updatedSkillCardIds.splice(groupIndex, 1);
       return updatedSkillCardIds;
     });
-  };
+  }
 
-  const swapSkillCardIdGroups = (groupIndexA, groupIndexB) => {
+  function swapSkillCardIdGroups(groupIndexA, groupIndexB) {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       const temp = updatedSkillCardIds[groupIndexA];
@@ -107,7 +89,7 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds[groupIndexB] = temp;
       return updatedSkillCardIds;
     });
-  };
+  }
 
   function setMemory(memory, index) {
     const multiplier = index ? 0.2 : 1;
@@ -175,14 +157,6 @@ export function LoadoutContextProvider({ children }) {
     ]);
   }
 
-  const simulatorUrl = getSimulatorUrl(
-    stageId,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups
-  );
-
   let kafeUrl = null;
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
@@ -219,7 +193,6 @@ export function LoadoutContextProvider({ children }) {
         deleteSkillCardIdGroup,
         swapSkillCardIdGroups,
         clear,
-        simulatorUrl,
         kafeUrl,
       }}
     >
