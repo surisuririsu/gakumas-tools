@@ -1,38 +1,20 @@
 import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
 
-const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
+const DEFAULTS = {
+  stageId: "22",
+  supportBonus: "0",
+  params: "1000-1000-1000-40",
+  pItemIds: "0-0-0",
+  skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
+};
 
-export function getSimulatorUrl(
-  stageId,
-  supportBonus,
-  params,
-  pItemIds,
-  skillCardIdGroups
-) {
-  const searchParams = new URLSearchParams();
-  stageId && stageId != "custom" && searchParams.set("stage", stageId);
-  supportBonus && searchParams.set("support_bonus", supportBonus);
-  searchParams.set("params", params.map((p) => p || 0).join("-"));
-  searchParams.set("items", pItemIds.join("-"));
-  searchParams.set(
-    "cards",
-    skillCardIdGroups.map((group) => group.join("-")).join("_")
-  );
-  return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
-}
-
-export function getLoadoutFromSearchParams(searchParams) {
-  let stageId = searchParams.get("stage");
-  let supportBonus = searchParams.get("support_bonus");
-  let params = searchParams.get("params");
-  let pItemIds = searchParams.get("items");
-  let skillCardIdGroups = searchParams.get("cards");
-  const hasDataFromParams = stageId || params || pItemIds || skillCardIdGroups;
-
-  stageId = stageId || "22";
-  params = params || "1000-1000-1000-40";
-  pItemIds = pItemIds || "0-0-0";
-  skillCardIdGroups = skillCardIdGroups || "0-0-0-0-0-0_0-0-0-0-0-0";
+export function loadoutFromSearchParams(searchParams) {
+  let stageId = searchParams.get("stage") || DEFAULTS.stageId;
+  let supportBonus = searchParams.get("support_bonus") || DEFAULTS.supportBonus;
+  let params = searchParams.get("params") || DEFAULTS.params;
+  let pItemIds = searchParams.get("items") || DEFAULTS.pItemIds;
+  let skillCardIdGroups =
+    searchParams.get("cards") || DEFAULTS.skillCardIdGroups;
 
   stageId = parseInt(stageId, 10) || null;
   supportBonus = parseFloat(supportBonus) || null;
@@ -48,8 +30,22 @@ export function getLoadoutFromSearchParams(searchParams) {
     params,
     pItemIds,
     skillCardIdGroups,
-    hasDataFromParams,
   };
+}
+
+export function loadoutToSearchParams(loadout) {
+  const { stageId, supportBonus, params, pItemIds, skillCardIdGroups } =
+    loadout;
+  const searchParams = new URLSearchParams();
+  searchParams.set("stage", stageId);
+  searchParams.set("support_bonus", supportBonus);
+  searchParams.set("params", params.map((p) => p || 0).join("-"));
+  searchParams.set("items", pItemIds.join("-"));
+  searchParams.set(
+    "cards",
+    skillCardIdGroups.map((group) => group.join("-")).join("_")
+  );
+  return searchParams;
 }
 
 export function bucketScores(scores) {
@@ -132,21 +128,4 @@ export function mergeGraphDatas(graphDatas) {
   }
 
   return mergedGraphData;
-}
-
-export function shuffle(arr) {
-  let shuffled = [...arr];
-  let currentIndex = shuffled.length;
-
-  while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    [shuffled[currentIndex], shuffled[randomIndex]] = [
-      shuffled[randomIndex],
-      shuffled[currentIndex],
-    ];
-  }
-
-  return shuffled;
 }
