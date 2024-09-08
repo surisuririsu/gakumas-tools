@@ -1,5 +1,6 @@
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import Input from "@/components/Input";
 import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
@@ -20,45 +21,25 @@ function ParametersInput({
     [withStamina, t]
   );
 
-  // To prevent onChange triggering before IME input committed
-  const [composing, setComposing] = useState(false);
-  const [params, setParams] = useState(parameters);
-
-  useEffect(() => {
-    if (!composing) onChange(params);
-  }, [composing, params]);
-
   function handleChange(value, index) {
-    let next = [...params];
-
-    value = value.normalize("NFKC");
-    if (round) {
-      value = parseInt(value, 10);
-    } else {
-      value = parseFloat(value);
-    }
-    value = Math.min(Math.max(value, MIN), max);
-    if (isNaN(value)) value = null;
-
+    let next = [...parameters];
     next[index] = value;
-    console.log(next);
-    setParams(next);
+    onChange(next);
   }
 
   return (
     <div className={styles.parameters}>
       {parameterNames.map((name, i) => (
-        <input
+        <Input
           key={name}
           type="number"
+          name={name}
           placeholder={name}
-          onChange={(e) => handleChange(e.target.value, i)}
-          onCompositionStart={() => setComposing(true)}
-          onCompositionEnd={(e) => {
-            handleChange(e.data, i);
-            setComposing(false);
-          }}
-          value={params[i] ?? ""}
+          min={MIN}
+          max={max}
+          round={round}
+          value={parameters[i]}
+          onChange={(val) => handleChange(val, i)}
         />
       ))}
     </div>
