@@ -1,5 +1,4 @@
 @import "@/constants";
-@import "@/components/Input/Input.module";
 
 .parameters {
   display: flex;
@@ -8,8 +7,6 @@
   overflow: hidden;
 
   input {
-    @extend .input;
-
     @include param-colors using ($param-color) {
       border-color: $param-color;
       background-color: scale-color($param-color, $lightness: 80%);
