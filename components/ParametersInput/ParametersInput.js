@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./ParametersInput.module.scss";
 
@@ -20,15 +20,29 @@ function ParametersInput({
     [withStamina, t]
   );
 
+  // To prevent onChange triggering before IME input committed
+  const [composing, setComposing] = useState(false);
+  const [params, setParams] = useState(parameters);
+
+  useEffect(() => {
+    if (!composing) onChange(params);
+  }, [composing, params]);
+
   function handleChange(value, index) {
-    let next = [...parameters];
+    let next = [...params];
+
+    value = value.normalize("NFKC");
     if (round) {
       value = parseInt(value, 10);
     } else {
       value = parseFloat(value);
     }
-    next[index] = Math.min(Math.max(value, MIN), max);
-    onChange(next);
+    value = Math.min(Math.max(value, MIN), max);
+    if (isNaN(value)) value = null;
+
+    next[index] = value;
+    console.log(next);
+    setParams(next);
   }
 
   return (
@@ -39,7 +53,12 @@ function ParametersInput({
           type="number"
           placeholder={name}
           onChange={(e) => handleChange(e.target.value, i)}
-          value={parameters[i] ?? ""}
+          onCompositionStart={() => setComposing(true)}
+          onCompositionEnd={(e) => {
+            handleChange(e.data, i);
+            setComposing(false);
+          }}
+          value={params[i] ?? ""}
         />
       ))}
     </div>
