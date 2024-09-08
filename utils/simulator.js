@@ -8,38 +8,13 @@ const DEFAULTS = {
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
 };
 
-const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
-
-export function getSimulatorUrl(
-  stageId,
-  supportBonus,
-  params,
-  pItemIds,
-  skillCardIdGroups
-) {
-  const searchParams = loadoutToSearchParams({
-    stageId,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-  });
-  return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
-}
-
 export function loadoutFromSearchParams(searchParams) {
-  let stageId = searchParams.get("stage");
-  let supportBonus = searchParams.get("support_bonus");
-  let params = searchParams.get("params");
-  let pItemIds = searchParams.get("items");
-  let skillCardIdGroups = searchParams.get("cards");
-  const hasDataFromParams = stageId || params || pItemIds || skillCardIdGroups;
-
-  stageId = stageId || DEFAULTS.stageId;
-  supportBonus = supportBonus || DEFAULTS.supportBonus;
-  params = params || DEFAULTS.params;
-  pItemIds = pItemIds || DEFAULTS.pItemIds;
-  skillCardIdGroups = skillCardIdGroups || DEFAULTS.skillCardIdGroups;
+  let stageId = searchParams.get("stage") || DEFAULTS.stageId;
+  let supportBonus = searchParams.get("support_bonus") || DEFAULTS.supportBonus;
+  let params = searchParams.get("params") || DEFAULTS.params;
+  let pItemIds = searchParams.get("items") || DEFAULTS.pItemIds;
+  let skillCardIdGroups =
+    searchParams.get("cards") || DEFAULTS.skillCardIdGroups;
 
   stageId = parseInt(stageId, 10) || null;
   supportBonus = parseFloat(supportBonus) || null;
@@ -55,7 +30,6 @@ export function loadoutFromSearchParams(searchParams) {
     params,
     pItemIds,
     skillCardIdGroups,
-    hasDataFromParams,
   };
 }
 

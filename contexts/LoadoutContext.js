@@ -1,113 +1,132 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
 import DataContext from "@/contexts/DataContext";
-import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
-import { generateKafeUrl } from "@/utils/kafeSimulator";
+import { usePathname } from "@/i18n/routing";
 import { FALLBACK_STAGE } from "@/simulator/constants";
-
-const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
+import { generateKafeUrl } from "@/utils/kafeSimulator";
+import {
+  loadoutFromSearchParams,
+  loadoutToSearchParams,
+} from "@/utils/simulator";
 
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const initial = loadoutFromSearchParams(searchParams);
+  const loadout = loadoutFromSearchParams(searchParams);
 
   const { memories } = useContext(DataContext);
-  const [loaded, setLoaded] = useState(false);
+  const loaded = useRef(false);
   const [memoryIds, setMemoryIds] = useState([null, null]);
-  const [stageId, setStageId] = useState(initial.stageId);
   const [customStage, setCustomStage] = useState(null);
-  const [supportBonus, setSupportBonus] = useState(initial.supportBonus);
-  const [params, setParams] = useState(initial.params);
-  const [pItemIds, setPItemIds] = useState(initial.pItemIds);
-  const [skillCardIdGroups, setSkillCardIdGroups] = useState(
-    initial.skillCardIdGroups
+
+  const loadoutRef = useRef(loadout);
+  const { stageId, supportBonus, params, pItemIds, skillCardIdGroups } =
+    loadoutRef.current;
+
+  useEffect(() => {
+    if (loaded.current && pathname == "/simulator") {
+      const params = loadoutToSearchParams(loadoutRef.current);
+      window.history.pushState(null, "", `?${params.toString()}`);
+    }
+    loaded.current = true;
+  }, [pathname]);
+
+  const setState = useCallback(
+    (key, value) => {
+      if (typeof value == "function") {
+        loadoutRef.current[key] = value(loadoutRef.current[key]);
+      } else {
+        loadoutRef.current[key] = value;
+      }
+      if (pathname == "/simulator") {
+        const params = loadoutToSearchParams(loadoutRef.current);
+        window.history.pushState(null, "", `?${params.toString()}`);
+      }
+    },
+    [pathname]
   );
 
-  useEffect(() => {
-    if (initial.hasDataFromParams) {
-      setLoaded(true);
-      return;
-    }
-    const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
-    if (loadoutString) {
-      const data = JSON.parse(loadoutString);
-      if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
-      if (data.stageId) setStageId(data.stageId);
-      if (data.customStage) setCustomStage(data.customStage);
-      if (data.supportBonus) setSupportBonus(data.supportBonus);
-      if (data.params?.some((id) => id)) setParams(data.params);
-      if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
-      if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
-        setSkillCardIdGroups(data.skillCardIdGroups);
-    }
-    setLoaded(true);
-  }, []);
+  const setStageId = useCallback(
+    (value) => setState("stageId", value),
+    [setState]
+  );
+  const setSupportBonus = useCallback(
+    (value) => setState("supportBonus", value),
+    [setState]
+  );
+  const setParams = useCallback(
+    (value) => setState("params", value),
+    [setState]
+  );
+  const setPItemIds = useCallback(
+    (value) => setState("pItemIds", value),
+    [setState]
+  );
+  const setSkillCardIdGroups = useCallback(
+    (value) => setState("skillCardIdGroups", value),
+    [setState]
+  );
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUT_STORAGE_KEY,
-      JSON.stringify({
-        memoryIds,
-        stageId,
-        customStage,
-        supportBonus,
-        params,
-        pItemIds,
-        skillCardIdGroups,
-      })
-    );
-  }, [
-    memoryIds,
-    stageId,
-    customStage,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-  ]);
+  const setSkillCardIds = useCallback(
+    (callback) => {
+      setSkillCardIdGroups((cur) => {
+        const skillCardIds = [].concat(...cur);
+        const updatedSkillCardIds = callback(skillCardIds);
+        let chunks = [];
+        for (let i = 0; i < updatedSkillCardIds.length; i += 6) {
+          chunks.push(updatedSkillCardIds.slice(i, i + 6));
+        }
+        return chunks;
+      });
+    },
+    [setSkillCardIdGroups]
+  );
 
-  function setSkillCardIds(callback) {
-    setSkillCardIdGroups((cur) => {
-      const skillCardIds = [].concat(...cur);
-      const updatedSkillCardIds = callback(skillCardIds);
-      let chunks = [];
-      for (let i = 0; i < updatedSkillCardIds.length; i += 6) {
-        chunks.push(updatedSkillCardIds.slice(i, i + 6));
-      }
-      return chunks;
-    });
-  }
+  const insertSkillCardIdGroup = useCallback(
+    (groupIndex) => {
+      setSkillCardIdGroups((cur) => {
+        const updatedSkillCardIds = [...cur];
+        updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
+        return updatedSkillCardIds;
+      });
+    },
+    [setSkillCardIdGroups]
+  );
 
-  const insertSkillCardIdGroup = (groupIndex) => {
-    setSkillCardIdGroups((cur) => {
-      const updatedSkillCardIds = [...cur];
-      updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
-      return updatedSkillCardIds;
-    });
-  };
+  const deleteSkillCardIdGroup = useCallback(
+    (groupIndex) => {
+      setSkillCardIdGroups((cur) => {
+        const updatedSkillCardIds = [...cur];
+        updatedSkillCardIds.splice(groupIndex, 1);
+        return updatedSkillCardIds;
+      });
+    },
+    [setSkillCardIdGroups]
+  );
 
-  const deleteSkillCardIdGroup = (groupIndex) => {
-    setSkillCardIdGroups((cur) => {
-      const updatedSkillCardIds = [...cur];
-      updatedSkillCardIds.splice(groupIndex, 1);
-      return updatedSkillCardIds;
-    });
-  };
-
-  const swapSkillCardIdGroups = (groupIndexA, groupIndexB) => {
-    setSkillCardIdGroups((cur) => {
-      const updatedSkillCardIds = [...cur];
-      const temp = updatedSkillCardIds[groupIndexA];
-      updatedSkillCardIds[groupIndexA] = updatedSkillCardIds[groupIndexB];
-      updatedSkillCardIds[groupIndexB] = temp;
-      return updatedSkillCardIds;
-    });
-  };
+  const swapSkillCardIdGroups = useCallback(
+    (groupIndexA, groupIndexB) => {
+      setSkillCardIdGroups((cur) => {
+        const updatedSkillCardIds = [...cur];
+        const temp = updatedSkillCardIds[groupIndexA];
+        updatedSkillCardIds[groupIndexA] = updatedSkillCardIds[groupIndexB];
+        updatedSkillCardIds[groupIndexB] = temp;
+        return updatedSkillCardIds;
+      });
+    },
+    [setSkillCardIdGroups]
+  );
 
   function setMemory(memory, index) {
     const multiplier = index ? 0.2 : 1;
@@ -149,21 +168,27 @@ export function LoadoutContextProvider({ children }) {
     });
   }
 
-  function replacePItemId(index, itemId) {
-    setPItemIds((cur) => {
-      const next = [...cur];
-      next[index] = itemId;
-      return next;
-    });
-  }
+  const replacePItemId = useCallback(
+    (index, itemId) => {
+      setPItemIds((cur) => {
+        const next = [...cur];
+        next[index] = itemId;
+        return next;
+      });
+    },
+    [setPItemIds]
+  );
 
-  function replaceSkillCardId(index, cardId) {
-    setSkillCardIds((cur) => {
-      const next = [...cur];
-      next[index] = cardId;
-      return next;
-    });
-  }
+  const replaceSkillCardId = useCallback(
+    (index, cardId) => {
+      setSkillCardIds((cur) => {
+        const next = [...cur];
+        next[index] = cardId;
+        return next;
+      });
+    },
+    [setSkillCardIds]
+  );
 
   function clear() {
     setMemoryIds([null, null]);
@@ -174,14 +199,6 @@ export function LoadoutContextProvider({ children }) {
       [0, 0, 0, 0, 0, 0],
     ]);
   }
-
-  const simulatorUrl = getSimulatorUrl(
-    stageId,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups
-  );
 
   let kafeUrl = null;
   let stage = FALLBACK_STAGE;
@@ -219,7 +236,6 @@ export function LoadoutContextProvider({ children }) {
         deleteSkillCardIdGroup,
         swapSkillCardIdGroups,
         clear,
-        simulatorUrl,
         kafeUrl,
       }}
     >
