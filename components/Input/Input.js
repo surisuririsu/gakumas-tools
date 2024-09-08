@@ -1,25 +1,19 @@
 import { memo } from "react";
 import styles from "./Input.module.scss";
 
-function Input({
-  type,
-  name,
-  defaultValue,
-  value,
-  min,
-  max,
-  placeholder,
-  onChange,
-}) {
-  function clamp(val) {
-    let clampedValue = val;
-    if (min != null) {
-      clampedValue = Math.max(clampedValue, min);
+function Input({ type, name, placeholder, round, min, max, value, onChange }) {
+  function handleChange(val) {
+    if (type == "number") {
+      if (round) {
+        val = parseInt(val, 10);
+      } else {
+        val = parseFloat(val);
+      }
+      if (min != null) val = Math.max(val, min);
+      if (max != null) val = Math.min(val, max);
+      if (isNaN(val)) val = null;
     }
-    if (max != null) {
-      clampedValue = Math.min(clampedValue, max);
-    }
-    return clampedValue;
+    onChange(val);
   }
 
   return (
@@ -27,14 +21,9 @@ function Input({
       className={styles.input}
       type={type}
       name={name}
-      defaultValue={defaultValue}
-      value={value}
       placeholder={placeholder}
-      onChange={(e) =>
-        onChange(
-          type == "number" ? clamp(parseFloat(e.target.value)) : e.target.value
-        )
-      }
+      value={value ?? ""}
+      onChange={(e) => handleChange(e.target.value)}
     />
   );
 }

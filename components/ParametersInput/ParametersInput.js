@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import Input from "@/components/Input";
 import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
@@ -22,24 +23,23 @@ function ParametersInput({
 
   function handleChange(value, index) {
     let next = [...parameters];
-    if (round) {
-      value = parseInt(value, 10);
-    } else {
-      value = parseFloat(value);
-    }
-    next[index] = Math.min(Math.max(value, MIN), max);
+    next[index] = value;
     onChange(next);
   }
 
   return (
     <div className={styles.parameters}>
       {parameterNames.map((name, i) => (
-        <input
+        <Input
           key={name}
           type="number"
+          name={name}
           placeholder={name}
-          onChange={(e) => handleChange(e.target.value, i)}
-          value={parameters[i] ?? ""}
+          round={round}
+          min={MIN}
+          max={max}
+          value={parameters[i]}
+          onChange={(val) => handleChange(val, i)}
         />
       ))}
     </div>
