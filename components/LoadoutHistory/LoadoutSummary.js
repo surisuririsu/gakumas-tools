@@ -9,7 +9,7 @@ import styles from "./LoadoutHistory.module.scss";
 function LoadoutSummary({ loadout, setLoadout }) {
   const t = useTranslations("StageSummary");
 
-  const { stageId, pItemIds, skillCardIdGroups } = loadout;
+  const { stageId, customStage, pItemIds, skillCardIdGroups } = loadout;
 
   const stage = useMemo(() => {
     let stage = FALLBACK_STAGE;
