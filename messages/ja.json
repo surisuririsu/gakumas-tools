@@ -132,6 +132,7 @@
   },
   "SimulatorSubTools": {
     "costRanges": "コスト範囲",
+    "history": "履歴α",
     "defaultCards": "基本カード"
   },
   "CostRanges": {

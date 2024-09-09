@@ -32,6 +32,7 @@ export default function Simulator() {
     pItemIds,
     skillCardIdGroups,
     replacePItemId,
+    pushLoadoutHistory,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
@@ -117,6 +118,7 @@ export default function Simulator() {
       Promise.all(promises).then((results) => {
         const mergedResults = mergeResults(results);
         setResult(mergedResults);
+        pushLoadoutHistory();
       });
     }
   }
