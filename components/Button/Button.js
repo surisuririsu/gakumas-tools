@@ -4,6 +4,7 @@ import c from "@/utils/classNames";
 import styles from "./Button.module.scss";
 
 function Button({
+  className,
   children,
   onClick,
   href,
@@ -14,15 +15,16 @@ function Button({
   fill,
   locale,
 }) {
-  const className = c(
+  const fullClassName = c(
     styles.button,
     styles[disabled ? "disabled" : style],
-    fill && styles.fill
+    fill && styles.fill,
+    className
   );
 
   return href ? (
     <Link
-      className={className}
+      className={fullClassName}
       href={href}
       target={target}
       onClick={onClick}
@@ -34,7 +36,7 @@ function Button({
     </Link>
   ) : (
     <button
-      className={className}
+      className={fullClassName}
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}

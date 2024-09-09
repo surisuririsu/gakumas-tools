@@ -8,6 +8,7 @@ import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 
 const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
+const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
 
 const LoadoutContext = createContext();
 
@@ -17,6 +18,7 @@ export function LoadoutContextProvider({ children }) {
 
   const { memories } = useContext(DataContext);
   const [loaded, setLoaded] = useState(false);
+  const [dirty, setDirty] = useState(true);
   const [memoryIds, setMemoryIds] = useState([null, null]);
   const [stageId, setStageId] = useState(initial.stageId);
   const [customStage, setCustomStage] = useState(null);
@@ -26,24 +28,32 @@ export function LoadoutContextProvider({ children }) {
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
     initial.skillCardIdGroups
   );
+  const [loadoutHistory, setLoadoutHistory] = useState([]);
 
   useEffect(() => {
-    if (initial.hasDataFromParams) {
-      setLoaded(true);
-      return;
+    if (!initial.hasDataFromParams) {
+      const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
+      if (loadoutString) {
+        const data = JSON.parse(loadoutString);
+        if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
+        if (data.stageId) setStageId(data.stageId);
+        if (data.customStage) setCustomStage(data.customStage);
+        if (data.supportBonus) setSupportBonus(data.supportBonus);
+        if (data.params?.some((id) => id)) setParams(data.params);
+        if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
+        if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
+          setSkillCardIdGroups(data.skillCardIdGroups);
+      }
     }
-    const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
-    if (loadoutString) {
-      const data = JSON.parse(loadoutString);
-      if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
-      if (data.stageId) setStageId(data.stageId);
-      if (data.customStage) setCustomStage(data.customStage);
-      if (data.supportBonus) setSupportBonus(data.supportBonus);
-      if (data.params?.some((id) => id)) setParams(data.params);
-      if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
-      if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
-        setSkillCardIdGroups(data.skillCardIdGroups);
+
+    const loadoutHistoryString = localStorage.getItem(
+      LOADOUT_HISTORY_STORAGE_KEY
+    );
+    if (loadoutHistoryString) {
+      const data = JSON.parse(loadoutHistoryString);
+      setLoadoutHistory(data);
     }
+
     setLoaded(true);
   }, []);
 
@@ -61,6 +71,7 @@ export function LoadoutContextProvider({ children }) {
         skillCardIdGroups,
       })
     );
+    setDirty(true);
   }, [
     memoryIds,
     stageId,
@@ -70,6 +81,14 @@ export function LoadoutContextProvider({ children }) {
     pItemIds,
     skillCardIdGroups,
   ]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(
+      LOADOUT_HISTORY_STORAGE_KEY,
+      JSON.stringify(loadoutHistory)
+    );
+  }, [loadoutHistory]);
 
   function setSkillCardIds(callback) {
     setSkillCardIdGroups((cur) => {
@@ -198,6 +217,34 @@ export function LoadoutContextProvider({ children }) {
     );
   }
 
+  const pushLoadoutHistory = () => {
+    if (!dirty) return;
+    setLoadoutHistory((cur) =>
+      [
+        {
+          timestamp: Date.now(),
+          stageId,
+          customStage: stageId == "custom" ? customStage : {},
+          supportBonus,
+          params,
+          pItemIds,
+          skillCardIdGroups,
+        },
+        ...cur,
+      ].slice(0, 10)
+    );
+    setDirty(false);
+  };
+
+  const setLoadout = (loadout) => {
+    setStageId(loadout.stageId);
+    setCustomStage(loadout.customStage);
+    setSupportBonus(loadout.supportBonus);
+    setParams(loadout.params);
+    setPItemIds(loadout.pItemIds);
+    setSkillCardIdGroups(loadout.skillCardIdGroups);
+  };
+
   return (
     <LoadoutContext.Provider
       value={{
@@ -221,6 +268,9 @@ export function LoadoutContextProvider({ children }) {
         clear,
         simulatorUrl,
         kafeUrl,
+        loadoutHistory,
+        pushLoadoutHistory,
+        setLoadout,
       }}
     >
       {children}

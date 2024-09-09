@@ -53,6 +53,11 @@
     font-size: 16px;
     text-align: center;
   }
+
+  .disabled {
+    color: $gray;
+    cursor: default;
+  }
 }
 
 .strategySelect {
