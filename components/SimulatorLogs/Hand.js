@@ -53,7 +53,8 @@ function Hand({ handCardIds, scores, selectedCardId, state, idolId }) {
             key={i}
             className={c(
               styles.handCard,
-              i === selectedIndex && styles.selected
+              i === selectedIndex && styles.selected,
+              scores[i] == -Infinity && styles.unusable
             )}
           >
             <Image
@@ -63,7 +64,9 @@ function Hand({ handCardIds, scores, selectedCardId, state, idolId }) {
               alt=""
             />
             {skillCard.name}
-            <span className={styles.cardScore}>{scores[i]}</span>
+            <span className={styles.cardScore}>
+              {scores[i] == -Infinity ? t("unplayable") : scores[i]}
+            </span>
           </div>
         ))}
       </div>

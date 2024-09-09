@@ -187,6 +187,7 @@
     "numTurns": "{num}ターン",
     "hand": "手札",
     "turnN": "{n}ターン目",
-    "average": "平均値"
+    "average": "平均値",
+    "unplayable": "使用不可"
   }
 }

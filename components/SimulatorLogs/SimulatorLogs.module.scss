@@ -159,6 +159,10 @@
     font-weight: 600;
   }
 
+  .unusable {
+    filter: brightness(0.6);
+  }
+
   .cardScore {
     font-size: 12px;
   }

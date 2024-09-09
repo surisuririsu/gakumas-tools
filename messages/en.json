@@ -187,6 +187,7 @@
     "numTurns": "{num} {num, plural, =1 {turn} other {turns}}",
     "hand": "Hand",
     "turnN": "Turn {n}",
-    "average": "Average"
+    "average": "Average",
+    "unplayable": "Unplayable"
   }
 }
