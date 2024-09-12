@@ -52,7 +52,7 @@ export default class HeuristicStrategy2 extends StageStrategy {
     const goodConditionTurnsMultiplier =
       recommendedEffect == "goodConditionTurns" ? 5 : 2;
     const concentrationMultiplier =
-      recommendedEffect == "concentration" ? 3 : 1;
+      recommendedEffect == "concentration" ? 4.5 : 1;
     const goodImpressionTurnsMultiplier =
       recommendedEffect == "goodImpressionTurns" ? 3 : 1;
     const motivationMultiplier = recommendedEffect == "motivation" ? 4 : 1;
