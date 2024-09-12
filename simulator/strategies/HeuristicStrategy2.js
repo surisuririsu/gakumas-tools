@@ -81,7 +81,7 @@ export default class HeuristicStrategy2 extends StageStrategy {
       Math.floor(previewState.turnsRemaining / 12);
 
     // Stamina
-    score += previewState.stamina * 0.33;
+    score += previewState.stamina * previewState.turnsRemaining * 0.25;
 
     // Genki
     score +=
@@ -109,7 +109,7 @@ export default class HeuristicStrategy2 extends StageStrategy {
     score +=
       previewState.concentration *
       previewState.turnsRemaining *
-      1.5 *
+      2 *
       concentrationMultiplier;
 
     // Good impression turns
@@ -135,10 +135,12 @@ export default class HeuristicStrategy2 extends StageStrategy {
       ) * 20;
 
     // Half cost turns
-    score += previewState.halfCostTurns * 9;
+    score +=
+      Math.min(previewState.halfCostTurns, previewState.turnsRemaining) * 9;
 
     // Double cost turns
-    score += previewState.doubleCostTurns * -3;
+    score +=
+      Math.min(previewState.doubleCostTurns, previewState.turnsRemaining) * -3;
 
     // Cost reduction
     score += previewState.costReduction * previewState.turnsRemaining * 2;
