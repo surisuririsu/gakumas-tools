@@ -110,7 +110,8 @@
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
-    "simulate": "Simulate"
+    "simulate": "Simulate",
+    "lastUpdated": "Last updated"
   },
   "StageSelect": {
     "placeholder": "Select stage"

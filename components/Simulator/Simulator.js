@@ -183,6 +183,13 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : t("simulate")}
         </Button>
+        <a
+          className={styles.updated}
+          href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
+          target="_blank"
+        >
+          {t("lastUpdated")}: 2024-09-14
+        </a>
       </div>
 
       {simulatorData && (
