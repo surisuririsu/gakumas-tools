@@ -110,7 +110,8 @@
   },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
-    "simulate": "実行"
+    "simulate": "実行",
+    "lastUpdated": "最終更新"
   },
   "StageSelect": {
     "placeholder": "ステージ選択"

@@ -67,6 +67,12 @@
   display: none;
 }
 
+.updated {
+  align-self: flex-start;
+  color: $blue;
+  font-size: 12px;
+}
+
 .buttons {
   display: flex;
   align-items: stretch;
