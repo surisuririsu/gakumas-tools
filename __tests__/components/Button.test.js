@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import Button from "@/components/Button";
 
 describe("Button", () => {
@@ -14,8 +15,7 @@ describe("Button", () => {
     const link = screen.queryByRole("link");
     expect(link).toBeNull();
 
-    const button = screen.queryByRole("button");
-    expect(button).toBeTruthy();
+    const button = screen.getByRole("button");
     expect(button).toHaveTextContent("Click me!");
     expect(button).toHaveAttribute("class", "button secondary");
 
@@ -31,13 +31,16 @@ describe("Button", () => {
       target: "_blank",
       style: "secondary",
     };
-    render(<Button {...props} />);
+    render(
+      <NextIntlClientProvider locale="en">
+        <Button {...props} />
+      </NextIntlClientProvider>
+    );
 
     const button = screen.queryByRole("button");
     expect(button).toBeNull();
 
-    const link = screen.queryByRole("link");
-    expect(link).toBeTruthy();
+    const link = screen.getByRole("link");
     expect(link).toHaveTextContent("Click me!");
     expect(link).toHaveAttribute("class", "button secondary");
     expect(link).toHaveAttribute("href", "https://www.example.org");
@@ -56,5 +59,16 @@ describe("Button", () => {
 
     const button = screen.getByRole("button");
     expect(button).toHaveAttribute("class", "button disabled");
+  });
+
+  it("uses fill style when fill prop is true", () => {
+    const props = {
+      fill: true,
+      style: "secondary",
+    };
+    render(<Button {...props} />);
+
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("class", "button secondary fill");
   });
 });
