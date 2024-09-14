@@ -20,7 +20,7 @@ import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
-export default function Simulator({ defaultStrategy = "v1" }) {
+export default function Simulator() {
   const t = useTranslations("Simulator");
 
   const {
@@ -35,7 +35,7 @@ export default function Simulator({ defaultStrategy = "v1" }) {
     pushLoadoutHistory,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
-  const [strategy, setStrategy] = useState(defaultStrategy);
+  const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
   const workersRef = useRef();
