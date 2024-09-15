@@ -3,6 +3,15 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-15
+
+### Changed
+
+- Use same frequency estimate for all phases in card evaluation
+- Recommended effect multipliers for good condition, concentration, good impression
+- More accurate estimate of average type multiplier
+- Evaluation of genki, good condition, perfect condition
+
 ## 2024-09-14
 
 ### Changed
@@ -144,6 +153,7 @@ Dates are based on Eastern Time Zone.
 ## 2024-08-21
 
 ### Added
+
 - Hibi China
 
 ### Fixed
@@ -241,7 +251,7 @@ Dates are based on Eastern Time Zone.
 
 ## 2024-08-08
 
-### Added 
+### Added
 
 - Simulator implementation
 - Distribution plot
