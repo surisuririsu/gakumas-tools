@@ -1,22 +1,28 @@
 import { StageStrategy } from "gakumas-engine";
 
-const PHASE_FREQUENCY_ESTIMATES = {
-  startOfStage: 0,
-  startOfTurn: 1,
-  cardUsed: 1.2,
-  activeCardUsed: 1,
-  mentalCardUsed: 1,
-  afterCardUsed: 1.2,
-  afterActiveCardUsed: 1,
-  afterMentalCardUsed: 1,
-  endOfTurn: 1,
-  goodImpressionTurnsIncreased: 0.75,
-  motivationIncreased: 0.75,
-  goodConditionTurnsIncreased: 0.75,
-  concentrationIncreased: 0.75,
-};
-
 export default class HeuristicStrategy extends StageStrategy {
+  constructor(engine) {
+    super(engine);
+
+    const { idolConfig, stageConfig } = engine;
+    this.averageTypeMultiplier = Object.keys(idolConfig.typeMultipliers).reduce(
+      (acc, cur) =>
+        acc +
+        (idolConfig.typeMultipliers[cur] * stageConfig.turnCounts[cur]) /
+          stageConfig.turnCount,
+      0
+    );
+
+    this.goodConditionTurnsMultiplier =
+      idolConfig.recommendedEffect == "goodConditionTurns" ? 3 : 1;
+    this.concentrationMultiplier =
+      idolConfig.recommendedEffect == "concentration" ? 2 : 1;
+    this.goodImpressionTurnsMultiplier =
+      idolConfig.recommendedEffect == "goodImpressionTurns" ? 4 : 1;
+    this.motivationMultiplier =
+      idolConfig.recommendedEffect == "motivation" ? 3 : 1;
+  }
+
   getScore(state, cardId) {
     if (!this.engine.isCardUsable(state, cardId)) {
       return -Infinity;
@@ -34,30 +40,6 @@ export default class HeuristicStrategy extends StageStrategy {
       if (filteredScores.length) return Math.max(...filteredScores);
     }
 
-    const { vocal, dance, visual } = this.engine.idolConfig.typeMultipliers;
-    const averageTypeMultiplier = (vocal + dance + visual) / 3;
-
-    const getTrueScore = (score) => {
-      // Score buff effects
-      score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
-      score = Math.ceil(score);
-
-      // Turn type multiplier
-      score *= averageTypeMultiplier;
-      score = Math.ceil(score);
-
-      return score;
-    };
-
-    const recommendedEffect = this.engine.idolConfig.recommendedEffect;
-    const goodConditionTurnsMultiplier =
-      recommendedEffect == "goodConditionTurns" ? 10 : 2;
-    const concentrationMultiplier =
-      recommendedEffect == "concentration" ? 2.75 : 1;
-    const goodImpressionTurnsMultiplier =
-      recommendedEffect == "goodImpressionTurns" ? 3 : 1;
-    const motivationMultiplier = recommendedEffect == "motivation" ? 3 : 1;
-
     // Effects
     const effectsDiff = previewState.effects.length - state.effects.length;
     for (let i = 0; i < effectsDiff; i++) {
@@ -66,7 +48,7 @@ export default class HeuristicStrategy extends StageStrategy {
         Math.min(
           effect.limit || previewState.turnsRemaining,
           previewState.turnsRemaining
-        ) * PHASE_FREQUENCY_ESTIMATES[effect.phase]
+        )
       );
       score += 300 * limit;
     }
@@ -78,7 +60,7 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       (((state.removedCardIds.length - previewState.removedCardIds.length) *
         (previewState.score - state.score)) /
-        averageTypeMultiplier) *
+        this.averageTypeMultiplier) *
       Math.floor(previewState.turnsRemaining / 12);
 
     // Stamina
@@ -87,15 +69,15 @@ export default class HeuristicStrategy extends StageStrategy {
     // Genki
     score +=
       previewState.genki *
-      Math.tanh(previewState.turnsRemaining / 5) *
-      0.6 *
-      motivationMultiplier;
+      Math.tanh(previewState.turnsRemaining) *
+      0.42 *
+      this.motivationMultiplier;
 
     // Good condition turns
     score +=
       Math.min(previewState.goodConditionTurns, previewState.turnsRemaining) *
-      5 *
-      goodConditionTurnsMultiplier;
+      2 *
+      this.goodConditionTurnsMultiplier;
 
     // Perfect condition turns
     score +=
@@ -104,29 +86,28 @@ export default class HeuristicStrategy extends StageStrategy {
         previewState.turnsRemaining
       ) *
       previewState.goodConditionTurns *
-      0.5 *
-      goodConditionTurnsMultiplier;
+      this.goodConditionTurnsMultiplier;
 
     // Concentration
     score +=
       previewState.concentration *
       previewState.turnsRemaining *
       1.5 *
-      concentrationMultiplier;
+      this.concentrationMultiplier;
 
     // Good impression turns
     score +=
       previewState.goodImpressionTurns *
       previewState.turnsRemaining *
       1.5 *
-      goodImpressionTurnsMultiplier;
+      this.goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
       previewState.motivation *
       previewState.turnsRemaining *
       0.3 *
-      motivationMultiplier;
+      this.motivationMultiplier;
 
     // Score buffs
     score +=
@@ -153,8 +134,14 @@ export default class HeuristicStrategy extends StageStrategy {
     // Nullify genki turns
     score += previewState.nullifyGenkiTurns * -9;
 
+    // Scale predicted score appropriately
+    score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
+    score = Math.ceil(score);
+    score *= this.averageTypeMultiplier;
+    score = Math.ceil(score);
+
     return Math.floor(
-      getTrueScore(score) +
+      score +
         previewState.score * 0.33 +
         previewState.score / (previewState.turnsRemaining + 1)
     );
