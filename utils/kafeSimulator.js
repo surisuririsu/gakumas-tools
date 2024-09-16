@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data/lite";
 import { IdolConfig } from "gakumas-engine";
 import KAFE_CARD_MAP from "@/generated/kafeCardMap.json";
 import KAFE_ITEM_MAP from "@/generated/kafeItemMap.json";
