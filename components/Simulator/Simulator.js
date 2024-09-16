@@ -25,12 +25,9 @@ export default function Simulator() {
 
   const {
     stage,
-    supportBonus,
+    loadout,
     setSupportBonus,
-    params,
     setParams,
-    pItemIds,
-    skillCardIdGroups,
     replacePItemId,
     pushLoadoutHistory,
   } = useContext(LoadoutContext);
@@ -41,10 +38,10 @@ export default function Simulator() {
   const workersRef = useRef();
 
   const idolConfig = new IdolConfig(
-    params,
-    supportBonus,
-    pItemIds,
-    skillCardIdGroups,
+    loadout.params,
+    loadout.supportBonus,
+    loadout.pItemIds,
+    loadout.skillCardIdGroups,
     stage,
     plan,
     idolId
@@ -132,7 +129,7 @@ export default function Simulator() {
           <label>{t("supportBonus")}</label>
           <Input
             type="number"
-            value={parseFloat(((supportBonus || 0) * 100).toFixed(2))}
+            value={parseFloat(((loadout.supportBonus || 0) * 100).toFixed(2))}
             onChange={(value) =>
               setSupportBonus(parseFloat((value / 100).toFixed(4)))
             }
@@ -140,7 +137,7 @@ export default function Simulator() {
         </div>
         <div className={styles.params}>
           <ParametersInput
-            parameters={params}
+            parameters={loadout.params}
             onChange={setParams}
             withStamina
             max={10000}
@@ -155,11 +152,11 @@ export default function Simulator() {
           </div>
         </div>
         <StagePItems
-          pItemIds={pItemIds}
+          pItemIds={loadout.pItemIds}
           replacePItemId={replacePItemId}
           size="medium"
         />
-        {skillCardIdGroups.map((skillCardIdGroup, i) => (
+        {loadout.skillCardIdGroups.map((skillCardIdGroup, i) => (
           <LoadoutSkillCardGroup
             key={i}
             skillCardIds={skillCardIdGroup}

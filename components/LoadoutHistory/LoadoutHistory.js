@@ -8,12 +8,8 @@ function LoadoutHistory() {
 
   return (
     <div className={styles.history}>
-      {loadoutHistory.map((loadout) => (
-        <LoadoutSummary
-          key={loadout.timestamp}
-          loadout={loadout}
-          setLoadout={setLoadout}
-        />
+      {loadoutHistory.map((loadout, i) => (
+        <LoadoutSummary key={i} loadout={loadout} setLoadout={setLoadout} />
       ))}
     </div>
   );

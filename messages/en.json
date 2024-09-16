@@ -133,7 +133,7 @@
   },
   "SimulatorSubTools": {
     "costRanges": "Cost ranges",
-    "history": "History α",
+    "history": "History β",
     "defaultCards": "Default cards"
   },
   "CostRanges": {
