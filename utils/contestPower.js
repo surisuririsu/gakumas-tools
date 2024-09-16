@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data/lite";
 
 export function calculateContestPower(params, pItemIds, skillCardIds) {
   const [vocal, dance, visual, stamina] = params.map((p) => p || 0);

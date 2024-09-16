@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
-import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
+import { Idols, PIdols } from "gakumas-data/lite";
 import {
   DEBUG,
   getGameRegion,

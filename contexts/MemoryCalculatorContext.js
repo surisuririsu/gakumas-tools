@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState } from "react";
-import { SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data/lite";
 
 const MemoryCalculatorContext = createContext();
 
