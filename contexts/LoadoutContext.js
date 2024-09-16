@@ -1,13 +1,11 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
-import DataContext from "@/contexts/DataContext";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 
-const LOADOUT_STORAGE_KEY = "gakumas-tools.loadout";
 const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
 
 const LoadoutContext = createContext();
@@ -16,10 +14,8 @@ export function LoadoutContextProvider({ children }) {
   const searchParams = useSearchParams();
   const initial = loadoutFromSearchParams(searchParams);
 
-  const { memories } = useContext(DataContext);
   const [loaded, setLoaded] = useState(false);
-  const [dirty, setDirty] = useState(true);
-  const [memoryIds, setMemoryIds] = useState([null, null]);
+  const [memoryParams, setMemoryParams] = useState([null, null]);
   const [stageId, setStageId] = useState(initial.stageId);
   const [customStage, setCustomStage] = useState(null);
   const [supportBonus, setSupportBonus] = useState(initial.supportBonus);
@@ -30,58 +26,29 @@ export function LoadoutContextProvider({ children }) {
   );
   const [loadoutHistory, setLoadoutHistory] = useState([]);
 
-  useEffect(() => {
-    if (!initial.hasDataFromParams) {
-      const loadoutString = localStorage.getItem(LOADOUT_STORAGE_KEY);
-      if (loadoutString) {
-        const data = JSON.parse(loadoutString);
-        if (data.memoryIds?.some((id) => id)) setMemoryIds(data.memoryIds);
-        if (data.stageId) setStageId(data.stageId);
-        if (data.customStage) setCustomStage(data.customStage);
-        if (data.supportBonus) setSupportBonus(data.supportBonus);
-        if (data.params?.some((id) => id)) setParams(data.params);
-        if (data.pItemIds?.some((id) => id)) setPItemIds(data.pItemIds);
-        if (data.skillCardIdGroups?.some((g) => g?.some((id) => id)))
-          setSkillCardIdGroups(data.skillCardIdGroups);
-      }
-    }
+  const setLoadout = (loadout) => {
+    setStageId(loadout.stageId);
+    setCustomStage(loadout.customStage);
+    setSupportBonus(loadout.supportBonus);
+    setParams(loadout.params);
+    setPItemIds(loadout.pItemIds);
+    setSkillCardIdGroups(loadout.skillCardIdGroups);
+  };
 
+  // Load history and latest loadout from local storage on mount
+  useEffect(() => {
     const loadoutHistoryString = localStorage.getItem(
       LOADOUT_HISTORY_STORAGE_KEY
     );
     if (loadoutHistoryString) {
       const data = JSON.parse(loadoutHistoryString);
       setLoadoutHistory(data);
+      if (!initial.hasDataFromParams) setLoadout(data[0]);
     }
-
     setLoaded(true);
   }, []);
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUT_STORAGE_KEY,
-      JSON.stringify({
-        memoryIds,
-        stageId,
-        customStage,
-        supportBonus,
-        params,
-        pItemIds,
-        skillCardIdGroups,
-      })
-    );
-    setDirty(true);
-  }, [
-    memoryIds,
-    stageId,
-    customStage,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-  ]);
-
+  // Update local storage when history changed
   useEffect(() => {
     if (!loaded) return;
     localStorage.setItem(
@@ -90,10 +57,29 @@ export function LoadoutContextProvider({ children }) {
     );
   }, [loadoutHistory]);
 
-  function setSkillCardIds(callback) {
+  function clear() {
+    setMemoryParams([null, null]);
+    setParams([null, null, null, null]);
+    setPItemIds([0, 0, 0]);
+    setSkillCardIdGroups([
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+    ]);
+  }
+
+  function replacePItemId(index, itemId) {
+    setPItemIds((cur) => {
+      const next = [...cur];
+      next[index] = itemId;
+      return next;
+    });
+  }
+
+  function replaceSkillCardId(index, cardId) {
     setSkillCardIdGroups((cur) => {
       const skillCardIds = [].concat(...cur);
-      const updatedSkillCardIds = callback(skillCardIds);
+      const updatedSkillCardIds = [...skillCardIds];
+      updatedSkillCardIds[index] = cardId;
       let chunks = [];
       for (let i = 0; i < updatedSkillCardIds.length; i += 6) {
         chunks.push(updatedSkillCardIds.slice(i, i + 6));
@@ -131,26 +117,21 @@ export function LoadoutContextProvider({ children }) {
   function setMemory(memory, index) {
     const multiplier = index ? 0.2 : 1;
 
-    if (!memoryIds.some((i) => i)) {
+    if (!memoryParams.some((p) => p)) {
       setParams([0, 0, 0, 0]);
-    }
-
-    if (memoryIds[index]) {
+    } else if (memoryParams[index]) {
       // If there is currently a memory in that slot, remove its params
-      const curMemory = memories.find((mem) => mem._id == memoryIds[index]);
-      if (curMemory) {
-        setParams((curParams) =>
-          curParams.map(
-            (p, i) => (p || 0) - Math.floor(curMemory.params[i] * multiplier)
-          )
-        );
-      }
+      setParams((curParams) =>
+        curParams.map(
+          (p, i) => (p || 0) - Math.floor(memoryParams[index][i] * multiplier)
+        )
+      );
     }
 
     // Set memory
-    setMemoryIds((cur) => {
+    setMemoryParams((cur) => {
       const next = [...cur];
-      next[index] = memory._id;
+      next[index] = memory.params;
       return next;
     });
     setParams((curParams) =>
@@ -166,32 +147,6 @@ export function LoadoutContextProvider({ children }) {
       next[index] = memory.skillCardIds;
       return next;
     });
-  }
-
-  function replacePItemId(index, itemId) {
-    setPItemIds((cur) => {
-      const next = [...cur];
-      next[index] = itemId;
-      return next;
-    });
-  }
-
-  function replaceSkillCardId(index, cardId) {
-    setSkillCardIds((cur) => {
-      const next = [...cur];
-      next[index] = cardId;
-      return next;
-    });
-  }
-
-  function clear() {
-    setMemoryIds([null, null]);
-    setParams([null, null, null, null]);
-    setPItemIds([0, 0, 0]);
-    setSkillCardIdGroups([
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0],
-    ]);
   }
 
   const simulatorUrl = getSimulatorUrl(
@@ -217,60 +172,41 @@ export function LoadoutContextProvider({ children }) {
     );
   }
 
-  const pushLoadoutHistory = () => {
-    if (!dirty) return;
-    setLoadoutHistory((cur) =>
-      [
-        {
-          timestamp: Date.now(),
-          stageId,
-          customStage: stageId == "custom" ? customStage : {},
-          supportBonus,
-          params,
-          pItemIds,
-          skillCardIdGroups,
-        },
-        ...cur,
-      ].slice(0, 10)
-    );
-    setDirty(false);
+  const loadout = {
+    stageId,
+    customStage: stageId == "custom" ? customStage : {},
+    supportBonus,
+    params,
+    pItemIds,
+    skillCardIdGroups,
   };
 
-  const setLoadout = (loadout) => {
-    setStageId(loadout.stageId);
-    setCustomStage(loadout.customStage);
-    setSupportBonus(loadout.supportBonus);
-    setParams(loadout.params);
-    setPItemIds(loadout.pItemIds);
-    setSkillCardIdGroups(loadout.skillCardIdGroups);
+  const pushLoadoutHistory = () => {
+    if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
+    setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
   };
 
   return (
     <LoadoutContext.Provider
       value={{
+        loadout,
+        setLoadout,
         setMemory,
-        stageId,
         setStageId,
-        customStage,
         setCustomStage,
-        stage,
-        supportBonus,
         setSupportBonus,
-        params,
         setParams,
-        pItemIds,
-        skillCardIdGroups,
         replacePItemId,
         replaceSkillCardId,
+        clear,
         insertSkillCardIdGroup,
         deleteSkillCardIdGroup,
         swapSkillCardIdGroups,
-        clear,
+        stage,
         simulatorUrl,
         kafeUrl,
         loadoutHistory,
         pushLoadoutHistory,
-        setLoadout,
       }}
     >
       {children}

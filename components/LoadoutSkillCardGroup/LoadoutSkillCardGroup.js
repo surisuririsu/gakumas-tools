@@ -19,7 +19,7 @@ import styles from "./LoadoutSkillCardGroup.module.scss";
 function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
   const t = useTranslations("LoadoutSkillCardGroup");
   const {
-    skillCardIdGroups,
+    loadout,
     replaceSkillCardId,
     insertSkillCardIdGroup,
     deleteSkillCardIdGroup,
@@ -83,7 +83,7 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
           <button
             className={styles.moveButton}
             onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex + 1)}
-            disabled={groupIndex >= skillCardIdGroups.length - 1}
+            disabled={groupIndex >= loadout.skillCardIdGroups.length - 1}
           >
             <FaCircleArrowDown />
           </button>
@@ -91,7 +91,7 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
           <button
             className={styles.deleteButton}
             onClick={() => deleteSkillCardIdGroup(groupIndex)}
-            disabled={skillCardIdGroups.length < 2}
+            disabled={loadout.skillCardIdGroups.length < 2}
           >
             <FaCircleXmark />
           </button>
