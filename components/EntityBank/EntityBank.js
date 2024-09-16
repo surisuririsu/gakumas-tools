@@ -1,7 +1,7 @@
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCheck, FaXmark } from "react-icons/fa6";
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data/lite";
 import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
 import PlanIdolSelects from "@/components/PlanIdolSelects";

@@ -1,5 +1,5 @@
-import { SkillCards } from "gakumas-data";
-import { calculateSkillCardCost } from "@/utils//contestPower";
+import { SkillCards } from "gakumas-data/lite";
+import { calculateSkillCardCost } from "@/utils/contestPower";
 
 export const COST_RANGES_BY_RANK = {
   B: { min: 306, max: 363 },

@@ -1,7 +1,7 @@
 import { memo, useContext, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaChevronUp, FaChevronDown, FaRegPenToSquare } from "react-icons/fa6";
-import { Stages } from "gakumas-data";
+import { Stages } from "gakumas-data/lite";
 import Button from "@/components/Button";
 import StageCustomizerModal from "@/components/StageCustomizerModal";
 import LoadoutContext from "@/contexts/LoadoutContext";

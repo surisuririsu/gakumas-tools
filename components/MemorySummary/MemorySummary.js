@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import Image from "next/image";
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
+import { PIdols } from "gakumas-data/lite";
 import PIdol from "@/components/PIdol";
 import { calculateContestPower } from "@/utils/contestPower";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
