@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data/lite";
 
 const RARITY_VALUES = {
   N: 0,
