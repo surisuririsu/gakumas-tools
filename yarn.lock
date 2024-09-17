@@ -1188,6 +1188,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/third-parties@npm:^14.2.11":
+  version: 14.2.11
+  resolution: "@next/third-parties@npm:14.2.11"
+  dependencies:
+    third-party-capital: "npm:1.0.20"
+  peerDependencies:
+    next: ^13.0.0 || ^14.0.0
+    react: ^18.2.0
+  checksum: 10c0/5197ba3fdea52a9b09d255c48a77d307de0a8bec5715c4c20faa5f027725fad8c75228bd14e0b22a4ac178502aba1f810f2069d66a9599c4ec896e4af39209b7
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -3718,6 +3730,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "gakumas-tools@workspace:."
   dependencies:
+    "@next/third-parties": "npm:^14.2.11"
     "@sgratzl/chartjs-chart-boxplot": "npm:^4.4.1"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.5.0"
@@ -3731,7 +3744,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     mongodb: "npm:^6.9.0"
-    next: "npm:14.2.11"
+    next: "npm:^14.2.11"
     next-auth: "npm:^4.24.7"
     next-intl: "npm:^3.19.1"
     react: "npm:^18.3.1"
@@ -5737,7 +5750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:14.2.11":
+"next@npm:^14.2.11":
   version: 14.2.11
   resolution: "next@npm:14.2.11"
   dependencies:
@@ -7263,6 +7276,13 @@ __metadata:
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
   checksum: 10c0/02805740c12851ea5982686810702e2f14369a5f4c5c40a836821e3eefc65ffeec3131ba324692a37608294b0fd8c1e55a2dd571ffed4909822787668ddbee5c
+  languageName: node
+  linkType: hard
+
+"third-party-capital@npm:1.0.20":
+  version: 1.0.20
+  resolution: "third-party-capital@npm:1.0.20"
+  checksum: 10c0/7f45ff156ec9d7e2957a5b39061be22b780ffbd2d93c127252d908e2bff6cdd09f827a95909d457c8096e036f155006a38e355a06ee11cb6d63c7f4b150bbfb0
   languageName: node
   linkType: hard
 

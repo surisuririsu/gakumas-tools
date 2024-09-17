@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
 import ToolHeader from "@/components/ToolHeader";
@@ -45,7 +45,6 @@ export default async function RootLayout({ children, params: { locale } }) {
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <GoogleAnalytics />
         <SessionContextProvider session={session}>
           <NextIntlClientProvider messages={messages}>
             <Navbar />
@@ -75,6 +74,7 @@ export default async function RootLayout({ children, params: { locale } }) {
           </NextIntlClientProvider>
         </SessionContextProvider>
       </body>
+      <GoogleAnalytics gaId="G-D4SNMY9VJP" />
     </html>
   );
 }
