@@ -20,6 +20,12 @@ import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
+IdolConfig.prototype.getTypeMultipliers = (params) => ({
+  vocal: params.vocal / 100,
+  dance: params.dance / 100,
+  visual: params.visual / 100,
+});
+
 export default function Simulator() {
   const t = useTranslations("Simulator");
 
@@ -125,7 +131,7 @@ export default function Simulator() {
       <div className={styles.configurator}>
         <StageSelect />
 
-        <div className={styles.supportBonusInput}>
+        {/* <div className={styles.supportBonusInput}>
           <label>{t("supportBonus")}</label>
           <Input
             type="number"
@@ -134,7 +140,11 @@ export default function Simulator() {
               setSupportBonus(parseFloat((value / 100).toFixed(4)))
             }
           />
-        </div>
+        </div> */}
+        <span>
+          Note: Due to type multiplier calculation change, enter the percents
+          directly.
+        </span>
         <div className={styles.params}>
           <ParametersInput
             parameters={loadout.params}
@@ -142,14 +152,14 @@ export default function Simulator() {
             withStamina
             max={10000}
           />
-          {/* <div className={styles.typeMultipliers}>
+          <div className={styles.typeMultipliers}>
             {Object.keys(idolConfig.typeMultipliers).map((param) => (
               <div key={param}>
                 {Math.round(idolConfig.typeMultipliers[param] * 100)}%
               </div>
             ))}
             <div />
-          </div> */}
+          </div>
         </div>
         <StagePItems
           pItemIds={loadout.pItemIds}
