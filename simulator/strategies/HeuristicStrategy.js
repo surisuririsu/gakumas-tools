@@ -27,11 +27,7 @@ export default class HeuristicStrategy extends StageStrategy {
     if (!this.engine.isCardUsable(state, cardId)) {
       return -Infinity;
     }
-
-    let score = 0;
-
-    let previewState = JSON.parse(JSON.stringify(state));
-    previewState = this.engine.useCard(previewState, cardId);
+    const previewState = this.engine.useCard(state, cardId);
 
     // Additional actions
     if (previewState.turnsRemaining >= state.turnsRemaining) {
@@ -39,6 +35,8 @@ export default class HeuristicStrategy extends StageStrategy {
       const filteredScores = scores.filter((s) => s > 0);
       if (filteredScores.length) return Math.max(...filteredScores);
     }
+
+    let score = 0;
 
     // Effects
     const effectsDiff = previewState.effects.length - state.effects.length;
