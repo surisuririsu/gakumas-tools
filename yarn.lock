@@ -3744,7 +3744,7 @@ __metadata:
 
 "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator":
   version: 0.1.0
-  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=356a657e1e99cf01ecaa5e65a55406562c0c58b5"
+  resolution: "gakumas_contest_simulator@https://github.com/katabami83/gakumas_contest_simulator.git#commit=990eb2baf10200f27ff3389e2746818ddaa6d0f3"
   dependencies:
     "@fortawesome/fontawesome-free": "npm:^6.6.0"
     "@fortawesome/fontawesome-svg-core": "npm:^6.6.0"
@@ -3757,7 +3757,7 @@ __metadata:
     vue: "npm:^3.4.37"
     vuetify: "npm:^3.6.14"
     webfontloader: "npm:^1.6.28"
-  checksum: 10c0/779f4753683b402a7069a81a073ebe9ca542cf7de29201b6773445424df3aad9abd0d610e1c05721a0b066f7a210c57092b8c663b2d8fae01affe00e37c7b8d2
+  checksum: 10c0/eb319af4575a9b55783e03e27af706089cf1bd9929b8227cc76f28078d0a9f05b416cf648f596b944f4472652811de8047c0dbe9ce8fd316ff79917ed44fed43
   languageName: node
   linkType: hard
 
