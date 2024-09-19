@@ -115,30 +115,30 @@ export function LoadoutContextProvider({ children }) {
   };
 
   function setMemory(memory, index) {
-    // const multiplier = index ? 0.2 : 1;
+    const multiplier = index ? 0.2 : 1;
 
-    // if (!memoryParams.some((p) => p)) {
-    //   setParams([0, 0, 0, 0]);
-    // } else if (memoryParams[index]) {
-    //   // If there is currently a memory in that slot, remove its params
-    //   setParams((curParams) =>
-    //     curParams.map(
-    //       (p, i) => (p || 0) - Math.floor(memoryParams[index][i] * multiplier)
-    //     )
-    //   );
-    // }
+    if (!memoryParams.some((p) => p)) {
+      setParams([0, 0, 0, 0]);
+    } else if (memoryParams[index]) {
+      // If there is currently a memory in that slot, remove its params
+      setParams((curParams) =>
+        curParams.map(
+          (p, i) => (p || 0) - Math.floor(memoryParams[index][i] * multiplier)
+        )
+      );
+    }
 
     // Set memory
-    // setMemoryParams((cur) => {
-    //   const next = [...cur];
-    //   next[index] = memory.params;
-    //   return next;
-    // });
-    // setParams((curParams) =>
-    //   curParams.map(
-    //     (p, i) => (p || 0) + Math.floor(memory.params[i] * multiplier)
-    //   )
-    // );
+    setMemoryParams((cur) => {
+      const next = [...cur];
+      next[index] = memory.params;
+      return next;
+    });
+    setParams((curParams) =>
+      curParams.map(
+        (p, i) => (p || 0) + Math.floor(memory.params[i] * multiplier)
+      )
+    );
     if (index == 0) {
       setPItemIds(memory.pItemIds);
     }
