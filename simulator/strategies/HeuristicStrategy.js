@@ -48,7 +48,7 @@ export default class HeuristicStrategy extends StageStrategy {
           previewState.turnsRemaining
         )
       );
-      score += 300 * limit;
+      score += 120 * limit;
     }
 
     // Cards in hand
@@ -67,7 +67,7 @@ export default class HeuristicStrategy extends StageStrategy {
     // Genki
     score +=
       previewState.genki *
-      Math.tanh(previewState.turnsRemaining) *
+      Math.tanh(previewState.turnsRemaining / 2) *
       0.42 *
       this.motivationMultiplier;
 
