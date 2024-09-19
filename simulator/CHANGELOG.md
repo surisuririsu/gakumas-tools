@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-18
+
+### Added
+
+- Contest season 9 stages (turn counts unknown)
+
 ## 2024-09-15
 
 ### Changed
