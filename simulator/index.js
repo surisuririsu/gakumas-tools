@@ -1,4 +1,4 @@
-import { StageEngine, StageLogger, StagePlayer } from "gakumas-engine";
+import { StageEngine, StageLogger, StagePlayer } from "./engine";
 import { mergeGraphDatas } from "@/utils/simulator";
 import { DEBUG } from "./constants";
 import STRATEGIES from "./strategies";
