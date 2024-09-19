@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { IdolConfig, StageConfig } from "gakumas-engine";
+import { StageConfig } from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
@@ -18,6 +18,7 @@ import STRATEGIES from "@/simulator/strategies";
 import { bucketScores, mergeResults } from "@/utils/simulator";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
+import IdolConfig from "@/simulator/IdolConfig";
 import styles from "./Simulator.module.scss";
 
 export default function Simulator() {
