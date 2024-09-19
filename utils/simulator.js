@@ -1,7 +1,7 @@
 import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
 
 const DEFAULTS = {
-  stageId: "22",
+  stageId: "25",
   supportBonus: "0",
   params: "1000-1000-1000-40",
   pItemIds: "0-0-0",
