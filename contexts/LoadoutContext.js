@@ -27,8 +27,10 @@ export function LoadoutContextProvider({ children }) {
   const [loadoutHistory, setLoadoutHistory] = useState([]);
 
   const setLoadout = (loadout) => {
-    setStageId(loadout.stageId);
-    setCustomStage(loadout.customStage);
+    if (loadout.stageId != "custom") {
+      setStageId(loadout.stageId);
+      setCustomStage(loadout.customStage);
+    }
     setSupportBonus(loadout.supportBonus);
     setParams(loadout.params);
     setPItemIds(loadout.pItemIds);

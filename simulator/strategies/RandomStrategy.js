@@ -1,4 +1,4 @@
-import { StageStrategy } from "gakumas-engine";
+import { StageStrategy } from "../engine";
 
 export default class RandomStrategy extends StageStrategy {
   getScore(state, cardId) {

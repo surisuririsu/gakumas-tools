@@ -55,7 +55,7 @@ function StageSelect() {
         )}
       </div>
 
-      <Button
+      {/* <Button
         onClick={() =>
           setModal(
             <StageCustomizerModal
@@ -66,7 +66,7 @@ function StageSelect() {
         }
       >
         <FaRegPenToSquare />
-      </Button>
+      </Button> */}
     </div>
   );
 }

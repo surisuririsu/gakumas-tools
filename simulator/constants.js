@@ -5,7 +5,7 @@ export const BUCKET_SIZE = 1000;
 export const MAX_WORKERS = 8;
 export const FALLBACK_STAGE = {
   turnCounts: { vocal: 4, dance: 4, visual: 4 },
-  firstTurns: ["vocal", "dance", "visual"],
+  firstTurns: [0.33, 0.33, 0.33],
   criteria: {
     vocal: 0,
     dance: 0,
