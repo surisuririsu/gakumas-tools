@@ -137,10 +137,19 @@ export default class HeuristicStrategy extends StageStrategy {
     score *= this.averageTypeMultiplier;
     score = Math.ceil(score);
 
-    return Math.floor(
-      score +
+    const { recommendedEffect } = this.engine.idolConfig;
+    if (recommendedEffect == "goodConditionTurns") {
+      score += previewState.score * 0.45;
+    } else if (recommendedEffect == "concentration") {
+      score += previewState.score * 0.6;
+    } else if (recommendedEffect == "goodImpressionTurns") {
+      score += previewState.score;
+    } else if (recommendedEffect == "motivation") {
+      score +=
         previewState.score * 0.33 +
-        previewState.score / (previewState.turnsRemaining + 1)
-    );
+        previewState.score / (previewState.turnsRemaining + 1);
+    }
+
+    return Math.floor(score);
   }
 }

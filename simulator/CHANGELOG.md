@@ -12,7 +12,7 @@ Dates are based on Eastern Time Zone.
 ### Changed
 
 - Recommended effect multiplier for concentration
-- Evaluation of concentration, motivation, genki
+- Evaluation of concentration, motivation, genki, score
 
 ## 2024-09-18
 
