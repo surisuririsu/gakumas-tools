@@ -13,6 +13,15 @@ import styles from "./StageCustomizerModal.module.scss";
 
 function normalizeCriteria(criteria) {
   const nums = criteria.map((c) => c || 0);
+  return {
+    vocal: nums[0],
+    dance: nums[1],
+    visual: nums[2],
+  };
+}
+
+function normalizeFirstTurns(firstTurns) {
+  const nums = firstTurns.map((c) => c || 0);
   const total = nums[0] + nums[1] + nums[2] || 1;
   return {
     vocal: Math.round((100 * nums[0]) / total) / 100,
@@ -29,7 +38,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
     Object.values(initialStage.turnCounts)
   );
   const [firstTurns, setFirstTurns] = useState(
-    initialStage.firstTurns.reduce((acc, cur) => ({ ...acc, [cur]: true }), {})
+    Object.values(initialStage.firstTurns)
   );
   const [criteria, setCriteria] = useState(
     Object.values(initialStage.criteria)
@@ -47,7 +56,7 @@ function StageCustomizerModal({ initialStage, onApply }) {
         dance: turnCounts[1] || 0,
         visual: turnCounts[2] || 0,
       },
-      firstTurns: Object.keys(firstTurns).filter((k) => firstTurns[k]),
+      firstTurns: normalizeFirstTurns(firstTurns),
       criteria: normalizeCriteria(criteria),
       effects: deserializeEffectSequence(effects.replace(/\s/g, "")),
     });
@@ -65,7 +74,12 @@ function StageCustomizerModal({ initialStage, onApply }) {
         />
 
         <label>{t("firstTurn")}</label>
-        <ParametersMultiSelect value={firstTurns} onChange={setFirstTurns} />
+        <ParametersInput
+          parameters={firstTurns}
+          onChange={setFirstTurns}
+          max={100}
+          round={false}
+        />
 
         <label>{t("criteria")}</label>
         <ParametersInput

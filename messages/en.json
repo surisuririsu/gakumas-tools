@@ -122,7 +122,7 @@
   },
   "StageCustomizerModal": {
     "turnCounts": "Turn counts",
-    "firstTurn": "First turn",
+    "firstTurn": "First turn rate",
     "criteria": "Criteria",
     "effects": "Effects",
     "effectFormat": "Effect format",

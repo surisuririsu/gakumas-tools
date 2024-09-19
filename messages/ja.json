@@ -122,7 +122,7 @@
   },
   "StageCustomizerModal": {
     "turnCounts": "ターン数",
-    "firstTurn": "初手ターン",
+    "firstTurn": "初手ターン率",
     "criteria": "審査基準",
     "effects": "ステージ効果",
     "effectFormat": "効果形式",
