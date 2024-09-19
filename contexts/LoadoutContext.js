@@ -27,9 +27,17 @@ export function LoadoutContextProvider({ children }) {
   const [loadoutHistory, setLoadoutHistory] = useState([]);
 
   const setLoadout = (loadout) => {
-    if (loadout.stageId != "custom") {
-      setStageId(loadout.stageId);
-      setCustomStage(loadout.customStage);
+    setStageId(loadout.stageId);
+    if (loadout.stageId == "custom") {
+      let custom = loadout.customStage;
+      if (Array.isArray(custom.firstTurns)) {
+        const length = custom.firstTurns.length;
+        custom.firstTurns = custom.firstTurns.reduce((acc, cur) => {
+          acc[cur] = 1 / length;
+          return acc;
+        }, {});
+      }
+      setCustomStage(custom);
     }
     setSupportBonus(loadout.supportBonus);
     setParams(loadout.params);

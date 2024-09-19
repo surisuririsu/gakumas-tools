@@ -86,7 +86,7 @@ export default class IdolConfig {
           multiplier += param;
         }
       }
-      multiplier = multiplier * criterion * 1.1 + 100;
+      multiplier = multiplier * criterion + 100;
       multiplier = Math.ceil(multiplier) * (1 + supportBonus);
       multiplier = Math.ceil(Math.floor(multiplier * 10) / 10);
       multipliers[key] = multiplier / 100;
