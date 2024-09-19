@@ -3,11 +3,24 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-19
+
+### Fixed
+
+- Permanent score buffs expiring at end of turn
+
+### Changed
+
+- Recommended effect multiplier for concentration
+- Evaluation of concentration, motivation
+
 ## 2024-09-18
 
 ### Added
 
 - Contest season 9 stages (turn counts unknown)
+- Feel Jewel Dream Mao
+- Toroketa jikan
 
 ## 2024-09-15
 

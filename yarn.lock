@@ -3700,12 +3700,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.11.0":
-  version: 0.11.0
-  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=4581f9c63e2433b65be657eed1696f62a1ffd94f"
+"gakumas-engine@https://github.com/surisuririsu/gakumas-engine#v0.11.1":
+  version: 0.11.1
+  resolution: "gakumas-engine@https://github.com/surisuririsu/gakumas-engine.git#commit=15bc9a6cfd9c4c1c997a0c0e839576043d3f0478"
   dependencies:
     gakumas-data: "https://github.com/surisuririsu/gakumas-data#v4.5.0"
-  checksum: 10c0/746227fb9d3fc6da93b0779d43804971b690079fad9decc6172587bd676b93f711627651d6961c36f630d473735a672b850c8780334ed3e055f6e79cdf9014e6
+  checksum: 10c0/abd04da95a0932addda1889062d6cfe7cbdbaf34577eeaace1de707d2ae2cfdca1b38174dd32c2dfbaa80c580d76315e5fdbed15b339d20aa8d5d001369fface
   languageName: node
   linkType: hard
 
@@ -3722,7 +3722,7 @@ __metadata:
     eslint: "npm:^9.10.0"
     eslint-config-next: "npm:14.2.11"
     gakumas-data: "https://github.com/surisuririsu/gakumas-data#v4.5.0"
-    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.11.0"
+    gakumas-engine: "https://github.com/surisuririsu/gakumas-engine#v0.11.1"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"

@@ -16,7 +16,7 @@ export default class HeuristicStrategy extends StageStrategy {
     this.goodConditionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodConditionTurns" ? 3 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 2 : 1;
+      idolConfig.recommendedEffect == "concentration" ? 3 : 1;
     this.goodImpressionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 4 : 1;
     this.motivationMultiplier =
@@ -90,7 +90,6 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       previewState.concentration *
       previewState.turnsRemaining *
-      1.5 *
       this.concentrationMultiplier;
 
     // Good impression turns
@@ -104,7 +103,7 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       previewState.motivation *
       previewState.turnsRemaining *
-      0.3 *
+      0.25 *
       this.motivationMultiplier;
 
     // Score buffs
