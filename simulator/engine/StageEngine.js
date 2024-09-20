@@ -424,10 +424,10 @@ export default class StageEngine {
     const numCards = state.handCardIds.length;
     state.discardedCardIds = state.discardedCardIds.concat(state.handCardIds);
     state.handCardIds = [];
+    this.logger.log("exchangeHand");
     for (let i = 0; i < numCards; i++) {
       state = this._drawCard(state);
     }
-    this.logger.log("exchangeHand");
     return state;
   }
 
