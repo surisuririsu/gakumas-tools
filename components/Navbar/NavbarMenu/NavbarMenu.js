@@ -3,8 +3,9 @@ import { memo, useState } from "react";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
-import { FaCircleUser } from "react-icons/fa6";
+import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
+import IconButton from "@/components/IconButton";
 import { Link, usePathname } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./NavbarMenu.module.scss";
@@ -58,6 +59,25 @@ function NavbarMenu() {
           >
             {t("sendFeedback")}
           </a>
+
+          <div className={styles.author}>
+            <div>Made by risりす</div>
+            <div className={styles.socials}>
+              <IconButton
+                icon={FaXTwitter}
+                href="https://x.com/surisuririsu"
+                size="small"
+              />
+              <IconButton
+                icon={FaGithub}
+                href="https://github.com/surisuririsu/gakumas-tools"
+                size="small"
+              />
+            </div>
+            <div className={styles.fine}>
+              with research from the Gakumas contest community
+            </div>
+          </div>
 
           {locale == "ja" && (
             <Link href={pathname} locale="en" className={styles.lang}>
