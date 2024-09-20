@@ -75,7 +75,7 @@ export default class IdolConfig {
     let multipliers = {};
 
     for (let key of Object.keys(criteria)) {
-      const param = params[key];
+      const param = Math.min(params[key], 1800);
       const criterion = criteria[key];
 
       let multiplier = param;
