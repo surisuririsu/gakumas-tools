@@ -39,7 +39,7 @@ function ProduceRankCalculator() {
 
   const TABLE_HEADERS = [t("produceRank"), t("targetScore")];
 
-  const [difficulty, setDifficulty] = useState("pro");
+  const [difficulty, setDifficulty] = useState("master");
   const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
   const [actualScore, setActualScore] = useState("");
