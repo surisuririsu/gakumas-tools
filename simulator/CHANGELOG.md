@@ -13,6 +13,8 @@ Dates are based on Eastern Time Zone.
 
 - Recommended effect multiplier for concentration
 - Evaluation of concentration, motivation, genki, score
+- Updated with new cards/items from Mao gacha
+- Updates to idoldamashii and shikirinaoshi
 
 ## 2024-09-18
 
