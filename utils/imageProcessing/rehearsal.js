@@ -13,11 +13,11 @@ export function extractScores(result) {
 
   for (let i in result.data.lines) {
     const line = result.data.lines[i];
-    if (line.confidence < 60) continue;
+    if (line.confidence < 40) continue;
 
     let words = line.words
       .map((word) => word.text)
-      .filter((word) => /^((\d+,)?\d+|[—\-]+)$/.test(word))
+      .filter((word) => /^((\d+[,\.])?\d+|[—\-]+)$/.test(word))
       .slice(0, 3);
     if (words.length < 3) continue;
 
