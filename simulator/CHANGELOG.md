@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-20
+
+### Fixed
+
+- Type multipliers calculation to use maximum 1800 params
+
 ## 2024-09-19
 
 ### Fixed
