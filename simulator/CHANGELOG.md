@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Type multipliers calculation to use maximum 1800 params
 
+### Changed
+
+- Evaluation of effects, and score for concentration type
+
 ## 2024-09-19
 
 ### Fixed

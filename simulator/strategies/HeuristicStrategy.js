@@ -48,7 +48,7 @@ export default class HeuristicStrategy extends StageStrategy {
           previewState.turnsRemaining
         )
       );
-      score += 120 * limit;
+      score += 200 * limit;
     }
 
     // Cards in hand
@@ -141,7 +141,7 @@ export default class HeuristicStrategy extends StageStrategy {
     if (recommendedEffect == "goodConditionTurns") {
       score += previewState.score * 0.45;
     } else if (recommendedEffect == "concentration") {
-      score += previewState.score * 0.6;
+      score += previewState.score / (previewState.turnsRemaining + 1);
     } else if (recommendedEffect == "goodImpressionTurns") {
       score += previewState.score;
     } else if (recommendedEffect == "motivation") {
