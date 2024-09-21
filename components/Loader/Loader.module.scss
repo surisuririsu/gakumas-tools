@@ -2,13 +2,27 @@
 
 .loader {
   width: calc(1em + 8px);
-  height: calc(1em + 8px);
-  border: 2px solid $blue;
-  border-bottom-color: transparent;
+  aspect-ratio: 1;
+  display: grid;
+  border: 2px solid #0000;
   border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
-  animation: spin 1s linear infinite;
+  border-right-color: $blue;
+  animation: spin 1s infinite linear;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  grid-area: 1/1;
+  margin: 3px;
+  border: inherit;
+  border-radius: 50%;
+  animation: spin 2s infinite;
+}
+
+.loader::after {
+  margin: 6px;
+  animation-duration: 1s;
 }
 
 @keyframes spin {
