@@ -9,15 +9,13 @@ import TargetSkillCards from "@/components/TargetSkillCards";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import { COST_RANGES_BY_RANK } from "@/utils/contestPower";
 import { EntityTypes } from "@/utils/entities";
-import {
-  COST_RANGES_BY_RANK,
-  generatePossibleMemories,
-} from "@/utils/skillCardLottery";
+import { generatePossibleMemories } from "@/utils/skillCardLottery";
 import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
 import styles from "./MemoryCalculator.module.scss";
 
-const RANK_OPTIONS = ["B", "B+", "A", "A+", "S"].map((r) => ({
+const RANK_OPTIONS = ["B", "B+", "A", "A+", "S", "S+"].map((r) => ({
   id: r,
   iconSrc: `/ranks/${r}.png`,
   alt: r,
@@ -45,10 +43,11 @@ function MemoryCalculator() {
     targetNegations,
     acquiredSkillCardIds,
     replaceAcquiredCardId,
+    rank,
+    setRank,
   } = useContext(MemoryCalculatorContext);
   const { setModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);
-  const [rank, setRank] = useState("A");
   const [showOnTargetResults, setShowOnTargetResults] = useState(true);
   const [showOffTargetResults, setShowOffTargetResults] = useState(false);
 
