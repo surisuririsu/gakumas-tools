@@ -1,13 +1,8 @@
 import { SkillCards } from "gakumas-data/lite";
-import { calculateSkillCardCost } from "@/utils/contestPower";
-
-export const COST_RANGES_BY_RANK = {
-  B: { min: 306, max: 363 },
-  "B+": { min: 306, max: 423 },
-  A: { min: 441, max: 519 },
-  "A+": { min: 441, max: 594 },
-  S: { min: 441, max: 642 },
-};
+import {
+  calculateSkillCardCost,
+  COST_RANGES_BY_RANK,
+} from "@/utils/contestPower";
 
 // Recursive function to generate all combinations of a specified length
 function generateCombinations(cards, length) {
