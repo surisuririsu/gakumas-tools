@@ -7,26 +7,25 @@
   gap: 16px;
   margin: auto;
   padding: 32px;
-  overflow: auto;
-}
 
-.toolsList {
-  list-style-type: none;
-  display: grid;
-  gap: 8px;
-}
+  ul {
+    list-style-type: none;
+    display: grid;
+    gap: 8px;
 
-.feature {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+    li {
+      display: flex;
+      align-items: center;
+      gap: 16px;
 
-  a {
-    min-width: 60px;
-  }
+      a {
+        min-width: 60px;
+      }
 
-  span {
-    display: flex;
-    justify-content: center;
+      span {
+        display: flex;
+        justify-content: center;
+      }
+    }
   }
 }

@@ -80,12 +80,12 @@ function NavbarMenu() {
           </div>
 
           {locale == "ja" && (
-            <Link href={pathname} locale="en" className={styles.lang}>
+            <Link href={pathname} locale="en">
               English
             </Link>
           )}
           {locale == "en" && (
-            <Link href={pathname} locale="ja" className={styles.lang}>
+            <Link href={pathname} locale="ja">
               日本語
             </Link>
           )}
