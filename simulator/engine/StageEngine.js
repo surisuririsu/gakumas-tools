@@ -62,6 +62,7 @@ export default class StageEngine {
       turnCardsUsed: 0,
 
       // Phase effects
+      effectsByPhase: {},
       effects: [],
 
       // Buffs and debuffs
@@ -487,6 +488,7 @@ export default class StageEngine {
       }
       state.effects.push({ ...effect, sourceType, sourceId });
     }
+    state.effects.sort((a, b) => (a.order || 0) - (b.order || 0)); // Ascending
     return state;
   }
 
@@ -500,7 +502,6 @@ export default class StageEngine {
       if (effect.phase != phase) continue;
       phaseEffects.push({ ...effect, phase: null, index: i });
     }
-    phaseEffects.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     this.logger.debug(phase, phaseEffects);
 
