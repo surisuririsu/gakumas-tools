@@ -38,7 +38,9 @@
     }
   },
   "NavbarMenu": {
+    "menu": "Menu",
     "signInWithDiscord": "Sign in with Discord",
+    "home": "Home",
     "gakumasContestWiki": "Gakumas Contest Wiki",
     "sendFeedback": "Send feedback",
     "signOut": "Sign out"

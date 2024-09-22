@@ -1,40 +1,32 @@
 import {
+  FaAnglesUp,
   FaBook,
   FaCalculator,
   FaChartSimple,
   FaFilm,
-  FaHouse,
+  FaPercent,
   FaTrophy,
 } from "react-icons/fa6";
 
 export const TOOLS = {
-  home: {
-    icon: <FaHouse />,
-    path: "/",
-  },
   produceRankCalculator: {
     icon: <FaCalculator />,
     path: "/produce-rank-calculator",
     pinnable: true,
   },
-  // lessonCalculator: {
-  //   icon: <FaCalculator />,
-  //   path: "/lesson-calculator",
-  //   pinnable: true,
-  // },
-  dex: {
-    icon: <FaBook />,
-    path: "/dex",
+  lessonCalculator: {
+    icon: <FaAnglesUp />,
+    path: "/lesson-calculator",
     pinnable: true,
   },
   memoryCalculator: {
-    icon: (
-      <span style={{ lineHeight: 0 }}>
-        <FaFilm />
-        <FaCalculator />
-      </span>
-    ),
+    icon: <FaPercent />,
     path: "/memory-calculator",
+    pinnable: true,
+  },
+  dex: {
+    icon: <FaBook />,
+    path: "/dex",
     pinnable: true,
   },
   memories: {

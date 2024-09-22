@@ -38,7 +38,9 @@
     }
   },
   "NavbarMenu": {
+    "menu": "メニュー",
     "signInWithDiscord": "Discordでログイン",
+    "home": "トップページ",
     "gakumasContestWiki": "学マスコンテストWiki",
     "sendFeedback": "フィードバックを送信",
     "signOut": "ログアウト"

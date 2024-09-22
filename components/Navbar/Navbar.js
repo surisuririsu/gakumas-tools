@@ -1,7 +1,7 @@
 "use client";
 import { memo } from "react";
 import { useTranslations } from "next-intl";
-import { usePathname } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { TOOLS } from "@/utils/tools";
 import NavbarLink from "./NavbarLink";
 import NavbarMenu from "./NavbarMenu";
@@ -13,7 +13,9 @@ function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <h1>Gakumas Tools</h1>
+      <Link href="/">
+        <h1>Gakumas Tools</h1>
+      </Link>
 
       <div className={styles.links}>
         {Object.keys(TOOLS).map((key) => (

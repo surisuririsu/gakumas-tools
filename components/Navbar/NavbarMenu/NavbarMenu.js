@@ -22,7 +22,11 @@ function NavbarMenu() {
 
   return (
     <div className={styles.menu}>
-      <button className={styles.avatar} onClick={() => setExpanded(!expanded)}>
+      <button
+        className={styles.avatar}
+        aria-label={t("menu")}
+        onClick={() => setExpanded(!expanded)}
+      >
         {status == "authenticated" ? (
           <Image
             src={session.user.image}
@@ -48,6 +52,8 @@ function NavbarMenu() {
               </Button>
             </div>
           )}
+
+          <Link href="/">{t("home")}</Link>
 
           <a href="https://wikiwiki.jp/gakumas/" target="_blank">
             {t("gakumasContestWiki")}
