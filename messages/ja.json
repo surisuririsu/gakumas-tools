@@ -12,6 +12,10 @@
       "title": "プロデュース評価計算機",
       "description": "プロデュース評価に必要な最終試験スコアを計算する"
     },
+    "lessonCalculator": {
+      "title": "レッスンパラメータ計算機",
+      "description": "レッスンによるパラメータ上昇量を計算する"
+    },
     "dex": {
       "title": "P図鑑",
       "description": "Pアイテムとスキルカード情報を表示する"
@@ -63,6 +67,23 @@
     "targetScores": "目標スコア",
     "produceRank": "プロデュース評価",
     "targetScore": "目標スコア",
+    "score": "スコア"
+  },
+  "LessonCalculator": {
+    "difficulties": {
+      "regular": "レギュラー",
+      "pro": "プロ",
+      "master": "マスター"
+    },
+    "difficulty": "難易度",
+    "lessonBonus": "レッスンボーナス%",
+    "limitIncrease": "上限増加",
+    "lessons": "レッスン",
+    "week": "週",
+    "type": "レッスン",
+    "normal": "通常",
+    "sp": "SP",
+    "oikomi": "追い込み",
     "score": "スコア"
   },
   "Dex": {

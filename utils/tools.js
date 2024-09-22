@@ -17,6 +17,11 @@ export const TOOLS = {
     path: "/produce-rank-calculator",
     pinnable: true,
   },
+  // lessonCalculator: {
+  //   icon: <FaCalculator />,
+  //   path: "/lesson-calculator",
+  //   pinnable: true,
+  // },
   dex: {
     icon: <FaBook />,
     path: "/dex",

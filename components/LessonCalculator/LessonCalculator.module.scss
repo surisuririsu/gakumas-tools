@@ -1,0 +1,71 @@
+@import "@/constants";
+
+.lessonCalculator {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.results {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+
+  th,
+  td {
+    padding: 8px 0;
+  }
+
+  th {
+    background-color: $gray;
+    color: $white;
+  }
+
+  th:nth-last-child(3) {
+    background-color: $vocal;
+  }
+
+  th:nth-last-child(2) {
+    background-color: $dance;
+  }
+
+  th:nth-last-child(1) {
+    background-color: $visual;
+  }
+
+  td {
+    color: $black-dark;
+  }
+
+  td:nth-last-child(3n + 1) {
+    background-color: scale-color($visual, $alpha: -50%);
+  }
+
+  td:nth-last-child(3n + 2) {
+    background-color: scale-color($dance, $alpha: -50%);
+  }
+
+  td:nth-last-child(3n + 3) {
+    background-color: scale-color($vocal, $alpha: -50%);
+  }
+
+  td:nth-child(-n + 2),
+  .perfect {
+    background-color: $gray-extra-light !important;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .results {
+    font-size: 12px;
+
+    th,
+    td {
+      padding: 4px 0;
+      overflow: hidden;
+    }
+  }
+}

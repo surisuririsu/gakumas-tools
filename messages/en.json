@@ -12,6 +12,10 @@
       "title": "Produce Rank Calculator",
       "description": "Calculate final exam score required to achieve each produce rank"
     },
+    "lessonCalculator": {
+      "title": "Lesson Calculator",
+      "description": "Calculate parameters gained from lessons"
+    },
     "dex": {
       "title": "P-Index",
       "description": "Filter and view p-item and skill card information"
@@ -63,6 +67,23 @@
     "targetScores": "Target scores",
     "produceRank": "Produce rank",
     "targetScore": "Target score",
+    "score": "Score"
+  },
+  "LessonCalculator": {
+    "difficulties": {
+      "regular": "Regular",
+      "pro": "Pro",
+      "master": "Master"
+    },
+    "difficulty": "Difficulty",
+    "lessonBonus": "Lesson bonus %",
+    "limitIncrease": "Limit increase",
+    "lessons": "Lessons",
+    "week": "Week",
+    "type": "Type",
+    "normal": "N",
+    "sp": "SP",
+    "oikomi": "Oikomi",
     "score": "Score"
   },
   "Dex": {
