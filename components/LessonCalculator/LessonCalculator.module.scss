@@ -58,7 +58,7 @@
   }
 }
 
-@media only screen and (max-width: 530px) {
+@container (width < 530px) {
   .results {
     font-size: 12px;
 

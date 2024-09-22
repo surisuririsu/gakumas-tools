@@ -19,6 +19,7 @@ main {
   background-color: $white-dark;
   color: $black-dark;
   overflow: auto;
+  container-type: inline-size;
 }
 
 h1,

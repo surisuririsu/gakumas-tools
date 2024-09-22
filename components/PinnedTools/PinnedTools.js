@@ -8,6 +8,7 @@ import styles from "./PinnedTools.module.scss";
 
 const TOOL_COMPONENTS = {
   dex: dynamic(() => import("@/components/Dex")),
+  lessonCalculator: dynamic(() => import("@/components/LessonCalculator")),
   memoryCalculator: dynamic(() => import("@/components/MemoryCalculator")),
   memories: dynamic(() => import("@/components/Memories")),
   produceRankCalculator: dynamic(() =>
