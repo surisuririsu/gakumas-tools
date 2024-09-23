@@ -134,6 +134,7 @@
   "Simulator": {
     "supportBonus": "Support bonus %",
     "simulate": "Simulate",
+    "provideData": "Provide rehearsal data",
     "lastUpdated": "Last updated"
   },
   "StageSelect": {

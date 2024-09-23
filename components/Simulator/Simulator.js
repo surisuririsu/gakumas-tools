@@ -180,13 +180,17 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : t("simulate")}
         </Button>
-        <a
-          className={styles.updated}
-          href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
-          target="_blank"
-        >
-          {t("lastUpdated")}: 2024-09-20
-        </a>
+        <div className={styles.subLinks}>
+          <a href="https://forms.gle/wpcwLELDPc8kfK3E9" target="_blank">
+            {t("provideData")}
+          </a>
+          <a
+            href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
+            target="_blank"
+          >
+            {t("lastUpdated")}: 2024-09-20
+          </a>
+        </div>
       </div>
 
       {simulatorData && (
