@@ -3,6 +3,18 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-25
+
+### Fixed
+
+- Simulator strategy looking at wrong effects due to order sorting
+- Simulator strategy not accounting for effects added when additional actions added
+
+### Changed
+
+- Recommended effect multipliers for concentration, goodImpressionTurns, motivation
+- Evaluation of effects, genki, good condition, good impression, motivation, double cost turns, score
+
 ## 2024-09-20
 
 ### Fixed

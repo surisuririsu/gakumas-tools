@@ -16,11 +16,11 @@ export default class HeuristicStrategy extends StageStrategy {
     this.goodConditionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodConditionTurns" ? 3 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 3 : 0.9;
+      idolConfig.recommendedEffect == "concentration" ? 3 : 1;
     this.goodImpressionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodImpressionTurns" ? 3 : 1;
+      idolConfig.recommendedEffect == "goodImpressionTurns" ? 4 : 1;
     this.motivationMultiplier =
-      idolConfig.recommendedEffect == "motivation" ? 4 : 1;
+      idolConfig.recommendedEffect == "motivation" ? 3 : 1;
   }
 
   getScore(state, cardId) {
@@ -29,14 +29,12 @@ export default class HeuristicStrategy extends StageStrategy {
     }
     const previewState = this.engine.useCard(state, cardId);
 
-    const scaleScore = (value) => {
-      // Scale predicted score appropriately
-      value *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
-      value = Math.ceil(value);
-      value *= this.averageTypeMultiplier;
-      value = Math.ceil(value);
-      return value;
-    };
+    // Additional actions
+    if (previewState.turnsRemaining >= state.turnsRemaining) {
+      const { scores } = this.evaluate(previewState);
+      const filteredScores = scores.filter((s) => s > 0);
+      if (filteredScores.length) return Math.max(...filteredScores);
+    }
 
     let score = 0;
 
@@ -44,20 +42,13 @@ export default class HeuristicStrategy extends StageStrategy {
     const effectsDiff = previewState.effects.length - state.effects.length;
     for (let i = 0; i < effectsDiff; i++) {
       const effect = previewState.effects[previewState.effects.length - i - 1];
-      let limit = previewState.turnsRemaining;
-      if (effect.limit != null && effect.limit < previewState.turnsRemaining) {
-        limit = effect.limit + 1;
-      }
-      score += 50 * limit;
-    }
-
-    // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining) {
-      const { scores } = this.evaluate(previewState);
-      const filteredScores = scores.filter((s) => s > 0);
-      if (filteredScores.length) {
-        return scaleScore(score) + Math.max(...filteredScores);
-      }
+      const limit = Math.ceil(
+        Math.min(
+          effect.limit || previewState.turnsRemaining,
+          previewState.turnsRemaining
+        )
+      );
+      score += 200 * limit;
     }
 
     // Cards in hand
@@ -77,13 +68,13 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       previewState.genki *
       Math.tanh(previewState.turnsRemaining / 2) *
-      0.4 *
+      0.42 *
       this.motivationMultiplier;
 
     // Good condition turns
     score +=
       Math.min(previewState.goodConditionTurns, previewState.turnsRemaining) *
-      1.5 *
+      2 *
       this.goodConditionTurnsMultiplier;
 
     // Perfect condition turns
@@ -105,13 +96,14 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       previewState.goodImpressionTurns *
       previewState.turnsRemaining *
+      1.5 *
       this.goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
       previewState.motivation *
       previewState.turnsRemaining *
-      0.5 *
+      0.25 *
       this.motivationMultiplier;
 
     // Score buffs
@@ -128,7 +120,7 @@ export default class HeuristicStrategy extends StageStrategy {
 
     // Double cost turns
     score +=
-      Math.min(previewState.doubleCostTurns, previewState.turnsRemaining) * -9;
+      Math.min(previewState.doubleCostTurns, previewState.turnsRemaining) * -3;
 
     // Cost reduction
     score += previewState.costReduction * previewState.turnsRemaining * 2;
@@ -139,18 +131,23 @@ export default class HeuristicStrategy extends StageStrategy {
     // Nullify genki turns
     score += previewState.nullifyGenkiTurns * -9;
 
-    // Scale score
-    score = scaleScore(score);
+    // Scale predicted score appropriately
+    score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
+    score = Math.ceil(score);
+    score *= this.averageTypeMultiplier;
+    score = Math.ceil(score);
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += previewState.score * 0.5;
+      score += previewState.score * 0.45;
     } else if (recommendedEffect == "concentration") {
-      score += previewState.score * 0.18;
+      score += previewState.score / (previewState.turnsRemaining + 1);
     } else if (recommendedEffect == "goodImpressionTurns") {
-      score += previewState.score * 1.1;
+      score += previewState.score;
     } else if (recommendedEffect == "motivation") {
-      score += previewState.score * 0.6;
+      score +=
+        previewState.score * 0.33 +
+        previewState.score / (previewState.turnsRemaining + 1);
     }
 
     return Math.floor(score);
