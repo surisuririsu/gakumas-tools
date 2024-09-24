@@ -13,13 +13,12 @@ export function extractScores(result) {
 
   for (let i in result.data.lines) {
     const line = result.data.lines[i];
-    if (line.confidence < 40) continue;
+    if (line.confidence < 60) continue;
 
     let words = line.words
       .map((word) => word.text)
-      .filter((word) => /^((\d+[,\.])?\d+|[—\-]+)$/.test(word))
-      .slice(0, 3);
-    if (words.length < 3) continue;
+      .filter((word) => /^((\d+[,\.])?\d+|[—\-]+)$/.test(word));
+    if (words.length != 3) continue;
 
     const stageScores = words.map(
       (word) => parseInt(word.replaceAll(/[^\d]/g, ""), 10) || ""
