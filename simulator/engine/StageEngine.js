@@ -492,7 +492,7 @@ export default class StageEngine {
   }
 
   _triggerEffectsForPhase(phase, state) {
-    const parentState = state.phase;
+    const parentPhase = state.phase;
     state.phase = phase;
 
     let phaseEffects = [];
@@ -507,7 +507,7 @@ export default class StageEngine {
 
     state = this._triggerEffects(phaseEffects, state);
 
-    state.phase = parentState;
+    state.phase = parentPhase;
 
     for (let idx of state.triggeredEffects) {
       const effectIndex = phaseEffects[idx].index;
