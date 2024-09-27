@@ -12,6 +12,7 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - Conditions being evaluated on updated state when multiple effects
+- Limit hand size to 5
 
 ## 2024-09-25
 

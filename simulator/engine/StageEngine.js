@@ -391,6 +391,7 @@ export default class StageEngine {
   }
 
   _drawCard(state) {
+    if (state.handCardIds.length >= 5) return state;
     if (!state.deckCardIds.length) {
       if (!state.discardedCardIds.length) return state;
       state = this._recycleDiscards(state);
