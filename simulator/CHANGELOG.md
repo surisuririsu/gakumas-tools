@@ -13,6 +13,7 @@ Dates are based on Eastern Time Zone.
 
 - Conditions being evaluated on updated state when multiple effects
 - Limit hand size to 5
+- Decrement TTL correctly at end of turn
 
 ## 2024-09-25
 

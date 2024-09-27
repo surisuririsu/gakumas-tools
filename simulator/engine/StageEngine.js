@@ -331,7 +331,7 @@ export default class StageEngine {
 
     // Decrement effect ttl and expire
     for (let i in state.effects) {
-      if (state.effects[i].ttl == null) break;
+      if (state.effects[i].ttl == null) continue;
       state.effects[i].ttl = Math.max(state.effects[i].ttl - 1, -1);
     }
 
