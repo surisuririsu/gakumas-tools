@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Upgraded versions of 仮装狂騒曲 China and Temari
 
+### Fixed
+
+- Conditions being evaluated on updated state when multiple effects
+
 ## 2024-09-25
 
 ### Fixed
