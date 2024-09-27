@@ -35,8 +35,8 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.11.1"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.11"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=824f1115905ab5fb6dd34dc8891b91599ea3c86e"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=12202a9a6d2e77574e039a9c1ae2620d1ae98b74"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2394eeec1071d5dc8c7a7c3fcf9a3bdedd063154"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=96b848ae2f0e19d78430b9bea105951b08bec31e"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.9.0"],\
@@ -1134,14 +1134,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.0.8", {\
-        "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-c7fa217c60/4/AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
+      ["virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.0.8", {\
+        "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-9848f3b3e2/4/AppData/Local/Yarn/Berry/cache/@fortawesome-vue-fontawesome-npm-3.0.8-82cfbc3635-10c0.zip/node_modules/@fortawesome/vue-fontawesome/",\
         "packageDependencies": [\
-          ["@fortawesome/vue-fontawesome", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.0.8"],\
+          ["@fortawesome/vue-fontawesome", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.0.8"],\
           ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
           ["@types/fortawesome__fontawesome-svg-core", null],\
           ["@types/vue", null],\
-          ["vue", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9"]\
+          ["vue", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9"]\
         ],\
         "packagePeers": [\
           "@fortawesome/fontawesome-svg-core",\
@@ -2611,14 +2611,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:4529f942bdbc39e8d67006654a8b26d5fa78a8c80aa30f3096d8580245ab1457d39595850b0509832808de3ae6d4cf4134109809f13d26c1c03848a9cb05ae84#npm:3.5.9", {\
-        "packageLocation": "./.yarn/__virtual__/@vue-server-renderer-virtual-1f91c80628/4/AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.5.9-173c118fbf-10c0.zip/node_modules/@vue/server-renderer/",\
+      ["virtual:8d39c09ec923f5c1fcdc20a3184f9c974b86717a3db40b090d018dc9378d6dd05e4663f710d58592242918d6f2358ff77cbd280da3b1a95e5331ca0790bd3426#npm:3.5.9", {\
+        "packageLocation": "./.yarn/__virtual__/@vue-server-renderer-virtual-21719a1cfe/4/AppData/Local/Yarn/Berry/cache/@vue-server-renderer-npm-3.5.9-173c118fbf-10c0.zip/node_modules/@vue/server-renderer/",\
         "packageDependencies": [\
-          ["@vue/server-renderer", "virtual:4529f942bdbc39e8d67006654a8b26d5fa78a8c80aa30f3096d8580245ab1457d39595850b0509832808de3ae6d4cf4134109809f13d26c1c03848a9cb05ae84#npm:3.5.9"],\
+          ["@vue/server-renderer", "virtual:8d39c09ec923f5c1fcdc20a3184f9c974b86717a3db40b090d018dc9378d6dd05e4663f710d58592242918d6f2358ff77cbd280da3b1a95e5331ca0790bd3426#npm:3.5.9"],\
           ["@types/vue", null],\
           ["@vue/compiler-ssr", "npm:3.5.9"],\
           ["@vue/shared", "npm:3.5.9"],\
-          ["vue", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9"]\
+          ["vue", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9"]\
         ],\
         "packagePeers": [\
           "@types/vue",\
@@ -4968,10 +4968,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=824f1115905ab5fb6dd34dc8891b91599ea3c86e", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-453069ff65-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=2394eeec1071d5dc8c7a7c3fcf9a3bdedd063154", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-409e707650-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=824f1115905ab5fb6dd34dc8891b91599ea3c86e"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2394eeec1071d5dc8c7a7c3fcf9a3bdedd063154"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4989,8 +4989,8 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.11.1"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.11"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=824f1115905ab5fb6dd34dc8891b91599ea3c86e"],\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=12202a9a6d2e77574e039a9c1ae2620d1ae98b74"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=2394eeec1071d5dc8c7a7c3fcf9a3bdedd063154"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=96b848ae2f0e19d78430b9bea105951b08bec31e"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["mongodb", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:6.9.0"],\
@@ -5011,20 +5011,20 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas_contest_simulator", [\
-      ["https://github.com/katabami83/gakumas_contest_simulator.git#commit=12202a9a6d2e77574e039a9c1ae2620d1ae98b74", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-3b349aadcb-10c0.zip/node_modules/gakumas_contest_simulator/",\
+      ["https://github.com/katabami83/gakumas_contest_simulator.git#commit=96b848ae2f0e19d78430b9bea105951b08bec31e", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas_contest_simulator-https-5b87de8c91-10c0.zip/node_modules/gakumas_contest_simulator/",\
         "packageDependencies": [\
-          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=12202a9a6d2e77574e039a9c1ae2620d1ae98b74"],\
+          ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=96b848ae2f0e19d78430b9bea105951b08bec31e"],\
           ["@fortawesome/fontawesome-free", "npm:6.6.0"],\
           ["@fortawesome/fontawesome-svg-core", "npm:6.6.0"],\
           ["@fortawesome/free-solid-svg-icons", "npm:6.6.0"],\
-          ["@fortawesome/vue-fontawesome", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.0.8"],\
+          ["@fortawesome/vue-fontawesome", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.0.8"],\
           ["@mdi/font", "npm:7.4.47"],\
           ["chart.js", "npm:4.4.4"],\
           ["core-js", "npm:3.38.1"],\
           ["roboto-fontface", "npm:0.10.0"],\
-          ["vue", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9"],\
-          ["vuetify", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.7.2"],\
+          ["vue", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9"],\
+          ["vuetify", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.7.2"],\
           ["webfontloader", "npm:1.6.28"]\
         ],\
         "linkType": "HARD"\
@@ -9391,15 +9391,15 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9", {\
-        "packageLocation": "./.yarn/__virtual__/vue-virtual-4529f942bd/4/AppData/Local/Yarn/Berry/cache/vue-npm-3.5.9-3feaca2380-10c0.zip/node_modules/vue/",\
+      ["virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9", {\
+        "packageLocation": "./.yarn/__virtual__/vue-virtual-8d39c09ec9/4/AppData/Local/Yarn/Berry/cache/vue-npm-3.5.9-3feaca2380-10c0.zip/node_modules/vue/",\
         "packageDependencies": [\
-          ["vue", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9"],\
+          ["vue", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9"],\
           ["@types/typescript", null],\
           ["@vue/compiler-dom", "npm:3.5.9"],\
           ["@vue/compiler-sfc", "npm:3.5.9"],\
           ["@vue/runtime-dom", "npm:3.5.9"],\
-          ["@vue/server-renderer", "virtual:4529f942bdbc39e8d67006654a8b26d5fa78a8c80aa30f3096d8580245ab1457d39595850b0509832808de3ae6d4cf4134109809f13d26c1c03848a9cb05ae84#npm:3.5.9"],\
+          ["@vue/server-renderer", "virtual:8d39c09ec923f5c1fcdc20a3184f9c974b86717a3db40b090d018dc9378d6dd05e4663f710d58592242918d6f2358ff77cbd280da3b1a95e5331ca0790bd3426#npm:3.5.9"],\
           ["@vue/shared", "npm:3.5.9"],\
           ["typescript", null]\
         ],\
@@ -9418,17 +9418,17 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.7.2", {\
-        "packageLocation": "./.yarn/__virtual__/vuetify-virtual-1c9dbcca18/4/AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.2-40fb6a4da6-10c0.zip/node_modules/vuetify/",\
+      ["virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.7.2", {\
+        "packageLocation": "./.yarn/__virtual__/vuetify-virtual-03f0397243/4/AppData/Local/Yarn/Berry/cache/vuetify-npm-3.7.2-40fb6a4da6-10c0.zip/node_modules/vuetify/",\
         "packageDependencies": [\
-          ["vuetify", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.7.2"],\
+          ["vuetify", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.7.2"],\
           ["@types/typescript", null],\
           ["@types/vite-plugin-vuetify", null],\
           ["@types/vue", null],\
           ["@types/webpack-plugin-vuetify", null],\
           ["typescript", null],\
           ["vite-plugin-vuetify", null],\
-          ["vue", "virtual:3b349aadcb33ebc9c2607d5c9e05f45bd9dbc1cc0139ff7c1eaae063f6ad293cf19af8684c24aa32a24f6e9fd2c2a010816d720bd6f2f2966ab079f247b060ac#npm:3.5.9"],\
+          ["vue", "virtual:5b87de8c911a910d44535800c359662ff24ed281b093cac98b0d6ad3a1d3901921a54f7de06f8cc8e0ac77af7e5b880c1ccf30f5ebcd2eb31ca91694fd8793c0#npm:3.5.9"],\
           ["webpack-plugin-vuetify", null]\
         ],\
         "packagePeers": [\
