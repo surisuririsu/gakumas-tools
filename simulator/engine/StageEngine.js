@@ -521,6 +521,8 @@ export default class StageEngine {
   }
 
   _triggerEffects(effects, state) {
+    const prevState = { ...state };
+
     let triggeredEffects = [];
     let skipNextEffect = false;
     for (let i in effects) {
@@ -558,7 +560,7 @@ export default class StageEngine {
       if (effect.conditions) {
         let satisfied = true;
         for (let condition of effect.conditions) {
-          if (!this._evaluateCondition(condition, state)) {
+          if (!this._evaluateCondition(condition, prevState)) {
             satisfied = false;
             break;
           }
