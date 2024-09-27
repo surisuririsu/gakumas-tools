@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-09-27
+
+### Added
+
+- Upgraded versions of 仮装狂騒曲 China and Temari
+
 ## 2024-09-25
 
 ### Fixed
