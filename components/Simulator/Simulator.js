@@ -181,9 +181,6 @@ export default function Simulator() {
           {running ? <Loader /> : t("simulate")}
         </Button>
         <div className={styles.subLinks}>
-          <a href="https://forms.gle/wpcwLELDPc8kfK3E9" target="_blank">
-            {t("provideData")}
-          </a>
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"

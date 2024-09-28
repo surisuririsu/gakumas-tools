@@ -134,7 +134,6 @@
   "Simulator": {
     "supportBonus": "サポートボーナス%",
     "simulate": "実行",
-    "provideData": "リハーサルデータを提供する",
     "lastUpdated": "最終更新"
   },
   "StageSelect": {
