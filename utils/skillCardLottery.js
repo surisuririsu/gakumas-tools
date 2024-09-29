@@ -92,6 +92,11 @@ export function generatePossibleMemories(skillCardIds, rank) {
           preLotteryCombination.concat(combination).map(({ id }) => id)
         );
 
+        // Remove combinations that cost too much
+        if (combinationCost > maxCost) {
+          continue;
+        }
+
         // Record the highest cost combination
         if (!maxCombinedCost) {
           maxCombinedCost = combinationCost;
@@ -104,8 +109,8 @@ export function generatePossibleMemories(skillCardIds, rank) {
           continue;
         }
 
-        // Remove combinations that are out of cost range
-        if (combinationCost < minCost || combinationCost > maxCost) {
+        // Remove combinations that cost too little
+        if (combinationCost < minCost) {
           continue;
         }
 
