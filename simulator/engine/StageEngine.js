@@ -382,6 +382,7 @@ export default class StageEngine {
 
     state.cardUsesRemaining = 1;
     state = this._triggerEffectsForPhase("startOfTurn", state);
+    state = this._triggerEffectsForPhase("everyTurn", state);
 
     return state;
   }
