@@ -14,11 +14,11 @@ export default class HeuristicStrategy extends StageStrategy {
     );
 
     this.goodConditionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodConditionTurns" ? 3 : 1;
+      idolConfig.recommendedEffect == "goodConditionTurns" ? 5 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 3 : 0.9;
+      idolConfig.recommendedEffect == "concentration" ? 4.5 : 0.8;
     this.goodImpressionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodImpressionTurns" ? 3 : 1;
+      idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       idolConfig.recommendedEffect == "motivation" ? 4 : 1;
   }
@@ -31,8 +31,6 @@ export default class HeuristicStrategy extends StageStrategy {
 
     const scaleScore = (value) => {
       // Scale predicted score appropriately
-      value *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
-      value = Math.ceil(value);
       value *= this.averageTypeMultiplier;
       value = Math.ceil(value);
       return value;
@@ -71,7 +69,7 @@ export default class HeuristicStrategy extends StageStrategy {
       Math.floor(previewState.turnsRemaining / 12);
 
     // Stamina
-    score += previewState.stamina * previewState.turnsRemaining * 0.25;
+    score += previewState.stamina * previewState.turnsRemaining * 0.05;
 
     // Genki
     score +=
@@ -144,13 +142,17 @@ export default class HeuristicStrategy extends StageStrategy {
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += previewState.score * 0.5;
+      score += previewState.score * 0.35;
     } else if (recommendedEffect == "concentration") {
-      score += previewState.score * 0.18;
+      score +=
+        previewState.score * 0.05 +
+        previewState.score / (previewState.turnsRemaining + 1);
     } else if (recommendedEffect == "goodImpressionTurns") {
       score += previewState.score * 1.1;
     } else if (recommendedEffect == "motivation") {
-      score += previewState.score * 0.6;
+      score +=
+        previewState.score * 0.45 +
+        previewState.score / (previewState.turnsRemaining + 1);
     }
 
     return Math.floor(score);
