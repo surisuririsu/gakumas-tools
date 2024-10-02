@@ -175,6 +175,7 @@
   "SimulatorResult": {
     "min": "最小値",
     "average": "平均値",
+    "median": "中央値",
     "max": "最大値",
     "logs": "ログ"
   },

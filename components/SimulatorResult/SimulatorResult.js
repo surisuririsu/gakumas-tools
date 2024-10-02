@@ -14,6 +14,7 @@ function SimulatorResult({ data, idolId }) {
           <tr>
             <th>{t("min")}</th>
             <th>{t("average")}</th>
+            <th>{t("median")}</th>
             <th>{t("max")}</th>
           </tr>
         </thead>
@@ -21,6 +22,7 @@ function SimulatorResult({ data, idolId }) {
           <tr>
             <td>{data.minRun.score}</td>
             <td>{data.averageScore}</td>
+            <td>{data.medianScore}</td>
             <td>{data.maxRun.score}</td>
           </tr>
         </tbody>
