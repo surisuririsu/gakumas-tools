@@ -15,7 +15,7 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
-import { bucketScores, mergeResults } from "@/utils/simulator";
+import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
@@ -76,10 +76,11 @@ export default function Simulator() {
   const setResult = useCallback(
     (result) => {
       const bucketedScores = bucketScores(result.scores);
+      const medianScore = getMedianScore(result.scores);
 
       console.timeEnd("simulation");
 
-      setSimulatorData({ bucketedScores, ...result });
+      setSimulatorData({ bucketedScores, medianScore, ...result });
       setRunning(false);
     },
     [setSimulatorData, setRunning]

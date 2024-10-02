@@ -5,6 +5,10 @@ Dates are based on Eastern Time Zone.
 
 ## 2024-10-01
 
+### Added
+
+- Median score in simulator result
+
 ### Fixed
 
 - Order of phase effect triggering

@@ -175,6 +175,7 @@
   "SimulatorResult": {
     "min": "Min",
     "average": "Average",
+    "median": "Median",
     "max": "Max",
     "logs": "Logs"
   },

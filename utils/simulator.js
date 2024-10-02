@@ -91,6 +91,14 @@ export function bucketScores(scores) {
   return data;
 }
 
+export function getMedianScore(scores) {
+  const sorted = [...scores].sort((a, b) => b - a);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2
+    ? sorted[mid]
+    : Math.floor((sorted[mid - 1] + sorted[mid]) / 2);
+}
+
 export function mergeResults(results) {
   let scores = [];
   for (let result of results) {
