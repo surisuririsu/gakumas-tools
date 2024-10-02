@@ -3,6 +3,18 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-01
+
+### Fixed
+
+- Order of phase effect triggering
+
+### Changed
+
+- Recommended effect multipliers for good condition, concentration, good impression
+- Score scaling in heuristic strategy
+- Evaluation of stamina and score in heuristic strategy
+
 ## 2024-09-27
 
 ### Added
