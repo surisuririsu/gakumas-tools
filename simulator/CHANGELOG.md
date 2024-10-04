@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-03
+
+### Fixed
+
+- まだ見ぬ世界へ to trigger later than other startOfTurn effects
+
 ## 2024-10-01
 
 ### Added
