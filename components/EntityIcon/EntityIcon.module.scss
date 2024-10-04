@@ -3,14 +3,13 @@
 .entityIcon {
   aspect-ratio: 1;
   position: relative;
-  border: 3px solid $gray-light;
-  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px $gray-light;
+  border-radius: 8%;
   background-color: $gray-extra-light;
   overflow: hidden;
-  transition: 0.2s box-shadow;
 
   &:hover {
-    outline: 2px solid $gk-orange;
+    outline: 3px solid $gk-orange;
   }
 }
 

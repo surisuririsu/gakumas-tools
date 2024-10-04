@@ -23,7 +23,10 @@ function IconSelect({ options, selected, onChange, collapsable, includeAll }) {
   return (
     <div className={styles.iconSelect}>
       {!expanded && (
-        <button className={styles.option} onClick={() => setExpanded(true)}>
+        <button
+          className={c(styles.option, styles.current)}
+          onClick={() => setExpanded(true)}
+        >
           <Image
             src={selectedOption.iconSrc}
             alt={selectedOption.alt}
@@ -33,25 +36,28 @@ function IconSelect({ options, selected, onChange, collapsable, includeAll }) {
           />
         </button>
       )}
-      {expanded &&
-        displayedOptions.map(({ id, iconSrc, alt }) => (
-          <button
-            key={id}
-            className={c(styles.option, selected === id && styles.selected)}
-            onClick={() => {
-              onChange(id);
-              if (collapsable) setExpanded(false);
-            }}
-          >
-            <Image
-              src={iconSrc}
-              alt={alt}
-              width={24}
-              height={24}
-              draggable={false}
-            />
-          </button>
-        ))}
+      {displayedOptions.map(({ id, iconSrc, alt }) => (
+        <button
+          key={id}
+          className={c(
+            styles.option,
+            selected === id && styles.selected,
+            expanded && styles.expanded
+          )}
+          onClick={() => {
+            onChange(id);
+            if (collapsable) setExpanded(!expanded);
+          }}
+        >
+          <Image
+            src={iconSrc}
+            alt={alt}
+            width={24}
+            height={24}
+            draggable={false}
+          />
+        </button>
+      ))}
     </div>
   );
 }

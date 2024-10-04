@@ -15,6 +15,8 @@ export async function generateMetadataForTool(tool, locale) {
   return {
     title: `${t_tools(`${tool}.title`)} - ${t_meta("title")}`,
     description: `${t_tools(`${tool}.description`)} - ${t_meta("description")}`,
-    openGraph: {},
+    openGraph: {
+      description: t_tools(`${tool}.description`),
+    },
   };
 }
