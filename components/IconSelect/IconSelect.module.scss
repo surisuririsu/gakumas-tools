@@ -13,6 +13,22 @@
   border-radius: 16px;
   padding: 4px;
   transition: all 0.2s;
+
+  @media only screen and (max-width: 512px) {
+    display: none;
+  }
+
+  &.expanded {
+    display: flex;
+  }
+}
+
+.current {
+  display: none;
+
+  @media only screen and (max-width: 512px) {
+    display: flex;
+  }
 }
 
 .selected {

@@ -20,7 +20,12 @@ const IDOL_NAMES_BY_ID = IDOLS.reduce(
 );
 
 const KAFE_P_IDOL_TITLE_FIXUPS = {
-  "Yellow Big Bang!": "Yellow Big Bang！",
+  32: "Yellow Big Bang!",
+};
+
+const KAFE_ITEM_NAME_FIXUPS = {
+  143: "う～ら〜め〜し～や〜",
+  144: "う～ら〜め〜し～や〜+",
 };
 
 const KAFE_CARD_NAME_FIXUPS = {
@@ -48,9 +53,7 @@ const KAFE_STAGE_IDS_BY_SEASON_STAGE = ContestData.getAll().reduce(
 const KAFE_P_IDOL_IDS_BY_NAME_TITLE = PIdolData.getAll().reduce(
   (acc, cur) => ({
     ...acc,
-    [`${cur.name}_${
-      KAFE_P_IDOL_TITLE_FIXUPS[cur.episode_name] || cur.episode_name
-    }`]: cur.id,
+    [`${cur.name}_${cur.episode_name}`]: cur.id,
   }),
   {}
 );
@@ -80,13 +83,16 @@ const KAFE_STAGE_MAP = STAGES.reduce((acc, cur) => {
 const KAFE_P_IDOL_MAP = P_IDOLS.reduce((acc, cur) => {
   acc[cur.id] =
     KAFE_P_IDOL_IDS_BY_NAME_TITLE[
-      `${IDOL_NAMES_BY_ID[cur.idolId].replaceAll(" ", "")}_${cur.title}`
+      `${IDOL_NAMES_BY_ID[cur.idolId].replaceAll(" ", "")}_${
+        KAFE_P_IDOL_TITLE_FIXUPS[cur.id] || cur.title
+      }`
     ] || -1;
   return acc;
 }, {});
 
 const KAFE_ITEM_MAP = P_ITEMS.reduce((acc, cur) => {
-  acc[cur.id] = KAFE_ITEM_IDS_BY_NAME[cur.name] || -1;
+  acc[cur.id] =
+    KAFE_ITEM_IDS_BY_NAME[KAFE_ITEM_NAME_FIXUPS[cur.id] || cur.name] || -1;
   return acc;
 }, {});
 
@@ -96,6 +102,12 @@ const KAFE_CARD_MAP = SKILL_CARDS.reduce((acc, cur) => {
   return acc;
 }, {});
 
+const MISMATCHED_STAGES = STAGES.filter(
+  (stage) => KAFE_STAGE_MAP[stage.id] === -1
+);
+const MISMATCHED_P_IDOLS = P_IDOLS.filter(
+  (pIdol) => KAFE_P_IDOL_MAP[pIdol.id] === -1
+);
 const MISMATCHED_ITEMS = P_ITEMS.filter(
   (item) => KAFE_ITEM_MAP[item.id] === -1
 );
@@ -103,11 +115,18 @@ const MISMATCHED_CARDS = SKILL_CARDS.filter(
   (card) => KAFE_CARD_MAP[card.id] === -1
 );
 
+if (MISMATCHED_STAGES.length)
+  console.log("Mismatched stages", MISMATCHED_STAGES);
+if (MISMATCHED_P_IDOLS.length)
+  console.log("Mismatched p-idols", MISMATCHED_P_IDOLS);
 if (MISMATCHED_ITEMS.length) console.log("Mismatched items", MISMATCHED_ITEMS);
 if (MISMATCHED_CARDS.length) console.log("Mismatched cards", MISMATCHED_CARDS);
 console.log(
   "Mismatch count",
-  MISMATCHED_ITEMS.length + MISMATCHED_CARDS.length
+  MISMATCHED_STAGES.length +
+    MISMATCHED_P_IDOLS.length +
+    MISMATCHED_ITEMS.length +
+    MISMATCHED_CARDS.length
 );
 
 const __filename = fileURLToPath(import.meta.url);

@@ -21,9 +21,9 @@ export default function Preview({
       width: "48px",
       height: "48px",
       display: "flex",
-      border: "4px solid #ccc",
-      borderRadius: "8px",
-      backgroundColor: "#ddd",
+      boxShadow: "inset 0 0 0 2px #ccc",
+      borderRadius: "10%",
+      backgroundColor: "#eee",
       overflow: "hidden",
     },
     url: {
@@ -39,9 +39,9 @@ export default function Preview({
       width: "68px",
       height: "68px",
       display: "flex",
-      border: "4px solid #ccc",
-      borderRadius: "8px",
-      backgroundColor: "#ddd",
+      boxShadow: "inset 0 0 0 2px #ccc",
+      borderRadius: "8%",
+      backgroundColor: "#eee",
       overflow: "hidden",
     },
     cost: { display: "flex", height: isEmpty ? 0 : "8px", color: "#444" },
@@ -58,8 +58,8 @@ export default function Preview({
               {item && (
                 <img
                   src={`${baseUrl}${item.getIcon().src}`}
-                  width={40}
-                  height={40}
+                  width={48}
+                  height={48}
                 />
               )}
             </div>
@@ -77,8 +77,8 @@ export default function Preview({
                   {card && (
                     <img
                       src={`${baseUrl}${card.getIcon().src}`}
-                      width={60}
-                      height={60}
+                      width={68}
+                      height={68}
                     />
                   )}
                 </div>
