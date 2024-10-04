@@ -1,4 +1,4 @@
-import { PItems, SkillCards, Stages } from "gakumas-data/lite";
+import { PItems, SkillCards } from "gakumas-data/lite";
 import { shuffle } from "./utils";
 import {
   DEBUFF_FIELDS,
@@ -62,8 +62,8 @@ export default class StageEngine {
       turnCardsUsed: 0,
 
       // Phase effects
-      effectsByPhase: {},
       effects: [],
+      triggeredEffects: [],
 
       // Buffs and debuffs
       goodConditionTurns: 0,
@@ -142,7 +142,7 @@ export default class StageEngine {
         phase: "endOfTurn",
         conditions: ["goodImpressionTurns>=1"],
         actions: ["score+=goodImpressionTurns"],
-        order: 100,
+        group: 100,
       },
     ]);
 
@@ -316,7 +316,7 @@ export default class StageEngine {
     }
 
     // Reduce score buff turns
-    for (let i in state.scoreBuffs) {
+    for (let i = 0; i < state.scoreBuffs.length; i++) {
       if (state.scoreBuffs[i].fresh) {
         state.scoreBuffs[i].fresh = false;
       } else if (state.scoreBuffs[i].turns) {
@@ -330,7 +330,7 @@ export default class StageEngine {
     state.turnCardsUsed = 0;
 
     // Decrement effect ttl and expire
-    for (let i in state.effects) {
+    for (let i = 0; i < state.effects.length; i++) {
       if (state.effects[i].ttl == null) continue;
       state.effects[i].ttl = Math.max(state.effects[i].ttl - 1, -1);
     }
@@ -412,7 +412,7 @@ export default class StageEngine {
   }
 
   _upgradeHand(state) {
-    for (let i in state.handCardIds) {
+    for (let i = 0; i < state.handCardIds.length; i++) {
       const card = SkillCards.getById(state.handCardIds[i]);
       if (!card.upgraded && card.type != "trouble") {
         state.handCardIds[i] += 1;
@@ -497,27 +497,33 @@ export default class StageEngine {
     const parentPhase = state.phase;
     state.phase = phase;
 
-    let phaseEffects = [];
-    for (let i in state.effects) {
+    let phaseEffectsByGroup = {};
+    for (let i = 0; i < state.effects.length; i++) {
       const effect = state.effects[i];
       if (effect.phase != phase) continue;
-      phaseEffects.push({ ...effect, phase: null, index: i });
+      const group = effect.group || 0;
+      if (!phaseEffectsByGroup[group]) {
+        phaseEffectsByGroup[group] = [];
+      }
+      phaseEffectsByGroup[group].push({ ...effect, phase: null, index: i });
     }
-    phaseEffects.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    this.logger.debug(phase, phaseEffects);
+    const groupKeys = Object.keys(phaseEffectsByGroup).sort((a, b) => a - b);
 
-    state = this._triggerEffects(phaseEffects, state);
+    this.logger.debug(phase, phaseEffectsByGroup);
+
+    for (let key of groupKeys) {
+      state = this._triggerEffects(phaseEffectsByGroup[key], state);
+
+      for (let index of state.triggeredEffects) {
+        if (state.effects[index].limit) {
+          state.effects[index].limit--;
+        }
+      }
+      state.triggeredEffects = [];
+    }
 
     state.phase = parentPhase;
-
-    for (let idx of state.triggeredEffects) {
-      const effectIndex = phaseEffects[idx].index;
-      if (state.effects[effectIndex].limit) {
-        state.effects[effectIndex].limit--;
-      }
-    }
-    state.triggeredEffects = [];
 
     return state;
   }
@@ -527,9 +533,7 @@ export default class StageEngine {
 
     let triggeredEffects = [];
     let skipNextEffect = false;
-    for (let i in effects) {
-      const effect = effects[i];
-
+    for (let effect of effects) {
       // Skip effect if condition is not satisfied
       if (skipNextEffect) {
         skipNextEffect = false;
@@ -614,7 +618,7 @@ export default class StageEngine {
         });
       }
 
-      triggeredEffects.push(i);
+      triggeredEffects.push(effect.index);
     }
 
     state.triggeredEffects = triggeredEffects;
