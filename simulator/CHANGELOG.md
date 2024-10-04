@@ -5,6 +5,10 @@ Dates are based on Eastern Time Zone.
 
 ## 2024-10-03
 
+### Added
+
+- Contest season 10 preview
+
 ### Fixed
 
 - まだ見ぬ世界へ to trigger later than other startOfTurn effects

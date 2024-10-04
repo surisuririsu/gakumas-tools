@@ -124,8 +124,8 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <StageSelect />
-
+        <StageSelect />* Season 10 preview is based only on the announced
+        p-items and criteria. Turn types are not yet known.
         <div className={styles.supportBonusInput}>
           <label>{t("supportBonus")}</label>
           <Input
