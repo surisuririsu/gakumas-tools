@@ -51,6 +51,7 @@
 
 .defaultTile {
   @extend .tile;
+  align-self: flex-start;
   padding: 8px;
   background-color: $gray-extra-light;
 }

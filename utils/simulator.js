@@ -1,4 +1,6 @@
-import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
+import { BUCKET_SIZE } from "@/simulator/constants";
+import { GRAPHED_FIELDS } from "@/simulator/engine/constants";
+import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
   stageId: "25",
@@ -43,11 +45,9 @@ export function loadoutFromSearchParams(searchParams) {
 
   stageId = parseInt(stageId, 10) || null;
   supportBonus = parseFloat(supportBonus) || null;
-  params = params.split("-").map((n) => parseInt(n, 10) || 0);
-  pItemIds = pItemIds.split("-").map((n) => parseInt(n, 10) || 0);
-  skillCardIdGroups = skillCardIdGroups
-    .split("_")
-    .map((group) => group.split("-").map((n) => parseInt(n, 10) || 0));
+  params = deserializeIds(params);
+  pItemIds = deserializeIds(pItemIds);
+  skillCardIdGroups = skillCardIdGroups.split("_").map(deserializeIds);
 
   return {
     stageId,
@@ -65,12 +65,9 @@ export function loadoutToSearchParams(loadout) {
   const searchParams = new URLSearchParams();
   searchParams.set("stage", stageId);
   searchParams.set("support_bonus", supportBonus);
-  searchParams.set("params", params.map((p) => p || 0).join("-"));
-  searchParams.set("items", pItemIds.join("-"));
-  searchParams.set(
-    "cards",
-    skillCardIdGroups.map((group) => group.join("-")).join("_")
-  );
+  searchParams.set("params", serializeIds(params));
+  searchParams.set("items", serializeIds(pItemIds));
+  searchParams.set("cards", skillCardIdGroups.map(serializeIds).join("_"));
   return searchParams;
 }
 

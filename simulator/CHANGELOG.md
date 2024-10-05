@@ -3,6 +3,14 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-05
+
+### Fixed
+
+- Contest season 10 turn counts
+- Effects added at everyTurn phase should not be protected from EOT decrement
+- Edge case for heuristic strategy when no recommended effect can be inferred
+
 ## 2024-10-03
 
 ### Added

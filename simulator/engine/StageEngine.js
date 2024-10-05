@@ -8,6 +8,7 @@ import {
   DECREASE_TRIGGER_FIELDS,
   LOGGED_FIELDS,
   WHOLE_FIELDS,
+  UNFRESH_PHASES,
 } from "./constants";
 
 const KEYS_TO_DIFF = [
@@ -459,7 +460,7 @@ export default class StageEngine {
       state.scoreBuffs.push({
         amount,
         turns,
-        fresh: state.phase != "startOfTurn",
+        fresh: !UNFRESH_PHASES.includes(state.phase),
       });
     }
     this.logger.log("setScoreBuff", {
@@ -744,7 +745,7 @@ export default class StageEngine {
     }
 
     // Protect fresh stats from decrement
-    if (!["startOfStage", "startOfTurn"].includes(state.phase)) {
+    if (!UNFRESH_PHASES.includes(state.phase)) {
       for (let key of EOT_DECREMENT_FIELDS) {
         if (state[key] > 0 && prev[key] == 0) {
           state.freshBuffs[key] = true;

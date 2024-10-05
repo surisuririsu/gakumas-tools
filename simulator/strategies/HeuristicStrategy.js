@@ -153,6 +153,8 @@ export default class HeuristicStrategy extends StageStrategy {
       score +=
         previewState.score * 0.45 +
         previewState.score / (previewState.turnsRemaining + 1);
+    } else {
+      score += previewState.score;
     }
 
     return Math.floor(score);

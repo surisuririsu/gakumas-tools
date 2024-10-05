@@ -30,6 +30,8 @@ export const INCREASE_TRIGGER_FIELDS = [
 
 export const DECREASE_TRIGGER_FIELDS = ["stamina"];
 
+export const UNFRESH_PHASES = ["startOfTurn", "everyTurn"];
+
 export const LOGGED_FIELDS = [
   "turnsRemaining",
   "cardUsesRemaining",

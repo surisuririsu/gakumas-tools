@@ -6,7 +6,6 @@ import Group from "./Group";
 import Hand from "./Hand";
 import SetScoreBuff from "./SetScoreBuff";
 import StartTurn from "./StartTurn";
-import Text from "./Text";
 import Tile from "./Tile";
 import styles from "./SimulatorLogs.module.scss";
 
@@ -34,7 +33,7 @@ function Log({ line, idolId }) {
     return <SetScoreBuff {...line.data} />;
   }
   if (line.logType == "setEffect") {
-    return <Text>{t("setEffect")}</Text>;
+    return <Tile text={t("setEffect")} />;
   }
   if (line.logType == "upgradeHand") {
     return <Tile text={t("upgradedHand")} />;

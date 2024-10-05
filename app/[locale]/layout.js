@@ -23,15 +23,15 @@ import "./globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export async function generateMetadata({ params: { locale } }) {
-  return await generateDefaultMetadata(locale);
-}
-
 export const viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
 };
+
+export async function generateMetadata({ params: { locale } }) {
+  return await generateDefaultMetadata(locale);
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
