@@ -15,11 +15,13 @@
 }
 
 .expander {
+  width: 100%;
   min-width: 0;
   margin-left: 8px;
   border: 2px solid $gray-light;
   border-radius: 4px;
   padding: 4px;
+  container-type: inline-size;
 }
 
 .result {

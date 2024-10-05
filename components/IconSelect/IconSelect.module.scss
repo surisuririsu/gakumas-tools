@@ -14,7 +14,7 @@
   padding: 4px;
   transition: all 0.2s;
 
-  @media only screen and (max-width: 512px) {
+  @container (width < 512px) {
     display: none;
   }
 
@@ -26,7 +26,7 @@
 .current {
   display: none;
 
-  @media only screen and (max-width: 512px) {
+  @container (width < 512px) {
     display: flex;
   }
 }

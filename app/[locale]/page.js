@@ -2,10 +2,6 @@ import { unstable_setRequestLocale } from "next-intl/server";
 import Welcome from "@/components/Welcome";
 import { generateMetadataForTool } from "@/utils/metadata";
 
-export async function generateMetadata({ params: { locale } }) {
-  return await generateMetadataForTool("home", locale);
-}
-
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -13,6 +9,10 @@ const JSON_LD = {
   alternateName: "gktools.ris.moe",
   url: "https://gktools.ris.moe/",
 };
+
+export async function generateMetadata({ params: { locale } }) {
+  return await generateMetadataForTool("home", locale);
+}
 
 export default function WelcomePage({ params: { locale } }) {
   unstable_setRequestLocale(locale);
