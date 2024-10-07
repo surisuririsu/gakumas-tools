@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-07
+
+### Added
+
+- Preview of Halloween Hiro gacha
+
 ## 2024-10-05
 
 ### Fixed
