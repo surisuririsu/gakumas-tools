@@ -10,19 +10,13 @@
   animation: spin 1s infinite linear;
 }
 
-.loader::before,
-.loader::after {
+.loader::before {
   content: "";
   grid-area: 1/1;
   margin: 3px;
   border: inherit;
   border-radius: 50%;
   animation: spin 2s infinite;
-}
-
-.loader::after {
-  margin: 6px;
-  animation-duration: 1s;
 }
 
 @keyframes spin {

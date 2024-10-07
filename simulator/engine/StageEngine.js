@@ -42,6 +42,7 @@ export default class StageEngine {
       fixedStamina: 0,
       intermediateStamina: 0,
       stamina: this.idolConfig.params.stamina,
+      consumedStamina: 0,
       fixedGenki: 0,
       intermediateGenki: 0,
       genki: 0,
@@ -847,6 +848,7 @@ export default class StageEngine {
         state.cost = 0;
         if (state.genki < 0) {
           state.stamina += state.genki;
+          state.consumedStamina -= state.genki;
           state.genki = 0;
         }
       } else if (lhs == "intermediateStamina") {
@@ -865,6 +867,9 @@ export default class StageEngine {
         }
 
         state.stamina += stamina;
+        if (stamina < 0) {
+          state.consumedStamina -= stamina;
+        }
         state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
         let score = state.intermediateScore;
@@ -913,6 +918,9 @@ export default class StageEngine {
       } else if (lhs == "fixedStamina") {
         // Apply fixed stamina
         state.stamina += state.fixedStamina;
+        if (state.fixedStamina < 0) {
+          state.consumedStamina -= state.fixedStamina;
+        }
         state.fixedStamina = 0;
       }
 

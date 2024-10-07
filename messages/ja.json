@@ -199,6 +199,7 @@
     "costIncrease": "消費体力追加",
     "doubleCardEffectCards": "スキルカード追加発動",
     "nullifyGenkiTurns": "元気増加無効",
+    "nullifyDebuff": "低下状態無効",
     "scoreBuff": "スコア上昇量増加",
     "turn": "ターン",
     "cardDrawn": "スキルカードを引いた",

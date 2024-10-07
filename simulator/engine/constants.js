@@ -49,6 +49,7 @@ export const LOGGED_FIELDS = [
   "costIncrease",
   "doubleCardEffectCards",
   "nullifyGenkiTurns",
+  "nullifyDebuff",
 ];
 
 export const WHOLE_FIELDS = [
