@@ -227,6 +227,7 @@ export default class StageEngine {
     nextState.cardEffects = this._getCardEffects(card);
 
     // Apply card cost
+    const preCostState = { ...nextState };
     this.logger.debug("Applying cost", card.cost);
     nextState = this._executeActions(card.cost, nextState);
 
@@ -235,11 +236,23 @@ export default class StageEngine {
     nextState.cardUsesRemaining -= 1;
 
     // Trigger events on card used
-    nextState = this._triggerEffectsForPhase("cardUsed", nextState);
+    nextState = this._triggerEffectsForPhase(
+      "cardUsed",
+      nextState,
+      preCostState
+    );
     if (card.type == "active") {
-      nextState = this._triggerEffectsForPhase("activeCardUsed", nextState);
+      nextState = this._triggerEffectsForPhase(
+        "activeCardUsed",
+        nextState,
+        preCostState
+      );
     } else if (card.type == "mental") {
-      nextState = this._triggerEffectsForPhase("mentalCardUsed", nextState);
+      nextState = this._triggerEffectsForPhase(
+        "mentalCardUsed",
+        nextState,
+        preCostState
+      );
     }
 
     // Apply card effects
@@ -495,7 +508,7 @@ export default class StageEngine {
     return state;
   }
 
-  _triggerEffectsForPhase(phase, state) {
+  _triggerEffectsForPhase(phase, state, prevState) {
     const parentPhase = state.phase;
     state.phase = phase;
 
@@ -515,7 +528,7 @@ export default class StageEngine {
     this.logger.debug(phase, phaseEffectsByGroup);
 
     for (let key of groupKeys) {
-      state = this._triggerEffects(phaseEffectsByGroup[key], state);
+      state = this._triggerEffects(phaseEffectsByGroup[key], state, prevState);
 
       for (let index of state.triggeredEffects) {
         if (state.effects[index].limit) {
@@ -530,8 +543,8 @@ export default class StageEngine {
     return state;
   }
 
-  _triggerEffects(effects, state) {
-    const prevState = { ...state };
+  _triggerEffects(effects, state, prevState) {
+    const conditionState = prevState || { ...state };
 
     let triggeredEffects = [];
     let skipNextEffect = false;
@@ -568,7 +581,7 @@ export default class StageEngine {
       if (effect.conditions) {
         let satisfied = true;
         for (let condition of effect.conditions) {
-          if (!this._evaluateCondition(condition, prevState)) {
+          if (!this._evaluateCondition(condition, conditionState)) {
             satisfied = false;
             break;
           }
