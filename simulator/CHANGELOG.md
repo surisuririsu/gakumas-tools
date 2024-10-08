@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of Halloween Hiro gacha
 
+### Fixed
+
+- Effect activation conditions for cardUsed phases should be evaluated on pre-cost state
+
 ## 2024-10-05
 
 ### Fixed
