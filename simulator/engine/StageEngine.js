@@ -227,7 +227,7 @@ export default class StageEngine {
     nextState.cardEffects = this._getCardEffects(card);
 
     // Apply card cost
-    const preCostState = { ...nextState };
+    let conditionState = { ...nextState };
     this.logger.debug("Applying cost", card.cost);
     nextState = this._executeActions(card.cost, nextState);
 
@@ -239,19 +239,19 @@ export default class StageEngine {
     nextState = this._triggerEffectsForPhase(
       "cardUsed",
       nextState,
-      preCostState
+      conditionState
     );
     if (card.type == "active") {
       nextState = this._triggerEffectsForPhase(
         "activeCardUsed",
         nextState,
-        preCostState
+        conditionState
       );
     } else if (card.type == "mental") {
       nextState = this._triggerEffectsForPhase(
         "mentalCardUsed",
         nextState,
-        preCostState
+        conditionState
       );
     }
 
@@ -266,16 +266,23 @@ export default class StageEngine {
     nextState.turnCardsUsed++;
 
     // Trigger events after card used
-    nextState = this._triggerEffectsForPhase("afterCardUsed", nextState);
+    conditionState = { ...nextState };
+    nextState = this._triggerEffectsForPhase(
+      "afterCardUsed",
+      nextState,
+      conditionState
+    );
     if (card.type == "active") {
       nextState = this._triggerEffectsForPhase(
         "afterActiveCardUsed",
-        nextState
+        nextState,
+        conditionState
       );
     } else if (card.type == "mental") {
       nextState = this._triggerEffectsForPhase(
         "afterMentalCardUsed",
-        nextState
+        nextState,
+        conditionState
       );
     }
 
