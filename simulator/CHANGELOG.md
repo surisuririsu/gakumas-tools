@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Effect and type of 切れた鼻緒が結んだ絆
 
+### Changed
+
+- Adjusted simulator strategy to improve accuracy, mainly by evaluating phase effects added (to fix hakusen vs dreamer), and adjusting weighting of good condition and concentration
+
 ## 2024-10-07
 
 ### Added

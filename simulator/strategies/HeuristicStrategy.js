@@ -14,13 +14,17 @@ export default class HeuristicStrategy extends StageStrategy {
     );
 
     this.goodConditionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodConditionTurns" ? 5 : 1;
+      idolConfig.recommendedEffect == "goodConditionTurns" ? 2 : 0.8;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 4.5 : 0.8;
+      idolConfig.recommendedEffect == "concentration" ? 7 : 0.8;
     this.goodImpressionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       idolConfig.recommendedEffect == "motivation" ? 4 : 1;
+  }
+
+  scaleScore(score) {
+    return Math.ceil(score * this.averageTypeMultiplier);
   }
 
   getScore(state, cardId) {
@@ -28,13 +32,6 @@ export default class HeuristicStrategy extends StageStrategy {
       return -Infinity;
     }
     const previewState = this.engine.useCard(state, cardId);
-
-    const scaleScore = (value) => {
-      // Scale predicted score appropriately
-      value *= this.averageTypeMultiplier;
-      value = Math.ceil(value);
-      return value;
-    };
 
     let score = 0;
 
@@ -46,7 +43,14 @@ export default class HeuristicStrategy extends StageStrategy {
       if (effect.limit != null && effect.limit < previewState.turnsRemaining) {
         limit = effect.limit + 1;
       }
-      score += 50 * limit;
+      if (limit == 0) continue;
+      const postEffectState = this.engine._triggerEffects(
+        [{ ...effect, phase: null }],
+        { ...previewState }
+      );
+      const scoreDelta =
+        this.getStateScore(postEffectState) - this.getStateScore(previewState);
+      score += 10 * scoreDelta * limit;
     }
 
     // Additional actions
@@ -54,12 +58,9 @@ export default class HeuristicStrategy extends StageStrategy {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
       if (filteredScores.length) {
-        return scaleScore(score) + Math.max(...filteredScores);
+        return this.scaleScore(score) + Math.max(...filteredScores);
       }
     }
-
-    // Cards in hand
-    score += previewState.handCardIds.length * 5;
 
     // Cards removed
     score +=
@@ -68,95 +69,94 @@ export default class HeuristicStrategy extends StageStrategy {
         this.averageTypeMultiplier) *
       Math.floor(previewState.turnsRemaining / 12);
 
+    score += this.getStateScore(previewState);
+
+    return Math.floor(score);
+  }
+
+  getStateScore(state) {
+    let score = 0;
+
+    // Cards in hand
+    score += state.handCardIds.length * 3;
+
     // Stamina
-    score += previewState.stamina * previewState.turnsRemaining * 0.05;
+    score += state.stamina * state.turnsRemaining * 0.05;
 
     // Genki
     score +=
-      previewState.genki *
-      Math.tanh(previewState.turnsRemaining / 2) *
-      0.4 *
+      state.genki *
+      Math.tanh(state.turnsRemaining / 3) *
+      0.36 *
       this.motivationMultiplier;
 
     // Good condition turns
     score +=
-      Math.min(previewState.goodConditionTurns, previewState.turnsRemaining) *
-      1.5 *
+      Math.min(state.goodConditionTurns, state.turnsRemaining) *
+      1.2 *
       this.goodConditionTurnsMultiplier;
 
     // Perfect condition turns
     score +=
-      Math.min(
-        previewState.perfectConditionTurns,
-        previewState.turnsRemaining
-      ) *
-      previewState.goodConditionTurns *
+      Math.min(state.perfectConditionTurns, state.turnsRemaining) *
+      state.goodConditionTurns *
       this.goodConditionTurnsMultiplier;
 
     // Concentration
     score +=
-      previewState.concentration *
-      previewState.turnsRemaining *
+      state.concentration *
+      state.turnsRemaining *
+      0.8 *
       this.concentrationMultiplier;
 
     // Good impression turns
     score +=
-      previewState.goodImpressionTurns *
-      previewState.turnsRemaining *
+      state.goodImpressionTurns *
+      state.turnsRemaining *
       this.goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
-      previewState.motivation *
-      previewState.turnsRemaining *
-      0.5 *
-      this.motivationMultiplier;
+      state.motivation * state.turnsRemaining * 0.5 * this.motivationMultiplier;
 
     // Score buffs
     score +=
-      previewState.scoreBuffs.reduce(
-        (acc, cur) =>
-          acc + cur.amount * (cur.turns || previewState.turnsRemaining),
+      state.scoreBuffs.reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state.turnsRemaining),
         0
-      ) * 20;
+      ) * 8;
 
     // Half cost turns
-    score +=
-      Math.min(previewState.halfCostTurns, previewState.turnsRemaining) * 9;
+    score += Math.min(state.halfCostTurns, state.turnsRemaining) * 6;
 
     // Double cost turns
-    score +=
-      Math.min(previewState.doubleCostTurns, previewState.turnsRemaining) * -9;
+    score += Math.min(state.doubleCostTurns, state.turnsRemaining) * -6;
 
     // Cost reduction
-    score += previewState.costReduction * previewState.turnsRemaining * 2;
+    score += state.costReduction * state.turnsRemaining * 0.5;
 
     // Double card effect cards
-    score += previewState.doubleCardEffectCards * 9;
+    score += state.doubleCardEffectCards * 9;
 
     // Nullify genki turns
-    score += previewState.nullifyGenkiTurns * -9;
+    score += state.nullifyGenkiTurns * -9;
 
     // Scale score
-    score = scaleScore(score);
+    score = this.scaleScore(score);
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += previewState.score * 0.35;
+      score += state.score * 0.35;
     } else if (recommendedEffect == "concentration") {
-      score +=
-        previewState.score * 0.05 +
-        previewState.score / (previewState.turnsRemaining + 1);
+      score += state.score * 0.4;
     } else if (recommendedEffect == "goodImpressionTurns") {
-      score += previewState.score * 1.1;
+      score += state.score * 1.1;
     } else if (recommendedEffect == "motivation") {
-      score +=
-        previewState.score * 0.45 +
-        previewState.score / (previewState.turnsRemaining + 1);
+      score += state.score * 0.45;
     } else {
-      score += previewState.score;
+      score += state.score;
     }
 
-    return Math.floor(score);
+    return score;
   }
 }
