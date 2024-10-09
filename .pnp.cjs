@@ -35,7 +35,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.14"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=141eba254c4bf24f0a2e0e5dd918dce1fe7d92d0"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c2a200bbfca8c718e764e73032b473ea71b06cb"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=92644c46dd9b2537f314312c4008562dfc440030"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
@@ -1049,10 +1049,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@formatjs/ecma402-abstract", [\
-      ["npm:2.0.0", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-ecma402-abstract-npm-2.0.0-a81766ac3e-10c0.zip/node_modules/@formatjs/ecma402-abstract/",\
+      ["npm:2.1.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-ecma402-abstract-npm-2.1.0-9cc7962ade-10c0.zip/node_modules/@formatjs/ecma402-abstract/",\
         "packageDependencies": [\
-          ["@formatjs/ecma402-abstract", "npm:2.0.0"],\
+          ["@formatjs/ecma402-abstract", "npm:2.1.0"],\
+          ["@formatjs/fast-memoize", "npm:2.2.0"],\
           ["@formatjs/intl-localematcher", "npm:0.5.4"],\
           ["tslib", "npm:2.7.0"]\
         ],\
@@ -1070,23 +1071,23 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@formatjs/icu-messageformat-parser", [\
-      ["npm:2.7.8", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-messageformat-parser-npm-2.7.8-f6b64e3bd8-10c0.zip/node_modules/@formatjs/icu-messageformat-parser/",\
+      ["npm:2.7.9", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-messageformat-parser-npm-2.7.9-f350b4bb0e-10c0.zip/node_modules/@formatjs/icu-messageformat-parser/",\
         "packageDependencies": [\
-          ["@formatjs/icu-messageformat-parser", "npm:2.7.8"],\
-          ["@formatjs/ecma402-abstract", "npm:2.0.0"],\
-          ["@formatjs/icu-skeleton-parser", "npm:1.8.2"],\
+          ["@formatjs/icu-messageformat-parser", "npm:2.7.9"],\
+          ["@formatjs/ecma402-abstract", "npm:2.1.0"],\
+          ["@formatjs/icu-skeleton-parser", "npm:1.8.3"],\
           ["tslib", "npm:2.7.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@formatjs/icu-skeleton-parser", [\
-      ["npm:1.8.2", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-skeleton-parser-npm-1.8.2-de6f6f7fa4-10c0.zip/node_modules/@formatjs/icu-skeleton-parser/",\
+      ["npm:1.8.3", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-skeleton-parser-npm-1.8.3-61636de5a5-10c0.zip/node_modules/@formatjs/icu-skeleton-parser/",\
         "packageDependencies": [\
-          ["@formatjs/icu-skeleton-parser", "npm:1.8.2"],\
-          ["@formatjs/ecma402-abstract", "npm:2.0.0"],\
+          ["@formatjs/icu-skeleton-parser", "npm:1.8.3"],\
+          ["@formatjs/ecma402-abstract", "npm:2.1.0"],\
           ["tslib", "npm:2.7.0"]\
         ],\
         "linkType": "HARD"\
@@ -4145,10 +4146,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["es-iterator-helpers", [\
-      ["npm:1.0.19", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/es-iterator-helpers-npm-1.0.19-5a0b930ca7-10c0.zip/node_modules/es-iterator-helpers/",\
+      ["npm:1.1.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/es-iterator-helpers-npm-1.1.0-47deee3fe3-10c0.zip/node_modules/es-iterator-helpers/",\
         "packageDependencies": [\
-          ["es-iterator-helpers", "npm:1.0.19"],\
+          ["es-iterator-helpers", "npm:1.1.0"],\
           ["call-bind", "npm:1.0.7"],\
           ["define-properties", "npm:1.2.1"],\
           ["es-abstract", "npm:1.23.3"],\
@@ -4534,7 +4535,7 @@ const RAW_RUNTIME_STATE =
           ["axobject-query", "npm:4.1.0"],\
           ["damerau-levenshtein", "npm:1.0.8"],\
           ["emoji-regex", "npm:9.2.2"],\
-          ["es-iterator-helpers", "npm:1.0.19"],\
+          ["es-iterator-helpers", "npm:1.1.0"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["hasown", "npm:2.0.2"],\
           ["jsx-ast-utils", "npm:3.3.5"],\
@@ -4569,7 +4570,7 @@ const RAW_RUNTIME_STATE =
           ["array.prototype.flatmap", "npm:1.3.2"],\
           ["array.prototype.tosorted", "npm:1.1.4"],\
           ["doctrine", "npm:2.1.0"],\
-          ["es-iterator-helpers", "npm:1.0.19"],\
+          ["es-iterator-helpers", "npm:1.1.0"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["estraverse", "npm:5.3.0"],\
           ["hasown", "npm:2.0.2"],\
@@ -4981,10 +4982,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=141eba254c4bf24f0a2e0e5dd918dce1fe7d92d0", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-21f4e8a4e6-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=1c2a200bbfca8c718e764e73032b473ea71b06cb", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-8466473772-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=141eba254c4bf24f0a2e0e5dd918dce1fe7d92d0"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c2a200bbfca8c718e764e73032b473ea71b06cb"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5002,7 +5003,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.14"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=141eba254c4bf24f0a2e0e5dd918dce1fe7d92d0"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=1c2a200bbfca8c718e764e73032b473ea71b06cb"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=92644c46dd9b2537f314312c4008562dfc440030"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
@@ -5489,13 +5490,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["intl-messageformat", [\
-      ["npm:10.5.14", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/intl-messageformat-npm-10.5.14-0494957584-10c0.zip/node_modules/intl-messageformat/",\
+      ["npm:10.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/intl-messageformat-npm-10.6.0-35abc0f76f-10c0.zip/node_modules/intl-messageformat/",\
         "packageDependencies": [\
-          ["intl-messageformat", "npm:10.5.14"],\
-          ["@formatjs/ecma402-abstract", "npm:2.0.0"],\
+          ["intl-messageformat", "npm:10.6.0"],\
+          ["@formatjs/ecma402-abstract", "npm:2.1.0"],\
           ["@formatjs/fast-memoize", "npm:2.2.0"],\
-          ["@formatjs/icu-messageformat-parser", "npm:2.7.8"],\
+          ["@formatjs/icu-messageformat-parser", "npm:2.7.9"],\
           ["tslib", "npm:2.7.0"]\
         ],\
         "linkType": "HARD"\
@@ -9324,7 +9325,7 @@ const RAW_RUNTIME_STATE =
           ["use-intl", "virtual:1a61a537bf31336ca78cef8147387ac9192dff6cedef7199f2832d3c31b364c3089abe5682d99958198fb0eb7231d3bf42e3828ad9d26990e9c4f1502f88e534#npm:3.20.0"],\
           ["@formatjs/fast-memoize", "npm:2.2.0"],\
           ["@types/react", null],\
-          ["intl-messageformat", "npm:10.5.14"],\
+          ["intl-messageformat", "npm:10.6.0"],\
           ["react", "npm:18.3.1"]\
         ],\
         "packagePeers": [\
