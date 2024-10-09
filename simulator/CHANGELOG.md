@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Fixed
 
-- Effect of 切れた鼻緒が結んだ絆
+- Effect and type of 切れた鼻緒が結んだ絆
 
 ## 2024-10-07
 
