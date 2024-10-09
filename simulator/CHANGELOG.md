@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-09
+
+### Fixed
+
+- Effect of 切れた鼻緒が結んだ絆
+
 ## 2024-10-07
 
 ### Added
