@@ -14,9 +14,9 @@ export default class HeuristicStrategy extends StageStrategy {
     );
 
     this.goodConditionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodConditionTurns" ? 2 : 0.8;
+      idolConfig.recommendedEffect == "goodConditionTurns" ? 2 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 7 : 0.8;
+      idolConfig.recommendedEffect == "concentration" ? 5 : 0.8;
     this.goodImpressionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
@@ -50,7 +50,7 @@ export default class HeuristicStrategy extends StageStrategy {
       );
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += 10 * scoreDelta * limit;
+      score += 3 * scoreDelta * limit;
     }
 
     // Additional actions
@@ -87,13 +87,13 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       state.genki *
       Math.tanh(state.turnsRemaining / 3) *
-      0.36 *
+      0.42 *
       this.motivationMultiplier;
 
     // Good condition turns
     score +=
       Math.min(state.goodConditionTurns, state.turnsRemaining) *
-      1.2 *
+      1.6 *
       this.goodConditionTurnsMultiplier;
 
     // Perfect condition turns
@@ -104,10 +104,7 @@ export default class HeuristicStrategy extends StageStrategy {
 
     // Concentration
     score +=
-      state.concentration *
-      state.turnsRemaining *
-      0.8 *
-      this.concentrationMultiplier;
+      state.concentration * state.turnsRemaining * this.concentrationMultiplier;
 
     // Good impression turns
     score +=
@@ -146,13 +143,13 @@ export default class HeuristicStrategy extends StageStrategy {
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += state.score * 0.35;
+      score += state.score * 0.365;
     } else if (recommendedEffect == "concentration") {
-      score += state.score * 0.4;
+      score += state.score * 0.33;
     } else if (recommendedEffect == "goodImpressionTurns") {
       score += state.score * 1.1;
     } else if (recommendedEffect == "motivation") {
-      score += state.score * 0.45;
+      score += state.score * 0.475;
     } else {
       score += state.score;
     }
