@@ -107,7 +107,7 @@ function ProduceRankCalculator() {
             placeholder={t("score")}
             onChange={setActualScore}
             min={0}
-            max={1000000}
+            max={10000000}
           />
 
           {!!actualScore && (

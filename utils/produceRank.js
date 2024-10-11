@@ -68,13 +68,11 @@ export function calculateTargetScores(ratingExExamScore) {
 export function calculateActualRating(actualScore, ratingExExamScore) {
   let calcScore = actualScore;
   let actualRating = 0;
-  for (let i = 0; calcScore > 0; i++) {
-    const regimeAmount = i < 2 ? 5000 : 10000;
-    actualRating +=
-      (Math.min(calcScore, regimeAmount) *
-        Math.round((0.3 * 100) / Math.pow(2, Math.min(i, 5)))) /
-      100;
-    calcScore -= regimeAmount;
+  for (let { base, multiplier } of REVERSE_RATING_REGIMES) {
+    if (calcScore > base) {
+      actualRating += (calcScore - base) * multiplier;
+      calcScore = base;
+    }
   }
   return Math.floor(actualRating) + ratingExExamScore;
 }
