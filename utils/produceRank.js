@@ -42,7 +42,7 @@ export const REVERSE_RATING_REGIMES = [
 export function calculateRatingExExamScore(place, params, maxParams) {
   const placeParamBonus = PARAM_BONUS_BY_PLACE[place];
   const placeRating = RATING_BY_PLACE[place];
-  const paramRating = Math.floor(
+  const paramRating = Math.ceil(
     params.reduce(
       (acc, cur) => acc + Math.min(cur + placeParamBonus, maxParams),
       0
@@ -58,7 +58,7 @@ export function calculateTargetScores(ratingExExamScore) {
       if (targetRating <= threshold) continue;
       return {
         rank,
-        score: Math.floor(base + (targetRating - threshold) / multiplier),
+        score: Math.ceil(base + (targetRating - threshold) / multiplier),
       };
     }
     return { rank, score: 0 };
@@ -72,7 +72,7 @@ export function calculateActualRating(actualScore, ratingExExamScore) {
     const regimeAmount = i < 2 ? 5000 : 10000;
     actualRating +=
       (Math.min(calcScore, regimeAmount) *
-        Math.round((0.3 * 100) / Math.pow(2, i))) /
+        Math.round((0.3 * 100) / Math.pow(2, Math.min(i, 5)))) /
       100;
     calcScore -= regimeAmount;
   }
