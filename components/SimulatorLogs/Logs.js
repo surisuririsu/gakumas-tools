@@ -14,37 +14,30 @@ function Log({ line, idolId }) {
 
   if (line.logType == "diff") {
     return <Diff {...line.data} />;
-  }
-  if (line.logType == "drawCard") {
+  } else if (line.logType == "drawCard") {
     return <AddCard {...line.data} idolId={idolId} text={t("cardDrawn")} />;
-  }
-  if (line.logType == "hand") {
+  } else if (line.logType == "hand") {
     return <Hand {...line.data} idolId={idolId} />;
-  }
-  if (line.logType == "group") {
+  } else if (line.logType == "group") {
     return (
       <Group entity={line.entity} childLogs={line.childLogs} idolId={idolId} />
     );
-  }
-  if (line.logType == "startTurn") {
+  } else if (line.logType == "startTurn") {
     return <StartTurn {...line.data} />;
-  }
-  if (line.logType == "setScoreBuff") {
+  } else if (line.logType == "setScoreBuff") {
     return <SetScoreBuff {...line.data} />;
-  }
-  if (line.logType == "setEffect") {
+  } else if (line.logType == "setEffect") {
     return <Tile text={t("setEffect")} />;
-  }
-  if (line.logType == "upgradeHand") {
+  } else if (line.logType == "upgradeHand") {
     return <Tile text={t("upgradedHand")} />;
-  }
-  if (line.logType == "exchangeHand") {
+  } else if (line.logType == "exchangeHand") {
     return <Tile text={t("exchangedHand")} />;
-  }
-  if (line.logType == "addRandomUpgradedCardToHand") {
+  } else if (line.logType == "addRandomUpgradedCardToHand") {
     return (
       <AddCard {...line.data} idolId={idolId} text={t("addedCardToHand")} />
     );
+  } else if (line.logType == "upgradeRandomCardInHand") {
+    return <AddCard {...line.data} idolId={idolId} text={t("upgradedCard")} />;
   }
 }
 
