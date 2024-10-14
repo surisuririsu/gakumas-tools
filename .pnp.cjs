@@ -35,7 +35,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.14"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=c7c416745f506c9440fde879886eb7daa3d8657d"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=61d9a5d1941009d91e220bee9d595f92ac2f6ddc"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=92644c46dd9b2537f314312c4008562dfc440030"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
@@ -4982,10 +4982,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=c7c416745f506c9440fde879886eb7daa3d8657d", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-05f24a7e28-10c0.zip/node_modules/gakumas-data/",\
+      ["https://github.com/surisuririsu/gakumas-data.git#commit=61d9a5d1941009d91e220bee9d595f92ac2f6ddc", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-ba9f2f5aee-10c0.zip/node_modules/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=c7c416745f506c9440fde879886eb7daa3d8657d"]\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=61d9a5d1941009d91e220bee9d595f92ac2f6ddc"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5003,7 +5003,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.4"],\
           ["eslint", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:9.12.0"],\
           ["eslint-config-next", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:14.2.14"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=c7c416745f506c9440fde879886eb7daa3d8657d"],\
+          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=61d9a5d1941009d91e220bee9d595f92ac2f6ddc"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=92644c46dd9b2537f314312c4008562dfc440030"],\
           ["jest", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:dff0e5a4c7b1df6a2f879c5fcf9ea88aaaf0cc2d975941273c47ddc14c6b7ebfcbee96ea9149ac2d7a18ed4889dc87b0bc8565d82a74ff240f6da47446d59ec8#npm:29.7.0"],\

@@ -207,6 +207,7 @@
     "exchangedHand": "手札をすべて入れ替える",
     "setEffect": "持続効果付与",
     "addedCardToHand": "スキルカードを手札に生成",
+    "upgradedCard": "スキルカードをレッスン中強化",
     "effect": "持続効果",
     "stageEffect": "ステージ効果",
     "skillCard": "スキルカード",

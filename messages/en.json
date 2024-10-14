@@ -207,6 +207,7 @@
     "exchangedHand": "Exchanged all cards in hand",
     "setEffect": "Set effect",
     "addedCardToHand": "Added card to hand",
+    "upgradedCard": "Upgraded card",
     "effect": "Effect",
     "stageEffect": "Stage effect",
     "skillCard": "Skill card",

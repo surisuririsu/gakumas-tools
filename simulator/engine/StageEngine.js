@@ -471,6 +471,25 @@ export default class StageEngine {
     return state;
   }
 
+  _upgradeRandomCardInHand(state) {
+    let unupgradedIndices = [];
+    for (let i = 0; i < state.handCardIds.length; i++) {
+      const card = SkillCards.getById(state.handCardIds[i]);
+      if (card.type != "trouble" && !card.upgraded) {
+        unupgradedIndices.push(i);
+      }
+    }
+    if (!unupgradedIndices.length) return state;
+    const randomIndex =
+      unupgradedIndices[Math.floor(Math.random() * unupgradedIndices.length)];
+    state.handCardIds[randomIndex] += 1;
+    this.logger.log("upgradeRandomCardInHand", {
+      type: "skillCard",
+      id: state.handCardIds[randomIndex],
+    });
+    return state;
+  }
+
   _setScoreBuff(state, amount, turns) {
     const existingBuffIndex = state.scoreBuffs.findIndex(
       (scoreBuff) => scoreBuff.turns == turns
@@ -811,6 +830,8 @@ export default class StageEngine {
         state = this._exchangeHand(state);
       } else if (tokens[0] == "addRandomUpgradedCardToHand") {
         state = this._addRandomUpgradedCardToHand(state);
+      } else if (tokens[0] == "upgradeRandomCardInHand") {
+        state = this._upgradeRandomCardInHand(state);
       }
       return state;
     }
