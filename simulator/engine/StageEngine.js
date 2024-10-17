@@ -770,6 +770,8 @@ export default class StageEngine {
 
     for (let action of actions) {
       state = this._executeAction(action, state);
+      if (state.stamina < 0) state.stamina = 0;
+      if (state.stamina > state.maxStamina) state.stamina = state.maxStamina;
     }
 
     // Log changed fields
@@ -967,9 +969,6 @@ export default class StageEngine {
       for (let key of WHOLE_FIELDS) {
         state[key] = Math.ceil(state[key]);
       }
-
-      if (state.stamina < 0) state.stamina = 0;
-      if (state.stamina > state.maxStamina) state.stamina = state.maxStamina;
     } else {
       console.warn("Invalid action", action);
     }
