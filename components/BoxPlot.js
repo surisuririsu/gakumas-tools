@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useTranslations } from "next-intl";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +27,7 @@ ChartJS.register(
 );
 
 function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
+  const t = useTranslations("BoxPlot");
   const options = {
     scales: {
       x: {
@@ -41,12 +43,12 @@ function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
           label: (context) => {
             const { max, mean, median, min, q1, q3 } = context.parsed;
             return [
-              `max: ${Math.round(max)}`,
-              `q3: ${Math.round(q3)}`,
-              `mean: ${Math.round(mean)}`,
-              `median: ${Math.round(median)}`,
-              `q1: ${Math.round(q1)}`,
-              `min: ${Math.round(min)}`,
+              `${t("max")}: ${Math.round(max)}`,
+              `${t("q3")}: ${Math.round(q3)}`,
+              `${t("mean")}: ${Math.round(mean)}`,
+              `${t("median")}: ${Math.round(median)}`,
+              `${t("q1")}: ${Math.round(q1)}`,
+              `${t("min")}: ${Math.round(min)}`,
               "(k=3)",
             ];
           },
