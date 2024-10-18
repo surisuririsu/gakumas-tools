@@ -217,5 +217,13 @@
     "turnN": "{n}ターン目",
     "average": "平均値",
     "unplayable": "使用不可"
+  },
+  "BoxPlot": {
+    "max": "最大",
+    "q3": "Q3",
+    "mean": "平均",
+    "median": "中央",
+    "q1": "Q1",
+    "min": "最小"
   }
 }
