@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-18
+
+### Changed
+
+- Updated L.U.V Rinami cards and items
+
 ## 2024-10-17
 
 ### Added
