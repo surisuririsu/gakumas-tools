@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-20
+
+### Added
+
+- Preview of Kokontouzai Chochoinochoi Saki
+
 ## 2024-10-19
 
 ### Added
