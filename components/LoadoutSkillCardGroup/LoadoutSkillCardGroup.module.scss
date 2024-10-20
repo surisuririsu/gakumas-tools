@@ -29,14 +29,17 @@
 .buttonGroup {
   display: flex;
   gap: 4px;
-  opacity: 0;
-  transition: all 0.3s;
 
-  &:hover {
-    opacity: 1;
+  @media (hover: hover) {
+    opacity: 0;
+    transition: all 0.3s;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
-  @media only screen and (max-width: 600px) {
+  @media (hover: none) {
     button {
       font-size: 20px;
       display: none;
@@ -70,7 +73,7 @@
   margin-left: 4px;
   color: $gray;
 
-  @media only screen and (max-width: 600px) {
+  @media (hover: none) {
     display: flex;
   }
 }
