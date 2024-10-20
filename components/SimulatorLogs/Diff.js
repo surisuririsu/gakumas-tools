@@ -1,8 +1,7 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
+import { DEBUFF_FIELDS } from "@/simulator/engine/constants";
 import styles from "./SimulatorLogs.module.scss";
-
-const DEBUFF_FIELDS = ["doubleCostTurns", "costIncrease", "nullifyGenkiTurns"];
 
 function Diff({ field, next, prev }) {
   const t = useTranslations("stage");
@@ -13,7 +12,7 @@ function Diff({ field, next, prev }) {
   }
 
   return (
-    <div className={styles.diff}>
+    <div className={styles.tile}>
       {t(field)}{" "}
       <span className={styles[diffDir]}>
         {prev} → {next}
