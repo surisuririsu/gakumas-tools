@@ -2,6 +2,7 @@ export const DEBUFF_FIELDS = [
   "doubleCostTurns",
   "costIncrease",
   "nullifyGenkiTurns",
+  "poorConditionTurns",
 ];
 
 export const COST_FIELDS = [
@@ -19,6 +20,7 @@ export const EOT_DECREMENT_FIELDS = [
   "halfCostTurns",
   "doubleCostTurns",
   "nullifyGenkiTurns",
+  "poorConditionTurns",
 ];
 
 export const INCREASE_TRIGGER_FIELDS = [
@@ -50,6 +52,7 @@ export const LOGGED_FIELDS = [
   "doubleCardEffectCards",
   "nullifyGenkiTurns",
   "nullifyDebuff",
+  "poorConditionTurns",
 ];
 
 export const WHOLE_FIELDS = [

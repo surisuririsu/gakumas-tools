@@ -80,6 +80,7 @@ export default class StageEngine {
       doubleCardEffectCards: 0,
       nullifyGenkiTurns: 0,
       nullifyDebuff: 0,
+      poorConditionTurns: 0,
 
       // Score buffs
       scoreBuffs: [],
@@ -931,6 +932,12 @@ export default class StageEngine {
 
           // Score buff effects
           score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
+
+          // Apply poor condition
+          if (state.poorConditionTurns) {
+            score *= 0.67;
+          }
+
           score = Math.ceil(score);
 
           // Turn type multiplier

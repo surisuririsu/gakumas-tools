@@ -98,18 +98,14 @@
   }
 }
 
-.diff {
-  @extend .tile;
+.positive {
+  color: $blue;
+  font-weight: 600;
+}
 
-  .positive {
-    color: $blue;
-    font-weight: 600;
-  }
-
-  .negative {
-    color: $red;
-    font-weight: 600;
-  }
+.negative {
+  color: $red;
+  font-weight: 600;
 }
 
 .hand {

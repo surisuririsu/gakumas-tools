@@ -124,7 +124,8 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <StageSelect />
+        <StageSelect />* Season 11 preview is based only on the announced
+        p-items and criteria. Turn types are not yet known.
         <div className={styles.supportBonusInput}>
           <label>{t("supportBonus")}</label>
           <Input
@@ -185,7 +186,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-10-18
+            {t("lastUpdated")}: 2024-10-20
           </a>
         </div>
       </div>
