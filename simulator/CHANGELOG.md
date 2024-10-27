@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-27
+
+### Added
+
+- Preview of support p-items from Chochoinochoi gacha
+
 ## 2024-10-20
 
 ### Added
