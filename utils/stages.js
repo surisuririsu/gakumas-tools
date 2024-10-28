@@ -11,6 +11,7 @@ export function formatStageName(stage, t) {
     stageName = t("eventStageName", {
       name: stage.name,
       stage: stage.stage,
+      season: stage.season,
     });
   }
   return stageName;

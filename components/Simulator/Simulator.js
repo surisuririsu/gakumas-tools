@@ -129,16 +129,21 @@ export default function Simulator() {
           * Season 12 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
         </> */}
-        <div className={styles.supportBonusInput}>
-          <label>{t("supportBonus")}</label>
-          <Input
-            type="number"
-            value={parseFloat(((loadout.supportBonus || 0) * 100).toFixed(2))}
-            onChange={(value) =>
-              setSupportBonus(parseFloat((value / 100).toFixed(4)))
-            }
-          />
-        </div>
+        {stage.type == "event" ? (
+          t("enterPercents")
+        ) : (
+          <div className={styles.supportBonusInput}>
+            <label>{t("supportBonus")}</label>
+            <Input
+              type="number"
+              value={parseFloat(((loadout.supportBonus || 0) * 100).toFixed(2))}
+              onChange={(value) =>
+                setSupportBonus(parseFloat((value / 100).toFixed(4)))
+              }
+            />
+          </div>
+        )}
+
         <div className={styles.params}>
           <ParametersInput
             parameters={loadout.params}

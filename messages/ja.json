@@ -133,6 +133,7 @@
   },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
+    "enterPercents": "計算式が解明されていないため、スコアボーナスの%を入力してください。",
     "simulate": "実行",
     "lastUpdated": "最終更新"
   },
@@ -146,7 +147,7 @@
   },
   "StageSummary": {
     "contestStageName": "シーズン{season} ステージ{stage}",
-    "eventStageName": "{name} ステージ{stage}",
+    "eventStageName": "{name} ステージ{stage} {season}周目",
     "custom": "カスタム"
   },
   "StageCustomizer": {
