@@ -139,11 +139,17 @@
   "StageSelect": {
     "placeholder": "ステージ選択"
   },
-  "StageSummary": {
-    "stageName": "シーズン{season} ステージ{stage}",
+  "StageSelectModal": {
+    "contest": "コンテスト",
+    "event": "イベント",
     "custom": "カスタム"
   },
-  "StageCustomizerModal": {
+  "StageSummary": {
+    "contestStageName": "シーズン{season} ステージ{stage}",
+    "eventStageName": "{name} ステージ{stage}",
+    "custom": "カスタム"
+  },
+  "StageCustomizer": {
     "turnCounts": "ターン数",
     "firstTurn": "初手ターン率",
     "criteria": "審査基準",

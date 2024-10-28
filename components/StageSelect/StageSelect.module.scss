@@ -1,34 +1,32 @@
 @import "@/constants";
 
 .stageSelect {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 14px;
+  color: $gray-dark;
+  font-weight: 600;
 }
 
-.select {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 8px transparentize($black, 0.75);
-  border-radius: 4px;
-  padding: 4px;
-
-  button {
-    height: 32px;
-    gap: 6px;
-    padding: 6px;
-    color: $gray-dark;
-    font-weight: 600;
-  }
+.typeSelect {
+  margin-bottom: 16px;
 }
 
-.options {
-  max-height: 200px;
+.stageList {
+  max-height: 400px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+}
+
+.option {
+  gap: 6px;
+  padding: 12px;
+  color: $gray-dark;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $gk-orange-extra-light;
+    color: $gk-red-orange;
+  }
 }
 
 .status {
@@ -53,13 +51,4 @@
 
 .placeholder {
   flex: 1;
-}
-
-.option {
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: $gk-orange-extra-light;
-    color: $gk-red-orange;
-  }
 }

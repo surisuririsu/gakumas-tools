@@ -5,6 +5,7 @@ export const BUCKET_SIZE = 1000;
 export const MAX_WORKERS = 8;
 export const FALLBACK_STAGE = {
   id: "custom",
+  type: "custom",
   plan: "free",
   turnCounts: { vocal: 4, dance: 4, visual: 4 },
   firstTurns: {
