@@ -18,9 +18,9 @@ export default function StageSelectModal() {
   const t = useTranslations("StageSelectModal");
 
   const STAGE_TYPE_OPTIONS = [
-    { value: "contest", label: "Contest" },
-    { value: "event", label: "Event" },
-    { value: "custom", label: "Custom" },
+    { value: "contest", label: t("contest") },
+    { value: "event", label: t("event") },
+    { value: "custom", label: t("custom") },
   ];
 
   const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
