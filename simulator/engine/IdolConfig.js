@@ -41,15 +41,15 @@ export default class IdolConfig {
 
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
 
-    let defaultCards = [];
-    if (stage.type == "event") {
-      defaultCards =
+    this.defaultCards = [];
+    if (stage.type == "event" && this.recommendedEffect) {
+      this.defaultCards =
         EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT[this.recommendedEffect];
     } else {
-      defaultCards = CONTEST_DEFAULT_CARDS_BY_PLAN[this.plan];
+      this.defaultCards = CONTEST_DEFAULT_CARDS_BY_PLAN[this.plan];
     }
     this.skillCardIds = this.getDedupedSkillCardIds(
-      skillCardIds.concat(defaultCards)
+      skillCardIds.concat(this.defaultCards)
     );
   }
 
