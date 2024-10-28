@@ -173,7 +173,7 @@ export default function Simulator() {
             idolId={idolConfig.idolId}
           />
         ))}
-        <SimulatorSubTools plan={idolConfig.plan} />
+        <SimulatorSubTools idolConfig={idolConfig} />
         <SimulatorButtons />
         <select
           className={styles.strategySelect}

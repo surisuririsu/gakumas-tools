@@ -7,7 +7,7 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import c from "@/utils/classNames";
 import styles from "./Simulator.module.scss";
 
-function SimulatorSubTools({ plan }) {
+function SimulatorSubTools({ idolConfig }) {
   const t = useTranslations("SimulatorSubTools");
 
   const { loadoutHistory } = useContext(LoadoutContext);
@@ -39,7 +39,9 @@ function SimulatorSubTools({ plan }) {
 
       {activeSubTool == "costRanges" && <CostRanges />}
       {activeSubTool == "history" && <LoadoutHistory />}
-      {activeSubTool == "defaultCards" && <DefaultCards plan={plan} />}
+      {activeSubTool == "defaultCards" && (
+        <DefaultCards idolConfig={idolConfig} />
+      )}
     </>
   );
 }
