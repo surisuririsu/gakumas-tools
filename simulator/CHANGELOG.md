@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of support p-items from Chochoinochoi gacha
+- 古今東西ちょちょいのちょい Saki and supports
 
 ## 2024-10-20
 

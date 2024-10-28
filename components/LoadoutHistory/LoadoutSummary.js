@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { PItems, SkillCards, Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import { FALLBACK_STAGE } from "@/simulator/constants";
+import { formatStageName } from "@/utils/stages";
 import styles from "./LoadoutHistory.module.scss";
 
 function LoadoutSummary({ loadout, setLoadout }) {
@@ -41,11 +42,7 @@ function LoadoutSummary({ loadout, setLoadout }) {
               draggable={false}
             />
           ))}
-        <span className={styles.stage}>
-          {stage.id == "custom"
-            ? t("custom")
-            : t("stageName", { season: stage.season, stage: stage.stage })}
-        </span>
+        <span className={styles.stage}>{formatStageName(stage, t)}</span>
       </div>
       <div className={styles.cards}>
         {skillCardIdGroups.map((group, j) => (

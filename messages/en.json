@@ -139,11 +139,17 @@
   "StageSelect": {
     "placeholder": "Select stage"
   },
-  "StageSummary": {
-    "stageName": "Season {season} - Stage {stage}",
+  "StageSelectModal": {
+    "contest": "Contest",
+    "event": "Event",
     "custom": "Custom"
   },
-  "StageCustomizerModal": {
+  "StageSummary": {
+    "contestStageName": "Season {season} - Stage {stage}",
+    "eventStageName": "{name} - Stage {stage}",
+    "custom": "Custom"
+  },
+  "StageCustomizer": {
     "turnCounts": "Turn counts",
     "firstTurn": "First turn rate",
     "criteria": "Criteria",
