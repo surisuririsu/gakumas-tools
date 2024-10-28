@@ -8,7 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Added
 
 - 古今東西ちょちょいのちょい Saki and supports
-- Round 1 of stages in animate event
+- Animate event stages
 
 ### Fixed
 
