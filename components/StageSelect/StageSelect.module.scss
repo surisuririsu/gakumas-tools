@@ -16,7 +16,12 @@
   overflow-y: auto;
 }
 
+.customizer {
+  overflow-y: auto;
+}
+
 .option {
+  flex-wrap: wrap;
   gap: 6px;
   padding: 12px;
   color: $gray-dark;
