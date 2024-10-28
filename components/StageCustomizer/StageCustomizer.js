@@ -7,6 +7,7 @@ import {
 import Button from "@/components/Button";
 import ParametersInput from "@/components/ParametersInput";
 import styles from "./StageCustomizer.module.scss";
+import ButtonGroup from "../ButtonGroup";
 
 function normalizeCriteria(criteria) {
   const nums = criteria.map((c) => c || 0);
@@ -42,6 +43,14 @@ function StageCustomizer({ initialStage, onApply }) {
   const [effects, setEffects] = useState(
     serializeEffectSequence(initialStage.effects)
   );
+  const [defaultCardSet, setDefaultCardSet] = useState(
+    initialStage.defaultCardSet || initialStage.type
+  );
+
+  const DEFAULT_CARD_SET_OPTIONS = [
+    { value: "contest", label: t("contest") },
+    { value: "event", label: t("event") },
+  ];
 
   function apply() {
     onApply({
@@ -56,6 +65,7 @@ function StageCustomizer({ initialStage, onApply }) {
       firstTurns: normalizeFirstTurns(firstTurns),
       criteria: normalizeCriteria(criteria),
       effects: deserializeEffectSequence(effects.replace(/\s/g, "")),
+      defaultCardSet,
     });
   }
 
@@ -98,7 +108,14 @@ function StageCustomizer({ initialStage, onApply }) {
         </a>
       </div>
 
-      <Button style="primary" onClick={apply}>
+      <label>{t("defaultCards")}</label>
+      <ButtonGroup
+        selected={defaultCardSet}
+        options={DEFAULT_CARD_SET_OPTIONS}
+        onChange={setDefaultCardSet}
+      />
+
+      <Button className={styles.apply} style="primary" onClick={apply}>
         {t("apply")}
       </Button>
     </div>

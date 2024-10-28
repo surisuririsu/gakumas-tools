@@ -156,6 +156,9 @@
     "criteria": "審査基準",
     "effects": "ステージ効果",
     "effectFormat": "効果形式",
+    "defaultCards": "基本カード",
+    "contest": "コンテスト",
+    "event": "イベント",
     "apply": "適用"
   },
   "LoadoutSkillCardGroup": {

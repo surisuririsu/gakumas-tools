@@ -42,7 +42,8 @@ export default class IdolConfig {
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
 
     this.defaultCards = [];
-    if (stage.type == "event" && this.recommendedEffect) {
+    const defaultCardSet = stage.defaultCardSet || stage.type;
+    if (defaultCardSet == "event" && this.recommendedEffect) {
       this.defaultCards =
         EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT[this.recommendedEffect];
     } else {

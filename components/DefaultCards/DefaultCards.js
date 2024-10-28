@@ -3,8 +3,8 @@ import Image from "next/image";
 import { SkillCards } from "gakumas-data";
 import styles from "./DefaultCards.module.scss";
 
-function DefaultCards({ idolConfig }) {
-  const defaultCards = idolConfig.defaultCards.map(SkillCards.getById);
+function DefaultCards({ skillCardIds }) {
+  const defaultCards = skillCardIds.map(SkillCards.getById);
 
   return (
     <div className={styles.list}>

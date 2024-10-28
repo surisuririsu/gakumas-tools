@@ -40,7 +40,7 @@ function SimulatorSubTools({ idolConfig }) {
       {activeSubTool == "costRanges" && <CostRanges />}
       {activeSubTool == "history" && <LoadoutHistory />}
       {activeSubTool == "defaultCards" && (
-        <DefaultCards idolConfig={idolConfig} />
+        <DefaultCards skillCardIds={idolConfig.defaultCards} />
       )}
     </>
   );
