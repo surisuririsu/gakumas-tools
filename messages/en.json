@@ -147,7 +147,7 @@
   },
   "StageSummary": {
     "contestStageName": "Season {season} - Stage {stage}",
-    "eventStageName": "{name} - Stage {stage} - Round {season}",
+    "eventStageName": "{name} - Stage {stage} - Round {round}",
     "custom": "Custom"
   },
   "StageCustomizer": {

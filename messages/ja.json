@@ -147,7 +147,7 @@
   },
   "StageSummary": {
     "contestStageName": "シーズン{season} ステージ{stage}",
-    "eventStageName": "{name} ステージ{stage} {season}周目",
+    "eventStageName": "{name} ステージ{stage} {round}周目",
     "custom": "カスタム"
   },
   "StageCustomizer": {
