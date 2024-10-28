@@ -41,7 +41,7 @@ function StageCustomizer({ initialStage, onApply }) {
     Object.values(initialStage.criteria)
   );
   const [effects, setEffects] = useState(
-    serializeEffectSequence(initialStage.effects)
+    serializeEffectSequence(initialStage.effects).replaceAll(";", ";\n")
   );
   const [defaultCardSet, setDefaultCardSet] = useState(
     initialStage.defaultCardSet || initialStage.type
