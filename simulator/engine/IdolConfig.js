@@ -1,8 +1,15 @@
 import { PIdols, PItems, SkillCards } from "gakumas-data/lite";
 
-const DEFAULT_CARDS_BY_PLAN = {
+const CONTEST_DEFAULT_CARDS_BY_PLAN = {
   sense: [5, 7, 1, 1, 15, 15, 17, 17],
   logic: [9, 11, 19, 19, 21, 21, 13, 13],
+};
+
+const EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT = {
+  goodConditionTurns: [15, 15, 5, 1, 1, 3, 13, 13],
+  concentration: [17, 17, 7, 1, 1, 3, 13, 13],
+  goodImpressionTurns: [19, 19, 9, 1, 1, 3, 13, 13],
+  motivation: [21, 21, 11, 1, 1, 3, 13, 13],
 };
 
 export default class IdolConfig {
@@ -33,8 +40,16 @@ export default class IdolConfig {
     );
 
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
+
+    let defaultCards = [];
+    if (stage.type == "event") {
+      defaultCards =
+        EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT[this.recommendedEffect];
+    } else {
+      defaultCards = CONTEST_DEFAULT_CARDS_BY_PLAN[this.plan];
+    }
     this.skillCardIds = this.getDedupedSkillCardIds(
-      skillCardIds.concat(DEFAULT_CARDS_BY_PLAN[this.plan])
+      skillCardIds.concat(defaultCards)
     );
   }
 
