@@ -133,6 +133,7 @@
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
+    "enterPercents": "Since the score multiplier calculation is unknown, please enter the multipliers (%) directly.",
     "simulate": "Simulate",
     "lastUpdated": "Last updated"
   },
@@ -146,7 +147,7 @@
   },
   "StageSummary": {
     "contestStageName": "Season {season} - Stage {stage}",
-    "eventStageName": "{name} - Stage {stage}",
+    "eventStageName": "{name} - Stage {stage} - Round {season}",
     "custom": "Custom"
   },
   "StageCustomizer": {

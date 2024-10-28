@@ -26,6 +26,7 @@ export default class IdolConfig {
     this.params = { vocal, dance, visual, stamina };
     this.supportBonus = supportBonus || 0;
     this.typeMultipliers = this.getTypeMultipliers(
+      stage.type,
       this.params,
       this.supportBonus,
       stage.criteria
@@ -71,7 +72,15 @@ export default class IdolConfig {
     return null;
   }
 
-  getTypeMultipliers(params, supportBonus, criteria) {
+  getTypeMultipliers(stageType, params, supportBonus, criteria) {
+    if (stageType == "event") {
+      return {
+        vocal: params.vocal / 100,
+        dance: params.dance / 100,
+        visual: params.visual / 100,
+      };
+    }
+
     let multipliers = {};
 
     for (let key of Object.keys(criteria)) {

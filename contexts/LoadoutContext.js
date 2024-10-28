@@ -173,13 +173,15 @@ export function LoadoutContextProvider({ children }) {
     stage = customStage;
   } else if (stageId) {
     stage = Stages.getById(stageId);
-    kafeUrl = generateKafeUrl(
-      stage,
-      supportBonus,
-      params,
-      pItemIds,
-      skillCardIdGroups
-    );
+    if (stage.type == "contest") {
+      kafeUrl = generateKafeUrl(
+        stage,
+        supportBonus,
+        params,
+        pItemIds,
+        skillCardIdGroups
+      );
+    }
   }
 
   const loadout = {

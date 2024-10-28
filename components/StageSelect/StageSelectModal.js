@@ -19,7 +19,7 @@ export default function StageSelectModal() {
 
   const STAGE_TYPE_OPTIONS = [
     { value: "contest", label: "Contest" },
-    // { value: "event", label: "Event" },
+    { value: "event", label: "Event" },
     { value: "custom", label: "Custom" },
   ];
 
