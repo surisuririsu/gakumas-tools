@@ -10,6 +10,10 @@ Dates are based on Eastern Time Zone.
 - 古今東西ちょちょいのちょい Saki and supports
 - Round 1 of stages in animate event
 
+### Fixed
+
+- Default cards in animate event
+
 ## 2024-10-20
 
 ### Added
