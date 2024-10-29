@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/Image";
 import styles from "./Error.module.scss";
 
 export default function Error({ code }) {

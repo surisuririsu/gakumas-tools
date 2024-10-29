@@ -1,9 +1,9 @@
 import { memo, useMemo } from "react";
-import Image from "next/image";
-import { PItems, SkillCards } from "gakumas-data";
 import { PIdols } from "gakumas-data/lite";
+import Image from "@/components/Image";
 import PIdol from "@/components/PIdol";
 import { calculateContestPower } from "@/utils/contestPower";
+import { PItems, SkillCards } from "@/utils/data";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
 
@@ -40,6 +40,7 @@ function MemorySummary({ memory, picking, onClick }) {
               key={i}
               src={pItem.getIcon()}
               width={35}
+              height={35}
               alt={pItem.name}
               draggable={false}
             />

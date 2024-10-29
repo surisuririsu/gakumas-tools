@@ -1,7 +1,7 @@
 import { memo } from "react";
-import Image from "next/image";
-import { SkillCards } from "gakumas-data";
+import Image from "@/components/Image";
 import { calculateSkillCardCost } from "@/utils/contestPower";
+import { SkillCards } from "@/utils/data";
 import styles from "./MemoryCalculator.module.scss";
 
 function MemoryCalculatorResult({ skillCardIds, probability, idolId, style }) {
