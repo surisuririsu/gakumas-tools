@@ -1,6 +1,6 @@
 import { memo } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
+import Image from "@/components/Image";
 import { formatStageName } from "@/utils/stages";
 import styles from "./StageSelect.module.scss";
 

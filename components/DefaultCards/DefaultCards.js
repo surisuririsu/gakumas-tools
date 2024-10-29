@@ -1,6 +1,6 @@
 import { memo } from "react";
-import Image from "next/image";
-import { SkillCards } from "gakumas-data";
+import Image from "@/components/Image";
+import { SkillCards } from "@/utils/data";
 import styles from "./DefaultCards.module.scss";
 
 function DefaultCards({ skillCardIds }) {
