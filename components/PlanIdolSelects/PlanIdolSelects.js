@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { Idols } from "gakumas-data";
 import IconSelect from "@/components/IconSelect";
+import { Idols } from "@/utils/data";
 import { PLANS } from "@/utils/plans";
 import styles from "./PlanIdolSelects.module.scss";
 

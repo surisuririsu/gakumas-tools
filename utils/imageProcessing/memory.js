@@ -1,6 +1,6 @@
 import { getImageProps } from "next/image";
-import { PItems, SkillCards } from "gakumas-data";
 import { Idols, PIdols } from "gakumas-data/lite";
+import { PItems, SkillCards } from "@/utils/data";
 import {
   DEBUG,
   getGameRegion,
@@ -111,7 +111,7 @@ export async function getEntityImageData(entityData, idolId) {
       (entity) =>
         new Promise((resolve) => {
           const entImg = new Image();
-          const icon = entity.getIcon(idolId);
+          const icon = entity._getIcon(idolId);
           entImg.src = getImageProps({
             ...icon,
             width: COMP_SIZE,

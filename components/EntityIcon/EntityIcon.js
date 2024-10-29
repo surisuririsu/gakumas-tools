@@ -1,5 +1,5 @@
 import { memo } from "react";
-import Image from "next/image";
+import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./EntityIcon.module.scss";

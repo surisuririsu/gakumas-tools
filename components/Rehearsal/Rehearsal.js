@@ -7,11 +7,11 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Image from "next/image";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
+import Image from "@/components/Image";
 import { getScoresFromFile } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";

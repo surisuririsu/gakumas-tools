@@ -1,6 +1,6 @@
 import { memo } from "react";
-import Image from "next/image";
-import { PIdols } from "gakumas-data";
+import Image from "@/components/Image";
+import { PIdols } from "@/utils/data";
 import styles from "./PIdol.module.scss";
 
 function PIdol({ pIdolId }) {
