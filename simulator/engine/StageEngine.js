@@ -882,7 +882,7 @@ export default class StageEngine {
         if (state.doubleCostTurns) {
           cost *= 2;
         }
-        cost = Math.ceil(cost);
+        cost = Math.floor(cost);
         cost += state.costReduction;
         cost -= state.costIncrease;
         cost = Math.min(cost, 0);
@@ -902,7 +902,7 @@ export default class StageEngine {
         if (state.doubleCostTurns) {
           stamina *= 2;
         }
-        stamina = Math.ceil(stamina);
+        stamina = Math.floor(stamina);
         if (stamina <= 0) {
           stamina += state.costReduction;
           stamina -= state.costIncrease;
