@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-10-29
+
+### Fixed
+
+- Round stamina numbers down (i.e. round consumed stamina up) when applying half cost
+
 ## 2024-10-27
 
 ### Added
