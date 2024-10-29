@@ -1,9 +1,9 @@
 import React, { memo, useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data";
+import Image from "@/components/Image";
 import c from "@/utils/classNames";
+import { SkillCards } from "@/utils/data";
 import styles from "./SimulatorLogs.module.scss";
 
 function HandState({ state }) {

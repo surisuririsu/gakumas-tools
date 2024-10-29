@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "@/utils/data";
 
 export const EntityTypes = {
   P_ITEM: "P_ITEM",

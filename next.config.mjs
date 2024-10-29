@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: "cdn.discordapp.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "gkimg.ris.moe",
+        port: "",
+      },
     ],
   },
   webpack: (config, { dev, isServer }) => {

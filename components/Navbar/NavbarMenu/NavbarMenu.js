@@ -1,11 +1,11 @@
 "use client";
 import { memo, useState } from "react";
-import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
+import Image from "@/components/Image";
 import { Link, usePathname } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./NavbarMenu.module.scss";

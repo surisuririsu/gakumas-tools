@@ -1,6 +1,6 @@
 import { memo } from "react";
-import Image from "next/image";
 import { FaRegRectangleList } from "react-icons/fa6";
+import Image from "@/components/Image";
 import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./EntityDetails.module.scss";
 

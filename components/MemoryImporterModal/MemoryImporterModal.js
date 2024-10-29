@@ -1,8 +1,8 @@
 "use client";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { FaCheck } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
+import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import {
   getSignatureSkillCardsImageData,

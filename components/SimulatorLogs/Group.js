@@ -1,7 +1,7 @@
 import { memo } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { PItems, SkillCards } from "gakumas-data";
+import Image from "@/components/Image";
+import { PItems, SkillCards } from "@/utils/data";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
 
