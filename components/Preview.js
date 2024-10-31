@@ -57,7 +57,7 @@ export default function Preview({
             <div key={index} style={styles.item}>
               {item && (
                 <img
-                  src={`${baseUrl}${item.getIcon().src}`}
+                  src={`${baseUrl}${item._getIcon().src}`}
                   width={48}
                   height={48}
                 />
@@ -76,7 +76,7 @@ export default function Preview({
                 <div key={index} style={styles.card}>
                   {card && (
                     <img
-                      src={`${baseUrl}${card.getIcon().src}`}
+                      src={`${baseUrl}${card._getIcon().src}`}
                       width={68}
                       height={68}
                     />
