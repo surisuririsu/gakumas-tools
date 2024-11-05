@@ -3,9 +3,17 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-05
+
+### Added
+
+- Select pickup gacha preview
+
 ## 2024-10-30
 
-- Add contest season 12 preview
+### Added
+
+- Contest season 12 preview
 
 ## 2024-10-29
 
