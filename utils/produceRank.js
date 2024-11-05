@@ -42,7 +42,7 @@ export const REVERSE_RATING_REGIMES = [
 export function calculateRatingExExamScore(place, params, maxParams) {
   const placeParamBonus = PARAM_BONUS_BY_PLACE[place];
   const placeRating = RATING_BY_PLACE[place];
-  const paramRating = Math.ceil(
+  const paramRating = Math.floor(
     params.reduce(
       (acc, cur) => acc + Math.min(cur + placeParamBonus, maxParams),
       0
