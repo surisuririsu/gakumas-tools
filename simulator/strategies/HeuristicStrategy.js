@@ -21,6 +21,8 @@ export default class HeuristicStrategy extends StageStrategy {
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       idolConfig.recommendedEffect == "motivation" ? 4 : 1;
+
+    this.depth = 0;
   }
 
   scaleScore(score) {
@@ -32,6 +34,7 @@ export default class HeuristicStrategy extends StageStrategy {
       return -Infinity;
     }
     const previewState = this.engine.useCard(state, cardId);
+    this.depth++;
 
     let score = 0;
 
@@ -50,15 +53,19 @@ export default class HeuristicStrategy extends StageStrategy {
       );
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += 3 * scoreDelta * limit;
+      score += scoreDelta * limit;
     }
 
     // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining) {
+    if (previewState.turnsRemaining >= state.turnsRemaining && this.depth < 3) {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
+      this.depth--;
       if (filteredScores.length) {
-        return this.scaleScore(score) + Math.max(...filteredScores);
+        return score + Math.max(...filteredScores);
+      } else {
+        const skipState = this.engine.endTurn(previewState);
+        return score + this.getStateScore(skipState);
       }
     }
 
@@ -71,7 +78,8 @@ export default class HeuristicStrategy extends StageStrategy {
 
     score += this.getStateScore(previewState);
 
-    return Math.floor(score);
+    this.depth--;
+    return Math.round(score);
   }
 
   getStateScore(state) {
@@ -133,7 +141,7 @@ export default class HeuristicStrategy extends StageStrategy {
     score += state.costReduction * state.turnsRemaining * 0.5;
 
     // Double card effect cards
-    score += state.doubleCardEffectCards * 9;
+    score += state.doubleCardEffectCards * 50;
 
     // Nullify genki turns
     score += state.nullifyGenkiTurns * -9;
@@ -143,17 +151,17 @@ export default class HeuristicStrategy extends StageStrategy {
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += state.score * 0.365;
+      score += state.score * 0.35;
     } else if (recommendedEffect == "concentration") {
-      score += state.score * 0.33;
+      score += state.score * 0.6;
     } else if (recommendedEffect == "goodImpressionTurns") {
       score += state.score * 1.1;
     } else if (recommendedEffect == "motivation") {
-      score += state.score * 0.475;
+      score += state.score * 0.45;
     } else {
       score += state.score;
     }
 
-    return score;
+    return Math.round(score);
   }
 }
