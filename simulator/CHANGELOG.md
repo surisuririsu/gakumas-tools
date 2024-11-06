@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Select pickup gacha preview
+- Select pickup gacha skill cards (Hokahoka Yakiimo, Kou kai......?)
 
 ## 2024-10-30
 
