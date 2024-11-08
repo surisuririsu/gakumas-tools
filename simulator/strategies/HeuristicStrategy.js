@@ -21,8 +21,6 @@ export default class HeuristicStrategy extends StageStrategy {
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       idolConfig.recommendedEffect == "motivation" ? 4 : 1;
-
-    this.depth = 0;
   }
 
   scaleScore(score) {
@@ -34,7 +32,6 @@ export default class HeuristicStrategy extends StageStrategy {
       return -Infinity;
     }
     const previewState = this.engine.useCard(state, cardId);
-    this.depth++;
 
     let score = 0;
 
@@ -53,14 +50,13 @@ export default class HeuristicStrategy extends StageStrategy {
       );
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += scoreDelta * limit;
+      score += 3 * scoreDelta * limit;
     }
 
     // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining && this.depth < 3) {
+    if (previewState.turnsRemaining >= state.turnsRemaining) {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
-      this.depth--;
       if (filteredScores.length) {
         return score + Math.max(...filteredScores);
       } else {
@@ -78,7 +74,6 @@ export default class HeuristicStrategy extends StageStrategy {
 
     score += this.getStateScore(previewState);
 
-    this.depth--;
     return Math.round(score);
   }
 
@@ -146,18 +141,21 @@ export default class HeuristicStrategy extends StageStrategy {
     // Nullify genki turns
     score += state.nullifyGenkiTurns * -9;
 
+    // Turn cards upgraded
+    score += state.turnCardsUpgraded * 20;
+
     // Scale score
     score = this.scaleScore(score);
 
     const { recommendedEffect } = this.engine.idolConfig;
     if (recommendedEffect == "goodConditionTurns") {
-      score += state.score * 0.35;
+      score += state.score * 0.4;
     } else if (recommendedEffect == "concentration") {
       score += state.score * 0.6;
     } else if (recommendedEffect == "goodImpressionTurns") {
-      score += state.score * 1.1;
+      score += state.score * 0.8;
     } else if (recommendedEffect == "motivation") {
-      score += state.score * 0.45;
+      score += state.score * 0.6;
     } else {
       score += state.score;
     }

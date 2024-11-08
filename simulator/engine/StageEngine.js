@@ -62,6 +62,7 @@ export default class StageEngine {
       removedCardIds: [],
       cardsUsed: 0,
       turnCardsUsed: 0,
+      turnCardsUpgraded: 0,
 
       // Phase effects
       effects: [],
@@ -351,6 +352,7 @@ export default class StageEngine {
     // Reset one turn buffs
     state.cardUsesRemaining = 0;
     state.turnCardsUsed = 0;
+    state.turnCardsUpgraded = 0;
 
     // Decrement effect ttl and expire
     for (let i = 0; i < state.effects.length; i++) {
@@ -439,6 +441,7 @@ export default class StageEngine {
       const card = SkillCards.getById(state.handCardIds[i]);
       if (!card.upgraded && card.type != "trouble") {
         state.handCardIds[i] += 1;
+        state.turnCardsUpgraded++;
       }
     }
     this.logger.log("upgradeHand");
@@ -484,6 +487,7 @@ export default class StageEngine {
     const randomIndex =
       unupgradedIndices[Math.floor(Math.random() * unupgradedIndices.length)];
     state.handCardIds[randomIndex] += 1;
+    state.turnCardsUpgraded++;
     this.logger.log("upgradeRandomCardInHand", {
       type: "skillCard",
       id: state.handCardIds[randomIndex],
