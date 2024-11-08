@@ -10,7 +10,7 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   padding: 16px;
   overflow: auto;
 }
@@ -76,10 +76,11 @@
   display: flex;
   align-items: stretch;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 4px;
 
-  button {
-    min-width: 60px;
+  button,
+  a {
+    padding: 8px;
   }
 }
 
