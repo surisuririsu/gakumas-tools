@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-08
+
+### Changed
+
+- Adjusted simulator strategy to improve accuracy. (remove action depth limit, include card upgrade effect in evaluation, adjust weighting of score and continuous effects)
+
 ## 2024-11-06
 
 ### Changed
