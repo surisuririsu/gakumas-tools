@@ -19,7 +19,7 @@ import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
 import { generateDefaultMetadata } from "@/utils/metadata";
 import styles from "./layout.module.scss";
-import "./globals.scss";
+import "../globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
