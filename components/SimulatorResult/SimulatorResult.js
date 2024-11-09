@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
+import KofiAd from "../KofiAd";
 
 function SimulatorResult({ data, idolId }) {
   const t = useTranslations("SimulatorResult");
@@ -37,6 +38,8 @@ function SimulatorResult({ data, idolId }) {
         maxRun={data.maxRun}
         idolId={idolId}
       />
+
+      <KofiAd />
     </div>
   );
 }
