@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import { FaCheck, FaDownload } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
@@ -20,6 +21,8 @@ import KofiAd from "../KofiAd";
 const MAX_WORKERS = 8;
 
 function Rehearsal() {
+  const t = useTranslations("Rehearsal");
+
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const [data, setData] = useState([]);
@@ -107,28 +110,25 @@ function Rehearsal() {
           alt=""
         />
         <p>
-          Add screenshots of the rehearsal result screen to parse scores from.
+          {t("addScreenshots")}
           <br />
           <br />
-          Accuracy is not guaranteed. It is recommended to manually verify the
-          results by comparing with your screenshots.
+          {t("accuracyNotGuaranteed")}
         </p>
       </div>
-      <div>
-        <input
-          className={styles.files}
-          type="file"
-          id="input"
-          multiple
-          onChange={handleFiles}
-        />
+      <input
+        className={styles.files}
+        type="file"
+        id="input"
+        multiple
+        onChange={handleFiles}
+      />
 
-        {progress != null && (
-          <div className={styles.progress}>
-            Progress: {progress}/{total} {progress == total && <FaCheck />}
-          </div>
-        )}
-      </div>
+      {progress != null && (
+        <div className={styles.progress}>
+          Progress: {progress}/{total} {progress == total && <FaCheck />}
+        </div>
+      )}
 
       {!!data.length && (
         <>
