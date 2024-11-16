@@ -3,6 +3,7 @@ export const DEBUFF_FIELDS = [
   "costIncrease",
   "nullifyGenkiTurns",
   "poorConditionTurns",
+  "lockStanceTurns",
 ];
 
 export const COST_FIELDS = [
@@ -48,6 +49,7 @@ export const LOGGED_FIELDS = [
   "motivation",
   "enthusiasm",
   "fullPowerCharge",
+  "lockStanceTurns",
   "halfCostTurns",
   "doubleCostTurns",
   "costReduction",
@@ -56,6 +58,7 @@ export const LOGGED_FIELDS = [
   "nullifyGenkiTurns",
   "nullifyDebuff",
   "poorConditionTurns",
+  "nullifyCostCards",
   "turnsRemaining",
   "cardUsesRemaining",
 ];
