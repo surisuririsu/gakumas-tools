@@ -11,12 +11,14 @@ export const COST_FIELDS = [
   "concentration",
   "goodImpressionTurns",
   "motivation",
+  "fullPowerCharge",
 ];
 
 export const EOT_DECREMENT_FIELDS = [
   "goodConditionTurns",
   "perfectConditionTurns",
   "goodImpressionTurns",
+  "lockStanceTurns",
   "halfCostTurns",
   "doubleCostTurns",
   "nullifyGenkiTurns",
@@ -35,16 +37,17 @@ export const DECREASE_TRIGGER_FIELDS = ["stamina"];
 export const UNFRESH_PHASES = ["startOfTurn", "everyTurn"];
 
 export const LOGGED_FIELDS = [
-  "turnsRemaining",
-  "cardUsesRemaining",
   "stamina",
   "genki",
+  "stance",
   "score",
   "goodConditionTurns",
   "perfectConditionTurns",
   "concentration",
   "goodImpressionTurns",
   "motivation",
+  "enthusiasm",
+  "fullPowerCharge",
   "halfCostTurns",
   "doubleCostTurns",
   "costReduction",
@@ -53,6 +56,8 @@ export const LOGGED_FIELDS = [
   "nullifyGenkiTurns",
   "nullifyDebuff",
   "poorConditionTurns",
+  "turnsRemaining",
+  "cardUsesRemaining",
 ];
 
 export const WHOLE_FIELDS = [

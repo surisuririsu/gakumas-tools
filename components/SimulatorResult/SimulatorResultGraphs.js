@@ -16,7 +16,7 @@ const HISTOGRAM = <AiOutlineBarChart />;
 const BOXPLOT = <AiOutlineBoxPlot />;
 const AREA = <AiOutlineAreaChart />;
 
-export default function SimulatorResultGraphs({ data }) {
+export default function SimulatorResultGraphs({ data, plan }) {
   const t = useTranslations("SimulatorResultGraphs");
 
   const [graphType, setGraphType] = useState("histogram");
@@ -44,7 +44,7 @@ export default function SimulatorResultGraphs({ data }) {
           showXAxis={false}
         />
       )}
-      {graphType == "area" && <AreaPlot data={data.graphData} />}
+      {graphType == "area" && <AreaPlot data={data.graphData} plan={plan} />}
     </div>
   );
 }

@@ -1,1 +1,1 @@
-export const PLANS = ["sense", "logic"];
+export const PLANS = ["sense", "logic", "anomaly"];
