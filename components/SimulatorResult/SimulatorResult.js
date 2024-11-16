@@ -5,7 +5,7 @@ import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
-function SimulatorResult({ data, idolId }) {
+function SimulatorResult({ data, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
 
   return (
@@ -29,7 +29,7 @@ function SimulatorResult({ data, idolId }) {
         </tbody>
       </table>
 
-      <SimulatorResultGraphs data={data} />
+      <SimulatorResultGraphs data={data} plan={plan} />
 
       <label>{t("logs")}</label>
       <SimulatorLogs

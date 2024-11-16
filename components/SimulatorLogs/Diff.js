@@ -7,7 +7,7 @@ function Diff({ field, next, prev }) {
   const t = useTranslations("stage");
 
   let diffDir = "positive";
-  if (DEBUFF_FIELDS.includes(field) == next > prev) {
+  if (!isNaN(next) && DEBUFF_FIELDS.includes(field) == next > prev) {
     diffDir = "negative";
   }
 
@@ -15,7 +15,15 @@ function Diff({ field, next, prev }) {
     <div className={styles.tile}>
       {t(field)}{" "}
       <span className={styles[diffDir]}>
-        {prev} → {next}
+        {isNaN(next) ? (
+          <>
+            {t(prev)} → {t(next)}
+          </>
+        ) : (
+          <>
+            {prev} → {next}
+          </>
+        )}
       </span>
     </div>
   );

@@ -3,6 +3,7 @@ import { PIdols, PItems, SkillCards } from "gakumas-data/lite";
 const CONTEST_DEFAULT_CARDS_BY_PLAN = {
   sense: [5, 7, 1, 1, 15, 15, 17, 17],
   logic: [9, 11, 19, 19, 21, 21, 13, 13],
+  anomaly: [370, 372, 1, 1, 374, 374, 376, 376],
 };
 
 const EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT = {
@@ -10,6 +11,9 @@ const EVENT_DEFAULT_CARDS_BY_RECOMMENDED_EFFECT = {
   concentration: [17, 17, 7, 1, 1, 3, 13, 13],
   goodImpressionTurns: [19, 19, 9, 1, 1, 3, 13, 13],
   motivation: [21, 21, 11, 1, 1, 3, 13, 13],
+  preservation: [370, 372, 1, 1, 374, 374, 376, 376],
+  strength: [370, 372, 1, 1, 374, 374, 376, 376],
+  fullPower: [370, 372, 1, 1, 374, 374, 376, 376],
 };
 
 export default class IdolConfig {
