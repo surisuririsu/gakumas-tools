@@ -23,7 +23,10 @@ function HandState({ state }) {
             ))
           ) : (
             <div>
-              {t(k)} <span className={styles.blue}>{state[k]}</span>
+              {t(k)}{" "}
+              <span className={styles.blue}>
+                {isNaN(state[k]) ? t(state[k]) : state[k]}
+              </span>
             </div>
           )}
         </React.Fragment>

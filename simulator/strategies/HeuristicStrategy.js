@@ -109,23 +109,25 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       state.concentration * state.turnsRemaining * this.concentrationMultiplier;
 
-    // Full power charge
-    score += state.fullPowerCharge * 5 * state.turnsRemaining;
+    // Stance
+    if (state.stance == "fullPower") {
+      score += 80;
+    }
 
-    // Enthusiasm
-    score += state.enthusiasm * 6;
+    // Full power charge
+    score += state.fullPowerCharge * 5;
 
     // Growth
     score +=
       Object.values(state.growthByEntity).reduce((acc, cur) => {
         if (cur["growth.score"]) {
-          acc += cur["growth.score"];
+          acc += cur["growth.score"] * 2;
         }
         if (cur["growth.scoreTimes"]) {
           acc += cur["growth.scoreTimes"] * 20 * this.averageTypeMultiplier;
         }
         if (cur["growth.cost"]) {
-          acc += cur["growth.cost"] * 5;
+          acc += cur["growth.cost"];
         }
         return acc;
       }, 0) * state.turnsRemaining;
@@ -177,6 +179,10 @@ export default class HeuristicStrategy extends StageStrategy {
       score += state.score * 0.8;
     } else if (recommendedEffect == "motivation") {
       score += state.score * 0.6;
+    } else if (recommendedEffect == "strength") {
+      score += state.score * 0.6;
+    } else if (recommendedEffect == "fullPower") {
+      score += state.score * 0.8;
     } else {
       score += state.score;
     }

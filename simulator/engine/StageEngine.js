@@ -92,8 +92,7 @@ export default class StageEngine {
       motivationMultiplier: 1,
 
       // Anomaly
-      stance: "default",
-      stanceLevel: 0,
+      stance: "none",
       lockStanceTurns: 0,
       intermediateFullPowerCharge: 0,
       fullPowerCharge: 0,
@@ -166,19 +165,19 @@ export default class StageEngine {
     nextState = this._setEffects(nextState, "default", "温存", [
       {
         phase: "stanceChanged",
-        conditions: ["prevStance==preservation", "prevStanceLevel==1"],
+        conditions: ["prevStance==preservation"],
         actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
       },
       {
         phase: "stanceChanged",
-        conditions: ["prevStance==preservation", "prevStanceLevel==2"],
+        conditions: ["prevStance==preservation2"],
         actions: ["enthusiasm+=8", "genki+=5", "cardUsesRemaining+=1"],
       },
     ]);
     nextState = this._setEffects(nextState, "default", "強気", [
       {
         phase: "cardUsed",
-        conditions: ["stance==strength", "stanceLevel==2"],
+        conditions: ["stance==strength2"],
         actions: ["fixedStamina-=1"],
       },
     ]);
@@ -255,13 +254,11 @@ export default class StageEngine {
 
     // Check cost
     let previewState = { ...state };
-    if (!previewState.nullifyCostCards) {
-      for (let cost of card.cost) {
-        previewState = this._executeAction(cost, previewState, growthEntity);
-      }
-      for (let field of COST_FIELDS) {
-        if (previewState[field] < 0) return false;
-      }
+    for (let cost of card.cost) {
+      previewState = this._executeAction(cost, previewState, growthEntity);
+    }
+    for (let field of COST_FIELDS) {
+      if (previewState[field] < 0) return false;
     }
 
     return true;
@@ -303,15 +300,13 @@ export default class StageEngine {
     // Apply card cost
     let conditionState = { ...nextState };
     this.logger.debug("Applying cost", card.cost);
-    if (nextState.nullifyCostCards > 0) {
-      // TODO: check
-      nextState.nullifyCostCards -= 1;
-    } else {
-      nextState = this._executeActions(
-        card.cost,
-        nextState,
-        `skillCard_${cardId}`
-      );
+    nextState = this._executeActions(
+      card.cost,
+      nextState,
+      `skillCard_${cardId}`
+    );
+    if (nextState.nullifyCostCards) {
+      nextState.nullifyCostCards--;
     }
 
     // Remove card from hand
@@ -614,23 +609,36 @@ export default class StageEngine {
 
   _setStance(state, stance) {
     if (state.lockStanceTurns) return state;
-    if (stance != state.stance) {
-      state.prevStance = state.stance;
-      state.prevStanceLevel = state.stanceLevel;
+    if (state.stance == "fullPower") return state;
+
+    state.prevStance = state.stance;
+
+    if (stance.startsWith("preservation")) {
+      if (state.stance.startsWith("preservation")) {
+        state.stance = "preservation2";
+      } else {
+        state.stance = stance;
+      }
+    } else if (stance.startsWith("strength")) {
+      if (state.stance.startsWith("strength")) {
+        state.stance = "strength2";
+      } else {
+        state.stance = stance;
+      }
+    } else {
       state.stance = stance;
-      state.stanceLevel = 1;
-      state = this._triggerEffectsForPhase("stanceChanged", state);
-    } else if (state.stanceLevel < 2) {
-      state.stanceLevel += 1;
     }
+
+    if (state.stance != state.prevStance) {
+      state = this._triggerEffectsForPhase("stanceChanged", state);
+    }
+
     return state;
   }
 
   _resetStance(state) {
     state.prevStance = state.stance;
-    state.prevStanceLevel = state.stanceLevel;
-    state.stance = "default";
-    state.stanceLevel = 0;
+    state.stance = "none";
     state = this._triggerEffectsForPhase("stanceChanged", state);
     return state;
   }
@@ -893,6 +901,9 @@ export default class StageEngine {
       isVocalTurn: state.turnType == "vocal",
       isDanceTurn: state.turnType == "dance",
       isVisualTurn: state.turnType == "visual",
+      isPreservation: state.stance?.startsWith("preservation"),
+      isStrength: state.stance?.startsWith("strength"),
+      isFullPower: state.stance == "fullPower",
     };
 
     function evaluate(tokens) {
@@ -904,9 +915,14 @@ export default class StageEngine {
 
         // Stances
         if (
-          ["default", "strength", "preservation", "fullPower"].includes(
-            tokens[0]
-          )
+          [
+            "none",
+            "strength",
+            "strength2",
+            "preservation",
+            "preservation2",
+            "fullPower",
+          ].includes(tokens[0])
         ) {
           return tokens[0];
         }
@@ -1124,70 +1140,74 @@ export default class StageEngine {
       const growth = state.growthByEntity?.[growthEntity] || {};
 
       if (lhs == "cost") {
-        // Apply cost
-        let cost = state.cost;
-        if (growth["growth.cost"]) {
-          cost += growth["growth.cost"];
-        }
+        if (state.nullifyCostCards) {
+          // pass
+        } else {
+          // Apply cost
+          let cost = state.cost;
+          if (growth["growth.cost"]) {
+            cost += growth["growth.cost"];
+          }
 
-        if (state.stance == "strength") {
-          cost *= 2;
-        } else if (state.stance == "preservation") {
-          if (state.stanceLevel == 1) {
+          if (state.stance.startsWith("strength")) {
+            cost *= 2;
+          } else if (state.stance == "preservation") {
             cost *= 0.5;
-          } else if (state.stanceLevel == 2) {
+          } else if (state.stance == "preservation2") {
             cost *= 0.25;
           }
-        }
-        if (state.halfCostTurns) {
-          cost *= 0.5;
-        }
-        if (state.doubleCostTurns) {
-          cost *= 2;
-        }
-        cost = Math.floor(cost);
-        cost += state.costReduction;
-        cost -= state.costIncrease;
-        cost = Math.min(cost, 0);
+          if (state.halfCostTurns) {
+            cost *= 0.5;
+          }
+          if (state.doubleCostTurns) {
+            cost *= 2;
+          }
+          cost = Math.floor(cost);
+          cost += state.costReduction;
+          cost -= state.costIncrease;
+          cost = Math.min(cost, 0);
 
-        state.genki += cost;
-        state.cost = 0;
-        if (state.genki < 0) {
-          state.stamina += state.genki;
-          state.consumedStamina -= state.genki;
-          state.genki = 0;
-        }
-      } else if (lhs == "intermediateStamina") {
-        let stamina = state.intermediateStamina;
-        if (growth["growth.cost"]) {
-          stamina += growth["growth.cost"];
-        }
-
-        if (state.stance == "strength") {
-          stamina *= 2;
-        } else if (state.stance == "preservation") {
-          if (state.stanceLevel == 1) {
-            stamina *= 0.5;
-          } else if (state.stanceLevel == 2) {
-            stamina *= 0.25;
+          state.genki += cost;
+          if (state.genki < 0) {
+            state.stamina += state.genki;
+            state.consumedStamina -= state.genki;
+            state.genki = 0;
           }
         }
-        if (state.halfCostTurns) {
-          stamina *= 0.5;
-        }
-        if (state.doubleCostTurns) {
-          stamina *= 2;
-        }
-        stamina = Math.floor(stamina);
-        if (stamina <= 0) {
-          stamina += state.costReduction;
-          stamina -= state.costIncrease;
-          stamina = Math.min(stamina, 0);
-        }
+        state.cost = 0;
+      } else if (lhs == "intermediateStamina") {
+        if (state.nullifyCostCards) {
+          // pass
+        } else {
+          let stamina = state.intermediateStamina;
+          if (growth["growth.cost"]) {
+            stamina += growth["growth.cost"];
+          }
 
-        state.stamina += stamina;
-        if (stamina < 0) {
-          state.consumedStamina -= stamina;
+          if (state.stance.startsWith("strength")) {
+            stamina *= 2;
+          } else if (state.stance == "preservation") {
+            stamina *= 0.5;
+          } else if (state.stance == "preservation2") {
+            stamina *= 0.25;
+          }
+          if (state.halfCostTurns) {
+            stamina *= 0.5;
+          }
+          if (state.doubleCostTurns) {
+            stamina *= 2;
+          }
+          stamina = Math.floor(stamina);
+          if (stamina <= 0) {
+            stamina += state.costReduction;
+            stamina -= state.costIncrease;
+            stamina = Math.min(stamina, 0);
+          }
+
+          state.stamina += stamina;
+          if (stamina < 0) {
+            state.consumedStamina -= stamina;
+          }
         }
         state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
@@ -1214,19 +1234,15 @@ export default class StageEngine {
 
           // Apply stance
           if (state.stance == "strength") {
-            if (state.stanceLevel == 1) {
-              score *= 2;
-            } else if (state.stanceLevel == 2) {
-              score *= 2.5;
-            }
+            score *= 2;
+          } else if (state.stance == "strength2") {
+            score *= 2.5;
           } else if (state.stance == "preservation") {
-            if (state.stanceLevel == 1) {
-              score *= 0.5;
-            } else if (state.stanceLevel == 2) {
-              score *= 0.25;
-            }
+            score *= 0.5;
+          } else if (state.stance == "preservation2") {
+            score *= 0.25;
           } else if (state.stance == "fullPower") {
-            score *= 3; // TODO: Check
+            score *= 3;
           }
 
           // Score buff effects
