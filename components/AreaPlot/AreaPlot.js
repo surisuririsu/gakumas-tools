@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-function AreaPlot({ data }) {
+function AreaPlot({ data, plan }) {
   const t = useTranslations("stage");
 
   const FIELDS = useMemo(
@@ -44,22 +44,30 @@ function AreaPlot({ data }) {
         label: t("genki"),
         color: "rgba(68, 246, 255, 0.25)",
       },
-      goodConditionTurns: {
-        label: t("goodConditionTurns"),
-        color: "rgba(255, 102, 119, 0.25)",
-      },
-      concentration: {
-        label: t("concentration"),
-        color: "rgba(255, 118, 0, 0.25)",
-      },
-      goodImpressionTurns: {
-        label: t("goodImpressionTurns"),
-        color: "rgba(255, 243, 74, 0.25)",
-      },
-      motivation: {
-        label: t("motivation"),
-        color: "rgba(214, 214, 214, 0.25)",
-      },
+      ...(plan == "sense"
+        ? {
+            goodConditionTurns: {
+              label: t("goodConditionTurns"),
+              color: "rgba(255, 102, 119, 0.25)",
+            },
+            concentration: {
+              label: t("concentration"),
+              color: "rgba(255, 118, 0, 0.25)",
+            },
+          }
+        : {}),
+      ...(plan == "logic"
+        ? {
+            goodImpressionTurns: {
+              label: t("goodImpressionTurns"),
+              color: "rgba(255, 243, 74, 0.25)",
+            },
+            motivation: {
+              label: t("motivation"),
+              color: "rgba(214, 214, 214, 0.25)",
+            },
+          }
+        : {}),
     }),
     [t]
   );

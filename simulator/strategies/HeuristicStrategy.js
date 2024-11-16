@@ -109,6 +109,27 @@ export default class HeuristicStrategy extends StageStrategy {
     score +=
       state.concentration * state.turnsRemaining * this.concentrationMultiplier;
 
+    // Full power charge
+    score += state.fullPowerCharge * 5 * state.turnsRemaining;
+
+    // Enthusiasm
+    score += state.enthusiasm * 6;
+
+    // Growth
+    score +=
+      Object.values(state.growthByEntity).reduce((acc, cur) => {
+        if (cur["growth.score"]) {
+          acc += cur["growth.score"];
+        }
+        if (cur["growth.scoreTimes"]) {
+          acc += cur["growth.scoreTimes"] * 20 * this.averageTypeMultiplier;
+        }
+        if (cur["growth.cost"]) {
+          acc += cur["growth.cost"] * 5;
+        }
+        return acc;
+      }, 0) * state.turnsRemaining;
+
     // Good impression turns
     score +=
       state.goodImpressionTurns *

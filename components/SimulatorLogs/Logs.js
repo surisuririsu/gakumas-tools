@@ -38,6 +38,8 @@ function Log({ line, idolId }) {
     );
   } else if (line.logType == "upgradeRandomCardInHand") {
     return <AddCard {...line.data} idolId={idolId} text={t("upgradedCard")} />;
+  } else if (line.logType == "growth") {
+    return <AddCard {...line.data} idolId={idolId} text={t("cardGrowth")} />;
   }
 }
 

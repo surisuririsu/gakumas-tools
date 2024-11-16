@@ -3,6 +3,15 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-16
+
+### Added
+
+- Partial implementation of plan Anomaly
+- R, SR, SSR Sena
+- New skill cards for Plv up to 60
+- New gacha and event supports
+
 ## 2024-11-08
 
 ### Changed
