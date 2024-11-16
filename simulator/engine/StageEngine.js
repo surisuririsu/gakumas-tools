@@ -60,6 +60,7 @@ export default class StageEngine {
       handCardIds: [],
       discardedCardIds: [],
       removedCardIds: [],
+      holdCardIds: [],
       cardsUsed: 0,
       turnCardsUsed: 0,
       turnCardsUpgraded: 0,
@@ -69,11 +70,6 @@ export default class StageEngine {
       triggeredEffects: [],
 
       // Buffs and debuffs
-      goodConditionTurns: 0,
-      perfectConditionTurns: 0,
-      concentration: 0,
-      goodImpressionTurns: 0,
-      motivation: 0,
       halfCostTurns: 0,
       doubleCostTurns: 0,
       costReduction: 0,
@@ -82,6 +78,28 @@ export default class StageEngine {
       nullifyGenkiTurns: 0,
       nullifyDebuff: 0,
       poorConditionTurns: 0,
+      nullifyCostCards: 0,
+
+      // Sense
+      goodConditionTurns: 0,
+      perfectConditionTurns: 0,
+      concentration: 0,
+      concentrationMultiplier: 1,
+
+      // Logic
+      goodImpressionTurns: 0,
+      motivation: 0,
+      motivationMultiplier: 1,
+
+      // Anomaly
+      stance: "default",
+      stanceLevel: 0,
+      lockStanceTurns: 0,
+      intermediateFullPowerCharge: 0,
+      fullPowerCharge: 0,
+      cumulativeFullPowerCharge: 0,
+      enthusiasm: 0,
+      growthByEntity: {},
 
       // Score buffs
       scoreBuffs: [],
@@ -92,10 +110,6 @@ export default class StageEngine {
 
       // Buffs/debuffs protected from decrement when fresh
       freshBuffs: {},
-
-      // Effect modifiers
-      concentrationMultiplier: 1,
-      motivationMultiplier: 1,
     };
   }
 
@@ -149,6 +163,41 @@ export default class StageEngine {
         group: 100,
       },
     ]);
+    nextState = this._setEffects(nextState, "default", "温存", [
+      {
+        phase: "stanceChanged",
+        conditions: ["prevStance==preservation", "prevStanceLevel==1"],
+        actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
+      },
+      {
+        phase: "stanceChanged",
+        conditions: ["prevStance==preservation", "prevStanceLevel==2"],
+        actions: ["enthusiasm+=8", "genki+=5", "cardUsesRemaining+=1"],
+      },
+    ]);
+    nextState = this._setEffects(nextState, "default", "強気", [
+      {
+        phase: "cardUsed",
+        conditions: ["stance==strength", "stanceLevel==2"],
+        actions: ["fixedStamina-=1"],
+      },
+    ]);
+    nextState = this._setEffects(nextState, "default", "全力", [
+      {
+        phase: "startOfTurn",
+        conditions: ["fullPowerCharge>=10"],
+        actions: [
+          "setStance(fullPower)",
+          "fullPowerCharge-=10",
+          "lockStanceTurns+=1",
+        ],
+      },
+      {
+        phase: "stanceChanged",
+        conditions: ["stance==fullPower"],
+        actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
+      },
+    ]);
 
     // Set stage effects
     this.logger.debug("Setting stage effects", this.stageConfig.effects);
@@ -166,6 +215,25 @@ export default class StageEngine {
       nextState = this._setEffects(nextState, "pItem", id, effects);
     }
 
+    // Set growth effects
+    for (let id of this.idolConfig.skillCardIds) {
+      const { growth, name } = SkillCards.getById(id);
+      if (!growth?.length) continue;
+      this.logger.debug("Setting growth effects", name, growth);
+      const growthEntity = `skillCard_${id}`;
+      nextState.growthByEntity[growthEntity] = {
+        "growth.cost": 0,
+        "growth.score": 0,
+        "growth.scoreTimes": 0,
+      };
+      nextState = this._setEffects(
+        nextState,
+        "skillCard",
+        id,
+        growth.map((g) => ({ ...g, growth: true }))
+      );
+    }
+
     nextState = this._triggerEffectsForPhase("startOfStage", nextState);
 
     this.logger.pushGraphData(nextState);
@@ -177,19 +245,23 @@ export default class StageEngine {
 
   isCardUsable(state, cardId) {
     const card = SkillCards.getById(cardId);
+    const growthEntity = `skillCard_${cardId}`;
 
     // Check conditions
     for (let condition of card.conditions) {
-      if (!this._evaluateCondition(condition, state)) return false;
+      if (!this._evaluateCondition(condition, state, growthEntity))
+        return false;
     }
 
     // Check cost
     let previewState = { ...state };
-    for (let cost of card.cost) {
-      previewState = this._executeAction(cost, previewState);
-    }
-    for (let field of COST_FIELDS) {
-      if (previewState[field] < 0) return false;
+    if (!previewState.nullifyCostCards) {
+      for (let cost of card.cost) {
+        previewState = this._executeAction(cost, previewState, growthEntity);
+      }
+      for (let field of COST_FIELDS) {
+        if (previewState[field] < 0) return false;
+      }
     }
 
     return true;
@@ -231,7 +303,16 @@ export default class StageEngine {
     // Apply card cost
     let conditionState = { ...nextState };
     this.logger.debug("Applying cost", card.cost);
-    nextState = this._executeActions(card.cost, nextState);
+    if (nextState.nullifyCostCards > 0) {
+      // TODO: check
+      nextState.nullifyCostCards -= 1;
+    } else {
+      nextState = this._executeActions(
+        card.cost,
+        nextState,
+        `skillCard_${cardId}`
+      );
+    }
 
     // Remove card from hand
     nextState.handCardIds.splice(handIndex, 1);
@@ -260,9 +341,19 @@ export default class StageEngine {
     // Apply card effects
     if (nextState.doubleCardEffectCards) {
       nextState.doubleCardEffectCards--;
-      nextState = this._triggerEffects(card.effects, nextState);
+      nextState = this._triggerEffects(
+        card.effects,
+        nextState,
+        null,
+        `skillCard_${card.id}`
+      );
     }
-    nextState = this._triggerEffects(card.effects, nextState);
+    nextState = this._triggerEffects(
+      card.effects,
+      nextState,
+      null,
+      `skillCard_${card.id}`
+    );
 
     nextState.cardsUsed++;
     nextState.turnCardsUsed++;
@@ -296,7 +387,9 @@ export default class StageEngine {
     this.logger.log("entityEnd", { type: "skillCard", id: cardId });
 
     // Send card to discards or remove
-    if (card.limit) {
+    if (nextState.thisCardHeld) {
+      nextState.thisCardHeld = false;
+    } else if (card.limit) {
       nextState.removedCardIds.push(card.id);
     } else {
       nextState.discardedCardIds.push(card.id);
@@ -353,6 +446,10 @@ export default class StageEngine {
     state.cardUsesRemaining = 0;
     state.turnCardsUsed = 0;
     state.turnCardsUpgraded = 0;
+    state.enthusiasm = 0;
+    if (state.stance == "fullPower") {
+      state = this._resetStance(state);
+    }
 
     // Decrement effect ttl and expire
     for (let i = 0; i < state.effects.length; i++) {
@@ -515,6 +612,71 @@ export default class StageEngine {
     return state;
   }
 
+  _setStance(state, stance) {
+    if (state.lockStanceTurns) return state;
+    if (stance != state.stance) {
+      state.prevStance = state.stance;
+      state.prevStanceLevel = state.stanceLevel;
+      state.stance = stance;
+      state.stanceLevel = 1;
+      state = this._triggerEffectsForPhase("stanceChanged", state);
+    } else if (state.stanceLevel < 2) {
+      state.stanceLevel += 1;
+    }
+    return state;
+  }
+
+  _resetStance(state) {
+    state.prevStance = state.stance;
+    state.prevStanceLevel = state.stanceLevel;
+    state.stance = "default";
+    state.stanceLevel = 0;
+    state = this._triggerEffectsForPhase("stanceChanged", state);
+    return state;
+  }
+
+  _holdThisCard(state) {
+    state.holdCardIds.push(state._usedCardId);
+    state.thisCardHeld = true;
+    return state;
+  }
+
+  _holdSelectedFromHand(state) {
+    // TODO: Random for now
+    const randomIndex = Math.floor(Math.random() * state.handCardIds.length);
+    const cardId = state.handCardIds.splice(randomIndex, 1)[0];
+    if (cardId) {
+      state.holdCardIds.push(cardId);
+    }
+    return state;
+  }
+
+  _holdSelectedFromDeckOrDiscards(state) {
+    // TODO: Random for now
+    const randomIndex = Math.floor(
+      Math.random() * (state.deckCardIds.length + state.discardedCardIds.length)
+    );
+    let cardId;
+    if (randomIndex >= state.deckCardIds.length) {
+      cardId = state.discardedCardIds.splice(
+        randomIndex - state.deckCardIds.length,
+        1
+      )[0];
+    } else {
+      cardId = state.deckCardIds.splice(randomIndex, 1)[0];
+    }
+    if (cardId) {
+      state.holdCardIds.push(cardId);
+    }
+    return state;
+  }
+
+  _addHeldCardsToHand(state) {
+    state.handCardIds = state.handCardIds.concat(state.holdCardIds);
+    state.holdCardIds = [];
+    return state;
+  }
+
   _getCardEffects(card) {
     let cardEffects = [];
     for (let effect of card.effects) {
@@ -522,7 +684,11 @@ export default class StageEngine {
       for (let action of effect.actions) {
         const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
         if (!tokens?.[0]?.length) continue;
-        cardEffects.push(tokens[0]);
+        let cardEffect = tokens[0];
+        if (tokens[0].startsWith("setStance")) {
+          cardEffect = tokens[0].match(/\(([^)]+)\)/)[1];
+        }
+        cardEffects.push(cardEffect);
       }
     }
     return cardEffects;
@@ -574,7 +740,7 @@ export default class StageEngine {
     return state;
   }
 
-  _triggerEffects(effects, state, prevState) {
+  _triggerEffects(effects, state, prevState, growthEntity) {
     const conditionState = prevState || { ...state };
 
     let triggeredEffects = [];
@@ -612,7 +778,9 @@ export default class StageEngine {
       if (effect.conditions) {
         let satisfied = true;
         for (let condition of effect.conditions) {
-          if (!this._evaluateCondition(condition, conditionState)) {
+          if (
+            !this._evaluateCondition(condition, conditionState, growthEntity)
+          ) {
             satisfied = false;
             break;
           }
@@ -632,29 +800,66 @@ export default class StageEngine {
         });
       }
 
-      // Execute actions
-      if (effect.actions) {
-        this.logger.debug("Executing actions", effect.actions);
+      this.logger.debug("Executing actions", effect.actions);
 
-        state = this._executeActions(effect.actions, state);
+      if (effect.targets) {
+        for (let target of effect.targets) {
+          let growthEntities = [];
+          if (target == "this") {
+            growthEntities.push(`${effect.sourceType}_${effect.sourceId}`);
+          } else if (target == "hand") {
+            growthEntities = growthEntities.concat(
+              state.handCardIds.map((id) => `skillCard_${id}`)
+            );
+          } else if (target == "all") {
+            growthEntities = growthEntities.concat(
+              `${effect.sourceType}_${effect.sourceId}`,
+              state.handCardIds.map((id) => `skillCard_${id}`),
+              state.deckCardIds.map((id) => `skillCard_${id}`),
+              state.discardedCardIds.map((id) => `skillCard_${id}`)
+            );
+          }
+          for (let growthEntity of growthEntities) {
+            state.growthByEntity[growthEntity] = this._executeActions(
+              effect.actions,
+              state.growthByEntity[growthEntity] || {}
+            );
+            const [sourceType, sourceId] = growthEntity.split("_");
+            if (sourceType == "skillCard") {
+              this.logger.log("growth", {
+                type: sourceType,
+                id: sourceId,
+              });
+            }
+          }
+        }
+      } else {
+        // Execute actions
+        if (effect.actions) {
+          state = this._executeActions(
+            effect.actions,
+            state,
+            growthEntity || `${effect.sourceType}_${effect.sourceId}`
+          );
 
-        // Reset modifiers
-        state.concentrationMultiplier = 1;
-        state.motivationMultiplier = 1;
-      }
+          // Reset modifiers
+          state.concentrationMultiplier = 1;
+          state.motivationMultiplier = 1;
+        }
 
-      // Set effects
-      if (effect.effects) {
-        this.logger.debug("Setting effects", effect.effects);
+        // Set effects
+        if (effect.effects) {
+          this.logger.debug("Setting effects", effect.effects);
 
-        this.logger.log("setEffect");
+          this.logger.log("setEffect");
 
-        state = this._setEffects(
-          state,
-          effect.sourceType,
-          effect.sourceId,
-          effect.effects
-        );
+          state = this._setEffects(
+            state,
+            effect.sourceType,
+            effect.sourceId,
+            effect.effects
+          );
+        }
       }
 
       if (effect.sourceType) {
@@ -672,10 +877,11 @@ export default class StageEngine {
     return state;
   }
 
-  _evaluateCondition(condition, state) {
+  _evaluateCondition(condition, state, growthEntity) {
     const result = this._evaluateExpression(
       condition.split(/([=!]?=|[<>]=?|[+\-*/%]|&)/),
-      state
+      state,
+      growthEntity
     );
     this.logger.debug("Condition", condition, result);
     return result;
@@ -694,6 +900,15 @@ export default class StageEngine {
         // Numeric constants
         if (/^-?[\d]+(\.\d+)?$/.test(tokens[0])) {
           return parseFloat(tokens[0]);
+        }
+
+        // Stances
+        if (
+          ["default", "strength", "preservation", "fullPower"].includes(
+            tokens[0]
+          )
+        ) {
+          return tokens[0];
         }
 
         // Variables
@@ -767,26 +982,44 @@ export default class StageEngine {
     return evaluate(tokens);
   }
 
-  _executeActions(actions, state) {
+  _executeActions(actions, state, growthEntity) {
     let prev = {};
     for (let key of KEYS_TO_DIFF) {
       prev[key] = state[key];
     }
 
+    const scoreTimes =
+      state.growthByEntity?.[growthEntity]?.["growth.scoreTimes"];
     for (let action of actions) {
-      state = this._executeAction(action, state);
+      state = this._executeAction(action, state, growthEntity);
+
+      if (scoreTimes) {
+        const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
+        if (tokens?.[0] == "score") {
+          for (let i = 0; i < scoreTimes; i++) {
+            state = this._executeAction(action, state, growthEntity);
+          }
+        }
+      }
+
       if (state.stamina < 0) state.stamina = 0;
       if (state.stamina > state.maxStamina) state.stamina = state.maxStamina;
     }
 
     // Log changed fields
-    for (let key of LOGGED_FIELDS) {
-      if (state[key] != prev[key]) {
-        this.logger.log("diff", {
-          field: key,
-          prev: parseFloat(prev[key].toFixed(2)),
-          next: parseFloat(state[key].toFixed(2)),
-        });
+    if (growthEntity) {
+      for (let key of LOGGED_FIELDS) {
+        if (state[key] != prev[key]) {
+          this.logger.log("diff", {
+            field: key,
+            prev: isNaN(prev[key])
+              ? prev[key]
+              : parseFloat(prev[key].toFixed(2)),
+            next: isNaN(state[key])
+              ? state[key]
+              : parseFloat(state[key].toFixed(2)),
+          });
+        }
       }
     }
 
@@ -818,13 +1051,15 @@ export default class StageEngine {
     return state;
   }
 
-  _executeAction(action, state) {
+  _executeAction(action, state, growthEntity) {
     const tokens = action.split(/([=!]?=|[<>]=?|[+\-*/%]=?|&)/);
 
     // Non-assignment actions
     if (tokens.length == 1) {
       if (tokens[0] == "drawCard") {
         state = this._drawCard(state);
+      } else if (tokens[0].startsWith("setStance")) {
+        state = this._setStance(state, tokens[0].match(/\(([^)]+)\)/)[1]);
       } else if (tokens[0].startsWith("setScoreBuff")) {
         state = this._setScoreBuff(
           state,
@@ -838,6 +1073,14 @@ export default class StageEngine {
         state = this._addRandomUpgradedCardToHand(state);
       } else if (tokens[0] == "upgradeRandomCardInHand") {
         state = this._upgradeRandomCardInHand(state);
+      } else if (tokens[0] == "holdThisCard") {
+        state = this._holdThisCard(state);
+      } else if (tokens[0] == "holdSelectedFromHand") {
+        state = this._holdSelectedFromHand(state);
+      } else if (tokens[0] == "holdSelectedFromDeckOrDiscards") {
+        state = this._holdSelectedFromDeckOrDiscards(state);
+      } else if (tokens[0] == "addHeldCardsToHand") {
+        state = this._addHeldCardsToHand(state);
       }
       return state;
     }
@@ -858,8 +1101,9 @@ export default class StageEngine {
       }
 
       if (lhs == "score" && op == "+=") lhs = "intermediateScore";
-      if (lhs == "genki" && op == "+=") lhs = "intermediateGenki";
-      if (lhs == "stamina" && op == "-=") lhs = "intermediateStamina";
+      else if (lhs == "genki" && op == "+=") lhs = "intermediateGenki";
+      else if (lhs == "stamina" && op == "-=") lhs = "intermediateStamina";
+      else if (lhs == "fullPowerCharge") lhs = "intermediateFullPowerCharge";
 
       if (op == "=") {
         state[lhs] = rhs;
@@ -877,9 +1121,24 @@ export default class StageEngine {
         console.warn("Unrecognized assignment operator", op);
       }
 
+      const growth = state.growthByEntity?.[growthEntity] || {};
+
       if (lhs == "cost") {
         // Apply cost
         let cost = state.cost;
+        if (growth["growth.cost"]) {
+          cost += growth["growth.cost"];
+        }
+
+        if (state.stance == "strength") {
+          cost *= 2;
+        } else if (state.stance == "preservation") {
+          if (state.stanceLevel == 1) {
+            cost *= 0.5;
+          } else if (state.stanceLevel == 2) {
+            cost *= 0.25;
+          }
+        }
         if (state.halfCostTurns) {
           cost *= 0.5;
         }
@@ -900,6 +1159,19 @@ export default class StageEngine {
         }
       } else if (lhs == "intermediateStamina") {
         let stamina = state.intermediateStamina;
+        if (growth["growth.cost"]) {
+          stamina += growth["growth.cost"];
+        }
+
+        if (state.stance == "strength") {
+          stamina *= 2;
+        } else if (state.stance == "preservation") {
+          if (state.stanceLevel == 1) {
+            stamina *= 0.5;
+          } else if (state.stanceLevel == 2) {
+            stamina *= 0.25;
+          }
+        }
         if (state.halfCostTurns) {
           stamina *= 0.5;
         }
@@ -920,10 +1192,16 @@ export default class StageEngine {
         state.intermediateStamina = 0;
       } else if (lhs == "intermediateScore") {
         let score = state.intermediateScore;
+        if (growth["growth.score"]) {
+          score += growth["growth.score"];
+        }
 
         if (score > 0) {
           // Apply concentration
           score += state.concentration * state.concentrationMultiplier;
+
+          // Apply enthusiasm
+          score += state.enthusiasm;
 
           // Apply good and perfect condition
           if (state.goodConditionTurns) {
@@ -932,6 +1210,23 @@ export default class StageEngine {
               (state.perfectConditionTurns
                 ? state.goodConditionTurns * 0.1
                 : 0);
+          }
+
+          // Apply stance
+          if (state.stance == "strength") {
+            if (state.stanceLevel == 1) {
+              score *= 2;
+            } else if (state.stanceLevel == 2) {
+              score *= 2.5;
+            }
+          } else if (state.stance == "preservation") {
+            if (state.stanceLevel == 1) {
+              score *= 0.5;
+            } else if (state.stanceLevel == 2) {
+              score *= 0.25;
+            }
+          } else if (state.stance == "fullPower") {
+            score *= 3; // TODO: Check
           }
 
           // Score buff effects
@@ -975,10 +1270,19 @@ export default class StageEngine {
           state.consumedStamina -= state.fixedStamina;
         }
         state.fixedStamina = 0;
+      } else if (lhs == "intermediateFullPowerCharge") {
+        const fullPowerCharge = state.intermediateFullPowerCharge;
+        if (fullPowerCharge > 0) {
+          state.cumulativeFullPowerCharge += fullPowerCharge;
+        }
+        state.fullPowerCharge += fullPowerCharge;
+        state.intermediateFullPowerCharge = 0;
       }
 
       for (let key of WHOLE_FIELDS) {
-        state[key] = Math.ceil(state[key]);
+        if (key in state) {
+          state[key] = Math.ceil(state[key]);
+        }
       }
     } else {
       console.warn("Invalid action", action);

@@ -18,6 +18,7 @@ const PLAN_VALUES = {
   free: 0,
   sense: 1,
   logic: 2,
+  anomaly: 3,
 };
 
 const TYPE_VALUES = {
