@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-18
+
+### Fixed
+
+- Prevent duplicate growth of cards when multiple copies are in the deck
+
 ## 2024-11-17
 
 ### Fixed

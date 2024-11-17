@@ -215,7 +215,8 @@ export default class StageEngine {
     }
 
     // Set growth effects
-    for (let id of this.idolConfig.skillCardIds) {
+    const uniqueSkillCardIds = new Set(this.idolConfig.skillCardIds);
+    for (let id of uniqueSkillCardIds) {
       const { growth, name } = SkillCards.getById(id);
       if (!growth?.length) continue;
       this.logger.debug("Setting growth effects", name, growth);
