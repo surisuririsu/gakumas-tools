@@ -165,7 +165,7 @@ export default class StageEngine {
     nextState = this._setEffects(nextState, "default", "温存", [
       {
         phase: "stanceChanged",
-        conditions: ["prevStance==preservation"],
+        conditions: ["prevStance==preservation", "stance!=preservation2"],
         actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
       },
       {
