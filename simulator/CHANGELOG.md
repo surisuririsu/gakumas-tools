@@ -3,6 +3,17 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-17
+
+### Fixed
+
+- Nullify cost cards was incorrectly applied to non-stamina cost
+- Stance change event was incorrectly triggered when increasing stance level
+
+### Changed
+
+- Adjusted simulator strategy for anomaly
+
 ## 2024-11-16
 
 ### Added
