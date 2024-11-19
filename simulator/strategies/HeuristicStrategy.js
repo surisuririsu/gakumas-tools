@@ -111,11 +111,11 @@ export default class HeuristicStrategy extends StageStrategy {
 
     // Stance
     if (state.stance == "fullPower") {
-      score += 80;
+      score += 200;
     }
 
     // Full power charge
-    score += state.fullPowerCharge * 5;
+    score += state.fullPowerCharge * 15;
 
     // Growth
     score +=
@@ -124,7 +124,7 @@ export default class HeuristicStrategy extends StageStrategy {
           acc += cur["growth.score"] * 2;
         }
         if (cur["growth.scoreTimes"]) {
-          acc += cur["growth.scoreTimes"] * 20 * this.averageTypeMultiplier;
+          acc += cur["growth.scoreTimes"] * 20;
         }
         if (cur["growth.cost"]) {
           acc += cur["growth.cost"];
