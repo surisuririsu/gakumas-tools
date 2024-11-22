@@ -40,7 +40,8 @@ export default class IdolConfig {
       stage.type,
       this.params,
       this.supportBonus,
-      stage.criteria
+      stage.criteria,
+      stage.season
     );
 
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
@@ -92,8 +93,8 @@ export default class IdolConfig {
     return null;
   }
 
-  getTypeMultipliers(stageType, params, supportBonus, criteria) {
-    if (stageType == "event") {
+  getTypeMultipliers(stageType, params, supportBonus, criteria, season) {
+    if (stageType == "event" || season == 13) {
       return {
         vocal: params.vocal / 100,
         dance: params.dance / 100,
