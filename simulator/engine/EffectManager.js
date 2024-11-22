@@ -1,0 +1,216 @@
+import { PItems, SkillCards } from "gakumas-data/lite";
+import { DEFAULT_EFFECTS } from "../constants";
+import EngineComponent from "./EngineComponent";
+
+export default class EffectManager extends EngineComponent {
+  initializeState(state) {
+    state.effects = [];
+
+    // Set default effects
+    this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
+    this.setEffects(state, DEFAULT_EFFECTS);
+
+    // Set stage effects
+    this.logger.debug("Setting stage effects", this.config.stage.effects);
+    this.setEffects(state, this.config.stage.effects, { type: "stage" });
+
+    // Set p-item effects
+    const { pItemIds } = this.config.idol;
+    for (let i = 0; i < pItemIds.length; i++) {
+      const pItem = PItems.getById(pItemIds[i]);
+      this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
+      this.setEffects(state, pItem.effects, { type: "pItem", id: pItemIds[i] });
+    }
+
+    // Set growth effects
+    for (let i = 0; i < state.cardMap.length; i++) {
+      const skillCardId = state.cardMap[i].id;
+      const skillCard = SkillCards.getById(skillCardId);
+      if (!skillCard.growth?.length) continue;
+      this.logger.debug(
+        "Setting growth effects",
+        skillCard.name,
+        skillCard.growth
+      );
+      this.setEffects(state, skillCard.growth, {
+        type: "skillCard",
+        id: skillCardId,
+        idx: i,
+      });
+    }
+  }
+
+  setEffects(state, effects, source) {
+    for (let i = 0; i < effects.length; i++) {
+      const effect = { ...effects[i] };
+      if (source) {
+        effect.source = source;
+      }
+      if (!effect.actions && i < effects.length - 1) {
+        effect.effects = [effects[++i]];
+      }
+      state.effects.push(effect);
+    }
+  }
+
+  triggerEffectsForPhase(state, phase, conditionState) {
+    const parentPhase = state.phase;
+    state.phase = phase;
+
+    // Filter and group effects
+    let effectsByGroup = {};
+    for (let i = 0; i < state.effects.length; i++) {
+      const effect = state.effects[i];
+      if (effect.phase != phase) continue;
+      const group = effect.group || 0;
+      if (!effectsByGroup[group]) effectsByGroup[group] = [];
+      effectsByGroup[group].push({ ...effect, phase: null, index: i });
+    }
+
+    // Trigger effects
+    const groupKeys = Object.keys(effectsByGroup);
+    this.logger.debug(phase, effectsByGroup);
+    for (let i = 0; i < groupKeys.length; i++) {
+      const triggeredEffects = this.triggerEffects(
+        state,
+        effectsByGroup[groupKeys[i]],
+        conditionState
+      );
+      for (let j = 0; j < triggeredEffects.length; j++) {
+        const effectIndex = triggeredEffects[j];
+        if (state.effects[effectIndex].limit) {
+          state.effects[effectIndex].limit--;
+        }
+      }
+    }
+
+    state.phase = parentPhase;
+  }
+
+  triggerEffects(state, effects, cndState, card) {
+    const conditionState = cndState || { ...state };
+
+    let triggeredEffects = [];
+    let skipNextEffect = false;
+
+    this.logger.debug(effects);
+
+    for (let i = 0; i < effects.length; i++) {
+      // Skip effect if condition not satisfied
+      if (skipNextEffect) {
+        skipNextEffect = false;
+        continue;
+      }
+
+      const effect = effects[i];
+
+      // Delayed effects
+      if (effect.phase) {
+        this.setEffects(
+          state,
+          [{ ...effect, group: card != null ? 10 : null }],
+          card ? { type: "skillCardEffect", id: state.cardMap[card].id } : null
+        );
+        continue;
+      }
+
+      // Check limit
+      if (effect.limit != null && effect.limit < 1) {
+        continue;
+      }
+
+      // Check ttl
+      if (effect.ttl != null && effect.ttl < 0) {
+        continue;
+      }
+
+      // Check conditions
+      if (effect.conditions) {
+        let satisfied = true;
+        for (let j = 0; j < effect.conditions.length; j++) {
+          const condition = effect.conditions[j];
+          if (
+            !this.engine.evaluator.evaluateCondition(conditionState, condition)
+          ) {
+            satisfied = false;
+            break;
+          }
+        }
+        if (!satisfied) {
+          if (!effect.actions) {
+            skipNextEffect = true;
+          }
+          continue;
+        }
+      }
+
+      // Log source
+      if (effect.source) {
+        this.logger.log("entityStart", effect.source);
+      }
+
+      this.logger.debug("Executing actions", effect.actions);
+
+      // Apply growth or actions or effects
+      if (effect.targets) {
+        // Identify cards to grow
+        let growthCards = new Set();
+        for (let j = 0; j < effect.targets.length; j++) {
+          const target = effect.targets[j];
+          if (target == "this") {
+            if (!effect.source || !("idx" in effect.source)) {
+              console.warn("Growth target not found");
+              continue;
+            }
+            growthCards.add(effect.source.idx);
+          } else if (target == "hand") {
+            for (let k = 0; k < state.handCards; k++) {
+              growthCards.add(state.handCards[k]);
+            }
+          } else if (target == "all") {
+            for (let k = 0; k < state.cardMap.length; k++) {
+              growthCards.add(k);
+            }
+            break;
+          }
+        }
+
+        // Grow cards
+        this.engine.cardManager.grow(state, [...growthCards], effect.actions);
+      } else {
+        // Execute actions
+        if (effect.actions) {
+          this.engine.executor.executeActions(state, effect.actions, card);
+        }
+
+        // Set effects
+        if (effect.effects) {
+          this.logger.debug("Setting effects", effect.effects);
+          this.engine.effectManager.setEffects(
+            state,
+            effect.effects,
+            effect.source
+          );
+          this.logger.log("setEffect");
+        }
+      }
+
+      // Log source end
+      if (effect.source) {
+        this.logger.log("entityEnd", effect.source);
+      }
+
+      // Track triggered effects
+      triggeredEffects.push(effect.index);
+    }
+
+    return triggeredEffects;
+  }
+
+  decrementTtl(state) {
+    for (let i = 0; i < state.effects.length; i++) {
+      if (state.effects[i].ttl == null || state.effects[i].ttl == -1) continue;
+      state.effects[i].ttl--;
+    }
+  }
+}

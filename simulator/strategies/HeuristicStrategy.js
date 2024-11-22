@@ -1,6 +1,6 @@
-import { StageStrategy } from "../engine";
+import BaseStrategy from "./BaseStrategy";
 
-export default class HeuristicStrategy extends StageStrategy {
+export default class HeuristicStrategy extends BaseStrategy {
   constructor(engine) {
     super(engine);
 
@@ -21,25 +21,23 @@ export default class HeuristicStrategy extends StageStrategy {
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       config.idol.recommendedEffect == "motivation" ? 4 : 1;
-
-    this.depth = 0;
   }
 
   scaleScore(score) {
     return Math.ceil(score * this.averageTypeMultiplier);
   }
 
-  getScore(state, cardId) {
-    if (!this.engine.isCardUsable(state, cardId)) {
+  getScore(state, card) {
+    if (!this.engine.isCardUsable(state, card)) {
       return -Infinity;
     }
-    const previewState = this.engine.useCard(state, cardId);
 
-    this.depth++;
+    const previewState = JSON.parse(JSON.stringify(state));
+    this.engine.useCard(previewState, card);
 
     let score = 0;
 
-    if ([362, 363].includes(cardId)) score += 100000;
+    if (previewState.cardMap[card].baseId == 362) score += 100000;
 
     // Effects
     const effectsDiff = previewState.effects.length - state.effects.length;
@@ -50,38 +48,37 @@ export default class HeuristicStrategy extends StageStrategy {
         limit = effect.limit + 1;
       }
       if (limit == 0) continue;
-      const postEffectState = this.engine._triggerEffects(
-        [{ ...effect, phase: null }],
-        { ...previewState }
-      );
+      let postEffectState = { ...previewState };
+      this.engine.effectManager.triggerEffects(postEffectState, [
+        { ...effect, phase: null },
+      ]);
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
       score += 3 * scoreDelta * limit;
     }
 
     // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining && this.depth < 4) {
+    if (previewState.turnsRemaining >= state.turnsRemaining) {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
-      this.depth--;
       if (filteredScores.length) {
         return score + Math.max(...filteredScores);
       } else {
-        const skipState = this.engine.endTurn(previewState);
+        const skipState = { ...previewState };
+        this.engine.endTurn(skipState);
         return score + this.getStateScore(skipState);
       }
     }
 
     // Cards removed
     score +=
-      (((state.removedCardIds.length - previewState.removedCardIds.length) *
+      (((state.removedCards.length - previewState.removedCards.length) *
         (previewState.score - state.score)) /
         this.averageTypeMultiplier) *
       Math.floor(previewState.turnsRemaining / 12);
 
     score += this.getStateScore(previewState);
 
-    this.depth--;
     return Math.round(score);
   }
 
@@ -89,7 +86,7 @@ export default class HeuristicStrategy extends StageStrategy {
     let score = 0;
 
     // Cards in hand
-    score += state.handCardIds.length * 3;
+    score += state.handCards.length * 3;
 
     // Stamina
     score += state.stamina * state.turnsRemaining * 0.05;
@@ -141,19 +138,19 @@ export default class HeuristicStrategy extends StageStrategy {
     score += state.cumulativeFullPowerCharge * 15;
 
     // Growth
-    score +=
-      Object.values(state.growthByEntity).reduce((acc, cur) => {
-        if (cur["growth.score"]) {
-          acc += cur["growth.score"] * 2;
-        }
-        if (cur["growth.scoreTimes"]) {
-          acc += cur["growth.scoreTimes"] * 20;
-        }
-        if (cur["growth.cost"]) {
-          acc += cur["growth.cost"];
-        }
-        return acc;
-      }, 0) * state.turnsRemaining;
+    Object.values(state.cardMap).reduce((acc, cur) => {
+      if (!cur.growth) return acc;
+      if (cur.growth["growth.score"]) {
+        acc += cur.growth["growth.score"] * 2;
+      }
+      if (cur.growth["growth.scoreTimes"]) {
+        acc += cur.growth["growth.scoreTimes"] * 20;
+      }
+      if (cur.growth["growth.cost"]) {
+        acc += cur.growth["growth.cost"];
+      }
+      return acc;
+    }, 0) * state.turnsRemaining;
 
     // Good impression turns
     score +=

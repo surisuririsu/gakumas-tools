@@ -1,16 +1,21 @@
 export function shuffle(arr) {
-  let shuffled = [...arr];
-  let currentIndex = shuffled.length;
+  let currentIndex = arr.length;
 
   while (currentIndex != 0) {
     let randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
-    [shuffled[currentIndex], shuffled[randomIndex]] = [
-      shuffled[randomIndex],
-      shuffled[currentIndex],
+    [arr[currentIndex], arr[randomIndex]] = [
+      arr[randomIndex],
+      arr[currentIndex],
     ];
   }
 
-  return shuffled;
+  return arr;
+}
+
+export function formatDiffField(value) {
+  return value;
+  if (isNaN(value)) return value;
+  return parseFloat(value.toFixed(2));
 }

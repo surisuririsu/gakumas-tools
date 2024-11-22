@@ -13,7 +13,7 @@ function HandState({ state }) {
     <div className={styles.state}>
       {Object.keys(state).map((k) => (
         <React.Fragment key={k}>
-          {k == "scoreBuff" ? (
+          {k == "scoreBuffs" ? (
             state[k].map(({ amount, turns }) => (
               <div key={turns}>
                 {t("scoreBuff")}{" "}

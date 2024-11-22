@@ -7,7 +7,7 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import c from "@/utils/classNames";
 import styles from "./Simulator.module.scss";
 
-function SimulatorSubTools({ idolConfig }) {
+function SimulatorSubTools({ defaultCardIds }) {
   const t = useTranslations("SimulatorSubTools");
 
   const { loadoutHistory } = useContext(LoadoutContext);
@@ -32,15 +32,19 @@ function SimulatorSubTools({ idolConfig }) {
           {t("history")}
         </button>
 
-        <button onClick={() => toggleSubTool("defaultCards")}>
+        <button
+          disabled={!defaultCardIds.length}
+          className={c(!defaultCardIds.length && styles.disabled)}
+          onClick={() => toggleSubTool("defaultCards")}
+        >
           {t("defaultCards")}
         </button>
       </div>
 
       {activeSubTool == "costRanges" && <CostRanges />}
       {activeSubTool == "history" && <LoadoutHistory />}
-      {activeSubTool == "defaultCards" && (
-        <DefaultCards skillCardIds={idolConfig.defaultCards} />
+      {activeSubTool == "defaultCards" && defaultCardIds && (
+        <DefaultCards skillCardIds={defaultCardIds} />
       )}
     </>
   );

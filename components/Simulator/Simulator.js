@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/engine";
+import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/config";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
@@ -99,7 +99,7 @@ export default function Simulator() {
             workersRef.current[i].onmessage = (e) => resolve(e.data);
             workersRef.current[i].postMessage({
               idolStageConfig,
-              strategy,
+              strategyName: strategy,
               numRuns: runsPerWorker,
             });
           })
@@ -169,10 +169,10 @@ export default function Simulator() {
             key={i}
             skillCardIds={skillCardIdGroup}
             groupIndex={i}
-            idolId={idolConfig.idolId}
+            idolId={idolConfig.idolId || idolId}
           />
         ))}
-        <SimulatorSubTools idolConfig={idolConfig} />
+        <SimulatorSubTools defaultCardIds={idolStageConfig.defaultCardIds} />
         <SimulatorButtons />
         <select
           className={styles.strategySelect}
@@ -206,8 +206,8 @@ export default function Simulator() {
       {simulatorData && (
         <SimulatorResult
           data={simulatorData}
-          idolId={idolConfig.idolId}
-          plan={idolConfig.plan}
+          idolId={idolConfig.idolId || idolId}
+          plan={idolConfig.plan || plan}
         />
       )}
     </div>
