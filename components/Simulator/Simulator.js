@@ -125,31 +125,17 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <StageSelect />
-        <>
-          * Season 13 preview is based only on the announced p-items and
+        {/* <>
+          * Season 14 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </>
-        <br />
+        </> */}
+        {/* <br /> */}
         <>
           ※NOTE: Anomaly plan is not fully implemented. Please be patient while
           we complete the implementation. Thanks.
         </>
-        {/* <span className={styles.note}>
-          Behavior of Anomaly plan may differ from the game. Please report any
-          problems via{" "}
-          <a
-            href="https://github.com/surisuririsu/gakumas-tools/issues/new"
-            target="_blank"
-          >
-            GitHub
-          </a>{" "}
-          or{" "}
-          <a href="https://x.com/surisuririsu" target="_blank">
-            Twitter
-          </a>{" "}
-          (or Discord, if you know where to find me).
-        </span> */}
-        {stage.type == "event" ? (
+        <br />
+        {stage.type == "event" || stage.season == 13 ? (
           t("enterPercents")
         ) : (
           <div className={styles.supportBonusInput}>
@@ -214,7 +200,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-11-21
+            {t("lastUpdated")}: 2024-11-23
           </a>
         </div>
       </div>
