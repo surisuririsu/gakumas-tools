@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
-import { DEBUFF_FIELDS } from "@/simulator/engine/constants";
+import { DEBUFF_FIELDS } from "@/simulator/constants";
 import styles from "./SimulatorLogs.module.scss";
 
 function Diff({ field, next, prev }) {

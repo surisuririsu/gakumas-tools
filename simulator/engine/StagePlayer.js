@@ -1,4 +1,4 @@
-import { LOGGED_FIELDS } from "./constants";
+import { LOGGED_FIELDS } from "../constants";
 
 export default class StagePlayer {
   constructor(engine, strategy) {
@@ -8,26 +8,28 @@ export default class StagePlayer {
 
   play() {
     let state = this.engine.getInitialState();
-    state = this.engine.startStage(state);
+    this.engine.startStage(state);
 
     while (state.turnsRemaining > 0) {
       this.engine.logger.disable();
-      const { scores, selectedCardId } = this.strategy.evaluate(state);
+      const { scores, selectedCard } = this.strategy.evaluate(state);
       this.engine.logger.enable();
 
       this.engine.logger.log("hand", {
-        handCardIds: [...state.handCardIds],
+        handCardIds: state.handCards.map((card) => state.cardMap[card].id),
         scores,
-        selectedCardId: selectedCardId,
-        state: this._getHandStateForLogging(state),
+        selectedCardId: state.cardMap[selectedCard]?.id,
+        state: this.getHandStateForLogging(state),
       });
 
-      if (selectedCardId) {
-        state = this.engine.useCard(state, selectedCardId);
+      if (selectedCard != null) {
+        this.engine.useCard(state, selectedCard);
       } else {
-        state = this.engine.endTurn(state);
+        this.engine.endTurn(state);
       }
     }
+
+    // console.log(state, this.engine.logger.logs);
 
     return {
       score: state.score,
@@ -36,13 +38,15 @@ export default class StagePlayer {
     };
   }
 
-  _getHandStateForLogging(state) {
-    let res = LOGGED_FIELDS.reduce((acc, cur) => {
-      if (state[cur]) acc[cur] = state[cur];
-      return acc;
-    }, {});
+  getHandStateForLogging(state) {
+    let res = {};
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      if (state[LOGGED_FIELDS[i]]) {
+        res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
+      }
+    }
     if (state.scoreBuffs.length) {
-      res.scoreBuff = state.scoreBuffs;
+      res.scoreBuffs = state.scoreBuffs;
     }
     delete res.turnsRemaining;
     delete res.cardUsesRemaining;

@@ -1,5 +1,4 @@
-import { BUCKET_SIZE } from "@/simulator/constants";
-import { GRAPHED_FIELDS } from "@/simulator/engine/constants";
+import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
