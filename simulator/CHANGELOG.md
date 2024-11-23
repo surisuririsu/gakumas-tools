@@ -5,6 +5,14 @@ Dates are based on Eastern Time Zone.
 
 ## 2024-11-23
 
+### Added
+
+- Preview of White Night! White Wish! p-idols
+
+### Fixed
+
+- Trigger order of season 13 stage 2 effect (should activate later than other startOfTurn effects)
+
 ### Changed
 
 - Updated first-turn rates of season 13
