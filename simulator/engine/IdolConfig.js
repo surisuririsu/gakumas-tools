@@ -94,7 +94,7 @@ export default class IdolConfig {
   }
 
   getTypeMultipliers(stageType, params, supportBonus, criteria, season) {
-    if (stageType == "event" || season == 13) {
+    if (stageType == "event") {
       return {
         vocal: params.vocal / 100,
         dance: params.dance / 100,
@@ -102,19 +102,28 @@ export default class IdolConfig {
       };
     }
 
+    const hasFlatBonus = season == 13;
+
     let multipliers = {};
 
     for (let key of Object.keys(criteria)) {
       const param = params[key];
       const criterion = criteria[key];
 
-      let multiplier = param;
-      for (let i = 0; i < 5; i++) {
-        if (param > 300 * i) {
-          multiplier += 300 * i;
-        } else {
-          multiplier += param;
+      let multiplier = 0;
+      if (param > 1200) {
+        multiplier = param + 300 * 10;
+        if (hasFlatBonus) {
+          multiplier += param - 1200;
         }
+      } else if (param > 900) {
+        multiplier = param * 2 + 300 * 6;
+      } else if (param > 600) {
+        multiplier = param * 3 + 300 * 3;
+      } else if (param > 300) {
+        multiplier = param * 4 + 300;
+      } else if (param > 0) {
+        multiplier = param * 5;
       }
       multiplier = multiplier * criterion + 100;
       multiplier = Math.ceil(multiplier) * (1 + supportBonus);

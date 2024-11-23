@@ -16,6 +16,7 @@ Dates are based on Eastern Time Zone.
 ### Changed
 
 - Updated first-turn rates of season 13
+- Added support for flat-criteria bonus in season 13 score bonus calculation
 
 ## 2024-11-21
 

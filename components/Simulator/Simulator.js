@@ -135,7 +135,7 @@ export default function Simulator() {
           we complete the implementation. Thanks.
         </>
         <br />
-        {stage.type == "event" || stage.season == 13 ? (
+        {stage.type == "event" ? (
           t("enterPercents")
         ) : (
           <div className={styles.supportBonusInput}>
