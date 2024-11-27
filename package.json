@@ -14,7 +14,7 @@
     "@next/third-parties": "^14.2.14",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.2",
     "chart.js": "^4.4.4",
-    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v9.2.1",
+    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v9.3.0",
     "mongodb": "^6.9.0",
     "next": "^14.2.14",
     "next-auth": "^4.24.8",
@@ -39,5 +39,5 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.5.3"
 }
