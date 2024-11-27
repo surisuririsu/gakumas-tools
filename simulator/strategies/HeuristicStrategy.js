@@ -16,11 +16,13 @@ export default class HeuristicStrategy extends StageStrategy {
     this.goodConditionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodConditionTurns" ? 2 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 5 : 0.8;
+      idolConfig.recommendedEffect == "concentration" ? 4 : 0.8;
     this.goodImpressionTurnsMultiplier =
       idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       idolConfig.recommendedEffect == "motivation" ? 4 : 1;
+
+    this.depth = 0;
   }
 
   scaleScore(score) {
@@ -33,7 +35,11 @@ export default class HeuristicStrategy extends StageStrategy {
     }
     const previewState = this.engine.useCard(state, cardId);
 
+    this.depth++;
+
     let score = 0;
+
+    if ([362, 363].includes(cardId)) score += 100000;
 
     // Effects
     const effectsDiff = previewState.effects.length - state.effects.length;
@@ -54,9 +60,10 @@ export default class HeuristicStrategy extends StageStrategy {
     }
 
     // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining) {
+    if (previewState.turnsRemaining >= state.turnsRemaining && this.depth < 4) {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
+      this.depth--;
       if (filteredScores.length) {
         return score + Math.max(...filteredScores);
       } else {
@@ -74,6 +81,7 @@ export default class HeuristicStrategy extends StageStrategy {
 
     score += this.getStateScore(previewState);
 
+    this.depth--;
     return Math.round(score);
   }
 
@@ -112,10 +120,25 @@ export default class HeuristicStrategy extends StageStrategy {
     // Stance
     if (state.stance == "fullPower") {
       score += 200;
+    } else if (state.stance == "strength") {
+      score += 20;
+    } else if (state.stance == "strength2") {
+      score += 40;
+    } else if (state.stance == "preservation") {
+      score += 8;
+    } else if (state.stance == "preservation2") {
+      score += 16;
     }
 
+    score += state.strengthTimes * 40;
+    score += state.preservationTimes * 80;
+    score += state.fullPowerTimes * 250;
+
+    //Enthusiasm
+    score += state.enthusiasm * 5;
+
     // Full power charge
-    score += state.fullPowerCharge * 15;
+    score += state.cumulativeFullPowerCharge * 15;
 
     // Growth
     score +=

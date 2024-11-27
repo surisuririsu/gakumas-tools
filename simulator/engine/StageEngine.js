@@ -99,6 +99,9 @@ export default class StageEngine {
       cumulativeFullPowerCharge: 0,
       enthusiasm: 0,
       growthByEntity: {},
+      strengthTimes: 0,
+      preservationTimes: 0,
+      fullPowerTimes: 0,
 
       // Score buffs
       scoreBuffs: [],
@@ -194,7 +197,33 @@ export default class StageEngine {
       {
         phase: "stanceChanged",
         conditions: ["stance==fullPower"],
-        actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
+        actions: [
+          "cardUsesRemaining+=1",
+          "addHeldCardsToHand",
+          "fullPowerTimes+=1",
+        ],
+      },
+    ]);
+    nextState = this._setEffects(nextState, "default", null, [
+      {
+        phase: "stanceChanged",
+        conditions: ["stance==strength"],
+        actions: ["strengthTimes+=1"],
+      },
+      {
+        phase: "stanceChanged",
+        conditions: ["stance==strength2"],
+        actions: ["strengthTimes+=1"],
+      },
+      {
+        phase: "stanceChanged",
+        conditions: ["stance==preservation"],
+        actions: ["preservationTimes+=1"],
+      },
+      {
+        phase: "stanceChanged",
+        conditions: ["stance==preservation2"],
+        actions: ["preservationTimes+=1"],
       },
     ]);
 

@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of skill card and p-item from supports in WNWW Ume gacha
 
+### Changed
+
+- Updated simulator strategy to improve accuracy of anomaly (slightly), and special case for chochoinochoi (temporary)
+
 ## 2024-11-23
 
 ### Added
