@@ -11,7 +11,8 @@ import { EntityTypes } from "@/utils/entities";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
 
-const HIDDEN_CARD_IDS = [];
+const HIDDEN_CARD_IDS = [458, 460, 463];
+const HIDDEN_ITEM_IDS = [175, 177];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const t = useTranslations("EntityBank");
@@ -49,9 +50,11 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
     entities = Entities.getAll().sort(compareFn);
   }
 
-  // Hide unreleased cards
+  // Hide unreleased entities
   if (type == EntityTypes.SKILL_CARD) {
     entities = entities.filter((e) => !HIDDEN_CARD_IDS.includes(e.id));
+  } else if (type == EntityTypes.P_ITEM) {
+    entities = entities.filter((e) => !HIDDEN_ITEM_IDS.includes(e.id));
   }
 
   for (let customFilter of filters) {
