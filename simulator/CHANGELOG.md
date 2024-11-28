@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-11-28
+
+### Changed
+
+- Updated skill card and p-item from supports in WNWW Ume gacha
+
 ## 2024-11-27
 
 ### Added
