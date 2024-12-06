@@ -3,7 +3,7 @@ import { GRAPHED_FIELDS } from "@/simulator/engine/constants";
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
-  stageId: "49",
+  stageId: "52",
   supportBonus: "0",
   params: "1500-1500-1500-50",
   pItemIds: "0-0-0",
