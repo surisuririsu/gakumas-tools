@@ -125,11 +125,11 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <StageSelect />
-        {/* <>
+        <>
           * Season 14 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </> */}
-        {/* <br /> */}
+        </>
+        <br />
         <>
           ※NOTE: Anomaly plan is not fully implemented. Please be patient while
           we complete the implementation. Thanks.
@@ -200,7 +200,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-11-28
+            {t("lastUpdated")}: 2024-12-05
           </a>
         </div>
       </div>

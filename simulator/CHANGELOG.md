@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-05
+
+### Added
+
+- Preview of season 14 contest
+
 ## 2024-11-28
 
 ### Changed
