@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-08
+
+### Added
+
+- Preview of skill cards and p-items from White Night! White Wish! Lilja gacha
+
 ## 2024-12-05
 
 ### Added
