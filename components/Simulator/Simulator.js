@@ -200,7 +200,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-12-05
+            {t("lastUpdated")}: 2024-12-08
           </a>
         </div>
       </div>
