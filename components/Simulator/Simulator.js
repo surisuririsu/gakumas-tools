@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { IdolConfig, StageConfig } from "@/simulator/engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import KofiAd from "@/components/KofiAd";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
@@ -203,6 +204,11 @@ export default function Simulator() {
             {t("lastUpdated")}: 2024-12-08
           </a>
         </div>
+        {!simulatorData && (
+          <div className={styles.ad}>
+            <KofiAd />
+          </div>
+        )}
       </div>
 
       {simulatorData && (
