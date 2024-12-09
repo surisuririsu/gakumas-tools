@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-09
+
+### Changed
+
+- Updated skill cards and p-items for White Night! White Wish! Lilja
+
 ## 2024-12-08
 
 ### Added
