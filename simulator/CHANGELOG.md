@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-11
+
+### Fixed
+
+- Effect and timing of きみと分け合う夏
+
 ## 2024-12-09
 
 ### Changed
