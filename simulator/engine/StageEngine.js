@@ -682,6 +682,25 @@ export default class StageEngine {
     return state;
   }
 
+  _holdCard(state, cardId) {
+    for (let pile of [
+      "deckCardIds",
+      "handCardIds",
+      "discardedCardIds",
+      "removedCardIds",
+    ]) {
+      const index = state[pile].findIndex(
+        (id) => id == cardId || id == cardId + 1
+      );
+      if (index != -1) {
+        const realCardId = state[pile].splice(index, 1)[0];
+        state.holdCardIds.push(realCardId);
+        break;
+      }
+    }
+    return state;
+  }
+
   _holdSelectedFromHand(state) {
     // TODO: Random for now
     const randomIndex = Math.floor(Math.random() * state.handCardIds.length);
@@ -1124,6 +1143,11 @@ export default class StageEngine {
         state = this._upgradeRandomCardInHand(state);
       } else if (tokens[0] == "holdThisCard") {
         state = this._holdThisCard(state);
+      } else if (tokens[0].startsWith("holdCard")) {
+        state = this._holdCard(
+          state,
+          parseInt(tokens[0].match(/\(([^)]+)\)/)[1])
+        );
       } else if (tokens[0] == "holdSelectedFromHand") {
         state = this._holdSelectedFromHand(state);
       } else if (tokens[0] == "holdSelectedFromDeckOrDiscards") {
