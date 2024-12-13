@@ -819,7 +819,7 @@ export default class StageEngine {
           state,
           state._usedCardId ? "skillCardEffect" : null,
           state._usedCardId,
-          [effect]
+          [{ ...effect, group: state._usedCardId ? 10 : null }]
         );
         continue;
       }
