@@ -64,6 +64,7 @@ export function generatePossibleMemories(skillCardIds, rank) {
     // Reduce number of lottery slots until we find a viable combination
     // or we reach 0 slots
     let maxCombinedCost;
+    let hasOverCostCombination = false;
     let remainingSlots = lotterySlots;
     while (true) {
       // If no possible combinations, add lonely memory
@@ -94,6 +95,7 @@ export function generatePossibleMemories(skillCardIds, rank) {
 
         // Remove combinations that cost too much
         if (combinationCost > maxCost) {
+          hasOverCostCombination = true;
           continue;
         }
 
@@ -102,10 +104,13 @@ export function generatePossibleMemories(skillCardIds, rank) {
           maxCombinedCost = combinationCost;
         }
 
-        // If this combination has the highest possible cost in the acquired cards
-        // and is below minimum cost for the rank, add it to possible combinations
-        if (maxCombinedCost < minCost && maxCombinedCost === combinationCost) {
-          stepCombinations.push(preLotteryCombination.concat(combination));
+        // If there are no combinations within cost range, then if there is a
+        // combination higher than max cost, add all combinations lower than min
+        // cost. Otherwise, add only the highest possible cost combination.
+        if (maxCombinedCost < minCost) {
+          if (hasOverCostCombination || maxCombinedCost === combinationCost) {
+            stepCombinations.push(preLotteryCombination.concat(combination));
+          }
           continue;
         }
 
