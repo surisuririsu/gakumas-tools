@@ -4,23 +4,23 @@ export default class HeuristicStrategy extends StageStrategy {
   constructor(engine) {
     super(engine);
 
-    const { idolConfig, stageConfig } = engine;
-    this.averageTypeMultiplier = Object.keys(idolConfig.typeMultipliers).reduce(
+    const { config } = engine;
+    this.averageTypeMultiplier = Object.keys(config.typeMultipliers).reduce(
       (acc, cur) =>
         acc +
-        (idolConfig.typeMultipliers[cur] * stageConfig.turnCounts[cur]) /
-          stageConfig.turnCount,
+        (config.typeMultipliers[cur] * config.stage.turnCounts[cur]) /
+          config.stage.turnCount,
       0
     );
 
     this.goodConditionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodConditionTurns" ? 2 : 1;
+      config.idol.recommendedEffect == "goodConditionTurns" ? 2 : 1;
     this.concentrationMultiplier =
-      idolConfig.recommendedEffect == "concentration" ? 4 : 0.8;
+      config.idol.recommendedEffect == "concentration" ? 4 : 0.8;
     this.goodImpressionTurnsMultiplier =
-      idolConfig.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
+      config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
-      idolConfig.recommendedEffect == "motivation" ? 4 : 1;
+      config.idol.recommendedEffect == "motivation" ? 4 : 1;
 
     this.depth = 0;
   }
@@ -193,7 +193,7 @@ export default class HeuristicStrategy extends StageStrategy {
     // Scale score
     score = this.scaleScore(score);
 
-    const { recommendedEffect } = this.engine.idolConfig;
+    const { recommendedEffect } = this.engine.config.idol;
     if (recommendedEffect == "goodConditionTurns") {
       score += state.score * 0.4;
     } else if (recommendedEffect == "concentration") {

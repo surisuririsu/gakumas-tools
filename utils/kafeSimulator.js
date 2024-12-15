@@ -1,5 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data/lite";
-import { IdolConfig } from "@/simulator/engine";
+import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/engine";
 import KAFE_CARD_MAP from "@/generated/kafeCardMap.json";
 import KAFE_ITEM_MAP from "@/generated/kafeItemMap.json";
 import KAFE_P_IDOL_MAP from "@/generated/kafePIdolMap.json";
@@ -15,19 +15,20 @@ export function generateKafeUrl(
   pItemIds,
   skillCardIdGroups
 ) {
-  const idolConfig = new IdolConfig(
+  const idolConfig = new IdolConfig({
     params,
     supportBonus,
     pItemIds,
     skillCardIdGroups,
-    stage
-  );
+  });
+  const stageConfig = new StageConfig(stage);
+  const idolStageConfig = new IdolStageConfig(idolConfig, stageConfig);
 
   // Convert stage id
   const kafeStage = KAFE_STAGE_MAP[stage.id];
 
   // Convert parameters
-  const status = Object.values(idolConfig.typeMultipliers)
+  const status = Object.values(idolStageConfig.typeMultipliers)
     .map((s) => Math.round(s * 100))
     .concat(idolConfig.params.stamina);
 

@@ -22,9 +22,8 @@ const KEYS_TO_DIFF = [
 ];
 
 export default class StageEngine {
-  constructor(stageConfig, idolConfig, logger, debug) {
-    this.stageConfig = stageConfig;
-    this.idolConfig = idolConfig;
+  constructor(idolStageConfig, logger, debug) {
+    this.config = idolStageConfig;
     this.logger = logger;
     this.debug = debug;
   }
@@ -36,12 +35,12 @@ export default class StageEngine {
 
       // General
       turnsElapsed: 0,
-      turnsRemaining: this.stageConfig.turnCount,
+      turnsRemaining: this.config.stage.turnCount,
       cardUsesRemaining: 0,
-      maxStamina: this.idolConfig.params.stamina,
+      maxStamina: this.config.idol.params.stamina,
       fixedStamina: 0,
       intermediateStamina: 0,
-      stamina: this.idolConfig.params.stamina,
+      stamina: this.config.idol.params.stamina,
       consumedStamina: 0,
       fixedGenki: 0,
       intermediateGenki: 0,
@@ -52,7 +51,9 @@ export default class StageEngine {
       clearRatio: 0,
 
       // Skill card piles
-      deckCardIds: shuffle(this.idolConfig.skillCardIds).sort((a, b) => {
+      deckCardIds: shuffle(
+        this.config.idol.skillCardIds.concat(this.config.defaultCardIds)
+      ).sort((a, b) => {
         if (SkillCards.getById(a).forceInitialHand) return 1;
         if (SkillCards.getById(b).forceInitialHand) return -1;
         return 0;
@@ -116,7 +117,7 @@ export default class StageEngine {
   }
 
   _generateTurnTypes() {
-    const { turnCounts, firstTurns, criteria } = this.stageConfig;
+    const { turnCounts, firstTurns, criteria } = this.config.stage;
     const remainingTurns = { ...turnCounts };
 
     const rand = Math.random();
@@ -228,23 +229,23 @@ export default class StageEngine {
     ]);
 
     // Set stage effects
-    this.logger.debug("Setting stage effects", this.stageConfig.effects);
+    this.logger.debug("Setting stage effects", this.config.stage.effects);
     nextState = this._setEffects(
       nextState,
       "stage",
       null,
-      this.stageConfig.effects
+      this.config.stage.effects
     );
 
     // Set p-item effects
-    for (let id of this.idolConfig.pItemIds) {
+    for (let id of this.config.idol.pItemIds) {
       const { effects, name } = PItems.getById(id);
       this.logger.debug("Setting p-item effects", name, effects);
       nextState = this._setEffects(nextState, "pItem", id, effects);
     }
 
     // Set growth effects
-    const uniqueSkillCardIds = new Set(this.idolConfig.skillCardIds);
+    const uniqueSkillCardIds = new Set(this.config.idol.skillCardIds);
     for (let id of uniqueSkillCardIds) {
       const { growth, name } = SkillCards.getById(id);
       if (!growth?.length) continue;
@@ -442,7 +443,7 @@ export default class StageEngine {
     if (state.cardUsesRemaining > 0) {
       state.stamina = Math.min(
         state.stamina + 2,
-        this.idolConfig.params.stamina
+        this.config.idol.params.stamina
       );
     }
 
@@ -504,13 +505,13 @@ export default class StageEngine {
 
     state.turnType =
       state.turnTypes[
-        Math.min(state.turnsElapsed, this.stageConfig.turnCount - 1)
+        Math.min(state.turnsElapsed, this.config.stage.turnCount - 1)
       ];
 
     this.logger.log("startTurn", {
       num: state.turnsElapsed + 1,
       type: state.turnType,
-      multiplier: this.idolConfig.typeMultipliers[state.turnType],
+      multiplier: this.config.typeMultipliers[state.turnType],
     });
 
     // Draw cards
@@ -584,7 +585,7 @@ export default class StageEngine {
   _addRandomUpgradedCardToHand(state) {
     const validBaseCards = SkillCards.getFiltered({
       rarities: ["R", "SR", "SSR"],
-      plans: [this.idolConfig.plan, "free"],
+      plans: [this.config.idol.plan, "free"],
       sourceTypes: ["produce"],
     }).filter((card) => card.upgraded);
     const randomCard =
@@ -1313,7 +1314,7 @@ export default class StageEngine {
           score = Math.ceil(score);
 
           // Turn type multiplier
-          score *= this.idolConfig.typeMultipliers[state.turnType];
+          score *= this.config.typeMultipliers[state.turnType];
           score = Math.ceil(score);
         }
 

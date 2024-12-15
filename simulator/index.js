@@ -3,9 +3,9 @@ import { mergeGraphDatas } from "@/utils/simulator";
 import { DEBUG } from "./constants";
 import STRATEGIES from "./strategies";
 
-export function simulate(stageConfig, idolConfig, strategyName, numRuns) {
+export function simulate(idolStageConfig, strategyName, numRuns) {
   const logger = new StageLogger(DEBUG);
-  const engine = new StageEngine(stageConfig, idolConfig, logger, DEBUG);
+  const engine = new StageEngine(idolStageConfig, logger, DEBUG);
   const strategy = new STRATEGIES[strategyName](engine);
 
   let totalScore = 0;
