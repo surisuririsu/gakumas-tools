@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-15
+
+### Fixed
+
+- Growth condition of 頂点へ
+
 ## 2024-12-13
 
 ### Fixed

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { IdolConfig, StageConfig } from "@/simulator/engine";
+import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
@@ -38,16 +38,9 @@ export default function Simulator() {
   const [running, setRunning] = useState(false);
   const workersRef = useRef();
 
-  const idolConfig = new IdolConfig(
-    loadout.params,
-    loadout.supportBonus,
-    loadout.pItemIds,
-    loadout.skillCardIdGroups,
-    stage,
-    plan,
-    idolId
-  );
+  const idolConfig = new IdolConfig(loadout);
   const stageConfig = new StageConfig(stage);
+  const idolStageConfig = new IdolStageConfig(idolConfig, stageConfig);
 
   // Set up web workers on mount
   useEffect(() => {
@@ -93,7 +86,7 @@ export default function Simulator() {
     console.time("simulation");
 
     if (SYNC || !workersRef.current) {
-      const result = simulate(stageConfig, idolConfig, strategy, NUM_RUNS);
+      const result = simulate(idolStageConfig, strategy, NUM_RUNS);
       setResult(result);
     } else {
       const numWorkers = workersRef.current.length;
@@ -105,8 +98,7 @@ export default function Simulator() {
           new Promise((resolve) => {
             workersRef.current[i].onmessage = (e) => resolve(e.data);
             workersRef.current[i].postMessage({
-              stageConfig,
-              idolConfig,
+              idolStageConfig,
               strategy,
               numRuns: runsPerWorker,
             });
@@ -159,9 +151,9 @@ export default function Simulator() {
             max={10000}
           />
           <div className={styles.typeMultipliers}>
-            {Object.keys(idolConfig.typeMultipliers).map((param) => (
+            {Object.keys(idolStageConfig.typeMultipliers).map((param) => (
               <div key={param}>
-                {Math.round(idolConfig.typeMultipliers[param] * 100)}%
+                {Math.round(idolStageConfig.typeMultipliers[param] * 100)}%
               </div>
             ))}
             <div />
@@ -201,7 +193,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-12-13
+            {t("lastUpdated")}: 2024-12-15
           </a>
         </div>
         {!simulatorData && (
