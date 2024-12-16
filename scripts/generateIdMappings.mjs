@@ -6,10 +6,15 @@ import P_IDOLS from "gakumas-data/json/p_idols.json" assert { type: "json" };
 import P_ITEMS from "gakumas-data/json/p_items.json" assert { type: "json" };
 import SKILL_CARDS from "gakumas-data/json/skill_cards.json" assert { type: "json" };
 import STAGES from "gakumas-data/json/stages.json" assert { type: "json" };
-import { ContestData } from "gakumas_contest_simulator/scripts/simulator/data/contestData.js";
-import { PIdolData } from "gakumas_contest_simulator/scripts/simulator/data/pIdolData.js";
-import { PItemData } from "gakumas_contest_simulator/scripts/simulator/data/pItemData.js";
-import { SkillCardData } from "gakumas_contest_simulator/scripts/simulator/data/skillCardData.js";
+
+import dataloader from "gakumas_contest_simulator/simulator/game/data/DataLoader.js";
+dataloader.initialize();
+console.log(dataloader.cardMap);
+
+import { data as KAFE_CONTESTS } from "gakumas_contest_simulator/simulator/game/data/contest.js";
+import { data as KAFE_P_IDOLS } from "gakumas_contest_simulator/simulator/game/data/pIdol.js";
+import { data as KAFE_P_ITEMS } from "gakumas_contest_simulator/simulator/game/data/pItem.js";
+import { data as KAFE_SKILL_CARDS } from "gakumas_contest_simulator/simulator/game/data/cards.js";
 
 const IDOL_NAMES_BY_ID = IDOLS.reduce(
   (acc, cur) => ({
@@ -37,20 +42,17 @@ const KAFE_CARD_NAME_FIXUPS = {
   281: "ＰＯＷ！+",
 };
 
-const KAFE_STAGE_IDS_BY_SEASON_STAGE = ContestData.getAll().reduce(
-  (acc, cur) => {
-    cur.stages.forEach((stage, i) => {
-      const normalizedName = `${cur.name} ${stage.name}`.normalize("NFKC");
-      const match = normalizedName.match(/第(\d+)期コンテスト.*ステージ(\d+)/);
-      if (!match) return;
-      acc[`${match[1]}-${match[2]}`] = `${cur.id}:${i}`;
-    });
-    return acc;
-  },
-  {}
-);
+const KAFE_STAGE_IDS_BY_SEASON_STAGE = KAFE_CONTESTS.reduce((acc, cur) => {
+  cur.stages.forEach((stage, i) => {
+    const normalizedName = `${cur.name} ${stage.name}`.normalize("NFKC");
+    const match = normalizedName.match(/第(\d+)期コンテスト.*ステージ(\d+)/);
+    if (!match) return;
+    acc[`${match[1]}-${match[2]}`] = `${cur.id}:${i}`;
+  });
+  return acc;
+}, {});
 
-const KAFE_P_IDOL_IDS_BY_NAME_TITLE = PIdolData.getAll().reduce(
+const KAFE_P_IDOL_IDS_BY_NAME_TITLE = KAFE_P_IDOLS.reduce(
   (acc, cur) => ({
     ...acc,
     [`${cur.name}_${cur.episode_name}`]: cur.id,
@@ -58,7 +60,7 @@ const KAFE_P_IDOL_IDS_BY_NAME_TITLE = PIdolData.getAll().reduce(
   {}
 );
 
-const KAFE_ITEM_IDS_BY_NAME = PItemData.getAll().reduce(
+const KAFE_ITEM_IDS_BY_NAME = KAFE_P_ITEMS.reduce(
   (acc, cur) => ({
     ...acc,
     [cur.name]: cur.id,
@@ -66,7 +68,7 @@ const KAFE_ITEM_IDS_BY_NAME = PItemData.getAll().reduce(
   {}
 );
 
-const KAFE_CARD_IDS_BY_NAME = SkillCardData.getAll().reduce(
+const KAFE_CARD_IDS_BY_NAME = KAFE_SKILL_CARDS.reduce(
   (acc, cur) => ({
     ...acc,
     [cur.name]: cur.id,
