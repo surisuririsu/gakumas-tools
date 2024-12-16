@@ -15,7 +15,6 @@ export function shuffle(arr) {
 }
 
 export function formatDiffField(value) {
-  return value;
   if (isNaN(value)) return value;
   return parseFloat(value.toFixed(2));
 }

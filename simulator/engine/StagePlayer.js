@@ -29,8 +29,6 @@ export default class StagePlayer {
       }
     }
 
-    // console.log(state, this.engine.logger.logs);
-
     return {
       score: state.score,
       logs: this.engine.logger.logs,
@@ -46,7 +44,7 @@ export default class StagePlayer {
       }
     }
     if (state.scoreBuffs.length) {
-      res.scoreBuffs = state.scoreBuffs;
+      res.scoreBuffs = JSON.parse(JSON.stringify(state.scoreBuffs));
     }
     delete res.turnsRemaining;
     delete res.cardUsesRemaining;
