@@ -62,7 +62,7 @@ export default class BuffManager extends EngineComponent {
         fresh: !UNFRESH_PHASES.includes(state[S.phase]),
       });
     }
-    this.logger.log("setScoreBuff", {
+    this.logger.log(state, "setScoreBuff", {
       amount,
       turns,
     });

@@ -107,7 +107,7 @@ export default class Executor extends EngineComponent {
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {
       const field = LOGGED_FIELDS[i];
       if (state[S[field]] == prev[S[field]]) continue;
-      this.logger.log("diff", {
+      this.logger.log(state, "diff", {
         field,
         prev: formatDiffField(prev[S[field]]),
         next: formatDiffField(state[S[field]]),

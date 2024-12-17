@@ -14,6 +14,7 @@ import {
 import { Line } from "react-chartjs-2";
 import c from "@/utils/classNames";
 import styles from "./AreaPlot.module.scss";
+import { S } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -108,12 +109,12 @@ function AreaPlot({ data, plan }) {
   };
 
   const formattedData = {
-    labels: data.score.map((_, i) => i),
+    labels: data[S.score].map((_, i) => i),
     datasets: Object.keys(FIELDS)
       .filter((f) => activeFields[f])
       .map((field) => ({
         label: FIELDS[field].label,
-        data: data[field].map((v) => parseFloat(v.toFixed(2))),
+        data: data[S[field]].map((v) => parseFloat(v.toFixed(2))),
         backgroundColor: FIELDS[field].color,
         fill: true,
         yAxisID: FIELDS[field].yAxisID || "y",

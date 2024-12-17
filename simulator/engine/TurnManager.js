@@ -65,7 +65,7 @@ export default class TurnManager extends EngineComponent {
   startTurn(state) {
     this.logger.debug("Starting turn", state[S.turnsElapsed] + 1);
 
-    this.logger.log("startTurn", {
+    this.logger.log(state, "startTurn", {
       num: state[S.turnsElapsed] + 1,
       type: this.getTurnType(state),
       multiplier: this.getTurnMultiplier(state),

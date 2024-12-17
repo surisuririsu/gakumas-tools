@@ -1,5 +1,3 @@
-import { S } from "../constants";
-
 export function shuffle(arr) {
   let currentIndex = arr.length;
 
@@ -14,6 +12,13 @@ export function shuffle(arr) {
   }
 
   return arr;
+}
+
+export function formatRun(run) {
+  return {
+    score: run.score,
+    logs: [].concat(...run.logs),
+  };
 }
 
 export function formatDiffField(value) {

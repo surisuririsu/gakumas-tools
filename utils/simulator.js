@@ -1,4 +1,4 @@
-import { BUCKET_SIZE, GRAPHED_FIELDS } from "@/simulator/constants";
+import { BUCKET_SIZE, GRAPHED_FIELDS, S } from "@/simulator/constants";
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
@@ -136,24 +136,24 @@ export function mergeResults(results) {
 
 export function mergeGraphDatas(graphDatas) {
   let mergedGraphData = GRAPHED_FIELDS.reduce((acc, cur) => {
-    acc[cur] = [];
+    acc[S[cur]] = [];
     return acc;
   }, {});
 
   for (let graphData of graphDatas) {
     for (let field of GRAPHED_FIELDS) {
-      for (let i = 0; i < graphData[field].length; i++) {
-        if (!mergedGraphData[field][i]) mergedGraphData[field][i] = [];
-        mergedGraphData[field][i].push(graphData[field][i]);
+      for (let i = 0; i < graphData[S[field]].length; i++) {
+        if (!mergedGraphData[S[field]][i]) mergedGraphData[S[field]][i] = [];
+        mergedGraphData[S[field]][i].push(graphData[S[field]][i]);
       }
     }
   }
 
   for (let field of GRAPHED_FIELDS) {
-    for (let i = 0; i < mergedGraphData[field].length; i++) {
-      mergedGraphData[field][i] =
-        mergedGraphData[field][i].reduce((acc, cur) => acc + cur, 0) /
-        mergedGraphData[field][i].length;
+    for (let i = 0; i < mergedGraphData[S[field]].length; i++) {
+      mergedGraphData[S[field]][i] =
+        mergedGraphData[S[field]][i].reduce((acc, cur) => acc + cur, 0) /
+        mergedGraphData[S[field]][i].length;
     }
   }
 

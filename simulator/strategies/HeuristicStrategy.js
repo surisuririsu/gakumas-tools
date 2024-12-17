@@ -1,5 +1,5 @@
 import { S } from "../constants";
-import { deepCopy, shallowCopy } from "../engine/utils";
+import { deepCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
 
 export default class HeuristicStrategy extends BaseStrategy {
@@ -25,17 +25,42 @@ export default class HeuristicStrategy extends BaseStrategy {
       config.idol.recommendedEffect == "motivation" ? 4 : 1;
   }
 
-  scaleScore(score) {
-    return Math.ceil(score * this.averageTypeMultiplier);
-  }
+  evaluate(state) {
+    const logIndex = state.logs.length;
+    this.engine.logger.log(state, "hand", {
+      handCardIds: state[S.handCards].map((card) => state[S.cardMap][card].id),
+      scores: [],
+      selectedIndex: null,
+      state: this.engine.logger.getHandStateForLogging(state),
+    });
 
-  getScore(state, card) {
-    if (!this.engine.isCardUsable(state, card)) {
-      return -Infinity;
+    const futures = state[S.handCards].map((card) =>
+      this.getFuture(state, card)
+    );
+
+    let nextState;
+
+    const scores = futures.map((f) => (f ? f.score : -Infinity));
+    const maxScore = Math.max(...scores);
+    if (maxScore > 0) {
+      const maxIndex = scores.indexOf(maxScore);
+      nextState = futures[maxIndex].state;
+      nextState.logs[logIndex].data.selectedIndex = maxIndex;
+    } else {
+      nextState = this.engine.endTurn(state);
     }
 
-    const previewState = deepCopy(state);
-    this.engine.useCard(previewState, card);
+    nextState.logs[logIndex].data.scores = scores;
+
+    return { score: maxScore, state: nextState };
+  }
+
+  getFuture(state, card) {
+    if (!this.engine.isCardUsable(state, card)) {
+      return null;
+    }
+
+    const previewState = this.engine.useCard(state, card);
 
     let score = 0;
 
@@ -55,7 +80,7 @@ export default class HeuristicStrategy extends BaseStrategy {
         limit = effect.limit + 1;
       }
       if (limit == 0) continue;
-      let postEffectState = shallowCopy(previewState);
+      const postEffectState = deepCopy(previewState);
       this.engine.effectManager.triggerEffects(postEffectState, [
         { ...effect, phase: null },
       ]);
@@ -66,15 +91,7 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     // Additional actions
     if (previewState[S.turnsRemaining] >= state[S.turnsRemaining]) {
-      const { scores } = this.evaluate(previewState);
-      const filteredScores = scores.filter((s) => s > 0);
-      if (filteredScores.length) {
-        return score + Math.max(...filteredScores);
-      } else {
-        const skipState = shallowCopy(previewState);
-        this.engine.endTurn(skipState);
-        return score + this.getStateScore(skipState);
-      }
+      return this.evaluate(previewState);
     }
 
     // Cards removed
@@ -86,7 +103,11 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     score += this.getStateScore(previewState);
 
-    return Math.round(score);
+    return { score: Math.round(score), state: previewState };
+  }
+
+  scaleScore(score) {
+    return Math.ceil(score * this.averageTypeMultiplier);
   }
 
   getStateScore(state) {

@@ -4,12 +4,14 @@ import CardManager from "./CardManager";
 import EffectManager from "./EffectManager";
 import Evaluator from "./Evaluator";
 import Executor from "./Executor";
+import StageLogger from "./StageLogger";
 import TurnManager from "./TurnManager";
+import { deepCopy } from "./utils";
 
 export default class StageEngine {
-  constructor(config, logger) {
+  constructor(config) {
     this.config = config;
-    this.logger = logger;
+    this.logger = new StageLogger();
     this.cardManager = new CardManager(this);
     this.effectManager = new EffectManager(this);
     this.buffManager = new BuffManager(this);
@@ -20,6 +22,9 @@ export default class StageEngine {
 
   getInitialState() {
     const state = {};
+
+    // Logs
+    this.logger.initializeState(state);
 
     // General
     state[S.cardUsesRemaining] = 0;
@@ -47,17 +52,22 @@ export default class StageEngine {
     this.effectManager.triggerEffectsForPhase(state, "startOfStage");
     this.logger.pushGraphData(state);
     this.turnManager.startTurn(state);
+    return state;
   }
 
   isCardUsable(state, card) {
     return this.cardManager.isCardUsable(state, card);
   }
 
-  useCard(state, card) {
+  useCard(prevState, card) {
+    const state = deepCopy(prevState);
     this.cardManager.useCard(state, card);
+    return state;
   }
 
-  endTurn(state) {
+  endTurn(prevState) {
+    const state = deepCopy(prevState);
     this.turnManager.endTurn(state);
+    return state;
   }
 }

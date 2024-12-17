@@ -107,6 +107,7 @@ export default class EffectManager extends EngineComponent {
 
       // Delayed effects
       if (effect.phase) {
+        this.logger.debug("Setting effects", effect.effects);
         this.setEffects(
           state,
           [{ ...effect, group: card != null ? 10 : null }],
@@ -114,6 +115,7 @@ export default class EffectManager extends EngineComponent {
             ? { type: "skillCardEffect", id: state[S.cardMap][card].id }
             : null
         );
+        this.logger.log(state, "setEffect");
         continue;
       }
 
@@ -149,7 +151,7 @@ export default class EffectManager extends EngineComponent {
 
       // Log source
       if (effect.source) {
-        this.logger.log("entityStart", effect.source);
+        this.logger.log(state, "entityStart", effect.source);
       }
 
       this.logger.debug("Executing actions", effect.actions);
@@ -183,24 +185,17 @@ export default class EffectManager extends EngineComponent {
       } else {
         // Execute actions
         if (effect.actions) {
-          this.engine.executor.executeActions(state, effect.actions, card);
-        }
-
-        // Set effects
-        if (effect.effects) {
-          this.logger.debug("Setting effects", effect.effects);
-          this.engine.effectManager.setEffects(
+          this.engine.executor.executeActions(
             state,
-            effect.effects,
-            effect.source
+            effect.actions,
+            card || effect.source
           );
-          this.logger.log("setEffect");
         }
       }
 
       // Log source end
       if (effect.source) {
-        this.logger.log("entityEnd", effect.source);
+        this.logger.log(state, "entityEnd", effect.source);
       }
 
       // Track triggered effects
