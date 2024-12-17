@@ -5,6 +5,7 @@ import {
   NUMBER_REGEX,
   SET_OPERATOR,
   STANCES,
+  S,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -33,8 +34,8 @@ export default class Evaluator extends EngineComponent {
       // Single tokens
       if (tokens.length == 1) {
         // State variables
-        if (tokens[0] in state) {
-          return state[tokens[0]];
+        if (S[tokens[0]] in state) {
+          return state[S[tokens[0]]];
         }
 
         // Variable resolvers

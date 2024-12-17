@@ -1,3 +1,4 @@
+import { S } from "../constants";
 import BuffManager from "./BuffManager";
 import CardManager from "./CardManager";
 import EffectManager from "./EffectManager";
@@ -18,14 +19,14 @@ export default class StageEngine {
   }
 
   getInitialState() {
-    const state = {
-      // General
-      cardUsesRemaining: 0,
-      stamina: this.config.idol.params.stamina,
-      consumedStamina: 0,
-      genki: 0,
-      score: 0,
-    };
+    const state = {};
+
+    // General
+    state[S.cardUsesRemaining] = 0;
+    state[S.stamina] = this.config.idol.params.stamina;
+    state[S.consumedStamina] = 0;
+    state[S.genki] = 0;
+    state[S.score] = 0;
 
     // Turns
     this.turnManager.initializeState(state);

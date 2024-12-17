@@ -1,3 +1,5 @@
+import { S } from "../constants";
+
 export function shuffle(arr) {
   let currentIndex = arr.length;
 
@@ -17,4 +19,12 @@ export function shuffle(arr) {
 export function formatDiffField(value) {
   if (isNaN(value)) return value;
   return parseFloat(value.toFixed(2));
+}
+
+export function shallowCopy(state) {
+  return { ...state };
+}
+
+export function deepCopy(state) {
+  return JSON.parse(JSON.stringify(state));
 }

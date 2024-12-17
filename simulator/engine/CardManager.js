@@ -1,17 +1,18 @@
 import { SkillCards } from "gakumas-data/lite";
 import EngineComponent from "./EngineComponent";
-import { shuffle } from "./utils";
-import { COST_FIELDS, FUNCTION_CALL_REGEX } from "../constants";
+import { shallowCopy, shuffle } from "./utils";
+import { COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
     super(engine);
 
     this.variableResolvers = {
-      cardEffects: (state) => this.getCardEffects(state, state.usedCard),
-      usedCardId: (state) => state.usedCard && state.cardMap[state.usedCard].id,
+      cardEffects: (state) => this.getCardEffects(state, state[S.usedCard]),
+      usedCardId: (state) =>
+        state[S.usedCard] && state[S.cardMap][state[S.usedCard]].id,
       usedCardBaseId: (state) =>
-        state.usedCard && state.cardMap[state.usedCard].baseId,
+        state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
     };
   }
 
@@ -24,25 +25,25 @@ export default class CardManager extends EngineComponent {
       baseId: SkillCards.getById(id).upgraded ? id - 1 : id,
     }));
 
-    state.cardMap = cardMap;
-    state.deckCards = cardMap.map((_, i) => i);
-    shuffle(state.deckCards);
-    state.deckCards.sort((a, b) => {
+    state[S.cardMap] = cardMap;
+    state[S.deckCards] = cardMap.map((_, i) => i);
+    shuffle(state[S.deckCards]);
+    state[S.deckCards].sort((a, b) => {
       if (SkillCards.getById(cardMap[a].id).forceInitialHand) return 1;
       if (SkillCards.getById(cardMap[b].id).forceInitialHand) return -1;
       return 0;
     });
-    state.handCards = [];
-    state.discardedCards = [];
-    state.removedCards = [];
-    state.heldCards = [];
-    state.cardsUsed = 0;
-    state.turnCardsUsed = 0;
-    state.turnCardsUpgraded = 0;
+    state[S.handCards] = [];
+    state[S.discardedCards] = [];
+    state[S.removedCards] = [];
+    state[S.heldCards] = [];
+    state[S.cardsUsed] = 0;
+    state[S.turnCardsUsed] = 0;
+    state[S.turnCardsUpgraded] = 0;
   }
 
   getCardEffects(state, card) {
-    const skillCard = SkillCards.getById(state.cardMap[card].id);
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     let cardEffects = new Set();
     for (let i = 0; i < skillCard.effects.length; i++) {
       const effect = skillCard.effects[i];
@@ -62,7 +63,7 @@ export default class CardManager extends EngineComponent {
 
   grow(state, cards, actions) {
     for (let i = 0; i < cards.length; i++) {
-      const card = state.cardMap[cards[i]];
+      const card = state[S.cardMap][cards[i]];
       if (!card.growth) card.growth = {};
       this.engine.executor.executeGrowthActions(card.growth, actions);
       this.logger.log("growth", { type: "skillCard", id: card.id });
@@ -71,41 +72,41 @@ export default class CardManager extends EngineComponent {
 
   drawCard(state) {
     // Hand size limit
-    if (state.handCards.length >= 5) return;
+    if (state[S.handCards].length >= 5) return;
 
     // No cards in deck
-    if (!state.deckCards.length) {
-      if (!state.discardedCards.length) return;
+    if (!state[S.deckCards].length) {
+      if (!state[S.discardedCards].length) return;
       this.recycleDiscards(state);
     }
 
     // Draw card
-    const card = state.deckCards.pop();
-    state.handCards.push(card);
+    const card = state[S.deckCards].pop();
+    state[S.handCards].push(card);
 
     this.logger.debug(
       "Drew card",
-      SkillCards.getById(state.cardMap[card].id).name
+      SkillCards.getById(state[S.cardMap][card].id).name
     );
     this.logger.log("drawCard", {
       type: "skillCard",
-      id: state.cardMap[card].id,
+      id: state[S.cardMap][card].id,
     });
   }
 
   recycleDiscards(state) {
-    shuffle(state.discardedCards);
-    state.deckCards = state.discardedCards;
-    state.discardedCards = [];
+    shuffle(state[S.discardedCards]);
+    state[S.deckCards] = state[S.discardedCards];
+    state[S.discardedCards] = [];
     this.logger.debug("Recycled discard pile");
   }
 
   peekDeck(state) {
-    return state.deckCards[state.deckCards.length - 1];
+    return state[S.deckCards][state[S.deckCards].length - 1];
   }
 
   isCardUsable(state, card) {
-    const skillCard = SkillCards.getById(state.cardMap[card].id);
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
 
     // Check conditions
     for (let i = 0; i < skillCard.conditions.length; i++) {
@@ -117,37 +118,37 @@ export default class CardManager extends EngineComponent {
     }
 
     // Check cost
-    const previewState = { ...state };
+    const previewState = shallowCopy(state);
     for (let i = 0; i < skillCard.cost.length; i++) {
       this.engine.executor.executeAction(previewState, skillCard.cost[i], card);
     }
     for (let i = 0; i < COST_FIELDS.length; i++) {
-      if (previewState[COST_FIELDS[i]] < 0) return false;
+      if (previewState[S[COST_FIELDS[i]]] < 0) return false;
     }
 
     return true;
   }
 
   useCard(state, card) {
-    const handIndex = state.handCards.indexOf(card);
-    const skillCard = SkillCards.getById(state.cardMap[card].id);
+    const handIndex = state[S.handCards].indexOf(card);
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
 
     this.logger.log("entityStart", { type: "skillCard", id: skillCard.id });
 
     this.logger.debug("Using card", skillCard.id, skillCard.name);
 
     // Set used card
-    state.usedCard = card;
+    state[S.usedCard] = card;
 
     // Apply card cost
-    let conditionState = { ...state };
+    let conditionState = shallowCopy(state);
     this.logger.debug("Applying cost", skillCard.cost);
     this.engine.executor.executeActions(state, skillCard.cost);
-    if (state.nullifyCostCards) state.nullifyCostCards--;
+    if (state[S.nullifyCostCards]) state[S.nullifyCostCards]--;
 
     // Remove card from hand
-    state.handCards.splice(handIndex, 1);
-    state.cardUsesRemaining--;
+    state[S.handCards].splice(handIndex, 1);
+    state[S.cardUsesRemaining]--;
 
     // Trigger effects on card used
     this.engine.effectManager.triggerEffectsForPhase(
@@ -170,8 +171,8 @@ export default class CardManager extends EngineComponent {
     }
 
     // Apply card effects
-    if (state.doubleCardEffectCards) {
-      state.doubleCardEffectCards--;
+    if (state[S.doubleCardEffectCards]) {
+      state[S.doubleCardEffectCards]--;
       this.engine.effectManager.triggerEffects(
         state,
         skillCard.effects,
@@ -187,11 +188,11 @@ export default class CardManager extends EngineComponent {
     );
 
     // Increment counters
-    state.cardsUsed++;
-    state.turnCardsUsed++;
+    state[S.cardsUsed]++;
+    state[S.turnCardsUsed]++;
 
     // Trigger effects after card used
-    conditionState = { ...state };
+    conditionState = shallowCopy(state);
     this.engine.effectManager.triggerEffectsForPhase(
       state,
       "afterCardUsed",
@@ -212,52 +213,52 @@ export default class CardManager extends EngineComponent {
     }
 
     // Reset used card
-    delete state.usedCard;
+    delete state[S.usedCard];
 
     this.logger.log("entityEnd", { type: "skillCard", id: skillCard.id });
 
     // Send card to discards or remove
-    if (state.thisCardHeld) {
-      state.thisCardHeld = false;
+    if (state[S.thisCardHeld]) {
+      state[S.thisCardHeld] = false;
     } else if (skillCard.limit) {
-      state.removedCards.push(card);
+      state[S.removedCards].push(card);
     } else {
-      state.discardedCards.push(card);
+      state[S.discardedCards].push(card);
     }
 
     // End turn if no card uses left
-    if (state.cardUsesRemaining < 1) {
+    if (state[S.cardUsesRemaining] < 1) {
       this.engine.turnManager.endTurn(state);
     }
   }
 
   isUpgradable(state, card) {
-    const skillCard = SkillCards.getById(state.cardMap[card].id);
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     return !skillCard.upgraded && skillCard.type != "trouble";
   }
 
   upgrade(state, card) {
-    state.cardMap[card].id++;
-    state.turnCardsUpgraded++;
+    state[S.cardMap][card].id++;
+    state[S.turnCardsUpgraded]++;
   }
 
   discardHand(state) {
-    while (state.handCards.length) {
-      state.discardedCards.push(state.handCards.pop());
+    while (state[S.handCards].length) {
+      state[S.discardedCards].push(state[S.handCards].pop());
     }
   }
 
   upgradeHand(state) {
-    for (let i = 0; i < state.handCards.length; i++) {
-      if (this.isUpgradable(state.handCards[i])) {
-        this.upgrade(state, state.handCards[i]);
+    for (let i = 0; i < state[S.handCards].length; i++) {
+      if (this.isUpgradable(state[S.handCards][i])) {
+        this.upgrade(state, state[S.handCards][i]);
       }
     }
     this.logger.log("upgradeHand");
   }
 
   exchangeHand(state) {
-    const numCards = state.handCards.length;
+    const numCards = state[S.handCards].length;
     this.discardHand(state);
     this.logger.log("exchangeHand");
     for (let i = 0; i < numCards; i++) {
@@ -267,9 +268,9 @@ export default class CardManager extends EngineComponent {
 
   upgradeRandomCardInHand(state) {
     let unupgradedCards = [];
-    for (let i = 0; i < state.handCards.length; i++) {
-      if (this.isUpgradable(state, state.handCards[i])) {
-        unupgradedCards.push(state.handCards[i]);
+    for (let i = 0; i < state[S.handCards].length; i++) {
+      if (this.isUpgradable(state, state[S.handCards][i])) {
+        unupgradedCards.push(state[S.handCards][i]);
       }
     }
     if (!unupgradedCards.length) return;
@@ -278,7 +279,7 @@ export default class CardManager extends EngineComponent {
     this.upgrade(state, randomCard);
     this.logger.log("upgradeRandomCardInHand", {
       type: "skillCard",
-      id: state.cardMap[randomCard].id,
+      id: state[S.cardMap][randomCard].id,
     });
   }
 
@@ -290,11 +291,11 @@ export default class CardManager extends EngineComponent {
     }).filter((card) => card.upgraded);
     const skillCard =
       validSkillCards[Math.floor(Math.random() * validSkillCards.length)];
-    state.cardMap.push({
+    state[S.cardMap].push({
       id: skillCard.id,
       baseId: skillCard.id - skillCard.upgraded ? 1 : 0,
     });
-    state.handCards.push(state.cardMap.length - 1);
+    state[S.handCards].push(state[S.cardMap].length - 1);
     this.logger.log("addRandomUpgradedCardToHand", {
       type: "skillCard",
       id: skillCard.id,
@@ -302,28 +303,28 @@ export default class CardManager extends EngineComponent {
   }
 
   holdCard(state, cardBaseId) {
-    const card = state.cardMap.findIndex((c) => c.baseId == cardBaseId);
+    const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
     for (let i = 0; i < CARD_PILES.length; i++) {
-      const index = state[CARD_PILES[i]].indexOf(card);
+      const index = state[S[CARD_PILES[i]]].indexOf(card);
       if (index != -1) {
-        state[CARD_PILES[i]].splice(index, 1);
-        state.heldCards.push(card);
+        state[S[CARD_PILES[i]]].splice(index, 1);
+        state[S.heldCards].push(card);
         break;
       }
     }
   }
 
   holdThisCard(state) {
-    state.heldCards.push(state.usedCard);
-    state.thisCardHeld = true;
+    state[S.heldCards].push(state[S.usedCard]);
+    state[S.thisCardHeld] = true;
   }
 
   holdSelectedFromHand(state) {
     // TODO: Random for now
-    const randomIndex = Math.floor(Math.random() * state.handCards.length);
-    const card = state.handCards.splice(randomIndex, 1)[0];
+    const randomIndex = Math.floor(Math.random() * state[S.handCards].length);
+    const card = state[S.handCards].splice(randomIndex, 1)[0];
     if (card != null) {
-      state.heldCards.push(card);
+      state[S.heldCards].push(card);
     }
     return state;
   }
@@ -331,25 +332,26 @@ export default class CardManager extends EngineComponent {
   holdSelectedFromDeckOrDiscards(state) {
     // TODO: Random for now
     const randomIndex = Math.floor(
-      Math.random() * (state.deckCards.length + state.discardedCards.length)
+      Math.random() *
+        (state[S.deckCards].length + state[S.discardedCards].length)
     );
     let card;
-    if (randomIndex >= state.deckCards.length) {
-      card = state.discardedCards.splice(
-        randomIndex - state.deckCards.length,
+    if (randomIndex >= state[S.deckCards].length) {
+      card = state[S.discardedCards].splice(
+        randomIndex - state[S.deckCards].length,
         1
       )[0];
     } else {
-      card = state.deckCards.splice(randomIndex, 1)[0];
+      card = state[S.deckCards].splice(randomIndex, 1)[0];
     }
     if (card) {
-      state.heldCards.push(card);
+      state[S.heldCards].push(card);
     }
   }
 
   addHeldCardsToHand(state) {
-    for (let i = 0; i < state.heldCards.length; i++) {
-      state.handCards.push(state.heldCards.pop());
+    for (let i = 0; i < state[S.heldCards].length; i++) {
+      state[S.handCards].push(state[S.heldCards].pop());
     }
   }
 }
