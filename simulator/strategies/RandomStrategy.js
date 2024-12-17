@@ -5,6 +5,6 @@ export default class RandomStrategy extends BaseStrategy {
     if (!this.engine.isCardUsable(state, card)) {
       return -Infinity;
     }
-    return Math.round(Math.random() * 10000);
+    return Math.round(getRand() * 10000);
   }
 }

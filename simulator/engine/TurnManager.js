@@ -1,6 +1,6 @@
 import { SkillCards } from "gakumas-data/lite";
 import EngineComponent from "./EngineComponent";
-import { shuffle } from "./utils";
+import { getRand, shuffle } from "./utils";
 import { S } from "../constants";
 
 export default class TurnManager extends EngineComponent {
@@ -38,7 +38,7 @@ export default class TurnManager extends EngineComponent {
     const remainingTurns = { ...turnCounts };
 
     // Pick first turn based on configured distribution
-    const rand = Math.random();
+    const rand = getRand();
     let firstTurn = "vocal";
     if (rand > firstTurns.vocal) firstTurn = "dance";
     if (rand > firstTurns.vocal + firstTurns.dance) firstTurn = "visual";

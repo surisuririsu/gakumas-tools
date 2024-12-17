@@ -91,9 +91,8 @@ export default class Executor extends EngineComponent {
         }
       }
 
-      if (state[S.stamina] < 0)
-        // Clamp stamina
-        state[S.stamina] = 0;
+      // Clamp stamina
+      if (state[S.stamina] < 0) state[S.stamina] = 0;
       if (state[S.stamina] > this.config.idol.params.stamina) {
         state[S.stamina] = this.config.idol.params.stamina;
       }
@@ -179,7 +178,9 @@ export default class Executor extends EngineComponent {
       // Special cases with intermediates
       let intermediateField = null;
       if (
-        ["cost", "fixedGenki", "fixedStamina"].includes(lhs) ||
+        ["cost", "fixedGenki", "fixedStamina", "fullPowerCharge"].includes(
+          lhs
+        ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
@@ -406,7 +407,7 @@ export default class Executor extends EngineComponent {
     }
   }
 
-  fullPowerCharge(state, fullPowerCharge) {
+  resolveFullPowerCharge(state, fullPowerCharge) {
     if (fullPowerCharge > 0) {
       state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
