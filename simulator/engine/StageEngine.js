@@ -194,6 +194,7 @@ export default class StageEngine {
           "fullPowerCharge-=10",
           "lockStanceTurns+=1",
         ],
+        group: -1,
       },
       {
         phase: "stanceChanged",
