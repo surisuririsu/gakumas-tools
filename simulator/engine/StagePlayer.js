@@ -1,4 +1,4 @@
-import { LOGGED_FIELDS } from "../constants";
+import { LOGGED_FIELDS, S } from "../constants";
 
 export default class StagePlayer {
   constructor(engine, strategy) {
@@ -10,15 +10,17 @@ export default class StagePlayer {
     let state = this.engine.getInitialState();
     this.engine.startStage(state);
 
-    while (state.turnsRemaining > 0) {
+    while (state[S.turnsRemaining] > 0) {
       this.engine.logger.disable();
       const { scores, selectedCard } = this.strategy.evaluate(state);
       this.engine.logger.enable();
 
       this.engine.logger.log("hand", {
-        handCardIds: state.handCards.map((card) => state.cardMap[card].id),
+        handCardIds: state[S.handCards].map(
+          (card) => state[S.cardMap][card].id
+        ),
         scores,
-        selectedCardId: state.cardMap[selectedCard]?.id,
+        selectedCardId: state[S.cardMap][selectedCard]?.id,
         state: this.getHandStateForLogging(state),
       });
 
@@ -30,7 +32,7 @@ export default class StagePlayer {
     }
 
     return {
-      score: state.score,
+      score: state[S.score],
       logs: this.engine.logger.logs,
       graphData: this.engine.logger.graphData,
     };
@@ -39,12 +41,12 @@ export default class StagePlayer {
   getHandStateForLogging(state) {
     let res = {};
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {
-      if (state[LOGGED_FIELDS[i]]) {
-        res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
+      if (state[S[LOGGED_FIELDS[i]]]) {
+        res[LOGGED_FIELDS[i]] = state[S[LOGGED_FIELDS[i]]];
       }
     }
-    if (state.scoreBuffs.length) {
-      res.scoreBuffs = JSON.parse(JSON.stringify(state.scoreBuffs));
+    if (state[S.scoreBuffs].length) {
+      res.scoreBuffs = JSON.parse(JSON.stringify(state[S.scoreBuffs]));
     }
     delete res.turnsRemaining;
     delete res.cardUsesRemaining;

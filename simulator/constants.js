@@ -195,3 +195,74 @@ export const FIELDS_TO_DIFF = [
     )
   ),
 ];
+
+const ALL_FIELDS = [
+  // General
+  "cardUsesRemaining",
+  "stamina",
+  "consumedStamina",
+  "genki",
+  "score",
+
+  // Turns
+  "turnsElapsed",
+  "turnsRemaining",
+  "turnTypes",
+
+  // Buffs
+  "halfCostTurns",
+  "doubleCostTurns",
+  "costReduction",
+  "costIncrease",
+  "nullifyCostCards",
+  "nullifyDebuff",
+  "nullifyGenkiTurns",
+  "doubleCardEffectCards",
+  "poorConditionTurns",
+  "scoreBuffs",
+  "goodConditionTurns",
+  "perfectConditionTurns",
+  "concentration",
+  "concentrationMultiplier",
+  "goodImpressionTurns",
+  "motivation",
+  "motivationMultiplier",
+  "stance",
+  "prevStance",
+  "lockStanceTurns",
+  "fullPowerCharge",
+  "cumulativeFullPowerCharge",
+  "enthusiasm",
+  "strengthTimes",
+  "preservationTimes",
+  "fullPowerTimes",
+  "freshBuffs",
+
+  // Cards
+  "cardMap",
+  "deckCards",
+  "deckCards",
+  "handCards",
+  "discardedCards",
+  "removedCards",
+  "heldCards",
+  "cardsUsed",
+  "turnCardsUsed",
+  "turnCardsUpgraded",
+  "thisCardHeld",
+  "usedCard",
+
+  // Effects
+  "effects",
+  "phase",
+
+  // Growth
+  "growth.cost",
+  "growth.score",
+  "growth.scoreTimes",
+];
+
+export const S = ALL_FIELDS.reduce((acc, cur, i) => {
+  acc[cur] = i;
+  return acc;
+}, {});

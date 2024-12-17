@@ -1,4 +1,4 @@
-import { UNFRESH_PHASES } from "@/simulator/constants";
+import { S, UNFRESH_PHASES } from "@/simulator/constants";
 import { EOT_DECREMENT_FIELDS } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -7,59 +7,59 @@ export default class BuffManager extends EngineComponent {
     super(engine);
 
     this.variableResolvers = {
-      isPreservation: (state) => state.stance.startsWith("preservation"),
-      isStrength: (state) => state.stance.startsWith("strength"),
-      isFullPower: (state) => state.stance == "fullPower",
+      isPreservation: (state) => state[S.stance].startsWith("pre"),
+      isStrength: (state) => state[S.stance].startsWith("str"),
+      isFullPower: (state) => state[S.stance] == "fullPower",
     };
   }
 
   initializeState(state) {
     // General
-    state.halfCostTurns = 0;
-    state.doubleCostTurns = 0;
-    state.costReduction = 0;
-    state.costIncrease = 0;
-    state.nullifyCostCards = 0;
-    state.nullifyDebuff = 0;
-    state.nullifyGenkiTurns = 0;
-    state.doubleCardEffectCards = 0;
-    state.poorConditionTurns = 0;
+    state[S.halfCostTurns] = 0;
+    state[S.doubleCostTurns] = 0;
+    state[S.costReduction] = 0;
+    state[S.costIncrease] = 0;
+    state[S.nullifyCostCards] = 0;
+    state[S.nullifyDebuff] = 0;
+    state[S.nullifyGenkiTurns] = 0;
+    state[S.doubleCardEffectCards] = 0;
+    state[S.poorConditionTurns] = 0;
 
     // Score buffs
-    state.scoreBuffs = [];
+    state[S.scoreBuffs] = [];
 
     // Sense
-    state.goodConditionTurns = 0;
-    state.perfectConditionTurns = 0;
-    state.concentration = 0;
+    state[S.goodConditionTurns] = 0;
+    state[S.perfectConditionTurns] = 0;
+    state[S.concentration] = 0;
 
     // Logic
-    state.goodImpressionTurns = 0;
-    state.motivation = 0;
+    state[S.goodImpressionTurns] = 0;
+    state[S.motivation] = 0;
 
     // Anomaly
-    state.stance = "none";
-    state.lockStanceTurns = 0;
-    state.fullPowerCharge = 0;
-    state.cumulativeFullPowerCharge = 0;
-    state.enthusiasm = 0;
-    state.strengthTimes = 0;
-    state.preservationTimes = 0;
-    state.fullPowerTimes = 0;
+    state[S.stance] = "none";
+    state[S.lockStanceTurns] = 0;
+    state[S.fullPowerCharge] = 0;
+    state[S.cumulativeFullPowerCharge] = 0;
+    state[S.enthusiasm] = 0;
+    state[S.strengthTimes] = 0;
+    state[S.preservationTimes] = 0;
+    state[S.fullPowerTimes] = 0;
 
     // Buffs/debuffs protected from decrement
-    state.freshBuffs = {};
+    state[S.freshBuffs] = {};
   }
 
   setScoreBuff(state, amount, turns) {
-    const buffIndex = state.scoreBuffs.findIndex((b) => b.turns == turns);
+    const buffIndex = state[S.scoreBuffs].findIndex((b) => b.turns == turns);
     if (buffIndex != -1) {
-      state.scoreBuffs[buffIndex].amount += amount;
+      state[S.scoreBuffs][buffIndex].amount += amount;
     } else {
-      state.scoreBuffs.push({
+      state[S.scoreBuffs].push({
         amount,
         turns,
-        fresh: !UNFRESH_PHASES.includes(state.phase),
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
       });
     }
     this.logger.log("setScoreBuff", {
@@ -72,16 +72,16 @@ export default class BuffManager extends EngineComponent {
     // General buffs
     for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
       const field = EOT_DECREMENT_FIELDS[i];
-      if (state.freshBuffs[field]) {
-        delete state.freshBuffs[field];
-      } else if (state[field]) {
-        state[field]--;
+      if (state[S.freshBuffs][field]) {
+        delete state[S.freshBuffs][field];
+      } else if (state[S[field]]) {
+        state[S[field]]--;
       }
     }
 
     // Score buffs
-    const scoreBuffs = state.scoreBuffs;
-    state.scoreBuffs = [];
+    const scoreBuffs = state[S.scoreBuffs];
+    state[S.scoreBuffs] = [];
     for (let i = 0; i < scoreBuffs.length; i++) {
       if (scoreBuffs[i].fresh) {
         scoreBuffs[i].fresh = false;
@@ -89,49 +89,49 @@ export default class BuffManager extends EngineComponent {
         scoreBuffs[i].turns--;
       }
       if (scoreBuffs[i].turns != 0) {
-        state.scoreBuffs.push(scoreBuffs[i]);
+        state[S.scoreBuffs].push(scoreBuffs[i]);
       }
     }
   }
 
   setStance(state, stance) {
     // Stance locked
-    if (state.lockStanceTurns) return;
+    if (state[S.lockStanceTurns]) return;
 
-    state.prevStance = state.stance;
+    state[S.prevStance] = state[S.stance];
 
     if (stance.startsWith("preservation")) {
-      if (state.stance.startsWith("preservation")) {
-        state.stance = "preservation2";
+      if (state[S.stance].startsWith("preservation")) {
+        state[S.stance] = "preservation2";
       } else {
-        state.stance = stance;
+        state[S.stance] = stance;
       }
     } else if (stance.startsWith("strength")) {
-      if (state.stance.startsWith("strength")) {
-        state.stance = "strength2";
+      if (state[S.stance].startsWith("strength")) {
+        state[S.stance] = "strength2";
       } else {
-        state.stance = stance;
+        state[S.stance] = stance;
       }
     } else {
-      state.stance = stance;
+      state[S.stance] = stance;
     }
 
     if (
-      state.stance != state.prevStance &&
-      state.stance != `${state.prevStance}2`
+      state[S.stance] != state[S.prevStance] &&
+      state[S.stance] != `${state[S.prevStance]}2`
     ) {
       this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
-      if (state.stance.startsWith("preservation")) {
-        state.preservationTimes++;
-      } else if (state.stance.startsWith("strength")) {
-        state.strengthTimes++;
+      if (state[S.stance].startsWith("preservation")) {
+        state[S.preservationTimes]++;
+      } else if (state[S.stance].startsWith("strength")) {
+        state[S.strengthTimes]++;
       }
     }
   }
 
   resetStance(state) {
-    state.prevStance = state.stance;
-    state.stance = "none";
+    state[S.prevStance] = state[S.stance];
+    state[S.stance] = "none";
     this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
   }
 }

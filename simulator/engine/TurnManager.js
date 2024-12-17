@@ -1,6 +1,7 @@
 import { SkillCards } from "gakumas-data/lite";
 import EngineComponent from "./EngineComponent";
 import { shuffle } from "./utils";
+import { S } from "../constants";
 
 export default class TurnManager extends EngineComponent {
   constructor(engine) {
@@ -14,14 +15,14 @@ export default class TurnManager extends EngineComponent {
   }
 
   initializeState(state) {
-    state.turnsElapsed = 0;
-    state.turnsRemaining = this.config.stage.turnCount;
-    state.turnTypes = this.generateTurnTypes();
+    state[S.turnsElapsed] = 0;
+    state[S.turnsRemaining] = this.config.stage.turnCount;
+    state[S.turnTypes] = this.generateTurnTypes();
   }
 
   getTurnType(state) {
-    return state.turnTypes[
-      Math.min(state.turnsElapsed, this.config.stage.turnCount - 1)
+    return state[S.turnTypes][
+      Math.min(state[S.turnsElapsed], this.config.stage.turnCount - 1)
     ];
   }
 
@@ -62,10 +63,10 @@ export default class TurnManager extends EngineComponent {
   }
 
   startTurn(state) {
-    this.logger.debug("Starting turn", state.turnsElapsed + 1);
+    this.logger.debug("Starting turn", state[S.turnsElapsed] + 1);
 
     this.logger.log("startTurn", {
-      num: state.turnsElapsed + 1,
+      num: state[S.turnsElapsed] + 1,
       type: this.getTurnType(state),
       multiplier: this.getTurnMultiplier(state),
     });
@@ -76,25 +77,25 @@ export default class TurnManager extends EngineComponent {
     }
 
     // Add forced initial hand cards
-    if (state.turnsElapsed == 0) {
+    if (state[S.turnsElapsed] == 0) {
       for (let i = 0; i < 2; i++) {
         const card = this.engine.cardManager.peekDeck(state);
-        if (SkillCards.getById(state.cardMap[card].id).forceInitialHand) {
+        if (SkillCards.getById(state[S.cardMap][card].id).forceInitialHand) {
           this.engine.cardManager.drawCard(state);
         }
       }
     }
 
-    state.cardUsesRemaining = 1;
+    state[S.cardUsesRemaining] = 1;
     this.engine.effectManager.triggerEffectsForPhase(state, "startOfTurn");
     this.engine.effectManager.triggerEffectsForPhase(state, "everyTurn");
   }
 
   endTurn(state) {
     // Recover stamina if turn ended by player
-    if (state.cardUsesRemaining > 0) {
-      state.stamina = Math.min(
-        state.stamina + 2,
+    if (state[S.cardUsesRemaining] > 0) {
+      state[S.stamina] = Math.min(
+        state[S.stamina] + 2,
         this.config.idol.params.stamina
       );
     }
@@ -106,11 +107,11 @@ export default class TurnManager extends EngineComponent {
     this.engine.buffManager.decrementBuffTurns(state);
 
     // Reset one turn fields
-    state.cardUsesRemaining = 0;
-    state.turnCardsUsed = 0;
-    state.turnCardsUpgraded = 0;
-    state.enthusiasm = 0;
-    if (state.stance == "fullPower") {
+    state[S.cardUsesRemaining] = 0;
+    state[S.turnCardsUsed] = 0;
+    state[S.turnCardsUpgraded] = 0;
+    state[S.enthusiasm] = 0;
+    if (state[S.stance] == "fullPower") {
       this.engine.buffManager.resetStance(state);
     }
 
@@ -120,13 +121,13 @@ export default class TurnManager extends EngineComponent {
     // Discard hand
     this.engine.cardManager.discardHand(state);
 
-    state.turnsElapsed++;
-    state.turnsRemaining--;
+    state[S.turnsElapsed]++;
+    state[S.turnsRemaining]--;
 
     this.logger.pushGraphData(state);
 
     // Start next turn
-    if (state.turnsRemaining > 0) {
+    if (state[S.turnsRemaining] > 0) {
       this.startTurn(state);
     }
   }

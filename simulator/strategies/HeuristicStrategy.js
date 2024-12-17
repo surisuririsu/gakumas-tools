@@ -1,3 +1,5 @@
+import { S } from "../constants";
+import { deepCopy, shallowCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
 
 export default class HeuristicStrategy extends BaseStrategy {
@@ -32,23 +34,28 @@ export default class HeuristicStrategy extends BaseStrategy {
       return -Infinity;
     }
 
-    const previewState = JSON.parse(JSON.stringify(state));
+    const previewState = deepCopy(state);
     this.engine.useCard(previewState, card);
 
     let score = 0;
 
-    if (previewState.cardMap[card].baseId == 362) score += 100000;
+    if (previewState[S.cardMap][card].baseId == 362) score += 100000;
 
     // Effects
-    const effectsDiff = previewState.effects.length - state.effects.length;
+    const effectsDiff =
+      previewState[S.effects].length - state[S.effects].length;
     for (let i = 0; i < effectsDiff; i++) {
-      const effect = previewState.effects[previewState.effects.length - i - 1];
-      let limit = previewState.turnsRemaining;
-      if (effect.limit != null && effect.limit < previewState.turnsRemaining) {
+      const effect =
+        previewState[S.effects][previewState[S.effects].length - i - 1];
+      let limit = previewState[S.turnsRemaining];
+      if (
+        effect.limit != null &&
+        effect.limit < previewState[S.turnsRemaining]
+      ) {
         limit = effect.limit + 1;
       }
       if (limit == 0) continue;
-      let postEffectState = { ...previewState };
+      let postEffectState = shallowCopy(previewState);
       this.engine.effectManager.triggerEffects(postEffectState, [
         { ...effect, phase: null },
       ]);
@@ -58,13 +65,13 @@ export default class HeuristicStrategy extends BaseStrategy {
     }
 
     // Additional actions
-    if (previewState.turnsRemaining >= state.turnsRemaining) {
+    if (previewState[S.turnsRemaining] >= state[S.turnsRemaining]) {
       const { scores } = this.evaluate(previewState);
       const filteredScores = scores.filter((s) => s > 0);
       if (filteredScores.length) {
         return score + Math.max(...filteredScores);
       } else {
-        const skipState = { ...previewState };
+        const skipState = shallowCopy(previewState);
         this.engine.endTurn(skipState);
         return score + this.getStateScore(skipState);
       }
@@ -72,10 +79,10 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     // Cards removed
     score +=
-      (((state.removedCards.length - previewState.removedCards.length) *
-        (previewState.score - state.score)) /
+      (((state[S.removedCards].length - previewState[S.removedCards].length) *
+        (previewState[S.score] - state[S.score])) /
         this.averageTypeMultiplier) *
-      Math.floor(previewState.turnsRemaining / 12);
+      Math.floor(previewState[S.turnsRemaining] / 12);
 
     score += this.getStateScore(previewState);
 
@@ -86,59 +93,61 @@ export default class HeuristicStrategy extends BaseStrategy {
     let score = 0;
 
     // Cards in hand
-    score += state.handCards.length * 3;
+    score += state[S.handCards].length * 3;
 
     // Stamina
-    score += state.stamina * state.turnsRemaining * 0.05;
+    score += state[S.stamina] * state[S.turnsRemaining] * 0.05;
 
     // Genki
     score +=
-      state.genki *
-      Math.tanh(state.turnsRemaining / 3) *
+      state[S.genki] *
+      Math.tanh(state[S.turnsRemaining] / 3) *
       0.42 *
       this.motivationMultiplier;
 
     // Good condition turns
     score +=
-      Math.min(state.goodConditionTurns, state.turnsRemaining) *
+      Math.min(state[S.goodConditionTurns], state[S.turnsRemaining]) *
       1.6 *
       this.goodConditionTurnsMultiplier;
 
     // Perfect condition turns
     score +=
-      Math.min(state.perfectConditionTurns, state.turnsRemaining) *
-      state.goodConditionTurns *
+      Math.min(state[S.perfectConditionTurns], state[S.turnsRemaining]) *
+      state[S.goodConditionTurns] *
       this.goodConditionTurnsMultiplier;
 
     // Concentration
     score +=
-      state.concentration * state.turnsRemaining * this.concentrationMultiplier;
+      state[S.concentration] *
+      state[S.turnsRemaining] *
+      this.concentrationMultiplier;
 
     // Stance
-    if (state.stance == "fullPower") {
+    if (state[S.stance] == "fullPower") {
       score += 200;
-    } else if (state.stance == "strength") {
+    } else if (state[S.stance] == "strength") {
       score += 20;
-    } else if (state.stance == "strength2") {
+    } else if (state[S.stance] == "strength2") {
       score += 40;
-    } else if (state.stance == "preservation") {
+    } else if (state[S.stance] == "preservation") {
       score += 8;
-    } else if (state.stance == "preservation2") {
+    } else if (state[S.stance] == "preservation2") {
       score += 16;
     }
 
-    score += state.strengthTimes * 40;
-    score += state.preservationTimes * 80;
-    score += state.fullPowerTimes * 250;
+    score += state[S.strengthTimes] * 40;
+    score += state[S.preservationTimes] * 80;
+    score += state[S.fullPowerTimes] * 250;
 
     //Enthusiasm
-    score += state.enthusiasm * 5;
+    score += state[S.enthusiasm] * 5;
 
     // Full power charge
-    score += state.cumulativeFullPowerCharge * 15;
+    score += state[S.cumulativeFullPowerCharge] * 15;
 
     // Growth
-    Object.values(state.cardMap).reduce((acc, cur) => {
+    Object.values(state[S.cardMap]).reduce((acc, cur) => {
       if (!cur.growth) return acc;
       if (cur.growth["growth.score"]) {
         acc += cur.growth["growth.score"] * 2;
@@ -150,61 +159,64 @@ export default class HeuristicStrategy extends BaseStrategy {
         acc += cur.growth["growth.cost"];
       }
       return acc;
-    }, 0) * state.turnsRemaining;
+    }, 0) * state[S.turnsRemaining];
 
     // Good impression turns
     score +=
-      state.goodImpressionTurns *
-      state.turnsRemaining *
+      state[S.goodImpressionTurns] *
+      state[S.turnsRemaining] *
       this.goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
-      state.motivation * state.turnsRemaining * 0.5 * this.motivationMultiplier;
+      state[S.motivation] *
+      state[S.turnsRemaining] *
+      0.5 *
+      this.motivationMultiplier;
 
     // Score buffs
     score +=
-      state.scoreBuffs.reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state.turnsRemaining),
+      state[S.scoreBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
         0
       ) * 8;
 
     // Half cost turns
-    score += Math.min(state.halfCostTurns, state.turnsRemaining) * 6;
+    score += Math.min(state[S.halfCostTurns], state[S.turnsRemaining]) * 6;
 
     // Double cost turns
-    score += Math.min(state.doubleCostTurns, state.turnsRemaining) * -6;
+    score += Math.min(state[S.doubleCostTurns], state[S.turnsRemaining]) * -6;
 
     // Cost reduction
-    score += state.costReduction * state.turnsRemaining * 0.5;
+    score += state[S.costReduction] * state[S.turnsRemaining] * 0.5;
 
     // Double card effect cards
-    score += state.doubleCardEffectCards * 50;
+    score += state[S.doubleCardEffectCards] * 50;
 
     // Nullify genki turns
-    score += state.nullifyGenkiTurns * -9;
+    score += state[S.nullifyGenkiTurns] * -9;
 
     // Turn cards upgraded
-    score += state.turnCardsUpgraded * 20;
+    score += state[S.turnCardsUpgraded] * 20;
 
     // Scale score
     score = this.scaleScore(score);
 
     const { recommendedEffect } = this.engine.config.idol;
     if (recommendedEffect == "goodConditionTurns") {
-      score += state.score * 0.4;
+      score += state[S.score] * 0.4;
     } else if (recommendedEffect == "concentration") {
-      score += state.score * 0.6;
+      score += state[S.score] * 0.6;
     } else if (recommendedEffect == "goodImpressionTurns") {
-      score += state.score * 0.8;
+      score += state[S.score] * 0.8;
     } else if (recommendedEffect == "motivation") {
-      score += state.score * 0.6;
+      score += state[S.score] * 0.6;
     } else if (recommendedEffect == "strength") {
-      score += state.score * 0.6;
+      score += state[S.score] * 0.6;
     } else if (recommendedEffect == "fullPower") {
-      score += state.score * 0.8;
+      score += state[S.score] * 0.8;
     } else {
-      score += state.score;
+      score += state[S.score];
     }
 
     return Math.round(score);

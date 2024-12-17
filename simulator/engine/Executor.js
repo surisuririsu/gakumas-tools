@@ -9,6 +9,7 @@ import {
   FUNCTION_CALL_REGEX,
   INCREASE_TRIGGER_FIELDS,
   LOGGED_FIELDS,
+  S,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "./utils";
@@ -67,17 +68,17 @@ export default class Executor extends EngineComponent {
     // Record previous state for diffing
     let prev = {};
     for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
-      prev[FIELDS_TO_DIFF[i]] = state[FIELDS_TO_DIFF[i]];
+      prev[S[FIELDS_TO_DIFF[i]]] = state[S[FIELDS_TO_DIFF[i]]];
     }
 
     // Set modifiers
-    const prevConcentrationMultiplier = state.concentrationMultiplier;
-    const prevMotivationMultiplier = state.motivationMultiplier;
-    state.concentrationMultiplier = 1;
-    state.motivationMultiplier = 1;
+    const prevConcentrationMultiplier = state[S.concentrationMultiplier];
+    const prevMotivationMultiplier = state[S.motivationMultiplier];
+    state[S.concentrationMultiplier] = 1;
+    state[S.motivationMultiplier] = 1;
 
     // Execute actions
-    const scoreTimes = state.cardMap[card]?.growth?.["growth.scoreTimes"];
+    const scoreTimes = state[S.cardMap][card]?.growth?.["growth.scoreTimes"];
     for (let i = 0; i < actions.length; i++) {
       this.executeAction(state, actions[i], card);
 
@@ -90,35 +91,35 @@ export default class Executor extends EngineComponent {
         }
       }
 
-      if (state.stamina < 0)
+      if (state[S.stamina] < 0)
         // Clamp stamina
-        state.stamina = 0;
-      if (state.stamina > this.config.idol.params.stamina) {
-        state.stamina = this.config.idol.params.stamina;
+        state[S.stamina] = 0;
+      if (state[S.stamina] > this.config.idol.params.stamina) {
+        state[S.stamina] = this.config.idol.params.stamina;
       }
     }
 
     // Reset modifiers
-    state.concentrationMultiplier = prevConcentrationMultiplier;
-    state.motivationMultiplier = prevMotivationMultiplier;
+    state[S.concentrationMultiplier] = prevConcentrationMultiplier;
+    state[S.motivationMultiplier] = prevMotivationMultiplier;
 
     // Log changed fields
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {
       const field = LOGGED_FIELDS[i];
-      if (state[field] == prev[field]) continue;
+      if (state[S[field]] == prev[S[field]]) continue;
       this.logger.log("diff", {
         field,
-        prev: formatDiffField(prev[field]),
-        next: formatDiffField(state[field]),
+        prev: formatDiffField(prev[S[field]]),
+        next: formatDiffField(state[S[field]]),
       });
     }
 
     // Protect fresh stats from decrement
-    if (!UNFRESH_PHASES.includes(state.phase)) {
+    if (!UNFRESH_PHASES.includes(state[S.phase])) {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
-        if (state[field] > 0 && prev[field] == 0) {
-          state.freshBuffs[field] = true;
+        if (state[S[field]] > 0 && prev[S[field]] == 0) {
+          state[S.freshBuffs][field] = true;
         }
       }
     }
@@ -126,8 +127,8 @@ export default class Executor extends EngineComponent {
     // Trigger increase effects
     for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
       const field = INCREASE_TRIGGER_FIELDS[i];
-      if (state.phase == `${field}Increased`) continue;
-      if (state[field] > prev[field]) {
+      if (state[S.phase] == `${field}Increased`) continue;
+      if (state[S[field]] > prev[S[field]]) {
         this.engine.effectManager.triggerEffectsForPhase(
           state,
           `${field}Increased`
@@ -138,8 +139,8 @@ export default class Executor extends EngineComponent {
     // Trigger decrease effects
     for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
       const field = DECREASE_TRIGGER_FIELDS[i];
-      if (state.phase == `${field}Decreased`) continue;
-      if (state[field] < prev[field]) {
+      if (state[S.phase] == `${field}Decreased`) continue;
+      if (state[S[field]] < prev[S[field]]) {
         this.engine.effectManager.triggerEffectsForPhase(
           state,
           `${field}Decreased`
@@ -162,8 +163,8 @@ export default class Executor extends EngineComponent {
       const lhs = tokens[0];
 
       // Nullify debuffs
-      if (state.nullifyDebuff && DEBUFF_FIELDS.includes(lhs)) {
-        state.nullifyDebuff--;
+      if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(lhs)) {
+        state[S.nullifyDebuff]--;
         return;
       }
 
@@ -173,7 +174,7 @@ export default class Executor extends EngineComponent {
         tokens.slice(2)
       );
 
-      let intermediate = state[lhs] || 0;
+      let intermediate = state[S[lhs]] || 0;
 
       // Special cases with intermediates
       let intermediateField = null;
@@ -206,7 +207,7 @@ export default class Executor extends EngineComponent {
 
       // Resolve intermediate
       if (intermediateField) {
-        const growth = state.cardMap[card]?.growth || {};
+        const growth = state[S.cardMap][card]?.growth || {};
         if (intermediateField in this.intermediateResolvers) {
           this.intermediateResolvers[intermediateField](
             state,
@@ -217,12 +218,12 @@ export default class Executor extends EngineComponent {
           console.warn(`Unresolved intermediate: ${intermediateField}`);
         }
       } else {
-        state[lhs] = intermediate;
+        state[S[lhs]] = intermediate;
       }
 
       // Round whole fields
       for (let i = 0; i < WHOLE_FIELDS.length; i++) {
-        state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]]);
+        state[S[WHOLE_FIELDS[i]]] = Math.ceil(state[S[WHOLE_FIELDS[i]]]);
       }
 
       return;
@@ -243,32 +244,31 @@ export default class Executor extends EngineComponent {
       return;
     }
 
-    throw new Error();
     console.warn(`Unrecognized special action: ${action}`);
   }
 
   resolveCost(state, cost, growth) {
     // Nullify cost
-    if (state.nullifyCostCards) return;
+    if (state[S.nullifyCostCards]) return;
 
-    if (growth["growth.cost"]) {
-      cost += growth["growth.cost"];
+    if (growth[S["growth.cost"]]) {
+      cost += growth[S["growth.cost"]];
     }
 
     // Apply stance
-    if (state.stance.startsWith("strength")) {
+    if (state[S.stance].startsWith("strength")) {
       cost *= 2;
-    } else if (state.stance == "preservation") {
+    } else if (state[S.stance] == "preservation") {
       cost *= 0.5;
-    } else if (state.stance == "preservation2") {
+    } else if (state[S.stance] == "preservation2") {
       cost *= 0.25;
     }
 
     // Multiplicative cost buffs
-    if (state.halfCostTurns) {
+    if (state[S.halfCostTurns]) {
       cost *= 0.5;
     }
-    if (state.doubleCostTurns) {
+    if (state[S.doubleCostTurns]) {
       cost *= 2;
     }
 
@@ -276,70 +276,72 @@ export default class Executor extends EngineComponent {
     cost = Math.floor(cost);
 
     // Additive cost buffs
-    cost += state.costReduction;
-    cost -= state.costIncrease;
+    cost += state[S.costReduction];
+    cost -= state[S.costIncrease];
 
     // Min cost 0
     cost = Math.min(cost, 0);
 
     // Apply cost
-    state.genki += cost;
-    if (state.genki < 0) {
-      state.stamina += state.genki;
-      state.consumedStamina -= state.genki;
-      state.genki = 0;
+    state[S.genki] += cost;
+    if (state[S.genki] < 0) {
+      state[S.stamina] += state[S.genki];
+      state[S.consumedStamina] -= state[S.genki];
+      state[S.genki] = 0;
     }
   }
 
   resolveFixedGenki(state, fixedGenki) {
-    state.genki += fixedGenki;
+    state[S.genki] += fixedGenki;
   }
 
   resolveFixedStamina(state, fixedStamina) {
-    state.stamina += fixedStamina;
+    state[S.stamina] += fixedStamina;
     if (fixedStamina < 0) {
-      state.consumedStamina -= fixedStamina;
+      state[S.consumedStamina] -= fixedStamina;
     }
   }
 
   resolveScore(state, score, growth) {
     // Apply growth
-    if (growth["growth.score"]) {
-      score += growth["growth.score"];
+    if (growth[S["growth.score"]]) {
+      score += growth[S["growth.score"]];
     }
 
     if (score > 0) {
       // Apply concentration
-      score += state.concentration * state.concentrationMultiplier;
+      score += state[S.concentration] * state[S.concentrationMultiplier];
 
       // Apply enthusiasm
-      score += state.enthusiasm;
+      score += state[S.enthusiasm];
 
       // Apply good and perfect condition
-      if (state.goodConditionTurns) {
+      if (state[S.goodConditionTurns]) {
         score *=
           1.5 +
-          (state.perfectConditionTurns ? state.goodConditionTurns * 0.1 : 0);
+          (state[S.perfectConditionTurns]
+            ? state[S.goodConditionTurns] * 0.1
+            : 0);
       }
 
       // Apply stance
-      if (state.stance == "strength") {
+      if (state[S.stance] == "strength") {
         score *= 2;
-      } else if (state.stance == "strength2") {
+      } else if (state[S.stance] == "strength2") {
         score *= 2.5;
-      } else if (state.stance == "preservation") {
+      } else if (state[S.stance] == "preservation") {
         score *= 0.5;
-      } else if (state.stance == "preservation2") {
+      } else if (state[S.stance] == "preservation2") {
         score *= 0.25;
-      } else if (state.stance == "fullPower") {
+      } else if (state[S.stance] == "fullPower") {
         score *= 3;
       }
 
       // Score buff effects
-      score *= state.scoreBuffs.reduce((acc, cur) => acc + cur.amount, 1);
+      score *= state[S.scoreBuffs].reduce((acc, cur) => acc + cur.amount, 1);
 
       // Apply poor condition
-      if (state.poorConditionTurns) {
+      if (state[S.poorConditionTurns]) {
         score *= 0.67;
       }
 
@@ -351,40 +353,40 @@ export default class Executor extends EngineComponent {
       score = Math.ceil(score);
     }
 
-    state.score += score;
+    state[S.score] += score;
   }
 
   resolveGenki(state, genki) {
     // Nullify genki turns
-    if (state.nullifyGenkiTurns) return;
+    if (state[S.nullifyGenkiTurns]) return;
 
     // Apply motivation
-    genki += state.motivation * state.motivationMultiplier;
+    genki += state[S.motivation] * state[S.motivationMultiplier];
 
-    state.genki += genki;
+    state[S.genki] += genki;
   }
 
   resolveStamina(state, stamina, growth) {
-    if (state.nullifyCostCards) return;
+    if (state[S.nullifyCostCards]) return;
 
-    if (growth["growth.cost"]) {
-      stamina += growth["growth.cost"];
+    if (growth[S["growth.cost"]]) {
+      stamina += growth[S["growth.cost"]];
     }
 
     // Apply stance
-    if (state.stance.startsWith("strength")) {
+    if (state[S.stance].startsWith("strength")) {
       stamina *= 2;
-    } else if (state.stance == "preservation") {
+    } else if (state[S.stance] == "preservation") {
       stamina *= 0.5;
-    } else if (state.stance == "preservation2") {
+    } else if (state[S.stance] == "preservation2") {
       stamina *= 0.25;
     }
 
     // Multiplicative cost buffs
-    if (state.halfCostTurns) {
+    if (state[S.halfCostTurns]) {
       stamina *= 0.5;
     }
-    if (state.doubleCostTurns) {
+    if (state[S.doubleCostTurns]) {
       stamina *= 2;
     }
 
@@ -393,21 +395,21 @@ export default class Executor extends EngineComponent {
 
     // Additive cost buffs
     if (stamina <= 0) {
-      stamina += state.costReduction;
-      stamina -= state.costIncrease;
+      stamina += state[S.costReduction];
+      stamina -= state[S.costIncrease];
       stamina = Math.min(stamina, 0);
     }
 
-    state.stamina += stamina;
+    state[S.stamina] += stamina;
     if (stamina < 0) {
-      state.consumedStamina -= stamina;
+      state[S.consumedStamina] -= stamina;
     }
   }
 
   fullPowerCharge(state, fullPowerCharge) {
     if (fullPowerCharge > 0) {
-      state.cumulativeFullPowerCharge += fullPowerCharge;
+      state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
-    state.fullPowerCharge += fullPowerCharge;
+    state[S.fullPowerCharge] += fullPowerCharge;
   }
 }

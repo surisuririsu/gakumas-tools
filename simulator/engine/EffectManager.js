@@ -1,10 +1,11 @@
 import { PItems, SkillCards } from "gakumas-data/lite";
-import { DEFAULT_EFFECTS } from "../constants";
+import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
+import { shallowCopy } from "./utils";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {
-    state.effects = [];
+    state[S.effects] = [];
 
     // Set default effects
     this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
@@ -23,8 +24,8 @@ export default class EffectManager extends EngineComponent {
     }
 
     // Set growth effects
-    for (let i = 0; i < state.cardMap.length; i++) {
-      const skillCardId = state.cardMap[i].id;
+    for (let i = 0; i < state[S.cardMap].length; i++) {
+      const skillCardId = state[S.cardMap][i].id;
       const skillCard = SkillCards.getById(skillCardId);
       if (!skillCard.growth?.length) continue;
       this.logger.debug(
@@ -49,18 +50,18 @@ export default class EffectManager extends EngineComponent {
       if (!effect.actions && i < effects.length - 1) {
         effect.effects = [effects[++i]];
       }
-      state.effects.push(effect);
+      state[S.effects].push(effect);
     }
   }
 
   triggerEffectsForPhase(state, phase, conditionState) {
-    const parentPhase = state.phase;
-    state.phase = phase;
+    const parentPhase = state[S.phase];
+    state[S.phase] = phase;
 
     // Filter and group effects
     let effectsByGroup = {};
-    for (let i = 0; i < state.effects.length; i++) {
-      const effect = state.effects[i];
+    for (let i = 0; i < state[S.effects].length; i++) {
+      const effect = state[S.effects][i];
       if (effect.phase != phase) continue;
       const group = effect.group || 0;
       if (!effectsByGroup[group]) effectsByGroup[group] = [];
@@ -78,17 +79,17 @@ export default class EffectManager extends EngineComponent {
       );
       for (let j = 0; j < triggeredEffects.length; j++) {
         const effectIndex = triggeredEffects[j];
-        if (state.effects[effectIndex].limit) {
-          state.effects[effectIndex].limit--;
+        if (state[S.effects][effectIndex].limit) {
+          state[S.effects][effectIndex].limit--;
         }
       }
     }
 
-    state.phase = parentPhase;
+    state[S.phase] = parentPhase;
   }
 
   triggerEffects(state, effects, cndState, card) {
-    const conditionState = cndState || { ...state };
+    const conditionState = cndState || shallowCopy(state);
 
     let triggeredEffects = [];
     let skipNextEffect = false;
@@ -109,7 +110,9 @@ export default class EffectManager extends EngineComponent {
         this.setEffects(
           state,
           [{ ...effect, group: card != null ? 10 : null }],
-          card ? { type: "skillCardEffect", id: state.cardMap[card].id } : null
+          card
+            ? { type: "skillCardEffect", id: state[S.cardMap][card].id }
+            : null
         );
         continue;
       }
@@ -164,11 +167,11 @@ export default class EffectManager extends EngineComponent {
             }
             growthCards.add(effect.source.idx);
           } else if (target == "hand") {
-            for (let k = 0; k < state.handCards; k++) {
-              growthCards.add(state.handCards[k]);
+            for (let k = 0; k < state[S.handCards]; k++) {
+              growthCards.add(state[S.handCards][k]);
             }
           } else if (target == "all") {
-            for (let k = 0; k < state.cardMap.length; k++) {
+            for (let k = 0; k < state[S.cardMap].length; k++) {
               growthCards.add(k);
             }
             break;
@@ -208,9 +211,10 @@ export default class EffectManager extends EngineComponent {
   }
 
   decrementTtl(state) {
-    for (let i = 0; i < state.effects.length; i++) {
-      if (state.effects[i].ttl == null || state.effects[i].ttl == -1) continue;
-      state.effects[i].ttl--;
+    for (let i = 0; i < state[S.effects].length; i++) {
+      if (state[S.effects][i].ttl == null || state[S.effects][i].ttl == -1)
+        continue;
+      state[S.effects][i].ttl--;
     }
   }
 }
