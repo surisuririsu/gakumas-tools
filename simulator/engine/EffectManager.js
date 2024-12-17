@@ -63,7 +63,7 @@ export default class EffectManager extends EngineComponent {
     for (let i = 0; i < state[S.effects].length; i++) {
       const effect = state[S.effects][i];
       if (effect.phase != phase) continue;
-      const group = effect.group || 0;
+      const group = (effect.group || 0) + 10;
       if (!effectsByGroup[group]) effectsByGroup[group] = [];
       effectsByGroup[group].push({ ...effect, phase: null, index: i });
     }

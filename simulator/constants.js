@@ -260,6 +260,9 @@ export const ALL_FIELDS = [
   "growth.cost",
   "growth.score",
   "growth.scoreTimes",
+
+  // Special
+  "hajikeruMizushibukiTurnUsed",
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {

@@ -1,8 +1,23 @@
+import { DEBUG } from "../constants";
+
+const seed = 610397104;
+
+function mulberry32(a) {
+  return function () {
+    let t = (a += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export const getRand = DEBUG ? mulberry32(seed) : Math.random;
+
 export function shuffle(arr) {
   let currentIndex = arr.length;
 
   while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
+    let randomIndex = Math.floor(getRand() * currentIndex);
     currentIndex--;
 
     [arr[currentIndex], arr[randomIndex]] = [

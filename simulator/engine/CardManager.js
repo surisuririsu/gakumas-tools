@@ -1,7 +1,7 @@
 import { SkillCards } from "gakumas-data/lite";
 import EngineComponent from "./EngineComponent";
-import { shallowCopy, shuffle } from "./utils";
-import { COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
+import { getRand, shallowCopy, shuffle } from "./utils";
+import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
@@ -281,7 +281,7 @@ export default class CardManager extends EngineComponent {
     }
     if (!unupgradedCards.length) return;
     const randomCard =
-      unupgradedCards[Math.floor(Math.random() * unupgradedCards.length)];
+      unupgradedCards[Math.floor(getRand() * unupgradedCards.length)];
     this.upgrade(state, randomCard);
     this.logger.log(state, "upgradeRandomCardInHand", {
       type: "skillCard",
@@ -296,7 +296,7 @@ export default class CardManager extends EngineComponent {
       sourceTypes: ["produce"],
     }).filter((card) => card.upgraded);
     const skillCard =
-      validSkillCards[Math.floor(Math.random() * validSkillCards.length)];
+      validSkillCards[Math.floor(getRand() * validSkillCards.length)];
     state[S.cardMap].push({
       id: skillCard.id,
       baseId: skillCard.id - skillCard.upgraded ? 1 : 0,
@@ -327,7 +327,7 @@ export default class CardManager extends EngineComponent {
 
   holdSelectedFromHand(state) {
     // TODO: Random for now
-    const randomIndex = Math.floor(Math.random() * state[S.handCards].length);
+    const randomIndex = Math.floor(getRand() * state[S.handCards].length);
     const card = state[S.handCards].splice(randomIndex, 1)[0];
     if (card != null) {
       state[S.heldCards].push(card);
@@ -338,8 +338,7 @@ export default class CardManager extends EngineComponent {
   holdSelectedFromDeckOrDiscards(state) {
     // TODO: Random for now
     const randomIndex = Math.floor(
-      Math.random() *
-        (state[S.deckCards].length + state[S.discardedCards].length)
+      getRand() * (state[S.deckCards].length + state[S.discardedCards].length)
     );
     let card;
     if (randomIndex >= state[S.deckCards].length) {

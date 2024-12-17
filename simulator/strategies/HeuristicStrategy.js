@@ -67,39 +67,40 @@ export default class HeuristicStrategy extends BaseStrategy {
     if (previewState[S.cardMap][card].baseId == 362) score += 100000;
 
     // Effects
-    const effectsDiff =
-      previewState[S.effects].length - state[S.effects].length;
-    for (let i = 0; i < effectsDiff; i++) {
-      const effect =
-        previewState[S.effects][previewState[S.effects].length - i - 1];
-      let limit = previewState[S.turnsRemaining];
-      if (
-        effect.limit != null &&
-        effect.limit < previewState[S.turnsRemaining]
-      ) {
-        limit = effect.limit + 1;
-      }
-      if (limit == 0) continue;
-      const postEffectState = deepCopy(previewState);
-      this.engine.effectManager.triggerEffects(postEffectState, [
-        { ...effect, phase: null },
-      ]);
-      const scoreDelta =
-        this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += 3 * scoreDelta * limit;
-    }
+    // const effectsDiff =
+    //   previewState[S.effects].length - state[S.effects].length;
+    // for (let i = 0; i < effectsDiff; i++) {
+    //   const effect =
+    //     previewState[S.effects][previewState[S.effects].length - i - 1];
+    //   let limit = previewState[S.turnsRemaining];
+    //   if (
+    //     effect.limit != null &&
+    //     effect.limit < previewState[S.turnsRemaining]
+    //   ) {
+    //     limit = effect.limit + 1;
+    //   }
+    //   if (limit == 0) continue;
+    //   const postEffectState = deepCopy(previewState);
+    //   this.engine.effectManager.triggerEffects(postEffectState, [
+    //     { ...effect, phase: null },
+    //   ]);
+    //   const scoreDelta =
+    //     this.getStateScore(postEffectState) - this.getStateScore(previewState);
+    //   score += 3 * scoreDelta * limit;
+    // }
 
     // Additional actions
     if (previewState[S.turnsRemaining] >= state[S.turnsRemaining]) {
-      return this.evaluate(previewState);
+      const future = this.evaluate(previewState);
+      return { score: score + future.score, state: future.state };
     }
 
     // Cards removed
-    score +=
-      (((state[S.removedCards].length - previewState[S.removedCards].length) *
-        (previewState[S.score] - state[S.score])) /
-        this.averageTypeMultiplier) *
-      Math.floor(previewState[S.turnsRemaining] / 12);
+    // score +=
+    //   (((state[S.removedCards].length - previewState[S.removedCards].length) *
+    //     (previewState[S.score] - state[S.score])) /
+    //     this.averageTypeMultiplier) *
+    //   Math.floor(previewState[S.turnsRemaining] / 12);
 
     score += this.getStateScore(previewState);
 
@@ -168,19 +169,20 @@ export default class HeuristicStrategy extends BaseStrategy {
     score += state[S.cumulativeFullPowerCharge] * 15;
 
     // Growth
-    Object.values(state[S.cardMap]).reduce((acc, cur) => {
-      if (!cur.growth) return acc;
-      if (cur.growth["growth.score"]) {
-        acc += cur.growth["growth.score"] * 2;
+    let growthScore = 0;
+    for (let { growth } of state[S.cardMap]) {
+      if (!growth) continue;
+      if (growth[S["growth.score"]]) {
+        growthScore += growth[S["growth.score"]] * 2;
       }
-      if (cur.growth["growth.scoreTimes"]) {
-        acc += cur.growth["growth.scoreTimes"] * 20;
+      if (growth[S["growth.scoreTimes"]]) {
+        growthScore += growth[S["growth.scoreTimes"]] * 20;
       }
-      if (cur.growth["growth.cost"]) {
-        acc += cur.growth["growth.cost"];
+      if (growth[S["growth.cost"]]) {
+        growthScore += growth[S["growth.cost"]];
       }
-      return acc;
-    }, 0) * state[S.turnsRemaining];
+    }
+    score += growthScore * state[S.turnsRemaining];
 
     // Good impression turns
     score +=
