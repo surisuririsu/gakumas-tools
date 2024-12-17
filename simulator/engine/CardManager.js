@@ -66,7 +66,7 @@ export default class CardManager extends EngineComponent {
       const card = state[S.cardMap][cards[i]];
       if (!card.growth) card.growth = {};
       this.engine.executor.executeGrowthActions(card.growth, actions);
-      this.logger.log("growth", { type: "skillCard", id: card.id });
+      this.logger.log(state, "growth", { type: "skillCard", id: card.id });
     }
   }
 
@@ -88,7 +88,7 @@ export default class CardManager extends EngineComponent {
       "Drew card",
       SkillCards.getById(state[S.cardMap][card].id).name
     );
-    this.logger.log("drawCard", {
+    this.logger.log(state, "drawCard", {
       type: "skillCard",
       id: state[S.cardMap][card].id,
     });
@@ -133,7 +133,10 @@ export default class CardManager extends EngineComponent {
     const handIndex = state[S.handCards].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
 
-    this.logger.log("entityStart", { type: "skillCard", id: skillCard.id });
+    this.logger.log(state, "entityStart", {
+      type: "skillCard",
+      id: skillCard.id,
+    });
 
     this.logger.debug("Using card", skillCard.id, skillCard.name);
 
@@ -215,7 +218,10 @@ export default class CardManager extends EngineComponent {
     // Reset used card
     delete state[S.usedCard];
 
-    this.logger.log("entityEnd", { type: "skillCard", id: skillCard.id });
+    this.logger.log(state, "entityEnd", {
+      type: "skillCard",
+      id: skillCard.id,
+    });
 
     // Send card to discards or remove
     if (state[S.thisCardHeld]) {
@@ -254,13 +260,13 @@ export default class CardManager extends EngineComponent {
         this.upgrade(state, state[S.handCards][i]);
       }
     }
-    this.logger.log("upgradeHand");
+    this.logger.log(state, "upgradeHand");
   }
 
   exchangeHand(state) {
     const numCards = state[S.handCards].length;
     this.discardHand(state);
-    this.logger.log("exchangeHand");
+    this.logger.log(state, "exchangeHand");
     for (let i = 0; i < numCards; i++) {
       this.drawCard(state);
     }
@@ -277,7 +283,7 @@ export default class CardManager extends EngineComponent {
     const randomCard =
       unupgradedCards[Math.floor(Math.random() * unupgradedCards.length)];
     this.upgrade(state, randomCard);
-    this.logger.log("upgradeRandomCardInHand", {
+    this.logger.log(state, "upgradeRandomCardInHand", {
       type: "skillCard",
       id: state[S.cardMap][randomCard].id,
     });
@@ -296,7 +302,7 @@ export default class CardManager extends EngineComponent {
       baseId: skillCard.id - skillCard.upgraded ? 1 : 0,
     });
     state[S.handCards].push(state[S.cardMap].length - 1);
-    this.logger.log("addRandomUpgradedCardToHand", {
+    this.logger.log(state, "addRandomUpgradedCardToHand", {
       type: "skillCard",
       id: skillCard.id,
     });

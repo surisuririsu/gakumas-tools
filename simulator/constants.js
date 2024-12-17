@@ -22,8 +22,8 @@ export const FALLBACK_STAGE = {
   effects: [],
 };
 
-export const TOKEN_REGEX = /([=!]?=|[<>]=?|[+\-*/%]=?|&)/;
-export const NUMBER_REGEX = /^-?[\d]+(\.\d+)?$/;
+export const TOKEN_REGEX = /([=!]?=|[<>+\-*/%]=?|&)/;
+export const NUMBER_REGEX = /^-?\d+(?:\.\d+)?$/;
 export const FUNCTION_CALL_REGEX = /([^(]+)(?:\(([^)]+)\))?/;
 export const STANCES = [
   "none",
@@ -196,7 +196,7 @@ export const FIELDS_TO_DIFF = [
   ),
 ];
 
-const ALL_FIELDS = [
+export const ALL_FIELDS = [
   // General
   "cardUsesRemaining",
   "stamina",

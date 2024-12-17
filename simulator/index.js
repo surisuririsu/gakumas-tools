@@ -1,13 +1,11 @@
 import { mergeGraphDatas } from "@/utils/simulator";
-import { DEBUG } from "./constants";
 import StageEngine from "./engine/StageEngine";
-import StageLogger from "./engine/StageLogger";
 import StagePlayer from "./engine/StagePlayer";
 import STRATEGIES from "./strategies";
+import { formatRun } from "./engine/utils";
 
 export function simulate(idolStageConfig, strategyName, numRuns) {
-  const logger = new StageLogger(DEBUG);
-  const engine = new StageEngine(idolStageConfig, logger);
+  const engine = new StageEngine(idolStageConfig);
   const strategy = new STRATEGIES[strategyName](engine);
 
   let totalScore = 0;
@@ -17,7 +15,6 @@ export function simulate(idolStageConfig, strategyName, numRuns) {
   let graphDatas = [];
 
   for (let i = 0; i < numRuns; i++) {
-    logger.clear();
     const result = new StagePlayer(engine, strategy).play();
 
     // Track min/average/max runs
@@ -45,9 +42,9 @@ export function simulate(idolStageConfig, strategyName, numRuns) {
 
   return {
     graphData: mergedGraphData,
-    minRun,
-    averageRun,
-    maxRun,
+    minRun: formatRun(minRun),
+    averageRun: formatRun(averageRun),
+    maxRun: formatRun(maxRun),
     averageScore,
     scores,
   };
