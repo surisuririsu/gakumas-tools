@@ -40,13 +40,14 @@ export default class HeuristicStrategy extends BaseStrategy {
     let nextState;
 
     const scores = futures.map((f) => (f ? f.score : -Infinity));
-    const maxScore = Math.max(...scores);
+    let maxScore = Math.max(...scores);
     let selectedIndex = null;
     if (maxScore > 0) {
       selectedIndex = scores.indexOf(maxScore);
       nextState = futures[selectedIndex].state;
     } else {
       nextState = this.engine.endTurn(state);
+      maxScore = this.getStateScore(nextState);
     }
 
     nextState.logs[logIndex].data = {
