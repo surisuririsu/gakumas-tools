@@ -188,7 +188,7 @@ export default class EffectManager extends EngineComponent {
           this.engine.executor.executeActions(
             state,
             effect.actions,
-            card || effect.source
+            card ?? effect.source?.id
           );
         }
       }

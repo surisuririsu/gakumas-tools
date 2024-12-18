@@ -78,14 +78,14 @@ export default class Executor extends EngineComponent {
     state[S.motivationMultiplier] = 1;
 
     // Execute actions
-    const scoreTimes = state[S.cardMap][card]?.growth?.["growth.scoreTimes"];
+    const scoreTimes = state[S.cardMap][card]?.growth?.[S["growth.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
       this.executeAction(state, actions[i], card);
 
       if (scoreTimes) {
         const tokens = actions[i];
         if (tokens?.[0] == "score") {
-          for (let i = 0; i < scoreTimes; i++) {
+          for (let j = 0; j < scoreTimes; j++) {
             this.executeAction(state, actions[i], card);
           }
         }
@@ -224,7 +224,9 @@ export default class Executor extends EngineComponent {
 
       // Round whole fields
       for (let i = 0; i < WHOLE_FIELDS.length; i++) {
-        state[S[WHOLE_FIELDS[i]]] = Math.ceil(state[S[WHOLE_FIELDS[i]]]);
+        if (S[WHOLE_FIELDS[i]] in state) {
+          state[S[WHOLE_FIELDS[i]]] = Math.ceil(state[S[WHOLE_FIELDS[i]]]);
+        }
       }
 
       return;
