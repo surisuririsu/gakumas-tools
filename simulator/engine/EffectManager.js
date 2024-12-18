@@ -169,7 +169,7 @@ export default class EffectManager extends EngineComponent {
             }
             growthCards.add(effect.source.idx);
           } else if (target == "hand") {
-            for (let k = 0; k < state[S.handCards]; k++) {
+            for (let k = 0; k < state[S.handCards].length; k++) {
               growthCards.add(state[S.handCards][k]);
             }
           } else if (target == "all") {
