@@ -1,42 +1,42 @@
-import { GRAPHED_FIELDS } from "./constants";
+import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
+import { deepCopy } from "./utils";
 
 export default class StageLogger {
-  constructor(debuggingEnabled) {
-    this.disabled = false;
-    this.debuggingEnabled = debuggingEnabled;
-    this.clear();
+  initializeState(state) {
+    state.logs = [];
+    state.graphData = {};
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      state.graphData[S[GRAPHED_FIELDS[i]]] = [];
+    }
   }
 
-  disable() {
-    this.disabled = true;
-  }
-
-  enable() {
-    this.disabled = false;
-  }
-
-  log(logType, data) {
-    if (this.disabled) return;
-    this.logs.push({ logType, data });
+  log(state, logType, data) {
+    state.logs.push({ logType, data });
   }
 
   debug(...args) {
-    if (!this.debuggingEnabled || this.disabled) return;
+    if (!DEBUG) return;
     console.log(...args);
   }
 
   pushGraphData(state) {
-    if (this.disabled) return;
-    for (let field of GRAPHED_FIELDS) {
-      this.graphData[field].push(state[field]);
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      state.graphData[S[GRAPHED_FIELDS[i]]].push(state[S[GRAPHED_FIELDS[i]]]);
     }
   }
 
-  clear() {
-    this.logs = [];
-    this.graphData = GRAPHED_FIELDS.reduce((acc, cur) => {
-      acc[cur] = [];
-      return acc;
-    }, {});
+  getHandStateForLogging(state) {
+    let res = {};
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      if (LOGGED_FIELDS[i] == "turnsRemaining") continue;
+      if (LOGGED_FIELDS[i] == "cardUsesRemaining") continue;
+      if (state[S[LOGGED_FIELDS[i]]]) {
+        res[S[LOGGED_FIELDS[i]]] = state[S[LOGGED_FIELDS[i]]];
+      }
+    }
+    if (state[S.scoreBuffs].length) {
+      res[S.scoreBuffs] = deepCopy(state[S.scoreBuffs]);
+    }
+    return res;
   }
 }

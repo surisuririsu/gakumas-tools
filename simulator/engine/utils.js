@@ -1,16 +1,51 @@
+import { DEBUG } from "../constants";
+
+const seed = 610397104;
+
+// Public domain
+function mulberry32(a) {
+  return function () {
+    let t = (a += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export const getRand = DEBUG ? mulberry32(seed) : Math.random;
+
 export function shuffle(arr) {
-  let shuffled = [...arr];
-  let currentIndex = shuffled.length;
+  let currentIndex = arr.length;
 
   while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
+    let randomIndex = Math.floor(getRand() * currentIndex);
     currentIndex--;
 
-    [shuffled[currentIndex], shuffled[randomIndex]] = [
-      shuffled[randomIndex],
-      shuffled[currentIndex],
+    [arr[currentIndex], arr[randomIndex]] = [
+      arr[randomIndex],
+      arr[currentIndex],
     ];
   }
 
-  return shuffled;
+  return arr;
+}
+
+export function formatRun(run) {
+  return {
+    score: run.score,
+    logs: [].concat(...run.logs),
+  };
+}
+
+export function formatDiffField(value) {
+  if (isNaN(value)) return value;
+  return parseFloat(value.toFixed(2));
+}
+
+export function shallowCopy(state) {
+  return { ...state };
+}
+
+export function deepCopy(state) {
+  return JSON.parse(JSON.stringify(state));
 }
