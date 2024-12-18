@@ -2,6 +2,7 @@ import { DEBUG } from "../constants";
 
 const seed = 610397104;
 
+// Public domain
 function mulberry32(a) {
   return function () {
     let t = (a += 0x6d2b79f5);

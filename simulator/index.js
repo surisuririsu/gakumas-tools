@@ -1,8 +1,8 @@
 import { mergeGraphDatas } from "@/utils/simulator";
 import StageEngine from "./engine/StageEngine";
 import StagePlayer from "./engine/StagePlayer";
-import STRATEGIES from "./strategies";
 import { formatRun } from "./engine/utils";
+import STRATEGIES from "./strategies";
 
 export function simulate(idolStageConfig, strategyName, numRuns) {
   const engine = new StageEngine(idolStageConfig);

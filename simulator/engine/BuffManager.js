@@ -1,5 +1,4 @@
-import { S, UNFRESH_PHASES } from "@/simulator/constants";
-import { EOT_DECREMENT_FIELDS } from "../constants";
+import { EOT_DECREMENT_FIELDS, S, UNFRESH_PHASES } from "../constants";
 import EngineComponent from "./EngineComponent";
 
 export default class BuffManager extends EngineComponent {
