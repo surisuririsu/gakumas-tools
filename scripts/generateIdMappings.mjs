@@ -6,11 +6,6 @@ import P_IDOLS from "gakumas-data/json/p_idols.json" assert { type: "json" };
 import P_ITEMS from "gakumas-data/json/p_items.json" assert { type: "json" };
 import SKILL_CARDS from "gakumas-data/json/skill_cards.json" assert { type: "json" };
 import STAGES from "gakumas-data/json/stages.json" assert { type: "json" };
-
-import dataloader from "gakumas_contest_simulator/simulator/game/data/DataLoader.js";
-dataloader.initialize();
-console.log(dataloader.cardMap);
-
 import { data as KAFE_CONTESTS } from "gakumas_contest_simulator/simulator/game/data/contest.js";
 import { data as KAFE_P_IDOLS } from "gakumas_contest_simulator/simulator/game/data/pIdol.js";
 import { data as KAFE_P_ITEMS } from "gakumas_contest_simulator/simulator/game/data/pItem.js";

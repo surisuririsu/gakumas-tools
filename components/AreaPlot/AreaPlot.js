@@ -12,9 +12,9 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import { S } from "@/simulator/constants";
 import c from "@/utils/classNames";
 import styles from "./AreaPlot.module.scss";
-import { S } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,

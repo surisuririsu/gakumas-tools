@@ -1,7 +1,7 @@
 import { SkillCards } from "gakumas-data/lite";
+import { S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shuffle } from "./utils";
-import { S } from "../constants";
 
 export default class TurnManager extends EngineComponent {
   constructor(engine) {

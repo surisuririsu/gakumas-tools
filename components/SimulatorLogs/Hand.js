@@ -2,10 +2,10 @@ import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import Image from "@/components/Image";
+import { ALL_FIELDS, S } from "@/simulator/constants";
 import c from "@/utils/classNames";
 import { SkillCards } from "@/utils/data";
 import styles from "./SimulatorLogs.module.scss";
-import { ALL_FIELDS, S } from "@/simulator/constants";
 
 function HandState({ state }) {
   const t = useTranslations("stage");

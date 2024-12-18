@@ -1,7 +1,7 @@
 import { SkillCards } from "gakumas-data/lite";
+import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shallowCopy, shuffle } from "./utils";
-import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
