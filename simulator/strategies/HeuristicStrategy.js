@@ -2,6 +2,8 @@ import { S } from "../constants";
 import { deepCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
 
+const MAX_DEPTH = 4;
+
 export default class HeuristicStrategy extends BaseStrategy {
   constructor(engine) {
     super(engine);
@@ -23,16 +25,13 @@ export default class HeuristicStrategy extends BaseStrategy {
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       config.idol.recommendedEffect == "motivation" ? 4 : 1;
+
+    this.depth = 0;
   }
 
   evaluate(state) {
     const logIndex = state.logs.length;
-    this.engine.logger.log(state, "hand", {
-      handCardIds: state[S.handCards].map((card) => state[S.cardMap][card].id),
-      scores: [],
-      selectedIndex: null,
-      state: this.engine.logger.getHandStateForLogging(state),
-    });
+    this.engine.logger.log(state, "hand", null);
 
     const futures = state[S.handCards].map((card) =>
       this.getFuture(state, card)
@@ -42,15 +41,20 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     const scores = futures.map((f) => (f ? f.score : -Infinity));
     const maxScore = Math.max(...scores);
+    let selectedIndex = null;
     if (maxScore > 0) {
-      const maxIndex = scores.indexOf(maxScore);
-      nextState = futures[maxIndex].state;
-      nextState.logs[logIndex].data.selectedIndex = maxIndex;
+      selectedIndex = scores.indexOf(maxScore);
+      nextState = futures[selectedIndex].state;
     } else {
       nextState = this.engine.endTurn(state);
     }
 
-    nextState.logs[logIndex].data.scores = scores;
+    nextState.logs[logIndex].data = {
+      handCardIds: state[S.handCards].map((card) => state[S.cardMap][card].id),
+      scores,
+      selectedIndex,
+      state: this.engine.logger.getHandStateForLogging(state),
+    };
 
     return { score: maxScore, state: nextState };
   }
@@ -61,49 +65,60 @@ export default class HeuristicStrategy extends BaseStrategy {
     }
 
     const previewState = this.engine.useCard(state, card);
+    this.depth++;
 
     let score = 0;
 
     if (previewState[S.cardMap][card].baseId == 362) score += 100000;
 
-    // Effects
-    // const effectsDiff =
-    //   previewState[S.effects].length - state[S.effects].length;
-    // for (let i = 0; i < effectsDiff; i++) {
-    //   const effect =
-    //     previewState[S.effects][previewState[S.effects].length - i - 1];
-    //   let limit = previewState[S.turnsRemaining];
-    //   if (
-    //     effect.limit != null &&
-    //     effect.limit < previewState[S.turnsRemaining]
-    //   ) {
-    //     limit = effect.limit + 1;
-    //   }
-    //   if (limit == 0) continue;
-    //   const postEffectState = deepCopy(previewState);
-    //   this.engine.effectManager.triggerEffects(postEffectState, [
-    //     { ...effect, phase: null },
-    //   ]);
-    //   const scoreDelta =
-    //     this.getStateScore(postEffectState) - this.getStateScore(previewState);
-    //   score += 3 * scoreDelta * limit;
-    // }
+    // Effects -- TODO: make this not suck
+    if (this.engine.config.idol.plan != "anomaly") {
+      const effectsDiff =
+        previewState[S.effects].length - state[S.effects].length;
+      for (let i = 0; i < effectsDiff; i++) {
+        const effect =
+          previewState[S.effects][previewState[S.effects].length - i - 1];
+        let limit = previewState[S.turnsRemaining];
+        if (
+          effect.limit != null &&
+          effect.limit < previewState[S.turnsRemaining]
+        ) {
+          limit = effect.limit + 1;
+        }
+        if (limit == 0) continue;
+        const postEffectState = deepCopy(previewState);
+        this.engine.effectManager.triggerEffects(postEffectState, [
+          { ...effect, phase: null },
+        ]);
+        const scoreDelta =
+          this.getStateScore(postEffectState) -
+          this.getStateScore(previewState);
+        score += 3 * scoreDelta * limit;
+      }
+    }
 
     // Additional actions
-    if (previewState[S.turnsRemaining] >= state[S.turnsRemaining]) {
+    if (
+      previewState[S.turnsRemaining] >= state[S.turnsRemaining] &&
+      this.depth < MAX_DEPTH
+    ) {
       const future = this.evaluate(previewState);
+      this.depth--;
       return { score: score + future.score, state: future.state };
     }
 
     // Cards removed
-    // score +=
-    //   (((state[S.removedCards].length - previewState[S.removedCards].length) *
-    //     (previewState[S.score] - state[S.score])) /
-    //     this.averageTypeMultiplier) *
-    //   Math.floor(previewState[S.turnsRemaining] / 12);
+    if (this.engine.config.idol.plan != "anomaly") {
+      score +=
+        (((state[S.removedCards].length - previewState[S.removedCards].length) *
+          (previewState[S.score] - state[S.score])) /
+          this.averageTypeMultiplier) *
+        Math.floor(previewState[S.turnsRemaining] / 13);
+    }
 
     score += this.getStateScore(previewState);
 
+    this.depth--;
     return { score: Math.round(score), state: previewState };
   }
 
@@ -146,43 +161,45 @@ export default class HeuristicStrategy extends BaseStrategy {
       this.concentrationMultiplier;
 
     // Stance
-    if (state[S.stance] == "fullPower") {
-      score += 200;
-    } else if (state[S.stance] == "strength") {
-      score += 20;
-    } else if (state[S.stance] == "strength2") {
-      score += 40;
-    } else if (state[S.stance] == "preservation") {
-      score += 8;
-    } else if (state[S.stance] == "preservation2") {
-      score += 16;
+    if (state[S.turnsRemaining] || state[S.cardUsesRemaining]) {
+      if (state[S.stance] == "fullPower") {
+        score += 200;
+      } else if (state[S.stance] == "strength") {
+        score += 20;
+      } else if (state[S.stance] == "strength2") {
+        score += 40;
+      } else if (state[S.stance] == "preservation") {
+        score += 8;
+      } else if (state[S.stance] == "preservation2") {
+        score += 16;
+      }
+
+      score += state[S.strengthTimes] * 40;
+      score += state[S.preservationTimes] * 80;
+      score += state[S.fullPowerTimes] * 250;
+
+      //Enthusiasm
+      score += state[S.enthusiasm] * 5;
+
+      // Full power charge
+      score += state[S.cumulativeFullPowerCharge] * 15;
+
+      // Growth
+      let growthScore = 0;
+      for (let { growth } of state[S.cardMap]) {
+        if (!growth) continue;
+        if (growth[S["growth.score"]]) {
+          growthScore += growth[S["growth.score"]] * 2;
+        }
+        if (growth[S["growth.scoreTimes"]]) {
+          growthScore += growth[S["growth.scoreTimes"]] * 20;
+        }
+        if (growth[S["growth.cost"]]) {
+          growthScore += growth[S["growth.cost"]];
+        }
+      }
+      score += growthScore * state[S.turnsRemaining];
     }
-
-    score += state[S.strengthTimes] * 40;
-    score += state[S.preservationTimes] * 80;
-    score += state[S.fullPowerTimes] * 250;
-
-    //Enthusiasm
-    score += state[S.enthusiasm] * 5;
-
-    // Full power charge
-    score += state[S.cumulativeFullPowerCharge] * 15;
-
-    // Growth
-    let growthScore = 0;
-    for (let { growth } of state[S.cardMap]) {
-      if (!growth) continue;
-      if (growth[S["growth.score"]]) {
-        growthScore += growth[S["growth.score"]] * 2;
-      }
-      if (growth[S["growth.scoreTimes"]]) {
-        growthScore += growth[S["growth.scoreTimes"]] * 20;
-      }
-      if (growth[S["growth.cost"]]) {
-        growthScore += growth[S["growth.cost"]];
-      }
-    }
-    score += growthScore * state[S.turnsRemaining];
 
     // Good impression turns
     score +=

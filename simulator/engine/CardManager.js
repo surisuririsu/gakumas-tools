@@ -43,8 +43,9 @@ export default class CardManager extends EngineComponent {
   }
 
   getCardEffects(state, card) {
-    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     let cardEffects = new Set();
+    if (card == null) return cardEffects;
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     for (let i = 0; i < skillCard.effects.length; i++) {
       const effect = skillCard.effects[i];
       if (effect.phase || !effect.actions) continue;
@@ -256,7 +257,7 @@ export default class CardManager extends EngineComponent {
 
   upgradeHand(state) {
     for (let i = 0; i < state[S.handCards].length; i++) {
-      if (this.isUpgradable(state[S.handCards][i])) {
+      if (this.isUpgradable(state, state[S.handCards][i])) {
         this.upgrade(state, state[S.handCards][i]);
       }
     }
