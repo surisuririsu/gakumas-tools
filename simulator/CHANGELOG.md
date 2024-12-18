@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of support p-items from kakushitawatashi
+- Skill cards and p-items from Kakushitawatashi gacha
 
 ## 2024-12-15
 
