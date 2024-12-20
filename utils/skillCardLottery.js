@@ -63,25 +63,24 @@ export function generatePossibleMemories(skillCardIds, rank) {
 
     // Reduce number of lottery slots until we find a viable combination
     // or we reach 0 slots
-    let maxCombinedCost;
     let hasOverCostCombination = false;
     let remainingSlots = lotterySlots;
+    let subCombinations = [];
     while (true) {
       // If no possible combinations, add lonely memory
       if (remainingSlots == 0) {
-        fullCombinations.push({
-          skillCards: preLotteryCombination,
-          probability: 1 / preLotteryCombinations.length,
-        });
         break;
       }
 
       // Generate all combinations based on remaining slots
+      let hasInRangeCostCombination = false;
+      let maxCombinedCost;
       let stepCombinations = [];
-      for (let combination of generateCombinations(
+      const combinations = generateCombinations(
         produceSkillCards,
         remainingSlots
-      )) {
+      );
+      for (let combination of combinations) {
         // Remove combinations that contain upgraded and non-upgraded version of the same card
         const names = combination.map((c) => c.name);
         if (names.some((name) => names.includes(`${name}+`))) {
@@ -99,7 +98,7 @@ export function generatePossibleMemories(skillCardIds, rank) {
           continue;
         }
 
-        // Record the highest cost combination
+        // Record the highest cost combination below max cost
         if (!maxCombinedCost) {
           maxCombinedCost = combinationCost;
         }
@@ -110,8 +109,8 @@ export function generatePossibleMemories(skillCardIds, rank) {
         if (maxCombinedCost < minCost) {
           if (hasOverCostCombination || maxCombinedCost === combinationCost) {
             stepCombinations.push(preLotteryCombination.concat(combination));
+            continue;
           }
-          continue;
         }
 
         // Remove combinations that cost too little
@@ -119,25 +118,44 @@ export function generatePossibleMemories(skillCardIds, rank) {
           continue;
         }
 
+        hasInRangeCostCombination = true;
+
         // Add valid combination
         stepCombinations.push(preLotteryCombination.concat(combination));
       }
 
-      // If we found combinations at the current number of slots, end the lottery
-      if (stepCombinations.length) {
-        fullCombinations = fullCombinations.concat(
-          stepCombinations.map((combination) => ({
-            skillCards: combination,
-            probability:
-              1 / preLotteryCombinations.length / stepCombinations.length,
-          }))
-        );
+      // If we found in-range combinations at the current number of slots, end the lottery
+      if (hasInRangeCostCombination) {
+        subCombinations = stepCombinations.map((combination) => ({
+          skillCards: combination,
+          probability:
+            1 / preLotteryCombinations.length / stepCombinations.length,
+        }));
         break;
       }
 
-      // Otherwise, reduce the number of slots
+      // If we found out-of-range combinations at the current number of slots
+      // And none for higher numbers, set to current step
+      if (stepCombinations.length && !subCombinations.length) {
+        subCombinations = stepCombinations.map((combination) => ({
+          skillCards: combination,
+          probability:
+            1 / preLotteryCombinations.length / stepCombinations.length,
+        }));
+      }
+
+      // Reduce the number of slots
       remainingSlots--;
     }
+
+    if (!subCombinations.length) {
+      subCombinations.push({
+        skillCards: preLotteryCombination,
+        probability: 1 / preLotteryCombinations.length,
+      });
+    }
+
+    fullCombinations = fullCombinations.concat(subCombinations);
   }
 
   return fullCombinations.map(({ skillCards, probability }) => ({
