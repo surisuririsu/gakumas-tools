@@ -16,11 +16,17 @@ import ModalContext from "@/contexts/ModalContext";
 import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
-function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
+function LoadoutSkillCardGroup({
+  skillCardIds,
+  customizations,
+  groupIndex,
+  idolId,
+}) {
   const t = useTranslations("LoadoutSkillCardGroup");
   const {
     loadout,
     replaceSkillCardId,
+    replaceCustomizations,
     insertSkillCardIdGroup,
     deleteSkillCardIdGroup,
     swapSkillCardIdGroups,
@@ -45,7 +51,9 @@ function LoadoutSkillCardGroup({ skillCardIds, groupIndex, idolId }) {
     <div>
       <StageSkillCards
         skillCardIds={skillCardIds}
+        customizations={[...customizations]}
         replaceSkillCardId={replaceSkillCardId}
+        replaceCustomizations={replaceCustomizations}
         idolId={idolId}
         groupIndex={groupIndex}
       />

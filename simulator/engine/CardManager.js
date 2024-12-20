@@ -1,4 +1,5 @@
 import { SkillCards } from "gakumas-data/lite";
+import { CUSTOMIZATIONS_BY_ID } from "@/utils/customizations";
 import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shallowCopy, shuffle } from "./utils";
@@ -17,12 +18,13 @@ export default class CardManager extends EngineComponent {
   }
 
   initializeState(state) {
-    const cardIds = this.config.idol.skillCardIds.concat(
-      this.config.defaultCardIds
+    const cards = this.config.idol.cards.concat(
+      this.config.defaultCardIds.map((id) => ({ id }))
     );
-    const cardMap = cardIds.map((id) => ({
+    const cardMap = cards.map(({ id, customizations }) => ({
       id,
       baseId: SkillCards.getById(id).upgraded ? id - 1 : id,
+      c: customizations,
     }));
 
     state[S.cardMap] = cardMap;
@@ -133,6 +135,7 @@ export default class CardManager extends EngineComponent {
   useCard(state, card) {
     const handIndex = state[S.handCards].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+    const customizations = state[S.cardMap][card].c;
 
     this.logger.log(state, "entityStart", {
       type: "skillCard",
@@ -175,21 +178,17 @@ export default class CardManager extends EngineComponent {
     }
 
     // Apply card effects
-    if (state[S.doubleCardEffectCards]) {
-      state[S.doubleCardEffectCards]--;
-      this.engine.effectManager.triggerEffects(
-        state,
-        skillCard.effects,
-        null,
-        card
+    let effects = skillCard.effects;
+    if (customizations) {
+      effects = effects.concat(
+        ...customizations.map((id) => CUSTOMIZATIONS_BY_ID[id].effects)
       );
     }
-    this.engine.effectManager.triggerEffects(
-      state,
-      skillCard.effects,
-      null,
-      card
-    );
+    if (state[S.doubleCardEffectCards]) {
+      state[S.doubleCardEffectCards]--;
+      this.engine.effectManager.triggerEffects(state, effects, null, card);
+    }
+    this.engine.effectManager.triggerEffects(state, effects, null, card);
 
     // Increment counters
     state[S.cardsUsed]++;

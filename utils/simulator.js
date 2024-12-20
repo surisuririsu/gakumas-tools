@@ -1,4 +1,8 @@
 import { BUCKET_SIZE, GRAPHED_FIELDS, S } from "@/simulator/constants";
+import {
+  deserializeCustomizations,
+  serializeCustomizations,
+} from "./customizations";
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
@@ -7,6 +11,7 @@ const DEFAULTS = {
   params: "1500-1500-1500-50",
   pItemIds: "0-0-0",
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
+  customizationGroups: "-----_-----",
 };
 
 const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
@@ -16,7 +21,8 @@ export function getSimulatorUrl(
   supportBonus,
   params,
   pItemIds,
-  skillCardIdGroups
+  skillCardIdGroups,
+  customizationGroups
 ) {
   const searchParams = loadoutToSearchParams({
     stageId,
@@ -24,6 +30,7 @@ export function getSimulatorUrl(
     params,
     pItemIds,
     skillCardIdGroups,
+    customizationGroups,
   });
   return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
 }
@@ -34,19 +41,25 @@ export function loadoutFromSearchParams(searchParams) {
   let params = searchParams.get("params");
   let pItemIds = searchParams.get("items");
   let skillCardIdGroups = searchParams.get("cards");
-  const hasDataFromParams = stageId || params || pItemIds || skillCardIdGroups;
+  let customizationGroups = searchParams.get("customizations");
+  const hasDataFromParams =
+    stageId || params || pItemIds || skillCardIdGroups || customizationGroups;
 
   stageId = stageId || DEFAULTS.stageId;
   supportBonus = supportBonus || DEFAULTS.supportBonus;
   params = params || DEFAULTS.params;
   pItemIds = pItemIds || DEFAULTS.pItemIds;
   skillCardIdGroups = skillCardIdGroups || DEFAULTS.skillCardIdGroups;
+  customizationGroups = customizationGroups || DEFAULTS.customizationGroups;
 
   stageId = parseInt(stageId, 10) || null;
   supportBonus = parseFloat(supportBonus) || null;
   params = deserializeIds(params);
   pItemIds = deserializeIds(pItemIds);
   skillCardIdGroups = skillCardIdGroups.split("_").map(deserializeIds);
+  customizationGroups = customizationGroups
+    .split("_")
+    .map(deserializeCustomizations);
 
   return {
     stageId,
@@ -54,19 +67,30 @@ export function loadoutFromSearchParams(searchParams) {
     params,
     pItemIds,
     skillCardIdGroups,
+    customizationGroups,
     hasDataFromParams,
   };
 }
 
 export function loadoutToSearchParams(loadout) {
-  const { stageId, supportBonus, params, pItemIds, skillCardIdGroups } =
-    loadout;
+  const {
+    stageId,
+    supportBonus,
+    params,
+    pItemIds,
+    skillCardIdGroups,
+    customizationGroups,
+  } = loadout;
   const searchParams = new URLSearchParams();
   searchParams.set("stage", stageId);
   searchParams.set("support_bonus", supportBonus);
   searchParams.set("params", serializeIds(params));
   searchParams.set("items", serializeIds(pItemIds));
   searchParams.set("cards", skillCardIdGroups.map(serializeIds).join("_"));
+  searchParams.set(
+    "customizations",
+    customizationGroups.map(serializeCustomizations).join("_")
+  );
   return searchParams;
 }
 

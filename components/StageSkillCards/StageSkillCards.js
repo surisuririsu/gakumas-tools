@@ -7,7 +7,9 @@ import EntityPickerModal from "../EntityPickerModal";
 
 function StageSkillCards({
   skillCardIds,
+  customizations,
   replaceSkillCardId,
+  replaceCustomizations,
   idolId,
   size,
   groupIndex = 0,
@@ -21,12 +23,18 @@ function StageSkillCards({
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
+          numCustomizations={customizations?.[index].length}
           onClick={() =>
             setModal(
               <EntityPickerModal
                 type={EntityTypes.SKILL_CARD}
+                id={skillCardId}
+                customizations={customizations?.[index]}
                 onPick={(card) =>
                   replaceSkillCardId(groupIndex * 6 + index, card.id)
+                }
+                onCustomize={(customs) =>
+                  replaceCustomizations(groupIndex * 6 + index, customs)
                 }
               />
             )
