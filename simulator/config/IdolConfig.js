@@ -2,15 +2,33 @@ import { PIdols, PItems, SkillCards } from "gakumas-data/lite";
 
 export default class IdolConfig {
   constructor(loadout) {
-    const { params, supportBonus, pItemIds, skillCardIdGroups } = loadout;
-    const skillCardIds = [].concat(...skillCardIdGroups).filter((id) => id);
+    const {
+      params,
+      supportBonus,
+      pItemIds,
+      skillCardIdGroups,
+      customizationGroups,
+    } = loadout;
+
+    let cards = [];
+    for (let i = 0; i < skillCardIdGroups.length; i++) {
+      for (let j = 0; j < skillCardIdGroups[i].length; j++) {
+        if (skillCardIdGroups[i][j]) {
+          cards.push({
+            id: skillCardIdGroups[i][j],
+            customizations: customizationGroups?.[i]?.[j],
+          });
+        }
+      }
+    }
 
     // P-items and skill cards
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
-    this.skillCardIds = this.getDedupedSkillCardIds(skillCardIds);
+    this.cards = this.getDedupedCards(cards);
+    const skillCardIds = this.cards.map((c) => c.id);
 
     // P-idol
-    this.pIdolId = this.inferPIdolId(this.pItemIds, this.skillCardIds);
+    this.pIdolId = this.inferPIdolId(this.pItemIds, skillCardIds);
     const pIdol = PIdols.getById(this.pIdolId);
     if (pIdol) {
       this.idolId = pIdol.idolId;
@@ -18,7 +36,7 @@ export default class IdolConfig {
       this.recommendedEffect = pIdol.recommendedEffect;
     }
     if (!this.plan) {
-      this.plan = this.inferPlan(this.pItemIds, this.skillCardIds);
+      this.plan = this.inferPlan(this.pItemIds, skillCardIds);
     }
 
     // Params
@@ -73,5 +91,24 @@ export default class IdolConfig {
     }
 
     return dedupedIds;
+  }
+
+  getDedupedCards(cards) {
+    const sortedCards = cards.sort((a, b) => b.id - a.id);
+
+    let dedupedCards = [];
+
+    for (let i = 0; i < sortedCards.length; i++) {
+      const skillCard = SkillCards.getById(sortedCards[i].id);
+      if (skillCard.unique) {
+        const baseId = skillCard.upgraded ? skillCard.id - 1 : skillCard.id;
+        if (dedupedCards.some((d) => [baseId, baseId + 1].includes(d.id))) {
+          continue;
+        }
+      }
+      dedupedCards.push(sortedCards[i]);
+    }
+
+    return dedupedCards;
   }
 }

@@ -1,10 +1,11 @@
 import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
-import Image from "@/components/Image";
+import EntityIcon from "@/components/EntityIcon";
 import { ALL_FIELDS, S } from "@/simulator/constants";
 import c from "@/utils/classNames";
 import { SkillCards } from "@/utils/data";
+import { EntityTypes } from "@/utils/entities";
 import styles from "./SimulatorLogs.module.scss";
 
 function HandState({ state }) {
@@ -36,7 +37,7 @@ function HandState({ state }) {
   );
 }
 
-function Hand({ handCardIds, scores, selectedIndex, state, idolId }) {
+function Hand({ handCards, scores, selectedIndex, state, idolId }) {
   const t = useTranslations("stage");
 
   const [expanded, setExpanded] = useState(false);
@@ -51,7 +52,7 @@ function Hand({ handCardIds, scores, selectedIndex, state, idolId }) {
       </div>
       {expanded && <HandState state={state} />}
       <div className={styles.handCards}>
-        {handCardIds.map(SkillCards.getById).map((skillCard, i) => (
+        {handCards.map((card, i) => (
           <div
             key={i}
             className={c(
@@ -60,13 +61,15 @@ function Hand({ handCardIds, scores, selectedIndex, state, idolId }) {
               scores[i] == -Infinity && styles.unusable
             )}
           >
-            <Image
-              src={skillCard.getIcon(idolId)}
-              width={60}
-              height={60}
-              alt=""
-            />
-            {skillCard.name}
+            <div className={styles.imgWrapper}>
+              <EntityIcon
+                type={EntityTypes.SKILL_CARD}
+                id={card.id}
+                numCustomizations={card.c}
+                size="fill"
+              />
+            </div>
+            {SkillCards.getById(card.id).name}
             <span className={styles.cardScore}>
               {scores[i] == -Infinity ? t("unplayable") : scores[i]}
             </span>

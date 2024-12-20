@@ -1,0 +1,36 @@
+@import "@/constants";
+
+.entityCustomizer {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  margin: 0 12px 12px;
+  border: 2px solid $gray-light;
+  border-radius: 8px;
+  padding: 8px;
+
+  .label {
+    position: absolute;
+    padding: 0 4px;
+    background-color: $white;
+    color: $gray;
+    font-size: 14px;
+    top: -14px;
+  }
+}
+
+.icon {
+  width: 68px;
+}
+
+.customizations {
+  flex: 1;
+  font-size: 14px;
+  color: $black-dark;
+}
+
+.add {
+  margin-right: 12px;
+  color: $green;
+  font-size: 24px;
+}

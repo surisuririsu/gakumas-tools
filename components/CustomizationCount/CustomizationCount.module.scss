@@ -1,0 +1,18 @@
+@import "@/constants";
+
+.customizations {
+  position: absolute;
+  top: 65%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $green;
+  color: $white;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid lighten($green, 20%);
+  box-shadow: 0 0 6px $green;
+}

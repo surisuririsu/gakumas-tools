@@ -5,6 +5,11 @@ import { Stages } from "gakumas-data/lite";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
+import {
+  CUSTOMIZATIONS_BY_ID,
+  deserializeCustomizations,
+  serializeCustomizations,
+} from "@/utils/customizations";
 
 const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
 
@@ -23,6 +28,9 @@ export function LoadoutContextProvider({ children }) {
   const [pItemIds, setPItemIds] = useState(initial.pItemIds);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
     initial.skillCardIdGroups
+  );
+  const [customizationGroups, setCustomizationGroups] = useState(
+    initial.customizationGroups
   );
   const [loadoutHistory, setLoadoutHistory] = useState([]);
 
@@ -43,6 +51,13 @@ export function LoadoutContextProvider({ children }) {
     setParams(loadout.params);
     setPItemIds(loadout.pItemIds);
     setSkillCardIdGroups(loadout.skillCardIdGroups);
+    if (loadout.customizationGroups) {
+      setCustomizationGroups(
+        loadout.customizationGroups.map((g) =>
+          g.map((c) => c.filter((n) => n in CUSTOMIZATIONS_BY_ID))
+        )
+      );
+    }
   };
 
   // Load history and latest loadout from local storage on mount
@@ -75,6 +90,10 @@ export function LoadoutContextProvider({ children }) {
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
+    setCustomizationGroups([
+      [[], [], [], [], [], []],
+      [[], [], [], [], [], []],
+    ]);
   }
 
   function replacePItemId(index, itemId) {
@@ -86,13 +105,33 @@ export function LoadoutContextProvider({ children }) {
   }
 
   function replaceSkillCardId(index, cardId) {
+    let changed = false;
     setSkillCardIdGroups((cur) => {
       const skillCardIds = [].concat(...cur);
       const updatedSkillCardIds = [...skillCardIds];
+      if (cardId != updatedSkillCardIds[index]) {
+        changed = true;
+      }
       updatedSkillCardIds[index] = cardId;
       let chunks = [];
       for (let i = 0; i < updatedSkillCardIds.length; i += 6) {
         chunks.push(updatedSkillCardIds.slice(i, i + 6));
+      }
+      return chunks;
+    });
+    if (changed) {
+      replaceCustomizations(index, []);
+    }
+  }
+
+  function replaceCustomizations(index, customizations) {
+    setCustomizationGroups((cur) => {
+      const curCustomizations = [].concat(...cur);
+      const updatedCustomizations = [...curCustomizations];
+      updatedCustomizations[index] = customizations;
+      let chunks = [];
+      for (let i = 0; i < updatedCustomizations.length; i += 6) {
+        chunks.push(updatedCustomizations.slice(i, i + 6));
       }
       return chunks;
     });
@@ -104,6 +143,11 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
       return updatedSkillCardIds;
     });
+    setCustomizationGroups((cur) => {
+      const updatedCustomizations = [...cur];
+      updatedCustomizations.splice(groupIndex, 0, [[], [], [], [], [], []]);
+      return updatedCustomizations;
+    });
   };
 
   const deleteSkillCardIdGroup = (groupIndex) => {
@@ -111,6 +155,11 @@ export function LoadoutContextProvider({ children }) {
       const updatedSkillCardIds = [...cur];
       updatedSkillCardIds.splice(groupIndex, 1);
       return updatedSkillCardIds;
+    });
+    setCustomizationGroups((cur) => {
+      const updatedCustomizations = [...cur];
+      updatedCustomizations.splice(groupIndex, 1);
+      return updatedCustomizations;
     });
   };
 
@@ -121,6 +170,13 @@ export function LoadoutContextProvider({ children }) {
       updatedSkillCardIds[groupIndexA] = updatedSkillCardIds[groupIndexB];
       updatedSkillCardIds[groupIndexB] = temp;
       return updatedSkillCardIds;
+    });
+    setCustomizationGroups((cur) => {
+      const updatedCustomizations = [...cur];
+      const temp = updatedCustomizations[groupIndexA];
+      updatedCustomizations[groupIndexA] = updatedCustomizations[groupIndexB];
+      updatedCustomizations[groupIndexB] = temp;
+      return updatedCustomizations;
     });
   };
 
@@ -157,6 +213,11 @@ export function LoadoutContextProvider({ children }) {
       next[index] = memory.skillCardIds;
       return next;
     });
+    setCustomizationGroups((cur) => {
+      const next = [...cur];
+      next[index] = memory.customizations || [[], [], [], [], [], []];
+      return next;
+    });
   }
 
   const simulatorUrl = getSimulatorUrl(
@@ -164,7 +225,8 @@ export function LoadoutContextProvider({ children }) {
     supportBonus,
     params,
     pItemIds,
-    skillCardIdGroups
+    skillCardIdGroups,
+    customizationGroups
   );
 
   let kafeUrl = null;
@@ -191,6 +253,7 @@ export function LoadoutContextProvider({ children }) {
     params,
     pItemIds,
     skillCardIdGroups,
+    customizationGroups,
   };
 
   const pushLoadoutHistory = () => {
@@ -210,6 +273,7 @@ export function LoadoutContextProvider({ children }) {
         setParams,
         replacePItemId,
         replaceSkillCardId,
+        replaceCustomizations,
         clear,
         insertSkillCardIdGroup,
         deleteSkillCardIdGroup,

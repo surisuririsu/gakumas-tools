@@ -7,7 +7,7 @@ export function ModalContextProvider({ children }) {
   const [modals, _setModals] = useState([]);
 
   function closeModal() {
-    _setModals(modals.slice(0, modals.length - 1));
+    _setModals((cur) => cur.slice(0, cur.length - 1));
   }
 
   function setModal(modal) {

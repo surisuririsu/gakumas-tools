@@ -168,6 +168,7 @@ export default function Simulator() {
           <LoadoutSkillCardGroup
             key={i}
             skillCardIds={skillCardIdGroup}
+            customizations={loadout.customizationGroups[i]}
             groupIndex={i}
             idolId={idolConfig.idolId || idolId}
           />
@@ -193,7 +194,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-12-19
+            {t("lastUpdated")}: 2024-12-20
           </a>
         </div>
         {!simulatorData && (

@@ -51,7 +51,10 @@ export default class HeuristicStrategy extends BaseStrategy {
     }
 
     nextState.logs[logIndex].data = {
-      handCardIds: state[S.handCards].map((card) => state[S.cardMap][card].id),
+      handCards: state[S.handCards].map((card) => ({
+        id: state[S.cardMap][card].id,
+        c: state[S.cardMap][card].c?.length || 0,
+      })),
       scores,
       selectedIndex,
       state: this.engine.logger.getHandStateForLogging(state),

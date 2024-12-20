@@ -144,8 +144,11 @@
     gap: 4px;
   }
 
+  .imgWrapper {
+    width: 60px;
+  }
+
   .selected img {
-    display: flex;
     border-radius: 4px;
     box-shadow: 0 0 8px $gk-orange;
     overflow: hidden;

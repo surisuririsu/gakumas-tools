@@ -95,6 +95,12 @@
   "EntityBank": {
     "filter": "フィルタ"
   },
+  "EntityCustomizer": {
+    "customization": "カスタマイズ"
+  },
+  "CustomizationMultiPickerModal": {
+    "apply": "適用"
+  },
   "MemoryCalculator": {
     "note": "※表示される確率はあくまで全メモリーが同確立で生成されるとして求められた推測値であり、実際の確率とは異なる可能性があります。",
     "target": "欲しいパターン",

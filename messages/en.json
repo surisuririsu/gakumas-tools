@@ -95,6 +95,12 @@
   "EntityBank": {
     "filter": "Filter"
   },
+  "EntityCustomizer": {
+    "customization": "Customization"
+  },
+  "CustomizationMultiPickerModal": {
+    "apply": "Apply"
+  },
   "MemoryCalculator": {
     "note": "Note: Probabilities shown are estimated based on a uniform distribution. The real skill card selection algorithm is not known.",
     "target": "Target skill cards",
