@@ -3,7 +3,15 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-21
+
+### Changed
+
+- Adjusted simulator strategy
+
 ## 2024-12-20
+
+### Fixed
 
 - Fix effect of みんなの憧れ
 - Fix inference of recommended effect from skill cards
