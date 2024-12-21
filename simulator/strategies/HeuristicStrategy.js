@@ -18,18 +18,25 @@ export default class HeuristicStrategy extends BaseStrategy {
     );
 
     this.goodConditionTurnsMultiplier =
-      config.idol.recommendedEffect == "goodConditionTurns" ? 2 : 1;
+      config.idol.recommendedEffect == "goodConditionTurns" ? 1.75 : 1;
     this.concentrationMultiplier =
-      config.idol.recommendedEffect == "concentration" ? 4 : 0.8;
+      config.idol.recommendedEffect == "concentration" ? 3 : 0.8;
     this.goodImpressionTurnsMultiplier =
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
       config.idol.recommendedEffect == "motivation" ? 4 : 1;
+    this.fullPowerMultiplier =
+      config.idol.recommendedEffect == "fullPower" ? 5 : 1;
 
     this.depth = 0;
+    this.rootEffectCount = 0;
   }
 
   evaluate(state) {
+    if (this.depth == 0) {
+      this.rootEffectCount = state[S.effects].length;
+    }
+
     const logIndex = state.logs.length;
     this.engine.logger.log(state, "hand", null);
 
@@ -71,14 +78,21 @@ export default class HeuristicStrategy extends BaseStrategy {
     const previewState = this.engine.useCard(state, card);
     this.depth++;
 
+    // Additional actions
+    if (
+      previewState[S.turnsRemaining] >= state[S.turnsRemaining] &&
+      this.depth < MAX_DEPTH
+    ) {
+      const future = this.evaluate(previewState);
+      this.depth--;
+      return { score: future.score, state: future.state };
+    }
+
     let score = 0;
 
-    if (previewState[S.cardMap][card].baseId == 362) score += 100000;
-
-    // Effects -- TODO: make this not suck
     if (this.engine.config.idol.plan != "anomaly") {
-      const effectsDiff =
-        previewState[S.effects].length - state[S.effects].length;
+      // Effects -- TODO: make this not suck
+      const effectsDiff = previewState[S.effects].length - this.rootEffectCount;
       for (let i = 0; i < effectsDiff; i++) {
         const effect =
           previewState[S.effects][previewState[S.effects].length - i - 1];
@@ -99,20 +113,8 @@ export default class HeuristicStrategy extends BaseStrategy {
           this.getStateScore(previewState);
         score += 3 * scoreDelta * limit;
       }
-    }
 
-    // Additional actions
-    if (
-      previewState[S.turnsRemaining] >= state[S.turnsRemaining] &&
-      this.depth < MAX_DEPTH
-    ) {
-      const future = this.evaluate(previewState);
-      this.depth--;
-      return { score: score + future.score, state: future.state };
-    }
-
-    // Cards removed
-    if (this.engine.config.idol.plan != "anomaly") {
+      // Cards removed
       score +=
         (((state[S.removedCards].length - previewState[S.removedCards].length) *
           (previewState[S.score] - state[S.score])) /
@@ -156,6 +158,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       Math.min(state[S.perfectConditionTurns], state[S.turnsRemaining]) *
       state[S.goodConditionTurns] *
+      this.goodConditionTurnsMultiplier *
       this.goodConditionTurnsMultiplier;
 
     // Concentration
@@ -165,28 +168,20 @@ export default class HeuristicStrategy extends BaseStrategy {
       this.concentrationMultiplier;
 
     // Stance
-    if (state[S.turnsRemaining] || state[S.cardUsesRemaining]) {
-      if (state[S.stance] == "fullPower") {
-        score += 200;
-      } else if (state[S.stance] == "strength") {
-        score += 20;
-      } else if (state[S.stance] == "strength2") {
-        score += 40;
-      } else if (state[S.stance] == "preservation") {
-        score += 8;
-      } else if (state[S.stance] == "preservation2") {
-        score += 16;
-      }
-
+    if (
+      this.engine.config.idol.plan == "anomaly" &&
+      (state[S.turnsRemaining] || state[S.cardUsesRemaining])
+    ) {
       score += state[S.strengthTimes] * 40;
       score += state[S.preservationTimes] * 80;
-      score += state[S.fullPowerTimes] * 250;
+      score += state[S.fullPowerTimes] * 80 * this.fullPowerMultiplier;
 
       //Enthusiasm
       score += state[S.enthusiasm] * 5;
 
       // Full power charge
-      score += state[S.cumulativeFullPowerCharge] * 15;
+      score +=
+        state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
 
       // Growth
       let growthScore = 0;
@@ -252,11 +247,11 @@ export default class HeuristicStrategy extends BaseStrategy {
     } else if (recommendedEffect == "concentration") {
       score += state[S.score] * 0.6;
     } else if (recommendedEffect == "goodImpressionTurns") {
-      score += state[S.score] * 0.8;
+      score += state[S.score] * 1.1;
     } else if (recommendedEffect == "motivation") {
       score += state[S.score] * 0.6;
     } else if (recommendedEffect == "strength") {
-      score += state[S.score] * 0.6;
+      score += state[S.score] * 0.65;
     } else if (recommendedEffect == "fullPower") {
       score += state[S.score] * 0.8;
     } else {
