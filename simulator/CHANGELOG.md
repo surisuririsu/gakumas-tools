@@ -3,6 +3,10 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-20
+
+- Fix effect of みんなの憧れ
+
 ## 2024-12-19
 
 ### Added
