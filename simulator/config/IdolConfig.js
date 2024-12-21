@@ -25,7 +25,7 @@ export default class IdolConfig {
     // P-items and skill cards
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
     this.cards = this.getDedupedCards(cards);
-    const skillCardIds = this.cards.map((c) => c.id);
+    const skillCardIds = cards.map((c) => c.id);
 
     // P-idol
     this.pIdolId = this.inferPIdolId(this.pItemIds, skillCardIds);
@@ -46,16 +46,16 @@ export default class IdolConfig {
   }
 
   inferPIdolId(pItemIds, skillCardIds) {
+    const signaturePItemId = pItemIds.find(
+      (id) => PItems.getById(id)?.sourceType == "pIdol"
+    );
+    if (signaturePItemId) return PItems.getById(signaturePItemId).pIdolId;
+
     const signatureSkillCardId = skillCardIds.find(
       (id) => SkillCards.getById(id)?.sourceType == "pIdol"
     );
     if (signatureSkillCardId)
       return SkillCards.getById(signatureSkillCardId).pIdolId;
-
-    const signaturePItemId = pItemIds.find(
-      (id) => PItems.getById(id)?.sourceType == "pIdol"
-    );
-    if (signaturePItemId) return PItems.getById(signaturePItemId).pIdolId;
 
     return null;
   }
