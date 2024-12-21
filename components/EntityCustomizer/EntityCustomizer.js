@@ -4,12 +4,14 @@ import { FaCirclePlus } from "react-icons/fa6";
 import CustomizationMultiPickerModal from "@/components/CustomizationMultiPickerModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { CUSTOMIZATIONS_BY_ID } from "@/utils/customizations";
 import styles from "./EntityCustomizer.module.scss";
 
 function EntityCustomizer({ type, id, customizations, onCustomize }) {
   const t = useTranslations("EntityCustomizer");
   const { setModal } = useContext(ModalContext);
+  const { idolId } = useContext(WorkspaceContext);
 
   return (
     <div className={styles.entityCustomizer}>
@@ -18,6 +20,7 @@ function EntityCustomizer({ type, id, customizations, onCustomize }) {
         <EntityIcon
           type={type}
           id={id}
+          idolId={idolId}
           numCustomizations={customizations.length}
           size="fill"
         />
