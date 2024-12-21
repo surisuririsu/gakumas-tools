@@ -5,7 +5,6 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 0 8px transparentize($black, 0.75);
   border-radius: 4px;
   padding: 12px;
   font-size: 16px;
@@ -20,10 +19,12 @@
 .default {
   background-color: $white;
   color: $black;
+  border: 1px solid $gray-light;
 
   &:hover,
   &:focus {
     color: $gk-red-orange;
+    box-shadow: 0 0 8px transparentize($black, 0.5);
   }
 }
 
@@ -39,7 +40,7 @@
 }
 
 .secondary {
-  background-color: $white;
+  background-color: transparent;
   color: $gk-orange;
 
   &:hover,
@@ -61,7 +62,7 @@
 }
 
 .red-secondary {
-  background-color: $white;
+  background-color: transparent;
   color: $red;
 
   &:hover,
@@ -74,16 +75,18 @@
 .blue {
   background-color: $blue;
   color: $white;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
 
   &:hover,
   &:focus {
     background-color: $white;
     color: $blue;
+    box-shadow: 0 0 8px transparentize($black, 0.5);
   }
 }
 
 .blue-secondary {
-  background-color: $white;
+  background-color: transparent;
   color: $blue;
 
   &:hover,

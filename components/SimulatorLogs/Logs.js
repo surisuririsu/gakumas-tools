@@ -5,8 +5,8 @@ import Diff from "./Diff";
 import Group from "./Group";
 import Hand from "./Hand";
 import SetScoreBuff from "./SetScoreBuff";
-import StartTurn from "./StartTurn";
 import Tile from "./Tile";
+import Turn from "./Turn";
 import styles from "./SimulatorLogs.module.scss";
 
 function Log({ line, idolId }) {
@@ -22,8 +22,8 @@ function Log({ line, idolId }) {
     return (
       <Group entity={line.entity} childLogs={line.childLogs} idolId={idolId} />
     );
-  } else if (line.logType == "startTurn") {
-    return <StartTurn {...line.data} />;
+  } else if (line.logType == "turn") {
+    return <Turn {...line.data} childLogs={line.childLogs} idolId={idolId} />;
   } else if (line.logType == "setScoreBuff") {
     return <SetScoreBuff {...line.data} />;
   } else if (line.logType == "setEffect") {

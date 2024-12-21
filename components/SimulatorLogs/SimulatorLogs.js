@@ -30,6 +30,7 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
 
   if (logs) {
     let i = 0;
+    let inTurn = false;
 
     function getLogGroup() {
       let group = [];
@@ -42,6 +43,15 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
           i++;
         } else if (log.logType == "entityEnd") {
           return group;
+        } else if (log.logType == "startTurn") {
+          if (inTurn) {
+            inTurn = false;
+            return group;
+          }
+          inTurn = true;
+          i++;
+          const childLogs = getLogGroup();
+          group.push({ logType: "turn", data: log.data, childLogs });
         } else {
           group.push(log);
           i++;
