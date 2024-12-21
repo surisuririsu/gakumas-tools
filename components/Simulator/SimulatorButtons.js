@@ -45,7 +45,7 @@ function SimulatorButtons() {
       </Button>
 
       {kafeUrl && (
-        <Button style="blue-secondary" href={kafeUrl} target="_blank" fill>
+        <Button style="blue-secondary" href={kafeUrl} target="_blank">
           @かふぇもっと <FaArrowUpRightFromSquare />
         </Button>
       )}

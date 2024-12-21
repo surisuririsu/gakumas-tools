@@ -13,38 +13,57 @@
   gap: 8px;
 }
 
+.turn {
+  border-left: 4px solid;
+  margin-bottom: -8px;
+
+  &.vocal {
+    border-color: $vocal-light;
+  }
+  &.dance {
+    border-color: $dance-light;
+  }
+  &.visual {
+    border-color: $visual-light;
+  }
+
+  .childLogs {
+    padding: 12px;
+    padding-right: 0;
+  }
+}
+
 .startTurn {
   display: flex;
   justify-content: space-between;
-  border-radius: 2px;
+  border-radius: 0 8px 2px 0;
   padding: 6px;
   color: $gray-dark;
   font-weight: 600;
   border: 2px solid;
-  border-left: 8px solid;
+  border-left: none;
 
   &.vocal {
-    border-color: $vocal;
+    border-color: $vocal-light;
     .multiplier {
-      color: $vocal;
+      color: $vocal-light;
     }
   }
   &.dance {
-    border-color: $dance;
+    border-color: $dance-light;
     .multiplier {
-      color: $dance;
+      color: $dance-light;
     }
   }
   &.visual {
-    border-color: $visual;
+    border-color: $visual-light;
     .multiplier {
-      color: $visual;
+      color: $visual-light;
     }
   }
 }
 
 .tile {
-  margin: 0 8px;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -80,7 +99,7 @@
   }
 
   .childLogs {
-    padding: 16px 8px;
+    padding: 12px;
   }
 
   .effect {

@@ -8,6 +8,10 @@ $dance: #1c85ed;
 $visual: #f7b12e;
 $stamina: #00d35b;
 
+$vocal-light: scale-color($vocal, $lightness: 15%);
+$dance-light: scale-color($dance, $lightness: 15%);
+$visual-light: scale-color($visual, $lightness: 15%);
+
 $parameters: (
   1: $vocal,
   2: $dance,

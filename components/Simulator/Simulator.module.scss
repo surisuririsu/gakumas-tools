@@ -22,10 +22,10 @@
 
 .supportBonusInput {
   display: flex;
-  align-items: center;
 
   input {
     width: 80px;
+    padding: 4px;
   }
 }
 
@@ -51,6 +51,7 @@
 
 .expanderButtons {
   display: flex;
+  margin-bottom: 4px;
 
   button {
     margin: 0 auto;
@@ -81,7 +82,6 @@
   display: flex;
   align-items: stretch;
   gap: 8px;
-  margin-top: 4px;
 
   button,
   a {

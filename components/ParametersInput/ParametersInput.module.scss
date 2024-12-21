@@ -3,16 +3,22 @@
 .parameters {
   display: flex;
   flex-direction: row;
-  border-radius: 4px;
   overflow: hidden;
 
   input {
+    transition: background-color 0.2s;
+
     @include param-colors using ($param-color) {
       border-color: $param-color;
       background-color: scale-color($param-color, $lightness: 80%);
       color: $param-color;
+
       &::placeholder {
         color: scale-color($param-color, $alpha: -40%);
+      }
+
+      &:hover {
+        background-color: scale-color($param-color, $lightness: 90%);
       }
     }
   }

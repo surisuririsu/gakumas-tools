@@ -117,7 +117,6 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <StageSelect />
         {/* <>
           * Season 15 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
@@ -127,7 +126,7 @@ export default function Simulator() {
           ※NOTE: Anomaly plan is not fully implemented. Please be patient while
           we complete the implementation. Thanks.
         </>
-        <br />
+        <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
         ) : (
@@ -174,7 +173,6 @@ export default function Simulator() {
           />
         ))}
         <SimulatorSubTools defaultCardIds={idolStageConfig.defaultCardIds} />
-        <SimulatorButtons />
         <select
           className={styles.strategySelect}
           value={strategy}
@@ -189,6 +187,7 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : t("simulate")}
         </Button>
+        <SimulatorButtons />
         <div className={styles.subLinks}>
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
