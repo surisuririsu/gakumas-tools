@@ -6,6 +6,7 @@ Dates are based on Eastern Time Zone.
 ## 2024-12-20
 
 - Fix effect of みんなの憧れ
+- Fix inference of recommended effect from skill cards
 
 ## 2024-12-19
 
