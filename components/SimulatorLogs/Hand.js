@@ -66,6 +66,7 @@ function Hand({ handCards, scores, selectedIndex, state, idolId }) {
                 type={EntityTypes.SKILL_CARD}
                 id={card.id}
                 numCustomizations={card.c}
+                idolId={idolId}
                 size="fill"
               />
             </div>
