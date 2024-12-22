@@ -19,7 +19,7 @@ export default class StagePlayer {
 
     return {
       score: state[S.score],
-      logs: [].concat(...logs),
+      logs,
       graphData: state.graphData,
     };
   }
