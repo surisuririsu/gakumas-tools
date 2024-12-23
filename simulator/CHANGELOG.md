@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of contest season 15
 
+### Changed
+
+- Turn counts and first turn rates of S15 preview
+
 ## 2024-12-21
 
 ### Changed
