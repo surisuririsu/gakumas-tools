@@ -117,14 +117,9 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/* <>
-          * Season 15 preview is based only on the announced p-items and
-          criteria. Turn types are not yet known.
-        </>
-        <br /> */}
         <>
-          ※NOTE: Anomaly plan is not fully implemented. Please be patient while
-          we complete the implementation. Thanks.
+          ※ Season 15 preview is based only on the announced p-items and
+          criteria. Turn types are not yet known.
         </>
         <StageSelect />
         {stage.type == "event" ? (
@@ -193,7 +188,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2024-12-20
+            {t("lastUpdated")}: 2024-12-23
           </a>
         </div>
         {!simulatorData && (
