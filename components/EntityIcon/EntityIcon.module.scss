@@ -60,16 +60,40 @@ button.entityIcon:hover {
   display: none;
   align-items: center;
   justify-content: center;
+  border: 1px solid;
   border-radius: 50%;
-  color: $white;
   font-size: 12px;
 
   &.R {
-    background-color: $gray;
+    box-shadow: 0 0 6px $silver;
+
+    &.low {
+      border-color: $black;
+      background-color: $silver;
+      color: $black-dark;
+    }
+
+    &.high {
+      border-color: $white-dark;
+      background-color: $silver-dark;
+      color: $white;
+    }
   }
 
   &.SR {
-    background-color: $gold;
+    box-shadow: 0 0 6px $gold;
+
+    &.low {
+      border-color: $black;
+      background-color: $gold;
+      color: $black-dark;
+    }
+
+    &.high {
+      border-color: $white-dark;
+      background-color: $gold-dark;
+      color: $white;
+    }
   }
 }
 

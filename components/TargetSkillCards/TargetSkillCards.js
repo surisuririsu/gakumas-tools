@@ -70,6 +70,7 @@ function TargetSkillCards({ idolId }) {
               }
               idolId={idolId}
               size="fill"
+              showTier
             />
 
             {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
@@ -93,6 +94,7 @@ function TargetSkillCards({ idolId }) {
                   }
                   idolId={idolId}
                   size="fill"
+                  showTier
                 />
               </React.Fragment>
             ))}
