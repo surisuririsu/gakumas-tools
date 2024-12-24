@@ -42,6 +42,8 @@ $blue-dark: darken($blue, 15%);
 
 $green: #4c4;
 
+$gold: #d3b405;
+
 @mixin param-colors {
   @each $i, $param-color in $parameters {
     &:nth-child(#{$i}) {

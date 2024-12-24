@@ -95,6 +95,10 @@
   "EntityBank": {
     "filter": "Filter"
   },
+  "EntityIcon": {
+    "high": "H",
+    "low": "L"
+  },
   "EntityCustomizer": {
     "customization": "Customization"
   },

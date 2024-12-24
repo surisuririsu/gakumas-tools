@@ -1,8 +1,9 @@
 import { memo } from "react";
-import CustomizationCount from "@/components/CustomizationCount";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
-import { ENTITY_DATA_BY_TYPE } from "@/utils/entities";
+import { ENTITY_DATA_BY_TYPE, EntityTypes } from "@/utils/entities";
+import CustomizationCount from "./CustomizationCount";
+import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
 
 function EntityIcon({
@@ -12,6 +13,7 @@ function EntityIcon({
   idolId,
   size = "large",
   onClick,
+  showTier,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
 
@@ -22,12 +24,17 @@ function EntityIcon({
         onClick={() => onClick(entity || {})}
       >
         {entity && (
-          <Image
-            src={entity.getIcon(idolId)}
-            alt={entity.name}
-            fill
-            sizes="64px"
-          />
+          <>
+            <Image
+              src={entity.getIcon(idolId)}
+              alt={entity.name}
+              fill
+              sizes="64px"
+            />
+            {showTier && type == EntityTypes.SKILL_CARD && (
+              <TierIndicator skillCard={entity} />
+            )}
+          </>
         )}
         {!!numCustomizations && <CustomizationCount num={numCustomizations} />}
       </button>

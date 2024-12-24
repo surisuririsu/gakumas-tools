@@ -33,3 +33,46 @@ button.entityIcon:hover {
 .small {
   width: 10%;
 }
+
+.customizations {
+  position: absolute;
+  top: 65%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $green;
+  color: $white;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid lighten($green, 20%);
+  box-shadow: 0 0 6px $green;
+}
+
+.tier {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 20px;
+  height: 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: $white;
+  font-size: 12px;
+
+  &.R {
+    background-color: $gray;
+  }
+
+  &.SR {
+    background-color: $gold;
+  }
+}
+
+button.entityIcon:hover .tier {
+  display: flex;
+}

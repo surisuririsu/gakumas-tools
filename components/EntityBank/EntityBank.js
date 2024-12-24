@@ -83,6 +83,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
             idolId={idolId}
             onClick={onClick}
             size="fill"
+            showTier
           />
         ))}
       </div>
