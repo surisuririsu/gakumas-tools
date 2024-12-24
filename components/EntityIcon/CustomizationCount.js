@@ -1,4 +1,4 @@
-import styles from "./CustomizationCount.module.scss";
+import styles from "./EntityIcon.module.scss";
 
 export default function CustomizationCount({ num }) {
   return <div className={styles.customizations}>{num}</div>;

@@ -95,6 +95,10 @@
   "EntityBank": {
     "filter": "フィルタ"
   },
+  "EntityIcon": {
+    "high": "高",
+    "low": "低"
+  },
   "EntityCustomizer": {
     "customization": "カスタマイズ"
   },
