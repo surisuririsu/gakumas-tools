@@ -140,6 +140,7 @@ function MemoryCalculator() {
                   )
                 }
                 idolId={idolId}
+                showTier
               />
             )),
           [acquiredSkillCardIds, idolId]
