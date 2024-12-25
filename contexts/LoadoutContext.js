@@ -5,11 +5,6 @@ import { Stages } from "gakumas-data/lite";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
-import {
-  CUSTOMIZATIONS_BY_ID,
-  deserializeCustomizations,
-  serializeCustomizations,
-} from "@/utils/customizations";
 
 const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
 

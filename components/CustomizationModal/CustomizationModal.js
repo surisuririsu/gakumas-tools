@@ -19,7 +19,7 @@ function CustomizationModal({ id, customizations, onCustomize }) {
     <Modal>
       <div className={styles.c11ns}>
         {availableC11ns.map((c11n) => (
-          <div key={c11n.id} className={c(styles.c11n)}>
+          <div key={c11n.id} className={c(styles.c11n, styles[c11n.type])}>
             <div className={styles.level}>{current[c11n.id] || 0}</div>
             <IconButton
               icon={FaPlus}
@@ -31,7 +31,7 @@ function CustomizationModal({ id, customizations, onCustomize }) {
                 })
               }
             />
-            <div>{c11n.name}</div>
+            {c11n.name}
             <IconButton
               icon={FaMinus}
               disabled={(current[c11n.id] || 0) <= 0}
