@@ -1,14 +1,13 @@
 import { memo, useContext, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCheck, FaPlus, FaMinus } from "react-icons/fa6";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 import Button from "@/components/Button";
+import IconButton from "@/components/IconButton";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
 import Customizations from "@/customizations/customizations";
 import c from "@/utils/classNames";
-import { CUSTOMIZATIONS } from "@/utils/customizations";
 import styles from "./CustomizationModal.module.scss";
-import IconButton from "../IconButton";
 
 function CustomizationModal({ id, customizations, onCustomize }) {
   const t = useTranslations("CustomizationModal");
@@ -45,38 +44,6 @@ function CustomizationModal({ id, customizations, onCustomize }) {
             />
           </div>
         ))}
-      </div>
-      <Button
-        style="primary"
-        onClick={() => {
-          onCustomize(current);
-          closeModal();
-        }}
-      >
-        {t("apply")}
-      </Button>
-    </Modal>
-  );
-
-  return (
-    <Modal>
-      <div className={styles.list}>
-        {CUSTOMIZATIONS.map(({ id, label }) => {
-          const selected = current.includes(id);
-          return (
-            <button
-              key={id}
-              className={c(selected && styles.selected)}
-              onClick={() =>
-                setCurrent(
-                  selected ? current.filter((x) => x != id) : [...current, id]
-                )
-              }
-            >
-              <span>{label}</span> {selected && <FaCheck />}
-            </button>
-          );
-        })}
       </div>
       <Button
         style="primary"
