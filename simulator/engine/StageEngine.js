@@ -49,6 +49,9 @@ export default class StageEngine {
   }
 
   startStage(state) {
+    this.logger.disable();
+    this.effectManager.triggerEffectsForPhase(state, "prestage");
+    this.logger.enable();
     this.effectManager.triggerEffectsForPhase(state, "startOfStage");
     this.logger.pushGraphData(state);
     this.turnManager.startTurn(state);

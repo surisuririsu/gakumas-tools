@@ -63,7 +63,7 @@ export function loadoutFromSearchParams(searchParams) {
 
   // Ensure customizations are same shape as skill cards
   if (skillCardIdGroups.length != customizationGroups.length) {
-    customizationGroups = skillCardIdGroups.map((g) => g.map(() => []));
+    customizationGroups = skillCardIdGroups.map((g) => g.map(() => ({})));
   }
 
   return {
@@ -72,7 +72,7 @@ export function loadoutFromSearchParams(searchParams) {
     params,
     pItemIds,
     skillCardIdGroups,
-    customizationGroups,
+    customizationGroups: [[], []],
     hasDataFromParams,
   };
 }
