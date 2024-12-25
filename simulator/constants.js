@@ -221,6 +221,7 @@ export const ALL_FIELDS = [
   "poorConditionTurns",
   "scoreBuffs",
   "goodConditionTurns",
+  "goodConditionTurnsMultiplier",
   "perfectConditionTurns",
   "concentration",
   "concentrationMultiplier",

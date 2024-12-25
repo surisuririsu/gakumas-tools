@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-25
+
+### Added
+
+- Preview of Campus mode!! vol.1
+
 ## 2024-12-22
 
 ### Added

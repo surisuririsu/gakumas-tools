@@ -111,7 +111,7 @@ export default class EffectManager extends EngineComponent {
         this.setEffects(
           state,
           [{ ...effect, group: card != null ? 10 : null }],
-          card
+          card != null
             ? { type: "skillCardEffect", id: state[S.cardMap][card].id }
             : null
         );
