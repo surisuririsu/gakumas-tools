@@ -31,6 +31,7 @@
 .primary {
   background-color: $gk-orange;
   color: $white;
+  box-shadow: 0 0 8px transparentize($black, 0.75);
 
   &:hover,
   &:focus {
