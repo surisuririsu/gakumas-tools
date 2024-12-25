@@ -51,13 +51,13 @@ export function LoadoutContextProvider({ children }) {
     setParams(loadout.params);
     setPItemIds(loadout.pItemIds);
     setSkillCardIdGroups(loadout.skillCardIdGroups);
-    // if (loadout.customizationGroups) {
-    //   setCustomizationGroups(
-    //     loadout.customizationGroups.map((g) =>
-    //       g.map((c) => c.filter((n) => n in CUSTOMIZATIONS_BY_ID))
-    //     )
-    //   );
-    // }
+    if (loadout.customizationGroups) {
+      try {
+        setCustomizationGroups(loadout.customizationGroups);
+      } catch (e) {
+        // pass
+      }
+    }
   };
 
   // Load history and latest loadout from local storage on mount
