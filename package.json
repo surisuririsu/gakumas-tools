@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "generate": "node scripts/generateIdMappings.mjs",
+    "generate": "python -m scripts.csv_to_json",
+    "generate-kafe": "node scripts/generateIdMappings.mjs",
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {

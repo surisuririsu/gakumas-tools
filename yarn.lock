@@ -3754,8 +3754,8 @@ __metadata:
 
 "gakumas-data@file:../gakumas-data::locator=gakumas-tools%40workspace%3A.":
   version: 10.2.0
-  resolution: "gakumas-data@file:../gakumas-data#../gakumas-data::hash=704015&locator=gakumas-tools%40workspace%3A."
-  checksum: 10c0/9c66efba6c9627e03905cf382e6612e913171e6a60f09f7ed1a5a3aa1a36b416a3b3dd99bd18348eaf5bcdf618dd8282751d67436401d18ea8bcb984c79308d8
+  resolution: "gakumas-data@file:../gakumas-data#../gakumas-data::hash=6d7498&locator=gakumas-tools%40workspace%3A."
+  checksum: 10c0/944f3d5499b3a77fc1ffca0771a69fa6fbb0057a57aac51f5412fad2d107316673fdeef6fb0cf4363a888eca6fddb7a5e422b716407520f8378f92e0cc070364
   languageName: node
   linkType: hard
 
