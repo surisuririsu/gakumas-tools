@@ -43,9 +43,9 @@ $blue-dark: darken($blue, 15%);
 $green: #4c4;
 
 $silver: #cfedfa;
-$silver-dark: darken($silver, 25%);
+$silver-dark: darken($silver, 40%);
 $gold: #fcd67f;
-$gold-dark: darken($gold, 25%);
+$gold-dark: darken($gold, 35%);
 
 @mixin param-colors {
   @each $i, $param-color in $parameters {

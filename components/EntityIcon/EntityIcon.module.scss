@@ -83,14 +83,15 @@ button.entityIcon:hover .tier {
 }
 
 .high {
-  border-color: $white-dark;
-  color: $white;
+  background-color: $white;
 
   &.R {
-    background-color: $silver-dark;
+    color: $silver-dark;
+    border-color: $silver-dark;
   }
 
   &.SR {
-    background-color: $gold-dark;
+    color: $gold-dark;
+    border-color: $gold-dark;
   }
 }
