@@ -1,6 +1,6 @@
 import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
-import { FaCirclePlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import CustomizationMultiPickerModal from "@/components/CustomizationModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
@@ -50,7 +50,7 @@ function EntityCustomizer({ type, id, customizations = {}, onCustomize }) {
           )
         }
       >
-        <FaCirclePlus />
+        <FaPlus />
       </button>
     </div>
   );
