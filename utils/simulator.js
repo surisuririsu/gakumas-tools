@@ -92,10 +92,10 @@ export function loadoutToSearchParams(loadout) {
   searchParams.set("params", serializeIds(params));
   searchParams.set("items", serializeIds(pItemIds));
   searchParams.set("cards", skillCardIdGroups.map(serializeIds).join("_"));
-  searchParams.set(
-    "customizations",
-    customizationGroups.map(serializeCustomizations).join("_")
-  );
+  // searchParams.set(
+  //   "customizations",
+  //   customizationGroups.map(serializeCustomizations).join("_")
+  // );
   return searchParams;
 }
 

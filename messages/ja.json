@@ -75,7 +75,8 @@
     "difficulties": {
       "regular": "レギュラー",
       "pro": "プロ",
-      "master": "マスター"
+      "master": "マスター",
+      "nia": "NIA"
     },
     "difficulty": "難易度",
     "lessonBonus": "レッスンボーナス%",
