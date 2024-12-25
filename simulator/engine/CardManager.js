@@ -2,7 +2,8 @@ import { SkillCards } from "gakumas-data/lite";
 import { CUSTOMIZATIONS_BY_ID } from "@/utils/customizations";
 import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { getRand, shallowCopy, shuffle } from "./utils";
+import { deepCopy, getRand, shallowCopy, shuffle } from "./utils";
+import Customizations from "@/customizations/customizations";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
@@ -24,15 +25,15 @@ export default class CardManager extends EngineComponent {
     const cardMap = cards.map(({ id, customizations }) => ({
       id,
       baseId: SkillCards.getById(id).upgraded ? id - 1 : id,
-      c: customizations,
+      c11n: customizations || {},
     }));
 
     state[S.cardMap] = cardMap;
     state[S.deckCards] = cardMap.map((_, i) => i);
     shuffle(state[S.deckCards]);
     state[S.deckCards].sort((a, b) => {
-      if (SkillCards.getById(cardMap[a].id).forceInitialHand) return 1;
-      if (SkillCards.getById(cardMap[b].id).forceInitialHand) return -1;
+      if (this.isForceInitialHand(state, a)) return 1;
+      if (this.isForceInitialHand(state, b)) return -1;
       return 0;
     });
     state[S.handCards] = [];
@@ -42,6 +43,23 @@ export default class CardManager extends EngineComponent {
     state[S.cardsUsed] = 0;
     state[S.turnCardsUsed] = 0;
     state[S.turnCardsUpgraded] = 0;
+  }
+
+  isForceInitialHand(state, card) {
+    const { id, c11n } = state[S.cardMap][card];
+
+    if (SkillCards.getById(id).forceInitialHand) {
+      return true;
+    }
+    if (
+      Object.keys(c11n)
+        .filter((k) => c11n[k])
+        .some((k) => Customizations.getById(k).forceInitialHand)
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   getCardEffects(state, card) {
@@ -135,7 +153,7 @@ export default class CardManager extends EngineComponent {
   useCard(state, card) {
     const handIndex = state[S.handCards].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
-    const customizations = state[S.cardMap][card].c;
+    const customizations = state[S.cardMap][card].c11n;
 
     this.logger.log(state, "entityStart", {
       type: "skillCard",
@@ -179,11 +197,13 @@ export default class CardManager extends EngineComponent {
 
     // Apply card effects
     let effects = skillCard.effects;
-    if (customizations) {
-      effects = effects.concat(
-        ...customizations.map((id) => CUSTOMIZATIONS_BY_ID[id].effects)
-      );
-    }
+    // if (customizations) {
+    //   effects = deepCopy(effects);
+
+    //   effects = effects.concat(
+    //     ...customizations.map((id) => CUSTOMIZATIONS_BY_ID[id].effects)
+    //   );
+    // }
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;
       this.engine.effectManager.triggerEffects(state, effects, null, card);

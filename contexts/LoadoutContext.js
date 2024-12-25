@@ -51,13 +51,13 @@ export function LoadoutContextProvider({ children }) {
     setParams(loadout.params);
     setPItemIds(loadout.pItemIds);
     setSkillCardIdGroups(loadout.skillCardIdGroups);
-    if (loadout.customizationGroups) {
-      setCustomizationGroups(
-        loadout.customizationGroups.map((g) =>
-          g.map((c) => c.filter((n) => n in CUSTOMIZATIONS_BY_ID))
-        )
-      );
-    }
+    // if (loadout.customizationGroups) {
+    //   setCustomizationGroups(
+    //     loadout.customizationGroups.map((g) =>
+    //       g.map((c) => c.filter((n) => n in CUSTOMIZATIONS_BY_ID))
+    //     )
+    //   );
+    // }
   };
 
   // Load history and latest loadout from local storage on mount
@@ -90,10 +90,7 @@ export function LoadoutContextProvider({ children }) {
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
-    setCustomizationGroups([
-      [[], [], [], [], [], []],
-      [[], [], [], [], [], []],
-    ]);
+    setCustomizationGroups([[], []]);
   }
 
   function replacePItemId(index, itemId) {
@@ -145,7 +142,7 @@ export function LoadoutContextProvider({ children }) {
     });
     setCustomizationGroups((cur) => {
       const updatedCustomizations = [...cur];
-      updatedCustomizations.splice(groupIndex, 0, [[], [], [], [], [], []]);
+      updatedCustomizations.splice(groupIndex, 0, []);
       return updatedCustomizations;
     });
   };
@@ -215,7 +212,7 @@ export function LoadoutContextProvider({ children }) {
     });
     setCustomizationGroups((cur) => {
       const next = [...cur];
-      next[index] = memory.customizations || [[], [], [], [], [], []];
+      next[index] = memory.customizations || {};
       return next;
     });
   }
@@ -225,8 +222,8 @@ export function LoadoutContextProvider({ children }) {
     supportBonus,
     params,
     pItemIds,
-    skillCardIdGroups,
-    customizationGroups
+    skillCardIdGroups
+    // customizationGroups
   );
 
   let kafeUrl = null;

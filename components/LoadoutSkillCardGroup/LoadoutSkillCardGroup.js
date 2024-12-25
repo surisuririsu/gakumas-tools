@@ -51,7 +51,7 @@ function LoadoutSkillCardGroup({
     <div>
       <StageSkillCards
         skillCardIds={skillCardIds}
-        customizations={[...customizations]}
+        customizations={customizations}
         replaceSkillCardId={replaceSkillCardId}
         replaceCustomizations={replaceCustomizations}
         idolId={idolId}

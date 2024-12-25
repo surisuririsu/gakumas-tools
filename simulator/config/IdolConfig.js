@@ -10,6 +10,8 @@ export default class IdolConfig {
       customizationGroups,
     } = loadout;
 
+    console.log(customizationGroups);
+
     let cards = [];
     for (let i = 0; i < skillCardIdGroups.length; i++) {
       for (let j = 0; j < skillCardIdGroups[i].length; j++) {

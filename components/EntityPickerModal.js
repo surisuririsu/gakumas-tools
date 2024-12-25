@@ -3,6 +3,8 @@ import EntityBank from "@/components/EntityBank";
 import EntityCustomizer from "@/components/EntityCustomizer";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
+import { EntityTypes } from "@/utils/entities";
+import Customizations from "@/customizations/customizations";
 
 function EntityPickerModal({
   type,
@@ -13,10 +15,12 @@ function EntityPickerModal({
   filters,
 }) {
   const { closeModal } = useContext(ModalContext);
+  const canCustomize =
+    type == EntityTypes.SKILL_CARD && Customizations.getBySkillCardId(id);
 
   return (
     <Modal>
-      {/* {!!id && customizations != null && (
+      {canCustomize && onCustomize && (
         <EntityCustomizer
           type={type}
           id={id}
@@ -26,7 +30,7 @@ function EntityPickerModal({
             closeModal();
           }}
         />
-      )} */}
+      )}
       <EntityBank
         type={type}
         onClick={(entity) => {

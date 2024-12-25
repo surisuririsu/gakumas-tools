@@ -4,6 +4,7 @@ import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StageSkillCards.module.scss";
 import EntityPickerModal from "../EntityPickerModal";
+import { countCustomizations } from "@/utils/customizations";
 
 function StageSkillCards({
   skillCardIds,
@@ -23,7 +24,7 @@ function StageSkillCards({
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
-          numCustomizations={customizations?.[index]?.length}
+          numCustomizations={countCustomizations(customizations?.[index])}
           onClick={() =>
             setModal(
               <EntityPickerModal
