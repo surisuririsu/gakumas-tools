@@ -2,6 +2,7 @@ import { PItems, SkillCards } from "gakumas-data/lite";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "./utils";
+import Customizations from "@/customizations/customizations";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {
@@ -26,18 +27,41 @@ export default class EffectManager extends EngineComponent {
     // Set growth effects
     for (let i = 0; i < state[S.cardMap].length; i++) {
       const skillCardId = state[S.cardMap][i].id;
+
       const skillCard = SkillCards.getById(skillCardId);
-      if (!skillCard.growth?.length) continue;
-      this.logger.debug(
-        "Setting growth effects",
-        skillCard.name,
-        skillCard.growth
-      );
-      this.setEffects(state, skillCard.growth, {
-        type: "skillCard",
-        id: skillCardId,
-        idx: i,
-      });
+      if (skillCard.growth?.length) {
+        this.logger.debug(
+          "Setting growth effects",
+          skillCard.name,
+          skillCard.growth
+        );
+        this.setEffects(state, skillCard.growth, {
+          type: "skillCard",
+          id: skillCardId,
+          idx: i,
+        });
+      }
+
+      const c11n = state[S.cardMap][i].c11n;
+      for (let k in c11n) {
+        const { growth, name } = Customizations.getById(k);
+        if (!growth.length) continue;
+        this.logger.debug(
+          "Setting custom growth effects",
+          skillCard.name,
+          growth,
+          name
+        );
+        this.setEffects(
+          state,
+          growth.filter((g) => (g.level || 1) == c11n[k]),
+          {
+            type: "skillCard",
+            id: skillCardId,
+            idx: i,
+          }
+        );
+      }
     }
   }
 

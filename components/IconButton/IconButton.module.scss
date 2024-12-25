@@ -25,3 +25,10 @@
   width: 32px;
   height: 32px;
 }
+
+.disabled {
+  box-shadow: none !important;
+  background-color: $gray-extra-light;
+  color: $gray;
+  cursor: default;
+}

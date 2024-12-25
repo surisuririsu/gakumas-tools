@@ -8,18 +8,29 @@ export default class StageLogger {
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
       state.graphData[S[GRAPHED_FIELDS[i]]] = [];
     }
+    this.disabled = false;
+  }
+
+  disable() {
+    this.disabled = true;
+  }
+
+  enable() {
+    this.disabled = false;
   }
 
   log(state, logType, data) {
+    if (this.disabled) return;
     state.logs.push({ logType, data });
   }
 
   debug(...args) {
-    if (!DEBUG) return;
+    if (!DEBUG || this.disabled) return;
     console.log(...args);
   }
 
   pushGraphData(state) {
+    if (this.disabled) return;
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
       state.graphData[S[GRAPHED_FIELDS[i]]].push(state[S[GRAPHED_FIELDS[i]]]);
     }

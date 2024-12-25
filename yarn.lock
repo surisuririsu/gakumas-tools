@@ -3752,10 +3752,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v10.2.0":
-  version: 10.2.0
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=fa343f0a32a9a501ce81707bba908d9f79dba261"
-  checksum: 10c0/a93d68fea0d2113cce4c277fae541925ad7f96d16bc226749d16613c92fa64bcd33f581b5b480259b4cc2a885a5a0643fbae1bc8ce05b930859a4fa60afc0bc6
+"gakumas-data@https://github.com/surisuririsu/gakumas-data#v10.3.0":
+  version: 10.3.0
+  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=97f56ca9d4cbdc99c56b14b4f7f6ca82020680a3"
+  checksum: 10c0/533f947fc5bd941a1dd6f86e224c3fd84353e9a35da22ca3f3f23ae97289b1b9ae6139fd8002bf0b8313260958077e98aa71b0387486bfaf2829b73195d38c7e
   languageName: node
   linkType: hard
 
@@ -3771,7 +3771,7 @@ __metadata:
     chart.js: "npm:^4.4.4"
     eslint: "npm:^9.12.0"
     eslint-config-next: "npm:14.2.14"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v10.2.0"
+    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v10.3.0"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"

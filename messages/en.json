@@ -103,7 +103,7 @@
   "EntityCustomizer": {
     "customization": "Customization"
   },
-  "CustomizationMultiPickerModal": {
+  "CustomizationModal": {
     "apply": "Apply"
   },
   "MemoryCalculator": {
