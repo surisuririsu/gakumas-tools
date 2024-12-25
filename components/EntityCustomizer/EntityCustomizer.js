@@ -1,12 +1,16 @@
 import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
 import { FaCirclePlus } from "react-icons/fa6";
-import CustomizationMultiPickerModal from "@/components/CustomizationMultiPickerModal";
+import CustomizationMultiPickerModal from "@/components/CustomizationModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { CUSTOMIZATIONS_BY_ID } from "@/utils/customizations";
+import {
+  countCustomizations,
+  CUSTOMIZATIONS_BY_ID,
+} from "@/utils/customizations";
 import styles from "./EntityCustomizer.module.scss";
+import Customizations from "@/customizations/customizations";
 
 function EntityCustomizer({ type, id, customizations, onCustomize }) {
   const t = useTranslations("EntityCustomizer");
@@ -21,14 +25,18 @@ function EntityCustomizer({ type, id, customizations, onCustomize }) {
           type={type}
           id={id}
           idolId={idolId}
-          numCustomizations={customizations.length}
+          numCustomizations={countCustomizations(customizations)}
           size="fill"
         />
       </div>
       <div className={styles.customizations}>
-        {customizations.map((custom) => (
-          <div key={custom}>{CUSTOMIZATIONS_BY_ID[custom].label}</div>
-        ))}
+        {Object.keys(customizations)
+          .filter((c11nId) => customizations[c11nId])
+          .map((c11nId) => (
+            <div key={c11nId}>
+              {customizations[c11nId]}×{Customizations.getById(c11nId).name}
+            </div>
+          ))}
       </div>
       <button
         className={styles.add}
@@ -37,6 +45,7 @@ function EntityCustomizer({ type, id, customizations, onCustomize }) {
             <CustomizationMultiPickerModal
               customizations={customizations}
               onCustomize={onCustomize}
+              id={id}
             />
           )
         }

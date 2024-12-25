@@ -25,3 +25,8 @@ export function deserializeCustomizations(str) {
 export function serializeCustomizations(customizations) {
   return customizations.map((c) => c.join("+")).join("-");
 }
+
+export function countCustomizations(customizations) {
+  if (!customizations) return 0;
+  return Object.values(customizations).reduce((acc, cur) => acc + cur, 0);
+}
