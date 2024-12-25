@@ -75,7 +75,8 @@
     "difficulties": {
       "regular": "Regular",
       "pro": "Pro",
-      "master": "Master"
+      "master": "Master",
+      "nia": "NIA"
     },
     "difficulty": "Difficulty",
     "lessonBonus": "Lesson bonus %",
