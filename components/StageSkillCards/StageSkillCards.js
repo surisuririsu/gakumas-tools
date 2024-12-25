@@ -23,7 +23,7 @@ function StageSkillCards({
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
-          numCustomizations={customizations?.[index].length}
+          numCustomizations={customizations?.[index]?.length}
           onClick={() =>
             setModal(
               <EntityPickerModal

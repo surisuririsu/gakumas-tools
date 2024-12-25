@@ -61,6 +61,11 @@ export function loadoutFromSearchParams(searchParams) {
     .split("_")
     .map(deserializeCustomizations);
 
+  // Ensure customizations are same shape as skill cards
+  if (skillCardIdGroups.length != customizationGroups.length) {
+    customizationGroups = skillCardIdGroups.map((g) => g.map(() => []));
+  }
+
   return {
     stageId,
     supportBonus,
