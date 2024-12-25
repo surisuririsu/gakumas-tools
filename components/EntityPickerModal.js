@@ -16,7 +16,7 @@ function EntityPickerModal({
 
   return (
     <Modal>
-      {!!id && customizations != null && (
+      {/* {!!id && customizations != null && (
         <EntityCustomizer
           type={type}
           id={id}
@@ -26,7 +26,7 @@ function EntityPickerModal({
             closeModal();
           }}
         />
-      )}
+      )} */}
       <EntityBank
         type={type}
         onClick={(entity) => {
