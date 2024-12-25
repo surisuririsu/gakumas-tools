@@ -63,40 +63,34 @@ button.entityIcon:hover {
   border: 1px solid;
   border-radius: 50%;
   font-size: 12px;
-
-  &.R {
-    box-shadow: 0 0 6px $silver;
-
-    &.low {
-      border-color: $black;
-      background-color: $silver;
-      color: $black-dark;
-    }
-
-    &.high {
-      border-color: $white-dark;
-      background-color: $silver-dark;
-      color: $white;
-    }
-  }
-
-  &.SR {
-    box-shadow: 0 0 6px $gold;
-
-    &.low {
-      border-color: $black;
-      background-color: $gold;
-      color: $black-dark;
-    }
-
-    &.high {
-      border-color: $white-dark;
-      background-color: $gold-dark;
-      color: $white;
-    }
-  }
 }
 
 button.entityIcon:hover .tier {
   display: flex;
+}
+
+.low {
+  border-color: $black;
+  color: $black-dark;
+
+  &.R {
+    background-color: $silver;
+  }
+
+  &.SR {
+    background-color: $gold;
+  }
+}
+
+.high {
+  border-color: $white-dark;
+  color: $white;
+
+  &.R {
+    background-color: $silver-dark;
+  }
+
+  &.SR {
+    background-color: $gold-dark;
+  }
 }
