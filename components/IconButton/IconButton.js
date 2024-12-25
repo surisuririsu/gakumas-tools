@@ -11,11 +11,17 @@ function IconButton({ icon: Icon, onClick, href, disabled, size = "medium" }) {
   );
 
   return href ? (
-    <Link className={className} href={href} target="_blank" onClick={onClick}>
+    <Link
+      className={className}
+      href={href}
+      target="_blank"
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Icon />
     </Link>
   ) : (
-    <button className={className} onClick={onClick}>
+    <button className={className} onClick={onClick} disabled={disabled}>
       <Icon />
     </button>
   );
