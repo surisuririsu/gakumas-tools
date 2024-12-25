@@ -72,8 +72,11 @@ export default class Executor extends EngineComponent {
     }
 
     // Set modifiers
+    const prevGoodConditionTurnsMultiplier =
+      state[S.goodConditionTurnsMultiplier];
     const prevConcentrationMultiplier = state[S.concentrationMultiplier];
     const prevMotivationMultiplier = state[S.motivationMultiplier];
+    state[S.goodConditionTurnsMultiplier] = 1;
     state[S.concentrationMultiplier] = 1;
     state[S.motivationMultiplier] = 1;
 
@@ -321,10 +324,12 @@ export default class Executor extends EngineComponent {
       // Apply good and perfect condition
       if (state[S.goodConditionTurns]) {
         score *=
-          1.5 +
-          (state[S.perfectConditionTurns]
-            ? state[S.goodConditionTurns] * 0.1
-            : 0);
+          1 +
+          (0.5 +
+            (state[S.perfectConditionTurns]
+              ? state[S.goodConditionTurns] * 0.1
+              : 0)) *
+            state[S.goodConditionTurnsMultiplier];
       }
 
       // Apply stance
