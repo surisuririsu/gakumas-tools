@@ -1,8 +1,7 @@
 import { SkillCards } from "gakumas-data/lite";
-import { CUSTOMIZATIONS_BY_ID } from "@/utils/customizations";
 import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { deepCopy, getRand, shallowCopy, shuffle } from "./utils";
+import { getRand, shallowCopy, shuffle } from "./utils";
 import Customizations from "@/customizations/customizations";
 
 export default class CardManager extends EngineComponent {
@@ -79,6 +78,7 @@ export default class CardManager extends EngineComponent {
         cardEffects.add(cardEffect);
       }
     }
+    // TODO: Count customizations?
     return cardEffects;
   }
 
@@ -140,9 +140,27 @@ export default class CardManager extends EngineComponent {
 
     // Check cost
     const previewState = shallowCopy(state);
-    for (let i = 0; i < skillCard.cost.length; i++) {
-      this.engine.executor.executeAction(previewState, skillCard.cost[i], card);
+    let cost = skillCard.cost;
+    const c11n = state[S.cardMap][card].c11n;
+    if (Object.keys(c11n).length) {
+      cost = [...cost];
+      for (let k in c11n) {
+        const c11nCost = Customizations.getById(k).cost;
+        for (let i = 0; i < c11nCost.length; i++) {
+          if ((c11nCost[i].level || 1) != c11n[k]) continue;
+          if (c11nCost[i].line) {
+            cost.splice(c11nCost[i].line - 1, 1, ...c11nCost[i].actions);
+          } else {
+            cost = cost.concat(c11nCost[i].actions);
+          }
+        }
+      }
     }
+
+    for (let i = 0; i < cost.length; i++) {
+      this.engine.executor.executeAction(previewState, cost[i], card);
+    }
+
     for (let i = 0; i < COST_FIELDS.length; i++) {
       if (previewState[S[COST_FIELDS[i]]] < 0) return false;
     }
@@ -153,7 +171,7 @@ export default class CardManager extends EngineComponent {
   useCard(state, card) {
     const handIndex = state[S.handCards].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
-    const customizations = state[S.cardMap][card].c11n;
+    const c11n = state[S.cardMap][card].c11n;
 
     this.logger.log(state, "entityStart", {
       type: "skillCard",
@@ -168,7 +186,22 @@ export default class CardManager extends EngineComponent {
     // Apply card cost
     let conditionState = shallowCopy(state);
     this.logger.debug("Applying cost", skillCard.cost);
-    this.engine.executor.executeActions(state, skillCard.cost);
+    let cost = skillCard.cost;
+    if (Object.keys(c11n).length) {
+      cost = [...cost];
+      for (let k in c11n) {
+        const c11nCost = Customizations.getById(k).cost;
+        for (let i = 0; i < c11nCost.length; i++) {
+          if ((c11nCost[i].level || 1) != c11n[k]) continue;
+          if (c11nCost[i].line) {
+            cost.splice(c11nCost[i].line - 1, 1, ...c11nCost[i].actions);
+          } else {
+            cost = cost.concat(c11nCost[i].actions);
+          }
+        }
+      }
+    }
+    this.engine.executor.executeActions(state, cost);
     if (state[S.nullifyCostCards]) state[S.nullifyCostCards]--;
 
     // Remove card from hand
@@ -197,13 +230,20 @@ export default class CardManager extends EngineComponent {
 
     // Apply card effects
     let effects = skillCard.effects;
-    // if (customizations) {
-    //   effects = deepCopy(effects);
-
-    //   effects = effects.concat(
-    //     ...customizations.map((id) => CUSTOMIZATIONS_BY_ID[id].effects)
-    //   );
-    // }
+    if (Object.keys(c11n).length) {
+      effects = [...effects];
+      for (let k in c11n) {
+        const c11nEffects = Customizations.getById(k).effects;
+        for (let i = 0; i < c11nEffects.length; i++) {
+          if ((c11nEffects[i].level || 1) != c11n[k]) continue;
+          if (c11nEffects[i].line) {
+            effects[c11nEffects[i].line - 1] = c11nEffects[i];
+          } else {
+            effects.push(c11nEffects[i]);
+          }
+        }
+      }
+    }
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;
       this.engine.effectManager.triggerEffects(state, effects, null, card);

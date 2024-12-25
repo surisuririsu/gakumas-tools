@@ -12,7 +12,7 @@ import {
 import styles from "./EntityCustomizer.module.scss";
 import Customizations from "@/customizations/customizations";
 
-function EntityCustomizer({ type, id, customizations, onCustomize }) {
+function EntityCustomizer({ type, id, customizations = {}, onCustomize }) {
   const t = useTranslations("EntityCustomizer");
   const { setModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);

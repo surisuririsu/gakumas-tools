@@ -7,7 +7,7 @@ import {
 CUSTOMIZATIONS.forEach((customization) => {
   customization.conditions =
     deserializeEffect(customization.conditions).conditions || [];
-  customization.cost = deserializeEffect(customization.cost).actions || [];
+  customization.cost = deserializeEffectSequence(customization.cost);
   customization.effects = deserializeEffectSequence(customization.effects);
   customization.growth = deserializeEffectSequence(customization.growth);
 });
