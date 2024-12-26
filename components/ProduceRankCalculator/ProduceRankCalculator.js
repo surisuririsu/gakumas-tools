@@ -3,7 +3,7 @@ import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import HajimeCalculator from "./HajimeCalculator";
-import NiaCalculator from "./NIACalculator";
+import NiaCalculator from "./NiaCalculator";
 import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
