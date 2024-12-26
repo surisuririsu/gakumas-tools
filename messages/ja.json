@@ -50,11 +50,14 @@
     "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
   },
   "ProduceRankCalculator": {
+    "scenarios": {
+      "hajime": "初",
+      "nia": "N.I.A"
+    },
     "difficulties": {
       "regular": "レギュラー",
       "pro": "プロ",
-      "master": "マスター",
-      "k2": "(2000)"
+      "master": "マスター"
     },
     "places": {
       "1": "1位",
@@ -62,11 +65,16 @@
       "3": "3位",
       "4": "4位以下"
     },
+    "scenario": "シナリオ",
     "difficulty": "難易度",
     "parameterLimit": "パラメータ上限",
     "finalExamPlacement": "最終試験順位",
     "parameter": "パラメータ",
     "parameters": "パラメータ",
+    "parametersPostAudition": "パラメータ（オーディション後）",
+    "voteCount": "ファン投票数",
+    "votesPostAudition": "ファン投票数（オーディション後）",
+    "voteCountRank": "投票数ランク",
     "targetScores": "目標スコア",
     "produceRank": "プロデュース評価",
     "targetScore": "目標スコア",
@@ -76,9 +84,7 @@
     "difficulties": {
       "regular": "レギュラー",
       "pro": "プロ",
-      "master": "マスター",
-      "nia": "NIA",
-      "k2": "(2000)"
+      "master": "マスター"
     },
     "difficulty": "難易度",
     "lessonBonus": "レッスンボーナス%",
