@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import DataContext from "@/contexts/DataContext";
+import { fixCustomizations } from "@/utils/customizations";
 
 const MemoryContext = createContext();
 
@@ -12,6 +13,14 @@ export function MemoryContextProvider({ children }) {
   const [params, setParams] = useState([null, null, null, null]);
   const [pItemIds, setPItemIds] = useState([0, 0, 0]);
   const [skillCardIds, setSkillCardIds] = useState([0, 0, 0, 0, 0, 0]);
+  const [customizations, setCustomizations] = useState([
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+  ]);
   const { fetchMemories } = useContext(DataContext);
 
   useEffect(() => {
@@ -26,6 +35,7 @@ export function MemoryContextProvider({ children }) {
       params,
       pItemIds,
       skillCardIds,
+      customizations,
     };
     if (asNew || !id) {
       const result = await fetch("/api/memory", {
@@ -54,6 +64,11 @@ export function MemoryContextProvider({ children }) {
     setParams(memory.params || [null, null, null, null]);
     setPItemIds(memory.pItemIds || [0, 0, 0]);
     setSkillCardIds(memory.skillCardIds || [0, 0, 0, 0, 0, 0]);
+    if (memory.customizations) {
+      setCustomizations(memory.customizations.map(fixCustomizations));
+    } else {
+      setCustomizations([{}, {}, {}, {}, {}, {}]);
+    }
   }
 
   function replacePItemId(index, itemId) {
@@ -72,6 +87,14 @@ export function MemoryContextProvider({ children }) {
     });
   }
 
+  function replaceCustomizations(index, c11n) {
+    setCustomizations((cur) => {
+      const next = [...cur];
+      next[index] = c11n;
+      return next;
+    });
+  }
+
   return (
     <MemoryContext.Provider
       value={{
@@ -85,8 +108,10 @@ export function MemoryContextProvider({ children }) {
         setParams,
         pItemIds,
         skillCardIds,
+        customizations,
         replacePItemId,
         replaceSkillCardId,
+        replaceCustomizations,
         setAll,
         save,
       }}

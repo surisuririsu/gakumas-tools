@@ -36,30 +36,22 @@
 .startTurn {
   display: flex;
   justify-content: space-between;
-  border-radius: 0 8px 2px 0;
+  align-items: center;
+  border-radius: 0 16px 2px 0;
   padding: 6px;
+  padding-left: 8px;
   color: $gray-dark;
   font-weight: 600;
-  border: 2px solid;
-  border-left: none;
+  color: $white;
 
   &.vocal {
-    border-color: $vocal-light;
-    .multiplier {
-      color: $vocal-light;
-    }
+    background-color: $vocal-light;
   }
   &.dance {
-    border-color: $dance-light;
-    .multiplier {
-      color: $dance-light;
-    }
+    background-color: $dance-light;
   }
   &.visual {
-    border-color: $visual-light;
-    .multiplier {
-      color: $visual-light;
-    }
+    background-color: $visual-light;
   }
 }
 

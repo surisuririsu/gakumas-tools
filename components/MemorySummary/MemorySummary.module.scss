@@ -57,14 +57,9 @@
   gap: 2px;
 }
 
-.imageWrapper {
-  position: relative;
+.imgWrapper {
   width: 16%;
   max-width: 50px;
-  aspect-ratio: 1;
-  border: 2px solid $gray-light;
-  border-radius: 4px;
-  overflow: hidden;
 }
 
 .filler {
