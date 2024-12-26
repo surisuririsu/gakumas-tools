@@ -38,10 +38,7 @@ export default function NiaCalculator() {
 
   return (
     <>
-      <span>
-        ※Functionality will be updated as we learn more about how parameter
-        bonuses and fan bonuses are calculated.
-      </span>
+      <span>{t("niaNote")}</span>
       <br />
       <label>{t("parametersPostAudition")}</label>
       <ParametersInput
