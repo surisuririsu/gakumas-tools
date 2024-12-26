@@ -50,11 +50,14 @@
     "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
   },
   "ProduceRankCalculator": {
+    "scenarios": {
+      "hajime": "Hajime",
+      "nia": "N.I.A"
+    },
     "difficulties": {
       "regular": "Regular",
       "pro": "Pro",
-      "master": "Master",
-      "k2": "(2000)"
+      "master": "Master"
     },
     "places": {
       "1": "1st",
@@ -62,11 +65,16 @@
       "3": "3rd",
       "4": "Other"
     },
+    "scenario": "Scenario",
     "difficulty": "Difficulty",
     "parameterLimit": "Parameter limit",
     "finalExamPlacement": "Final exam placement",
     "parameter": "Parameter",
     "parameters": "Parameters",
+    "parametersPostAudition": "Parameters (post-audition)",
+    "voteCount": "Vote count",
+    "votesPostAudition": "Vote count (post-audition)",
+    "voteCountRank": "Vote count rank",
     "targetScores": "Target scores",
     "produceRank": "Produce rank",
     "targetScore": "Target score",
@@ -76,9 +84,7 @@
     "difficulties": {
       "regular": "Regular",
       "pro": "Pro",
-      "master": "Master",
-      "nia": "NIA",
-      "k2": "(2000)"
+      "master": "Master"
     },
     "difficulty": "Difficulty",
     "lessonBonus": "Lesson bonus %",

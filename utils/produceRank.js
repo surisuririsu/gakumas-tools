@@ -2,7 +2,6 @@ export const MAX_PARAMS_BY_DIFFICULTY = {
   regular: 1000,
   pro: 1500,
   master: 1800,
-  k2: 2000,
 };
 
 export const PARAM_BONUS_BY_PLACE = {
