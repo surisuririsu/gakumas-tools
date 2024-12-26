@@ -360,6 +360,7 @@ export default class CardManager extends EngineComponent {
     state[S.cardMap].push({
       id: skillCard.id,
       baseId: skillCard.id - skillCard.upgraded ? 1 : 0,
+      c11n: {},
     });
     state[S.handCards].push(state[S.cardMap].length - 1);
     this.logger.log(state, "addRandomUpgradedCardToHand", {
