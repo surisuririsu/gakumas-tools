@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-26
+
+### Added
+
+- Support for customizations on sense R and SSR, logic SSR skill cards
+
 ## 2024-12-25
 
 ### Added
