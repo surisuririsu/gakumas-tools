@@ -53,7 +53,8 @@
     "difficulties": {
       "regular": "Regular",
       "pro": "Pro",
-      "master": "Master"
+      "master": "Master",
+      "k2": "(2000)"
     },
     "places": {
       "1": "1st",
@@ -77,7 +78,7 @@
       "pro": "Pro",
       "master": "Master",
       "nia": "NIA",
-      "(2000)": "(2000)"
+      "k2": "(2000)"
     },
     "difficulty": "Difficulty",
     "lessonBonus": "Lesson bonus %",
