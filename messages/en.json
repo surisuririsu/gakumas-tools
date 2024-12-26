@@ -78,7 +78,8 @@
     "targetScores": "Target scores",
     "produceRank": "Produce rank",
     "targetScore": "Target score",
-    "score": "Score"
+    "score": "Score",
+    "niaNote": "※Functionality will be updated as we learn more about parameter and vote counts from audition bonus."
   },
   "LessonCalculator": {
     "difficulties": {
