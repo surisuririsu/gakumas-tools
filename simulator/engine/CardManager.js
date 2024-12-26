@@ -286,10 +286,16 @@ export default class CardManager extends EngineComponent {
     // Send card to discards or remove
     if (state[S.thisCardHeld]) {
       state[S.thisCardHeld] = false;
-    } else if (skillCard.limit) {
-      state[S.removedCards].push(card);
-    } else {
+    } else if (!skillCard.limit) {
       state[S.discardedCards].push(card);
+    } else if (
+      Object.keys(c11n)
+        .map(Customizations.getById)
+        .some((c) => c11n[c.id] && c?.limit === 0)
+    ) {
+      state[S.discardedCards].push(card);
+    } else {
+      state[S.removedCards].push(card);
     }
 
     // End turn if no card uses left

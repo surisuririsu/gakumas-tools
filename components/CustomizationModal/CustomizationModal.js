@@ -23,7 +23,7 @@ function CustomizationModal({ id, customizations, onCustomize }) {
             <div className={styles.level}>{current[c11n.id] || 0}</div>
             <IconButton
               icon={FaPlus}
-              disabled={current[c11n.id] >= c11n.limit}
+              disabled={current[c11n.id] >= c11n.max}
               onClick={() =>
                 setCurrent({
                   ...current,
