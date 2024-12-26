@@ -27,14 +27,17 @@ export async function POST(request) {
 
   const { db } = await connect();
   const { insertedIds } = await db.collection("memories").insertMany(
-    memories.map(({ name, pIdolId, params, pItemIds, skillCardIds }) => ({
-      userId,
-      name,
-      pIdolId,
-      params,
-      pItemIds,
-      skillCardIds,
-    }))
+    memories.map(
+      ({ name, pIdolId, params, pItemIds, skillCardIds, customizations }) => ({
+        userId,
+        name,
+        pIdolId,
+        params,
+        pItemIds,
+        skillCardIds,
+        customizations,
+      })
+    )
   );
 
   return Response.json({ ids: insertedIds });

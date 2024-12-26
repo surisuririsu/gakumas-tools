@@ -30,6 +30,7 @@ function EntityIcon({
               alt={entity.name}
               fill
               sizes="64px"
+              draggable={false}
             />
             {showTier && type == EntityTypes.SKILL_CARD && (
               <TierIndicator skillCard={entity} />
@@ -48,6 +49,7 @@ function EntityIcon({
             alt={entity.name}
             fill
             sizes="64px"
+            draggable={false}
           />
         )}
         {!!numCustomizations && <CustomizationCount num={numCustomizations} />}

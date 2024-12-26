@@ -34,8 +34,11 @@ function StageSkillCards({
                 onPick={(card) =>
                   replaceSkillCardId(groupIndex * 6 + index, card.id)
                 }
-                onCustomize={(customs) =>
-                  replaceCustomizations(groupIndex * 6 + index, customs)
+                onCustomize={
+                  replaceCustomizations
+                    ? (customs) =>
+                        replaceCustomizations(groupIndex * 6 + index, customs)
+                    : null
                 }
               />
             )

@@ -31,6 +31,8 @@ function MemoryEditorModal() {
     replacePItemId,
     skillCardIds,
     replaceSkillCardId,
+    customizations,
+    replaceCustomizations,
   } = useContext(MemoryContext);
   const { idolId: workspaceIdolId } = useContext(WorkspaceContext);
 
@@ -68,7 +70,9 @@ function MemoryEditorModal() {
 
         <StageSkillCards
           skillCardIds={skillCardIds}
+          customizations={customizations}
           replaceSkillCardId={replaceSkillCardId}
+          replaceCustomizations={replaceCustomizations}
           idolId={idolId}
         />
         <div>

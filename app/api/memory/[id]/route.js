@@ -11,16 +11,24 @@ export async function PUT(request, { params: routeParams }) {
   const userId = session.user.id;
 
   const id = new ObjectId(routeParams.id);
-  const { name, pIdolId, params, pItemIds, skillCardIds } =
+  const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
     await request.json();
 
   const { db } = await connect();
-  const { updatedId } = await db
-    .collection("memories")
-    .updateOne(
-      { _id: id, userId },
-      { $set: { userId, name, pIdolId, params, pItemIds, skillCardIds } }
-    );
+  const { updatedId } = await db.collection("memories").updateOne(
+    { _id: id, userId },
+    {
+      $set: {
+        userId,
+        name,
+        pIdolId,
+        params,
+        pItemIds,
+        skillCardIds,
+        customizations,
+      },
+    }
+  );
 
   return Response.json({ id: updatedId });
 }
