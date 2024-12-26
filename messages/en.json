@@ -76,7 +76,8 @@
       "regular": "Regular",
       "pro": "Pro",
       "master": "Master",
-      "nia": "NIA"
+      "nia": "NIA",
+      "(2000)": "(2000)"
     },
     "difficulty": "Difficulty",
     "lessonBonus": "Lesson bonus %",
