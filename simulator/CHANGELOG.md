@@ -9,6 +9,7 @@ Dates are based on Eastern Time Zone.
 
 - Preview of Campus mode!! vol.1
 - Preview of customizations seen in press articles
+- Update Campus mode!! vol.1
 
 ## 2024-12-22
 
