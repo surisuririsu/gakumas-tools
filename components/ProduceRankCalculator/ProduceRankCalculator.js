@@ -21,7 +21,7 @@ function ProduceRankCalculator() {
 
   const DIFFICULTY_OPTIONS = useMemo(
     () =>
-      ["regular", "pro", "master", "(2000)"].map((difficulty) => ({
+      ["regular", "pro", "master", "k2"].map((difficulty) => ({
         value: difficulty,
         label: t(`difficulties.${difficulty}`),
       })),
