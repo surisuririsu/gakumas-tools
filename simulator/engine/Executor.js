@@ -54,6 +54,8 @@ export default class Executor extends EngineComponent {
       score: (...args) => this.resolveScore(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
+      goodImpressionTurns: (...args) =>
+        this.resolveGoodImpressionTurns(...args),
       fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args),
     };
   }
@@ -186,6 +188,7 @@ export default class Executor extends EngineComponent {
         ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
+        (lhs == "goodImpressionTurns" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
         intermediate = 0;
@@ -364,9 +367,13 @@ export default class Executor extends EngineComponent {
     state[S.score] += score;
   }
 
-  resolveGenki(state, genki) {
+  resolveGenki(state, genki, growth) {
     // Nullify genki turns
     if (state[S.nullifyGenkiTurns]) return;
+
+    if (growth[S["growth.genki"]]) {
+      genki += growth[S["growth.genki"]];
+    }
 
     // Apply motivation
     genki += state[S.motivation] * state[S.motivationMultiplier];
@@ -414,7 +421,17 @@ export default class Executor extends EngineComponent {
     }
   }
 
+  resolveGoodImpressionTurns(state, goodImpressionTurns, growth) {
+    if (growth[S["growth.goodImpressionTurns"]]) {
+      goodImpressionTurns += growth[S["growth.goodImpressionTurns"]];
+    }
+    state[S.goodImpressionTurns] += goodImpressionTurns;
+  }
+
   resolveFullPowerCharge(state, fullPowerCharge) {
+    if (growth[S["growth.fullPowerCharge"]]) {
+      fullPowerCharge += growth[S["growth.fullPowerCharge"]];
+    }
     if (fullPowerCharge > 0) {
       state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
