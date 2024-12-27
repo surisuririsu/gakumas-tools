@@ -402,6 +402,16 @@ export default class CardManager extends EngineComponent {
     return state;
   }
 
+  holdSelectedFromDeck(state) {
+    // TODO: Random for now
+    const randomIndex = Math.floor(getRand() * state[S.deckCards].length);
+    const card = state[S.deckCards].splice(randomIndex, 1)[0];
+
+    if (card) {
+      state[S.heldCards].push(card);
+    }
+  }
+
   holdSelectedFromDeckOrDiscards(state) {
     // TODO: Random for now
     const randomIndex = Math.floor(

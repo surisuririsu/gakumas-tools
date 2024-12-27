@@ -259,8 +259,11 @@ export const ALL_FIELDS = [
 
   // Growth
   "growth.cost",
+  "growth.genki",
   "growth.score",
   "growth.scoreTimes",
+  "growth.goodImpressionTurns",
+  "growth.fullPowerCharge",
 
   // Special
   "hajikeruMizushibukiTurnUsed",
