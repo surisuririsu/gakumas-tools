@@ -15,7 +15,7 @@ import { generatePossibleMemories } from "@/utils/skillCardLottery";
 import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
 import styles from "./MemoryCalculator.module.scss";
 
-const RANK_OPTIONS = ["B", "B+", "A", "A+", "S", "S+"].map((r) => ({
+const RANK_OPTIONS = ["B", "B+", "A", "A+", "S", "S+", "SS"].map((r) => ({
   id: r,
   iconSrc: `/ranks/${r}.png`,
   alt: r,
