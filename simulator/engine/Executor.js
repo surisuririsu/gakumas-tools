@@ -42,7 +42,7 @@ export default class Executor extends EngineComponent {
         engine.buffManager.setScoreBuff(
           state,
           parseFloat(amount),
-          parseInt(turns, 10)
+          turns ? parseInt(turns, 10) : null
         ),
       setStance: (state, stance) => engine.buffManager.setStance(state, stance),
     };
