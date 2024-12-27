@@ -428,7 +428,7 @@ export default class Executor extends EngineComponent {
     state[S.goodImpressionTurns] += goodImpressionTurns;
   }
 
-  resolveFullPowerCharge(state, fullPowerCharge) {
+  resolveFullPowerCharge(state, fullPowerCharge, growth) {
     if (growth[S["growth.fullPowerCharge"]]) {
       fullPowerCharge += growth[S["growth.fullPowerCharge"]];
     }
