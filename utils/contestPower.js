@@ -1,6 +1,7 @@
 import { PItems, SkillCards } from "gakumas-data/lite";
 
 export const COST_RANGES = [
+  { rank: "SS", min: 651, max: 804 },
   { rank: "S+", min: 546, max: 741 },
   { rank: "S", min: 546, max: 642 },
   { rank: "A+", min: 441, max: 594 },
