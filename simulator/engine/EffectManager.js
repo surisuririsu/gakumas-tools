@@ -78,6 +78,12 @@ export default class EffectManager extends EngineComponent {
     }
   }
 
+  clearPrestageEffects(state) {
+    state[S.effects] = state[S.effects].filter(
+      (effect) => effect.phase != "prestage"
+    );
+  }
+
   triggerEffectsForPhase(state, phase, conditionState) {
     const parentPhase = state[S.phase];
     state[S.phase] = phase;

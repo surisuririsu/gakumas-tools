@@ -51,6 +51,7 @@ export default class StageEngine {
   startStage(state) {
     this.logger.disable();
     this.effectManager.triggerEffectsForPhase(state, "prestage");
+    this.effectManager.clearPrestageEffects(state);
     this.logger.enable();
     this.effectManager.triggerEffectsForPhase(state, "startOfStage");
     this.logger.pushGraphData(state);
