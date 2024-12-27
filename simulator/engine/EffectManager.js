@@ -196,6 +196,14 @@ export default class EffectManager extends EngineComponent {
             for (let k = 0; k < state[S.handCards].length; k++) {
               growthCards.add(state[S.handCards][k]);
             }
+          } else if (target == "deck") {
+            for (let k = 0; k < state[S.deckCards].length; k++) {
+              growthCards.add(state[S.deckCards][k]);
+            }
+          } else if (target == "held") {
+            for (let k = 0; k < state[S.heldCards].length; k++) {
+              growthCards.add(state[S.heldCards][k]);
+            }
           } else if (target == "all") {
             for (let k = 0; k < state[S.cardMap].length; k++) {
               growthCards.add(k);
