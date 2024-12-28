@@ -1,14 +1,32 @@
 import Customizations from "@/customizations/customizations";
 
 export function deserializeCustomizations(str) {
-  return str.split("-").map(
-    (c) => c.split("+")
-    // .map((n) => parseInt(n, 10))
-  );
+  try {
+    return str.split("-").map((c) =>
+      c
+        .split("e")
+        .filter((e) => e)
+        .reduce((acc, cur) => {
+          const [k, v] = cur.split("x");
+          acc[k] = parseInt(v, 10);
+          return acc;
+        }, {})
+    );
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 }
 
 export function serializeCustomizations(customizations) {
-  return customizations.map((c) => c.join("+")).join("-");
+  return customizations
+    .map((c) =>
+      Object.keys(c)
+        .filter((k) => c[k])
+        .map((k) => `${k}x${c[k]}`)
+        .join("e")
+    )
+    .join("-");
 }
 
 export function countCustomizations(customizations) {
