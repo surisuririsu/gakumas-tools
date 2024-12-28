@@ -5,7 +5,6 @@ import { Stages } from "gakumas-data/lite";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
-import Customizations from "@/customizations/customizations";
 import { fixCustomizations } from "@/utils/customizations";
 
 const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
@@ -221,8 +220,8 @@ export function LoadoutContextProvider({ children }) {
     supportBonus,
     params,
     pItemIds,
-    skillCardIdGroups
-    // customizationGroups
+    skillCardIdGroups,
+    customizationGroups
   );
 
   let kafeUrl = null;

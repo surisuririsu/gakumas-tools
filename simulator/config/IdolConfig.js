@@ -1,3 +1,4 @@
+import Customizations from "@/customizations/customizations";
 import { PIdols, PItems, SkillCards } from "gakumas-data/lite";
 
 export default class IdolConfig {
@@ -14,9 +15,17 @@ export default class IdolConfig {
     for (let i = 0; i < skillCardIdGroups.length; i++) {
       for (let j = 0; j < skillCardIdGroups[i].length; j++) {
         if (skillCardIdGroups[i][j]) {
+          const customizations = customizationGroups?.[i]?.[j];
+          if (customizations) {
+            Object.keys(customizations).forEach((k) => {
+              if (!Customizations.getById(k)) {
+                delete customizations[k];
+              }
+            });
+          }
           cards.push({
             id: skillCardIdGroups[i][j],
-            customizations: customizationGroups?.[i]?.[j],
+            customizations,
           });
         }
       }
