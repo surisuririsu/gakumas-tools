@@ -17,7 +17,7 @@ function EntityPickerModal({
   const { closeModal } = useContext(ModalContext);
   const canCustomize =
     type == EntityTypes.SKILL_CARD &&
-    SkillCards.getById(id)?.availableCustomizations?.length;
+    !!SkillCards.getById(id)?.availableCustomizations?.length;
 
   return (
     <Modal>

@@ -330,14 +330,17 @@ export default class Executor extends EngineComponent {
     // Apply growth
     if (
       growth[S["g.scoreByGoodImpressionTurns"]] &&
-      "goodImpressionTurns" in rhsTokens
+      rhsTokens.includes("goodImpressionTurns")
     ) {
       score +=
         state[S.goodImpressionTurns] *
         growth[S["g.scoreByGoodImpressionTurns"]];
-    } else if (growth[S["g.scoreByMotivation"]] && "motivation" in rhsTokens) {
+    } else if (
+      growth[S["g.scoreByMotivation"]] &&
+      rhsTokens.includes("motivation")
+    ) {
       score += state[S.motivation] * growth[S["g.scoreByMotivation"]];
-    } else if (growth[S["g.scoreByGenki"]] && "genki" in rhsTokens) {
+    } else if (growth[S["g.scoreByGenki"]] && rhsTokens.includes("genki")) {
       score += state[S.genki] * growth[S["g.scoreByGenki"]];
     } else if (growth[S["g.score"]]) {
       score += growth[S["g.score"]];
