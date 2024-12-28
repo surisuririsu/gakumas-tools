@@ -17,12 +17,6 @@ const CUSTOMIZATIONS_BY_ID = CUSTOMIZATIONS.reduce((acc, cur) => {
   return acc;
 }, {});
 
-const CUSTOMIZATIONS_BY_SKILL_CARD_ID = CUSTOMIZATIONS.reduce((acc, cur) => {
-  if (!acc[cur.skillCardId]) acc[cur.skillCardId] = [];
-  acc[cur.skillCardId].push(cur);
-  return acc;
-}, {});
-
 class Customizations {
   static getAll() {
     return CUSTOMIZATIONS;
@@ -30,10 +24,6 @@ class Customizations {
 
   static getById(id) {
     return CUSTOMIZATIONS_BY_ID[id];
-  }
-
-  static getBySkillCardId(id) {
-    return CUSTOMIZATIONS_BY_SKILL_CARD_ID[id];
   }
 }
 

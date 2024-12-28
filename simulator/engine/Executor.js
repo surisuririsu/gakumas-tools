@@ -10,6 +10,7 @@ import {
   INCREASE_TRIGGER_FIELDS,
   LOGGED_FIELDS,
   S,
+  GROWABLE_FIELDS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "./utils";
@@ -32,6 +33,8 @@ export default class Executor extends EngineComponent {
       holdThisCard: (state) => engine.cardManager.holdThisCard(state),
       holdSelectedFromHand: (state) =>
         engine.cardManager.holdSelectedFromHand(state),
+      holdSelectedFromDeck: (state) =>
+        engine.cardManager.holdSelectedFromDeck(state),
       holdSelectedFromDeckOrDiscards: (state) =>
         engine.cardManager.holdSelectedFromDeckOrDiscards(state),
       addHeldCardsToHand: (state) =>
@@ -54,8 +57,6 @@ export default class Executor extends EngineComponent {
       score: (...args) => this.resolveScore(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
-      goodImpressionTurns: (...args) =>
-        this.resolveGoodImpressionTurns(...args),
       fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args),
     };
   }
@@ -83,7 +84,7 @@ export default class Executor extends EngineComponent {
     state[S.motivationMultiplier] = 1;
 
     // Execute actions
-    const scoreTimes = state[S.cardMap][card]?.growth?.[S["growth.scoreTimes"]];
+    const scoreTimes = state[S.cardMap][card]?.growth?.[S["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
       this.executeAction(state, actions[i], card);
 
@@ -104,6 +105,7 @@ export default class Executor extends EngineComponent {
     }
 
     // Reset modifiers
+    state[S.goodConditionTurnsMultiplier] = prevGoodConditionTurnsMultiplier;
     state[S.concentrationMultiplier] = prevConcentrationMultiplier;
     state[S.motivationMultiplier] = prevMotivationMultiplier;
 
@@ -154,11 +156,15 @@ export default class Executor extends EngineComponent {
   }
 
   executeAction(state, action, card) {
+    let growth = null;
+    if (card != null) {
+      growth = state[S.cardMap][card].growth;
+    }
     const tokens = action;
 
     // Special actions
     if (tokens.length == 1) {
-      this.executeSpecialAction(state, tokens[0]);
+      this.executeSpecialAction(state, tokens[0], growth);
       return;
     }
 
@@ -173,10 +179,8 @@ export default class Executor extends EngineComponent {
       }
 
       const op = tokens[1];
-      const rhs = this.engine.evaluator.evaluateExpression(
-        state,
-        tokens.slice(2)
-      );
+      const rhsTokens = tokens.slice(2);
+      let rhs = this.engine.evaluator.evaluateExpression(state, rhsTokens);
 
       let intermediate = state[S[lhs]] || 0;
 
@@ -188,7 +192,6 @@ export default class Executor extends EngineComponent {
         ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
-        (lhs == "goodImpressionTurns" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
         intermediate = 0;
@@ -200,7 +203,14 @@ export default class Executor extends EngineComponent {
         intermediate = rhs;
       } else if (op == "+=") {
         intermediate += rhs;
+        if (growth?.[S[`g.${lhs}`]] && GROWABLE_FIELDS.includes(lhs)) {
+          intermediate += growth[S[`g.${lhs}`]];
+        }
       } else if (op == "-=") {
+        if (growth?.[S["g.cost"]] && state[S.phase] == "cost") {
+          rhs -= growth[S["g.cost"]];
+          if (rhs < 0) rhs = 0;
+        }
         intermediate -= rhs;
       } else if (op == "*=") {
         intermediate *= rhs;
@@ -212,14 +222,15 @@ export default class Executor extends EngineComponent {
         console.warn(`Unrecognized assignment operator: ${op}`);
       }
 
-      // Resolve intermediate
       if (intermediateField) {
-        const growth = state[S.cardMap][card]?.growth || {};
+        // Resolve intermediate
+
         if (intermediateField in this.intermediateResolvers) {
           this.intermediateResolvers[intermediateField](
             state,
             intermediate,
-            growth
+            growth || {},
+            rhsTokens
           );
         } else {
           console.warn(`Unresolved intermediate: ${intermediateField}`);
@@ -241,7 +252,7 @@ export default class Executor extends EngineComponent {
     console.warn(`Invalid action: ${action}`);
   }
 
-  executeSpecialAction(state, action) {
+  executeSpecialAction(state, action, growth) {
     if (action in this.specialActions) {
       this.specialActions[action](state);
       return;
@@ -249,20 +260,24 @@ export default class Executor extends EngineComponent {
 
     const match = action.match(FUNCTION_CALL_REGEX);
     if (match[1] in this.specialActions) {
-      this.specialActions[match[1]](state, ...match[2].split(","));
+      const args = match[2].split(",");
+      if (growth && growth[S["g.stanceLevel"]] && match[1] == "setStance") {
+        if (args[0].startsWith("str")) {
+          args[0] = "strength2";
+        } else if (args[0].startsWith("pre")) {
+          args[0] = "preservation2";
+        }
+      }
+      this.specialActions[match[1]](state, ...args);
       return;
     }
 
     console.warn(`Unrecognized special action: ${action}`);
   }
 
-  resolveCost(state, cost, growth) {
+  resolveCost(state, cost) {
     // Nullify cost
     if (state[S.nullifyCostCards]) return;
-
-    if (growth[S["growth.cost"]]) {
-      cost += growth[S["growth.cost"]];
-    }
 
     // Apply stance
     if (state[S.stance].startsWith("strength")) {
@@ -311,10 +326,21 @@ export default class Executor extends EngineComponent {
     }
   }
 
-  resolveScore(state, score, growth) {
+  resolveScore(state, score, growth, rhsTokens) {
     // Apply growth
-    if (growth[S["growth.score"]]) {
-      score += growth[S["growth.score"]];
+    if (
+      growth[S["g.scoreByGoodImpressionTurns"]] &&
+      "goodImpressionTurns" in rhsTokens
+    ) {
+      score +=
+        state[S.goodImpressionTurns] *
+        growth[S["g.scoreByGoodImpressionTurns"]];
+    } else if (growth[S["g.scoreByMotivation"]] && "motivation" in rhsTokens) {
+      score += state[S.motivation] * growth[S["g.scoreByMotivation"]];
+    } else if (growth[S["g.scoreByGenki"]] && "genki" in rhsTokens) {
+      score += state[S.genki] * growth[S["g.scoreByGenki"]];
+    } else if (growth[S["g.score"]]) {
+      score += growth[S["g.score"]];
     }
 
     if (score > 0) {
@@ -367,13 +393,9 @@ export default class Executor extends EngineComponent {
     state[S.score] += score;
   }
 
-  resolveGenki(state, genki, growth) {
+  resolveGenki(state, genki) {
     // Nullify genki turns
     if (state[S.nullifyGenkiTurns]) return;
-
-    if (growth[S["growth.genki"]]) {
-      genki += growth[S["growth.genki"]];
-    }
 
     // Apply motivation
     genki += state[S.motivation] * state[S.motivationMultiplier];
@@ -381,12 +403,8 @@ export default class Executor extends EngineComponent {
     state[S.genki] += genki;
   }
 
-  resolveStamina(state, stamina, growth) {
+  resolveStamina(state, stamina) {
     if (state[S.nullifyCostCards]) return;
-
-    if (growth[S["growth.cost"]]) {
-      stamina += growth[S["growth.cost"]];
-    }
 
     // Apply stance
     if (state[S.stance].startsWith("strength")) {
@@ -421,17 +439,7 @@ export default class Executor extends EngineComponent {
     }
   }
 
-  resolveGoodImpressionTurns(state, goodImpressionTurns, growth) {
-    if (growth[S["growth.goodImpressionTurns"]]) {
-      goodImpressionTurns += growth[S["growth.goodImpressionTurns"]];
-    }
-    state[S.goodImpressionTurns] += goodImpressionTurns;
-  }
-
-  resolveFullPowerCharge(state, fullPowerCharge, growth) {
-    if (growth[S["growth.fullPowerCharge"]]) {
-      fullPowerCharge += growth[S["growth.fullPowerCharge"]];
-    }
+  resolveFullPowerCharge(state, fullPowerCharge) {
     if (fullPowerCharge > 0) {
       state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
