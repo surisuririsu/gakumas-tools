@@ -3,6 +3,16 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-28
+
+### Added
+
+- Support for most customizations
+
+### Fixed
+
+- An error when loading memories from db without customizations
+
 ## 2024-12-26
 
 ### Added
