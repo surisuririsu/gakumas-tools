@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
 import { FaPlus } from "react-icons/fa6";
-import CustomizationMultiPickerModal from "@/components/CustomizationModal";
+import CustomizationModal from "@/components/CustomizationModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -42,7 +42,7 @@ function EntityCustomizer({ type, id, customizations = {}, onCustomize }) {
         className={styles.add}
         onClick={() =>
           setModal(
-            <CustomizationMultiPickerModal
+            <CustomizationModal
               customizations={customizations}
               onCustomize={onCustomize}
               id={id}

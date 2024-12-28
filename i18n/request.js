@@ -8,6 +8,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   if (!routing.locales.includes(locale)) notFound();
 
   return {
+    locale,
     messages: (await import(`@/messages/${locale}.json`)).default,
   };
 });

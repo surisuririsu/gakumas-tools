@@ -196,6 +196,17 @@ export const FIELDS_TO_DIFF = [
   ),
 ];
 
+export const GROWABLE_FIELDS = [
+  "genki",
+  "goodConditionTurns",
+  "perfectConditionTurns",
+  "concentration",
+  "goodImpressionTurns",
+  "motivation",
+  "fullPowerCharge",
+  "halfCostTurns",
+];
+
 export const ALL_FIELDS = [
   // General
   "cardUsesRemaining",
@@ -258,12 +269,21 @@ export const ALL_FIELDS = [
   "phase",
 
   // Growth
-  "growth.cost",
-  "growth.genki",
-  "growth.score",
-  "growth.scoreTimes",
-  "growth.goodImpressionTurns",
-  "growth.fullPowerCharge",
+  "g.score",
+  "g.scoreTimes",
+  "g.cost",
+  "g.genki",
+  "g.goodConditionTurns",
+  "g.perfectConditionTurns",
+  "g.concentration",
+  "g.goodImpressionTurns",
+  "g.motivation",
+  "g.fullPowerCharge",
+  "g.halfCostTurns",
+  "g.scoreByGoodImpressionTurns",
+  "g.scoreByMotivation",
+  "g.scoreByGenki",
+  "g.stanceLevel",
 
   // Special
   "hajikeruMizushibukiTurnUsed",

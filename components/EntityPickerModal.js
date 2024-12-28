@@ -1,10 +1,10 @@
 import { memo, useContext } from "react";
+import { SkillCards } from "gakumas-data/lite";
 import EntityBank from "@/components/EntityBank";
 import EntityCustomizer from "@/components/EntityCustomizer";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
-import Customizations from "@/customizations/customizations";
 
 function EntityPickerModal({
   type,
@@ -16,7 +16,8 @@ function EntityPickerModal({
 }) {
   const { closeModal } = useContext(ModalContext);
   const canCustomize =
-    type == EntityTypes.SKILL_CARD && Customizations.getBySkillCardId(id);
+    type == EntityTypes.SKILL_CARD &&
+    SkillCards.getById(id)?.availableCustomizations?.length;
 
   return (
     <Modal>

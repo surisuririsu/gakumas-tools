@@ -157,9 +157,11 @@ export default class CardManager extends EngineComponent {
       }
     }
 
+    previewState[S.phase] = "cost";
     for (let i = 0; i < cost.length; i++) {
       this.engine.executor.executeAction(previewState, cost[i], card);
     }
+    delete previewState[S.phase];
 
     for (let i = 0; i < COST_FIELDS.length; i++) {
       if (previewState[S[COST_FIELDS[i]]] < 0) return false;
@@ -201,7 +203,9 @@ export default class CardManager extends EngineComponent {
         }
       }
     }
-    this.engine.executor.executeActions(state, cost);
+    state[S.phase] = "cost";
+    this.engine.executor.executeActions(state, cost, card);
+    delete state[S.phase];
     if (state[S.nullifyCostCards]) state[S.nullifyCostCards]--;
 
     // Remove card from hand

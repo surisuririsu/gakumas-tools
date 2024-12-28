@@ -1,6 +1,7 @@
 import { memo, useContext, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaPlus, FaMinus } from "react-icons/fa6";
+import { SkillCards } from "gakumas-data/lite";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Modal from "@/components/Modal";
@@ -13,7 +14,11 @@ function CustomizationModal({ id, customizations, onCustomize }) {
   const t = useTranslations("CustomizationModal");
   const { closeModal } = useContext(ModalContext);
   const [current, setCurrent] = useState(customizations);
-  const availableC11ns = Customizations.getBySkillCardId(id);
+  const availableC11nIds =
+    SkillCards.getById(id)?.availableCustomizations || [];
+  const availableC11ns = availableC11nIds
+    .map(Customizations.getById)
+    .filter((x) => x);
 
   return (
     <Modal>
