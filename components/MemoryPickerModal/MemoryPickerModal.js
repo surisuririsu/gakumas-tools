@@ -30,8 +30,8 @@ function MemoryPickerModal({ index }) {
       memories
         .filter((memory) => {
           const pIdol = PIdols.getById(memory.pIdolId);
-          if (plan && plan != pIdol.plan) return false;
-          if (idolId && idolId != pIdol.idolId) return false;
+          if (plan && plan != pIdol?.plan) return false;
+          if (idolId && idolId != pIdol?.idolId) return false;
           return true;
         })
         .map((memory) => {
