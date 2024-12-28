@@ -210,7 +210,7 @@ export function LoadoutContextProvider({ children }) {
     });
     setCustomizationGroups((cur) => {
       const next = [...cur];
-      next[index] = memory.customizations || {};
+      next[index] = memory.customizations || [];
       return next;
     });
   }
