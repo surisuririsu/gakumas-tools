@@ -66,7 +66,7 @@ function NavbarMenu() {
             {t("sendFeedback")}
           </a>
 
-          {/* <div className={styles.author}>
+          <div className={styles.author}>
             <div>Made by risりす</div>
             <div className={styles.socials}>
               <IconButton
@@ -83,7 +83,7 @@ function NavbarMenu() {
             <div className={styles.fine}>
               with research from the Gakumas contest community
             </div>
-          </div> */}
+          </div>
 
           {locale == "ja" && (
             <Link href={pathname} locale="en">
