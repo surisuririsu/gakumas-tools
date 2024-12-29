@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-29
+
+### Fixed
+
+- Customized skill cards were not prioritized over uncustomized cards when deduping
+
 ## 2024-12-28
 
 ### Added
