@@ -19,7 +19,9 @@ export function deserializeCustomizations(str) {
 }
 
 export function serializeCustomizations(customizations) {
+  if (!customizations) return "";
   return customizations
+    .filter((c) => c)
     .map((c) =>
       Object.keys(c)
         .filter((k) => c[k])

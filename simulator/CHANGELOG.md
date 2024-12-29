@@ -12,6 +12,7 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - An error when loading memories from db without customizations
+- An error that enabled nullify debuff effect to unlock stance during full power
 
 ## 2024-12-26
 

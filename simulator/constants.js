@@ -69,11 +69,7 @@ export const DEFAULT_EFFECTS = [
   {
     phase: "startOfTurn",
     conditions: ["fullPowerCharge>=10"],
-    actions: [
-      "setStance(fullPower)",
-      "fullPowerCharge-=10",
-      "lockStanceTurns+=1",
-    ],
+    actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
     group: -1,
     source: { type: "default", id: "全力" },
   },
