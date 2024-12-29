@@ -7,7 +7,13 @@ import ParametersInput from "@/components/ParametersInput";
 import { getRank } from "@/utils/produceRank";
 import styles from "./ProduceRankCalculator.module.scss";
 import ParamOrderPicker from "../ParamOrderPicker";
-import { calculateAuditionBonusParams } from "@/utils/nia";
+import {
+  calculateBonusParams,
+  calculateGainedParams,
+  calculatePostAuditionParams,
+} from "@/utils/nia";
+import ParamBadges from "./ParamBadges";
+import Params from "./Params";
 
 const MAX_PARAMS = 2000;
 const VOTE_RANK_OPTIONS = ["A+", "S", "S+", "SS"].map((r) => ({
@@ -25,25 +31,30 @@ const FAN_RATING_BY_VOTE_RANK = {
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
 
+  const [paramOrder, setParamOrder] = useState([1, 2, 3]);
   const [params, setParams] = useState([null, null, null]);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
   const [votes, setVotes] = useState(0);
   const [scores, setScores] = useState([null, null, null]);
-  const [voteRank, setVoteRank] = useState("S");
-  const [paramOrder, setParamOrder] = useState([1, 2, 3]);
 
-  console.log(paramOrder);
-
-  const paramRating = Math.floor(
-    params.reduce((acc, cur) => acc + cur, 0) * 2.3
+  const gainedParams = calculateGainedParams(paramOrder, scores);
+  const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
+  const postAuditionParams = calculatePostAuditionParams(
+    params,
+    gainedParams,
+    bonusParams
   );
-  const { base, multiplier } = FAN_RATING_BY_VOTE_RANK[voteRank];
-  const fanRating = base + Math.ceil(votes * multiplier);
 
-  const actualRating = paramRating + fanRating;
-  const actualRank = getRank(actualRating);
+  // const [voteRank, setVoteRank] = useState("S");
 
-  const auditionBonusParams = calculateAuditionBonusParams(paramOrder, scores);
+  // const paramRating = Math.floor(
+  //   params.reduce((acc, cur) => acc + cur, 0) * 2.3
+  // );
+  // const { base, multiplier } = FAN_RATING_BY_VOTE_RANK[voteRank];
+  // const fanRating = base + Math.ceil(votes * multiplier);
+
+  // const actualRating = paramRating + fanRating;
+  // const actualRank = getRank(actualRating);
 
   return (
     <>
@@ -51,8 +62,6 @@ export default function NiaCalculator() {
 
       <label>Evaluation criteria</label>
       <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
-
-      <h3>オーディション前</h3>
 
       <label>{t("parametersPreAudition")}</label>
       <ParametersInput
@@ -68,13 +77,6 @@ export default function NiaCalculator() {
         onChange={setParamBonuses}
         round={false}
       />
-
-      {/* <label>{t("parametersPostAudition")}</label>
-      <ParametersInput
-        parameters={params}
-        max={MAX_PARAMS}
-        onChange={setParams}
-      /> */}
 
       <label>Votes</label>
       <Input
@@ -93,7 +95,15 @@ export default function NiaCalculator() {
         onChange={setScores}
       />
 
-      {JSON.stringify(auditionBonusParams)}
+      <label>Gained params</label>
+      <ParamBadges params={gainedParams} />
+
+      <label>Bonus params</label>
+      <ParamBadges params={bonusParams} />
+
+      <label>{t("parametersPostAudition")}</label>
+      <Params params={postAuditionParams} />
+
       {/*
       <label>{t("voteCountRank")}</label>
       <div className={styles.rankSelect}>
