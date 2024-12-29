@@ -103,7 +103,13 @@ export default class IdolConfig {
   }
 
   getDedupedCards(cards) {
-    const sortedCards = cards.sort((a, b) => b.id - a.id);
+    const sortedCards = cards.sort(
+      (a, b) =>
+        b.id +
+        (b.customizations ? Object.keys(b.customizations).length : 0) -
+        a.id -
+        (a.customizations ? Object.keys(a.customizations).length : 0)
+    );
 
     let dedupedCards = [];
 
