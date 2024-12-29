@@ -49,6 +49,11 @@
     "title": "Gakumas Tools",
     "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
   },
+  "Calculator": {
+    "scenario": "Scenario",
+    "hajime": "Hajime",
+    "nia": "N.I.A"
+  },
   "ProduceRankCalculator": {
     "scenarios": {
       "hajime": "Hajime",
@@ -71,8 +76,10 @@
     "finalExamPlacement": "Final exam placement",
     "parameter": "Parameter",
     "parameters": "Parameters",
+    "parametersPreAudition": "Parameters (pre-audition)",
     "parametersPostAudition": "Parameters (post-audition)",
     "voteCount": "Vote count",
+    "votesPreAudition": "Vote count (pre-audition)",
     "votesPostAudition": "Vote count (post-audition)",
     "voteCountRank": "Vote count rank",
     "targetScores": "Target scores",

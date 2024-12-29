@@ -49,6 +49,11 @@
     "title": "Gakumas Tools - 学マスツール",
     "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
   },
+  "Calculator": {
+    "scenario": "シナリオ",
+    "hajime": "初",
+    "nia": "N.I.A"
+  },
   "ProduceRankCalculator": {
     "scenarios": {
       "hajime": "初",
@@ -71,8 +76,10 @@
     "finalExamPlacement": "最終試験順位",
     "parameter": "パラメータ",
     "parameters": "パラメータ",
+    "parametersPreAudition": "パラメータ（オーディション前）",
     "parametersPostAudition": "パラメータ（オーディション後）",
     "voteCount": "ファン投票数",
+    "votesPreAudition": "ファン投票数（オーディション前）",
     "votesPostAudition": "ファン投票数（オーディション後）",
     "voteCountRank": "投票数ランク",
     "targetScores": "目標スコア",
