@@ -14,6 +14,7 @@ import {
   calculateVoteRating,
   getVoteRank,
   MAX_PARAMS,
+  PARAM_REGIMES_BY_ORDER,
 } from "@/utils/nia";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
@@ -98,6 +99,13 @@ export default function NiaCalculator() {
         onChange={setVotes}
         min={0}
         max={10000000}
+      />
+
+      <label>{t("paramHighGrowthScores")}</label>
+      <Params
+        params={paramOrder.map((order, i) =>
+          Math.min(PARAM_REGIMES_BY_ORDER[order][1].threshold, maxScores[i])
+        )}
       />
 
       <label>{t("paramMaximizingScores")}</label>
