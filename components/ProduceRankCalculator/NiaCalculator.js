@@ -17,6 +17,7 @@ import {
 } from "@/utils/nia";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
+import styles from "./NiaCalculator.module.scss";
 
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
@@ -55,7 +56,21 @@ export default function NiaCalculator() {
 
   return (
     <>
-      <span>{t("niaNote")}</span>
+      <span className={styles.note}>
+        {t.rich("niaNote", {
+          br: () => (
+            <>
+              <br />
+              <br />
+            </>
+          ),
+          link: (chunks) => (
+            <a href="https://x.com/surisuririsu" target="_blank">
+              {chunks}
+            </a>
+          ),
+        })}
+      </span>
 
       <label>{t("evaluationCriteria")}</label>
       <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />

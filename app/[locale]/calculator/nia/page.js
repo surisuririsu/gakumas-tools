@@ -3,7 +3,7 @@ import { generateMetadataForTool } from "@/utils/metadata";
 import NiaCalculator from "@/components/ProduceRankCalculator/NiaCalculator";
 
 export async function generateMetadata({ params: { locale } }) {
-  return await generateMetadataForTool("produceRankCalculator", locale);
+  return await generateMetadataForTool("niaCalculator", locale);
 }
 
 export default function ProduceRankCalculatorPage({ params: { locale } }) {

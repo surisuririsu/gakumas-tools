@@ -11,7 +11,7 @@ import {
 export const TOOLS = {
   produceRankCalculator: {
     icon: <FaCalculator />,
-    path: "/produce-rank-calculator",
+    path: "/calculator/hajime",
     pinnable: true,
   },
   lessonCalculator: {
