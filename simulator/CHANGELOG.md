@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-12-30
+
+### Added
+
+- Customizations for a few more support cards
+
 ## 2024-12-29
 
 ### Fixed

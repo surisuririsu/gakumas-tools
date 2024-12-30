@@ -1,6 +1,6 @@
 export const MAX_PARAMS = 2000;
 
-const PARAM_REGIMES_BY_ORDER = {
+export const PARAM_REGIMES_BY_ORDER = {
   1: [
     { threshold: 80000, multiplier: 0, constant: 172 },
     { threshold: 35000, multiplier: 0.000367, constant: 143.5 },
@@ -13,7 +13,7 @@ const PARAM_REGIMES_BY_ORDER = {
   ],
   3: [
     { threshold: 54500, multiplier: 0, constant: 116 },
-    { threshold: 25000, multiplier: 0.000367, constant: 96 },
+    { threshold: 25000, multiplier: 0.000367, constant: 97 },
     { threshold: 0, multiplier: 0.0041, constant: 0 },
   ],
 };
