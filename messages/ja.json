@@ -12,6 +12,10 @@
       "title": "プロデュース評価計算機",
       "description": "プロデュース評価に必要な最終試験スコアを計算する"
     },
+    "niaCalculator": {
+      "title": "N.I.A計算機",
+      "description": "N.I.Aのオーディションボーナスとプロデュース評価を計算する"
+    },
     "lessonCalculator": {
       "title": "レッスンパラメータ計算機",
       "description": "レッスンによるパラメータ上昇量を計算する"
@@ -49,6 +53,11 @@
     "title": "Gakumas Tools - 学マスツール",
     "introduction": "プロデュース評価に必要な最終試験スコアの計算、メモリー生成確率の計算、コンテスト編成のシミュレーションなど、便利な機能が揃っています。"
   },
+  "Calculator": {
+    "scenario": "シナリオ",
+    "hajime": "初",
+    "nia": "N.I.A"
+  },
   "ProduceRankCalculator": {
     "scenarios": {
       "hajime": "初",
@@ -71,15 +80,25 @@
     "finalExamPlacement": "最終試験順位",
     "parameter": "パラメータ",
     "parameters": "パラメータ",
+    "parametersPreAudition": "パラメータ（オーディション前）",
     "parametersPostAudition": "パラメータ（オーディション後）",
-    "voteCount": "ファン投票数",
-    "votesPostAudition": "ファン投票数（オーディション後）",
-    "voteCountRank": "投票数ランク",
     "targetScores": "目標スコア",
     "produceRank": "プロデュース評価",
     "targetScore": "目標スコア",
     "score": "スコア",
-    "niaNote": "※オーディションボーナスのパラメータや投票数の計算方法が分かり次第、機能を更新していきます。"
+    "niaNote": "※オーディションボーナスのパラメータや投票数の計算方法が分かり次第、機能を更新していきます。<br></br>現在の計算はFINALE、親愛度20、ファン投票数4万以上前提です。<br></br>実際の値とのずれる場合があります。大きくずれたらゲームのスクショ付けてX(<link>@surisuririsu</link>)で報告してください。",
+    "evaluationCriteria": "審査基準",
+    "paramsPreAudition": "パラメータ (オーディション前)",
+    "paramBonusPct": "パラメータボーナス%",
+    "votesPreAudition": "ファン投票数 (オーディション前)",
+    "paramMaximizingScores": "パラメータを最大化するスコア",
+    "voteCount": "ファン投票数",
+    "scores": "スコア",
+    "gainedParams": "パラメータ上昇",
+    "bonusParams": "パラメータボーナス",
+    "paramsPostAudition": "パラメータ (オーディション後)",
+    "gainedVotes": "ファン投票数上昇",
+    "votesPostAudition": "ファン投票数 (オーディション後)"
   },
   "LessonCalculator": {
     "difficulties": {
