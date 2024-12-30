@@ -1,0 +1,22 @@
+@import "@/constants";
+
+.badges {
+  display: flex;
+  justify-content: space-around;
+  margin: 8px 0;
+}
+
+.badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  padding: 4px;
+  background-color: $white;
+  border-radius: 50vh;
+
+  @include param-colors using ($param-color) {
+    color: $param-color;
+    box-shadow: 0 0 8px $param-color;
+  }
+}
