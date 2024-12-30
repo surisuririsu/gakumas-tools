@@ -138,6 +138,8 @@ export default function NiaCalculator() {
           </span>
         </>
       )}
+
+      <div className={styles.spacer} />
     </>
   );
 }
