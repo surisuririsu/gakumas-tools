@@ -20,18 +20,18 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   },
   galaxy: {
     1: [
-      { threshold: 25000, multiplier: 0, constant: 119 },
-      { threshold: 11500, multiplier: 0.00075, constant: 100 },
+      { threshold: 25350, multiplier: 0, constant: 119 },
+      { threshold: 12400, multiplier: 0.00075, constant: 100 },
       { threshold: 0, multiplier: 0.0087, constant: 1.5 },
     ],
     2: [
-      { threshold: 18000, multiplier: 0, constant: 98 },
-      { threshold: 10000, multiplier: 0.00075, constant: 82.75 },
+      { threshold: 20400, multiplier: 0, constant: 98 },
+      { threshold: 10200, multiplier: 0.00075, constant: 82.75 },
       { threshold: 0, multiplier: 0.0087, constant: 1.4 },
     ],
     3: [
-      { threshold: 16000, multiplier: 0, constant: 80 },
-      { threshold: 8500, multiplier: 0.00075, constant: 67.7 },
+      { threshold: 16400, multiplier: 0, constant: 80 },
+      { threshold: 8400, multiplier: 0.00075, constant: 67.7 },
       { threshold: 0, multiplier: 0.0087, constant: 1.3 },
     ],
   },
