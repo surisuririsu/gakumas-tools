@@ -87,6 +87,7 @@
     "targetScore": "目標スコア",
     "score": "スコア",
     "niaNote": "※オーディションボーナスのパラメータや投票数の計算方法が分かり次第、機能を更新していきます。<br></br>現在の計算はFINALE、親愛度20、ファン投票数4万以上前提です。<br></br>実際の値とのずれる場合があります。大きくずれたらゲームのスクショ付けてX(<link>@surisuririsu</link>)で報告してください。",
+    "stage": "ステージ",
     "evaluationCriteria": "審査基準",
     "paramsPreAudition": "パラメータ (オーディション前)",
     "paramBonusPct": "パラメータボーナス%",
