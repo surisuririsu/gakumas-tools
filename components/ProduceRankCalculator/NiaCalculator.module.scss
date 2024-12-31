@@ -1,9 +1,9 @@
 @import "@/constants";
 
-.note a {
-  color: $blue;
-}
+.note {
+  margin-top: 24px;
 
-.spacer {
-  margin-bottom: 80px;
+  a {
+    color: $blue;
+  }
 }
