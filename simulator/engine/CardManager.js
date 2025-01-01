@@ -379,8 +379,8 @@ export default class CardManager extends EngineComponent {
     });
   }
 
-  moveCardToHand(state, cardId) {
-    const card = state[S.cardMap].findIndex((c) => c.id == cardId);
+  moveCardToHand(state, cardBaseId) {
+    const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
     let index = state[S.deckCards].indexOf(card);
     if (index != -1) {
       state[S.deckCards].splice(index, 1);
