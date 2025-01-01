@@ -215,6 +215,12 @@ export default class EffectManager extends EngineComponent {
               growthCards.add(k);
             }
             break;
+          } else if (/^\d+$/.test(target)) {
+            for (let k = 0; k < state[S.cardMap].length; k++) {
+              if (state[S.cardMap][k].baseId == target) {
+                growthCards.add(k);
+              }
+            }
           }
         }
 
