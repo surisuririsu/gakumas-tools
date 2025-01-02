@@ -379,8 +379,19 @@ export default class CardManager extends EngineComponent {
     });
   }
 
-  moveCardToHand(state, cardBaseId) {
-    const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
+  moveCardToHand(state, cardId, exact) {
+    let cards = state[S.cardMap]
+      .map((c, i) => {
+        if (exact && c.id == cardId) return i;
+        if (!exact && c.baseId == cardId) return i;
+        return -1;
+      })
+      .filter((i) => i != -1);
+
+    if (!cards.length) return;
+
+    const card = cards[Math.floor(getRand() * cards.length)];
+
     let index = state[S.deckCards].indexOf(card);
     if (index != -1) {
       state[S.deckCards].splice(index, 1);
