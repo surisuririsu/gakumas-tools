@@ -85,14 +85,19 @@ function NavbarMenu() {
             </div>
           </div>
 
-          {locale == "ja" && (
+          {locale != "en" && (
             <Link href={pathname} locale="en">
               English
             </Link>
           )}
-          {locale == "en" && (
+          {locale != "ja" && (
             <Link href={pathname} locale="ja">
               日本語
+            </Link>
+          )}
+          {locale != "zh-Hans" && (
+            <Link href={pathname} locale="zh-Hans">
+              简体中文
             </Link>
           )}
 
