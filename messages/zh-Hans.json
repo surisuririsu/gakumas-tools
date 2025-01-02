@@ -1,0 +1,295 @@
+{
+  "metadata": {
+    "title": "学マス工具站",
+    "description": "学マス工具站是一个为初星学园的制作人提供实用工具的工具站。在这里可以计算等级所需的考试分数、查看道具和技能卡的信息、整理记忆卡、规划并模拟竞技场阵容等。成为最优秀的制作人，帮助你的偶像闪耀吧！"
+  },
+  "tools": {
+    "home": {
+      "title": "主页",
+      "description": "可用工具概览"
+    },
+    "produceRankCalculator": {
+      "title": "制作评级计算器",
+      "description": "计算达到目标评价需要取得的期末考试分数"
+    },
+    "niaCalculator": {
+      "title": "N.I.A 计算器",
+      "description": "计算 N.I.A 的试镜加成和培育评级"
+    },
+    "lessonCalculator": {
+      "title": "课程计算器",
+      "description": "计算从课程中获得的范围加成"
+    },
+    "dex": {
+      "title": "制作人图鉴",
+      "description": "筛选并查看道具以及技能卡信息"
+    },
+    "memoryCalculator": {
+      "title": "回忆计算器",
+      "description": "计算在记忆中获得所需技能卡的概率"
+    },
+    "memories": {
+      "title": "回忆",
+      "description": "创建或者导入回忆,并根据道具和技能卡进行搜索"
+    },
+    "simulator": {
+      "title": "竞技场模拟器",
+      "description": "创建并模拟竞技场阵容"
+    },
+    "rehearsal": {
+      "title": "排练解析器",
+      "description": "从排练截图中解析分数"
+    }
+  },
+  "NavbarMenu": {
+    "menu": "菜单",
+    "signInWithDiscord": "Discord 登入",
+    "home": "主页",
+    "gakumasContestWiki": "学マス竞技场Wiki",
+    "sendFeedback": "反馈",
+    "signOut": "登出"
+  },
+  "Welcome": {
+    "title": "学マス工具站",
+    "introduction": "一个为学マス而生的工具站。这里有着计算达到目标评级所需得分、查看道具以及技能卡信息、导入以及查找回忆、模拟竞技场阵容等功能"
+  },
+  "Calculator": {
+    "scenario": "剧本",
+    "hajime": "初",
+    "nia": "N.I.A"
+  },
+  "ProduceRankCalculator": {
+    "scenarios": {
+      "hajime": "初",
+      "nia": "N.I.A"
+    },
+    "difficulties": {
+      "regular": "Regular",
+      "pro": "Pro",
+      "master": "Master"
+    },
+    "places": {
+      "1": "1st",
+      "2": "2nd",
+      "3": "3rd",
+      "4": "其他名次"
+    },
+    "scenario": "剧本",
+    "difficulty": "难度",
+    "parameterLimit": "属性上限",
+    "finalExamPlacement": "期末考试名次",
+    "parameter": "属性加成",
+    "parameters": "属性",
+    "targetScores": "目标分数",
+    "produceRank": "制作评级",
+    "targetScore": "目标分数",
+    "score": "最终得分",
+    "niaNote": "※ 随着我们进一步了解分数加成的参数和投票数的计算方法，本功能将持续更新。<br></br>目前的计算基于好感度等级20，且至少达到 A+ 的情况。<br></br>如果您发现计算有误的情况，请将截图发送至此X账号 <link>@surisuririsu</link> ",
+    "stage": "舞台",
+    "evaluationCriteria": "评级标准",
+    "paramsPreAudition": "属性（试镜前）",
+    "paramBonusPct": "属性加成 %",
+    "votesPreAudition": "票数（试镜前）",
+    "paramHighGrowthScores": "属性增长在超过此分数后会减缓",
+    "paramMaximizingScores": "属性增长在超过此分数后会停止",
+    "voteCount": "票数",
+    "scores": "属性得分",
+    "gainedParams": "获得属性",
+    "bonusParams": "属性加成",
+    "paramsPostAudition": "属性（试镜后）",
+    "gainedVotes": "获得票数",
+    "votesPostAudition": "票数（试镜后）"
+  },
+  "LessonCalculator": {
+    "difficulties": {
+      "regular": "Regular",
+      "pro": "Pro",
+      "master": "Master"
+    },
+    "difficulty": "难度",
+    "lessonBonus": "课程加成 %",
+    "limitIncrease": "上限提升",
+    "lessons": "课程",
+    "week": "周",
+    "type": "类型",
+    "normal": "普通",
+    "sp": "SP",
+    "oikomi": "追加练习",
+    "score": "分数"
+  },
+  "Dex": {
+    "skillCards": "技能卡",
+    "pItems": "道具"
+  },
+  "EntityBank": {
+    "filter": "筛选"
+  },
+  "EntityIcon": {
+    "high": "H",
+    "low": "L"
+  },
+  "EntityCustomizer": {
+    "customization": "自定义"
+  },
+  "CustomizationModal": {
+    "apply": "应用"
+  },
+  "MemoryCalculator": {
+    "note": "注意: 显示的概率是基于均匀分布的估算值，实际的技能卡选择算法尚不明确。",
+    "target": "目标技能卡",
+    "acquired": "已获得的技能卡（包括升级前/后）",
+    "produceRank": "制作评级",
+    "costRange": "容量范围",
+    "success": "成功",
+    "failure": "失败"
+  },
+  "TargetSkillCards": {
+    "acquired": "已获得"
+  },
+  "MemorySummaryActionButtons": {
+    "edit": "编辑"
+  },
+  "MemoryEditorModal": {
+    "name": "命名",
+    "contestPower": "综合竞争力",
+    "cost": "容量"
+  },
+  "ParametersInput": {
+    "stamina": "体力"
+  },
+  "MemorySave": {
+    "save": "保存",
+    "saveAsNew": "作为新回忆保存",
+    "signInToSave": "登入 Discord 以同步保存"
+  },
+  "MemoriesNudge": {
+    "create": "创建新回忆",
+    "import": "从截图导入回忆"
+  },
+  "MemoriesHeader": {
+    "selected": "{num} 个回忆被选中",
+    "delete": "删除"
+  },
+  "Simulator": {
+    "supportBonus": "支援加成 %",
+    "enterPercents": "由于分数倍数的计算方式未知，请直接输入倍数（%）。",
+    "simulate": "模拟",
+    "lastUpdated": "最后更新于"
+  },
+  "StageSelect": {
+    "placeholder": "选择舞台"
+  },
+  "StageSelectModal": {
+    "contest": "Contest",
+    "event": "Event",
+    "custom": "Custom"
+  },
+  "StageSummary": {
+    "contestStageName": "Season {season} - Stage {stage}",
+    "eventStageName": "{name} - Stage {stage} - Round {round}",
+    "custom": "Custom"
+  },
+  "StageCustomizer": {
+    "turnCounts": "Turn counts",
+    "firstTurn": "First turn rate",
+    "criteria": "Criteria",
+    "effects": "Effects",
+    "effectFormat": "Effect format",
+    "defaultCards": "Default cards",
+    "contest": "Contest",
+    "event": "Event",
+    "apply": "应用"
+  },
+  "LoadoutSkillCardGroup": {
+    "cost": "Cost"
+  },
+  "SimulatorSubTools": {
+    "costRanges": "Cost ranges",
+    "history": "History β",
+    "defaultCards": "Default cards"
+  },
+  "CostRanges": {
+    "rank": "Rank",
+    "min": "Min",
+    "max": "Max"
+  },
+  "SimulatorButtons": {
+    "confirm": "您确定要清除配置吗？",
+    "clear": "清除"
+  },
+  "ConfirmModal": {
+    "cancel": "取消",
+    "ok": "确认"
+  },
+  "SimulatorResult": {
+    "min": "最低分",
+    "average": "平均分",
+    "median": "中位分",
+    "max": "最高分",
+    "logs": "记录"
+  },
+  "SimulatorResultGraphs": {
+    "score": "分数"
+  },
+  "stage": {
+    "turnsRemaining": "剩余回合",
+    "cardUsesRemaining": "技能卡使用次数",
+    "stamina": "体力",
+    "genki": "元气",
+    "score": "分数",
+    "goodConditionTurns": "好调",
+    "perfectConditionTurns": "绝好调",
+    "concentration": "集中",
+    "goodImpressionTurns": "好印象",
+    "motivation": "干劲",
+    "stance": "指针",
+    "none": "无",
+    "preservation": "温存 1",
+    "preservation2": "温存 2",
+    "strength": "强气 1",
+    "strength2": "强气 2",
+    "fullPower": "全力",
+    "fullPowerCharge": "全力值",
+    "lockStanceTurns": "指针固定",
+    "enthusiasm": "热意",
+    "halfCostTurns": "体力消耗减半",
+    "doubleCostTurns": "体力消耗翻倍",
+    "costReduction": "体力消耗减小",
+    "costIncrease": "体力消耗增加",
+    "doubleCardEffectCards": "卡牌效果额外生效",
+    "nullifyGenkiTurns": "元气增加无效",
+    "nullifyDebuff": "负面状态无效",
+    "poorConditionTurns": "不调",
+    "nullifyCostCards": "体力消费无效",
+    "scoreBuff": "分数上升量增加",
+    "turn": "回合",
+    "cardDrawn": "抽取技能卡",
+    "upgradedHand": "在课程中强化技能卡",
+    "exchangedHand": "更换持有技能卡",
+    "setEffect": "赋予持续效果",
+    "addedCardToHand": "生成技能卡",
+    "upgradedCard": "临时强化技能卡",
+    "cardGrowth": "强化技能卡",
+    "effect": "发动效果",
+    "stageEffect": "舞台效果",
+    "skillCard": "技能卡",
+    "pItem": "道具",
+    "numTurns": "第 {num} 回合",
+    "hand": "持有技能卡",
+    "turnN": "回合 {n}",
+    "average": "平均值",
+    "unplayable": "无法使用"
+  },
+  "BoxPlot": {
+    "max": "最大",
+    "q3": "Q3",
+    "mean": "平均",
+    "median": "中值",
+    "q1": "Q1",
+    "min": "Min"
+  },
+  "Rehearsal": {
+    "addScreenshots": "添加竞技场配队结果的屏幕截图以解析分数。",
+    "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。"
+  }
+}
