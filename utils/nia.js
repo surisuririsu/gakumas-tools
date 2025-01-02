@@ -4,17 +4,17 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   melobang: {
     1: [
       { threshold: 2600, multiplier: 0, constant: 92 },
-      { threshold: 1300, multiplier: 0.00548, constant: 78.22 },
+      { threshold: 1300, multiplier: 0.00547, constant: 78.22 },
       { threshold: 0, multiplier: 0.066, constant: 0 },
     ],
     2: [
       { threshold: 2050, multiplier: 0, constant: 76 },
-      { threshold: 1060, multiplier: 0.00548, constant: 64.6 },
+      { threshold: 1060, multiplier: 0.00547, constant: 64.6 },
       { threshold: 0, multiplier: 0.066, constant: 0.25 },
     ],
     3: [
       { threshold: 1700, multiplier: 0, constant: 62 },
-      { threshold: 870, multiplier: 0.00548, constant: 53.22 },
+      { threshold: 860, multiplier: 0.00547, constant: 53.25 },
       { threshold: 0, multiplier: 0.066, constant: 0.8 },
     ],
   },
