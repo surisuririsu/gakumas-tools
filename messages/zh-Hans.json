@@ -180,38 +180,38 @@
     "placeholder": "选择舞台"
   },
   "StageSelectModal": {
-    "contest": "Contest",
-    "event": "Event",
-    "custom": "Custom"
+    "contest": "竞技场",
+    "event": "活动",
+    "custom": "自定义"
   },
   "StageSummary": {
     "contestStageName": "Season {season} - Stage {stage}",
     "eventStageName": "{name} - Stage {stage} - Round {round}",
-    "custom": "Custom"
+    "custom": "自定义"
   },
   "StageCustomizer": {
-    "turnCounts": "Turn counts",
-    "firstTurn": "First turn rate",
-    "criteria": "Criteria",
-    "effects": "Effects",
-    "effectFormat": "Effect format",
-    "defaultCards": "Default cards",
-    "contest": "Contest",
-    "event": "Event",
+    "turnCounts": "回合数",
+    "firstTurn": "首回合率",
+    "criteria": "评级标准",
+    "effects": "舞台效果",
+    "effectFormat": "语法格式",
+    "defaultCards": "基本技能卡",
+    "contest": "竞技场",
+    "event": "活动",
     "apply": "应用"
   },
   "LoadoutSkillCardGroup": {
-    "cost": "Cost"
+    "cost": "容量"
   },
   "SimulatorSubTools": {
-    "costRanges": "Cost ranges",
-    "history": "History β",
-    "defaultCards": "Default cards"
+    "costRanges": "容量范围",
+    "history": "历史记录 β",
+    "defaultCards": "基本技能卡"
   },
   "CostRanges": {
-    "rank": "Rank",
-    "min": "Min",
-    "max": "Max"
+    "rank": "评级",
+    "min": "最小值",
+    "max": "最大值"
   },
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
