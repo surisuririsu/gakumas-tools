@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "学マス工具站",
-    "description": "学マス工具站是一个为初星学园的制作人提供实用工具的工具站。在这里可以计算等级所需的考试分数、查看道具和技能卡的信息、整理记忆卡、规划并模拟竞技场阵容等。成为最优秀的制作人，帮助你的偶像闪耀吧！"
+    "title": "学园偶像大师工具站",
+    "description": "学园偶像大师工具站是一个为初星学园的制作人提供实用工具的工具站。在这里可以计算等级所需的考试分数、查看道具和技能卡的信息、整理记忆卡、规划并模拟竞技场阵容等。成为最优秀的制作人，帮助你的偶像闪耀吧！"
   },
   "tools": {
     "home": {
@@ -10,31 +10,31 @@
     },
     "produceRankCalculator": {
       "title": "制作评级计算器",
-      "description": "计算达到目标评价需要取得的期末考试分数"
+      "description": "计算目标评价所需考试分数"
     },
     "niaCalculator": {
       "title": "N.I.A 计算器",
       "description": "计算 N.I.A 的试镜加成和培育评级"
     },
     "lessonCalculator": {
-      "title": "课程计算器",
-      "description": "计算从课程中获得的范围加成"
+      "title": "训练计算器",
+      "description": "计算训练属性提升量"
     },
     "dex": {
       "title": "制作人图鉴",
-      "description": "筛选并查看道具以及技能卡信息"
+      "description": "查看 P 道具与技能卡信息"
     },
     "memoryCalculator": {
       "title": "回忆计算器",
-      "description": "计算在记忆中获得所需技能卡的概率"
+      "description": "计算回忆卡中获得目标技能卡组合的概率"
     },
     "memories": {
       "title": "回忆",
-      "description": "创建或者导入回忆,并根据道具和技能卡进行搜索"
+      "description": "创建与保存回忆卡、检索 P 道具与技能卡"
     },
     "simulator": {
       "title": "竞技场模拟器",
-      "description": "创建并模拟竞技场阵容"
+      "description": "创建竞技场编成、模拟预测打分"
     },
     "rehearsal": {
       "title": "排练解析器",
@@ -50,8 +50,8 @@
     "signOut": "登出"
   },
   "Welcome": {
-    "title": "学マス工具站",
-    "introduction": "一个为学マス而生的工具站。这里有着计算达到目标评级所需得分、查看道具以及技能卡信息、导入以及查找回忆、模拟竞技场阵容等功能"
+    "title": "学园偶像大师工具站",
+    "introduction": "一个为学园偶像大师而生的工具站。本站有计算目标评级所需得分、回忆卡生成概率计算、查看P道具与技能卡信息、导入和搜索回忆卡、竞技场编成与打分模拟等功能"
   },
   "Calculator": {
     "scenario": "剧本",
@@ -107,9 +107,9 @@
       "master": "Master"
     },
     "difficulty": "难度",
-    "lessonBonus": "课程加成 %",
+    "lessonBonus": "属性加成 %",
     "limitIncrease": "上限提升",
-    "lessons": "课程",
+    "lessons": "训练",
     "week": "周",
     "type": "类型",
     "normal": "普通",
@@ -119,7 +119,7 @@
   },
   "Dex": {
     "skillCards": "技能卡",
-    "pItems": "道具"
+    "pItems": "P 道具"
   },
   "EntityBank": {
     "filter": "筛选"
@@ -151,7 +151,7 @@
   },
   "MemoryEditorModal": {
     "name": "命名",
-    "contestPower": "综合竞争力",
+    "contestPower": "总合力",
     "cost": "容量"
   },
   "ParametersInput": {
@@ -159,15 +159,15 @@
   },
   "MemorySave": {
     "save": "保存",
-    "saveAsNew": "作为新回忆保存",
+    "saveAsNew": "作为新回忆卡保存",
     "signInToSave": "登入 Discord 以同步保存"
   },
   "MemoriesNudge": {
-    "create": "创建新回忆",
-    "import": "从截图导入回忆"
+    "create": "创建回忆卡",
+    "import": "从截图导入回忆卡"
   },
   "MemoriesHeader": {
-    "selected": "{num} 个回忆被选中",
+    "selected": "{num} 个回忆卡被选中",
     "delete": "删除"
   },
   "Simulator": {
@@ -191,11 +191,11 @@
   },
   "StageCustomizer": {
     "turnCounts": "回合数",
-    "firstTurn": "首回合率",
-    "criteria": "评级标准",
-    "effects": "舞台效果",
+    "firstTurn": "首回合比例",
+    "criteria": "审查基准",
+    "effects": "场地效果",
     "effectFormat": "语法格式",
-    "defaultCards": "基本技能卡",
+    "defaultCards": "基本卡组",
     "contest": "竞技场",
     "event": "活动",
     "apply": "应用"
@@ -206,12 +206,12 @@
   "SimulatorSubTools": {
     "costRanges": "容量范围",
     "history": "历史记录 β",
-    "defaultCards": "基本技能卡"
+    "defaultCards": "基本卡组"
   },
   "CostRanges": {
     "rank": "评级",
-    "min": "最小值",
-    "max": "最大值"
+    "min": "最低容量",
+    "max": "最高容量"
   },
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
@@ -264,7 +264,7 @@
     "scoreBuff": "分数上升量增加",
     "turn": "回合",
     "cardDrawn": "抽取技能卡",
-    "upgradedHand": "在课程中强化技能卡",
+    "upgradedHand": "在训练中强化技能卡",
     "exchangedHand": "更换持有技能卡",
     "setEffect": "赋予持续效果",
     "addedCardToHand": "生成技能卡",
@@ -273,7 +273,7 @@
     "effect": "发动效果",
     "stageEffect": "舞台效果",
     "skillCard": "技能卡",
-    "pItem": "道具",
+    "pItem": "P 道具",
     "numTurns": "第 {num} 回合",
     "hand": "持有技能卡",
     "turnN": "回合 {n}",
