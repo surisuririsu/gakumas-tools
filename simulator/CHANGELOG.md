@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2024-01-04
+
+### Added
+
+- Last missing effect for おアツい視線
+
 ## 2025-01-01
 
 ### Added
