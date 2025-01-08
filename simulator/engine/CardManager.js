@@ -14,6 +14,7 @@ export default class CardManager extends EngineComponent {
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].id,
       usedCardBaseId: (state) =>
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
+      numHeldCards: (state) => state[S.heldCards].length,
     };
   }
 
