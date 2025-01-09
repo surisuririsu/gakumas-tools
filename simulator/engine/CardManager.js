@@ -415,7 +415,7 @@ export default class CardManager extends EngineComponent {
 
   hold(state, card) {
     // Hold the card
-    if (card) {
+    if (card != null) {
       const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       state[S.heldCards].push(card);
       this.logger.log(state, "holdCard", {
@@ -438,6 +438,8 @@ export default class CardManager extends EngineComponent {
   }
 
   holdSelectedFrom(state, ...sources) {
+    if (state[S.nullifyHold]) return;
+
     // Collect cards from specified sources
     const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
     const sourceCards = sourceKeys.map((k) => state[k]);

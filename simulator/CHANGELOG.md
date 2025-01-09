@@ -13,6 +13,7 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - Bug that caused not all held cards to be added to hand when entering full power stance
+- Bug that caused infinite recursion when evaluating cards to hold
 
 ## 2025-01-08
 
