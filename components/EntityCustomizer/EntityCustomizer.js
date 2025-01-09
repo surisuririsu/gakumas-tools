@@ -5,10 +5,6 @@ import CustomizationModal from "@/components/CustomizationModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import {
-  countCustomizations,
-  CUSTOMIZATIONS_BY_ID,
-} from "@/utils/customizations";
 import styles from "./EntityCustomizer.module.scss";
 import Customizations from "@/customizations/customizations";
 
@@ -25,7 +21,7 @@ function EntityCustomizer({ type, id, customizations = {}, onCustomize }) {
           type={type}
           id={id}
           idolId={idolId}
-          numCustomizations={countCustomizations(customizations)}
+          customizations={customizations}
           size="fill"
         />
       </div>

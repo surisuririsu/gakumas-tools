@@ -56,3 +56,25 @@ $custom-green: #1cc15c;
     }
   }
 }
+
+$effect: #ca5cfe;
+$cost: #02e28f;
+$buff: #09bfff;
+$score: #ff3482;
+$genki: #00b1e2;
+
+$c11n: (
+  "effect": $effect,
+  "cost": $cost,
+  "buff": $buff,
+  "score": $score,
+  "genki": $genki,
+);
+
+@mixin c11n-colors {
+  @each $type, $c11n-color in $c11n {
+    &.#{$type} {
+      @content ($c11n-color);
+    }
+  }
+}

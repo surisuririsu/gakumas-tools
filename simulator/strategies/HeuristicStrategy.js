@@ -1,5 +1,4 @@
-import { countCustomizations } from "@/utils/customizations";
-import { MINIMAL_STATE, S } from "../constants";
+import { S } from "../constants";
 import { deepCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
 
@@ -61,7 +60,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     nextState.logs[logIndex].data = {
       handCards: state[S.handCards].map((card) => ({
         id: state[S.cardMap][card].id,
-        c: countCustomizations(state[S.cardMap][card].c11n),
+        c: state[S.cardMap][card].c11n,
       })),
       scores,
       selectedIndex,
