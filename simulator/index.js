@@ -7,6 +7,7 @@ import STRATEGIES from "./strategies";
 export function simulate(idolStageConfig, strategyName, numRuns) {
   const engine = new StageEngine(idolStageConfig);
   const strategy = new STRATEGIES[strategyName](engine);
+  engine.strategy = strategy;
 
   let totalScore = 0;
   let averageScore = 0;

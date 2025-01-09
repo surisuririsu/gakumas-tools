@@ -249,7 +249,6 @@ export const ALL_FIELDS = [
   // Cards
   "cardMap",
   "deckCards",
-  "deckCards",
   "handCards",
   "discardedCards",
   "removedCards",
@@ -289,3 +288,9 @@ export const S = ALL_FIELDS.reduce((acc, cur, i) => {
   acc[cur] = i;
   return acc;
 }, {});
+
+export const HOLD_SOURCES_BY_ALIAS = {
+  hand: S.handCards,
+  deck: S.deckCards,
+  discards: S.discardedCards,
+};

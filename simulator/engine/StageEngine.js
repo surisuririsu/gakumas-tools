@@ -20,7 +20,7 @@ export default class StageEngine {
     this.executor = new Executor(this);
   }
 
-  getInitialState() {
+  getInitialState(skipEffects = false) {
     const state = {};
 
     // Logs
@@ -43,7 +43,11 @@ export default class StageEngine {
     this.cardManager.initializeState(state);
 
     // Effects
-    this.effectManager.initializeState(state);
+    if (skipEffects) {
+      state[S.effects] = [];
+    } else {
+      this.effectManager.initializeState(state);
+    }
 
     return state;
   }

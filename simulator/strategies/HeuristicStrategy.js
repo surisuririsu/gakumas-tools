@@ -1,5 +1,5 @@
 import { countCustomizations } from "@/utils/customizations";
-import { S } from "../constants";
+import { MINIMAL_STATE, S } from "../constants";
 import { deepCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
 
@@ -260,5 +260,23 @@ export default class HeuristicStrategy extends BaseStrategy {
     }
 
     return Math.round(score);
+  }
+
+  evaluateForHold(state, card) {
+    let previewState = this.engine.getInitialState(true);
+    previewState[S.cardMap] = deepCopy(state[S.cardMap]);
+    this.engine.buffManager.setStance(previewState, "fullPower");
+    previewState = this.engine.useCard(previewState, card);
+    return Math.round(previewState[S.score]);
+  }
+
+  pickCardToHold(state, cards) {
+    let scores = [];
+    for (let i = 0; i < cards.length; i++) {
+      scores.push(this.evaluateForHold(state, cards[i]));
+    }
+    const maxScore = Math.max(...scores);
+    const maxIndex = scores.indexOf(maxScore);
+    return maxIndex;
   }
 }
