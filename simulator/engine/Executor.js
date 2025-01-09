@@ -34,11 +34,11 @@ export default class Executor extends EngineComponent {
         engine.cardManager.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => engine.cardManager.holdThisCard(state),
       holdSelectedFromHand: (state) =>
-        engine.cardManager.holdSelectedFromHand(state),
+        engine.cardManager.holdSelectedFrom(state, "hand"),
       holdSelectedFromDeck: (state) =>
-        engine.cardManager.holdSelectedFromDeck(state),
+        engine.cardManager.holdSelectedFrom(state, "deck"),
       holdSelectedFromDeckOrDiscards: (state) =>
-        engine.cardManager.holdSelectedFromDeckOrDiscards(state),
+        engine.cardManager.holdSelectedFrom(state, "deck", "discards"),
       addHeldCardsToHand: (state) =>
         engine.cardManager.addHeldCardsToHand(state),
 

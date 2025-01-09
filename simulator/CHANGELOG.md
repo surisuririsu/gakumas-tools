@@ -3,6 +3,16 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-09
+
+### Changed
+
+- Strategy for selecting card to hold
+
+### Fixed
+
+- Bug that caused not all held cards to be added to hand when entering full power stance
+
 ## 2025-01-08
 
 ### Added

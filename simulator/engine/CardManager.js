@@ -1,5 +1,11 @@
 import { SkillCards } from "gakumas-data/lite";
-import { CARD_PILES, COST_FIELDS, FUNCTION_CALL_REGEX, S } from "../constants";
+import {
+  CARD_PILES,
+  COST_FIELDS,
+  FUNCTION_CALL_REGEX,
+  HOLD_SOURCES_BY_ALIAS,
+  S,
+} from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shallowCopy, shuffle } from "./utils";
 import Customizations from "@/customizations/customizations";
@@ -407,65 +413,80 @@ export default class CardManager extends EngineComponent {
     }
   }
 
+  hold(state, card) {
+    // Hold the card
+    if (card) {
+      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+      state[S.heldCards].push(card);
+      this.logger.log(state, "holdCard", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
+    }
+
+    // Discard cards if over limit
+    if (state[S.heldCards].length > 2) {
+      const skillCard = SkillCards.getById(
+        state[S.cardMap][state[S.heldCards][0]].id
+      );
+      state[S.heldCards] = state[S.heldCards].slice(1);
+      this.logger.log(state, "discardCard", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
+    }
+  }
+
+  holdSelectedFrom(state, ...sources) {
+    // Collect cards from specified sources
+    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
+    const sourceCards = sourceKeys.map((k) => state[k]);
+    const cards = [].concat(...sourceCards);
+    if (!cards.length) return;
+
+    // Pick card to hold based on strategy
+    let indexToHold = this.engine.strategy.pickCardToHold(state, cards);
+    if (indexToHold < 0) return;
+
+    // Find card and move to hold
+    for (let i = 0; i < sources.length; i++) {
+      if (indexToHold < sourceCards[i].length) {
+        const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
+        this.hold(state, card);
+        return;
+      } else {
+        indexToHold -= sourceCards[i].length;
+      }
+    }
+  }
+
   holdCard(state, cardBaseId) {
     const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
     for (let i = 0; i < CARD_PILES.length; i++) {
       const index = state[S[CARD_PILES[i]]].indexOf(card);
       if (index != -1) {
         state[S[CARD_PILES[i]]].splice(index, 1);
-        state[S.heldCards].push(card);
+        this.hold(state, card);
         break;
       }
     }
   }
 
   holdThisCard(state) {
-    state[S.heldCards].push(state[S.usedCard]);
+    this.hold(state, state[S.usedCard]);
     state[S.thisCardHeld] = true;
   }
 
-  holdSelectedFromHand(state) {
-    // TODO: Random for now
-    const randomIndex = Math.floor(getRand() * state[S.handCards].length);
-    const card = state[S.handCards].splice(randomIndex, 1)[0];
-    if (card != null) {
-      state[S.heldCards].push(card);
-    }
-    return state;
-  }
-
-  holdSelectedFromDeck(state) {
-    // TODO: Random for now
-    const randomIndex = Math.floor(getRand() * state[S.deckCards].length);
-    const card = state[S.deckCards].splice(randomIndex, 1)[0];
-
-    if (card) {
-      state[S.heldCards].push(card);
-    }
-  }
-
-  holdSelectedFromDeckOrDiscards(state) {
-    // TODO: Random for now
-    const randomIndex = Math.floor(
-      getRand() * (state[S.deckCards].length + state[S.discardedCards].length)
-    );
-    let card;
-    if (randomIndex >= state[S.deckCards].length) {
-      card = state[S.discardedCards].splice(
-        randomIndex - state[S.deckCards].length,
-        1
-      )[0];
-    } else {
-      card = state[S.deckCards].splice(randomIndex, 1)[0];
-    }
-    if (card) {
-      state[S.heldCards].push(card);
-    }
-  }
-
   addHeldCardsToHand(state) {
-    for (let i = 0; i < state[S.heldCards].length; i++) {
-      state[S.handCards].push(state[S.heldCards].pop());
+    while (state[S.heldCards].length) {
+      const card = state[S.heldCards].pop();
+      state[S.handCards].push(card);
+
+      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
     }
   }
 }
