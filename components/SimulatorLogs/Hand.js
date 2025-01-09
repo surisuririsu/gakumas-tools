@@ -65,7 +65,7 @@ function Hand({ handCards, scores, selectedIndex, state, idolId }) {
               <EntityIcon
                 type={EntityTypes.SKILL_CARD}
                 id={card.id}
-                numCustomizations={card.c}
+                customizations={card.c}
                 idolId={idolId}
                 size="fill"
               />

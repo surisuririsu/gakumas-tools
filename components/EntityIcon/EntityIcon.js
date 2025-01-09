@@ -2,14 +2,14 @@ import { memo } from "react";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import { ENTITY_DATA_BY_TYPE, EntityTypes } from "@/utils/entities";
-import CustomizationCount from "./CustomizationCount";
+import CustomizationCounts from "./CustomizationCounts";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
 
 function EntityIcon({
   type,
   id,
-  numCustomizations,
+  customizations,
   idolId,
   size = "large",
   onClick,
@@ -37,7 +37,9 @@ function EntityIcon({
             )}
           </>
         )}
-        {!!numCustomizations && <CustomizationCount num={numCustomizations} />}
+        {!!customizations && (
+          <CustomizationCounts customizations={customizations} />
+        )}
       </button>
     );
   } else {
@@ -52,7 +54,9 @@ function EntityIcon({
             draggable={false}
           />
         )}
-        {!!numCustomizations && <CustomizationCount num={numCustomizations} />}
+        {!!customizations && (
+          <CustomizationCounts customizations={customizations} />
+        )}
       </div>
     );
   }

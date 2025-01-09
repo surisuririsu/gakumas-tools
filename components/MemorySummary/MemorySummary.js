@@ -8,7 +8,6 @@ import { PItems, SkillCards } from "@/utils/data";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
 import { EntityTypes } from "@/utils/entities";
-import { countCustomizations } from "@/utils/customizations";
 
 function MemorySummary({ memory, picking, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
@@ -63,7 +62,7 @@ function MemorySummary({ memory, picking, onClick }) {
               <EntityIcon
                 type={EntityTypes.SKILL_CARD}
                 id={skillCard.id}
-                numCustomizations={countCustomizations(customizations?.[i])}
+                customizations={customizations?.[i]}
                 idolId={idolId}
                 size="fill"
               />
