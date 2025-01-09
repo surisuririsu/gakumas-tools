@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Changed
 
 - Strategy for selecting card to hold
+- Color-coded customization counts
 
 ### Fixed
 
