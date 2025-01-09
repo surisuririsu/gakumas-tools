@@ -38,6 +38,7 @@ button.entityIcon:hover {
   position: absolute;
   top: 60%;
   display: flex;
+  gap: 2px;
 }
 
 .customization {
@@ -55,6 +56,12 @@ button.entityIcon:hover {
     background-color: $c11n-color;
     border: 1px solid lighten($c11n-color, 20%);
     box-shadow: 0 0 6px $c11n-color;
+  }
+
+  @container (width < 600px) {
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
   }
 }
 
