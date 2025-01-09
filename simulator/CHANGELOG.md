@@ -7,7 +7,8 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of campus mode vol 3
+- Campus mode vol. 3
+- Preview of season 16 contest
 
 ## 2025-01-04
 
