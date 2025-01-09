@@ -282,6 +282,7 @@ export const ALL_FIELDS = [
 
   // Special
   "hajikeruMizushibukiTurnUsed",
+  "nullifyHold",
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {
