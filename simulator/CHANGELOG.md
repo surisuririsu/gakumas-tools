@@ -9,6 +9,7 @@ Dates are based on Eastern Time Zone.
 
 - Strategy for selecting card to hold
 - Color-coded customization counts
+- Updated season 16 contest
 
 ### Fixed
 
