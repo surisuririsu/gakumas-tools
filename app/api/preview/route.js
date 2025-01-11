@@ -1,21 +1,14 @@
 import { ImageResponse } from "next/og";
 import Preview from "@/components/Preview";
-import { deserializeIds } from "@/utils/ids";
-
-const DEFAULT_ITEM_IDS_STR = "0-0-0-0";
-const DEFAULT_SKILL_CARD_ID_GROUPS_STR = "0-0-0-0-0-0_0-0-0-0-0-0";
+import { loadoutFromSearchParams } from "@/utils/simulator";
 
 export async function GET(request) {
   const { searchParams, host, protocol } = new URL(request.url);
 
-  let itemIds = searchParams.get("items") || DEFAULT_ITEM_IDS_STR;
-  let skillCardIdGroups =
-    searchParams.get("cards") || DEFAULT_SKILL_CARD_ID_GROUPS_STR;
+  const loadout = loadoutFromSearchParams(searchParams);
+  const { pItemIds, skillCardIdGroups, customizationGroups } = loadout;
 
-  const isEmpty = skillCardIdGroups == DEFAULT_SKILL_CARD_ID_GROUPS_STR;
-
-  itemIds = deserializeIds(itemIds);
-  skillCardIdGroups = skillCardIdGroups.split("_").map(deserializeIds);
+  const isEmpty = skillCardIdGroups.every((g) => g.every((c) => c == 0));
 
   const height =
     32 + // Margin
@@ -27,8 +20,9 @@ export async function GET(request) {
     (
       <Preview
         baseUrl={`${protocol}//${host}`}
-        itemIds={itemIds}
+        itemIds={pItemIds}
         skillCardIdGroups={skillCardIdGroups}
+        customizationGroups={customizationGroups}
         isEmpty={isEmpty}
       />
     ),
