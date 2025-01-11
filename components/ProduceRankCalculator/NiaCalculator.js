@@ -7,7 +7,6 @@ import ParametersInput from "@/components/ParametersInput";
 import ParamOrderPicker from "@/components/ParamOrderPicker";
 import { getRank } from "@/utils/produceRank";
 import {
-  AFFECTION_MULTIPLIERS,
   calculateBonusParams,
   calculateGainedParams,
   calculateGainedVotes,
@@ -17,7 +16,6 @@ import {
   getVoteRank,
   MAX_PARAMS,
   PARAM_REGIMES_BY_ORDER_BY_STAGE,
-  VOTE_REGIMES_BY_STAGE,
 } from "@/utils/nia";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
@@ -29,20 +27,22 @@ const STAGE_OPTIONS = [
   { value: "finale", label: "FINALE" },
 ];
 
-const AFFECTION_OPTIONS = Object.keys(AFFECTION_MULTIPLIERS).map((k) => ({
-  value: k,
-  label: k,
-}));
-
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
+
+  const PROGRESS_OPTIONS = [
+    { value: 1, label: t("runN", { num: 1 }) },
+    { value: 2, label: t("runN", { num: 2 }) },
+    { value: 3, label: t("runN", { num: 3 }) },
+    { value: 4, label: t("runN+", { num: 4 }) },
+  ];
 
   const [stage, setStage] = useState("finale");
   const [paramOrder, setParamOrder] = useState([1, 2, 3]);
   const [params, setParams] = useState([null, null, null]);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
   const [votes, setVotes] = useState(0);
-  const [affection, setAffection] = useState(20);
+  const [progress, setProgress] = useState(4);
   const [scores, setScores] = useState([null, null, null]);
 
   const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
@@ -55,7 +55,7 @@ export default function NiaCalculator() {
     bonusParams
   );
   const totalScore = scores.reduce((acc, cur) => acc + cur, 0);
-  const gainedVotes = calculateGainedVotes(stage, affection, totalScore);
+  const gainedVotes = calculateGainedVotes(stage, progress, totalScore);
   const totalVotes = votes + gainedVotes;
   const voteRank = getVoteRank(totalVotes);
 
@@ -80,11 +80,11 @@ export default function NiaCalculator() {
         onChange={setStage}
       />
 
-      <label>{t("affection")}</label>
+      <label>{t("characterProgress")}</label>
       <ButtonGroup
-        options={AFFECTION_OPTIONS}
-        selected={affection}
-        onChange={setAffection}
+        options={PROGRESS_OPTIONS}
+        selected={progress}
+        onChange={setProgress}
       />
 
       <label>{t("evaluationCriteria")}</label>
