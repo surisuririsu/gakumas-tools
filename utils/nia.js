@@ -101,12 +101,40 @@ export function calculatePostAuditionParams(params, gainedParams, bonusParams) {
   );
 }
 
-export function calculateGainedVotes(score) {
-  if (score < 200000) {
-    return Math.floor(score * 0.160057 + 3248);
-  } else {
-    return Math.floor(score * 0.0048 + 34176);
+export const VOTE_REGIMES_BY_STAGE = {
+  melobang: [
+    { threshold: 10710, multiplier: 0, constant: 12000 },
+    { threshold: 5400, multiplier: 0.1464, constant: 10434 },
+    { threshold: 0, multiplier: 1.949, constant: 783 },
+  ],
+  galaxy: [
+    { threshold: 64500, multiplier: 0.00541, constant: 14609 },
+    { threshold: 0, multiplier: 0.1804, constant: 3362 },
+  ],
+  finale: [
+    { threshold: 200000, multiplier: 0.0048, constant: 34176 },
+    { threshold: 0, multiplier: 0.160057, constant: 3248 },
+  ],
+};
+
+export const AFFECTION_MULTIPLIERS = {
+  20: 30 / 30,
+  17: 27 / 30,
+  13: 23 / 30,
+  12: 20 / 30,
+};
+
+export function calculateGainedVotes(stage, affection, score) {
+  const regimes = VOTE_REGIMES_BY_STAGE[stage];
+  for (let j = 0; j < regimes.length; j++) {
+    const { threshold, multiplier, constant } = regimes[j];
+    if (score > threshold) {
+      return Math.floor(
+        (score * multiplier + constant) * AFFECTION_MULTIPLIERS[affection]
+      );
+    }
   }
+  return 0;
 }
 
 const VOTE_RANKS = [

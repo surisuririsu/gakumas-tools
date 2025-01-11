@@ -86,6 +86,7 @@
     "score": "Score",
     "niaNote": "※Functionality will be updated as we learn more about parameter and vote counts from audition bonus.<br></br>Current calculations are for affection 20 with at least A+ vote rank only.<br></br>If you find a case where the calculation is inaccurate, please send it with screenshots to <link>@surisuririsu</link> on X.",
     "stage": "Stage",
+    "affection": "Affection",
     "evaluationCriteria": "Evaluation criteria",
     "paramsPreAudition": "Params (pre-audition)",
     "paramBonusPct": "Param bonus %",
