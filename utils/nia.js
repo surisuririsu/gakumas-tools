@@ -117,11 +117,11 @@ export const VOTE_REGIMES_BY_STAGE = {
   ],
 };
 
-export const AFFECTION_MULTIPLIERS = {
-  20: 30 / 30,
-  17: 27 / 30,
-  13: 23 / 30,
-  12: 20 / 30,
+export const PROGRESS_VOTE_MULTIPLIERS = {
+  4: 30 / 30,
+  3: 27 / 30,
+  2: 23 / 30,
+  1: 20 / 30,
 };
 
 export function calculateGainedVotes(stage, affection, score) {
@@ -130,7 +130,7 @@ export function calculateGainedVotes(stage, affection, score) {
     const { threshold, multiplier, constant } = regimes[j];
     if (score > threshold) {
       return Math.floor(
-        (score * multiplier + constant) * AFFECTION_MULTIPLIERS[affection]
+        (score * multiplier + constant) * PROGRESS_VOTE_MULTIPLIERS[affection]
       );
     }
   }
