@@ -41,7 +41,14 @@ export default class IdolStageConfig {
     let multipliers = {};
 
     for (let key of Object.keys(criteria)) {
-      const param = Math.min(params[key], season < 10 ? 1800 : 2160);
+      let param = params[key];
+      if (season < 10) {
+        param = Math.min(param, 1800);
+      } else if (season < 16) {
+        param = Math.min(param, 2160);
+      } else {
+        param = Math.min(param, 2400);
+      }
       const criterion = criteria[key];
 
       let multiplier = 0;
