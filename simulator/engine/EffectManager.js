@@ -231,6 +231,13 @@ export default class EffectManager extends EngineComponent {
         if (effect.actions) {
           this.engine.executor.executeActions(state, effect.actions, card);
         }
+
+        // Delayed effects from p-items
+        if (effect.effects) {
+          this.logger.debug("Setting effects", effect.effects);
+          this.setEffects(state, effect.effects, effect.source);
+          this.logger.log(state, "setEffect");
+        }
       }
 
       // Log source end
