@@ -30,6 +30,8 @@ export default class Executor extends EngineComponent {
         engine.cardManager.addRandomUpgradedCardToHand(state),
       moveCardToHand: (state, cardId, exact) =>
         engine.cardManager.moveCardToHand(state, cardId, parseInt(exact, 10)),
+      moveCardToHandFromRemoved: (state, cardBaseId) =>
+        engine.cardManager.moveCardToHandFromRemoved(state, cardBaseId),
       holdCard: (state, cardBaseId) =>
         engine.cardManager.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => engine.cardManager.holdThisCard(state),

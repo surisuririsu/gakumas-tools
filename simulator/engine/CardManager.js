@@ -386,6 +386,7 @@ export default class CardManager extends EngineComponent {
     });
   }
 
+  // From deck/discards
   moveCardToHand(state, cardId, exact) {
     let cards = state[S.cardMap]
       .map((c, i) => {
@@ -403,13 +404,47 @@ export default class CardManager extends EngineComponent {
     if (index != -1) {
       state[S.deckCards].splice(index, 1);
       state[S.handCards].push(card);
+
+      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
       return;
     }
     index = state[S.discardedCards].indexOf(card);
     if (index != -1) {
       state[S.discardedCards].splice(index, 1);
       state[S.handCards].push(card);
+
+      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
       return;
+    }
+  }
+
+  moveCardToHandFromRemoved(state, cardBaseId) {
+    let cards = state[S.cardMap]
+      .map((c, i) => (c.baseId == cardBaseId ? i : -1))
+      .filter((i) => i != -1);
+
+    if (!cards.length) return;
+
+    const card = cards[Math.floor(getRand() * cards.length)];
+
+    const index = state[S.removedCards].indexOf(card);
+    if (index != -1) {
+      state[S.removedCards].splice(index, 1);
+      state[S.handCards].push(card);
+
+      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: skillCard.id,
+      });
     }
   }
 
