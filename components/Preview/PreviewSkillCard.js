@@ -1,4 +1,4 @@
-import Customizations from "@/customizations/customizations";
+import { Customizations } from "gakumas-data/lite";
 import { countCustomizations } from "@/utils/customizations";
 import styles from "./Preview.styles";
 

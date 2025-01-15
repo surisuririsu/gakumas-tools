@@ -1,12 +1,11 @@
 import { memo, useContext, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaPlus, FaMinus } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data/lite";
+import { Customizations, SkillCards } from "gakumas-data/lite";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
-import Customizations from "@/customizations/customizations";
 import c from "@/utils/classNames";
 import styles from "./CustomizationModal.module.scss";
 

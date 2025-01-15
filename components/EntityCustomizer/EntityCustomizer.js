@@ -1,12 +1,12 @@
 import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
 import { FaPlus } from "react-icons/fa6";
+import { Customizations } from "gakumas-data/lite";
 import CustomizationModal from "@/components/CustomizationModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import styles from "./EntityCustomizer.module.scss";
-import Customizations from "@/customizations/customizations";
 
 function EntityCustomizer({ type, id, customizations = {}, onCustomize }) {
   const t = useTranslations("EntityCustomizer");

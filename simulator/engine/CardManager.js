@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data/lite";
+import { Customizations, SkillCards } from "gakumas-data/lite";
 import {
   CARD_PILES,
   COST_FIELDS,
@@ -8,7 +8,6 @@ import {
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shallowCopy, shuffle } from "./utils";
-import Customizations from "@/customizations/customizations";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
