@@ -13,7 +13,12 @@ function MemorySummary({ memory, picking, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
     memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
-  const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
+  const contestPower = calculateContestPower(
+    params,
+    pItemIds,
+    skillCardIds,
+    customizations
+  );
 
   const pItems = useMemo(
     () => pItemIds.filter((p) => p).map(PItems.getById),

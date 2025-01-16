@@ -61,7 +61,7 @@ export async function getMemoryFromFile(
   }
 
   // Calculate contest power and flag those that are mismatched with the screenshot
-  const calculatedPower = calculateContestPower(params, items, cards);
+  const calculatedPower = calculateContestPower(params, items, cards, []);
   const flag =
     !powerCandidates.includes(calculatedPower) || itemsPIdolId != cardsPIdolId;
 

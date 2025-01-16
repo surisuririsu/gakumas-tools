@@ -37,7 +37,12 @@ function MemoryEditorModal() {
   const { idolId: workspaceIdolId } = useContext(WorkspaceContext);
 
   const idolId = PIdols.getById(pIdolId)?.idolId || workspaceIdolId;
-  const contestPower = calculateContestPower(params, pItemIds, skillCardIds);
+  const contestPower = calculateContestPower(
+    params,
+    pItemIds,
+    skillCardIds,
+    customizations
+  );
   const skillCardCost = calculateSkillCardCost(skillCardIds);
 
   return (

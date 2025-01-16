@@ -1,4 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data/lite";
+import { countCustomizations } from "./customizations";
 
 export const COST_RANGES = [
   { rank: "SS", min: 651, max: 804 },
@@ -18,7 +19,12 @@ export const COST_RANGES_BY_RANK = COST_RANGES.reduce((acc, cur) => {
   return acc;
 }, {});
 
-export function calculateContestPower(params, pItemIds, skillCardIds) {
+export function calculateContestPower(
+  params,
+  pItemIds,
+  skillCardIds,
+  customizations
+) {
   const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
   const paramPower = 3 * (vocal + dance + visual) + 24 * stamina;
   const pItems = pItemIds.filter((p) => !!p).map(PItems.getById);
@@ -28,7 +34,11 @@ export function calculateContestPower(params, pItemIds, skillCardIds) {
     (acc, cur) => acc + cur.contestPower,
     0
   );
-  return paramPower + pItemPower + skillCardPower;
+  const customizationPower = (customizations || []).reduce(
+    (acc, cur) => acc + countCustomizations(cur) * 36,
+    0
+  );
+  return paramPower + pItemPower + skillCardPower + customizationPower;
 }
 
 export function calculateSkillCardCost(skillCardIds) {
