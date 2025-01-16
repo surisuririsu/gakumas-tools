@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of campus mode vol 4
+- Campus mode vol 4
 
 ## 2025-01-11
 
