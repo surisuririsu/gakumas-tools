@@ -37,7 +37,8 @@ function Memories() {
           memory.contestPower = calculateContestPower(
             memory.params,
             memory.pItemIds,
-            memory.skillCardIds
+            memory.skillCardIds,
+            memory.customizations
           );
           return memory;
         })
