@@ -1,6 +1,7 @@
 "use client";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
+import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
@@ -15,7 +16,7 @@ import styles from "./MemoryImporterModal.module.scss";
 const MAX_WORKERS = 8;
 
 function MemoryImporterModal({ onSuccess }) {
-  // TODO: Add translations
+  const t = useTranslations("MemoryImporterModal");
 
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
@@ -105,7 +106,7 @@ function MemoryImporterModal({ onSuccess }) {
 
   return (
     <Modal>
-      <h3>Import memories from screenshots</h3>
+      <h3>{t("importMemories")}</h3>
       <div className={styles.help}>
         <Image
           src="/memory_importer_reference.png"
@@ -115,22 +116,9 @@ function MemoryImporterModal({ onSuccess }) {
         />
 
         <div>
-          <p>
-            Contest power, parameters, p-items, and skill card icons must be
-            visible in each screenshot.
-          </p>
-          <p>
-            Importing may take several seconds or minutes depending on the
-            number of memories imported and your device&apos;s processor and
-            memory. Your browser may crash if you try to import too many
-            memories at once. The recommended limit is 50 memories per batch.
-            Use on a smartphone is not recommended.
-          </p>
-          <p>
-            Some memories may fail to parse correctly, and require fixing after
-            import. In such cases, they will be marked with &quot;(FIXME)&quot;
-            in the name.
-          </p>
+          {t.rich("instructions", {
+            p: (chunks) => <p>{chunks}</p>,
+          })}
         </div>
       </div>
 
@@ -144,7 +132,11 @@ function MemoryImporterModal({ onSuccess }) {
 
       {progress != null && (
         <div className={styles.progress}>
-          Progress: {progress}/{total} {progress == total && <FaCheck />}
+          {t("progress", {
+            progress,
+            total,
+          })}{" "}
+          {progress == total && <FaCheck />}
         </div>
       )}
     </Modal>
