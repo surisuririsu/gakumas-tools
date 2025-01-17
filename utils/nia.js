@@ -3,7 +3,7 @@ export const MAX_PARAMS = 2000;
 export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   melobang: {
     1: [
-      { threshold: 2600, multiplier: 0, constant: 92 },
+      { threshold: 2550, multiplier: 0, constant: 92 },
       { threshold: 1300, multiplier: 0.00547, constant: 78.22 },
       { threshold: 0, multiplier: 0.066, constant: 0 },
     ],
@@ -13,7 +13,7 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
       { threshold: 0, multiplier: 0.066, constant: 0.25 },
     ],
     3: [
-      { threshold: 1700, multiplier: 0, constant: 62 },
+      { threshold: 1600, multiplier: 0, constant: 62 },
       { threshold: 860, multiplier: 0.00547, constant: 53.25 },
       { threshold: 0, multiplier: 0.066, constant: 0.8 },
     ],
