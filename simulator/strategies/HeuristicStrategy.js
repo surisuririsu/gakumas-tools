@@ -145,7 +145,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       state[S.genki] *
       Math.tanh(state[S.turnsRemaining] / 3) *
-      0.42 *
+      0.8 *
       this.motivationMultiplier;
 
     // Good condition turns
@@ -210,7 +210,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       state[S.motivation] *
       state[S.turnsRemaining] *
-      0.5 *
+      0.65 *
       this.motivationMultiplier;
 
     // Score buffs
