@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-17
+
+### Changed
+
+- Increased evaluation of genki and motivation in simulator strategy
+
 ## 2025-01-15
 
 ### Added
