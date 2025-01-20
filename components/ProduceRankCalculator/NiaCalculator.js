@@ -70,93 +70,99 @@ export default function NiaCalculator() {
   }
 
   return (
-    <>
-      <label>{t("affectionAtStartOfProduce")}</label>
-      <ButtonGroup
-        options={AFFECTION_OPTIONS}
-        selected={affection}
-        onChange={setAffection}
-      />
+    <div className={styles.nia}>
+      <section>
+        <label>{t("affectionAtStartOfProduce")}</label>
+        <ButtonGroup
+          options={AFFECTION_OPTIONS}
+          selected={affection}
+          onChange={setAffection}
+        />
 
-      <label>{t("evaluationCriteria")}</label>
-      <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
+        <label>{t("evaluationCriteria")}</label>
+        <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
 
-      <label>{t("paramBonusPct")}</label>
-      <ParametersInput
-        parameters={paramBonuses}
-        max={MAX_PARAMS}
-        onChange={setParamBonuses}
-        round={false}
-      />
+        <label>{t("paramBonusPct")}</label>
+        <ParametersInput
+          parameters={paramBonuses}
+          max={MAX_PARAMS}
+          onChange={setParamBonuses}
+          round={false}
+        />
+      </section>
 
-      <label>{t("stage")}</label>
-      <ButtonGroup
-        options={STAGE_OPTIONS}
-        selected={stage}
-        onChange={setStage}
-      />
+      <section>
+        <label>{t("stage")}</label>
+        <ButtonGroup
+          options={STAGE_OPTIONS}
+          selected={stage}
+          onChange={setStage}
+        />
 
-      <label>{t("paramsPreAudition")}</label>
-      <ParametersInput
-        parameters={params}
-        max={MAX_PARAMS}
-        onChange={setParams}
-      />
+        <label>{t("paramsPreAudition")}</label>
+        <ParametersInput
+          parameters={params}
+          max={MAX_PARAMS}
+          onChange={setParams}
+        />
 
-      <label>{t("votesPreAudition")}</label>
-      <Input
-        type="number"
-        value={votes || ""}
-        placeholder={t("voteCount")}
-        onChange={setVotes}
-        min={0}
-        max={10000000}
-      />
+        <label>{t("votesPreAudition")}</label>
+        <Input
+          type="number"
+          value={votes || ""}
+          placeholder={t("voteCount")}
+          onChange={setVotes}
+          min={0}
+          max={10000000}
+        />
+      </section>
 
-      <label>{t("paramHighGrowthScores")}</label>
-      <Params
-        params={paramOrder.map((order, i) =>
-          Math.min(
-            PARAM_REGIMES_BY_ORDER_BY_STAGE[stage][order][1].threshold,
-            maxScores[i]
-          )
+      <section>
+        <label>{t("paramHighGrowthScores")}</label>
+        <Params
+          params={paramOrder.map((order, i) =>
+            Math.min(
+              PARAM_REGIMES_BY_ORDER_BY_STAGE[stage][order][1].threshold,
+              maxScores[i]
+            )
+          )}
+        />
+        <label>{t("paramMaximizingScores")}</label>
+        <Params params={maxScores} />
+        {/* <>TODO: Add target scores</> */}
+        <label>{t("scores")}</label>
+        <ParametersInput
+          parameters={scores}
+          max={10000000}
+          onChange={setScores}
+        />
+        {!!totalScore && (
+          <>
+            <label>{t("gainedParams")}</label>
+            <ParamBadges params={gainedParams} />
+
+            <label>{t("bonusParams")}</label>
+            <ParamBadges params={bonusParams} />
+
+            <label>{t("paramsPostAudition")}</label>
+            <Params params={postAuditionParams} />
+
+            <label>{t("gainedVotes")}</label>
+            <div>+{gainedVotes}</div>
+
+            <label>{t("votesPostAudition")}</label>
+            <div>
+              {totalVotes}
+              {voteRank ? ` (${voteRank})` : null}
+            </div>
+
+            <label>{t("produceRank")}</label>
+            <span>
+              {actualRating} {actualRank ? `(${actualRank})` : null}
+            </span>
+          </>
         )}
-      />
-      <label>{t("paramMaximizingScores")}</label>
-      <Params params={maxScores} />
-      {/* <>TODO: Add target scores</> */}
-      <label>{t("scores")}</label>
-      <ParametersInput
-        parameters={scores}
-        max={10000000}
-        onChange={setScores}
-      />
-      {!!totalScore && (
-        <>
-          <label>{t("gainedParams")}</label>
-          <ParamBadges params={gainedParams} />
-
-          <label>{t("bonusParams")}</label>
-          <ParamBadges params={bonusParams} />
-
-          <label>{t("paramsPostAudition")}</label>
-          <Params params={postAuditionParams} />
-
-          <label>{t("gainedVotes")}</label>
-          <div>+{gainedVotes}</div>
-
-          <label>{t("votesPostAudition")}</label>
-          <div>
-            {totalVotes}
-            {voteRank ? ` (${voteRank})` : null}
-          </div>
-
-          <label>{t("produceRank")}</label>
-          <span>
-            {actualRating} {actualRank ? `(${actualRank})` : null}
-          </span>
-        </>
-      )}
+      </section>
 
       <span className={styles.note}>
         {t.rich("niaNote", {
@@ -173,6 +179,6 @@ export default function NiaCalculator() {
           ),
         })}
       </span>
-    </>
+    </div>
   );
 }
