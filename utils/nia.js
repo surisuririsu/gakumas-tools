@@ -20,7 +20,7 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   },
   galaxy: {
     1: [
-      { threshold: 25400, multiplier: 0, constant: 119 },
+      { threshold: 24500, multiplier: 0, constant: 119 },
       { threshold: 12400, multiplier: 0.00075, constant: 100 },
       { threshold: 0, multiplier: 0.0087, constant: 1.5 },
     ],
@@ -103,25 +103,18 @@ export function calculatePostAuditionParams(params, gainedParams, bonusParams) {
 
 export const VOTE_REGIMES_BY_STAGE = {
   melobang: [
-    { threshold: 10710, multiplier: 0, constant: 12000 },
-    { threshold: 5400, multiplier: 0.1464, constant: 10434 },
-    { threshold: 0, multiplier: 1.949, constant: 783 },
+    { threshold: 10710, multiplier: 0, constant: 8000 },
+    { threshold: 5360, multiplier: 0.0976, constant: 6956 },
+    { threshold: 0, multiplier: 1.299, constant: 523.5 },
   ],
   galaxy: [
-    { threshold: 64500, multiplier: 0.00541, constant: 14609 },
-    { threshold: 0, multiplier: 0.1804, constant: 3362 },
+    { threshold: 64500, multiplier: 0.00361, constant: 9740 },
+    { threshold: 0, multiplier: 0.12028, constant: 2241.5 },
   ],
   finale: [
-    { threshold: 200000, multiplier: 0.0048, constant: 34176 },
-    { threshold: 0, multiplier: 0.160057, constant: 3248 },
+    { threshold: 200000, multiplier: 0.0032025, constant: 22784 },
+    { threshold: 0, multiplier: 0.1067045, constant: 2166 },
   ],
-};
-
-export const PROGRESS_VOTE_MULTIPLIERS = {
-  4: 30 / 30,
-  3: 27 / 30,
-  2: 23 / 30,
-  1: 20 / 30,
 };
 
 export function calculateGainedVotes(stage, affection, score) {
@@ -130,7 +123,8 @@ export function calculateGainedVotes(stage, affection, score) {
     const { threshold, multiplier, constant } = regimes[j];
     if (score > threshold) {
       return Math.floor(
-        (score * multiplier + constant) * PROGRESS_VOTE_MULTIPLIERS[affection]
+        Math.floor(score * multiplier + constant) *
+          (1 + 0.05 * (affection - 10))
       );
     }
   }
