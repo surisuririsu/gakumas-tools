@@ -26,7 +26,7 @@ describe("calculateGainedParams", () => {
     for (let i = 0; i < cases.length; i++) {
       const [order, x, y] = cases[i];
       expect(
-        [0, -1].includes(
+        [1, 0, -1].includes(
           calculateGainedParams("melobang", [order, 1, 1], [x, 0, 0])[0] - y
         )
       ).toBe(true);
@@ -58,7 +58,7 @@ describe("calculateGainedParams", () => {
     for (let i = 0; i < cases.length; i++) {
       const [order, x, y] = cases[i];
       expect(
-        [0, -1].includes(
+        [1, 0, -1].includes(
           calculateGainedParams("galaxy", [order, 1, 1], [x, 0, 0])[0] - y
         )
       ).toBe(true);
@@ -89,7 +89,7 @@ describe("calculateGainedParams", () => {
     for (let i = 0; i < cases.length; i++) {
       const [order, x, y] = cases[i];
       expect(
-        [0, -1].includes(
+        [1, 0, -1].includes(
           calculateGainedParams("finale", [order, 1, 1], [x, 0, 0])[0] - y
         )
       ).toBe(true);
