@@ -4,52 +4,52 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   melobang: {
     1: [
       { threshold: 2550, multiplier: 0, constant: 92 },
-      { threshold: 1300, multiplier: 0.00547, constant: 78.22 },
-      { threshold: 0, multiplier: 0.066, constant: 0 },
+      { threshold: 1300, multiplier: 0.0055, constant: 77 },
+      { threshold: 0, multiplier: 0.0654, constant: 0 },
     ],
     2: [
       { threshold: 2050, multiplier: 0, constant: 76 },
-      { threshold: 1060, multiplier: 0.00547, constant: 64.6 },
-      { threshold: 0, multiplier: 0.066, constant: 0.25 },
+      { threshold: 1060, multiplier: 0.0055, constant: 63.5 },
+      { threshold: 0, multiplier: 0.0654, constant: 0 },
     ],
     3: [
       { threshold: 1600, multiplier: 0, constant: 62 },
-      { threshold: 860, multiplier: 0.00547, constant: 53.25 },
-      { threshold: 0, multiplier: 0.066, constant: 0.8 },
+      { threshold: 860, multiplier: 0.0055, constant: 52.25 },
+      { threshold: 0, multiplier: 0.0654, constant: 0 },
     ],
   },
   galaxy: {
     1: [
       { threshold: 24500, multiplier: 0, constant: 119 },
-      { threshold: 12400, multiplier: 0.00075, constant: 100 },
-      { threshold: 0, multiplier: 0.0087, constant: 1.5 },
+      { threshold: 12400, multiplier: 0.0008, constant: 98 },
+      { threshold: 0, multiplier: 0.00875, constant: 0 },
     ],
     2: [
       { threshold: 20400, multiplier: 0, constant: 98 },
-      { threshold: 10200, multiplier: 0.00075, constant: 82.75 },
-      { threshold: 0, multiplier: 0.0087, constant: 1.4 },
+      { threshold: 10200, multiplier: 0.0008, constant: 81 },
+      { threshold: 0, multiplier: 0.00875, constant: 0 },
     ],
     3: [
       { threshold: 16400, multiplier: 0, constant: 80 },
-      { threshold: 8400, multiplier: 0.00075, constant: 67.7 },
-      { threshold: 0, multiplier: 0.0087, constant: 1.3 },
+      { threshold: 8400, multiplier: 0.0008, constant: 66.25 },
+      { threshold: 0, multiplier: 0.00875, constant: 0 },
     ],
   },
   finale: {
     1: [
       { threshold: 80000, multiplier: 0, constant: 172 },
-      { threshold: 38400, multiplier: 0.000367, constant: 143.5 },
-      { threshold: 0, multiplier: 0.004068, constant: 1.5 },
+      { threshold: 38400, multiplier: 0.000367, constant: 142.5 },
+      { threshold: 0, multiplier: 0.004072, constant: 1.5 },
     ],
     2: [
       { threshold: 65000, multiplier: 0, constant: 142 },
-      { threshold: 31800, multiplier: 0.000367, constant: 118.5 },
-      { threshold: 0, multiplier: 0.004068, constant: 1 },
+      { threshold: 31800, multiplier: 0.000367, constant: 117.5 },
+      { threshold: 0, multiplier: 0.004072, constant: 1 },
     ],
     3: [
       { threshold: 55000, multiplier: 0, constant: 116 },
-      { threshold: 26000, multiplier: 0.000367, constant: 96.5 },
-      { threshold: 0, multiplier: 0.004068, constant: 1 },
+      { threshold: 26000, multiplier: 0.000367, constant: 95.5 },
+      { threshold: 0, multiplier: 0.004072, constant: 1 },
     ],
   },
 };
@@ -61,7 +61,7 @@ export function calculateGainedParams(stage, paramOrder, scores) {
     for (let j = 0; j < regimes.length; j++) {
       const { threshold, multiplier, constant } = regimes[j];
       if (scores[i] > threshold) {
-        return Math.floor(scores[i] * multiplier + constant);
+        return Math.ceil(scores[i] * multiplier + constant);
       }
     }
     return 0;
@@ -85,7 +85,7 @@ export function calculateMaxScores(stage, paramOrder, params, paramBonuses) {
     }
     const { threshold, constant, multiplier } = regime;
     if (multiplier == 0) return threshold;
-    return Math.ceil((maxGain - constant) / multiplier);
+    return Math.floor((maxGain - constant) / multiplier);
   });
 }
 
