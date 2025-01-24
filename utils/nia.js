@@ -35,6 +35,23 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
       { threshold: 0, multiplier: 0.00875, constant: 0 },
     ],
   },
+  quartet: {
+    1: [
+      { threshold: 41600, multiplier: 0, constant: 145 },
+      { threshold: 20000, multiplier: 0.000578, constant: 120 },
+      { threshold: 0, multiplier: 0.00661, constant: 0 },
+    ],
+    2: [
+      { threshold: 34000, multiplier: 0, constant: 120 },
+      { threshold: 16500, multiplier: 0.000578, constant: 99.5 },
+      { threshold: 0, multiplier: 0.00661, constant: 0 },
+    ],
+    3: [
+      { threshold: 27700, multiplier: 0, constant: 98 },
+      { threshold: 13400, multiplier: 0.000578, constant: 81 },
+      { threshold: 0, multiplier: 0.00661, constant: 0 },
+    ],
+  },
   finale: {
     1: [
       { threshold: 80000, multiplier: 0, constant: 172 },
@@ -104,16 +121,21 @@ export function calculatePostAuditionParams(params, gainedParams, bonusParams) {
 export const VOTE_REGIMES_BY_STAGE = {
   melobang: [
     { threshold: 10710, multiplier: 0, constant: 8000 },
-    { threshold: 5360, multiplier: 0.0976, constant: 6956 },
-    { threshold: 0, multiplier: 1.299, constant: 523.5 },
+    { threshold: 5360, multiplier: 0.0976, constant: 6955 },
+    { threshold: 0, multiplier: 1.299, constant: 522.5 },
   ],
   galaxy: [
-    { threshold: 64500, multiplier: 0.00361, constant: 9740 },
-    { threshold: 0, multiplier: 0.12028, constant: 2241.5 },
+    { threshold: 64500, multiplier: 0.00361, constant: 9739 },
+    { threshold: 0, multiplier: 0.12028, constant: 2240.5 },
+  ],
+  quartet: [
+    { threshold: 207900, multiplier: 0, constant: 20000 },
+    { threshold: 103970, multiplier: 0.01339, constant: 17216 },
+    { threshold: 0, multiplier: 0.14868, constant: 3150.5 },
   ],
   finale: [
-    { threshold: 200000, multiplier: 0.0032025, constant: 22784 },
-    { threshold: 0, multiplier: 0.1067045, constant: 2166 },
+    { threshold: 200000, multiplier: 0.0032025, constant: 22783 },
+    { threshold: 0, multiplier: 0.1067045, constant: 2165 },
   ],
 };
 
@@ -123,8 +145,7 @@ export function calculateGainedVotes(stage, affection, score) {
     const { threshold, multiplier, constant } = regimes[j];
     if (score > threshold) {
       return Math.floor(
-        Math.floor(score * multiplier + constant) *
-          (1 + 0.05 * (affection - 10))
+        Math.ceil(score * multiplier + constant) * (1 + 0.05 * (affection - 10))
       );
     }
   }
@@ -136,6 +157,7 @@ const VOTE_RANKS = [
   { rank: "S+", threshold: 80000 },
   { rank: "S", threshold: 60000 },
   { rank: "A+", threshold: 40000 },
+  { rank: "A", threshold: 20000 },
 ];
 
 export function getVoteRank(votes) {
