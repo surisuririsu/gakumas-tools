@@ -36,7 +36,13 @@ export default class IdolStageConfig {
       };
     }
 
-    const hasFlatBonus = season == 13;
+    // Working theory: flat bonus when max criterion is <= 40%
+    const totalCriteria = Object.values(criteria).reduce(
+      (acc, cur) => acc + cur,
+      0
+    );
+    const maxCriterion = Math.max(...Object.values(criteria));
+    const hasFlatBonus = maxCriterion / totalCriteria <= 0.4;
 
     let multipliers = {};
 
