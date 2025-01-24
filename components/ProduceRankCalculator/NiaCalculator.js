@@ -24,6 +24,7 @@ import styles from "./NiaCalculator.module.scss";
 const STAGE_OPTIONS = [
   { value: "melobang", label: "メロBang!" },
   { value: "galaxy", label: "GALAXY" },
+  { value: "quartet", label: "QUARTET" },
   { value: "finale", label: "FINALE" },
 ];
 
