@@ -157,7 +157,6 @@ const VOTE_RANKS = [
   { rank: "S+", threshold: 80000 },
   { rank: "S", threshold: 60000 },
   { rank: "A+", threshold: 40000 },
-  { rank: "A", threshold: 20000 },
 ];
 
 export function getVoteRank(votes) {
