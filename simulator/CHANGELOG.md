@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - A bug that caused customized cards that should be drawn on turn 1 to not be draw in some cases
+- A bug that caused increase/decrease trigger effects to be activated when they shouldn't be
 
 ## 2025-01-23
 

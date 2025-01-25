@@ -11,6 +11,7 @@ import {
   LOGGED_FIELDS,
   S,
   GROWABLE_FIELDS,
+  CHANGE_TRIGGER_PHASES,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "./utils";
@@ -134,27 +135,29 @@ export default class Executor extends EngineComponent {
       }
     }
 
-    // Trigger increase effects
-    for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-      const field = INCREASE_TRIGGER_FIELDS[i];
-      if (state[S.phase] == `${field}Increased`) continue;
-      if (state[S[field]] > prev[S[field]]) {
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${field}Increased`
-        );
+    if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+      // Trigger increase effects
+      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+        const field = INCREASE_TRIGGER_FIELDS[i];
+        if (state[S.phase] == `${field}Increased`) continue;
+        if (state[S[field]] > prev[S[field]]) {
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${field}Increased`
+          );
+        }
       }
-    }
 
-    // Trigger decrease effects
-    for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-      const field = DECREASE_TRIGGER_FIELDS[i];
-      if (state[S.phase] == `${field}Decreased`) continue;
-      if (state[S[field]] < prev[S[field]]) {
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${field}Decreased`
-        );
+      // Trigger decrease effects
+      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+        const field = DECREASE_TRIGGER_FIELDS[i];
+        if (state[S.phase] == `${field}Decreased`) continue;
+        if (state[S[field]] < prev[S[field]]) {
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${field}Decreased`
+          );
+        }
       }
     }
   }

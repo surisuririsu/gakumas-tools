@@ -254,11 +254,13 @@ export default class CardManager extends EngineComponent {
         }
       }
     }
+    state[S.phase] = "card";
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;
       this.engine.effectManager.triggerEffects(state, effects, null, card);
     }
     this.engine.effectManager.triggerEffects(state, effects, null, card);
+    delete state[S.phase];
 
     // Increment counters
     state[S.cardsUsed]++;
