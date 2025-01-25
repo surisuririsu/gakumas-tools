@@ -80,7 +80,7 @@ export default class TurnManager extends EngineComponent {
     if (state[S.turnsElapsed] == 0) {
       for (let i = 0; i < 2; i++) {
         const card = this.engine.cardManager.peekDeck(state);
-        if (SkillCards.getById(state[S.cardMap][card].id).forceInitialHand) {
+        if (this.engine.cardManager.isForceInitialHand(state, card)) {
           this.engine.cardManager.drawCard(state);
         }
       }

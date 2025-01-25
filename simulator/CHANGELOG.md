@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-24
+
+### Fixed
+
+- A bug that caused customized cards that should be drawn on turn 1 to not be draw in some cases
+
 ## 2025-01-23
 
 ### Added
