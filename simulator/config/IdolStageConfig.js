@@ -42,7 +42,7 @@ export default class IdolStageConfig {
       0
     );
     const maxCriterion = Math.max(...Object.values(criteria));
-    const hasFlatBonus = maxCriterion / totalCriteria <= 0.4;
+    const hasFlatBonus = false; //maxCriterion / totalCriteria <= 0.4;
 
     let multipliers = {};
 
