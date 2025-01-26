@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-26
+
+### Changed
+
+- Updated contest season 17
+
 ## 2025-01-24
 
 ### Fixed
