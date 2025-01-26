@@ -26,10 +26,7 @@ function EntityPickerModal({
           type={type}
           id={id}
           customizations={customizations}
-          onCustomize={(customs) => {
-            onCustomize(customs);
-            closeModal();
-          }}
+          onCustomize={onCustomize}
         />
       )}
       <EntityBank
