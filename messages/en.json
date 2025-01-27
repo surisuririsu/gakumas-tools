@@ -34,7 +34,7 @@
     },
     "simulator": {
       "title": "Contest Simulator",
-      "description": "Create and simulate contest loadouts"
+      "description": "Create and simulate contest loadouts, and calculate memory cost"
     },
     "rehearsal": {
       "title": "Rehearsal Parser",
