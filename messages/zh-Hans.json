@@ -122,7 +122,8 @@
   },
   "Dex": {
     "skillCards": "技能卡",
-    "pItems": "P 道具"
+    "pItems": "P 道具",
+    "maxTimes": "Max {n}"
   },
   "EntityBank": {
     "filter": "筛选"

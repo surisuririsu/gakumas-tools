@@ -42,6 +42,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px $gray-light;
 
+  @include c11n-background;
+
   @container (width < 460px) {
     display: flex;
     align-items: center;
@@ -93,24 +95,4 @@
     padding: 4px 8px;
     border-left: 2px solid $white;
   }
-}
-
-.effect {
-  background: linear-gradient(135deg, #ca5cfe, #fd6be4);
-}
-
-.cost {
-  background: linear-gradient(135deg, #02e28f, #94ea03);
-}
-
-.buff {
-  background: linear-gradient(135deg, #09bfff, #90cdff);
-}
-
-.score {
-  background: linear-gradient(135deg, #ff3482, #ffa202);
-}
-
-.genki {
-  background: linear-gradient(135deg, #00b1e2, #06e0d1);
 }
