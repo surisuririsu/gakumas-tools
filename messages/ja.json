@@ -124,7 +124,8 @@
   },
   "Dex": {
     "skillCards": "スキルカード",
-    "pItems": "Pアイテム"
+    "pItems": "Pアイテム",
+    "maxTimes": "最大{n}回"
   },
   "EntityBank": {
     "filter": "フィルタ"

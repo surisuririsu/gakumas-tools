@@ -122,7 +122,8 @@
   },
   "Dex": {
     "skillCards": "Skill cards",
-    "pItems": "P-items"
+    "pItems": "P-items",
+    "maxTimes": "Max {n}"
   },
   "EntityBank": {
     "filter": "Filter"
