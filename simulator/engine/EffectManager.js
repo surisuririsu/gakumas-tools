@@ -214,6 +214,15 @@ export default class EffectManager extends EngineComponent {
               growthCards.add(k);
             }
             break;
+          } else if (/^effect\(.+\)$/.test(target)) {
+            const effect = target.match(/^effect\((.+)\)/)[1];
+            for (let k = 0; k < state[S.cardMap].length; k++) {
+              if (
+                this.engine.cardManager.getCardEffects(state, k).has(effect)
+              ) {
+                growthCards.add(k);
+              }
+            }
           } else if (/^\d+$/.test(target)) {
             for (let k = 0; k < state[S.cardMap].length; k++) {
               if (state[S.cardMap][k].baseId == target) {
