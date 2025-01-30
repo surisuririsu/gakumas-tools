@@ -117,7 +117,7 @@ export default class EffectManager extends EngineComponent {
     state[S.phase] = parentPhase;
   }
 
-  triggerEffects(state, effects, cndState, card) {
+  triggerEffects(state, effects, cndState, card, skipConditions) {
     const conditionState = cndState || shallowCopy(state);
 
     let triggeredEffects = [];
@@ -159,7 +159,7 @@ export default class EffectManager extends EngineComponent {
       }
 
       // Check conditions
-      if (effect.conditions) {
+      if (!skipConditions && effect.conditions) {
         let satisfied = true;
         for (let j = 0; j < effect.conditions.length; j++) {
           const condition = effect.conditions[j];
