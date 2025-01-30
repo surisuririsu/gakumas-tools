@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-30
+
+### Added
+
+- Preview of Happy Millefeuille Hiro and Rinami
+
 ## 2025-01-26
 
 ### Changed
