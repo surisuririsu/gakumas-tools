@@ -54,7 +54,7 @@ export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   },
   finale: {
     1: [
-      { threshold: 80000, multiplier: 0, constant: 172 },
+      { threshold: 79000, multiplier: 0, constant: 172 },
       { threshold: 38400, multiplier: 0.000367, constant: 142.5 },
       { threshold: 0, multiplier: 0.004072, constant: 1.5 },
     ],

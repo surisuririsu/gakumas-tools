@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
+import LineChart from "@/components/LineChart";
 import ParametersInput from "@/components/ParametersInput";
 import ParamOrderPicker from "@/components/ParamOrderPicker";
 import { getRank } from "@/utils/produceRank";
@@ -119,24 +120,22 @@ export default function NiaCalculator() {
       </section>
 
       <section>
-        <label>{t("paramHighGrowthScores")}</label>
-        <Params
-          params={paramOrder.map((order, i) =>
-            Math.min(
-              PARAM_REGIMES_BY_ORDER_BY_STAGE[stage][order][1].threshold,
-              maxScores[i]
-            )
-          )}
+        <LineChart
+          paramOrder={paramOrder}
+          paramRegimes={PARAM_REGIMES_BY_ORDER_BY_STAGE[stage]}
+          scores={scores}
+          gainedParams={gainedParams}
         />
-        <label>{t("paramMaximizingScores")}</label>
-        <Params params={maxScores} />
-        {/* <>TODO: Add target scores</> */}
+
         <label>{t("scores")}</label>
         <ParametersInput
           parameters={scores}
           max={10000000}
           onChange={setScores}
         />
+
+        {/* <>TODO: Add target scores</> */}
+
         {!!totalScore && (
           <>
             <label>{t("gainedParams")}</label>
