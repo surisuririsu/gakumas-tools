@@ -3,7 +3,7 @@
 .badges {
   display: flex;
   justify-content: space-around;
-  margin: 8px 0;
+  margin: 4px 0;
 }
 
 .badge {
@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
   width: 60px;
-  padding: 4px;
+  padding: 2px;
   background-color: $white;
   border-radius: 50vh;
 
