@@ -136,7 +136,11 @@ function Rehearsal() {
             <FaDownload /> CSV
           </Button>
           <BoxPlot
-            labels={["ステージ1", "ステージ2", "ステージ3"]}
+            labels={[0, 1, 2].map(
+              (i) =>
+                t("stage", { n: i + 1 }) +
+                ` (n=${boxPlotData[i].data[0].length})`
+            )}
             data={boxPlotData}
             showLegend={false}
           />
