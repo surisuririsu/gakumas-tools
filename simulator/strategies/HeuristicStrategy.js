@@ -113,7 +113,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       );
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += 3 * scoreDelta * limit;
+      score += 3 * scoreDelta * Math.min(limit, 3);
     }
 
     if (this.engine.config.idol.plan != "anomaly") {
@@ -187,7 +187,7 @@ export default class HeuristicStrategy extends BaseStrategy {
         state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
 
       // Growth
-      score += this.getGrowthScore(state) * state[S.turnsRemaining];
+      score += this.getGrowthScore(state) * 0.2 * state[S.turnsRemaining];
     }
 
     // Good impression turns
@@ -265,9 +265,9 @@ export default class HeuristicStrategy extends BaseStrategy {
       [S["g.motivation"]]: 1,
       [S["g.fullPowerCharge"]]: 1,
       [S["g.halfCostTurns"]]: 1,
-      [S["g.scoreByGoodImpressionTurns"]]: 10,
-      [S["g.scoreByMotivation"]]: 10,
-      [S["g.scoreByGenki"]]: 10,
+      [S["g.scoreByGoodImpressionTurns"]]: 20,
+      [S["g.scoreByMotivation"]]: 20,
+      [S["g.scoreByGenki"]]: 20,
       [S["g.stanceLevel"]]: 2,
     };
     for (let { growth } of state[S.cardMap]) {

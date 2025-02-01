@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Changed
 
 - Update Happy Millefeuille Hiro and Rinami
+- Adjust evaluation of growth and effects by simulator strategy
 
 ## 2025-01-30
 
