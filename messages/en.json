@@ -182,7 +182,9 @@
   "Simulator": {
     "supportBonus": "Support bonus %",
     "enterPercents": "Since the score multiplier calculation is unknown, please enter the multipliers (%) directly.",
+    "custom": "Custom",
     "simulate": "Simulate",
+    "provideData": "Provide data",
     "lastUpdated": "Last updated"
   },
   "StageSelect": {

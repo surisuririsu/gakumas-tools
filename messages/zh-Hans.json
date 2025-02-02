@@ -182,7 +182,9 @@
   "Simulator": {
     "supportBonus": "支援加成 %",
     "enterPercents": "由于分数倍数的计算方式未知，请直接输入倍数（%）。",
+    "custom": "自定义",
     "simulate": "模拟",
+    "provideData": "Provide data",
     "lastUpdated": "最后更新于"
   },
   "StageSelect": {
