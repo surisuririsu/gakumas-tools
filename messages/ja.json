@@ -184,7 +184,9 @@
   "Simulator": {
     "supportBonus": "サポートボーナス%",
     "enterPercents": "計算式が解明されていないため、スコアボーナスの%を入力してください。",
+    "custom": "カスタム",
     "simulate": "実行",
+    "provideData": "データを提供する",
     "lastUpdated": "最終更新"
   },
   "StageSelect": {

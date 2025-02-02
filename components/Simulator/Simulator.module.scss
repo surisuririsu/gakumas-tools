@@ -49,6 +49,17 @@
   }
 }
 
+.pItemsRow {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  color: $black;
+}
+
+.pItems {
+  flex: 1;
+}
+
 .expanderButtons {
   display: flex;
   margin-bottom: 4px;
