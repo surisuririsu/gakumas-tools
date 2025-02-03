@@ -40,6 +40,14 @@ function Log({ line, idolId }) {
     return <AddCard {...line.data} idolId={idolId} text={t("upgradedCard")} />;
   } else if (line.logType == "growth") {
     return <AddCard {...line.data} idolId={idolId} text={t("cardGrowth")} />;
+  } else if (line.logType == "holdCard") {
+    return <AddCard {...line.data} idolId={idolId} text={t("heldCard")} />;
+  } else if (line.logType == "discardCard") {
+    return <AddCard {...line.data} idolId={idolId} text={t("discardedCard")} />;
+  } else if (line.logType == "moveCardToHand") {
+    return (
+      <AddCard {...line.data} idolId={idolId} text={t("movedCardToHand")} />
+    );
   }
 }
 

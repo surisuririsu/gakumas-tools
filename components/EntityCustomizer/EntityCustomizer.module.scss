@@ -3,44 +3,96 @@
 .entityCustomizer {
   position: relative;
   display: flex;
-  align-items: center;
   gap: 8px;
   margin: 0 12px 12px;
   border: 2px solid $gray-light;
   border-radius: 8px;
   padding: 8px;
+}
 
-  .label {
-    position: absolute;
-    padding: 0 4px;
-    background-color: $white;
-    color: $gray;
-    font-size: 14px;
-    top: -14px;
-  }
+.label {
+  position: absolute;
+  top: -14px;
+  padding: 0 4px;
+  background-color: $white;
+  color: $gray;
+  font-size: 14px;
 }
 
 .icon {
   width: 68px;
 }
 
-.customizations {
+.c11ns {
   flex: 1;
-  font-size: 14px;
-  color: $black-dark;
+  min-width: 0;
+  display: flex;
+  gap: 4px;
+  color: $white;
+  font-weight: 600;
+
+  @container (width < 460px) {
+    flex-direction: column;
+  }
 }
 
-.add {
-  width: 36px;
-  height: 36px;
-  margin-right: 12px;
-  border-radius: 18px;
-  background-color: $custom-green;
-  color: $white;
-  font-size: 24px;
-  transition: box-shadow 0.2s;
+.c11n {
+  flex: 1;
+  min-width: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px $gray-light;
 
-  &:hover {
-    box-shadow: 0 0 8px transparentize($custom-green, 0.5);
+  @include c11n-background;
+
+  @container (width < 460px) {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 24px;
+
+  .level {
+    width: 20px;
+    font-size: 20px;
+  }
+
+  & > * {
+    flex: 1;
+  }
+
+  button {
+    padding: 8px 12px;
+  }
+
+  @container (width < 460px) {
+    font-size: unset;
+
+    .level {
+      font-size: unset;
+    }
+  }
+}
+
+.disabled {
+  color: transparent;
+}
+
+.text {
+  display: block;
+  font-size: 14px;
+  padding: 0 8px 8px;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @container (width < 460px) {
+    padding: 4px 8px;
+    border-left: 2px solid $white;
   }
 }

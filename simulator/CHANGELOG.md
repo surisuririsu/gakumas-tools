@@ -3,6 +3,86 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-01-31
+
+### Changed
+
+- Update Happy Millefeuille Hiro and Rinami
+- Adjust evaluation of growth and effects by simulator strategy
+
+## 2025-01-30
+
+### Added
+
+- Preview of Happy Millefeuille Hiro and Rinami
+
+### Fixed
+
+- Evaluation of growth and effects by simulator strategy
+
+## 2025-01-26
+
+### Changed
+
+- Updated contest season 17
+
+## 2025-01-24
+
+### Fixed
+
+- A bug that caused customized cards that should be drawn on turn 1 to not be draw in some cases
+- A bug that caused increase/decrease trigger effects to be activated when they shouldn't be
+
+## 2025-01-23
+
+### Added
+
+- Contest season 17 preview
+
+## 2025-01-17
+
+### Changed
+
+- Increased evaluation of genki and motivation in simulator strategy
+
+## 2025-01-15
+
+### Added
+
+- Campus mode vol 4
+
+## 2025-01-11
+
+### Fixed
+
+- Increased param cap for season 16 onward
+
+## 2025-01-09
+
+### Changed
+
+- Strategy for selecting card to hold
+- Color-coded customization counts
+- Updated season 16 contest
+
+### Fixed
+
+- Bug that caused not all held cards to be added to hand when entering full power stance
+- Bug that caused infinite recursion when evaluating cards to hold
+
+## 2025-01-08
+
+### Added
+
+- Campus mode vol. 3
+- Preview of season 16 contest
+
+## 2025-01-04
+
+### Added
+
+- Last missing effect for おアツい視線
+
 ## 2025-01-01
 
 ### Added

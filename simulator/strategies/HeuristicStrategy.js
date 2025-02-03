@@ -1,4 +1,3 @@
-import { countCustomizations } from "@/utils/customizations";
 import { S } from "../constants";
 import { deepCopy } from "../engine/utils";
 import BaseStrategy from "./BaseStrategy";
@@ -25,7 +24,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     this.goodImpressionTurnsMultiplier =
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
-      config.idol.recommendedEffect == "motivation" ? 4 : 1;
+      config.idol.recommendedEffect == "motivation" ? 5.25 : 1;
     this.fullPowerMultiplier =
       config.idol.recommendedEffect == "fullPower" ? 5 : 1;
 
@@ -61,7 +60,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     nextState.logs[logIndex].data = {
       handCards: state[S.handCards].map((card) => ({
         id: state[S.cardMap][card].id,
-        c: countCustomizations(state[S.cardMap][card].c11n),
+        c: state[S.cardMap][card].c11n,
       })),
       scores,
       selectedIndex,
@@ -91,30 +90,33 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     let score = 0;
 
-    if (this.engine.config.idol.plan != "anomaly") {
-      // Effects -- TODO: make this not suck
-      const effectsDiff = previewState[S.effects].length - this.rootEffectCount;
-      for (let i = 0; i < effectsDiff; i++) {
-        const effect =
-          previewState[S.effects][previewState[S.effects].length - i - 1];
-        let limit = previewState[S.turnsRemaining];
-        if (
-          effect.limit != null &&
-          effect.limit < previewState[S.turnsRemaining]
-        ) {
-          limit = effect.limit + 1;
-        }
-        if (limit == 0) continue;
-        const postEffectState = deepCopy(previewState);
-        this.engine.effectManager.triggerEffects(postEffectState, [
-          { ...effect, phase: null },
-        ]);
-        const scoreDelta =
-          this.getStateScore(postEffectState) -
-          this.getStateScore(previewState);
-        score += 3 * scoreDelta * limit;
+    // Effects -- TODO: make this not suck
+    const effectsDiff = previewState[S.effects].length - this.rootEffectCount;
+    for (let i = 0; i < effectsDiff; i++) {
+      const effect =
+        previewState[S.effects][previewState[S.effects].length - i - 1];
+      let limit = previewState[S.turnsRemaining];
+      if (
+        effect.limit != null &&
+        effect.limit < previewState[S.turnsRemaining]
+      ) {
+        limit = effect.limit + 1;
       }
+      if (limit == 0) continue;
+      const postEffectState = deepCopy(previewState);
+      this.engine.effectManager.triggerEffects(
+        postEffectState,
+        [{ ...effect, phase: null }],
+        null,
+        null,
+        true
+      );
+      const scoreDelta =
+        this.getStateScore(postEffectState) - this.getStateScore(previewState);
+      score += 3 * scoreDelta * Math.min(limit, 3);
+    }
 
+    if (this.engine.config.idol.plan != "anomaly") {
       // Cards removed
       score +=
         (((state[S.removedCards].length - previewState[S.removedCards].length) *
@@ -146,7 +148,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       state[S.genki] *
       Math.tanh(state[S.turnsRemaining] / 3) *
-      0.42 *
+      0.65 *
       this.motivationMultiplier;
 
     // Good condition turns
@@ -185,20 +187,7 @@ export default class HeuristicStrategy extends BaseStrategy {
         state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
 
       // Growth
-      let growthScore = 0;
-      for (let { growth } of state[S.cardMap]) {
-        if (!growth) continue;
-        if (growth[S["growth.score"]]) {
-          growthScore += growth[S["growth.score"]] * 2;
-        }
-        if (growth[S["growth.scoreTimes"]]) {
-          growthScore += growth[S["growth.scoreTimes"]] * 20;
-        }
-        if (growth[S["growth.cost"]]) {
-          growthScore += growth[S["growth.cost"]];
-        }
-      }
-      score += growthScore * state[S.turnsRemaining];
+      score += this.getGrowthScore(state) * 0.2 * state[S.turnsRemaining];
     }
 
     // Good impression turns
@@ -211,7 +200,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       state[S.motivation] *
       state[S.turnsRemaining] *
-      0.5 *
+      0.45 *
       this.motivationMultiplier;
 
     // Score buffs
@@ -260,5 +249,52 @@ export default class HeuristicStrategy extends BaseStrategy {
     }
 
     return Math.round(score);
+  }
+
+  getGrowthScore(state) {
+    let growthScore = 0;
+    const multipliers = {
+      [S["g.score"]]: 2,
+      [S["g.scoreTimes"]]: 20,
+      [S["g.cost"]]: 1,
+      [S["g.genki"]]: 1,
+      [S["g.goodConditionTurns"]]: 1,
+      [S["g.perfectConditionTurns"]]: 1,
+      [S["g.concentration"]]: 2,
+      [S["g.goodImpressionTurns"]]: 1,
+      [S["g.motivation"]]: 1,
+      [S["g.fullPowerCharge"]]: 1,
+      [S["g.halfCostTurns"]]: 1,
+      [S["g.scoreByGoodImpressionTurns"]]: 20,
+      [S["g.scoreByMotivation"]]: 20,
+      [S["g.scoreByGenki"]]: 20,
+      [S["g.stanceLevel"]]: 2,
+    };
+    for (let { growth } of state[S.cardMap]) {
+      if (!growth) continue;
+      for (let key in growth) {
+        growthScore += growth[key] * (multipliers[key] || 1);
+      }
+    }
+    return growthScore;
+  }
+
+  evaluateForHold(state, card) {
+    let previewState = this.engine.getInitialState(true);
+    previewState[S.cardMap] = deepCopy(state[S.cardMap]);
+    this.engine.buffManager.setStance(previewState, "fullPower");
+    previewState[S.nullifyHold] = true;
+    previewState = this.engine.useCard(previewState, card);
+    return Math.round(previewState[S.score]);
+  }
+
+  pickCardToHold(state, cards) {
+    let scores = [];
+    for (let i = 0; i < cards.length; i++) {
+      scores.push(this.evaluateForHold(state, cards[i]));
+    }
+    const maxScore = Math.max(...scores);
+    const maxIndex = scores.indexOf(maxScore);
+    return maxIndex;
   }
 }

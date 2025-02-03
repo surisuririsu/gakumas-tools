@@ -17,6 +17,7 @@ import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
+import { formatStageShortName } from "@/utils/stages";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
@@ -27,6 +28,7 @@ export default function Simulator() {
   const {
     stage,
     loadout,
+    simulatorUrl,
     setSupportBonus,
     setParams,
     replacePItemId,
@@ -117,10 +119,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/* <>
-          ※ Season 16 preview is based only on the announced p-items and
+        {/*<>
+          ※ Season 18 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </> */}
+        </>*/}
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
@@ -153,11 +155,16 @@ export default function Simulator() {
             <div />
           </div>
         </div>
-        <StagePItems
-          pItemIds={loadout.pItemIds}
-          replacePItemId={replacePItemId}
-          size="medium"
-        />
+        <div className={styles.pItemsRow}>
+          <div className={styles.pItems}>
+            <StagePItems
+              pItemIds={loadout.pItemIds}
+              replacePItemId={replacePItemId}
+              size="medium"
+            />
+          </div>
+          <span>{formatStageShortName(stage, t)}</span>
+        </div>
         {loadout.skillCardIdGroups.map((skillCardIdGroup, i) => (
           <LoadoutSkillCardGroup
             key={i}
@@ -182,13 +189,21 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : t("simulate")}
         </Button>
+        <Button
+          href={`https://docs.google.com/forms/d/e/1FAIpQLScNquedw8Lp2yVfZjoBFMjQxIFlX6-rkzDWIJTjWPdQVCJbiQ/viewform?usp=pp_url&entry.1787906485=${encodeURIComponent(
+            simulatorUrl
+          )}`}
+          target="_blank"
+        >
+          {t("provideData")}
+        </Button>
         <SimulatorButtons />
         <div className={styles.subLinks}>
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2025-01-02
+            {t("lastUpdated")}: 2025-02-01
           </a>
         </div>
         {!simulatorData && (

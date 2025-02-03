@@ -56,3 +56,47 @@ $custom-green: #1cc15c;
     }
   }
 }
+
+$effect: #ca5cfe;
+$cost: #02e28f;
+$buff: #09bfff;
+$score: #ff3482;
+$genki: #00b1e2;
+
+$c11n: (
+  "effect": $effect,
+  "cost": $cost,
+  "buff": $buff,
+  "score": $score,
+  "genki": $genki,
+);
+
+@mixin c11n-colors {
+  @each $type, $c11n-color in $c11n {
+    &.#{$type} {
+      @content ($c11n-color);
+    }
+  }
+}
+
+$effect-gradient: linear-gradient(135deg, #ca5cfe, #fd6be4);
+$cost-gradient: linear-gradient(135deg, #02e28f, #94ea03);
+$buff-gradient: linear-gradient(135deg, #09bfff, #90cdff);
+$score-gradient: linear-gradient(135deg, #ff3482, #ffa202);
+$genki-gradient: linear-gradient(135deg, #00b1e2, #06e0d1);
+
+$c11n-gradient: (
+  "effect": $effect-gradient,
+  "cost": $cost-gradient,
+  "buff": $buff-gradient,
+  "score": $score-gradient,
+  "genki": $genki-gradient,
+);
+
+@mixin c11n-background {
+  @each $type, $gradient in $c11n-gradient {
+    &.#{$type} {
+      background: $gradient;
+    }
+  }
+}

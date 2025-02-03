@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
+import LineChart from "@/components/LineChart";
 import ParametersInput from "@/components/ParametersInput";
 import ParamOrderPicker from "@/components/ParamOrderPicker";
 import { getRank } from "@/utils/produceRank";
@@ -24,8 +25,14 @@ import styles from "./NiaCalculator.module.scss";
 const STAGE_OPTIONS = [
   { value: "melobang", label: "メロBang!" },
   { value: "galaxy", label: "GALAXY" },
+  { value: "quartet", label: "QUARTET" },
   { value: "finale", label: "FINALE" },
 ];
+
+const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
+  value: i + 10,
+  label: i + 10,
+}));
 
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
@@ -35,6 +42,7 @@ export default function NiaCalculator() {
   const [params, setParams] = useState([null, null, null]);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
   const [votes, setVotes] = useState(0);
+  const [affection, setAffection] = useState(20);
   const [scores, setScores] = useState([null, null, null]);
 
   const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
@@ -47,7 +55,7 @@ export default function NiaCalculator() {
     bonusParams
   );
   const totalScore = scores.reduce((acc, cur) => acc + cur, 0);
-  const gainedVotes = calculateGainedVotes(totalScore);
+  const gainedVotes = calculateGainedVotes(stage, affection, totalScore);
   const totalVotes = votes + gainedVotes;
   const voteRank = getVoteRank(totalVotes);
 
@@ -64,94 +72,97 @@ export default function NiaCalculator() {
   }
 
   return (
-    <>
-      <label>{t("stage")}</label>
-      <ButtonGroup
-        options={STAGE_OPTIONS}
-        selected={stage}
-        onChange={setStage}
-      />
-      <label>{t("evaluationCriteria")}</label>
-      <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
-      {stage == "finale" && (
-        <>
-          <label>{t("paramsPreAudition")}</label>
-          <ParametersInput
-            parameters={params}
-            max={MAX_PARAMS}
-            onChange={setParams}
-          />
-        </>
-      )}
-      {stage == "finale" && (
-        <>
-          <label>{t("votesPreAudition")}</label>
-          <Input
-            type="number"
-            value={votes || ""}
-            placeholder={t("voteCount")}
-            onChange={setVotes}
-            min={0}
-            max={10000000}
-          />
-        </>
-      )}
-      <label>{t("paramHighGrowthScores")}</label>
-      <Params
-        params={paramOrder.map((order, i) =>
-          Math.min(
-            PARAM_REGIMES_BY_ORDER_BY_STAGE[stage][order][1].threshold,
-            maxScores[i]
-          )
+    <div className={styles.nia}>
+      <section>
+        <label>{t("affectionAtStartOfProduce")}</label>
+        <ButtonGroup
+          options={AFFECTION_OPTIONS}
+          selected={affection}
+          onChange={setAffection}
+        />
+
+        <label>{t("evaluationCriteria")}</label>
+        <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
+
+        <label>{t("paramBonusPct")}</label>
+        <ParametersInput
+          parameters={paramBonuses}
+          max={MAX_PARAMS}
+          onChange={setParamBonuses}
+          round={false}
+        />
+      </section>
+
+      <section>
+        <label>{t("stage")}</label>
+        <ButtonGroup
+          options={STAGE_OPTIONS}
+          selected={stage}
+          onChange={setStage}
+        />
+
+        <label>{t("paramsPreAudition")}</label>
+        <ParametersInput
+          parameters={params}
+          max={MAX_PARAMS}
+          onChange={setParams}
+        />
+
+        <label>{t("votesPreAudition")}</label>
+        <Input
+          type="number"
+          value={votes || ""}
+          placeholder={t("voteCount")}
+          onChange={setVotes}
+          min={0}
+          max={10000000}
+        />
+      </section>
+
+      <section>
+        <LineChart
+          paramOrder={paramOrder}
+          paramRegimes={PARAM_REGIMES_BY_ORDER_BY_STAGE[stage]}
+          scores={scores}
+          gainedParams={gainedParams}
+        />
+
+        <label>{t("scores")}</label>
+        <ParametersInput
+          parameters={scores}
+          max={10000000}
+          onChange={setScores}
+        />
+
+        {/* <>TODO: Add target scores</> */}
+
+        {!!totalScore && (
+          <>
+            <label>{t("gainedParams")}</label>
+            <ParamBadges params={gainedParams} />
+
+            <label>{t("bonusParams")}</label>
+            <ParamBadges params={bonusParams} />
+
+            <label>{t("paramsPostAudition")}</label>
+            <Params params={postAuditionParams} />
+
+            <label>{t("gainedVotes")}</label>
+            <div>+{gainedVotes}</div>
+
+            <label>{t("votesPostAudition")}</label>
+            <div>
+              {totalVotes}
+              {voteRank ? ` (${voteRank})` : null}
+            </div>
+
+            <label>{t("produceRank")}</label>
+            <span>
+              {actualRating} {actualRank ? `(${actualRank})` : null}
+            </span>
+          </>
         )}
-      />
-      <label>{t("paramMaximizingScores")}</label>
-      <Params params={maxScores} />
-      {/* <>TODO: Add target scores</> */}
-      <label>{t("scores")}</label>
-      <ParametersInput
-        parameters={scores}
-        max={10000000}
-        onChange={setScores}
-      />
-      {!!totalScore && (
-        <>
-          <label>{t("gainedParams")}</label>
-          <ParamBadges params={gainedParams} />
-
-          <label>{t("paramBonusPct")}</label>
-          <ParametersInput
-            parameters={paramBonuses}
-            max={MAX_PARAMS}
-            onChange={setParamBonuses}
-            round={false}
-          />
-
-          <label>{t("bonusParams")}</label>
-          <ParamBadges params={bonusParams} />
-
-          {stage == "finale" && (
-            <>
-              <label>{t("paramsPostAudition")}</label>
-              <Params params={postAuditionParams} />
-
-              <label>{t("gainedVotes")}</label>
-              <div>+{gainedVotes}</div>
-
-              <label>{t("votesPostAudition")}</label>
-              <div>
-                {totalVotes}
-                {voteRank ? ` (${voteRank})` : null}
-              </div>
-
-              <label>{t("produceRank")}</label>
-              <span>
-                {actualRating} {actualRank ? `(${actualRank})` : null}
-              </span>
-            </>
-          )}
-        </>
-      )}
+      </section>
 
       <span className={styles.note}>
         {t.rich("niaNote", {
@@ -168,6 +179,6 @@ export default function NiaCalculator() {
           ),
         })}
       </span>
-    </>
+    </div>
   );
 }

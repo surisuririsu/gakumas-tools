@@ -1,8 +1,7 @@
-import { PItems, SkillCards } from "gakumas-data/lite";
+import { Customizations, PItems, SkillCards } from "gakumas-data/lite";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "./utils";
-import Customizations from "@/customizations/customizations";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {
@@ -118,7 +117,7 @@ export default class EffectManager extends EngineComponent {
     state[S.phase] = parentPhase;
   }
 
-  triggerEffects(state, effects, cndState, card) {
+  triggerEffects(state, effects, cndState, card, skipConditions) {
     const conditionState = cndState || shallowCopy(state);
 
     let triggeredEffects = [];
@@ -160,7 +159,7 @@ export default class EffectManager extends EngineComponent {
       }
 
       // Check conditions
-      if (effect.conditions) {
+      if (!skipConditions && effect.conditions) {
         let satisfied = true;
         for (let j = 0; j < effect.conditions.length; j++) {
           const condition = effect.conditions[j];
@@ -215,6 +214,15 @@ export default class EffectManager extends EngineComponent {
               growthCards.add(k);
             }
             break;
+          } else if (/^effect\(.+\)$/.test(target)) {
+            const effect = target.match(/^effect\((.+)\)/)[1];
+            for (let k = 0; k < state[S.cardMap].length; k++) {
+              if (
+                this.engine.cardManager.getCardEffects(state, k).has(effect)
+              ) {
+                growthCards.add(k);
+              }
+            }
           } else if (/^\d+$/.test(target)) {
             for (let k = 0; k < state[S.cardMap].length; k++) {
               if (state[S.cardMap][k].baseId == target) {
@@ -230,6 +238,13 @@ export default class EffectManager extends EngineComponent {
         // Execute actions
         if (effect.actions) {
           this.engine.executor.executeActions(state, effect.actions, card);
+        }
+
+        // Delayed effects from p-items
+        if (effect.effects) {
+          this.logger.debug("Setting effects", effect.effects);
+          this.setEffects(state, effect.effects, effect.source);
+          this.logger.log(state, "setEffect");
         }
       }
 

@@ -136,6 +136,8 @@ export const INCREASE_TRIGGER_FIELDS = [
 
 export const DECREASE_TRIGGER_FIELDS = ["stamina"];
 
+export const CHANGE_TRIGGER_PHASES = ["card", "cost"];
+
 export const WHOLE_FIELDS = [
   "stamina",
   "genki",
@@ -249,7 +251,6 @@ export const ALL_FIELDS = [
   // Cards
   "cardMap",
   "deckCards",
-  "deckCards",
   "handCards",
   "discardedCards",
   "removedCards",
@@ -283,9 +284,16 @@ export const ALL_FIELDS = [
 
   // Special
   "hajikeruMizushibukiTurnUsed",
+  "nullifyHold",
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {
   acc[cur] = i;
   return acc;
 }, {});
+
+export const HOLD_SOURCES_BY_ALIAS = {
+  hand: S.handCards,
+  deck: S.deckCards,
+  discards: S.discardedCards,
+};

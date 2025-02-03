@@ -11,6 +11,7 @@ import {
   LOGGED_FIELDS,
   S,
   GROWABLE_FIELDS,
+  CHANGE_TRIGGER_PHASES,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "./utils";
@@ -30,15 +31,17 @@ export default class Executor extends EngineComponent {
         engine.cardManager.addRandomUpgradedCardToHand(state),
       moveCardToHand: (state, cardId, exact) =>
         engine.cardManager.moveCardToHand(state, cardId, parseInt(exact, 10)),
+      moveCardToHandFromRemoved: (state, cardBaseId) =>
+        engine.cardManager.moveCardToHandFromRemoved(state, cardBaseId),
       holdCard: (state, cardBaseId) =>
         engine.cardManager.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => engine.cardManager.holdThisCard(state),
       holdSelectedFromHand: (state) =>
-        engine.cardManager.holdSelectedFromHand(state),
+        engine.cardManager.holdSelectedFrom(state, "hand"),
       holdSelectedFromDeck: (state) =>
-        engine.cardManager.holdSelectedFromDeck(state),
+        engine.cardManager.holdSelectedFrom(state, "deck"),
       holdSelectedFromDeckOrDiscards: (state) =>
-        engine.cardManager.holdSelectedFromDeckOrDiscards(state),
+        engine.cardManager.holdSelectedFrom(state, "deck", "discards"),
       addHeldCardsToHand: (state) =>
         engine.cardManager.addHeldCardsToHand(state),
 
@@ -132,27 +135,29 @@ export default class Executor extends EngineComponent {
       }
     }
 
-    // Trigger increase effects
-    for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-      const field = INCREASE_TRIGGER_FIELDS[i];
-      if (state[S.phase] == `${field}Increased`) continue;
-      if (state[S[field]] > prev[S[field]]) {
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${field}Increased`
-        );
+    if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+      // Trigger increase effects
+      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+        const field = INCREASE_TRIGGER_FIELDS[i];
+        if (state[S.phase] == `${field}Increased`) continue;
+        if (state[S[field]] > prev[S[field]]) {
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${field}Increased`
+          );
+        }
       }
-    }
 
-    // Trigger decrease effects
-    for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-      const field = DECREASE_TRIGGER_FIELDS[i];
-      if (state[S.phase] == `${field}Decreased`) continue;
-      if (state[S[field]] < prev[S[field]]) {
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${field}Decreased`
-        );
+      // Trigger decrease effects
+      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+        const field = DECREASE_TRIGGER_FIELDS[i];
+        if (state[S.phase] == `${field}Decreased`) continue;
+        if (state[S[field]] < prev[S[field]]) {
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${field}Decreased`
+          );
+        }
       }
     }
   }

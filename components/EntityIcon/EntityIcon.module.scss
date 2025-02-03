@@ -37,18 +37,32 @@ button.entityIcon:hover {
 .customizations {
   position: absolute;
   top: 60%;
+  display: flex;
+  gap: 2px;
+}
+
+.customization {
   width: 20px;
   height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: $custom-green;
   color: $white;
   font-weight: 600;
   font-size: 14px;
-  border: 1px solid lighten($custom-green, 20%);
-  box-shadow: 0 0 6px $custom-green;
+
+  @include c11n-colors using ($c11n-color) {
+    background-color: $c11n-color;
+    border: 1px solid lighten($c11n-color, 20%);
+    box-shadow: 0 0 6px $c11n-color;
+  }
+
+  @container (width < 600px) {
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+  }
 }
 
 .tier {

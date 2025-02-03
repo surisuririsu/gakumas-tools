@@ -34,7 +34,7 @@
     },
     "simulator": {
       "title": "コンテストシミュレーター",
-      "description": "コンテスト編成を作成、シミュレーターでスコアを予測する"
+      "description": "コンテスト編成を作成、コストを計算し、シミュレーターでスコアを予測する"
     },
     "rehearsal": {
       "title": "リハーサル読み取り",
@@ -86,8 +86,11 @@
     "produceRank": "プロデュース評価",
     "targetScore": "目標スコア",
     "score": "スコア",
-    "niaNote": "※オーディションボーナスのパラメータや投票数の計算方法が分かり次第、機能を更新していきます。<br></br>現在の計算は親愛度20、ファン投票数4万以上前提です。<br></br>実際の値とのずれる場合があります。大きくずれたらゲームのスクショ付けてX(<link>@surisuririsu</link>)で報告してください。",
+    "niaNote": "※オーディションボーナスのパラメータや投票数の計算方法が分かり次第、機能を更新していきます。<br></br>実際の値とのずれる場合があります。大きくずれたらゲームのスクショ付けてX(<link>@surisuririsu</link>)で報告してください。",
+    "affectionAtStartOfProduce": "プロデュース開始時親愛度",
     "stage": "ステージ",
+    "runN": "{num}周目",
+    "runN+": "{num}周目以降",
     "evaluationCriteria": "審査基準",
     "paramsPreAudition": "パラメータ (オーディション前)",
     "paramBonusPct": "パラメータボーナス%",
@@ -121,7 +124,8 @@
   },
   "Dex": {
     "skillCards": "スキルカード",
-    "pItems": "Pアイテム"
+    "pItems": "Pアイテム",
+    "maxTimes": "最大{n}回"
   },
   "EntityBank": {
     "filter": "フィルタ"
@@ -138,7 +142,7 @@
   },
   "MemoryCalculator": {
     "note": "※表示される確率はあくまで全メモリーが同確立で生成されるとして求められた推測値であり、実際の確率とは異なる可能性があります。",
-    "target": "欲しいパターン",
+    "target": "欲しい組み合わせ",
     "acquired": "取得スキルカード（強化前後含む）",
     "produceRank": "プロデュース評価",
     "costRange": "コスト範囲",
@@ -172,10 +176,17 @@
     "selected": "{num}個のメモリーを選択",
     "delete": "削除する"
   },
+  "MemoryImporterModal": {
+    "importMemories": "Import memories from screenshots",
+    "instructions": "<p>Contest power, parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once. The recommended limit is 50 memories per batch. Use on a smartphone is not recommended.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
+    "progress": "Progress: {progress}/{total}"
+  },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
     "enterPercents": "計算式が解明されていないため、スコアボーナスの%を入力してください。",
+    "custom": "カスタム",
     "simulate": "実行",
+    "provideData": "データを提供する",
     "lastUpdated": "最終更新"
   },
   "StageSelect": {
@@ -272,6 +283,9 @@
     "addedCardToHand": "スキルカードを手札に生成",
     "upgradedCard": "スキルカードをレッスン中強化",
     "cardGrowth": "スキルカードを成長",
+    "heldCard": "スキルカードを保留に移動",
+    "discardedCard": "スキルカードを捨札に移動",
+    "movedCardToHand": "スキルカードを手札に移動",
     "effect": "持続効果",
     "stageEffect": "ステージ効果",
     "skillCard": "スキルカード",
@@ -292,6 +306,7 @@
   },
   "Rehearsal": {
     "addScreenshots": "リハーサル結果画面のスクリーンショットからスコアを読み取ります。",
-    "accuracyNotGuaranteed": "精度は保証できません。スクリーンショットと比較して、結果を確認することをお勧めします。"
+    "accuracyNotGuaranteed": "精度は保証できません。スクリーンショットと比較して、結果を確認することをお勧めします。",
+    "stage": "ステージ{n}"
   }
 }

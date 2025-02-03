@@ -34,7 +34,7 @@
     },
     "simulator": {
       "title": "Contest Simulator",
-      "description": "Create and simulate contest loadouts"
+      "description": "Create and simulate contest loadouts, and calculate memory cost"
     },
     "rehearsal": {
       "title": "Rehearsal Parser",
@@ -84,8 +84,11 @@
     "produceRank": "Produce rank",
     "targetScore": "Target score",
     "score": "Score",
-    "niaNote": "※Functionality will be updated as we learn more about parameter and vote counts from audition bonus.<br></br>Current calculations are for affection 20 with at least A+ vote rank only.<br></br>If you find a case where the calculation is inaccurate, please send it with screenshots to <link>@surisuririsu</link> on X.",
+    "niaNote": "※Functionality will be updated as we learn more about parameter and vote counts from audition bonus.<br></br>If you find a case where the calculation is inaccurate, please send it with screenshots to <link>@surisuririsu</link> on X.",
+    "affectionAtStartOfProduce": "Affection at start of produce",
     "stage": "Stage",
+    "runN": "Run {num}",
+    "runN+": "Run {num}+",
     "evaluationCriteria": "Evaluation criteria",
     "paramsPreAudition": "Params (pre-audition)",
     "paramBonusPct": "Param bonus %",
@@ -119,7 +122,8 @@
   },
   "Dex": {
     "skillCards": "Skill cards",
-    "pItems": "P-items"
+    "pItems": "P-items",
+    "maxTimes": "Max {n}"
   },
   "EntityBank": {
     "filter": "Filter"
@@ -170,10 +174,17 @@
     "selected": "{num} memories selected",
     "delete": "Delete"
   },
+  "MemoryImporterModal": {
+    "importMemories": "Import memories from screenshots",
+    "instructions": "<p>Contest power, parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once. The recommended limit is 50 memories per batch. Use on a smartphone is not recommended.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
+    "progress": "Progress: {progress}/{total}"
+  },
   "Simulator": {
     "supportBonus": "Support bonus %",
     "enterPercents": "Since the score multiplier calculation is unknown, please enter the multipliers (%) directly.",
+    "custom": "Custom",
     "simulate": "Simulate",
+    "provideData": "Provide data",
     "lastUpdated": "Last updated"
   },
   "StageSelect": {
@@ -270,6 +281,9 @@
     "addedCardToHand": "Added card to hand",
     "upgradedCard": "Upgraded card",
     "cardGrowth": "Card growth",
+    "heldCard": "Held card",
+    "discardedCard": "Discarded card",
+    "movedCardToHand": "Moved card to hand",
     "effect": "Effect",
     "stageEffect": "Stage effect",
     "skillCard": "Skill card",
@@ -290,6 +304,7 @@
   },
   "Rehearsal": {
     "addScreenshots": "Add screenshots of the rehearsal result screen to parse scores from.",
-    "accuracyNotGuaranteed": "Accuracy is not guaranteed. It is recommended to manually verify the results by comparing with your screenshots."
+    "accuracyNotGuaranteed": "Accuracy is not guaranteed. It is recommended to manually verify the results by comparing with your screenshots.",
+    "stage": "Stage {n}"
   }
 }
