@@ -89,6 +89,7 @@
     "stage": "舞台",
     "runN": "Run {num}",
     "runN+": "Run {num}+",
+    "idol": "Idol",
     "evaluationCriteria": "评级标准",
     "paramsPreAudition": "属性（试镜前）",
     "paramBonusPct": "属性加成 %",

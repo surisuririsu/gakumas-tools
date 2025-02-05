@@ -9,7 +9,7 @@ export function WorkspaceContextProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
   const [filter, setFilter] = useState(true);
   const [plan, setPlan] = useState("sense");
-  const [idolId, setIdolId] = useState(1);
+  const [idolId, setIdolId] = useState(6);
   const [pinnedTools, setPinnedTools] = useState([]);
 
   useEffect(() => {

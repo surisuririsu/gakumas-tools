@@ -1,26 +1,39 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Idols } from "@/utils/data";
 import ButtonGroup from "@/components/ButtonGroup";
+import IconSelect from "@/components/IconSelect";
 import Input from "@/components/Input";
 import LineChart from "@/components/LineChart";
 import ParametersInput from "@/components/ParametersInput";
-import ParamOrderPicker from "@/components/ParamOrderPicker";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { getRank } from "@/utils/produceRank";
 import {
   calculateBonusParams,
   calculateGainedParams,
   calculateGainedVotes,
-  calculateMaxScores,
   calculatePostAuditionParams,
   calculateVoteRating,
   getVoteRank,
   MAX_PARAMS,
+  PARAM_ORDER_BY_IDOL,
   PARAM_REGIMES_BY_ORDER_BY_STAGE,
 } from "@/utils/nia";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
 import styles from "./NiaCalculator.module.scss";
+
+const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
+  value: i + 10,
+  label: i + 10,
+}));
+
+const IDOL_OPTIONS = Idols.getAll().map(({ id, name, getIcon }) => ({
+  id,
+  iconSrc: getIcon(),
+  alt: name,
+}));
 
 const STAGE_OPTIONS = [
   { value: "melobang", label: "メロBang!" },
@@ -29,24 +42,18 @@ const STAGE_OPTIONS = [
   { value: "finale", label: "FINALE" },
 ];
 
-const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
-  value: i + 10,
-  label: i + 10,
-}));
-
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
+  const { idolId, setIdolId } = useContext(WorkspaceContext);
 
   const [stage, setStage] = useState("finale");
-  const [paramOrder, setParamOrder] = useState([1, 2, 3]);
   const [params, setParams] = useState([null, null, null]);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
   const [votes, setVotes] = useState(0);
   const [affection, setAffection] = useState(20);
   const [scores, setScores] = useState([null, null, null]);
 
-  const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
-
+  const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
   const gainedParams = calculateGainedParams(stage, paramOrder, scores);
   const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
   const postAuditionParams = calculatePostAuditionParams(
@@ -74,15 +81,21 @@ export default function NiaCalculator() {
   return (
     <div className={styles.nia}>
       <section>
+        <label>{t("idol")}</label>
+        <div className={styles.idolSelect}>
+          <IconSelect
+            options={IDOL_OPTIONS}
+            selected={idolId}
+            onChange={setIdolId}
+          />
+        </div>
+
         <label>{t("affectionAtStartOfProduce")}</label>
         <ButtonGroup
           options={AFFECTION_OPTIONS}
           selected={affection}
           onChange={setAffection}
         />
-
-        <label>{t("evaluationCriteria")}</label>
-        <ParamOrderPicker initialOrder={paramOrder} onChange={setParamOrder} />
 
         <label>{t("paramBonusPct")}</label>
         <ParametersInput
