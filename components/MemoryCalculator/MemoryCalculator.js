@@ -1,18 +1,15 @@
 "use client";
-import React, { memo, useContext, useMemo, useState } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import EntityIcon from "@/components/EntityIcon";
-import EntityPickerModal from "@/components/EntityPickerModal";
 import IconSelect from "@/components/IconSelect";
-import TargetSkillCards from "@/components/TargetSkillCards";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
-import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { COST_RANGES_BY_RANK } from "@/utils/contestPower";
-import { EntityTypes } from "@/utils/entities";
 import { generatePossibleMemories } from "@/utils/skillCardLottery";
+import AcquiredSkillCards from "./AcquiredSkillCards";
 import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
+import TargetSkillCards from "./TargetSkillCards";
 import styles from "./MemoryCalculator.module.scss";
 
 const RANK_OPTIONS = ["B", "B+", "A", "A+", "S", "S+", "SS"].map((r) => ({
@@ -42,11 +39,9 @@ function MemoryCalculator() {
     alternateSkillCardIds,
     targetNegations,
     acquiredSkillCardIds,
-    replaceAcquiredCardId,
     rank,
     setRank,
   } = useContext(MemoryCalculatorContext);
-  const { setModal } = useContext(ModalContext);
   const { idolId } = useContext(WorkspaceContext);
   const [showOnTargetResults, setShowOnTargetResults] = useState(true);
   const [showOffTargetResults, setShowOffTargetResults] = useState(false);
@@ -123,29 +118,7 @@ function MemoryCalculator() {
       <TargetSkillCards idolId={idolId} />
 
       <label>{t("acquired")}</label>
-      <div className={styles.skillCards}>
-        {useMemo(
-          () =>
-            acquiredSkillCardIds.map((skillCardId, index) => (
-              <EntityIcon
-                key={`${index}_${skillCardId}`}
-                type={EntityTypes.SKILL_CARD}
-                id={skillCardId}
-                onClick={() =>
-                  setModal(
-                    <EntityPickerModal
-                      type={EntityTypes.SKILL_CARD}
-                      onPick={(card) => replaceAcquiredCardId(index, card.id)}
-                    />
-                  )
-                }
-                idolId={idolId}
-                showTier
-              />
-            )),
-          [acquiredSkillCardIds, idolId]
-        )}
-      </div>
+      <AcquiredSkillCards />
 
       <label>{t("produceRank")}</label>
       <div className={styles.rankSelect}>
