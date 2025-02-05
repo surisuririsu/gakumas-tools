@@ -1,5 +1,19 @@
 export const MAX_PARAMS = 2000;
 
+export const PARAM_ORDER_BY_IDOL = {
+  1: [3, 2, 1],
+  2: [1, 2, 3],
+  3: [3, 1, 2],
+  4: [1, 3, 2],
+  5: [3, 2, 1],
+  6: [3, 1, 2],
+  7: [3, 1, 2],
+  8: [1, 2, 3],
+  9: [3, 2, 1],
+  10: [2, 1, 3],
+  11: [2, 3, 1],
+};
+
 export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
   melobang: {
     1: [

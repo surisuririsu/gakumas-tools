@@ -91,6 +91,7 @@
     "stage": "ステージ",
     "runN": "{num}周目",
     "runN+": "{num}周目以降",
+    "idol": "アイドル",
     "evaluationCriteria": "審査基準",
     "paramsPreAudition": "パラメータ (オーディション前)",
     "paramBonusPct": "パラメータボーナス%",

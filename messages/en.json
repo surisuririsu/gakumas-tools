@@ -89,6 +89,7 @@
     "stage": "Stage",
     "runN": "Run {num}",
     "runN+": "Run {num}+",
+    "idol": "Idol",
     "evaluationCriteria": "Evaluation criteria",
     "paramsPreAudition": "Params (pre-audition)",
     "paramBonusPct": "Param bonus %",
