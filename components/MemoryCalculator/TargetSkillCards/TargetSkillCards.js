@@ -27,6 +27,9 @@ function TargetSkillCards({ idolId }) {
   const filters = useMemo(
     () => [
       {
+        callback: (e) => e.sourceType != "pIdol",
+      },
+      {
         label: t("acquired"),
         callback: (e) => acquiredSkillCardIds.includes(e.id),
         default: acquiredSkillCardIds.some((id) => id),
