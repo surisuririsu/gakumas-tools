@@ -85,7 +85,7 @@
     "targetScore": "目标分数",
     "score": "最终得分",
     "niaNote": "※ 随着我们进一步了解分数加成的参数和投票数的计算方法，本功能将持续更新。<br></br>如果您发现计算有误的情况，请将截图发送至此X账号 <link>@surisuririsu</link> ",
-    "affectionAtStartOfProduce": "Affection at start of produce",
+    "affectionAtStartOfProduce": "制作开始时好感度",
     "stage": "舞台",
     "runN": "Run {num}",
     "runN+": "Run {num}+",
@@ -176,9 +176,9 @@
     "delete": "删除"
   },
   "MemoryImporterModal": {
-    "importMemories": "Import memories from screenshots",
-    "instructions": "<p>Contest power, parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once. The recommended limit is 50 memories per batch. Use on a smartphone is not recommended.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
-    "progress": "Progress: {progress}/{total}"
+    "importMemories": "从截图中导入回忆卡",
+    "instructions": "<p>>每张截图中必须清晰显示总合力、属性、P 物品和技能卡图标。</p><p>记忆卡导入耗时取决于导入数量及设备处理器性能与内存容量，可能需要数秒至数分钟。单次导入过多记忆卡可能导致浏览器崩溃，建议每批次最多导入50张记忆卡。不建议在移动端使用。</p><p> 部分记忆卡可能解析失败，需导入后手动修复，此类条目将在名称中标记为 \"(FIXME)\" </p>",
+    "progress": "进度: {progress}/{total}"
   },
   "Simulator": {
     "supportBonus": "支援加成 %",
@@ -282,9 +282,9 @@
     "addedCardToHand": "生成技能卡",
     "upgradedCard": "临时强化技能卡",
     "cardGrowth": "强化技能卡",
-    "heldCard": "Held card",
-    "discardedCard": "Discarded card",
-    "movedCardToHand": "Moved card to hand",
+    "heldCard": "将技能卡移动到保留区",
+    "discardedCard": "将技能卡移动到弃牌堆",
+    "movedCardToHand": "将技能卡移动到手牌",
     "effect": "发动效果",
     "stageEffect": "舞台效果",
     "skillCard": "技能卡",
