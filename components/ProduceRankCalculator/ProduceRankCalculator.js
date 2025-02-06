@@ -18,7 +18,7 @@ function ProduceRankCalculator() {
     [t]
   );
 
-  const [scenario, setScenario] = useState("hajime");
+  const [scenario, setScenario] = useState("nia");
 
   return (
     <div className={styles.produceRankCalculator}>

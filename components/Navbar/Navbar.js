@@ -24,7 +24,7 @@ function Navbar() {
             icon={TOOLS[key].icon}
             path={TOOLS[key].path}
             title={t(`${key}.title`)}
-            active={TOOLS[key].path == pathname}
+            active={pathname.startsWith(TOOLS[key].path)}
           />
         ))}
       </div>

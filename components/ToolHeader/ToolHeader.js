@@ -9,7 +9,9 @@ import styles from "./ToolHeader.module.scss";
 function ToolHeader() {
   const pathname = usePathname();
   const { pinnedTools, pin } = useContext(WorkspaceContext);
-  const tool = Object.keys(TOOLS).find((t) => TOOLS[t].path == pathname);
+  const tool = Object.keys(TOOLS).find((t) =>
+    pathname.startsWith(TOOLS[t].path)
+  );
 
   if (!tool || !TOOLS[tool].pinnable || pinnedTools.includes(tool)) return null;
 
