@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 
 export default function ProduceRankCalculatorPage({ params: { locale } }) {
-  redirect("calculator/hajime");
+  redirect("calculator/nia");
   return null;
 }
