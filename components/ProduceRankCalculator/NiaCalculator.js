@@ -194,32 +194,28 @@ export default function NiaCalculator() {
           onChange={setScores}
         />
 
-        {true && (
-          <>
-            <label>{t("gainedParams")}</label>
-            <ParamBadges params={gainedParams} />
+        <label>{t("gainedParams")}</label>
+        <ParamBadges params={gainedParams} />
 
-            <label>{t("bonusParams")}</label>
-            <ParamBadges params={bonusParams} />
+        <label>{t("bonusParams")}</label>
+        <ParamBadges params={bonusParams} />
 
-            <label>{t("paramsPostAudition")}</label>
-            <Params params={postAuditionParams} />
+        <label>{t("paramsPostAudition")}</label>
+        <Params params={postAuditionParams} />
 
-            <label>{t("gainedVotes")}</label>
-            <div>+{gainedVotes}</div>
+        <label>{t("gainedVotes")}</label>
+        <div>+{gainedVotes}</div>
 
-            <label>{t("votesPostAudition")}</label>
-            <div>
-              {totalVotes}
-              {voteRank ? ` (${voteRank})` : null}
-            </div>
+        <label>{t("votesPostAudition")}</label>
+        <div>
+          {totalVotes}
+          {voteRank ? ` (${voteRank})` : null}
+        </div>
 
-            <label>{t("produceRank")}</label>
-            <span>
-              {actualRating} {actualRank ? `(${actualRank})` : null}
-            </span>
-          </>
-        )}
+        <label>{t("produceRank")}</label>
+        <span>
+          {actualRating} {actualRank ? `(${actualRank})` : null}
+        </span>
       </section>
 
       <span className={styles.note}>

@@ -95,29 +95,25 @@ function HajimeCalculator() {
         onChange={setParams}
       />
 
-      {!!params.every((p) => !!p) && (
+      <label>{t("targetScores")}</label>
+      <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
+
+      <label>{t("score")}</label>
+      <Input
+        type="number"
+        value={actualScore || ""}
+        placeholder={t("score")}
+        onChange={setActualScore}
+        min={0}
+        max={10000000}
+      />
+
+      {!!actualScore && (
         <>
-          <label>{t("targetScores")}</label>
-          <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
-
-          <label>{t("score")}</label>
-          <Input
-            type="number"
-            value={actualScore || ""}
-            placeholder={t("score")}
-            onChange={setActualScore}
-            min={0}
-            max={10000000}
-          />
-
-          {!!actualScore && (
-            <>
-              <label>{t("produceRank")}</label>
-              <span>
-                {actualRating} {actualRank ? `(${actualRank})` : null}
-              </span>
-            </>
-          )}
+          <label>{t("produceRank")}</label>
+          <span>
+            {actualRating} {actualRank ? `(${actualRank})` : null}
+          </span>
         </>
       )}
     </>

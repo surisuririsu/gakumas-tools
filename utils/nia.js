@@ -101,20 +101,6 @@ export function calculateGainedParams(stage, paramOrder, scores) {
   });
 }
 
-// function calculateScoreForGainedParams(stage, paramOrder, gainedParams) {
-//   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
-//   return gainedParams.map((param, i) => {
-//     const regimes = paramRegimesByOrder[paramOrder[i]];
-//     for (let j = 0; j < regimes.length; j++) {
-//       const { threshold, multiplier, constant } = regimes[j];
-//       if (param > threshold) {
-//         return Math.floor((param - constant) / multiplier);
-//       }
-//     }
-//     return 0;
-//   });
-// }
-
 export function calculateMaxScores(stage, paramOrder, params, paramBonuses) {
   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
   return paramOrder.map((order, i) => {
@@ -362,14 +348,6 @@ export function calculateRecommendedScores(
             currentVoteRank?.multiplier || 0)
     );
 
-    // console.log(
-    //   scoreToNextVoteRank,
-    //   scoreToMaxParam,
-    //   scoreToNextParamRegime,
-    //   scoreToNextVoteRegime,
-    //   remainingScore
-    // );
-
     const targetScores = [
       scoreToNextVoteRank,
       scoreToMaxParam,
@@ -380,10 +358,10 @@ export function calculateRecommendedScores(
 
     if (!targetScores.length) break;
     currentScores[selectedParam] += Math.min(...targetScores);
-    console.log(currentScores);
 
-    // Safety
     i++;
+
+    // Break if too many iterations
     if (i > 1000) break;
   }
 
