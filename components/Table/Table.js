@@ -16,8 +16,8 @@ function Table({ headers, widths = [], rows }) {
       <tbody>
         {rows.map((row, i) => (
           <tr key={i}>
-            {row.map((d) => (
-              <td key={d}>{d}</td>
+            {row.map((d, j) => (
+              <td key={j}>{d}</td>
             ))}
           </tr>
         ))}

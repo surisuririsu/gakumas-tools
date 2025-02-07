@@ -94,6 +94,7 @@
     "paramsPreAudition": "属性（试镜前）",
     "paramBonusPct": "属性加成 %",
     "votesPreAudition": "票数（试镜前）",
+    "recommendedScores": "Recommended scores",
     "paramHighGrowthScores": "属性增长在超过此分数后会减缓",
     "paramMaximizingScores": "属性增长在超过此分数后会停止",
     "voteCount": "票数",
