@@ -1,19 +1,22 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { FaCircleChevronDown } from "react-icons/fa6";
 import { Idols } from "@/utils/data";
 import ButtonGroup from "@/components/ButtonGroup";
 import IconSelect from "@/components/IconSelect";
 import Input from "@/components/Input";
 import LineChart from "@/components/LineChart";
 import ParametersInput from "@/components/ParametersInput";
+import Table from "@/components/Table";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { getRank } from "@/utils/produceRank";
+import { getRank, TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 import {
   calculateBonusParams,
   calculateGainedParams,
   calculateGainedVotes,
   calculatePostAuditionParams,
+  calculateRecommendedScores,
   calculateVoteRating,
   getVoteRank,
   MAX_PARAMS,
@@ -42,8 +45,13 @@ const STAGE_OPTIONS = [
   { value: "finale", label: "FINALE" },
 ];
 
+const FINAL_AUDITIONS = ["quartet", "finale"];
+
 export default function NiaCalculator() {
   const t = useTranslations("ProduceRankCalculator");
+
+  const TABLE_HEADERS = [t("produceRank"), "Vo", "Da", "Vi"];
+
   const { idolId, setIdolId } = useContext(WorkspaceContext);
 
   const [stage, setStage] = useState("finale");
@@ -54,6 +62,17 @@ export default function NiaCalculator() {
   const [scores, setScores] = useState([null, null, null]);
 
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
+  const recommendedScores = useMemo(() => {
+    if (!FINAL_AUDITIONS.includes(stage)) return null;
+    return calculateRecommendedScores(
+      stage,
+      paramOrder,
+      paramBonuses,
+      affection,
+      params,
+      votes
+    );
+  }, [stage, paramOrder, paramBonuses, affection, params, votes]);
   const gainedParams = calculateGainedParams(stage, paramOrder, scores);
   const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
   const postAuditionParams = calculatePostAuditionParams(
@@ -132,6 +151,34 @@ export default function NiaCalculator() {
         />
       </section>
 
+      {recommendedScores && (
+        <section className={styles.recommendedScores}>
+          <label>{t("recommendedScores")}</label>
+          <Table
+            headers={TABLE_HEADERS}
+            rows={Object.keys(TARGET_RATING_BY_RANK).map((rank) => {
+              let row = [
+                recommendedScores[rank] ? (
+                  <button onClick={() => setScores(recommendedScores[rank])}>
+                    <FaCircleChevronDown />
+                    <span className={styles.rankButtonLabel}>
+                      {rank} ({TARGET_RATING_BY_RANK[rank]})
+                    </span>
+                  </button>
+                ) : (
+                  `${rank} (${TARGET_RATING_BY_RANK[rank]})`
+                ),
+              ];
+              if (recommendedScores[rank]) {
+                return row.concat(recommendedScores[rank]);
+              } else {
+                return row.concat(["-", "-", "-"]);
+              }
+            })}
+          />
+        </section>
+      )}
+
       <section>
         <LineChart
           paramOrder={paramOrder}
@@ -143,13 +190,11 @@ export default function NiaCalculator() {
         <label>{t("scores")}</label>
         <ParametersInput
           parameters={scores}
-          max={10000000}
+          max={1000000000}
           onChange={setScores}
         />
 
-        {/* <>TODO: Add target scores</> */}
-
-        {!!totalScore && (
+        {true && (
           <>
             <label>{t("gainedParams")}</label>
             <ParamBadges params={gainedParams} />

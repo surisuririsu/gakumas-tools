@@ -96,6 +96,7 @@
     "paramsPreAudition": "パラメータ (オーディション前)",
     "paramBonusPct": "パラメータボーナス%",
     "votesPreAudition": "ファン投票数 (オーディション前)",
+    "recommendedScores": "推奨スコア",
     "paramHighGrowthScores": "これ以上のスコアはパラメータが伸びにくい",
     "paramMaximizingScores": "これ以上のスコアはパラメータが伸びない",
     "voteCount": "ファン投票数",

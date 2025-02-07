@@ -94,6 +94,7 @@
     "paramsPreAudition": "Params (pre-audition)",
     "paramBonusPct": "Param bonus %",
     "votesPreAudition": "Votes (pre-audition)",
+    "recommendedScores": "Recommended scores",
     "paramHighGrowthScores": "Param growth slows above these scores",
     "paramMaximizingScores": "Param growth stops above these scores",
     "voteCount": "Vote count",

@@ -1,3 +1,5 @@
+import { TARGET_RATING_BY_RANK } from "@/utils/produceRank";
+
 export const MAX_PARAMS = 2000;
 
 export const PARAM_ORDER_BY_IDOL = {
@@ -99,6 +101,20 @@ export function calculateGainedParams(stage, paramOrder, scores) {
   });
 }
 
+// function calculateScoreForGainedParams(stage, paramOrder, gainedParams) {
+//   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
+//   return gainedParams.map((param, i) => {
+//     const regimes = paramRegimesByOrder[paramOrder[i]];
+//     for (let j = 0; j < regimes.length; j++) {
+//       const { threshold, multiplier, constant } = regimes[j];
+//       if (param > threshold) {
+//         return Math.floor((param - constant) / multiplier);
+//       }
+//     }
+//     return 0;
+//   });
+// }
+
 export function calculateMaxScores(stage, paramOrder, params, paramBonuses) {
   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
   return paramOrder.map((order, i) => {
@@ -166,6 +182,20 @@ export function calculateGainedVotes(stage, affection, score) {
   return 0;
 }
 
+function calculateScoreForVotes(stage, affection, votes) {
+  const regimes = VOTE_REGIMES_BY_STAGE[stage];
+  for (let j = 0; j < regimes.length; j++) {
+    const { threshold, multiplier, constant } = regimes[j];
+    if (votes > constant) {
+      return Math.floor(
+        (Math.ceil(votes / (1 + 0.05 * (affection - 10))) - constant) /
+          multiplier
+      );
+    }
+  }
+  return 0;
+}
+
 const VOTE_RANKS = [
   { rank: "SS", threshold: 100000 },
   { rank: "S+", threshold: 80000 },
@@ -175,7 +205,7 @@ const VOTE_RANKS = [
 
 export function getVoteRank(votes) {
   for (let i = 0; i < VOTE_RANKS.length; i++) {
-    if (votes > VOTE_RANKS[i].threshold) {
+    if (votes >= VOTE_RANKS[i].threshold) {
       return VOTE_RANKS[i].rank;
     }
   }
@@ -192,4 +222,170 @@ const FAN_RATING_BY_VOTE_RANK = {
 export function calculateVoteRating(votes, voteRank) {
   const { base, multiplier } = FAN_RATING_BY_VOTE_RANK[voteRank];
   return base + Math.ceil(votes * multiplier);
+}
+
+export function calculateRecommendedScores(
+  stage,
+  paramOrder,
+  paramBonuses,
+  affection,
+  params,
+  votes
+) {
+  let i = 0;
+  const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
+  const voteRegimes = VOTE_REGIMES_BY_STAGE[stage];
+  const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
+  let recommendedScores = {};
+  let currentScores = [0, 0, 0];
+
+  const produceRanks = Object.keys(TARGET_RATING_BY_RANK);
+  let rankIndex = produceRanks.length - 1;
+  while (true) {
+    // Current target
+    const targetRank = produceRanks[rankIndex];
+    const targetRating = TARGET_RATING_BY_RANK[targetRank];
+
+    // Calculate current state
+    const gainedParams = calculateGainedParams(
+      stage,
+      paramOrder,
+      currentScores
+    );
+    console.log(gainedParams);
+    const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
+    const postAuditionParams = calculatePostAuditionParams(
+      params,
+      gainedParams,
+      bonusParams
+    );
+
+    const totalScore = currentScores.reduce((acc, cur) => acc + cur, 0);
+    const gainedVotes = calculateGainedVotes(stage, affection, totalScore);
+    const postAuditionVotes = votes + gainedVotes;
+
+    const currentParamRating = Math.floor(
+      postAuditionParams.reduce((acc, cur) => acc + cur, 0) * 2.3
+    );
+
+    let currentVoteRating = 0;
+    const voteRank = getVoteRank(postAuditionVotes);
+    if (voteRank) {
+      currentVoteRating = calculateVoteRating(postAuditionVotes, voteRank);
+    }
+
+    console.log(currentParamRating, currentVoteRating);
+
+    // Check if target is reached
+    if (currentParamRating + currentVoteRating >= targetRating) {
+      recommendedScores[targetRank] = [...currentScores];
+      rankIndex--;
+      if (rankIndex < 0) break;
+      continue;
+    }
+
+    // Determine parameter to allocate score
+    const multipliers = paramOrder.map((order, i) => {
+      const regimes = paramRegimesByOrder[order];
+      for (let j = 0; j < regimes.length; j++) {
+        const { threshold, multiplier } = regimes[j];
+        if (currentScores[i] >= threshold) {
+          return multiplier;
+        }
+      }
+      return 0;
+    });
+    const maxMultiplier = Math.max(...multipliers);
+    const selectedParam = paramOrder.reduce((acc, cur, i) => {
+      if (multipliers[i] == maxMultiplier && cur < paramOrder[acc]) {
+        return i;
+      }
+      return acc;
+    }, 0);
+
+    // Score to next vote rank
+    let scoreToNextVoteRank = Infinity;
+    let voteRankIndex = VOTE_RANKS.findIndex((rank) => rank.rank == voteRank);
+    if (voteRankIndex == -1) voteRankIndex = VOTE_RANKS.length;
+    if (voteRankIndex > 0) {
+      const votesToNextVoteRank =
+        VOTE_RANKS[voteRankIndex - 1].threshold - votes;
+      scoreToNextVoteRank =
+        calculateScoreForVotes(stage, affection, votesToNextVoteRank) -
+        totalScore;
+    }
+
+    // Score to max for selected param
+    let scoreToMaxParam =
+      maxScores[selectedParam] - currentScores[selectedParam];
+    if (scoreToMaxParam <= 0) scoreToMaxParam = Infinity;
+
+    // Current regimes
+    const paramRegimes = paramRegimesByOrder[paramOrder[selectedParam]];
+    const currentParamRegimeIndex = paramRegimes.findIndex(
+      (regime) => regime.multiplier == maxMultiplier
+    );
+    const currentVoteRegimeIndex = voteRegimes.findIndex(
+      (regime) => totalScore >= regime.threshold
+    );
+
+    // Score to next param regime
+    let scoreToNextParamRegime = Infinity;
+    if (currentParamRegimeIndex > 0) {
+      const nextParamRegime = paramRegimes[currentParamRegimeIndex - 1];
+      scoreToNextParamRegime =
+        nextParamRegime.threshold - currentScores[selectedParam];
+    }
+
+    // Score to next vote regime
+    let scoreToNextVoteRegime = Infinity;
+    if (currentVoteRegimeIndex > 0) {
+      const nextVoteRegime = voteRegimes[currentVoteRegimeIndex - 1];
+      scoreToNextVoteRegime = nextVoteRegime.threshold - totalScore;
+    }
+
+    // Remaining score
+    const currentParamRegime = paramRegimes[currentParamRegimeIndex];
+    const currentVoteRegime = voteRegimes[currentVoteRegimeIndex];
+    const currentVoteRank = FAN_RATING_BY_VOTE_RANK[voteRank];
+
+    const remainingRating =
+      targetRating - currentParamRating - currentVoteRating;
+
+    const remainingScore = Math.floor(
+      remainingRating /
+        (2.3 *
+          currentParamRegime.multiplier *
+          (1 + paramBonuses[selectedParam] / 100) +
+          currentVoteRegime.multiplier *
+            (1 + 0.05 * (affection - 10)) *
+            currentVoteRank?.multiplier || 0)
+    );
+
+    // console.log(
+    //   scoreToNextVoteRank,
+    //   scoreToMaxParam,
+    //   scoreToNextParamRegime,
+    //   scoreToNextVoteRegime,
+    //   remainingScore
+    // );
+
+    const targetScores = [
+      scoreToNextVoteRank,
+      scoreToMaxParam,
+      scoreToNextParamRegime,
+      scoreToNextVoteRegime,
+      remainingScore,
+    ].filter((score) => score != Infinity && score > 0);
+
+    if (!targetScores.length) break;
+    currentScores[selectedParam] += Math.min(...targetScores);
+    console.log(currentScores);
+
+    // Safety
+    i++;
+    if (i > 1000) break;
+  }
+
+  return recommendedScores;
 }

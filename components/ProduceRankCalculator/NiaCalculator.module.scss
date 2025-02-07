@@ -14,6 +14,87 @@
   align-self: flex-start;
 }
 
+.recommendedScores {
+  table {
+    height: 0;
+    text-align: center;
+
+    thead,
+    tbody {
+      background: none;
+    }
+  }
+
+  th {
+    background-color: $gray;
+    color: $white;
+    width: 22%;
+  }
+
+  th:nth-child(1) {
+    width: 34%;
+  }
+
+  th:nth-child(2) {
+    background-color: $vocal;
+  }
+
+  th:nth-child(3) {
+    background-color: $dance;
+  }
+
+  th:nth-child(4) {
+    background-color: $visual;
+  }
+
+  td {
+    color: $black-dark;
+  }
+
+  td:nth-child(1) {
+    padding: 0;
+    background-color: $gray-extra-light;
+  }
+
+  td:nth-child(2) {
+    background-color: scale-color($vocal, $alpha: -50%);
+  }
+
+  td:nth-child(3) {
+    background-color: scale-color($dance, $alpha: -50%);
+  }
+
+  td:nth-child(4) {
+    background-color: scale-color($visual, $alpha: -50%);
+  }
+
+  button {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    padding: 0 8px;
+    color: $gray;
+  }
+
+  .rankButtonLabel {
+    flex: 1;
+    color: $black-dark;
+  }
+}
+
 .note a {
   color: $blue;
+}
+
+@container (width < 530px) {
+  .recommendedScores {
+    font-size: 12px;
+
+    th,
+    td {
+      padding: 4px 0;
+      overflow: hidden;
+    }
+  }
 }
