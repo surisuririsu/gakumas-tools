@@ -16,6 +16,7 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import STRATEGIES from "@/simulator/strategies";
+import { logEvent } from "@/utils/logging";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import { formatStageShortName } from "@/utils/stages";
 import SimulatorButtons from "./SimulatorButtons";
@@ -112,6 +113,15 @@ export default function Simulator() {
         const mergedResults = mergeResults(results);
         setResult(mergedResults);
         pushLoadoutHistory();
+
+        logEvent("simulator.simulate", {
+          stageId: stage.id,
+          idolId: idolConfig.idolId,
+          url: simulatorUrl,
+          minScore: mergedResults.minRun.score,
+          averageScore: mergedResults.averageScore,
+          maxScore: mergedResults.maxRun.score,
+        });
       });
     }
   }
