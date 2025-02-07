@@ -189,16 +189,17 @@ export default function Simulator() {
         <Button style="blue" onClick={runSimulation} disabled={running}>
           {running ? <Loader /> : t("simulate")}
         </Button>
-        <Button
-          href={`https://docs.google.com/forms/d/e/1FAIpQLScNquedw8Lp2yVfZjoBFMjQxIFlX6-rkzDWIJTjWPdQVCJbiQ/viewform?usp=pp_url&entry.1787906485=${encodeURIComponent(
-            simulatorUrl
-          )}`}
-          target="_blank"
-        >
-          {t("provideData")}
-        </Button>
         <SimulatorButtons />
+        <div className={styles.url}>{simulatorUrl}</div>
         <div className={styles.subLinks}>
+          <a
+            href={`https://docs.google.com/forms/d/e/1FAIpQLScNquedw8Lp2yVfZjoBFMjQxIFlX6-rkzDWIJTjWPdQVCJbiQ/viewform?usp=pp_url&entry.1787906485=${encodeURIComponent(
+              simulatorUrl
+            )}`}
+            target="_blank"
+          >
+            {t("provideData")}
+          </a>
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
