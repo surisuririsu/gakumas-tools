@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCircleChevronDown } from "react-icons/fa6";
 import { Idols } from "@/utils/data";
@@ -20,6 +20,7 @@ import {
   calculateVoteRating,
   getVoteRank,
   MAX_PARAMS,
+  MIN_VOTES_BY_STAGE,
   PARAM_ORDER_BY_IDOL,
   PARAM_REGIMES_BY_ORDER_BY_STAGE,
 } from "@/utils/nia";
@@ -57,11 +58,18 @@ export default function NiaCalculator() {
   const [stage, setStage] = useState("finale");
   const [params, setParams] = useState([null, null, null]);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
-  const [votes, setVotes] = useState(0);
+  const [votes, setVotes] = useState(MIN_VOTES_BY_STAGE[stage]);
   const [affection, setAffection] = useState(20);
   const [scores, setScores] = useState([null, null, null]);
 
+  useEffect(() => {
+    if (votes < MIN_VOTES_BY_STAGE[stage]) {
+      setVotes(MIN_VOTES_BY_STAGE[stage]);
+    }
+  }, [stage]);
+
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
+  const minVotes = MIN_VOTES_BY_STAGE[stage];
   const recommendedScores = useMemo(() => {
     if (!FINAL_AUDITIONS.includes(stage)) return null;
     return calculateRecommendedScores(
@@ -146,7 +154,7 @@ export default function NiaCalculator() {
           value={votes || ""}
           placeholder={t("voteCount")}
           onChange={setVotes}
-          min={0}
+          min={minVotes}
           max={10000000}
         />
       </section>

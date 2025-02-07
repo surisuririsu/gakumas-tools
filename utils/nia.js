@@ -2,6 +2,13 @@ import { TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 
 export const MAX_PARAMS = 2000;
 
+export const MIN_VOTES_BY_STAGE = {
+  melobang: 9000,
+  galaxy: 25000,
+  quartet: 40000,
+  finale: 57000,
+};
+
 export const PARAM_ORDER_BY_IDOL = {
   1: [3, 2, 1],
   2: [1, 2, 3],
