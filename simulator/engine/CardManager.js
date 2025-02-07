@@ -135,6 +135,10 @@ export default class CardManager extends EngineComponent {
   isCardUsable(state, card) {
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
 
+    // Check debuffs
+    if (state[S.noActiveTurns] && skillCard.type == "active") return false;
+    if (state[S.noMentalTurns] && skillCard.type == "mental") return false;
+
     // Check conditions
     for (let i = 0; i < skillCard.conditions.length; i++) {
       if (

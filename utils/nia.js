@@ -218,7 +218,7 @@ export function calculateRecommendedScores(
   params,
   votes
 ) {
-  let i = 0;
+  let sft = 0;
   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
   const voteRegimes = VOTE_REGIMES_BY_STAGE[stage];
   const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
@@ -260,7 +260,7 @@ export function calculateRecommendedScores(
       currentVoteRating = calculateVoteRating(postAuditionVotes, voteRank);
     }
 
-    console.log(currentParamRating, currentVoteRating);
+    // console.log(currentParamRating, currentVoteRating);
 
     // Check if target is reached
     if (currentParamRating + currentVoteRating >= targetRating) {
@@ -283,11 +283,10 @@ export function calculateRecommendedScores(
     });
     const maxMultiplier = Math.max(...multipliers);
     const selectedParam = paramOrder.reduce((acc, cur, i) => {
-      if (multipliers[i] == maxMultiplier && cur < paramOrder[acc]) {
-        return i;
-      }
+      if (multipliers[i] != maxMultiplier) return acc;
+      if (acc == -1 || cur < paramOrder[acc]) return i;
       return acc;
-    }, 0);
+    }, -1);
 
     // Score to next vote rank
     let scoreToNextVoteRank = Infinity;
@@ -359,10 +358,10 @@ export function calculateRecommendedScores(
     if (!targetScores.length) break;
     currentScores[selectedParam] += Math.min(...targetScores);
 
-    i++;
+    sft++;
 
     // Break if too many iterations
-    if (i > 1000) break;
+    if (sft > 1000) break;
   }
 
   return recommendedScores;
