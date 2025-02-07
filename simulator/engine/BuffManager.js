@@ -22,6 +22,8 @@ export default class BuffManager extends EngineComponent {
     state[S.nullifyDebuff] = 0;
     state[S.nullifyGenkiTurns] = 0;
     state[S.doubleCardEffectCards] = 0;
+    state[S.noActiveTurns] = 0;
+    state[S.noMentalTurns] = 0;
     state[S.poorConditionTurns] = 0;
 
     // Score buffs

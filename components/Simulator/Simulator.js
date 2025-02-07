@@ -119,10 +119,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/*<>
+        <>
           ※ Season 18 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </>*/}
+        </>
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
@@ -203,7 +203,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2025-02-01
+            {t("lastUpdated")}: 2025-02-07
           </a>
         </div>
         {!simulatorData && (

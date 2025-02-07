@@ -274,6 +274,8 @@
     "nullifyDebuff": "负面状态无效",
     "poorConditionTurns": "不调",
     "nullifyCostCards": "体力消费无效",
+    "noActiveTurns": "No active cards",
+    "noMentalTurns": "No mental cards",
     "scoreBuff": "分数上升量增加",
     "turn": "回合",
     "cardDrawn": "抽取技能卡",

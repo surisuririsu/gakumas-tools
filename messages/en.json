@@ -274,6 +274,8 @@
     "nullifyDebuff": "Nullify debuff",
     "poorConditionTurns": "Poor condition",
     "nullifyCostCards": "Nullify cost cards",
+    "noActiveTurns": "No active cards",
+    "noMentalTurns": "No mental cards",
     "scoreBuff": "Score increase buff",
     "turn": "Turn",
     "cardDrawn": "Card drawn",

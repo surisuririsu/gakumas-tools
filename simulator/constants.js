@@ -112,6 +112,8 @@ export const DEBUFF_FIELDS = [
   "doubleCostTurns",
   "costIncrease",
   "nullifyGenkiTurns",
+  "noActiveTurns",
+  "noMentalTurns",
   "poorConditionTurns",
   "lockStanceTurns",
 ];
@@ -125,6 +127,8 @@ export const EOT_DECREMENT_FIELDS = [
   "doubleCostTurns",
   "nullifyGenkiTurns",
   "poorConditionTurns",
+  "noActiveTurns",
+  "noMentalTurns",
 ];
 
 export const INCREASE_TRIGGER_FIELDS = [
@@ -172,6 +176,8 @@ export const LOGGED_FIELDS = [
   "nullifyCostCards",
   "turnsRemaining",
   "cardUsesRemaining",
+  "noActiveTurns",
+  "noMentalTurns",
 ];
 
 export const GRAPHED_FIELDS = [
@@ -227,6 +233,8 @@ export const ALL_FIELDS = [
   "nullifyDebuff",
   "nullifyGenkiTurns",
   "doubleCardEffectCards",
+  "noActiveTurns",
+  "noMentalTurns",
   "poorConditionTurns",
   "scoreBuffs",
   "goodConditionTurns",
