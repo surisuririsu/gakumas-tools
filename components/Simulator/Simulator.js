@@ -117,7 +117,7 @@ export default function Simulator() {
         logEvent("simulator.simulate", {
           stageId: stage.id,
           idolId: idolConfig.idolId,
-          url: simulatorUrl,
+          page_location: simulatorUrl,
           minScore: mergedResults.minRun.score,
           averageScore: mergedResults.averageScore,
           maxScore: mergedResults.maxRun.score,
