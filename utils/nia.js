@@ -245,7 +245,7 @@ export function calculateRecommendedScores(
       paramOrder,
       currentScores
     );
-    console.log(gainedParams);
+    // console.log(gainedParams);
     const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
     const postAuditionParams = calculatePostAuditionParams(
       params,

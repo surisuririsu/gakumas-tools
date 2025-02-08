@@ -5,6 +5,7 @@ import styles from "./Preview.styles";
 export default function PreviewSkillCardGroup({
   cards,
   customizationGroup,
+  idolId,
   baseUrl,
   isEmpty,
 }) {
@@ -19,6 +20,7 @@ export default function PreviewSkillCardGroup({
               key={index}
               card={card}
               customizations={customizationGroup?.[index]}
+              idolId={idolId}
               baseUrl={baseUrl}
             />
           ))}

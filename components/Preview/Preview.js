@@ -7,6 +7,7 @@ export default function Preview({
   itemIds,
   skillCardIdGroups,
   customizationGroups,
+  idolId,
   isEmpty,
 }) {
   return (
@@ -17,6 +18,7 @@ export default function Preview({
           key={groupIndex}
           cards={cards}
           customizationGroup={customizationGroups?.[groupIndex]}
+          idolId={idolId}
           baseUrl={baseUrl}
           isEmpty={isEmpty}
         />
