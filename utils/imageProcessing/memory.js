@@ -7,6 +7,7 @@ import {
   getBlackCanvas,
   getWhiteCanvas,
   loadImageFromFile,
+  extractLines,
 } from "./common";
 import { calculateContestPower } from "../contestPower";
 
@@ -23,7 +24,11 @@ export async function getMemoryFromFile(
 
   const engWhitePromise = engWorker.recognize(whiteCanvas);
   const engBlackPromise = engWorker.recognize(blackCanvas);
-  const jpnBlackPromise = jpnWorker.recognize(blackCanvas);
+  const jpnBlackPromise = jpnWorker.recognize(
+    blackCanvas,
+    {},
+    { blocks: true }
+  );
 
   const powerCandidates = extractPower(await engWhitePromise);
   const params = extractParams(await engBlackPromise);
@@ -287,7 +292,7 @@ function identifyEntities(img, coords, width, entityData, plusIndex) {
 
 export function extractItems(result, img, blackCanvas, itemImageData) {
   // Find p-items label
-  const labelLine = result.data.lines.find(({ text }) =>
+  const labelLine = extractLines(result).find(({ text }) =>
     text.replaceAll(" ", "").startsWith("Pアイテム")
   );
   if (!labelLine) return [];
@@ -355,7 +360,7 @@ export function extractCards(
   itemsPIdolId
 ) {
   // Find skill cards label
-  const labelLine = result.data.lines.find(({ text }) =>
+  const labelLine = extractLines(result).find(({ text }) =>
     text.replaceAll(" ", "").startsWith("スキルカード")
   );
   if (!labelLine) return [];
