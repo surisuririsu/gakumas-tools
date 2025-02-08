@@ -2,11 +2,20 @@ import { Customizations } from "gakumas-data/lite";
 import { countCustomizations } from "@/utils/customizations";
 import styles from "./Preview.styles";
 
-export default function PreviewSkillCard({ card, customizations, baseUrl }) {
+export default function PreviewSkillCard({
+  card,
+  customizations,
+  idolId,
+  baseUrl,
+}) {
   return (
     <div style={styles.card}>
       {card && (
-        <img src={`${baseUrl}${card._getIcon().src}`} width={68} height={68} />
+        <img
+          src={`${baseUrl}${card._getIcon(idolId || 6).src}`}
+          width={68}
+          height={68}
+        />
       )}
       {!!countCustomizations(customizations) && (
         <div style={styles.customizations}>

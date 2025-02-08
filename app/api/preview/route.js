@@ -1,11 +1,13 @@
 import { ImageResponse } from "next/og";
 import Preview from "@/components/Preview";
+import { IdolConfig } from "@/simulator/config";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 export async function GET(request) {
   const { searchParams, host, protocol } = new URL(request.url);
 
   const loadout = loadoutFromSearchParams(searchParams);
+  const idolConfig = new IdolConfig(loadout);
   const { pItemIds, skillCardIdGroups, customizationGroups } = loadout;
 
   const isEmpty = skillCardIdGroups.every((g) => g.every((c) => c == 0));
@@ -23,6 +25,7 @@ export async function GET(request) {
         itemIds={pItemIds}
         skillCardIdGroups={skillCardIdGroups}
         customizationGroups={customizationGroups}
+        idolId={idolConfig.idolId}
         isEmpty={isEmpty}
       />
     ),
