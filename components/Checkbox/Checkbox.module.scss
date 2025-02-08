@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .checkbox {
   display: flex;
@@ -8,7 +8,7 @@
   input {
     width: 1.5em;
     height: 1.5em;
-    accent-color: $gk-orange;
+    accent-color: colors.$gk-orange;
     cursor: pointer;
   }
 

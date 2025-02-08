@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "../../styles/mixins";
+@use "../../styles/colors";
 
 .badges {
   display: flex;
@@ -12,10 +13,10 @@
   align-items: center;
   width: 60px;
   padding: 2px;
-  background-color: $white;
+  background-color: colors.$white;
   border-radius: 50vh;
 
-  @include param-colors using ($param-color) {
+  @include mixins.param-colors using ($param-color) {
     color: $param-color;
     box-shadow: 0 0 8px $param-color;
   }

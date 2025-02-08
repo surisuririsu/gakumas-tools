@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .history {
   max-height: 240px;
@@ -16,7 +16,7 @@
 
 .itemsAndStage {
   display: flex;
-  justify-content: stretch;
+  justify-content: space-between;
   align-items: center;
 }
 

@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../styles/colors";
 
 * {
   box-sizing: border-box;
@@ -16,8 +16,8 @@ body {
 main {
   min-width: 350px;
   flex: 1;
-  background-color: $white-dark;
-  color: $black-dark;
+  background-color: colors.$white-dark;
+  color: colors.$black-dark;
   overflow: auto;
   container-type: inline-size;
 }
@@ -25,7 +25,7 @@ main {
 h1,
 h2,
 h3 {
-  color: $gk-orange;
+  color: colors.$gk-orange;
   font-weight: 400;
   text-transform: uppercase;
 }
@@ -34,7 +34,7 @@ label {
   margin-top: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: $gk-orange;
+  color: colors.$gk-orange;
 }
 
 a {

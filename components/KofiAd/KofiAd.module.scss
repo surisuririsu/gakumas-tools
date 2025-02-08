@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .kofiAd {
   width: 100%;
@@ -9,8 +9,8 @@
   flex-wrap: wrap;
   gap: 16px;
   padding: 16px;
-  color: $black;
+  color: colors.$black;
   font-size: 18px;
   font-weight: 600;
-  border: 1px solid $black;
+  border: 1px solid colors.$black;
 }

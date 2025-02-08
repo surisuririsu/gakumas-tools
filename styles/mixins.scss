@@ -1,0 +1,51 @@
+@use "./colors";
+
+@mixin param-colors {
+  @each $i,
+    $param-color
+      in (
+        1: colors.$vocal,
+        2: colors.$dance,
+        3: colors.$visual,
+        4: colors.$stamina
+      )
+  {
+    &:nth-child(#{$i}) {
+      @content ($param-color);
+    }
+  }
+}
+
+@mixin c11n-colors {
+  @each $type,
+    $c11n-color
+      in (
+        "effect": colors.$effect,
+        "cost": colors.$cost,
+        "buff": colors.$buff,
+        "score": colors.$score,
+        "genki": colors.$genki
+      )
+  {
+    &.#{$type} {
+      @content ($c11n-color);
+    }
+  }
+}
+
+@mixin c11n-gradients {
+  @each $type,
+    $c11n-gradient
+      in (
+        "effect": linear-gradient(135deg, colors.$effect, colors.$effect-2),
+        "cost": linear-gradient(135deg, colors.$cost, colors.$cost-2),
+        "buff": linear-gradient(135deg, colors.$buff, colors.$buff-2),
+        "score": linear-gradient(135deg, colors.$score, colors.$score-2),
+        "genki": linear-gradient(135deg, colors.$genki, colors.$genki-2)
+      )
+  {
+    &.#{$type} {
+      @content ($c11n-gradient);
+    }
+  }
+}

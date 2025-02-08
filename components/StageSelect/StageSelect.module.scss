@@ -1,7 +1,7 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .stageSelect {
-  color: $gray-dark;
+  color: colors.$gray-dark;
   font-weight: 600;
 }
 
@@ -24,13 +24,13 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 12px;
-  color: $gray-dark;
+  color: colors.$gray-dark;
   font-weight: 600;
   transition: all 0.2s;
 
   &:hover {
-    background-color: $gk-orange-extra-light;
-    color: $gk-red-orange;
+    background-color: colors.$gk-orange-extra-light;
+    color: colors.$gk-red-orange;
   }
 }
 
@@ -40,7 +40,7 @@
   display: flex;
   gap: 1.5px;
   border-radius: 2px;
-  background-color: $white;
+  background-color: colors.$white;
   overflow: hidden;
 
   div:nth-child(1) {

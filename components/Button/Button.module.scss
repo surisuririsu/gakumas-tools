@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "sass:color";
+@use "../../styles/colors";
 
 .button {
   display: flex;
@@ -12,95 +13,95 @@
 
   &:hover,
   &:focus {
-    box-shadow: 0 0 8px transparentize($black, 0.5);
+    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
   }
 }
 
 .default {
-  background-color: $white;
-  color: $black;
-  border: 1px solid $gray-light;
+  background-color: colors.$white;
+  color: colors.$black;
+  border: 1px solid colors.$gray-light;
 
   &:hover,
   &:focus {
-    color: $gk-red-orange;
-    box-shadow: 0 0 8px transparentize($black, 0.5);
+    color: colors.$gk-red-orange;
+    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
   }
 }
 
 .primary {
-  background-color: $gk-orange;
-  color: $white;
-  box-shadow: 0 0 8px transparentize($black, 0.75);
+  background-color: colors.$gk-orange;
+  color: colors.$white;
+  box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.75);
 
   &:hover,
   &:focus {
-    background-color: $white;
-    color: $gk-red-orange;
+    background-color: colors.$white;
+    color: colors.$gk-red-orange;
   }
 }
 
 .secondary {
   background-color: transparent;
-  color: $gk-orange;
+  color: colors.$gk-orange;
 
   &:hover,
   &:focus {
-    background-color: $gk-orange-extra-light;
-    color: $gk-red-orange;
+    background-color: colors.$gk-orange-extra-light;
+    color: colors.$gk-red-orange;
   }
 }
 
 .red {
-  background-color: $red-dark;
-  color: $white;
+  background-color: colors.$red-dark;
+  color: colors.$white;
 
   &:hover,
   &:focus {
-    background-color: $red-extra-light;
-    color: $red-dark;
+    background-color: colors.$red-extra-light;
+    color: colors.$red-dark;
   }
 }
 
 .red-secondary {
   background-color: transparent;
-  color: $red;
+  color: colors.$red;
 
   &:hover,
   &:focus {
-    background-color: $red-extra-light;
-    color: $red-dark;
+    background-color: colors.$red-extra-light;
+    color: colors.$red-dark;
   }
 }
 
 .blue {
-  background-color: $blue;
-  color: $white;
-  box-shadow: 0 0 8px transparentize($black, 0.75);
+  background-color: colors.$blue;
+  color: colors.$white;
+  box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.75);
 
   &:hover,
   &:focus {
-    background-color: $white;
-    color: $blue;
-    box-shadow: 0 0 8px transparentize($black, 0.5);
+    background-color: colors.$white;
+    color: colors.$blue;
+    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
   }
 }
 
 .blue-secondary {
   background-color: transparent;
-  color: $blue;
+  color: colors.$blue;
 
   &:hover,
   &:focus {
-    background-color: $blue-extra-light;
-    color: $blue-dark;
+    background-color: colors.$blue-extra-light;
+    color: colors.$blue-dark;
   }
 }
 
 .disabled {
   box-shadow: none !important;
-  background-color: $gray-extra-light;
-  color: $gray;
+  background-color: colors.$gray-extra-light;
+  color: colors.$gray;
   cursor: default;
 }
 

@@ -1,10 +1,10 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .pIdol {
   position: relative;
   width: 81px;
   height: 108px;
-  background-color: $gray-extra-light;
+  background-color: colors.$gray-extra-light;
 }
 
 .overlay {
@@ -16,7 +16,7 @@
   justify-content: space-between;
   padding: 2px;
   background: linear-gradient(rgba(0, 0, 0, 0) 0 65%, rgba(0, 0, 0, 0.75));
-  color: $white;
+  color: colors.$white;
   font-size: 10px;
   font-weight: 600;
   text-wrap: balance;

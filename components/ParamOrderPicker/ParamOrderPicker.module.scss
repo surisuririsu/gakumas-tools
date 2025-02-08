@@ -1,11 +1,11 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .picker {
   display: flex;
   gap: 24px;
   min-height: 100px;
   padding: 0 24px;
-  border-bottom: 6px solid $gray-light;
+  border-bottom: 6px solid colors.$gray-light;
 }
 
 .column {
@@ -16,7 +16,7 @@
   button {
     flex: 2;
     border-radius: 8px 8px 0 0;
-    box-shadow: 0 -2px 4px $gray-light;
+    box-shadow: 0 -2px 4px colors.$gray-light;
     transition: all 0.2s;
 
     &:hover {
