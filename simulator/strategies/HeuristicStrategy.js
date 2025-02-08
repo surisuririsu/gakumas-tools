@@ -20,7 +20,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     this.goodConditionTurnsMultiplier =
       config.idol.recommendedEffect == "goodConditionTurns" ? 1.75 : 1;
     this.concentrationMultiplier =
-      config.idol.recommendedEffect == "concentration" ? 3 : 0.8;
+      config.idol.recommendedEffect == "concentration" ? 3 : 1;
     this.goodImpressionTurnsMultiplier =
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
@@ -113,7 +113,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       );
       const scoreDelta =
         this.getStateScore(postEffectState) - this.getStateScore(previewState);
-      score += 3 * scoreDelta * Math.min(limit, 3);
+      score += 3 * scoreDelta * Math.min(limit, 6);
     }
 
     if (this.engine.config.idol.plan != "anomaly") {
@@ -168,6 +168,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     score +=
       state[S.concentration] *
       state[S.turnsRemaining] *
+      2 *
       this.concentrationMultiplier;
 
     // Stance
