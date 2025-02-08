@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of contest season 18
 
+### Changed
+
+- Adjusted weighting of effects, concentration
+
 ## 2025-01-31
 
 ### Changed
