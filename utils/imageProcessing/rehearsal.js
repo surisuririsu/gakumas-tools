@@ -1,9 +1,9 @@
-import { getWhiteCanvas, loadImageFromFile } from "./common";
+import { extractLines, getWhiteCanvas, loadImageFromFile } from "./common";
 
 export async function getScoresFromFile(file, worker) {
   const img = await loadImageFromFile(file);
   const whiteCanvas = getWhiteCanvas(img, 190);
-  const engWhitePromise = worker.recognize(whiteCanvas);
+  const engWhitePromise = worker.recognize(whiteCanvas, {}, { blocks: true });
   const scores = extractScores(await engWhitePromise);
   return scores;
 }
@@ -11,8 +11,9 @@ export async function getScoresFromFile(file, worker) {
 export function extractScores(result) {
   let scores = [];
 
-  for (let i in result.data.lines) {
-    const line = result.data.lines[i];
+  const lines = extractLines(result);
+  for (let i in lines) {
+    const line = lines[i];
     if (line.confidence < 60) continue;
 
     let words = line.words
