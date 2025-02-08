@@ -3783,7 +3783,7 @@ __metadata:
     mongodb: "npm:^6.9.0"
     next: "npm:^14.2.14"
     next-auth: "npm:^4.24.8"
-    next-intl: "npm:^3.20.0"
+    next-intl: "npm:^3.26.3"
     react: "npm:^18.3.1"
     react-chartjs-2: "npm:^5.2.0"
     react-dom: "npm:^18.3.1"
@@ -5745,7 +5745,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-intl@npm:^3.20.0":
+"next-intl@npm:^3.26.3":
   version: 3.26.3
   resolution: "next-intl@npm:3.26.3"
   dependencies:

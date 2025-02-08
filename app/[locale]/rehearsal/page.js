@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import Rehearsal from "@/components/Rehearsal";
 import { generateMetadataForTool } from "@/utils/metadata";
 
@@ -7,6 +7,6 @@ export async function generateMetadata({ params: { locale } }) {
 }
 
 export default function RehearsalPage({ params: { locale } }) {
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   return <Rehearsal />;
 }
