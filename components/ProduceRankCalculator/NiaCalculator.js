@@ -69,7 +69,6 @@ export default function NiaCalculator() {
   }, [stage]);
 
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
-  const minVotes = MIN_VOTES_BY_STAGE[stage];
   const recommendedScores = useMemo(() => {
     if (!FINAL_AUDITIONS.includes(stage)) return null;
     return calculateRecommendedScores(
@@ -154,7 +153,7 @@ export default function NiaCalculator() {
           value={votes || ""}
           placeholder={t("voteCount")}
           onChange={setVotes}
-          min={minVotes}
+          min={0}
           max={10000000}
         />
       </section>
