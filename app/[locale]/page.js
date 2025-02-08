@@ -10,12 +10,16 @@ const JSON_LD = {
   url: "https://gktools.ris.moe/",
 };
 
-export async function generateMetadata({ params: { locale } }) {
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+
   return await generateMetadataForTool("home", locale);
 }
 
-export default function WelcomePage({ params: { locale } }) {
+export default async function WelcomePage({ params }) {
+  const { locale } = await params;
   setRequestLocale(locale);
+
   return (
     <>
       <script
