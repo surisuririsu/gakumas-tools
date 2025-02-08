@@ -1,6 +1,8 @@
 import { redirect } from "@/i18n/routing";
 
-export default function ProduceRankCalculatorPage({ params: { locale } }) {
+export default async function ProduceRankCalculatorPage({ params }) {
+  const { locale } = await params;
+
   redirect({ href: "calculator/nia", locale });
   return null;
 }

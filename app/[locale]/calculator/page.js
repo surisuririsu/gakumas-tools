@@ -1,6 +1,8 @@
 import { redirect } from "@/i18n/routing";
 
-export default function CalculatorPage({ params: { locale } }) {
+export default async function CalculatorPage({ params }) {
+  const { locale } = await params;
+
   redirect({ href: "calculator/nia", locale });
   return null;
 }

@@ -29,7 +29,9 @@ export const viewport = {
   maximumScale: 1,
 };
 
-export async function generateMetadata({ params: { locale } }) {
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+
   return await generateDefaultMetadata(locale);
 }
 
@@ -37,8 +39,10 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default async function RootLayout({ children, params: { locale } }) {
+export default async function RootLayout({ params, children }) {
+  const { locale } = await params;
   setRequestLocale(locale);
+
   const messages = await getMessages();
   const session = await getServerSession(authOptions);
 
