@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .sub {
   display: flex;
@@ -16,7 +16,7 @@
     font-size: 22px;
 
     &:disabled {
-      color: $gray-light;
+      color: colors.$gray-light;
       cursor: not-allowed;
     }
   }
@@ -53,25 +53,25 @@
 }
 
 .pickButton {
-  color: $gk-orange;
+  color: colors.$gk-orange;
 }
 
 .addButton {
-  color: $green;
+  color: colors.$green;
 }
 
 .moveButton {
-  color: $blue;
+  color: colors.$blue;
 }
 
 .deleteButton {
-  color: $red;
+  color: colors.$red;
 }
 
 .expandButton {
   display: none;
   margin-left: 4px;
-  color: $gray;
+  color: colors.$gray;
 
   @media (hover: none) {
     display: flex;

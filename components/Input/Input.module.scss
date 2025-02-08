@@ -1,18 +1,19 @@
-@import "@/constants";
+@use "sass:color";
+@use "../../styles/colors";
 
 .input {
   min-width: 0;
   outline: none;
   border: none;
-  border-bottom: 2px solid $gk-orange;
+  border-bottom: 2px solid colors.$gk-orange;
   padding: 8px;
   background-color: transparent;
-  color: $black;
+  color: colors.$black;
   font-weight: 600;
   text-align: center;
 
   &::placeholder {
-    color: lighten($gk-orange, 15%);
+    color: color.adjust(colors.$gk-orange, $lightness: 15%);
   }
 
   /* Chrome, Safari, Edge, Opera */

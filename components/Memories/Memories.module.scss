@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .memories {
   max-width: 560px;
@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: row;
   gap: 6px;
-  border-bottom: 2px solid $gray-light;
+  border-bottom: 2px solid colors.$gray-light;
   padding: 6px;
 }
 
@@ -34,7 +34,7 @@
   align-self: flex-end;
   display: flex;
   align-items: center;
-  color: $gk-orange;
+  color: colors.$gk-orange;
 }
 
 .search {
@@ -60,17 +60,17 @@
 
 .memoryTile {
   display: flex;
-  border-bottom: 1px solid $gk-orange;
+  border-bottom: 1px solid colors.$gk-orange;
 }
 
 .check {
   display: flex;
-  background-color: $red-extra-light;
+  background-color: colors.$red-extra-light;
 
   input {
     width: 16px;
     margin: 8px;
-    accent-color: $red-dark;
+    accent-color: colors.$red-dark;
     cursor: pointer;
   }
 }

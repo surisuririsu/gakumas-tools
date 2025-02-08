@@ -1,4 +1,4 @@
-@import "@/components/ButtonGroup/ButtonGroup.module";
+@use "../../components/ButtonGroup/ButtonGroup.module";
 
 .fieldButtons {
   @extend .buttonGroup;

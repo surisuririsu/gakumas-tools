@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .stageCustomizer {
   max-height: 800px;
@@ -17,13 +17,13 @@
     min-height: 80px;
     resize: vertical;
     font-size: 16px;
-    border: 2px solid $gk-orange;
+    border: 2px solid colors.$gk-orange;
     border-radius: 4px;
     padding: 8px;
   }
 
   a {
-    color: $blue;
+    color: colors.$blue;
     font-size: 14px;
   }
 }

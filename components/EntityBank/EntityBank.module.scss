@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .entities {
   flex: 1;
@@ -33,16 +33,16 @@
 
 .toggle {
   gap: 4px;
-  border: 2px solid $gray-light;
+  border: 2px solid colors.$gray-light;
   border-radius: 22px;
   padding: 8px;
-  color: $gray;
+  color: colors.$gray;
   font-weight: 600;
   line-height: 24px;
 }
 
 .enabled {
-  border-color: darken($gk-red-orange, 10%);
-  background-color: lighten($gk-orange, 30%);
-  color: darken($gk-red-orange, 10%);
+  border-color: colors.$gk-red-orange-dark;
+  background-color: colors.$gk-orange-extra-light;
+  color: colors.$gk-red-orange-dark;
 }

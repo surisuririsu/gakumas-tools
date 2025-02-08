@@ -1,15 +1,15 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .table {
-  color: $black-dark;
+  color: colors.$black-dark;
   text-align: center;
 
   thead {
-    background-color: $gk-orange-light;
+    background-color: colors.$gk-orange-light;
   }
 
   tbody {
-    background-color: $gk-orange-extra-light;
+    background-color: colors.$gk-orange-extra-light;
   }
 
   th,

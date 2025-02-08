@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "../../styles/mixins";
+@use "../../styles/colors";
 
 .params {
   display: flex;
@@ -10,7 +11,7 @@
     font-weight: 600;
     text-align: center;
 
-    @include param-colors using ($param-color) {
+    @include mixins.param-colors using ($param-color) {
       color: $param-color;
     }
   }
