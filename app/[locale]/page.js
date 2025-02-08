@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import Welcome from "@/components/Welcome";
 import { generateMetadataForTool } from "@/utils/metadata";
 
@@ -15,7 +15,7 @@ export async function generateMetadata({ params: { locale } }) {
 }
 
 export default function WelcomePage({ params: { locale } }) {
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   return (
     <>
       <script

@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import Simulator from "@/components/Simulator";
 import { generateMetadataForTool } from "@/utils/metadata";
 
@@ -10,6 +10,6 @@ export async function generateMetadata({ params: { locale }, searchParams }) {
 }
 
 export default function SimulatorPage({ params: { locale } }) {
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   return <Simulator />;
 }

@@ -1,6 +1,6 @@
 import { redirect } from "@/i18n/routing";
 
 export default function ProduceRankCalculatorPage({ params: { locale } }) {
-  redirect("calculator/nia");
+  redirect({ href: "calculator/nia", locale });
   return null;
 }

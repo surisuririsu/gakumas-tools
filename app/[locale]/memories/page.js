@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import Memories from "@/components/Memories";
 import { generateMetadataForTool } from "@/utils/metadata";
 
@@ -7,6 +7,6 @@ export async function generateMetadata({ params: { locale } }) {
 }
 
 export default function MemoriesPage({ params: { locale } }) {
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   return <Memories />;
 }
