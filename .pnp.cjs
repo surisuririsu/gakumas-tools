@@ -17,11 +17,16 @@ const RAW_RUNTIME_STATE =
     {\
       "name": "gakumas-tools",\
       "reference": "workspace:apps/gakumas-tools"\
+    },\
+    {\
+      "name": "gakumas-data",\
+      "reference": "workspace:packages/gakumas-data"\
     }\
   ],\
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
+    ["gakumas-data", ["workspace:packages/gakumas-data"]],\
     ["gakumas-tools", ["workspace:apps/gakumas-tools"]],\
     ["gakumas-tools-monorepo", ["workspace:."]]\
   ],\
@@ -1002,12 +1007,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@formatjs/ecma402-abstract", [\
-      ["npm:2.3.2", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-ecma402-abstract-npm-2.3.2-cfd44f8fed-10c0.zip/node_modules/@formatjs/ecma402-abstract/",\
+      ["npm:2.3.3", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-ecma402-abstract-npm-2.3.3-8ca00e7400-10c0.zip/node_modules/@formatjs/ecma402-abstract/",\
         "packageDependencies": [\
-          ["@formatjs/ecma402-abstract", "npm:2.3.2"],\
+          ["@formatjs/ecma402-abstract", "npm:2.3.3"],\
           ["@formatjs/fast-memoize", "npm:2.2.6"],\
-          ["@formatjs/intl-localematcher", "npm:0.5.10"],\
+          ["@formatjs/intl-localematcher", "npm:0.6.0"],\
           ["decimal.js", "npm:10.5.0"],\
           ["tslib", "npm:2.8.1"]\
         ],\
@@ -1025,23 +1030,23 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@formatjs/icu-messageformat-parser", [\
-      ["npm:2.11.0", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-messageformat-parser-npm-2.11.0-0b90491a2f-10c0.zip/node_modules/@formatjs/icu-messageformat-parser/",\
+      ["npm:2.11.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-messageformat-parser-npm-2.11.1-2bf3ff699d-10c0.zip/node_modules/@formatjs/icu-messageformat-parser/",\
         "packageDependencies": [\
-          ["@formatjs/icu-messageformat-parser", "npm:2.11.0"],\
-          ["@formatjs/ecma402-abstract", "npm:2.3.2"],\
-          ["@formatjs/icu-skeleton-parser", "npm:1.8.12"],\
+          ["@formatjs/icu-messageformat-parser", "npm:2.11.1"],\
+          ["@formatjs/ecma402-abstract", "npm:2.3.3"],\
+          ["@formatjs/icu-skeleton-parser", "npm:1.8.13"],\
           ["tslib", "npm:2.8.1"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@formatjs/icu-skeleton-parser", [\
-      ["npm:1.8.12", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-skeleton-parser-npm-1.8.12-96d5e98f1c-10c0.zip/node_modules/@formatjs/icu-skeleton-parser/",\
+      ["npm:1.8.13", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-icu-skeleton-parser-npm-1.8.13-88ca4214d3-10c0.zip/node_modules/@formatjs/icu-skeleton-parser/",\
         "packageDependencies": [\
-          ["@formatjs/icu-skeleton-parser", "npm:1.8.12"],\
-          ["@formatjs/ecma402-abstract", "npm:2.3.2"],\
+          ["@formatjs/icu-skeleton-parser", "npm:1.8.13"],\
+          ["@formatjs/ecma402-abstract", "npm:2.3.3"],\
           ["tslib", "npm:2.8.1"]\
         ],\
         "linkType": "HARD"\
@@ -1052,6 +1057,14 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-intl-localematcher-npm-0.5.10-eec39cf7ea-10c0.zip/node_modules/@formatjs/intl-localematcher/",\
         "packageDependencies": [\
           ["@formatjs/intl-localematcher", "npm:0.5.10"],\
+          ["tslib", "npm:2.8.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.6.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-intl-localematcher-npm-0.6.0-da7c60e144-10c0.zip/node_modules/@formatjs/intl-localematcher/",\
+        "packageDependencies": [\
+          ["@formatjs/intl-localematcher", "npm:0.6.0"],\
           ["tslib", "npm:2.8.1"]\
         ],\
         "linkType": "HARD"\
@@ -5003,12 +5016,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["gakumas-data", [\
-      ["https://github.com/surisuririsu/gakumas-data.git#commit=f97dd4efcd266f9412adab8c7793b61aae291233", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/gakumas-data-https-e813455011-10c0.zip/node_modules/gakumas-data/",\
+      ["workspace:packages/gakumas-data", {\
+        "packageLocation": "./packages/gakumas-data/",\
         "packageDependencies": [\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=f97dd4efcd266f9412adab8c7793b61aae291233"]\
+          ["gakumas-data", "workspace:packages/gakumas-data"]\
         ],\
-        "linkType": "HARD"\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["gakumas-tools", [\
@@ -5024,7 +5037,7 @@ const RAW_RUNTIME_STATE =
           ["chart.js", "npm:4.4.7"],\
           ["eslint", "virtual:7917b8ba4773652b55c354acb9ce1fd346a9f17abc361242cddfa56b347e829c306920fc9c752bc9330e6fdff66ed141c1d7a69d649dfc03149912d6ce675558#npm:9.20.0"],\
           ["eslint-config-next", "virtual:7917b8ba4773652b55c354acb9ce1fd346a9f17abc361242cddfa56b347e829c306920fc9c752bc9330e6fdff66ed141c1d7a69d649dfc03149912d6ce675558#npm:15.1.6"],\
-          ["gakumas-data", "https://github.com/surisuririsu/gakumas-data.git#commit=f97dd4efcd266f9412adab8c7793b61aae291233"],\
+          ["gakumas-data", "workspace:packages/gakumas-data"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=b7d43a76bebf64421f7fc3030c39dd2fd58124d6"],\
           ["jest", "virtual:7917b8ba4773652b55c354acb9ce1fd346a9f17abc361242cddfa56b347e829c306920fc9c752bc9330e6fdff66ed141c1d7a69d649dfc03149912d6ce675558#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:7917b8ba4773652b55c354acb9ce1fd346a9f17abc361242cddfa56b347e829c306920fc9c752bc9330e6fdff66ed141c1d7a69d649dfc03149912d6ce675558#npm:29.7.0"],\
@@ -5518,13 +5531,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["intl-messageformat", [\
-      ["npm:10.7.14", {\
-        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/intl-messageformat-npm-10.7.14-73c4346c68-10c0.zip/node_modules/intl-messageformat/",\
+      ["npm:10.7.15", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/intl-messageformat-npm-10.7.15-8de3c7ebb7-10c0.zip/node_modules/intl-messageformat/",\
         "packageDependencies": [\
-          ["intl-messageformat", "npm:10.7.14"],\
-          ["@formatjs/ecma402-abstract", "npm:2.3.2"],\
+          ["intl-messageformat", "npm:10.7.15"],\
+          ["@formatjs/ecma402-abstract", "npm:2.3.3"],\
           ["@formatjs/fast-memoize", "npm:2.2.6"],\
-          ["@formatjs/icu-messageformat-parser", "npm:2.11.0"],\
+          ["@formatjs/icu-messageformat-parser", "npm:2.11.1"],\
           ["tslib", "npm:2.8.1"]\
         ],\
         "linkType": "HARD"\
@@ -9405,7 +9418,7 @@ const RAW_RUNTIME_STATE =
           ["use-intl", "virtual:6d30d822855f3fc7fa838ac79c2b17c651f0c6e1c16281dc6b55f587541cef1f844eb92f617940dcce66e4535eceea4015819d9a5599c82d834c9b1a5d55c99d#npm:3.26.3"],\
           ["@formatjs/fast-memoize", "npm:2.2.6"],\
           ["@types/react", null],\
-          ["intl-messageformat", "npm:10.7.14"],\
+          ["intl-messageformat", "npm:10.7.15"],\
           ["react", "npm:19.0.0"]\
         ],\
         "packagePeers": [\

@@ -29,6 +29,3 @@ next-env.d.ts
 
 # db dumps
 /dump
-
-# python
-__pycache__/
