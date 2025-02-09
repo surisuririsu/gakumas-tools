@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
-import { generateMetadataForTool } from "@/utils/metadata";
 import NiaCalculator from "@/components/ProduceRankCalculator/NiaCalculator";
+import { generateMetadataForTool } from "@/utils/metadata";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;

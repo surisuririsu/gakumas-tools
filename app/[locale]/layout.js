@@ -17,6 +17,7 @@ import { SessionContextProvider } from "@/contexts/SessionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
+import { GA_ID } from "@/utils/logging";
 import { generateDefaultMetadata } from "@/utils/metadata";
 import styles from "./layout.module.scss";
 import "../globals.scss";
@@ -78,7 +79,7 @@ export default async function RootLayout({ params, children }) {
           </NextIntlClientProvider>
         </SessionContextProvider>
       </body>
-      <GoogleAnalytics gaId="G-D4SNMY9VJP" />
+      <GoogleAnalytics gaId={GA_ID} />
     </html>
   );
 }
