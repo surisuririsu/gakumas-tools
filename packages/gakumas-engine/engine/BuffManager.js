@@ -75,8 +75,8 @@ export default class BuffManager extends EngineComponent {
       const field = EOT_DECREMENT_FIELDS[i];
       if (state[S.freshBuffs][field]) {
         delete state[S.freshBuffs][field];
-      } else if (state[S[field]]) {
-        state[S[field]]--;
+      } else if (state[field]) {
+        state[field]--;
       }
     }
 
