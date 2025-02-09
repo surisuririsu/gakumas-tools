@@ -1,5 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data";
-import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/config";
+import { IdolConfig, StageConfig, IdolStageConfig } from "gakumas-engine";
 import KAFE_CARD_MAP from "@/generated/kafeCardMap.json";
 import KAFE_ITEM_MAP from "@/generated/kafeItemMap.json";
 import KAFE_P_IDOL_MAP from "@/generated/kafePIdolMap.json";

@@ -1,5 +1,5 @@
 import { S } from "../constants";
-import { deepCopy } from "../engine/utils";
+import { deepCopy } from "../utils";
 import BaseStrategy from "./BaseStrategy";
 
 const MAX_DEPTH = 4;
