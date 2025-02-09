@@ -1,12 +1,16 @@
-import { unstable_setRequestLocale } from "next-intl/server";
-import { generateMetadataForTool } from "@/utils/metadata";
+import { setRequestLocale } from "next-intl/server";
 import NiaCalculator from "@/components/ProduceRankCalculator/NiaCalculator";
+import { generateMetadataForTool } from "@/utils/metadata";
 
-export async function generateMetadata({ params: { locale } }) {
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+
   return await generateMetadataForTool("niaCalculator", locale);
 }
 
-export default function ProduceRankCalculatorPage({ params: { locale } }) {
-  unstable_setRequestLocale(locale);
+export default async function ProduceRankCalculatorPage({ params }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return <NiaCalculator />;
 }

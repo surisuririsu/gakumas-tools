@@ -1,10 +1,10 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .simulatorLogs {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: $black-dark;
+  color: colors.$black-dark;
 }
 
 .logs {
@@ -18,13 +18,13 @@
   margin-bottom: -8px;
 
   &.vocal {
-    border-color: $vocal-light;
+    border-color: colors.$vocal-light;
   }
   &.dance {
-    border-color: $dance-light;
+    border-color: colors.$dance-light;
   }
   &.visual {
-    border-color: $visual-light;
+    border-color: colors.$visual-light;
   }
 
   .childLogs {
@@ -40,18 +40,18 @@
   border-radius: 0 16px 2px 0;
   padding: 6px;
   padding-left: 8px;
-  color: $gray-dark;
+  color: colors.$gray-dark;
   font-weight: 600;
-  color: $white;
+  color: colors.$white;
 
   &.vocal {
-    background-color: $vocal-light;
+    background-color: colors.$vocal-light;
   }
   &.dance {
-    background-color: $dance-light;
+    background-color: colors.$dance-light;
   }
   &.visual {
-    background-color: $visual-light;
+    background-color: colors.$visual-light;
   }
 }
 
@@ -64,7 +64,7 @@
   @extend .tile;
   align-self: flex-start;
   padding: 8px;
-  background-color: $gray-extra-light;
+  background-color: colors.$gray-extra-light;
 }
 
 .drawCard {
@@ -74,20 +74,20 @@
   align-items: center;
   gap: 4px;
   padding: 8px;
-  background-color: $gray-extra-light;
+  background-color: colors.$gray-extra-light;
   font-size: 14px;
 }
 
 .group {
   @extend .tile;
-  border: 2px solid $gray-extra-light;
+  border: 2px solid colors.$gray-extra-light;
 
   .entity {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 8px;
-    background-color: $gray-extra-light;
+    background-color: colors.$gray-extra-light;
   }
 
   .childLogs {
@@ -110,33 +110,33 @@
 }
 
 .positive {
-  color: $blue;
+  color: colors.$blue;
   font-weight: 600;
 }
 
 .negative {
-  color: $red;
+  color: colors.$red;
   font-weight: 600;
 }
 
 .hand {
   @extend .tile;
-  border: 2px solid $gray-extra-light;
+  border: 2px solid colors.$gray-extra-light;
   overflow: visible;
 
   .handTitle {
     display: flex;
     justify-content: space-between;
     padding: 8px;
-    background-color: $gray-extra-light;
+    background-color: colors.$gray-extra-light;
 
     button {
-      color: $gray-dark;
+      color: colors.$gray-dark;
     }
   }
 
   .state {
-    border-bottom: 2px solid $gray-extra-light;
+    border-bottom: 2px solid colors.$gray-extra-light;
     padding: 16px;
   }
 
@@ -161,12 +161,12 @@
 
   .selected img {
     border-radius: 4px;
-    box-shadow: 0 0 8px $gk-orange;
+    box-shadow: 0 0 8px colors.$gk-orange;
     overflow: hidden;
   }
 
   .selected {
-    color: $gk-orange;
+    color: colors.$gk-orange;
     font-weight: 600;
   }
 
@@ -180,7 +180,7 @@
 }
 
 .blue {
-  color: $blue;
+  color: colors.$blue;
   font-weight: 600;
 }
 
@@ -190,5 +190,5 @@
   align-items: center;
   gap: 4px;
   margin: 8px;
-  color: $blue;
+  color: colors.$blue;
 }

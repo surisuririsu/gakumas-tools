@@ -1,11 +1,12 @@
-@import "@/constants";
+@use "../../styles/mixins";
+@use "../../styles/colors";
 
 .entityCustomizer {
   position: relative;
   display: flex;
   gap: 8px;
   margin: 0 12px 12px;
-  border: 2px solid $gray-light;
+  border: 2px solid colors.$gray-light;
   border-radius: 8px;
   padding: 8px;
 }
@@ -14,8 +15,8 @@
   position: absolute;
   top: -14px;
   padding: 0 4px;
-  background-color: $white;
-  color: $gray;
+  background-color: colors.$white;
+  color: colors.$gray;
   font-size: 14px;
 }
 
@@ -28,7 +29,7 @@
   min-width: 0;
   display: flex;
   gap: 4px;
-  color: $white;
+  color: colors.$white;
   font-weight: 600;
 
   @container (width < 460px) {
@@ -40,9 +41,11 @@
   flex: 1;
   min-width: 0;
   border-radius: 8px;
-  box-shadow: 0 2px 4px $gray-light;
+  box-shadow: 0 2px 4px colors.$gray-light;
 
-  @include c11n-background;
+  @include mixins.c11n-gradients using ($c11n-gradient) {
+    background: $c11n-gradient;
+  }
 
   @container (width < 460px) {
     display: flex;
@@ -93,6 +96,6 @@
 
   @container (width < 460px) {
     padding: 4px 8px;
-    border-left: 2px solid $white;
+    border-left: 2px solid colors.$white;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
-import Error from "@/components/Error";
+import { default as ErrorComponent } from "@/components/Error";
 
-export default function NotFound() {
-  return <Error />;
+export default function Error() {
+  return <ErrorComponent />;
 }

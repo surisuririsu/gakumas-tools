@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "sass:color";
+@use "../../styles/colors";
 
 .lessonCalculator {
   max-width: 600px;
@@ -20,41 +21,41 @@
   }
 
   th {
-    background-color: $gray;
-    color: $white;
+    background-color: colors.$gray;
+    color: colors.$white;
   }
 
   th:nth-last-child(3) {
-    background-color: $vocal;
+    background-color: colors.$vocal;
   }
 
   th:nth-last-child(2) {
-    background-color: $dance;
+    background-color: colors.$dance;
   }
 
   th:nth-last-child(1) {
-    background-color: $visual;
+    background-color: colors.$visual;
   }
 
   td {
-    color: $black-dark;
+    color: colors.$black-dark;
   }
 
   td:nth-last-child(3n + 1) {
-    background-color: scale-color($visual, $alpha: -50%);
+    background-color: color.scale(colors.$visual, $alpha: -50%);
   }
 
   td:nth-last-child(3n + 2) {
-    background-color: scale-color($dance, $alpha: -50%);
+    background-color: color.scale(colors.$dance, $alpha: -50%);
   }
 
   td:nth-last-child(3n + 3) {
-    background-color: scale-color($vocal, $alpha: -50%);
+    background-color: color.scale(colors.$vocal, $alpha: -50%);
   }
 
   td:nth-child(-n + 2),
   .perfect {
-    background-color: $gray-extra-light !important;
+    background-color: colors.$gray-extra-light !important;
   }
 }
 

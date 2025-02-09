@@ -1,10 +1,10 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .iconSelect {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
-  border: 2px solid $gray-light;
+  border: 2px solid colors.$gray-light;
   border-radius: 22px;
   padding: 4px;
 }
@@ -32,5 +32,5 @@
 }
 
 .selected {
-  box-shadow: 0 0 4px $gray-dark;
+  box-shadow: 0 0 4px colors.$gray-dark;
 }
