@@ -498,15 +498,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/ecma402-abstract@npm:2.3.2":
-  version: 2.3.2
-  resolution: "@formatjs/ecma402-abstract@npm:2.3.2"
+"@formatjs/ecma402-abstract@npm:2.3.3":
+  version: 2.3.3
+  resolution: "@formatjs/ecma402-abstract@npm:2.3.3"
   dependencies:
     "@formatjs/fast-memoize": "npm:2.2.6"
-    "@formatjs/intl-localematcher": "npm:0.5.10"
+    "@formatjs/intl-localematcher": "npm:0.6.0"
     decimal.js: "npm:10"
     tslib: "npm:2"
-  checksum: 10c0/364e9e7de974fed976e0e8142a0f888ee0af4a11a61899115e5761ed933e7c1f16379b7b54a01524fd3c5d58bf08b71308237ea969cd54889eaf7bb2d30ec776
+  checksum: 10c0/63de990c380a1800bc54d97c4aa13a88a92e73b1680f0f561d03f9bf3e23289b7aafd1a92037527c285bd587a44e20504258ac2cbd4564a4138ce2b4612c1495
   languageName: node
   linkType: hard
 
@@ -519,28 +519,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/icu-messageformat-parser@npm:2.11.0":
-  version: 2.11.0
-  resolution: "@formatjs/icu-messageformat-parser@npm:2.11.0"
+"@formatjs/icu-messageformat-parser@npm:2.11.1":
+  version: 2.11.1
+  resolution: "@formatjs/icu-messageformat-parser@npm:2.11.1"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.2"
-    "@formatjs/icu-skeleton-parser": "npm:1.8.12"
+    "@formatjs/ecma402-abstract": "npm:2.3.3"
+    "@formatjs/icu-skeleton-parser": "npm:1.8.13"
     tslib: "npm:2"
-  checksum: 10c0/9ad43847cb4a5c13895af606c634dcf2ec034d484cbbce6566746b60920643f33cbc5e2e3fd1efe21bcfdb555e1ee527e4518768001c3b36bf2e76c171e4049f
+  checksum: 10c0/2e4106d564ede73cc52c97fc4270002f2460c3ded10715a095ec6765c48f951b1e9744cc55679abe046e24e4e22c345e738f7477c43d440d1d10a0235b12df37
   languageName: node
   linkType: hard
 
-"@formatjs/icu-skeleton-parser@npm:1.8.12":
-  version: 1.8.12
-  resolution: "@formatjs/icu-skeleton-parser@npm:1.8.12"
+"@formatjs/icu-skeleton-parser@npm:1.8.13":
+  version: 1.8.13
+  resolution: "@formatjs/icu-skeleton-parser@npm:1.8.13"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.2"
+    "@formatjs/ecma402-abstract": "npm:2.3.3"
     tslib: "npm:2"
-  checksum: 10c0/03e743aa09acb2137e37d03b98578fcbbc949d056b8c151763778e885d04d621e69c82f7656547f0532351d2a987bffac0a8c4c3d81186f47a28047ba64385e2
+  checksum: 10c0/eddea5b7c43745d05178211b25641319e054747e40b42ffaa93ae9940fd42e6f5654d12d42e6998b91b4de4b67a24e3ed779a37394262ec1dd46e693c166729a
   languageName: node
   linkType: hard
 
-"@formatjs/intl-localematcher@npm:0.5.10, @formatjs/intl-localematcher@npm:^0.5.4":
+"@formatjs/intl-localematcher@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@formatjs/intl-localematcher@npm:0.6.0"
+  dependencies:
+    tslib: "npm:2"
+  checksum: 10c0/90238e633426ff7237ab2bbe017be044fb2fb185a8d59a0652096ddab9cb1ddf64106d58fafd711ea19c4d3455bd966516ab93574ac3b169d9af2325875fae59
+  languageName: node
+  linkType: hard
+
+"@formatjs/intl-localematcher@npm:^0.5.4":
   version: 0.5.10
   resolution: "@formatjs/intl-localematcher@npm:0.5.10"
   dependencies:
@@ -3787,16 +3796,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data@https://github.com/surisuririsu/gakumas-data#v11.9.1":
-  version: 11.9.1
-  resolution: "gakumas-data@https://github.com/surisuririsu/gakumas-data.git#commit=f97dd4efcd266f9412adab8c7793b61aae291233"
-  checksum: 10c0/f9ec14b967d307333129dc670a554b89fd9aa275dfbb9fc3b37379221986258a531f549fbab001f16186ddd39334d554702c582f369929c3fc504427fc10533b
-  languageName: node
-  linkType: hard
-
-"gakumas-tools@workspace:.":
+"gakumas-data@workspace:*, gakumas-data@workspace:packages/gakumas-data":
   version: 0.0.0-use.local
-  resolution: "gakumas-tools@workspace:."
+  resolution: "gakumas-data@workspace:packages/gakumas-data"
+  languageName: unknown
+  linkType: soft
+
+"gakumas-tools-monorepo@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "gakumas-tools-monorepo@workspace:."
+  languageName: unknown
+  linkType: soft
+
+"gakumas-tools@workspace:apps/gakumas-tools":
+  version: 0.0.0-use.local
+  resolution: "gakumas-tools@workspace:apps/gakumas-tools"
   dependencies:
     "@next/third-parties": "npm:^15.1.6"
     "@sgratzl/chartjs-chart-boxplot": "npm:^4.4.4"
@@ -3806,7 +3820,7 @@ __metadata:
     chart.js: "npm:^4.4.7"
     eslint: "npm:^9.20.0"
     eslint-config-next: "npm:^15.1.6"
-    gakumas-data: "https://github.com/surisuririsu/gakumas-data#v11.9.1"
+    gakumas-data: "workspace:*"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
@@ -4238,14 +4252,14 @@ __metadata:
   linkType: hard
 
 "intl-messageformat@npm:^10.5.14":
-  version: 10.7.14
-  resolution: "intl-messageformat@npm:10.7.14"
+  version: 10.7.15
+  resolution: "intl-messageformat@npm:10.7.15"
   dependencies:
-    "@formatjs/ecma402-abstract": "npm:2.3.2"
+    "@formatjs/ecma402-abstract": "npm:2.3.3"
     "@formatjs/fast-memoize": "npm:2.2.6"
-    "@formatjs/icu-messageformat-parser": "npm:2.11.0"
+    "@formatjs/icu-messageformat-parser": "npm:2.11.1"
     tslib: "npm:2"
-  checksum: 10c0/914c11118c47bb7d0163a7d54afebf52ae4fe9b250bba609b5db4c802a34f8bf758edbbc8c58094203205faf76948c7112399addb32e9b36e40483c4cf7c1cb7
+  checksum: 10c0/5759cd38718b7e4874fd6eb5e759e920227f993bdf17d71cd7474919098aafc13c8bbc63f5ccb2bafe13093f3a519fd7a03a47efc84bb3e9fbf9f25f88a408c9
   languageName: node
   linkType: hard
 
