@@ -13,16 +13,16 @@ IMAGE_SIZES = {
 
 for image_type, size in IMAGE_SIZES.items():
     snake_slug = re.sub("([A-Z]+)", r"_\1", image_type).lower()
-    if not os.path.exists(f"docs/{snake_slug}"):
-        os.makedirs(f"docs/{snake_slug}")
+    if not os.path.exists(f"gk-img/docs/{snake_slug}"):
+        os.makedirs(f"gk-img/docs/{snake_slug}")
 
     directory = f"packages/gakumas-data/images/{image_type}"
     for filename in os.listdir(directory):
         # Skip if the file already exists
         output_filename = (
-            f"docs/{snake_slug}/{filename}"
+            f"gk-img/docs/{snake_slug}/{filename}"
             if image_type == "idols"
-            else f"docs/{snake_slug}/{re.sub(r'\.(png|jpg)', '.webp', filename)}"
+            else f"gk-img/docs/{snake_slug}/{re.sub(r'\.(png|jpg)', '.webp', filename)}"
         )
         if os.path.isfile(output_filename):
             continue

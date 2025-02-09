@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "yarn workspace gakumas-tools dev",
     "generate": "yarn workspace gakumas-data generate && python scripts/generate.py",
-    "regenerate": "rm -rf docs/*s && yarn generate",
+    "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "backup-db": "yarn workspace gakumas-tools backup-db"
   },
   "workspaces": [
