@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useMemo, useState } from "react";
-import { PIdols } from "gakumas-data/lite";
+import { PIdols } from "gakumas-data";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import PIdol from "@/components/PIdol";
 import WorkspaceContext from "@/contexts/WorkspaceContext";

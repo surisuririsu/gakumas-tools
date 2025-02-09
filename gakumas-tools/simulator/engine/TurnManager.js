@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data/lite";
+import { SkillCards } from "gakumas-data";
 import { S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shuffle } from "./utils";

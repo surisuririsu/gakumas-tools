@@ -16,6 +16,7 @@
     "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
     "chart.js": "^4.4.7",
     "gakumas-data": "workspace:*",
+    "gakumas-images": "workspace:*",
     "mongodb": "^6.13.0",
     "next": "^15.1.6",
     "next-auth": "^4.24.11",
@@ -39,5 +40,6 @@
     "gakumas_contest_simulator": "https://github.com/katabami83/gakumas_contest_simulator",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }

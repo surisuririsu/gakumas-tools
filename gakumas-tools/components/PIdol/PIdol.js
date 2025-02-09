@@ -1,11 +1,12 @@
 import { memo } from "react";
+import { PIdols } from "gakumas-data";
+import gkImg from "gakumas-images";
 import Image from "@/components/Image";
-import { PIdols } from "@/utils/data";
 import styles from "./PIdol.module.scss";
 
 function PIdol({ pIdolId }) {
   const pIdol = PIdols.getById(pIdolId);
-  const icon = pIdol?.getIcon();
+  const icon = pIdol && gkImg(pIdol).icon;
 
   return (
     <div className={styles.pIdol}>

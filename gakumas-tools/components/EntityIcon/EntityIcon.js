@@ -1,4 +1,5 @@
 import { memo } from "react";
+import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import { ENTITY_DATA_BY_TYPE, EntityTypes } from "@/utils/entities";
@@ -16,6 +17,7 @@ function EntityIcon({
   showTier,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
+  const { icon } = gkImg(entity, idolId);
 
   if (onClick) {
     return (
@@ -26,7 +28,7 @@ function EntityIcon({
         {entity && (
           <>
             <Image
-              src={entity.getIcon(idolId)}
+              src={icon}
               alt={entity.name}
               fill
               sizes="64px"
@@ -47,7 +49,7 @@ function EntityIcon({
       <div className={c(styles.entityIcon, styles[size])}>
         {entity && (
           <Image
-            src={entity.getIcon(idolId)}
+            src={icon}
             alt={entity.name}
             fill
             sizes="64px"

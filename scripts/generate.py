@@ -16,7 +16,7 @@ for image_type, size in IMAGE_SIZES.items():
     if not os.path.exists(f"gk-img/docs/{snake_slug}"):
         os.makedirs(f"gk-img/docs/{snake_slug}")
 
-    directory = f"packages/gakumas-data/images/{image_type}"
+    directory = f"packages/gakumas-images/images/{image_type}"
     for filename in os.listdir(directory):
         # Skip if the file already exists
         output_filename = (

@@ -1,6 +1,6 @@
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Customizations, SkillCards } from "gakumas-data/lite";
+import { Customizations, SkillCards } from "gakumas-data";
 import EntityIcon from "@/components/EntityIcon";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import c from "@/utils/classNames";

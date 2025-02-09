@@ -1,9 +1,10 @@
 import { memo, useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { PItems, SkillCards, Stages } from "gakumas-data";
+import gkImg from "gakumas-images";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
 import { FALLBACK_STAGE } from "@/simulator/constants";
-import { PItems, SkillCards, Stages } from "@/utils/data";
 import { formatStageName } from "@/utils/stages";
 import styles from "./LoadoutHistory.module.scss";
 
@@ -37,7 +38,7 @@ function LoadoutSummary({ loadout, setLoadout }) {
             .map((pItem, i) => (
               <Image
                 key={i}
-                src={pItem.getIcon()}
+                src={gkImg(pItem).icon}
                 width={40}
                 height={40}
                 alt={pItem.name}
@@ -56,7 +57,7 @@ function LoadoutSummary({ loadout, setLoadout }) {
               .map((skillCard, i) => (
                 <Image
                   key={i}
-                  src={skillCard.getIcon()}
+                  src={gkImg(skillCard).icon}
                   width={40}
                   height={40}
                   alt={skillCard.name}
