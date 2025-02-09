@@ -3802,6 +3802,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"gakumas-images@workspace:*, gakumas-images@workspace:packages/gakumas-images":
+  version: 0.0.0-use.local
+  resolution: "gakumas-images@workspace:packages/gakumas-images"
+  languageName: unknown
+  linkType: soft
+
 "gakumas-tools-monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "gakumas-tools-monorepo@workspace:."
@@ -3821,6 +3827,7 @@ __metadata:
     eslint: "npm:^9.20.0"
     eslint-config-next: "npm:^15.1.6"
     gakumas-data: "workspace:*"
+    gakumas-images: "workspace:*"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"

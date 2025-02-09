@@ -1,4 +1,5 @@
-import { PItems } from "@/utils/data";
+import { PItems } from "gakumas-data";
+import gkImg from "gakumas-images";
 import styles from "./Preview.styles";
 
 export default function PreviewPItems({ itemIds, baseUrl }) {
@@ -11,7 +12,7 @@ export default function PreviewPItems({ itemIds, baseUrl }) {
           <div key={index} style={styles.item}>
             {item && (
               <img
-                src={`${baseUrl}${item._getIcon().src}`}
+                src={`${baseUrl}${gkImg(item)._icon.src}`}
                 width={48}
                 height={48}
               />

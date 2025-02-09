@@ -1,7 +1,7 @@
 "use client";
 import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
-import { PIdols } from "gakumas-data/lite";
+import { PIdols } from "gakumas-data";
 import Input from "@/components/Input";
 import MemorySave from "@/components/MemorySave";
 import Modal from "@/components/Modal";

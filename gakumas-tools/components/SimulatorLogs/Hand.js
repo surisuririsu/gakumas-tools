@@ -4,7 +4,7 @@ import { FaEllipsisVertical } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import { ALL_FIELDS, S } from "@/simulator/constants";
 import c from "@/utils/classNames";
-import { SkillCards } from "@/utils/data";
+import { SkillCards } from "gakumas-data";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./SimulatorLogs.module.scss";
 

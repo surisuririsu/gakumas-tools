@@ -21,12 +21,17 @@ const RAW_RUNTIME_STATE =
     {\
       "name": "gakumas-data",\
       "reference": "workspace:packages/gakumas-data"\
+    },\
+    {\
+      "name": "gakumas-images",\
+      "reference": "workspace:packages/gakumas-images"\
     }\
   ],\
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
     ["gakumas-data", ["workspace:packages/gakumas-data"]],\
+    ["gakumas-images", ["workspace:packages/gakumas-images"]],\
     ["gakumas-tools", ["workspace:gakumas-tools"]],\
     ["gakumas-tools-monorepo", ["workspace:."]]\
   ],\
@@ -5024,6 +5029,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
+    ["gakumas-images", [\
+      ["workspace:packages/gakumas-images", {\
+        "packageLocation": "./packages/gakumas-images/",\
+        "packageDependencies": [\
+          ["gakumas-images", "workspace:packages/gakumas-images"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["gakumas-tools", [\
       ["workspace:gakumas-tools", {\
         "packageLocation": "./gakumas-tools/",\
@@ -5038,6 +5052,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:9.20.0"],\
           ["eslint-config-next", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:15.1.6"],\
           ["gakumas-data", "workspace:packages/gakumas-data"],\
+          ["gakumas-images", "workspace:packages/gakumas-images"],\
           ["gakumas_contest_simulator", "https://github.com/katabami83/gakumas_contest_simulator.git#commit=b7d43a76bebf64421f7fc3030c39dd2fd58124d6"],\
           ["jest", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:29.7.0"],\
           ["jest-environment-jsdom", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:29.7.0"],\

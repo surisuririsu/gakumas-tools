@@ -1,4 +1,4 @@
-import { Customizations } from "gakumas-data/lite";
+import { Customizations } from "gakumas-data";
 
 export function deserializeCustomizations(str) {
   try {

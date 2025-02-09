@@ -1,4 +1,4 @@
-import { Customizations, SkillCards } from "gakumas-data/lite";
+import { Customizations, SkillCards } from "gakumas-data";
 import {
   CARD_PILES,
   COST_FIELDS,
