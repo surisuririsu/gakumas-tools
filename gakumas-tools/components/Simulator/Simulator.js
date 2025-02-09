@@ -1,7 +1,12 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { IdolConfig, StageConfig, IdolStageConfig } from "@/simulator/config";
+import {
+  IdolConfig,
+  StageConfig,
+  IdolStageConfig,
+  STRATEGIES,
+} from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
@@ -15,7 +20,6 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
-import STRATEGIES from "@/simulator/strategies";
 import { logEvent } from "@/utils/logging";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import { formatStageShortName } from "@/utils/stages";

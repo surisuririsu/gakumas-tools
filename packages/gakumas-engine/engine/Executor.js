@@ -12,9 +12,10 @@ import {
   S,
   GROWABLE_FIELDS,
   CHANGE_TRIGGER_PHASES,
+  ALL_FIELDS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { formatDiffField } from "./utils";
+import { formatDiffField } from "../utils";
 
 export default class Executor extends EngineComponent {
   constructor(engine) {
@@ -76,7 +77,7 @@ export default class Executor extends EngineComponent {
     // Record previous state for diffing
     let prev = {};
     for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
-      prev[S[FIELDS_TO_DIFF[i]]] = state[S[FIELDS_TO_DIFF[i]]];
+      prev[FIELDS_TO_DIFF[i]] = state[FIELDS_TO_DIFF[i]];
     }
 
     // Set modifiers
@@ -117,11 +118,11 @@ export default class Executor extends EngineComponent {
     // Log changed fields
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {
       const field = LOGGED_FIELDS[i];
-      if (state[S[field]] == prev[S[field]]) continue;
+      if (state[field] == prev[field]) continue;
       this.logger.log(state, "diff", {
         field,
-        prev: formatDiffField(prev[S[field]]),
-        next: formatDiffField(state[S[field]]),
+        prev: formatDiffField(prev[field]),
+        next: formatDiffField(state[field]),
       });
     }
 
@@ -129,7 +130,7 @@ export default class Executor extends EngineComponent {
     if (!UNFRESH_PHASES.includes(state[S.phase])) {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
-        if (state[S[field]] > 0 && prev[S[field]] == 0) {
+        if (state[field] > 0 && prev[field] == 0) {
           state[S.freshBuffs][field] = true;
         }
       }
@@ -139,11 +140,12 @@ export default class Executor extends EngineComponent {
       // Trigger increase effects
       for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
         const field = INCREASE_TRIGGER_FIELDS[i];
-        if (state[S.phase] == `${field}Increased`) continue;
-        if (state[S[field]] > prev[S[field]]) {
+        const increasedPhase = `${ALL_FIELDS[field]}Increased`;
+        if (state[S.phase] == increasedPhase) continue;
+        if (state[field] > prev[field]) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            `${field}Increased`
+            increasedPhase
           );
         }
       }
@@ -151,11 +153,12 @@ export default class Executor extends EngineComponent {
       // Trigger decrease effects
       for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
         const field = DECREASE_TRIGGER_FIELDS[i];
-        if (state[S.phase] == `${field}Decreased`) continue;
-        if (state[S[field]] < prev[S[field]]) {
+        const decreasedPhase = `${ALL_FIELDS[field]}Decreased`;
+        if (state[S.phase] == decreasedPhase) continue;
+        if (state[field] < prev[field]) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            `${field}Decreased`
+            decreasedPhase
           );
         }
       }
@@ -210,7 +213,7 @@ export default class Executor extends EngineComponent {
         intermediate = rhs;
       } else if (op == "+=") {
         intermediate += rhs;
-        if (growth?.[S[`g.${lhs}`]] && GROWABLE_FIELDS.includes(lhs)) {
+        if (growth?.[S[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
           intermediate += growth[S[`g.${lhs}`]];
         }
       } else if (op == "-=") {
@@ -248,8 +251,8 @@ export default class Executor extends EngineComponent {
 
       // Round whole fields
       for (let i = 0; i < WHOLE_FIELDS.length; i++) {
-        if (S[WHOLE_FIELDS[i]] in state) {
-          state[S[WHOLE_FIELDS[i]]] = Math.ceil(state[S[WHOLE_FIELDS[i]]]);
+        if (WHOLE_FIELDS[i] in state) {
+          state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]]);
         }
       }
 

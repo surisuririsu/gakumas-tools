@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Stages } from "gakumas-data/lite";
+import { Stages } from "gakumas-data";
 import ButtonGroup from "@/components/ButtonGroup";
 import Modal from "@/components/Modal";
 import StageCustomizer from "@/components/StageCustomizer";

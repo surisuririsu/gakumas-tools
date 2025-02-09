@@ -1,4 +1,4 @@
-import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data/lite";
+import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data";
 
 export default class IdolConfig {
   constructor(loadout) {

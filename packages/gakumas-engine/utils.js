@@ -1,4 +1,4 @@
-import { DEBUG } from "../constants";
+import { DEBUG } from "./constants";
 
 const seed = 610397104;
 
@@ -28,13 +28,6 @@ export function shuffle(arr) {
   }
 
   return arr;
-}
-
-export function formatRun(run) {
-  return {
-    score: run.score,
-    logs: [].concat(...run.logs),
-  };
 }
 
 export function formatDiffField(value) {

@@ -1,6 +1,7 @@
 import { memo } from "react";
+import { SkillCards } from "gakumas-data";
+import gkImg from "gakumas-images";
 import Image from "@/components/Image";
-import { SkillCards } from "@/utils/data";
 import styles from "./SimulatorLogs.module.scss";
 
 function AddCard({ id, idolId, text }) {
@@ -8,7 +9,12 @@ function AddCard({ id, idolId, text }) {
   return (
     <div className={styles.drawCard}>
       {text}
-      <Image src={skillCard.getIcon(idolId)} width={24} height={24} alt="" />
+      <Image
+        src={gkImg(skillCard, idolId).icon}
+        width={24}
+        height={24}
+        alt=""
+      />
       {skillCard.name}
     </div>
   );

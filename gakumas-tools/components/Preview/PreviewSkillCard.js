@@ -1,4 +1,5 @@
-import { Customizations } from "gakumas-data/lite";
+import { Customizations } from "gakumas-data";
+import gkImg from "gakumas-images";
 import { countCustomizations } from "@/utils/customizations";
 import styles from "./Preview.styles";
 
@@ -12,7 +13,7 @@ export default function PreviewSkillCard({
     <div style={styles.card}>
       {card && (
         <img
-          src={`${baseUrl}${card._getIcon(idolId || 6).src}`}
+          src={`${baseUrl}${gkImg(card, idolId || 6)._icon.src}`}
           width={68}
           height={68}
         />

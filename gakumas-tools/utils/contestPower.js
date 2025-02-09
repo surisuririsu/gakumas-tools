@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data/lite";
+import { PItems, SkillCards } from "gakumas-data";
 import { countCustomizations } from "./customizations";
 
 export const COST_RANGES = [

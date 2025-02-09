@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import {
   serializeEffectSequence,
   deserializeEffectSequence,
-} from "gakumas-data/lite";
+} from "gakumas-data";
 import Button from "@/components/Button";
 import ParametersInput from "@/components/ParametersInput";
 import styles from "./StageCustomizer.module.scss";

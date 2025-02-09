@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
-import { DEBUFF_FIELDS } from "@/simulator/constants";
+import { ALL_FIELDS, DEBUFF_FIELDS } from "gakumas-engine";
 import styles from "./SimulatorLogs.module.scss";
 
 function Diff({ field, next, prev }) {
@@ -13,7 +13,7 @@ function Diff({ field, next, prev }) {
 
   return (
     <div className={styles.tile}>
-      {t(field)}{" "}
+      {t(ALL_FIELDS[field])}{" "}
       <span className={styles[diffDir]}>
         {isNaN(next) ? (
           <>

@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
+import { PItems, SkillCards } from "gakumas-data";
+import gkImg from "gakumas-images";
 import Image from "@/components/Image";
-import { PItems, SkillCards } from "@/utils/data";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
 
@@ -15,6 +16,8 @@ function Group({ entity, childLogs, idolId }) {
     resolvedEntity = PItems.getById(entity.id);
   }
 
+  const { icon } = gkImg(resolvedEntity, idolId);
+
   return (
     <div className={styles.group}>
       <div className={styles.entity}>
@@ -26,36 +29,21 @@ function Group({ entity, childLogs, idolId }) {
         {entity.type == "stage" && t("stageEffect")}
         {entity.type == "skillCard" && (
           <>
-            <Image
-              src={resolvedEntity.getIcon(idolId)}
-              width={24}
-              height={24}
-              alt=""
-            />
+            <Image src={icon} width={24} height={24} alt="" />
             {t("skillCard")}「{resolvedEntity.name}」
           </>
         )}
         {entity.type == "skillCardEffect" && (
           <>
             <div className={styles.effect}>
-              <Image
-                src={resolvedEntity.getIcon(idolId)}
-                width={24}
-                height={24}
-                alt=""
-              />
+              <Image src={icon} width={24} height={24} alt="" />
             </div>
             {t("effect")}「{resolvedEntity.name}」
           </>
         )}
         {entity.type == "pItem" && (
           <>
-            <Image
-              src={resolvedEntity.getIcon()}
-              width={24}
-              height={24}
-              alt=""
-            />
+            <Image src={icon} width={24} height={24} alt="" />
             {t("pItem")}「{resolvedEntity.name}」
           </>
         )}

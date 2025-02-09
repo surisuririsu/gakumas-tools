@@ -2,7 +2,8 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCircleChevronDown } from "react-icons/fa6";
-import { Idols } from "@/utils/data";
+import { Idols } from "gakumas-data";
+import gkImg from "gakumas-images";
 import ButtonGroup from "@/components/ButtonGroup";
 import IconSelect from "@/components/IconSelect";
 import Input from "@/components/Input";
@@ -33,10 +34,10 @@ const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
   label: i + 10,
 }));
 
-const IDOL_OPTIONS = Idols.getAll().map(({ id, name, getIcon }) => ({
-  id,
-  iconSrc: getIcon(),
-  alt: name,
+const IDOL_OPTIONS = Idols.getAll().map((idol) => ({
+  id: idol.id,
+  iconSrc: gkImg(idol).icon,
+  alt: idol.name,
 }));
 
 const STAGE_OPTIONS = [

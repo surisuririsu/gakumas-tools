@@ -1,13 +1,13 @@
 import { memo, useMemo } from "react";
-import { PIdols } from "gakumas-data/lite";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
+import gkImg from "gakumas-images";
 import EntityIcon from "@/components/EntityIcon";
 import Image from "@/components/Image";
 import PIdol from "@/components/PIdol";
 import { calculateContestPower } from "@/utils/contestPower";
-import { PItems, SkillCards } from "@/utils/data";
+import { EntityTypes } from "@/utils/entities";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
-import { EntityTypes } from "@/utils/entities";
 
 function MemorySummary({ memory, picking, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
@@ -46,7 +46,7 @@ function MemorySummary({ memory, picking, onClick }) {
           {pItems.map((pItem, i) => (
             <Image
               key={i}
-              src={pItem.getIcon()}
+              src={gkImg(pItem).icon}
               width={35}
               height={35}
               alt={pItem.name}

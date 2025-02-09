@@ -1,4 +1,4 @@
-import { SkillCards } from "@/utils/data";
+import { SkillCards } from "gakumas-data";
 import PreviewSkillCard from "./PreviewSkillCard";
 import styles from "./Preview.styles";
 
