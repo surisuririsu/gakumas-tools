@@ -3794,9 +3794,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-tools@workspace:.":
+"gakumas-tools-monorepo@workspace:.":
   version: 0.0.0-use.local
-  resolution: "gakumas-tools@workspace:."
+  resolution: "gakumas-tools-monorepo@workspace:."
+  languageName: unknown
+  linkType: soft
+
+"gakumas-tools@workspace:apps/gakumas-tools":
+  version: 0.0.0-use.local
+  resolution: "gakumas-tools@workspace:apps/gakumas-tools"
   dependencies:
     "@next/third-parties": "npm:^15.1.6"
     "@sgratzl/chartjs-chart-boxplot": "npm:^4.4.4"

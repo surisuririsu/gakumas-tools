@@ -1,43 +1,12 @@
 {
-  "name": "gakumas-tools",
+  "name": "gakumas-tools-monorepo",
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "jest",
-    "generate-kafe": "node scripts/generateIdMappings.mjs",
-    "backup-db": "scripts/create_db_backup.sh"
+    "dev": "yarn workspace gakumas-tools dev",
+    "backup-db": "yarn workspace gakumas-tools backup-db"
   },
-  "dependencies": {
-    "@next/third-parties": "^15.1.6",
-    "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
-    "chart.js": "^4.4.7",
-    "gakumas-data": "https://github.com/surisuririsu/gakumas-data#v11.9.1",
-    "mongodb": "^6.13.0",
-    "next": "^15.1.6",
-    "next-auth": "^4.24.11",
-    "next-intl": "^3.26.3",
-    "react": "^19.0.0",
-    "react-chartjs-2": "^5.3.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.4.0",
-    "react-virtualized-auto-sizer": "^1.0.25",
-    "react-window": "^1.8.11",
-    "sass": "^1.84.0",
-    "sharp": "^0.33.5",
-    "tesseract.js": "^6.0.0"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "eslint": "^9.20.0",
-    "eslint-config-next": "^15.1.6",
-    "gakumas_contest_simulator": "https://github.com/katabami83/gakumas_contest_simulator",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
-  },
+  "workspaces": [
+    "apps/*"
+  ],
   "packageManager": "yarn@4.6.0"
 }
