@@ -19,7 +19,6 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ["gakumas-data", "gakumas-images"],
   webpack: (config, { dev, isServer }) => {
     config.module.rules = config.module.rules.filter(
       (c) => c.loader != "next-image-loader"
