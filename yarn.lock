@@ -3808,9 +3808,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"gakumas-tools@workspace:apps/gakumas-tools":
+"gakumas-tools@workspace:gakumas-tools":
   version: 0.0.0-use.local
-  resolution: "gakumas-tools@workspace:apps/gakumas-tools"
+  resolution: "gakumas-tools@workspace:gakumas-tools"
   dependencies:
     "@next/third-parties": "npm:^15.1.6"
     "@sgratzl/chartjs-chart-boxplot": "npm:^4.4.4"

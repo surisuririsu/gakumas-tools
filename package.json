@@ -9,7 +9,7 @@
     "backup-db": "yarn workspace gakumas-tools backup-db"
   },
   "workspaces": [
-    "apps/*",
+    "gakumas-tools",
     "packages/*"
   ],
   "packageManager": "yarn@4.6.0"
