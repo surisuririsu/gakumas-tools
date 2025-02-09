@@ -4,7 +4,6 @@ import { generateMetadataForTool } from "@/utils/metadata";
 
 export async function generateMetadata({ params, searchParams }) {
   const { locale } = await params;
-
   const metadata = await generateMetadataForTool("simulator", locale);
   const query = new URLSearchParams(await searchParams).toString();
   metadata.openGraph.images = [`/api/preview/?${query}`];
