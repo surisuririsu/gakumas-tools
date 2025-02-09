@@ -1,4 +1,6 @@
-@import "@/constants";
+@use "../../styles/mixins";
+@use "sass:color";
+@use "../../styles/colors";
 
 .parameters {
   display: flex;
@@ -8,17 +10,17 @@
   input {
     transition: background-color 0.2s;
 
-    @include param-colors using ($param-color) {
+    @include mixins.param-colors using ($param-color) {
       border-color: $param-color;
-      background-color: scale-color($param-color, $lightness: 80%);
+      background-color: color.scale($param-color, $lightness: 80%);
       color: $param-color;
 
       &::placeholder {
-        color: scale-color($param-color, $alpha: -40%);
+        color: color.scale($param-color, $alpha: -40%);
       }
 
       &:hover {
-        background-color: scale-color($param-color, $lightness: 90%);
+        background-color: color.scale($param-color, $lightness: 90%);
       }
     }
   }

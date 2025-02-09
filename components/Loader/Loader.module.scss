@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .loader {
   width: calc(1em + 8px);
@@ -6,7 +6,7 @@
   display: grid;
   border: 2px solid #0000;
   border-radius: 50%;
-  border-right-color: $blue;
+  border-right-color: colors.$blue;
   animation: spin 1s infinite linear;
 }
 

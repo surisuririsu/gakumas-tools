@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .pIdolSelect {
   display: flex;
@@ -9,7 +9,7 @@
 .pIdol {
   min-width: 89px;
   height: fit-content;
-  border: 4px solid $gray-light;
+  border: 4px solid colors.$gray-light;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -18,7 +18,7 @@
   width: 100%;
   min-width: 0;
   margin-left: 8px;
-  border: 2px solid $gray-light;
+  border: 2px solid colors.$gray-light;
   border-radius: 4px;
   padding: 4px;
   container-type: inline-size;

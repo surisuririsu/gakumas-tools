@@ -1,6 +1,8 @@
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 
-export default function CalculatorPage() {
-  redirect("calculator/nia");
+export default async function CalculatorPage({ params }) {
+  const { locale } = await params;
+
+  redirect({ href: "calculator/nia", locale });
   return null;
 }

@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../../styles/colors";
 
 .targetSkillCards {
   max-width: 420px;
@@ -20,7 +20,7 @@
   z-index: 1;
   border-radius: 4px;
   padding: 4px;
-  color: $white;
+  color: colors.$white;
   font-size: 14px;
   line-height: 14px;
 }
@@ -28,13 +28,13 @@
 .or {
   @extend %boolOp;
   margin: -11px;
-  background-color: $green;
+  background-color: colors.$green;
 }
 
 .not {
   @extend %boolOp;
   margin: -3px;
-  background-color: $red;
+  background-color: colors.$red;
 }
 
 .orGroup {
@@ -44,7 +44,7 @@
 }
 
 .hasMultiple {
-  outline: 2px solid $green;
+  outline: 2px solid colors.$green;
   border-radius: 8px;
 }
 
@@ -55,10 +55,10 @@
 
 .plus {
   @extend %boolButton;
-  color: $green;
+  color: colors.$green;
 }
 
 .minus {
   @extend %boolButton;
-  color: $red;
+  color: colors.$red;
 }

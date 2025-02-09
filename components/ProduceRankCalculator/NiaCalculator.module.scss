@@ -1,11 +1,12 @@
-@import "@/constants";
+@use "sass:color";
+@use "../../styles/colors";
 
 .nia section {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 12px 0;
-  border: 2px solid $gray-light;
+  border: 2px solid colors.$gray-light;
   border-radius: 8px;
   padding: 12px 16px 16px;
 }
@@ -26,8 +27,8 @@
   }
 
   th {
-    background-color: $gray;
-    color: $white;
+    background-color: colors.$gray;
+    color: colors.$white;
     width: 22%;
   }
 
@@ -36,36 +37,36 @@
   }
 
   th:nth-child(2) {
-    background-color: $vocal;
+    background-color: colors.$vocal;
   }
 
   th:nth-child(3) {
-    background-color: $dance;
+    background-color: colors.$dance;
   }
 
   th:nth-child(4) {
-    background-color: $visual;
+    background-color: colors.$visual;
   }
 
   td {
-    color: $black-dark;
+    color: colors.$black-dark;
   }
 
   td:nth-child(1) {
     padding: 0;
-    background-color: $gray-extra-light;
+    background-color: colors.$gray-extra-light;
   }
 
   td:nth-child(2) {
-    background-color: scale-color($vocal, $alpha: -50%);
+    background-color: color.scale(colors.$vocal, $alpha: -50%);
   }
 
   td:nth-child(3) {
-    background-color: scale-color($dance, $alpha: -50%);
+    background-color: color.scale(colors.$dance, $alpha: -50%);
   }
 
   td:nth-child(4) {
-    background-color: scale-color($visual, $alpha: -50%);
+    background-color: color.scale(colors.$visual, $alpha: -50%);
   }
 
   button {
@@ -74,17 +75,17 @@
     text-align: center;
     display: flex;
     padding: 0 8px;
-    color: $gray;
+    color: colors.$gray;
   }
 
   .rankButtonLabel {
     flex: 1;
-    color: $black-dark;
+    color: colors.$black-dark;
   }
 }
 
 .note a {
-  color: $blue;
+  color: colors.$blue;
 }
 
 @container (width < 530px) {

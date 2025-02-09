@@ -61,3 +61,10 @@ export function getWhiteCanvas(img, threshold = 252) {
     [r, g, b].every((v) => v > threshold)
   );
 }
+
+// Get lines from result
+export function extractLines(result) {
+  return result.data.blocks
+    .map((block) => block.paragraphs.map((paragraph) => paragraph.lines))
+    .flat(2);
+}

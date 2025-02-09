@@ -1,13 +1,13 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .toolHeader {
   position: absolute;
   margin: 12px;
-  color: $black;
+  color: colors.$black;
   transition: color 0.2s;
 
   &:hover {
-    color: $gk-orange;
+    color: colors.$gk-orange;
   }
 
   @media only screen and (max-width: 600px) {

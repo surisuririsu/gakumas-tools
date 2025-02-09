@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "../../styles/mixins";
+@use "../../styles/colors";
 
 .entityDetails {
   display: flex;
@@ -24,7 +25,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: $gray-light;
+  color: colors.$gray-light;
   font-size: 60px;
 }
 
@@ -42,23 +43,25 @@
   flex: 1;
   min-width: 0;
   border-radius: 8px;
-  box-shadow: 0 2px 4px $gray-light;
+  box-shadow: 0 2px 4px colors.$gray-light;
   overflow: hidden;
 
-  @include c11n-background;
+  @include mixins.c11n-gradients using ($c11n-gradient) {
+    background: $c11n-gradient;
+  }
 }
 
 .max {
   width: 50%;
   margin: auto;
   border-radius: 0 0 6px 6px;
-  background-color: $white;
+  background-color: colors.$white;
   font-size: 12px;
 }
 
 .name {
   padding: 2px 8px;
-  color: $white;
+  color: colors.$white;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -76,7 +79,7 @@
   height: 48px;
 
   .c11n {
-    border: 2px solid $white;
+    border: 2px solid colors.$white;
   }
 
   .max,

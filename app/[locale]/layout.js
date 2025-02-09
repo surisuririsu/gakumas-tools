@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
 import ToolHeader from "@/components/ToolHeader";
@@ -17,6 +17,7 @@ import { SessionContextProvider } from "@/contexts/SessionContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
+import { GA_ID } from "@/utils/logging";
 import { generateDefaultMetadata } from "@/utils/metadata";
 import styles from "./layout.module.scss";
 import "../globals.scss";
@@ -29,7 +30,9 @@ export const viewport = {
   maximumScale: 1,
 };
 
-export async function generateMetadata({ params: { locale } }) {
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+
   return await generateDefaultMetadata(locale);
 }
 
@@ -37,8 +40,10 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default async function RootLayout({ children, params: { locale } }) {
-  unstable_setRequestLocale(locale);
+export default async function RootLayout({ params, children }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const messages = await getMessages();
   const session = await getServerSession(authOptions);
 
@@ -74,7 +79,7 @@ export default async function RootLayout({ children, params: { locale } }) {
           </NextIntlClientProvider>
         </SessionContextProvider>
       </body>
-      <GoogleAnalytics gaId="G-D4SNMY9VJP" />
+      <GoogleAnalytics gaId={GA_ID} />
     </html>
   );
 }

@@ -1,4 +1,4 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .memoryCalculator {
   max-width: 500px;
@@ -16,7 +16,7 @@
 .resultsToggle {
   justify-content: flex-start;
   gap: 8px;
-  color: $gk-orange;
+  color: colors.$gk-orange;
   font-size: 16px;
 }
 

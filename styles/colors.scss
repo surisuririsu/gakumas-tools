@@ -1,0 +1,63 @@
+@use "sass:color";
+
+// Gakumas Tools theme colors
+$gk-orange: #f39800;
+$gk-orange-light: color.adjust($gk-orange, $lightness: 15%);
+$gk-orange-extra-light: color.adjust($gk-orange, $lightness: 40%);
+$gk-red-orange: #ff7600;
+$gk-red-orange-dark: color.adjust($gk-red-orange, $lightness: -10%);
+
+// Grays
+$white: #fefefe;
+$white-dark: #fcfcfc;
+
+$gray-extra-light: #eee;
+$gray-light: #ccc;
+$gray: #999;
+$gray-dark: #666;
+
+$black-light: #667;
+$black: #556;
+$black-dark: #111;
+
+// Other colors
+$red: #f67;
+$red-extra-light: color.adjust($red, $lightness: 20%);
+$red-light: color.adjust($red, $lightness: 10%);
+$red-dark: color.adjust($red, $lightness: -10%);
+
+$green: #4c4;
+
+$blue: #4bf;
+$blue-extra-light: color.adjust($blue, $lightness: 25%);
+$blue-dark: color.adjust($blue, $lightness: -15%);
+
+// Parameter colors
+$vocal: #f23584;
+$dance: #1c85ed;
+$visual: #f7b12e;
+$stamina: #00d35b;
+
+$vocal-light: color.scale($vocal, $lightness: 15%);
+$dance-light: color.scale($dance, $lightness: 15%);
+$visual-light: color.scale($visual, $lightness: 15%);
+
+// Rarity colors
+$silver: #cfedfa;
+$silver-dark: color.adjust($silver, $lightness: -40%);
+$gold: #fcd67f;
+$gold-dark: color.adjust($gold, $lightness: -35%);
+
+// Customizations
+$custom-green: #1cc15c;
+
+$effect: #ca5cfe;
+$effect-2: #fd6be4;
+$cost: #02e28f;
+$cost-2: #94ea03;
+$buff: #09bfff;
+$buff-2: #90cdff;
+$score: #ff3482;
+$score-2: #ffa202;
+$genki: #00b1e2;
+$genki-2: #06e0d1;

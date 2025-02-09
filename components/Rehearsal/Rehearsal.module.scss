@@ -1,4 +1,5 @@
-@import "@/constants";
+@use "sass:color";
+@use "../../styles/colors";
 
 .rehearsal {
   max-width: 800px;
@@ -20,7 +21,7 @@
   margin-top: 16px;
   border-radius: 8px;
   padding: 16px;
-  background-color: $gk-orange-extra-light;
+  background-color: colors.$gk-orange-extra-light;
 }
 
 .progress {
@@ -28,7 +29,7 @@
   display: flex;
   gap: 4px;
   align-items: center;
-  color: $gk-orange;
+  color: colors.$gk-orange;
 }
 
 .tableWrapper {
@@ -39,11 +40,11 @@
   }
 
   thead {
-    background-color: lighten($gk-orange, 20%);
+    background-color: color.adjust(colors.$gk-orange, $lightness: 20%);
   }
 
   tbody {
-    background-color: lighten($gk-orange, 40%);
+    background-color: color.adjust(colors.$gk-orange, $lightness: 40%);
   }
 
   th,

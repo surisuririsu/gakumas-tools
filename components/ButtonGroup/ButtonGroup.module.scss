@@ -1,27 +1,27 @@
-@import "@/constants";
+@use "../../styles/colors";
 
 .buttonGroup {
   display: flex;
-  border: 1px solid $gk-orange;
+  border: 1px solid colors.$gk-orange;
   border-radius: 4px;
   overflow: hidden;
 
   button {
     flex: 1;
     padding: 6px;
-    color: $gk-orange;
+    color: colors.$gk-orange;
     font-size: 14px;
     line-height: 16px;
     transition: all 0.2s;
 
     &.selected {
-      background-color: $gk-orange;
-      color: $white;
+      background-color: colors.$gk-orange;
+      color: colors.$white;
     }
 
     &:hover {
-      background-color: $gk-orange-extra-light;
-      color: $gk-red-orange;
+      background-color: colors.$gk-orange-extra-light;
+      color: colors.$gk-red-orange;
     }
   }
 }

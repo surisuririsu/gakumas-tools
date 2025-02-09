@@ -30,19 +30,21 @@ function LoadoutSummary({ loadout, setLoadout }) {
   return (
     <Button className={styles.summary} onClick={handleClick}>
       <div className={styles.itemsAndStage}>
-        {pItemIds
-          .map(PItems.getById)
-          .filter((p) => p)
-          .map((pItem, i) => (
-            <Image
-              key={i}
-              src={pItem.getIcon()}
-              width={40}
-              height={40}
-              alt={pItem.name}
-              draggable={false}
-            />
-          ))}
+        <div>
+          {pItemIds
+            .map(PItems.getById)
+            .filter((p) => p)
+            .map((pItem, i) => (
+              <Image
+                key={i}
+                src={pItem.getIcon()}
+                width={40}
+                height={40}
+                alt={pItem.name}
+                draggable={false}
+              />
+            ))}
+        </div>
         <span className={styles.stage}>{formatStageName(stage, t)}</span>
       </div>
       <div className={styles.cards}>

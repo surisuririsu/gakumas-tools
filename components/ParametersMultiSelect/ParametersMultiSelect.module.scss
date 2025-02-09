@@ -1,4 +1,5 @@
-@import "@/components/ButtonGroup/ButtonGroup.module";
+@use "sass:color";
+@use "../../components/ButtonGroup/ButtonGroup.module";
 
 .parametersMultiSelect {
   @extend .buttonGroup;
@@ -9,7 +10,7 @@
   button {
     @include param-colors using ($param-color) {
       border-color: $param-color;
-      background-color: scale-color($param-color, $lightness: 80%);
+      background-color: color.scale($param-color, $lightness: 80%);
       color: $param-color;
 
       &.selected {
