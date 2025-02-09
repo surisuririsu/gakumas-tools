@@ -1,4 +1,4 @@
-import { Customizations, SkillCards } from "gakumas-data/lite";
+import { Customizations, SkillCards } from "gakumas-data";
 import {
   CARD_PILES,
   COST_FIELDS,
@@ -7,7 +7,7 @@ import {
   S,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { getRand, shallowCopy, shuffle } from "./utils";
+import { getRand, shallowCopy, shuffle } from "../utils";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
@@ -174,7 +174,7 @@ export default class CardManager extends EngineComponent {
     delete previewState[S.phase];
 
     for (let i = 0; i < COST_FIELDS.length; i++) {
-      if (previewState[S[COST_FIELDS[i]]] < 0) return false;
+      if (previewState[COST_FIELDS[i]] < 0) return false;
     }
 
     return true;
@@ -505,9 +505,9 @@ export default class CardManager extends EngineComponent {
   holdCard(state, cardBaseId) {
     const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
     for (let i = 0; i < CARD_PILES.length; i++) {
-      const index = state[S[CARD_PILES[i]]].indexOf(card);
+      const index = state[CARD_PILES[i]].indexOf(card);
       if (index != -1) {
-        state[S[CARD_PILES[i]]].splice(index, 1);
+        state[CARD_PILES[i]].splice(index, 1);
         this.hold(state, card);
         break;
       }

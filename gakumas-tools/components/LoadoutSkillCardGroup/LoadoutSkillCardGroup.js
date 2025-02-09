@@ -8,7 +8,7 @@ import {
   FaEllipsis,
   FaFilm,
 } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data/lite";
+import { SkillCards } from "gakumas-data";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";

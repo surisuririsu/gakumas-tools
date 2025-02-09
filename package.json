@@ -1,7 +1,6 @@
 {
   "name": "gakumas-tools-monorepo",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "yarn workspace gakumas-tools dev",
     "generate": "yarn workspace gakumas-data generate && python scripts/generate.py",

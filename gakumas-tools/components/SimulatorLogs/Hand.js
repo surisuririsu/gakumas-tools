@@ -1,10 +1,10 @@
 import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
+import { SkillCards } from "gakumas-data";
+import { ALL_FIELDS, S } from "gakumas-engine";
 import EntityIcon from "@/components/EntityIcon";
-import { ALL_FIELDS, S } from "@/simulator/constants";
 import c from "@/utils/classNames";
-import { SkillCards } from "@/utils/data";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./SimulatorLogs.module.scss";
 

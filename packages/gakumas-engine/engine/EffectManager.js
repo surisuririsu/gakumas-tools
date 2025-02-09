@@ -1,7 +1,7 @@
-import { Customizations, PItems, SkillCards } from "gakumas-data/lite";
+import { Customizations, PItems, SkillCards } from "gakumas-data";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { shallowCopy } from "./utils";
+import { shallowCopy } from "../utils";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {

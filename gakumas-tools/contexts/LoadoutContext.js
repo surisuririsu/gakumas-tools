@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Stages } from "gakumas-data/lite";
+import { Stages } from "gakumas-data";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
 import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";

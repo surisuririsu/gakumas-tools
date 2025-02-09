@@ -1,5 +1,5 @@
 import { memo, useContext } from "react";
-import { SkillCards } from "gakumas-data/lite";
+import { SkillCards } from "gakumas-data";
 import EntityBank from "@/components/EntityBank";
 import EntityCustomizer from "@/components/EntityCustomizer";
 import Modal from "@/components/Modal";

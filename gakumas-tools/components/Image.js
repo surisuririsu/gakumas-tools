@@ -1,8 +1,7 @@
 import NextImage from "next/image";
-import { GH_PAGES_BASE_URL } from "@/utils/data";
+import { isGkImgUrl } from "gakumas-images";
 
 export default function Image(props) {
-  const unoptimized =
-    typeof props.src == "string" && props.src.startsWith(GH_PAGES_BASE_URL);
+  const unoptimized = isGkImgUrl(props.src);
   return <NextImage {...props} unoptimized={unoptimized} />;
 }

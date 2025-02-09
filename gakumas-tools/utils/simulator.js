@@ -1,4 +1,5 @@
-import { BUCKET_SIZE, GRAPHED_FIELDS, S } from "@/simulator/constants";
+import { GRAPHED_FIELDS } from "gakumas-engine";
+import { BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
   serializeCustomizations,
@@ -124,6 +125,13 @@ export function getMedianScore(scores) {
     : Math.floor((sorted[mid - 1] + sorted[mid]) / 2);
 }
 
+export function formatRun(run) {
+  return {
+    score: run.score,
+    logs: [].concat(...run.logs),
+  };
+}
+
 export function mergeResults(results) {
   let scores = [];
   for (let result of results) {
@@ -165,24 +173,24 @@ export function mergeResults(results) {
 
 export function mergeGraphDatas(graphDatas) {
   let mergedGraphData = GRAPHED_FIELDS.reduce((acc, cur) => {
-    acc[S[cur]] = [];
+    acc[cur] = [];
     return acc;
   }, {});
 
   for (let graphData of graphDatas) {
     for (let field of GRAPHED_FIELDS) {
-      for (let i = 0; i < graphData[S[field]].length; i++) {
-        if (!mergedGraphData[S[field]][i]) mergedGraphData[S[field]][i] = [];
-        mergedGraphData[S[field]][i].push(graphData[S[field]][i]);
+      for (let i = 0; i < graphData[field].length; i++) {
+        if (!mergedGraphData[field][i]) mergedGraphData[field][i] = [];
+        mergedGraphData[field][i].push(graphData[field][i]);
       }
     }
   }
 
   for (let field of GRAPHED_FIELDS) {
-    for (let i = 0; i < mergedGraphData[S[field]].length; i++) {
-      mergedGraphData[S[field]][i] =
-        mergedGraphData[S[field]][i].reduce((acc, cur) => acc + cur, 0) /
-        mergedGraphData[S[field]][i].length;
+    for (let i = 0; i < mergedGraphData[field].length; i++) {
+      mergedGraphData[field][i] =
+        mergedGraphData[field][i].reduce((acc, cur) => acc + cur, 0) /
+        mergedGraphData[field][i].length;
     }
   }
 

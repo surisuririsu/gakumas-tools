@@ -1,6 +1,6 @@
 import { memo, useContext, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
-import { PIdols } from "gakumas-data/lite";
+import { PIdols } from "gakumas-data";
 import MemoriesList from "@/components/Memories/MemoriesList";
 import Modal from "@/components/Modal";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
