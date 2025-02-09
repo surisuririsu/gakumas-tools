@@ -1,12 +1,20 @@
 {
   "name": "gakumas-tools-monorepo",
   "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "yarn workspace gakumas-tools dev",
+    "build": "yarn --cwd apps/gakumas-tools build",
+    "start": "yarn --cwd apps/gakumas-tools start",
+    "lint": "yarn workspace gakumas-tools lint",
+    "test": "yarn workspace gakumas-tools test",
+    "generate": "yarn workspace gakumas-data generate && python scripts/generate.py",
+    "regenerate": "rm -rf docs/*s && yarn generate",
     "backup-db": "yarn workspace gakumas-tools backup-db"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "packageManager": "yarn@4.6.0"
 }

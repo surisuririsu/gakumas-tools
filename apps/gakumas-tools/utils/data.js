@@ -40,4 +40,11 @@ if (!initialized) {
   initialized = true;
 }
 
-export * from "gakumas-data";
+export {
+  Customizations,
+  Idols,
+  PIdols,
+  PItems,
+  SkillCards,
+  Stages,
+} from "gakumas-data";
