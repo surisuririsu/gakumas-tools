@@ -4,5 +4,8 @@
   "type": "module",
   "scripts": {
     "generate": "python -m scripts.generate_image_imports"
+  },
+  "peerDependencies": {
+    "gakumas-data": "workspace:*"
   }
 }

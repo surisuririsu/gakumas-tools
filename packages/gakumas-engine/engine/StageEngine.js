@@ -6,7 +6,7 @@ import Evaluator from "./Evaluator";
 import Executor from "./Executor";
 import StageLogger from "./StageLogger";
 import TurnManager from "./TurnManager";
-import { deepCopy } from "./utils";
+import { deepCopy } from "../utils";
 
 export default class StageEngine {
   constructor(config) {

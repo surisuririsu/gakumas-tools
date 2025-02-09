@@ -1,0 +1,8 @@
+{
+  "name": "gakumas-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "gakumas-data": "workspace:*"
+  }
+}

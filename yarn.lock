@@ -3802,9 +3802,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"gakumas-engine@workspace:*, gakumas-engine@workspace:packages/gakumas-engine":
+  version: 0.0.0-use.local
+  resolution: "gakumas-engine@workspace:packages/gakumas-engine"
+  dependencies:
+    gakumas-data: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "gakumas-images@workspace:*, gakumas-images@workspace:packages/gakumas-images":
   version: 0.0.0-use.local
   resolution: "gakumas-images@workspace:packages/gakumas-images"
+  peerDependencies:
+    gakumas-data: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -3827,6 +3837,7 @@ __metadata:
     eslint: "npm:^9.20.0"
     eslint-config-next: "npm:^15.1.6"
     gakumas-data: "workspace:*"
+    gakumas-engine: "workspace:*"
     gakumas-images: "workspace:*"
     gakumas_contest_simulator: "https://github.com/katabami83/gakumas_contest_simulator"
     jest: "npm:^29.7.0"

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
+import { IdolConfig } from "gakumas-engine";
 import Preview from "@/components/Preview";
-import { IdolConfig } from "@/simulator/config";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 export async function GET(request) {

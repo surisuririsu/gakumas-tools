@@ -7,7 +7,7 @@ export default class BaseStrategy {
     throw new Error("evaluate is not implemented!");
   }
 
-  getScore(state, card) {
-    throw new Error("getScore is not implemented!");
+  pickCardToHold(state, cards) {
+    throw new Error("pickCardToHold is not implemented!");
   }
 }
