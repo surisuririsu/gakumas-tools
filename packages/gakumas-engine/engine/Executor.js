@@ -183,7 +183,7 @@ export default class Executor extends EngineComponent {
       const lhs = tokens[0];
 
       // Nullify debuffs
-      if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(lhs)) {
+      if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(S[lhs])) {
         state[S.nullifyDebuff]--;
         return;
       }
