@@ -12,7 +12,7 @@ import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
 
 const HIDDEN_ITEM_IDS = [226];
-const HIDDEN_CARD_IDS = [500];
+const HIDDEN_CARD_IDS = [500, 502, 503];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const t = useTranslations("EntityBank");
