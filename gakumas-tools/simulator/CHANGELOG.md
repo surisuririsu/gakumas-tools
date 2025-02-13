@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of Happy Millefeuille Sena
 
+### Fixed
+
+- Limit for endOfTurn effects that are set by skill cards
+
 ## 2025-02-10
 
 ### Changed
