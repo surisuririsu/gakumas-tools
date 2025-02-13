@@ -1704,6 +1704,8 @@ import image_49_8 from "./49_8.png";
 import image_49_9 from "./49_9.png";
 import image_5 from "./5.png";
 import image_50 from "./50.png";
+import image_500 from "./500.png";
+import image_501 from "./501.png";
 import image_51 from "./51.png";
 import image_52 from "./52.png";
 import image_53 from "./53.png";
@@ -3765,6 +3767,8 @@ const IMAGES = {
   '49_9': image_49_9,
   '5': image_5,
   '50': image_50,
+  '500': image_500,
+  '501': image_501,
   '51': image_51,
   '52': image_52,
   '53': image_53,

@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-02-13
+
+### Added
+
+- Preview of Happy Millefeuille Sena
+
 ## 2025-02-10
 
 ### Changed
