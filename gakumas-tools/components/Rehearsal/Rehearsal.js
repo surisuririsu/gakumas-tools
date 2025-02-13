@@ -137,9 +137,7 @@ function Rehearsal() {
           </Button>
           <BoxPlot
             labels={[0, 1, 2].map(
-              (i) =>
-                t("stage", { n: i + 1 }) +
-                ` (n=${boxPlotData[i].data[0].length})`
+              (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`
             )}
             data={boxPlotData}
             showLegend={false}
