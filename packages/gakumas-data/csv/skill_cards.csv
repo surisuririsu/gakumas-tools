@@ -498,3 +498,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 497,バレンタイン大作戦！+,"30,26",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:stamina-=2,"do:genki+=8,do:setStance(preservation);at:startOfTurn,do:setStance(preservation),limit:2",1,
 498,愛情レインボー,,SR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,if:isPreservation,do:cost-=0,"do:fullPowerCharge+=2,do:fixedStamina+=2,do:holdSelectedFromDeck",1,
 499,愛情レインボー+,"57,42,83",SR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,if:isPreservation,do:cost-=0,"do:fullPowerCharge+=3,do:fixedStamina+=3,do:holdSelectedFromDeck",1,
+500,あなたにあげる,,SSR,active,logic,1,FALSE,TRUE,pIdol,79,FALSE,,do:cost-=8,"at:endOfTurn,do:score+=genki*0.8,limit:3",1,
+501,あなたにあげる+,,SSR,active,logic,1,TRUE,TRUE,pIdol,79,FALSE,,do:cost-=8,"at:endOfTurn,do:score+=genki*0.8,limit:3",1,

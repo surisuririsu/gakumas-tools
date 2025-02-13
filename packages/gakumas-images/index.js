@@ -7,7 +7,7 @@ import SKILL_CARD_DETAILS from "./images/skillCards/details/imports";
 
 const GK_IMG_BASE_URL = process.env.NEXT_PUBLIC_GK_IMG_BASE_URL;
 
-export default function getImages(entity, idolId) {
+export default function getImages(entity, idolId = 6) {
   switch (entity?._type) {
     case "idol":
       return getIdolImages(entity.id);
