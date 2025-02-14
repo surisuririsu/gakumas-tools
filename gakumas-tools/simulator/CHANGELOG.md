@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of Happy Millefeuille Sena
+- Happy Millefeuille Sena
 
 ### Fixed
 
