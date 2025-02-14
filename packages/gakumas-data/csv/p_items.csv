@@ -224,6 +224,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 223,れんしゅーのしるし+,SSR,TRUE,anomaly,stage,pIdol,77,FALSE,"at:cardUsed,if:cardEffects&fullPowerCharge,do:genki+=13,limit:1"
 224,あまいくちどけ,SSR,FALSE,anomaly,stage,pIdol,78,FALSE,"at:endOfTurn,if:isStrength,do:setStance(preservation),do:genki+=2,limit:2"
 225,あまいくちどけ+,SSR,TRUE,anomaly,stage,pIdol,78,FALSE,"at:endOfTurn,if:isStrength,do:setStance(preservation),do:genki+=5,limit:2"
-226,相手への深い愛,SSR,FALSE,logic,stage,pIdol,79,FALSE,"at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,limit:2"
+226,相手への深い愛,SSR,FALSE,logic,stage,pIdol,79,FALSE,"at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,do:fixedStamina-=2,limit:2"
 227,相手への深い愛+,SSR,TRUE,logic,stage,pIdol,79,FALSE,"at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,limit:2"
 228,お姉さまビッグラブ,SSR,FALSE,logic,stage,support,,FALSE,"at:activeCardUsed,if:isVocalTurn,do:setScoreBuff(0.5,1),do:motivationMultiplier=1.3,do:genki+=2,limit:1"
