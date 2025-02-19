@@ -395,6 +395,7 @@ export default class CardManager extends EngineComponent {
   moveCardToHand(state, cardId, exact) {
     let cards = state[S.cardMap]
       .map((c, i) => {
+        if (state[S.handCards].includes(i)) return -1;
         if (exact && c.id == cardId) return i;
         if (!exact && c.baseId == cardId) return i;
         return -1;

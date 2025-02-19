@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-02-18
+
+### Fixed
+
+- Bug that caused card to not be moved to hand by effects in some cases when card occurs multiple times in deck and one is already in hand
+
 ## 2025-02-13
 
 ### Added
