@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
+import { SiKofi } from "react-icons/si";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Image from "@/components/Image";
@@ -59,13 +60,6 @@ function NavbarMenu() {
             {t("gakumasContestWiki")}
           </a>
 
-          <a
-            href="https://github.com/surisuririsu/gakumas-tools/issues/new"
-            target="_blank"
-          >
-            {t("sendFeedback")}
-          </a>
-
           <div className={styles.author}>
             <div>Made by risりす</div>
             <div className={styles.socials}>
@@ -77,6 +71,11 @@ function NavbarMenu() {
               <IconButton
                 icon={FaGithub}
                 href="https://github.com/surisuririsu/gakumas-tools"
+                size="small"
+              />
+              <IconButton
+                icon={SiKofi}
+                href="https://ko-fi.com/surisuririsu"
                 size="small"
               />
             </div>
