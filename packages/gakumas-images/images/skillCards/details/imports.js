@@ -448,6 +448,10 @@ import image_500 from "./500.png";
 import image_501 from "./501.png";
 import image_502 from "./502.png";
 import image_503 from "./503.png";
+import image_504 from "./504.png";
+import image_505 from "./505.png";
+import image_506 from "./506.png";
+import image_507 from "./507.png";
 import image_51 from "./51.png";
 import image_52 from "./52.png";
 import image_53 from "./53.png";
@@ -953,6 +957,10 @@ const IMAGES = {
   '501': image_501,
   '502': image_502,
   '503': image_503,
+  '504': image_504,
+  '505': image_505,
+  '506': image_506,
+  '507': image_507,
   '51': image_51,
   '52': image_52,
   '53': image_53,

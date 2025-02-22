@@ -8,6 +8,8 @@ export default class BuffManager extends EngineComponent {
     this.variableResolvers = {
       isPreservation: (state) => state[S.stance].startsWith("pre"),
       isStrength: (state) => state[S.stance].startsWith("str"),
+      isNotStrength: (state) =>
+        state[S.stance] == "none" || state[S.stance].startsWith("pre"),
       isFullPower: (state) => state[S.stance] == "fullPower",
     };
   }
