@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of Yukidokeni Temari and China
 
+### Fixed
+
+- 3-stage score growth customization did not correctly apply stage 3 growth effect
+
 ## 2025-02-18
 
 ### Fixed

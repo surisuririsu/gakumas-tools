@@ -44,10 +44,10 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 78,growAllScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:all,do:g.score+=1;level:2,target:all,do:g.score+=2;level:3,target:all,do:g.score+=5",,
 45,growHandScoreAdd1,成長追加,effect,70,1,,,,"target:hand,do:g.score+=5",,
 60,growHandScoreAdd2,成長追加,effect,"40,70",2,,,,"level:1,target:hand,do:g.score+=3;level:2,target:hand,do:g.score+=8",,
-76,growHandScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:hand,do:g.score+=3;level:2,target:hand,do:g.score+=6;level:3,target:hand,do:g.score+11",,
+76,growHandScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:hand,do:g.score+=3;level:2,target:hand,do:g.score+=6;level:3,target:hand,do:g.score+=11",,
 44,growHeldScoreAdd1,成長追加,effect,70,1,,,,"target:held,do:g.score+=5",,
 61,growHeldScoreAdd2,成長追加,effect,"40,70",2,,,,"level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=8",,
-77,growHeldScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=6;level:3,target:held,do:g.score+11",,
+77,growHeldScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=6;level:3,target:held,do:g.score+=11",,
 81,onFullPowerGrowThisAdd1,成長追加,effect,70,1,,,,,,"at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=3"
 63,onStrengthGrowThisAdd2,成長追加,effect,"40,70",2,,,,,,"level:1,at:stanceChanged,if:isStrength,target:this,do:g.score+=2;level:2,at:stanceChanged,if:isStrength,target:this,do:g.score+=5"
 46,kagakimi1,持続効果+,effect,100,1,,,,"line:2,at:cardUsed,do:score+=goodImpressionTurns*0.5,do:goodImpressionTurns+=1",,
