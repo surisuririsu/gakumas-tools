@@ -189,6 +189,16 @@ export const EOT_DECREMENT_FIELDS = [
   S.noMentalTurns,
 ];
 
+// Consumable buffs
+export const BUFF_FIELDS = [
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge,
+];
+
 export const DEBUFF_FIELDS = [
   S.doubleCostTurns,
   S.costIncrease,

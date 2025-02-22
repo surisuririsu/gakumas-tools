@@ -13,6 +13,7 @@ import {
   GROWABLE_FIELDS,
   CHANGE_TRIGGER_PHASES,
   ALL_FIELDS,
+  BUFF_FIELDS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "../utils";
@@ -137,28 +138,48 @@ export default class Executor extends EngineComponent {
     }
 
     if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+      // Calculate diff
+      let increasedFields = new Set();
+      let decreasedFields = new Set();
+      for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
+        let diff = state[FIELDS_TO_DIFF[i]] - prev[FIELDS_TO_DIFF[i]];
+        if (diff > 0) {
+          increasedFields.add(FIELDS_TO_DIFF[i]);
+        } else if (diff < 0) {
+          decreasedFields.add(FIELDS_TO_DIFF[i]);
+        }
+      }
+
+      // Cost consumed effects
+      if (state[S.phase] == "cost") {
+        // Trigger buff cost consumed effects
+        for (let i = 0; i < BUFF_FIELDS.length; i++) {
+          if (decreasedFields.has(BUFF_FIELDS[i])) {
+            this.engine.effectManager.triggerEffectsForPhase(
+              state,
+              "buffCostConsumed"
+            );
+            break;
+          }
+        }
+      }
+
       // Trigger increase effects
       for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-        const field = INCREASE_TRIGGER_FIELDS[i];
-        const increasedPhase = `${ALL_FIELDS[field]}Increased`;
-        if (state[S.phase] == increasedPhase) continue;
-        if (state[field] > prev[field]) {
+        if (increasedFields.has(INCREASE_TRIGGER_FIELDS[i])) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            increasedPhase
+            `${ALL_FIELDS[INCREASE_TRIGGER_FIELDS[i]]}Increased`
           );
         }
       }
 
       // Trigger decrease effects
       for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-        const field = DECREASE_TRIGGER_FIELDS[i];
-        const decreasedPhase = `${ALL_FIELDS[field]}Decreased`;
-        if (state[S.phase] == decreasedPhase) continue;
-        if (state[field] < prev[field]) {
+        if (decreasedFields.has(DECREASE_TRIGGER_FIELDS[i])) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            decreasedPhase
+            `${ALL_FIELDS[DECREASE_TRIGGER_FIELDS[i]]}Decreased`
           );
         }
       }

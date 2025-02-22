@@ -227,3 +227,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 226,相手への深い愛,SSR,FALSE,logic,stage,pIdol,79,FALSE,"at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,do:fixedStamina-=2,limit:2"
 227,相手への深い愛+,SSR,TRUE,logic,stage,pIdol,79,FALSE,"at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,limit:2"
 228,お姉さまビッグラブ,SSR,FALSE,logic,stage,support,,FALSE,"at:activeCardUsed,if:isVocalTurn,do:setScoreBuff(0.5,1),do:motivationMultiplier=1.3,do:genki+=2,limit:1"
+229,勝利の1枚,SSR,FALSE,anomaly,stage,pIdol,80,FALSE,"at:startOfTurn,if:isStrength,do:genki+=8,limit:2"
+230,勝利の1枚+,SSR,TRUE,anomaly,stage,pIdol,80,FALSE,"at:startOfTurn,if:isStrength,do:genki+=8,limit:2"
+231,春のおとずれ,SSR,FALSE,logic,stage,pIdol,81,FALSE,"at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,limit:4"
+232,春のおとずれ+,SSR,TRUE,logic,stage,pIdol,81,FALSE,"at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,limit:4"
