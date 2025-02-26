@@ -7,7 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of contest season 19
+- Contest season 19
 
 ### Fixed
 
