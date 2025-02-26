@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of contest season 19
 
+### Fixed
+
+- Bug that caused card effects from customizations not to be considered in cardEffect trigger conditions
+
 ## 2025-02-22
 
 ### Added

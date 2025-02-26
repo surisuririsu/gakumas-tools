@@ -71,8 +71,14 @@ export default class CardManager extends EngineComponent {
     let cardEffects = new Set();
     if (card == null) return cardEffects;
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
-    for (let i = 0; i < skillCard.effects.length; i++) {
-      const effect = skillCard.effects[i];
+    const effects = skillCard.effects.concat(
+      Object.keys(state[S.cardMap][card].c11n)
+        .map(Customizations.getById)
+        .map((c) => c.effects)
+        .flat()
+    );
+    for (let i = 0; i < effects.length; i++) {
+      const effect = effects[i];
       if (effect.phase || !effect.actions) continue;
       for (let j = 0; j < effect.actions.length; j++) {
         const tokens = effect.actions[j];
@@ -84,7 +90,6 @@ export default class CardManager extends EngineComponent {
         cardEffects.add(cardEffect);
       }
     }
-    // TODO: Count customizations?
     return cardEffects;
   }
 
