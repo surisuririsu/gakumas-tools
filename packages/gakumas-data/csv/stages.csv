@@ -68,3 +68,6 @@ id,name,type,season,stage,round,plan,criteria,turnCounts,firstTurns,effects
 67,シーズン18 ステージ1,contest,18,1,,free,"0.33,0.275,0.495","3,3,6","0,0,1","at:startOfTurn,do:setScoreBuff(1.2,5),do:doubleCostTurns+=5,limit:1"
 68,シーズン18 ステージ2,contest,18,2,,sense,"0.33,0.275,0.495","2,2,4","0,0,1","at:startOfTurn,do:concentration+=12,do:goodConditionTurns+=3,do:doubleCostTurns+=4,limit:1"
 69,シーズン18 ステージ3,contest,18,3,,logic,"0.33,0.275,0.495","3,3,6","0,0,1","at:startOfTurn,do:motivation+=15,do:noActiveTurns+=4,limit:1"
+70,シーズン19 ステージ1,contest,19,1,,free,"0.3,0.35,0.35","2,3,3","0,1,0","at:startOfTurn,do:setScoreBuff(0.5,3),limit:3"
+71,シーズン19 ステージ2,contest,19,2,,sense,"0.3,0.35,0.35","3,4,3","0,0.875,0.125","at:cardUsed,if:cardEffects&halfCostTurns,do:concentration+=3,do:goodConditionTurns+=3,do:fixedStamina-=3,limit:3"
+72,シーズン19 ステージ3,contest,19,3,,logic,"0.3,0.35,0.35","3,5,4","0,0.89,0.11","at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1;at:buffCostConsumed,if:goodImpressionTurns>=10,do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*2.5"

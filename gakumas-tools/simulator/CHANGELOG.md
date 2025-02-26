@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-02-26
+
+### Added
+
+- Preview of contest season 19
+
 ## 2025-02-22
 
 ### Added
