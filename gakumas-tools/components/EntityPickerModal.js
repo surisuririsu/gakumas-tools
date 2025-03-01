@@ -32,7 +32,10 @@ function EntityPickerModal({
       <EntityBank
         type={type}
         onClick={(entity) => {
-          onPick(entity);
+          if (entity.id != id) {
+            onCustomize && onCustomize({});
+            onPick(entity);
+          }
           closeModal();
         }}
         filters={filters}
