@@ -14,6 +14,7 @@ Dates are based on Eastern Time Zone.
 
 - Bugs related to customization-counting, which may have caused incorrect duplicate card removal or application of customizations
 - Fix bug that caused addRandomCardToHand effect to set the incorrect baseId
+- Fix bug that caused customizations to be applied to wrong card when changing card after picking customizations in entity picker modal
 
 ## 2025-02-27
 
