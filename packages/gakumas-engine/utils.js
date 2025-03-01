@@ -42,3 +42,8 @@ export function shallowCopy(state) {
 export function deepCopy(state) {
   return JSON.parse(JSON.stringify(state));
 }
+
+export function getBaseId(entity) {
+  if (entity.upgraded) return entity.id - 1;
+  return entity.id;
+}

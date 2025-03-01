@@ -1,4 +1,5 @@
-import { GRAPHED_FIELDS } from "gakumas-engine";
+import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { GRAPHED_FIELDS, IdolConfig } from "gakumas-engine";
 import { BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
@@ -195,4 +196,80 @@ export function mergeGraphDatas(graphDatas) {
   }
 
   return mergedGraphData;
+}
+
+export function getIndications(loadout, stage) {
+  const idolConfig = new IdolConfig(loadout);
+  const pIdolId = idolConfig.pIdolId;
+  const idolId = idolConfig.idolId;
+  const plan = stage.plan != "free" ? stage.plan : idolConfig.plan;
+  const dupeIndices = idolConfig.dupeIndices;
+
+  let pItemIndications = [];
+  for (let id of loadout.pItemIds) {
+    const pItem = PItems.getById(id);
+
+    if (!pItem) {
+      pItemIndications.push(null);
+      continue;
+    }
+
+    let indications = {};
+
+    // Plan mismatch
+    if (plan && pItem.plan != "free" && pItem.plan != plan) {
+      indications.planMismatch = true;
+    }
+
+    // P-idol mismatch
+    if (pIdolId && pItem.sourceType == "pIdol" && pItem.pIdolId != pIdolId) {
+      indications.pIdolMismatch = true;
+    }
+    pItemIndications.push(indications);
+  }
+
+  let skillCardIndicationGroups = [];
+  let curIndex = 0;
+  for (let i = 0; i < loadout.skillCardIdGroups.length; i++) {
+    let skillCardIndications = [];
+    for (let id of loadout.skillCardIdGroups[i]) {
+      const skillCard = SkillCards.getById(id);
+
+      if (!skillCard) {
+        skillCardIndications.push(null);
+        curIndex++;
+        continue;
+      }
+
+      let indications = {};
+
+      // Plan mismatch
+      if (plan && skillCard.plan != "free" && skillCard.plan != plan) {
+        indications.planMismatch = true;
+      }
+
+      // Idol mismatch
+      if (
+        idolId &&
+        skillCard.sourceType == "pIdol" &&
+        PIdols.getById(skillCard.pIdolId).idolId != idolId
+      ) {
+        indications.idolMismatch = true;
+      }
+
+      // Duplicate
+      if (dupeIndices.includes(curIndex)) {
+        indications.duplicate = true;
+      }
+
+      skillCardIndications.push(indications);
+      curIndex++;
+    }
+    skillCardIndicationGroups.push(skillCardIndications);
+  }
+
+  return {
+    pItemIndications,
+    skillCardIndicationGroups,
+  };
 }

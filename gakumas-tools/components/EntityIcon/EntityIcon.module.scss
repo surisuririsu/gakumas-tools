@@ -36,6 +36,15 @@ button.entityIcon:hover {
   width: 10%;
 }
 
+.badge {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
 .customizations {
   position: absolute;
   top: 60%;
@@ -44,12 +53,6 @@ button.entityIcon:hover {
 }
 
 .customization {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
   color: colors.$white;
   font-weight: 600;
   font-size: 14px;
@@ -71,13 +74,8 @@ button.entityIcon:hover {
   position: absolute;
   top: -4px;
   left: -4px;
-  width: 20px;
-  height: 20px;
   display: none;
-  align-items: center;
-  justify-content: center;
   border: 1px solid;
-  border-radius: 50%;
   font-size: 12px;
 }
 
@@ -110,4 +108,23 @@ button.entityIcon:hover .tier {
     color: colors.$gold-dark;
     border-color: colors.$gold-dark;
   }
+}
+
+.indication {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  border: 1px solid colors.$red-light;
+  background-color: colors.$red;
+  color: colors.$white;
+  font-size: 12px;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: colors.$red-light;
+  }
+}
+
+.duplicate {
+  filter: brightness(0.6);
 }

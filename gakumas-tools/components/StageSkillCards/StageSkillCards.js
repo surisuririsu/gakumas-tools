@@ -10,6 +10,7 @@ function StageSkillCards({
   customizations,
   replaceSkillCardId,
   replaceCustomizations,
+  indications,
   idolId,
   size,
   groupIndex = 0,
@@ -24,6 +25,7 @@ function StageSkillCards({
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
           customizations={customizations?.[index]}
+          indications={indications?.[index]}
           onClick={() =>
             setModal(
               <EntityPickerModal

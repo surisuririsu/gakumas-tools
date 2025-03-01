@@ -5,7 +5,7 @@ import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./StagePItems.module.scss";
 
-function StagePItems({ pItemIds, replacePItemId, size }) {
+function StagePItems({ pItemIds, replacePItemId, indications, size }) {
   const { setModal } = useContext(ModalContext);
 
   return (
@@ -15,6 +15,7 @@ function StagePItems({ pItemIds, replacePItemId, size }) {
           key={`${index}_${pItemId}`}
           type={EntityTypes.P_ITEM}
           id={pItemId}
+          indications={indications[index]}
           onClick={() =>
             setModal(
               <EntityPickerModal

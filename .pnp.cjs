@@ -1016,6 +1016,36 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@floating-ui/core", [\
+      ["npm:1.6.9", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@floating-ui-core-npm-1.6.9-6b15c93868-10c0.zip/node_modules/@floating-ui/core/",\
+        "packageDependencies": [\
+          ["@floating-ui/core", "npm:1.6.9"],\
+          ["@floating-ui/utils", "npm:0.2.9"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@floating-ui/dom", [\
+      ["npm:1.6.13", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@floating-ui-dom-npm-1.6.13-faaec36e87-10c0.zip/node_modules/@floating-ui/dom/",\
+        "packageDependencies": [\
+          ["@floating-ui/dom", "npm:1.6.13"],\
+          ["@floating-ui/core", "npm:1.6.9"],\
+          ["@floating-ui/utils", "npm:0.2.9"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@floating-ui/utils", [\
+      ["npm:0.2.9", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@floating-ui-utils-npm-0.2.9-f2d9dffc79-10c0.zip/node_modules/@floating-ui/utils/",\
+        "packageDependencies": [\
+          ["@floating-ui/utils", "npm:0.2.9"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@formatjs/ecma402-abstract", [\
       ["npm:2.3.3", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@formatjs-ecma402-abstract-npm-2.3.3-8ca00e7400-10c0.zip/node_modules/@formatjs/ecma402-abstract/",\
@@ -3568,6 +3598,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["classnames", [\
+      ["npm:2.5.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/classnames-npm-2.5.1-c7273f3423-10c0.zip/node_modules/classnames/",\
+        "packageDependencies": [\
+          ["classnames", "npm:2.5.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["client-only", [\
       ["npm:0.0.1", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/client-only-npm-0.0.1-07d3e9505c-10c0.zip/node_modules/client-only/",\
@@ -5093,6 +5132,7 @@ const RAW_RUNTIME_STATE =
           ["react-chartjs-2", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.3.0"],\
           ["react-dom", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:19.0.0"],\
           ["react-icons", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.4.0"],\
+          ["react-tooltip", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.28.0"],\
           ["react-virtualized-auto-sizer", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:1.0.25"],\
           ["react-window", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:1.8.11"],\
           ["sass", "npm:1.84.0"],\
@@ -8184,6 +8224,34 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/react-is-npm-18.3.1-370a81e1e9-10c0.zip/node_modules/react-is/",\
         "packageDependencies": [\
           ["react-is", "npm:18.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-tooltip", [\
+      ["npm:5.28.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/react-tooltip-npm-5.28.0-a698d2e4f8-10c0.zip/node_modules/react-tooltip/",\
+        "packageDependencies": [\
+          ["react-tooltip", "npm:5.28.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.28.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-tooltip-virtual-146160eacf/4/AppData/Local/Yarn/Berry/cache/react-tooltip-npm-5.28.0-a698d2e4f8-10c0.zip/node_modules/react-tooltip/",\
+        "packageDependencies": [\
+          ["react-tooltip", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.28.0"],\
+          ["@floating-ui/dom", "npm:1.6.13"],\
+          ["@types/react", null],\
+          ["@types/react-dom", null],\
+          ["classnames", "npm:2.5.1"],\
+          ["react", "npm:19.0.0"],\
+          ["react-dom", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:19.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\

@@ -14,6 +14,7 @@ export default function CustomizationCounts({ customizations = {} }) {
           <div
             key={c11n}
             className={c(
+              styles.badge,
               styles.customization,
               styles[Customizations.getById(c11n).type]
             )}

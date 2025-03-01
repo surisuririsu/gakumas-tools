@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Tooltip } from "react-tooltip";
 import {
   IdolConfig,
   StageConfig,
@@ -21,7 +22,12 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
 import { logEvent } from "@/utils/logging";
-import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
+import {
+  bucketScores,
+  getMedianScore,
+  mergeResults,
+  getIndications,
+} from "@/utils/simulator";
 import { formatStageShortName } from "@/utils/stages";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
@@ -44,6 +50,11 @@ export default function Simulator() {
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
   const workersRef = useRef();
+
+  const { pItemIndications, skillCardIndicationGroups } = getIndications(
+    loadout,
+    stage
+  );
 
   const idolConfig = new IdolConfig(loadout);
   const stageConfig = new StageConfig(stage);
@@ -174,6 +185,7 @@ export default function Simulator() {
             <StagePItems
               pItemIds={loadout.pItemIds}
               replacePItemId={replacePItemId}
+              indications={pItemIndications}
               size="medium"
             />
           </div>
@@ -184,6 +196,7 @@ export default function Simulator() {
             key={i}
             skillCardIds={skillCardIdGroup}
             customizations={loadout.customizationGroups[i]}
+            indications={skillCardIndicationGroups[i]}
             groupIndex={i}
             idolId={idolConfig.idolId || idolId}
           />
@@ -218,7 +231,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2025-02-27
+            {t("lastUpdated")}: 2025-02-28
           </a>
         </div>
         {!simulatorData && (
@@ -235,6 +248,8 @@ export default function Simulator() {
           plan={idolConfig.plan || plan}
         />
       )}
+
+      <Tooltip id="indications-tooltip" />
     </div>
   );
 }

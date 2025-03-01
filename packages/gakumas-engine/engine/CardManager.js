@@ -7,7 +7,7 @@ import {
   S,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { getRand, shallowCopy, shuffle } from "../utils";
+import { getBaseId, getRand, shallowCopy, shuffle } from "../utils";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
@@ -29,7 +29,7 @@ export default class CardManager extends EngineComponent {
     );
     const cardMap = cards.map(({ id, customizations }) => ({
       id,
-      baseId: SkillCards.getById(id).upgraded ? id - 1 : id,
+      baseId: getBaseId(SkillCards.getById(id)),
       c11n: customizations || {},
     }));
 
@@ -73,6 +73,7 @@ export default class CardManager extends EngineComponent {
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     const effects = skillCard.effects.concat(
       Object.keys(state[S.cardMap][card].c11n)
+        .filter((k) => state[S.cardMap][card].c11n[k])
         .map(Customizations.getById)
         .map((c) => c.effects)
         .flat()
@@ -157,7 +158,7 @@ export default class CardManager extends EngineComponent {
     const previewState = shallowCopy(state);
     let cost = skillCard.cost;
     const c11n = state[S.cardMap][card].c11n;
-    if (Object.keys(c11n).length) {
+    if (Object.keys(c11n).filter((k) => c11n[k]).length) {
       cost = [...cost];
       for (let k in c11n) {
         const c11nCost = Customizations.getById(k).cost;
@@ -386,7 +387,7 @@ export default class CardManager extends EngineComponent {
       validSkillCards[Math.floor(getRand() * validSkillCards.length)];
     state[S.cardMap].push({
       id: skillCard.id,
-      baseId: skillCard.id - skillCard.upgraded ? 1 : 0,
+      baseId: getBaseId(skillCard),
       c11n: {},
     });
     state[S.handCards].push(state[S.cardMap].length - 1);

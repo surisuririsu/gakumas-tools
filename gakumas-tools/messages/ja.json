@@ -134,7 +134,10 @@
   },
   "EntityIcon": {
     "high": "高",
-    "low": "低"
+    "low": "低",
+    "planMismatch": "プラン不一致",
+    "pIdolMismatch": "Pアイドル不一致",
+    "idolMismatch": "アイドル不一致"
   },
   "EntityCustomizer": {
     "customization": "カスタマイズ"

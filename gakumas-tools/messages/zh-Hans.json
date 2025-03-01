@@ -132,7 +132,10 @@
   },
   "EntityIcon": {
     "high": "H",
-    "low": "L"
+    "low": "L",
+    "planMismatch": "Plan mismatch",
+    "pIdolMismatch": "P-idol mismatch",
+    "idolMismatch": "Idol mismatch"
   },
   "EntityCustomizer": {
     "customization": "自定义"

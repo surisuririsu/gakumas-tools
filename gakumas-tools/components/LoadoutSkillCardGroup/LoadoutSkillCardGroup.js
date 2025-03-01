@@ -19,6 +19,7 @@ import styles from "./LoadoutSkillCardGroup.module.scss";
 function LoadoutSkillCardGroup({
   skillCardIds,
   customizations,
+  indications,
   groupIndex,
   idolId,
 }) {
@@ -54,6 +55,7 @@ function LoadoutSkillCardGroup({
         customizations={customizations}
         replaceSkillCardId={replaceSkillCardId}
         replaceCustomizations={replaceCustomizations}
+        indications={indications}
         idolId={idolId}
         groupIndex={groupIndex}
       />
