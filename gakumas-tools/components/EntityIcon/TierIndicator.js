@@ -8,7 +8,14 @@ export default function TierIndicator({ skillCard }) {
   if (!["R", "SR"].includes(skillCard.rarity)) return null;
   const tier = skillCard.unlockPlv > 2 ? "high" : "low";
   return (
-    <div className={c(styles.tier, styles[tier], styles[skillCard.rarity])}>
+    <div
+      className={c(
+        styles.badge,
+        styles.tier,
+        styles[tier],
+        styles[skillCard.rarity]
+      )}
+    >
       {t(tier)}
     </div>
   );

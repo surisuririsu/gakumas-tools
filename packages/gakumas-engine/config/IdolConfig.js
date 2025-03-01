@@ -1,4 +1,5 @@
 import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data";
+import { getBaseId } from "../utils";
 
 export default class IdolConfig {
   constructor(loadout) {
@@ -10,14 +11,16 @@ export default class IdolConfig {
       customizationGroups,
     } = loadout;
 
+    let skillCardIds = [];
     let cards = [];
+    let k = 0;
     for (let i = 0; i < skillCardIdGroups.length; i++) {
       for (let j = 0; j < skillCardIdGroups[i].length; j++) {
         if (skillCardIdGroups[i][j]) {
           const customizations = customizationGroups?.[i]?.[j];
           if (customizations) {
             Object.keys(customizations).forEach((k) => {
-              if (!Customizations.getById(k)) {
+              if (!Customizations.getById(k) || !customizations[k]) {
                 delete customizations[k];
               }
             });
@@ -25,15 +28,21 @@ export default class IdolConfig {
           cards.push({
             id: skillCardIdGroups[i][j],
             customizations,
+            index: k++,
           });
+          skillCardIds.push(skillCardIdGroups[i][j]);
         }
       }
     }
 
     // P-items and skill cards
     this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
-    this.cards = this.getDedupedCards(cards);
-    const skillCardIds = cards.map((c) => c.id);
+    const { dedupedCards, dupeIndices } = this.getDedupedCards(cards);
+    dedupedCards.forEach((c) => {
+      delete c.index;
+    });
+    this.cards = dedupedCards;
+    this.dupeIndices = dupeIndices;
 
     // P-idol
     this.pIdolId = this.inferPIdolId(this.pItemIds, skillCardIds);
@@ -54,16 +63,16 @@ export default class IdolConfig {
   }
 
   inferPIdolId(pItemIds, skillCardIds) {
-    const signaturePItemId = pItemIds.find(
-      (id) => PItems.getById(id)?.sourceType == "pIdol"
-    );
-    if (signaturePItemId) return PItems.getById(signaturePItemId).pIdolId;
-
     const signatureSkillCardId = skillCardIds.find(
       (id) => SkillCards.getById(id)?.sourceType == "pIdol"
     );
     if (signatureSkillCardId)
       return SkillCards.getById(signatureSkillCardId).pIdolId;
+
+    const signaturePItemId = pItemIds.find(
+      (id) => PItems.getById(id)?.sourceType == "pIdol"
+    );
+    if (signaturePItemId) return PItems.getById(signaturePItemId).pIdolId;
 
     return null;
   }
@@ -80,49 +89,40 @@ export default class IdolConfig {
     return null;
   }
 
-  // If the loadout contains dupes of a unique skill card,
-  // keep only the most upgraded copy
-  getDedupedSkillCardIds(skillCardIds) {
-    const sortedSkillCardIds = skillCardIds.sort((a, b) => b - a);
-
-    let dedupedIds = [];
-
-    for (let i = 0; i < sortedSkillCardIds.length; i++) {
-      const skillCard = SkillCards.getById(sortedSkillCardIds[i]);
-      if (skillCard.unique) {
-        const baseId = skillCard.upgraded ? skillCard.id - 1 : skillCard.id;
-        if (dedupedIds.some((d) => [baseId, baseId + 1].includes(d))) {
-          continue;
-        }
-      }
-      dedupedIds.push(skillCard.id);
-    }
-
-    return dedupedIds;
+  countCustomizations(customizations) {
+    if (!customizations) return 0;
+    return Object.values(customizations).reduce((acc, cur) => acc + cur, 0);
   }
 
+  // If the loadout contains dupes of a unique skill card,
+  // keep only the most upgraded copy
   getDedupedCards(cards) {
     const sortedCards = cards.sort(
       (a, b) =>
         b.id +
-        (b.customizations ? Object.keys(b.customizations).length : 0) -
+        (b.customizations ? this.countCustomizations(b.customizations) : 0) -
         a.id -
-        (a.customizations ? Object.keys(a.customizations).length : 0)
+        (a.customizations ? this.countCustomizations(a.customizations) : 0)
     );
 
     let dedupedCards = [];
+    let dupeIndices = [];
 
     for (let i = 0; i < sortedCards.length; i++) {
       const skillCard = SkillCards.getById(sortedCards[i].id);
       if (skillCard.unique) {
-        const baseId = skillCard.upgraded ? skillCard.id - 1 : skillCard.id;
+        const baseId = getBaseId(skillCard);
         if (dedupedCards.some((d) => [baseId, baseId + 1].includes(d.id))) {
+          dupeIndices.push(sortedCards[i].index);
           continue;
         }
       }
       dedupedCards.push(sortedCards[i]);
     }
 
-    return dedupedCards;
+    return {
+      dedupedCards,
+      dupeIndices,
+    };
   }
 }

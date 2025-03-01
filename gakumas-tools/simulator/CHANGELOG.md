@@ -3,6 +3,18 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-02-28
+
+### Added
+
+- Indication of removed duplicate skill cards
+- Indication of mismatched idol, pIdol, plan
+
+### Fixed
+
+- Bugs related to customization-counting, which may have caused incorrect duplicate card removal or application of customizations
+- Fix bug that caused addRandomCardToHand effect to set the incorrect baseId
+
 ## 2025-02-27
 
 ### Added
