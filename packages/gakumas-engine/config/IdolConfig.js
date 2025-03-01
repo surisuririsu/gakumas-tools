@@ -28,10 +28,11 @@ export default class IdolConfig {
           cards.push({
             id: skillCardIdGroups[i][j],
             customizations,
-            index: k++,
+            index: k,
           });
           skillCardIds.push(skillCardIdGroups[i][j]);
         }
+        k++;
       }
     }
 
