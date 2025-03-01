@@ -417,10 +417,9 @@ export default class CardManager extends EngineComponent {
       state[S.deckCards].splice(index, 1);
       state[S.handCards].push(card);
 
-      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       this.logger.log(state, "moveCardToHand", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][card].id,
       });
       return;
     }
@@ -429,10 +428,9 @@ export default class CardManager extends EngineComponent {
       state[S.discardedCards].splice(index, 1);
       state[S.handCards].push(card);
 
-      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       this.logger.log(state, "moveCardToHand", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][card].id,
       });
       return;
     }
@@ -452,10 +450,9 @@ export default class CardManager extends EngineComponent {
       state[S.removedCards].splice(index, 1);
       state[S.handCards].push(card);
 
-      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       this.logger.log(state, "moveCardToHand", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][card].id,
       });
     }
   }
@@ -463,23 +460,19 @@ export default class CardManager extends EngineComponent {
   hold(state, card) {
     // Hold the card
     if (card != null) {
-      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       state[S.heldCards].push(card);
       this.logger.log(state, "holdCard", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][card].id,
       });
     }
 
     // Discard cards if over limit
     if (state[S.heldCards].length > 2) {
-      const skillCard = SkillCards.getById(
-        state[S.cardMap][state[S.heldCards][0]].id
-      );
       state[S.heldCards] = state[S.heldCards].slice(1);
       this.logger.log(state, "discardCard", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][state[S.heldCards][0]].id,
       });
     }
   }
@@ -531,10 +524,9 @@ export default class CardManager extends EngineComponent {
       const card = state[S.heldCards].pop();
       state[S.handCards].push(card);
 
-      const skillCard = SkillCards.getById(state[S.cardMap][card].id);
       this.logger.log(state, "moveCardToHand", {
         type: "skillCard",
-        id: skillCard.id,
+        id: state[S.cardMap][card].id,
       });
     }
   }
