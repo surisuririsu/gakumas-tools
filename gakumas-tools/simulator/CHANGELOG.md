@@ -3,6 +3,13 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-01
+
+### Fixed
+
+- Bug that caused p-items to not be resettable
+- Fixed errors on memories page
+
 ## 2025-02-28
 
 ### Added

@@ -15,7 +15,7 @@ function StagePItems({ pItemIds, replacePItemId, indications, size }) {
           key={`${index}_${pItemId}`}
           type={EntityTypes.P_ITEM}
           id={pItemId}
-          indications={indications[index]}
+          indications={indications?.[index]}
           onClick={() =>
             setModal(
               <EntityPickerModal
