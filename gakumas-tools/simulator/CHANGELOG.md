@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-09
+
+### Added
+
+- Preview of Yukidokeni Mao
+
 ## 2025-03-01
 
 ### Fixed

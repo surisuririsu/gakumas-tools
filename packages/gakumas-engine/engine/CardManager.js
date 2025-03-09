@@ -530,4 +530,64 @@ export default class CardManager extends EngineComponent {
       });
     }
   }
+
+  getTargetRuleCards(state, targetRule, source) {
+    let cardSets = [];
+
+    const targets = targetRule.split("*");
+    for (let i = 0; i < targets.length; i++) {
+      cardSets.push(this.getTargetCards(state, targets[i], source));
+    }
+
+    return cardSets.reduce((acc, cur) => (acc ? acc.intersection(cur) : cur));
+  }
+
+  getTargetCards(state, target, source) {
+    let targetCards = new Set();
+
+    if (target == "this") {
+      if (!source || !("idx" in source)) {
+        console.warn("Growth target not found");
+      } else {
+        targetCards.add(source.idx);
+      }
+    } else if (target == "hand") {
+      for (let k = 0; k < state[S.handCards].length; k++) {
+        targetCards.add(state[S.handCards][k]);
+      }
+    } else if (target == "deck") {
+      for (let k = 0; k < state[S.deckCards].length; k++) {
+        targetCards.add(state[S.deckCards][k]);
+      }
+    } else if (target == "held") {
+      for (let k = 0; k < state[S.heldCards].length; k++) {
+        targetCards.add(state[S.heldCards][k]);
+      }
+    } else if (target == "all") {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        targetCards.add(k);
+      }
+    } else if (["active", "mental"].includes(target)) {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (SkillCards.getById(state[S.cardMap][k].id).type == target) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^effect\(.+\)$/.test(target)) {
+      const effect = target.match(/^effect\((.+)\)/)[1];
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (this.engine.cardManager.getCardEffects(state, k).has(effect)) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^\d+$/.test(target)) {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (state[S.cardMap][k].baseId == target) {
+          targetCards.add(k);
+        }
+      }
+    }
+
+    return targetCards;
+  }
 }
