@@ -232,3 +232,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 231,春のおとずれ,SSR,FALSE,logic,stage,pIdol,81,FALSE,"at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,do:fixedStamina-=1,limit:4"
 232,春のおとずれ+,SSR,TRUE,logic,stage,pIdol,81,FALSE,"at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,limit:4"
 233,ゆうじょーのきろく,SSR,FALSE,logic,produce,support,,FALSE,
+234,まあるい春色,SSR,FALSE,anomaly,stage,pIdol,82,FALSE,"at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:startOfTurn,do:setStance(preservation2),limit:1"
+235,まあるい春色+,SSR,FALSE,anomaly,stage,pIdol,82,FALSE,"at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:startOfTurn,do:setStance(preservation2),limit:1"
+236,体力自慢の本気,SSR,FALSE,anomaly,produce,support,,FALSE,

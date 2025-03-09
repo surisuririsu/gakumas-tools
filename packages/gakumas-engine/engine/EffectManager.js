@@ -190,46 +190,12 @@ export default class EffectManager extends EngineComponent {
         // Identify cards to grow
         let growthCards = new Set();
         for (let j = 0; j < effect.targets.length; j++) {
-          const target = effect.targets[j];
-          if (target == "this") {
-            if (!effect.source || !("idx" in effect.source)) {
-              console.warn("Growth target not found");
-              continue;
-            }
-            growthCards.add(effect.source.idx);
-          } else if (target == "hand") {
-            for (let k = 0; k < state[S.handCards].length; k++) {
-              growthCards.add(state[S.handCards][k]);
-            }
-          } else if (target == "deck") {
-            for (let k = 0; k < state[S.deckCards].length; k++) {
-              growthCards.add(state[S.deckCards][k]);
-            }
-          } else if (target == "held") {
-            for (let k = 0; k < state[S.heldCards].length; k++) {
-              growthCards.add(state[S.heldCards][k]);
-            }
-          } else if (target == "all") {
-            for (let k = 0; k < state[S.cardMap].length; k++) {
-              growthCards.add(k);
-            }
-            break;
-          } else if (/^effect\(.+\)$/.test(target)) {
-            const effect = target.match(/^effect\((.+)\)/)[1];
-            for (let k = 0; k < state[S.cardMap].length; k++) {
-              if (
-                this.engine.cardManager.getCardEffects(state, k).has(effect)
-              ) {
-                growthCards.add(k);
-              }
-            }
-          } else if (/^\d+$/.test(target)) {
-            for (let k = 0; k < state[S.cardMap].length; k++) {
-              if (state[S.cardMap][k].baseId == target) {
-                growthCards.add(k);
-              }
-            }
-          }
+          const targetRuleCards = this.engine.cardManager.getTargetRuleCards(
+            state,
+            effect.targets[j],
+            effect.source
+          );
+          growthCards = growthCards.union(targetRuleCards);
         }
 
         // Grow cards
