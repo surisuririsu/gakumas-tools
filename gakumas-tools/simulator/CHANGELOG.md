@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of Yukidokeni Mao
 
+### Fixed
+
+- Slow (and incompatible with some browsers) set operations for determining growth targets
+
 ## 2025-03-01
 
 ### Fixed

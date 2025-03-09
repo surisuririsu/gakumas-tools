@@ -532,14 +532,23 @@ export default class CardManager extends EngineComponent {
   }
 
   getTargetRuleCards(state, targetRule, source) {
-    let cardSets = [];
+    let targetRuleCards = null;
 
     const targets = targetRule.split("*");
     for (let i = 0; i < targets.length; i++) {
-      cardSets.push(this.getTargetCards(state, targets[i], source));
+      const targetCards = this.getTargetCards(state, targets[i], source);
+      if (targetRuleCards) {
+        for (let card of targetRuleCards.values()) {
+          if (!targetCards.has(card)) {
+            targetRuleCards.delete(card);
+          }
+        }
+      } else {
+        targetRuleCards = targetCards;
+      }
     }
 
-    return cardSets.reduce((acc, cur) => (acc ? acc.intersection(cur) : cur));
+    return targetRuleCards;
   }
 
   getTargetCards(state, target, source) {
