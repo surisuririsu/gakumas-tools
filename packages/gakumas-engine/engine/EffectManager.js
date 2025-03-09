@@ -195,7 +195,9 @@ export default class EffectManager extends EngineComponent {
             effect.targets[j],
             effect.source
           );
-          growthCards = growthCards.union(targetRuleCards);
+          for (let card of targetRuleCards) {
+            growthCards.add(card);
+          }
         }
 
         // Grow cards
