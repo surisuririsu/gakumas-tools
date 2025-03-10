@@ -7,11 +7,11 @@ Dates are based on Eastern Time Zone.
 
 ### Added
 
-- Preview of Yukidokeni Mao
+- Yukidokeni Mao
 
 ### Fixed
 
-- Slow (and incompatible with some browsers) set operations for determining growth targets
+- Slow set operations for determining growth targets
 
 ## 2025-03-01
 
