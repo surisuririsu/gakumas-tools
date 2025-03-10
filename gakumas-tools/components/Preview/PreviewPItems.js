@@ -19,7 +19,7 @@ export default function PreviewPItems({ itemIds, baseUrl }) {
             )}
           </div>
         ))}
-      <div style={styles.url}>gkcontest.ris.moe</div>
+      <div style={styles.url}>gktools.ris.moe</div>
     </div>
   );
 }
