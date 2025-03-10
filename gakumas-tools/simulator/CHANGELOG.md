@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-10
+
+### Fixed
+
+- Bug that caused effect to be skipped when the effect set prior to it had no actions (yukidokeni mao p-item for example)
+
 ## 2025-03-09
 
 ### Added

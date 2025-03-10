@@ -128,6 +128,7 @@ export default class EffectManager extends EngineComponent {
     for (let i = 0; i < effects.length; i++) {
       // Skip effect if condition not satisfied
       if (skipNextEffect) {
+        this.logger.debug("Skipping effect", effects[i]);
         skipNextEffect = false;
         continue;
       }
@@ -150,11 +151,13 @@ export default class EffectManager extends EngineComponent {
 
       // Check limit
       if (effect.limit != null && effect.limit < 1) {
+        this.logger.debug("Effect limit reached", effect.limit);
         continue;
       }
 
       // Check ttl
       if (effect.ttl != null && effect.ttl < 0) {
+        this.logger.debug("Effect ttl reached", effect.ttl);
         continue;
       }
 
@@ -171,7 +174,7 @@ export default class EffectManager extends EngineComponent {
           }
         }
         if (!satisfied) {
-          if (!effect.actions) {
+          if (!effect.actions && !effect.effects) {
             skipNextEffect = true;
           }
           continue;
