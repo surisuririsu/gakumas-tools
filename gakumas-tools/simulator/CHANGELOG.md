@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of contest season 20
 
+### Fixed
+
+- Effect for おてつき注意 should only last 5 turns (not 5 times)
+
 ## 2025-03-10
 
 ### Fixed
