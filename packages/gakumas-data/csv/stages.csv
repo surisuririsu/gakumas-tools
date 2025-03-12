@@ -71,3 +71,6 @@ id,name,type,season,stage,round,plan,criteria,turnCounts,firstTurns,effects
 70,シーズン19 ステージ1,contest,19,1,,free,"0.33,0.385,0.385","2,3,3","0,0.82,0.18","at:startOfTurn,do:setScoreBuff(0.5,3),limit:3"
 71,シーズン19 ステージ2,contest,19,2,,sense,"0.33,0.385,0.385","3,4,3","0,0.89,0.11","at:cardUsed,if:cardEffects&halfCostTurns,do:concentration+=3,do:goodConditionTurns+=3,do:fixedStamina-=3,limit:3"
 72,シーズン19 ステージ3,contest,19,3,,logic,"0.33,0.385,0.385","3,5,4","0,0.89,0.11","at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1;at:buffCostConsumed,if:goodImpressionTurns>=10,do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*2.5"
+73,シーズン20 ステージ1,contest,20,1,,sense,"0.45,0.2,0.35","6,2,4","1,0,0","at:startOfTurn,do:doubleCostTurns+=1,do:concentration+=5,limit:2"
+74,シーズン20 ステージ2,contest,20,2,,anomaly,"0.45,0.2,0.35","5,2,3","1,0,0","at:stanceChanged,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3"
+75,シーズン20 ステージ3,contest,20,3,,free,"0.45,0.2,0.35","4,2,2","1,0,0","at:startOfTurn,if:turnsRemaining<=2,limit:2;at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;at:startOfTurn,if:turnsRemaining<=2,do:drawCard,limit:2"
