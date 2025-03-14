@@ -144,10 +144,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <>
+        {/* <>
           ※ Season 20 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </>
+        </> */}
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
