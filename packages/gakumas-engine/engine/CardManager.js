@@ -173,7 +173,7 @@ export default class CardManager extends EngineComponent {
       }
     }
 
-    previewState[S.phase] = "cost";
+    previewState[S.phase] = "processCost";
     for (let i = 0; i < cost.length; i++) {
       this.engine.executor.executeAction(previewState, cost[i], card);
     }
@@ -219,7 +219,7 @@ export default class CardManager extends EngineComponent {
         }
       }
     }
-    state[S.phase] = "cost";
+    state[S.phase] = "processCost";
     this.engine.executor.executeActions(state, cost, card);
     delete state[S.phase];
     if (state[S.nullifyCostCards]) state[S.nullifyCostCards]--;
@@ -264,7 +264,7 @@ export default class CardManager extends EngineComponent {
         }
       }
     }
-    state[S.phase] = "card";
+    state[S.phase] = "processCard";
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;
       this.engine.effectManager.triggerEffects(state, effects, null, card);

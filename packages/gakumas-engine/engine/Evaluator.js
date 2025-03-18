@@ -3,6 +3,7 @@ import {
   BOOLEAN_OPERATORS,
   MULTIPLICATIVE_OPERATORS,
   NUMBER_REGEX,
+  PHASES,
   SET_OPERATOR,
   STANCES,
   S,
@@ -45,6 +46,11 @@ export default class Evaluator extends EngineComponent {
 
         // Stances
         if (STANCES.includes(tokens[0])) {
+          return tokens[0];
+        }
+
+        // Phases
+        if (PHASES.includes(tokens[0])) {
           return tokens[0];
         }
 

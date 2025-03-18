@@ -151,7 +151,7 @@ export default class Executor extends EngineComponent {
       }
 
       // Cost consumed effects
-      if (state[S.phase] == "cost") {
+      if (state[S.phase] == "processCost") {
         // Trigger buff cost consumed effects
         for (let i = 0; i < BUFF_FIELDS.length; i++) {
           if (decreasedFields.has(BUFF_FIELDS[i])) {
@@ -238,7 +238,7 @@ export default class Executor extends EngineComponent {
           intermediate += growth[S[`g.${lhs}`]];
         }
       } else if (op == "-=") {
-        if (growth?.[S["g.cost"]] && state[S.phase] == "cost") {
+        if (growth?.[S["g.cost"]] && state[S.phase] == "processCost") {
           rhs -= growth[S["g.cost"]];
           if (rhs < 0) rhs = 0;
         }

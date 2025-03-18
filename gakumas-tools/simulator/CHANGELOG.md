@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-18
+
+### Fixed
+
+- Modified season 20 stage 2 effect condition to include parent phase check
+
 ## 2025-03-12
 
 ### Added
