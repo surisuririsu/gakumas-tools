@@ -84,7 +84,7 @@ export default class EffectManager extends EngineComponent {
   }
 
   triggerEffectsForPhase(state, phase, conditionState) {
-    const parentPhase = state[S.phase];
+    state[S.parentPhase] = state[S.phase];
     state[S.phase] = phase;
 
     // Filter and group effects
@@ -114,7 +114,7 @@ export default class EffectManager extends EngineComponent {
       }
     }
 
-    state[S.phase] = parentPhase;
+    state[S.phase] = state[S.parentPhase];
   }
 
   triggerEffects(state, effects, cndState, card, skipConditions) {

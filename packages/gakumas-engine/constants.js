@@ -69,7 +69,29 @@ DEFAULT_EFFECTS.forEach((effect) => {
 });
 
 export const UNFRESH_PHASES = ["startOfTurn", "everyTurn"];
-export const CHANGE_TRIGGER_PHASES = ["card", "cost"];
+export const CHANGE_TRIGGER_PHASES = ["processCard", "processCost"];
+export const PHASES = [
+  "activeCardUsed",
+  "afterActiveCardUsed",
+  "afterCardUsed",
+  "afterMentalCardUsed",
+  "buffCostConsumed",
+  "cardUsed",
+  "concentrationIncreased",
+  "endOfTurn",
+  "everyTurn",
+  "goodConditionTurnsIncreased",
+  "goodImpressionTurnsIncreased",
+  "mentalCardUsed",
+  "motivationIncreased",
+  "prestage",
+  "staminaDecreased",
+  "stanceChanged",
+  "startOfStage",
+  "startOfTurn",
+  "processCost",
+  "processCard",
+];
 
 export const ALL_FIELDS = [
   // General
@@ -132,6 +154,7 @@ export const ALL_FIELDS = [
   // Effects
   "effects",
   "phase",
+  "parentPhase",
 
   // Growth
   "g.score",
