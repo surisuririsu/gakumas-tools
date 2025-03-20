@@ -24,7 +24,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     this.goodImpressionTurnsMultiplier =
       config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
     this.motivationMultiplier =
-      config.idol.recommendedEffect == "motivation" ? 5.25 : 1;
+      config.idol.recommendedEffect == "motivation" ? 5.5 : 1;
     this.fullPowerMultiplier =
       config.idol.recommendedEffect == "fullPower" ? 5 : 1;
 
@@ -147,8 +147,8 @@ export default class HeuristicStrategy extends BaseStrategy {
     // Genki
     score +=
       state[S.genki] *
-      Math.tanh(state[S.turnsRemaining] / 3) *
-      0.65 *
+      Math.tanh(state[S.turnsRemaining] / 2) *
+      0.7 *
       this.motivationMultiplier;
 
     // Good condition turns
@@ -162,13 +162,12 @@ export default class HeuristicStrategy extends BaseStrategy {
       Math.min(state[S.perfectConditionTurns], state[S.turnsRemaining]) *
       state[S.goodConditionTurns] *
       this.goodConditionTurnsMultiplier *
-      this.goodConditionTurnsMultiplier;
+      1.5;
 
     // Concentration
     score +=
       state[S.concentration] *
       state[S.turnsRemaining] *
-      2 *
       this.concentrationMultiplier;
 
     // Stance
