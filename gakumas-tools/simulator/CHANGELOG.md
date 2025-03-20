@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-20
+
+### Changed
+
+- Adjusted evaluation of genki, concentration, and perfect condition
+
 ## 2025-03-18
 
 ### Fixed
