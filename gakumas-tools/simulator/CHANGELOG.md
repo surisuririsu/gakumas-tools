@@ -5,6 +5,10 @@ Dates are based on Eastern Time Zone.
 
 ## 2025-03-20
 
+### Added
+
+- Preview of kyokkou lilja
+
 ### Changed
 
 - Adjusted evaluation of genki, concentration, and perfect condition
