@@ -87,6 +87,7 @@ export default class CardManager extends EngineComponent {
         let cardEffect = tokens[0];
         if (cardEffect.startsWith("setStance")) {
           cardEffect = cardEffect.match(FUNCTION_CALL_REGEX)[2];
+          cardEffect = cardEffect.replace(/\d/g, "");
         }
         cardEffects.add(cardEffect);
       }
