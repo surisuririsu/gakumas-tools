@@ -235,3 +235,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 234,まあるい春色,SSR,FALSE,anomaly,stage,pIdol,82,FALSE,"at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,do:fixedStamina-=2,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:startOfTurn,do:setStance(preservation2),limit:1"
 235,まあるい春色+,SSR,TRUE,anomaly,stage,pIdol,82,FALSE,"at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:startOfTurn,do:setStance(preservation2),limit:1"
 236,体力自慢の本気,SSR,FALSE,anomaly,produce,support,,FALSE,
+237,小さな銀河,SSR,FALSE,anomaly,stage,pIdol,83,FALSE,"at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=1,limit:3"
+238,小さな銀河+,SSR,TRUE,anomaly,stage,pIdol,83,FALSE,"at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=1,limit:3"
+239,ひとりだちシューズ,SSR,FALSE,free,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedStamina+=maxStamina*0.15,limit:2"

@@ -512,3 +512,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 511,頬張る3色+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,82,FALSE,,do:cost-=5,"do:setStance(strength),do:fullPowerCharge+=5;target:effect(fullPowerCharge)*active,do:g.score+=4;at:startOfTurn,do:setStance(preservation),limit:1",1,
 512,小さなお客さん,,SR,active,anomaly,1,FALSE,TRUE,support,,FALSE,,do:cost-=6,"at:startOfTurn,do:setStance(preservation),do:fullPowerCharge+=2,limit:1;if:isFullPower,do:score+=24",1,
 513,小さなお客さん+,"29,48,83",SR,active,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=4,"at:startOfTurn,do:setStance(preservation),do:fullPowerCharge+=3,limit:1;if:isFullPower,do:score+=24",1,
+514,きらきらプリズム,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,83,FALSE,if:isPreservation,do:cost-=4,"do:setStance(strength2);at:mentalCardUsed,if:stance==strength2,target:effect(strength),do:g.score+=8",1,
+515,きらきらプリズム+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,83,FALSE,if:isPreservation,do:cost-=4,"do:setStance(strength2);at:mentalCardUsed,if:stance==strength2,target:effect(strength),do:g.score+=8",1,
