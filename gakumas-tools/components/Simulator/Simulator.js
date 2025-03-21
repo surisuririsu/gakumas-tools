@@ -125,7 +125,7 @@ export default function Simulator() {
           new Promise((resolve) => {
             workersRef.current[i].onmessage = (e) => resolve(e.data);
             workersRef.current[i].postMessage({
-              config,
+              idolStageConfig: config,
               strategyName: strategy,
               numRuns: runsPerWorker,
             });
