@@ -1,5 +1,12 @@
 "use client";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Tooltip } from "react-tooltip";
 import {
@@ -51,14 +58,16 @@ export default function Simulator() {
   const [running, setRunning] = useState(false);
   const workersRef = useRef();
 
-  const { pItemIndications, skillCardIndicationGroups } = getIndications(
-    loadout,
-    stage
-  );
+  const config = useMemo(() => {
+    const idolConfig = new IdolConfig(loadout);
+    const stageConfig = new StageConfig(stage);
+    return new IdolStageConfig(idolConfig, stageConfig);
+  }, [loadout, stage]);
 
-  const idolConfig = new IdolConfig(loadout);
-  const stageConfig = new StageConfig(stage);
-  const idolStageConfig = new IdolStageConfig(idolConfig, stageConfig);
+  const { pItemIndications, skillCardIndicationGroups } = getIndications(
+    config,
+    loadout
+  );
 
   // Set up web workers on mount
   useEffect(() => {
@@ -104,7 +113,7 @@ export default function Simulator() {
     console.time("simulation");
 
     if (SYNC || !workersRef.current) {
-      const result = simulate(idolStageConfig, strategy, NUM_RUNS);
+      const result = simulate(config, strategy, NUM_RUNS);
       setResult(result);
     } else {
       const numWorkers = workersRef.current.length;
@@ -116,7 +125,7 @@ export default function Simulator() {
           new Promise((resolve) => {
             workersRef.current[i].onmessage = (e) => resolve(e.data);
             workersRef.current[i].postMessage({
-              idolStageConfig,
+              config,
               strategyName: strategy,
               numRuns: runsPerWorker,
             });
@@ -131,7 +140,7 @@ export default function Simulator() {
 
         logEvent("simulator.simulate", {
           stageId: stage.id,
-          idolId: idolConfig.idolId,
+          idolId: config.idol.idolId,
           page_location: simulatorUrl,
           minScore: mergedResults.minRun.score,
           averageScore: mergedResults.averageScore,
@@ -172,9 +181,9 @@ export default function Simulator() {
             max={10000}
           />
           <div className={styles.typeMultipliers}>
-            {Object.keys(idolStageConfig.typeMultipliers).map((param) => (
+            {Object.keys(config.typeMultipliers).map((param) => (
               <div key={param}>
-                {Math.round(idolStageConfig.typeMultipliers[param] * 100)}%
+                {Math.round(config.typeMultipliers[param] * 100)}%
               </div>
             ))}
             <div />
@@ -198,10 +207,10 @@ export default function Simulator() {
             customizations={loadout.customizationGroups[i]}
             indications={skillCardIndicationGroups[i]}
             groupIndex={i}
-            idolId={idolConfig.idolId || idolId}
+            idolId={config.idol.idolId || idolId}
           />
         ))}
-        <SimulatorSubTools defaultCardIds={idolStageConfig.defaultCardIds} />
+        <SimulatorSubTools defaultCardIds={config.defaultCardIds} />
         <select
           className={styles.strategySelect}
           value={strategy}
@@ -244,8 +253,8 @@ export default function Simulator() {
       {simulatorData && (
         <SimulatorResult
           data={simulatorData}
-          idolId={idolConfig.idolId || idolId}
-          plan={idolConfig.plan || plan}
+          idolId={config.idol.idolId || idolId}
+          plan={config.idol.plan || plan}
         />
       )}
 

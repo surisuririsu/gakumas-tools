@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
 import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
-import { generateKafeUrl } from "@/utils/kafeSimulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
@@ -224,21 +223,11 @@ export function LoadoutContextProvider({ children }) {
     customizationGroups
   );
 
-  let kafeUrl = null;
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
     stage = customStage;
   } else if (stageId) {
     stage = Stages.getById(stageId);
-    if (stage.type == "contest") {
-      kafeUrl = generateKafeUrl(
-        stage,
-        supportBonus,
-        params,
-        pItemIds,
-        skillCardIdGroups
-      );
-    }
   }
 
   const loadout = {
@@ -275,7 +264,6 @@ export function LoadoutContextProvider({ children }) {
         swapSkillCardIdGroups,
         stage,
         simulatorUrl,
-        kafeUrl,
         loadoutHistory,
         pushLoadoutHistory,
       }}
