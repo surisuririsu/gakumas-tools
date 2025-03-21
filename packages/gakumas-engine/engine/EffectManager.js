@@ -28,38 +28,14 @@ export default class EffectManager extends EngineComponent {
       const skillCardId = state[S.cardMap][i].id;
 
       const skillCard = SkillCards.getById(skillCardId);
-      if (skillCard.growth?.length) {
-        this.logger.debug(
-          "Setting growth effects",
-          skillCard.name,
-          skillCard.growth
-        );
-        this.setEffects(state, skillCard.growth, {
+      const growth = this.engine.cardManager.getLines(state, i, "growth");
+      if (growth.length) {
+        this.logger.debug("Setting growth effects", skillCard.name, growth);
+        this.setEffects(state, growth, {
           type: "skillCard",
           id: skillCardId,
           idx: i,
         });
-      }
-
-      const c11n = state[S.cardMap][i].c11n;
-      for (let k in c11n) {
-        const { growth, name } = Customizations.getById(k);
-        if (!growth.length) continue;
-        this.logger.debug(
-          "Setting custom growth effects",
-          skillCard.name,
-          growth,
-          name
-        );
-        this.setEffects(
-          state,
-          growth.filter((g) => (g.level || 1) == c11n[k]),
-          {
-            type: "skillCard",
-            id: skillCardId,
-            idx: i,
-          }
-        );
       }
     }
   }

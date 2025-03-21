@@ -67,17 +67,32 @@ export default class CardManager extends EngineComponent {
     return false;
   }
 
+  getLines(state, card, attribute) {
+    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+    let attr = skillCard[attribute] || [];
+    const c11n = state[S.cardMap][card].c11n;
+    if (!Object.keys(c11n).length) return attr;
+
+    attr = [...attr];
+    for (let k in c11n) {
+      const c11nAttr = Customizations.getById(k)[attribute] || [];
+      for (let i = 0; i < c11nAttr.length; i++) {
+        if ((c11nAttr[i].level || 1) != c11n[k]) continue;
+        if (c11nAttr[i].line) {
+          attr.splice(c11nAttr[i].line - 1, 1, c11nAttr[i]);
+        } else {
+          attr = attr.concat(c11nAttr[i]);
+        }
+      }
+    }
+
+    return attr;
+  }
+
   getCardEffects(state, card) {
     let cardEffects = new Set();
     if (card == null) return cardEffects;
-    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
-    const effects = skillCard.effects.concat(
-      Object.keys(state[S.cardMap][card].c11n)
-        .filter((k) => state[S.cardMap][card].c11n[k])
-        .map(Customizations.getById)
-        .map((c) => c.effects)
-        .flat()
-    );
+    const effects = this.getLines(state, card, "effects");
     for (let i = 0; i < effects.length; i++) {
       const effect = effects[i];
       if (effect.phase || !effect.actions) continue;
@@ -147,33 +162,20 @@ export default class CardManager extends EngineComponent {
     if (state[S.noMentalTurns] && skillCard.type == "mental") return false;
 
     // Check conditions
-    for (let i = 0; i < skillCard.conditions.length; i++) {
-      if (
-        !this.engine.evaluator.evaluateCondition(state, skillCard.conditions[i])
-      ) {
+    const conditions = this.getLines(state, card, "conditions")
+      .map((c) => c.conditions)
+      .flat();
+    for (let i = 0; i < conditions.length; i++) {
+      if (!this.engine.evaluator.evaluateCondition(state, conditions[i])) {
         return false;
       }
     }
 
     // Check cost
+    const cost = this.getLines(state, card, "cost")
+      .map((c) => c.actions)
+      .flat();
     const previewState = shallowCopy(state);
-    let cost = skillCard.cost;
-    const c11n = state[S.cardMap][card].c11n;
-    if (Object.keys(c11n).filter((k) => c11n[k]).length) {
-      cost = [...cost];
-      for (let k in c11n) {
-        const c11nCost = Customizations.getById(k).cost;
-        for (let i = 0; i < c11nCost.length; i++) {
-          if ((c11nCost[i].level || 1) != c11n[k]) continue;
-          if (c11nCost[i].line) {
-            cost.splice(c11nCost[i].line - 1, 1, ...c11nCost[i].actions);
-          } else {
-            cost = cost.concat(c11nCost[i].actions);
-          }
-        }
-      }
-    }
-
     previewState[S.phase] = "processCost";
     for (let i = 0; i < cost.length; i++) {
       this.engine.executor.executeAction(previewState, cost[i], card);
@@ -205,21 +207,9 @@ export default class CardManager extends EngineComponent {
     // Apply card cost
     let conditionState = shallowCopy(state);
     this.logger.debug("Applying cost", skillCard.cost);
-    let cost = skillCard.cost;
-    if (Object.keys(c11n).length) {
-      cost = [...cost];
-      for (let k in c11n) {
-        const c11nCost = Customizations.getById(k).cost;
-        for (let i = 0; i < c11nCost.length; i++) {
-          if ((c11nCost[i].level || 1) != c11n[k]) continue;
-          if (c11nCost[i].line) {
-            cost.splice(c11nCost[i].line - 1, 1, ...c11nCost[i].actions);
-          } else {
-            cost = cost.concat(c11nCost[i].actions);
-          }
-        }
-      }
-    }
+    const cost = this.getLines(state, card, "cost")
+      .map((c) => c.actions)
+      .flat();
     state[S.phase] = "processCost";
     this.engine.executor.executeActions(state, cost, card);
     delete state[S.phase];
@@ -250,21 +240,7 @@ export default class CardManager extends EngineComponent {
     }
 
     // Apply card effects
-    let effects = skillCard.effects;
-    if (Object.keys(c11n).length) {
-      effects = [...effects];
-      for (let k in c11n) {
-        const c11nEffects = Customizations.getById(k).effects;
-        for (let i = 0; i < c11nEffects.length; i++) {
-          if ((c11nEffects[i].level || 1) != c11n[k]) continue;
-          if (c11nEffects[i].line) {
-            effects[c11nEffects[i].line - 1] = c11nEffects[i];
-          } else {
-            effects.push(c11nEffects[i]);
-          }
-        }
-      }
-    }
+    const effects = this.getLines(state, card, "effects");
     state[S.phase] = "processCard";
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;

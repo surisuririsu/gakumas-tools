@@ -1,15 +1,14 @@
 import SKILL_CARDS from "../json/skill_cards.json";
 import { getSkillCardContestPower } from "../utils/contestPower";
-import { deserializeEffect, deserializeEffectSequence } from "../utils/effects";
+import { deserializeEffectSequence } from "../utils/effects";
 
 SKILL_CARDS.forEach((skillCard) => {
   skillCard._type = "skillCard";
   skillCard.availableCustomizations = skillCard.availableCustomizations
     .split(",")
     .filter((c) => c);
-  skillCard.conditions =
-    deserializeEffect(skillCard.conditions).conditions || [];
-  skillCard.cost = deserializeEffect(skillCard.cost).actions || [];
+  skillCard.conditions = deserializeEffectSequence(skillCard.conditions);
+  skillCard.cost = deserializeEffectSequence(skillCard.cost);
   skillCard.effects = deserializeEffectSequence(skillCard.effects);
   skillCard.limit = skillCard.limit || null;
   skillCard.growth = deserializeEffectSequence(skillCard.growth);

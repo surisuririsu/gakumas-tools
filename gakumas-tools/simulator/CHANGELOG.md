@@ -3,6 +3,13 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-21
+
+### Added
+
+- Kyokkou Lilja
+- New skill cards for Plv > 60
+
 ## 2025-03-20
 
 ### Added
