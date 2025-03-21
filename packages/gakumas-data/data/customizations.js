@@ -1,9 +1,10 @@
 import CUSTOMIZATIONS from "../json/customizations.json";
-import { deserializeEffect, deserializeEffectSequence } from "../utils/effects";
+import { deserializeEffectSequence } from "../utils/effects";
 
 CUSTOMIZATIONS.forEach((customization) => {
-  customization.conditions =
-    deserializeEffect(customization.conditions).conditions || [];
+  customization.conditions = deserializeEffectSequence(
+    customization.conditions
+  );
   customization.cost = deserializeEffectSequence(customization.cost);
   customization.effects = deserializeEffectSequence(customization.effects);
   customization.growth = deserializeEffectSequence(customization.growth);
