@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "generate-kafe": "node scripts/generateIdMappings.mjs",
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
@@ -39,7 +38,6 @@
     "@testing-library/react": "^16.2.0",
     "eslint": "^9.20.0",
     "eslint-config-next": "^15.1.6",
-    "gakumas_contest_simulator": "https://github.com/katabami83/gakumas_contest_simulator",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
   },

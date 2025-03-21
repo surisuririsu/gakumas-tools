@@ -1,5 +1,5 @@
 import { PIdols, PItems, SkillCards } from "gakumas-data";
-import { GRAPHED_FIELDS, IdolConfig } from "gakumas-engine";
+import { GRAPHED_FIELDS } from "gakumas-engine";
 import { BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
@@ -198,12 +198,12 @@ export function mergeGraphDatas(graphDatas) {
   return mergedGraphData;
 }
 
-export function getIndications(loadout, stage) {
-  const idolConfig = new IdolConfig(loadout);
-  const pIdolId = idolConfig.pIdolId;
-  const idolId = idolConfig.idolId;
-  const plan = stage.plan != "free" ? stage.plan : idolConfig.plan;
-  const dupeIndices = idolConfig.dupeIndices;
+export function getIndications(config, loadout) {
+  const pIdolId = config.idol.pIdolId;
+  const idolId = config.idol.idolId;
+  const plan =
+    config.stage.plan != "free" ? config.stage.plan : config.idol.plan;
+  const dupeIndices = config.idol.dupeIndices;
 
   let pItemIndications = [];
   for (let id of loadout.pItemIds) {

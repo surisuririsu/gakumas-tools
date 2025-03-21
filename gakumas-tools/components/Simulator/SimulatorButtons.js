@@ -1,7 +1,7 @@
 "use client";
 import { memo, useContext, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCheck, FaRegCopy, FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { FaCheck, FaRegCopy } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
@@ -11,7 +11,7 @@ import styles from "./Simulator.module.scss";
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
-  const { clear, kafeUrl, simulatorUrl } = useContext(LoadoutContext);
+  const { clear, simulatorUrl } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -43,12 +43,6 @@ function SimulatorButtons() {
           </>
         )}
       </Button>
-
-      {kafeUrl && (
-        <Button style="blue-secondary" href={kafeUrl} target="_blank">
-          @かふぇもっと <FaArrowUpRightFromSquare />
-        </Button>
-      )}
     </div>
   );
 }
