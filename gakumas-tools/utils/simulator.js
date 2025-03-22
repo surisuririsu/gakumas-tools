@@ -18,22 +18,8 @@ const DEFAULTS = {
 
 const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
 
-export function getSimulatorUrl(
-  stageId,
-  supportBonus,
-  params,
-  pItemIds,
-  skillCardIdGroups,
-  customizationGroups
-) {
-  const searchParams = loadoutToSearchParams({
-    stageId,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-    customizationGroups,
-  });
+export function getSimulatorUrl(loadout) {
+  const searchParams = loadoutToSearchParams(loadout);
   return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
 }
 
