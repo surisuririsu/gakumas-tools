@@ -21,55 +21,42 @@ function EntityIcon({
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const { icon } = gkImg(entity, idolId);
 
-  if (onClick) {
-    return (
+  let unwrappedElement = null;
+  if (entity) {
+    unwrappedElement = (
       <>
-        <button
-          className={c(
-            styles.entityIcon,
-            styles[size],
-            indications?.duplicate && styles.duplicate
-          )}
-          onClick={() => onClick(entity || {})}
-        >
-          {entity && (
-            <>
-              <Image
-                src={icon}
-                alt={entity.name}
-                fill
-                sizes="64px"
-                draggable={false}
-              />
-              {showTier && type == EntityTypes.SKILL_CARD && (
-                <TierIndicator skillCard={entity} />
-              )}
-            </>
-          )}
-          {!!customizations && (
-            <CustomizationCounts customizations={customizations} />
-          )}
-          {!!indications && <Indications indications={indications} />}
-        </button>
-      </>
-    );
-  } else {
-    return (
-      <div className={c(styles.entityIcon, styles[size])}>
-        {entity && (
-          <Image
-            src={icon}
-            alt={entity.name}
-            fill
-            sizes="64px"
-            draggable={false}
-          />
+        <Image
+          src={icon}
+          alt={entity.name}
+          fill
+          sizes="64px"
+          draggable={false}
+        />
+        {showTier && type == EntityTypes.SKILL_CARD && (
+          <TierIndicator skillCard={entity} />
         )}
         {!!customizations && (
           <CustomizationCounts customizations={customizations} />
         )}
-      </div>
+        {!!indications && <Indications indications={indications} />}
+      </>
     );
+  }
+
+  const className = c(
+    styles.entityIcon,
+    styles[size],
+    indications?.duplicate && styles.duplicate
+  );
+
+  if (onClick) {
+    return (
+      <button className={className} onClick={() => onClick(entity || {})}>
+        {unwrappedElement}
+      </button>
+    );
+  } else {
+    return <div className={className}>{unwrappedElement}</div>;
   }
 }
 

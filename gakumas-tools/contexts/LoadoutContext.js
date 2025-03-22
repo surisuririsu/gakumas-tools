@@ -1,8 +1,12 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
-import { loadoutFromSearchParams, getSimulatorUrl } from "@/utils/simulator";
+import {
+  loadoutFromSearchParams,
+  getSimulatorUrl,
+  loadoutToSearchParams,
+} from "@/utils/simulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
@@ -12,7 +16,7 @@ const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const searchParams = useSearchParams();
-  const initial = loadoutFromSearchParams(searchParams);
+  const initial = useMemo(() => loadoutFromSearchParams(searchParams), []);
 
   const [loaded, setLoaded] = useState(false);
   const [memoryParams, setMemoryParams] = useState([null, null]);
@@ -28,6 +32,36 @@ export function LoadoutContextProvider({ children }) {
     initial.customizationGroups
   );
   const [loadoutHistory, setLoadoutHistory] = useState([]);
+
+  let stage = FALLBACK_STAGE;
+  if (stageId == "custom") {
+    stage = customStage;
+  } else if (stageId) {
+    stage = Stages.getById(stageId);
+  }
+
+  const loadout = useMemo(
+    () => ({
+      stageId,
+      customStage: stageId == "custom" ? customStage : {},
+      supportBonus,
+      params,
+      pItemIds,
+      skillCardIdGroups,
+      customizationGroups,
+    }),
+    [
+      stageId,
+      customStage,
+      supportBonus,
+      params,
+      pItemIds,
+      skillCardIdGroups,
+      customizationGroups,
+    ]
+  );
+
+  const simulatorUrl = getSimulatorUrl(loadout);
 
   const setLoadout = (loadout) => {
     setStageId(loadout.stageId);
@@ -78,6 +112,14 @@ export function LoadoutContextProvider({ children }) {
       JSON.stringify(loadoutHistory)
     );
   }, [loadoutHistory]);
+
+  // Update browser URL when the loadout changes
+  useEffect(() => {
+    if (!loaded) return;
+    const url = new URL(window.location);
+    url.search = loadoutToSearchParams(loadout).toString();
+    window.history.replaceState(null, "", url);
+  }, [loadout]);
 
   function clear() {
     setMemoryParams([null, null]);
@@ -213,32 +255,6 @@ export function LoadoutContextProvider({ children }) {
       return next;
     });
   }
-
-  const simulatorUrl = getSimulatorUrl(
-    stageId,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-    customizationGroups
-  );
-
-  let stage = FALLBACK_STAGE;
-  if (stageId == "custom") {
-    stage = customStage;
-  } else if (stageId) {
-    stage = Stages.getById(stageId);
-  }
-
-  const loadout = {
-    stageId,
-    customStage: stageId == "custom" ? customStage : {},
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-    customizationGroups,
-  };
 
   const pushLoadoutHistory = () => {
     if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;

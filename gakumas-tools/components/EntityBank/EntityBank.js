@@ -106,8 +106,6 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
           )}
         </div>
 
-        <div className={styles.fill}></div>
-
         <div className={styles.customFilters}>
           {toggleableFilters.map((f) => (
             <button
