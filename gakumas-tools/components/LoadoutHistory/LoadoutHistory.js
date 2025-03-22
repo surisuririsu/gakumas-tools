@@ -1,4 +1,5 @@
 import { memo, useContext } from "react";
+import Button from "@/components/Button";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import LoadoutSummary from "./LoadoutSummary";
 import styles from "./LoadoutHistory.module.scss";
@@ -9,7 +10,13 @@ function LoadoutHistory() {
   return (
     <div className={styles.history}>
       {loadoutHistory.map((loadout, i) => (
-        <LoadoutSummary key={i} loadout={loadout} setLoadout={setLoadout} />
+        <Button
+          key={i}
+          className={styles.summary}
+          onClick={() => setLoadout(loadout)}
+        >
+          <LoadoutSummary loadout={loadout} setLoadout={setLoadout} />
+        </Button>
       ))}
     </div>
   );

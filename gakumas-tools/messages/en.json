@@ -231,7 +231,8 @@
   },
   "SimulatorButtons": {
     "confirm": "Are you sure you want to clear the loadout?",
-    "clear": "Clear"
+    "clear": "Clear",
+    "manageLoadouts": "Save/Load β"
   },
   "ConfirmModal": {
     "cancel": "Cancel",

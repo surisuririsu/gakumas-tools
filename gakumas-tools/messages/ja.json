@@ -233,7 +233,8 @@
   },
   "SimulatorButtons": {
     "confirm": "編成をクリアしますか？",
-    "clear": "クリア"
+    "clear": "クリア",
+    "manageLoadouts": "保存・読み込み β"
   },
   "ConfirmModal": {
     "cancel": "キャンセル",
