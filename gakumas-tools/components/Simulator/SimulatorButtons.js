@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { FaCheck, FaRegCopy } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
+import LoadoutManagerModal from "@/components/LoadoutManagerModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Simulator.module.scss";
@@ -24,6 +25,13 @@ function SimulatorButtons() {
         }
       >
         {t("clear")}
+      </Button>
+
+      <Button
+        style="secondary"
+        onClick={() => setModal(<LoadoutManagerModal />)}
+      >
+        {t("manageLoadouts")}
       </Button>
 
       <Button

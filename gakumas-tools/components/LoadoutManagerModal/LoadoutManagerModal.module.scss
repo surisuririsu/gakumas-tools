@@ -1,0 +1,47 @@
+@use "@/styles/colors";
+
+.currentLoadout {
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.save {
+  display: flex;
+  gap: 8px;
+
+  input {
+    flex: 1;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.loadoutList {
+  min-height: 300px;
+}
+
+.loadoutRow {
+  display: flex;
+}
+
+.loadoutSummary {
+  flex: 1;
+  flex-direction: column;
+}
+
+.check {
+  display: flex;
+  background-color: colors.$red-extra-light;
+
+  input {
+    width: 16px;
+    margin: 8px;
+    accent-color: colors.$red-dark;
+    cursor: pointer;
+  }
+}

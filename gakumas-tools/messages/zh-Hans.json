@@ -231,7 +231,8 @@
   },
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
-    "clear": "清除"
+    "clear": "清除",
+    "manageLoadouts": "保存/加载 β"
   },
   "ConfirmModal": {
     "cancel": "取消",

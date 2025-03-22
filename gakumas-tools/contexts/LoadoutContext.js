@@ -261,6 +261,29 @@ export function LoadoutContextProvider({ children }) {
     setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
   };
 
+  async function saveLoadout(name) {
+    const response = await fetch("/api/loadout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...loadout, name }),
+    });
+    const data = await response.json();
+    return data.id;
+  }
+
+  async function fetchLoadouts() {
+    const response = await fetch("/api/loadout");
+    return response.json();
+  }
+
+  async function deleteLoadouts(ids) {
+    await fetch("/api/loadout", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+  }
+
   return (
     <LoadoutContext.Provider
       value={{
@@ -282,6 +305,9 @@ export function LoadoutContextProvider({ children }) {
         simulatorUrl,
         loadoutHistory,
         pushLoadoutHistory,
+        saveLoadout,
+        fetchLoadouts,
+        deleteLoadouts,
       }}
     >
       {children}
