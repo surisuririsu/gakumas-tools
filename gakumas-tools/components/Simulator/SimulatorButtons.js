@@ -28,14 +28,14 @@ function SimulatorButtons() {
       </Button>
 
       <Button
-        style="secondary"
+        style="blue-secondary"
         onClick={() => setModal(<LoadoutManagerModal />)}
       >
         {t("manageLoadouts")}
       </Button>
 
       <Button
-        style="secondary"
+        style="blue-secondary"
         onClick={() => {
           navigator.clipboard.writeText(simulatorUrl);
           setLinkCopied(true);
