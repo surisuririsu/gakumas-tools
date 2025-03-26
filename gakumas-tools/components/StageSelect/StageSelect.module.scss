@@ -1,6 +1,8 @@
 @use "../../styles/colors";
 
-.stageSelect {
+button.stageSelect {
+  display: block;
+  padding: 8px;
   color: colors.$gray-dark;
   font-weight: 600;
 }
@@ -21,9 +23,8 @@
 }
 
 .option {
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 12px;
+  display: block;
+  padding: 8px;
   color: colors.$gray-dark;
   font-weight: 600;
   transition: all 0.2s;
@@ -34,14 +35,18 @@
   }
 }
 
+.namePlan {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
 .status {
-  flex: 1;
-  align-self: stretch;
+  min-height: 3px;
   display: flex;
   gap: 1.5px;
-  border-radius: 2px;
-  background-color: colors.$white;
-  overflow: hidden;
+  margin-top: 2px;
 
   div:nth-child(1) {
     background-color: #f23584;
