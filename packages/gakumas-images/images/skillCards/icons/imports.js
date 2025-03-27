@@ -1768,6 +1768,10 @@ import image_521_6 from "./521_6.png";
 import image_521_7 from "./521_7.png";
 import image_521_8 from "./521_8.png";
 import image_521_9 from "./521_9.png";
+import image_522 from "./522.png";
+import image_523 from "./523.png";
+import image_524 from "./524.png";
+import image_525 from "./525.png";
 import image_53 from "./53.png";
 import image_54 from "./54.png";
 import image_55 from "./55.png";
@@ -3891,6 +3895,10 @@ const IMAGES = {
   '521_7': image_521_7,
   '521_8': image_521_8,
   '521_9': image_521_9,
+  '522': image_522,
+  '523': image_523,
+  '524': image_524,
+  '525': image_525,
   '53': image_53,
   '54': image_54,
   '55': image_55,
