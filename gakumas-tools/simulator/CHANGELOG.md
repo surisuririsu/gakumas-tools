@@ -3,6 +3,16 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-03-27
+
+### Added
+
+- Preview of Sakura Photograph Lilja and Sumika
+
+### Changed
+
+- Evaluation of card uses remaining in contest strategy
+
 ## 2025-03-22
 
 ### Fixed

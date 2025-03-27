@@ -238,3 +238,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 237,小さな銀河,SSR,FALSE,anomaly,stage,pIdol,83,FALSE,"at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=2,limit:3"
 238,小さな銀河+,SSR,TRUE,anomaly,stage,pIdol,83,FALSE,"at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=1,limit:3"
 239,ひとりだちシューズ,SSR,FALSE,free,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedStamina+=maxStamina*0.15,limit:2"
+240,積み重ねた努力,SSR,FALSE,anomaly,stage,pIdol,84,FALSE,"at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=8,limit:2"
+241,積み重ねた努力+,SSR,TRUE,anomaly,stage,pIdol,84,FALSE,"at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=8,limit:2"
+242,Pっち,SSR,FALSE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=3,do:goodConditionTurns+=3,do:concentration-=1"
+243,Pっち+,SSR,TRUE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=3,do:goodConditionTurns+=3,do:concentration-=1"

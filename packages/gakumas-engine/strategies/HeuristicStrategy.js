@@ -222,6 +222,9 @@ export default class HeuristicStrategy extends BaseStrategy {
     // Double card effect cards
     score += state[S.doubleCardEffectCards] * 50;
 
+    // Card uses remaining
+    score += state[S.cardUsesRemaining] * 50;
+
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
 

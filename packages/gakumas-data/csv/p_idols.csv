@@ -82,3 +82,5 @@ id,idolId,title,rarity,plan,recommendedEffect
 81,6,雪解けに,SSR,logic,goodImpressionTurns
 82,4,雪解けに,SSR,anomaly,fullPower
 83,5,極光,SSR,anomaly,strength
+84,5,桜フォトグラフ,SSR,anomaly,fullPower
+85,7,桜フォトグラフ,SSR,sense,goodConditionTurns
