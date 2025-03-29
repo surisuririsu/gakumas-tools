@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Preview of contest season 21
 
+### Changed
+
+- Prevent concentration from being negative outside of cost calculation
+
 ## 2025-03-27
 
 ### Added
