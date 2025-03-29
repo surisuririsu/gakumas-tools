@@ -74,3 +74,6 @@ id,name,type,season,stage,round,plan,criteria,turnCounts,firstTurns,effects
 73,シーズン20 ステージ1,contest,20,1,,sense,"0.45,0.2,0.35","6,2,4","1,0,0","at:startOfTurn,do:doubleCostTurns+=1,do:concentration+=5,limit:2"
 74,シーズン20 ステージ2,contest,20,2,,anomaly,"0.45,0.2,0.35","5,2,3","1,0,0","at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3"
 75,シーズン20 ステージ3,contest,20,3,,free,"0.45,0.2,0.35","4,2,2","1,0,0","at:startOfTurn,if:turnsRemaining<=2,limit:2;at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;at:startOfTurn,if:turnsRemaining<=2,do:drawCard,limit:2"
+76,シーズン21 ステージ1,contest,21,1,,sense,"0.2,0.45,0.35","2,6,4","0,1,0","at:startOfTurn,if:turnsElapsed==4,do:concentration+=2,do:goodConditionTurns+=7,limit:1"
+77,シーズン21 ステージ2,contest,21,2,,logic,"0.2,0.45,0.35","2,6,4","0,1,0","at:afterCardUsed,if:cardEffects&genki,do:genki+=1,do:goodImpressionTurns+=3,limit:3"
+78,シーズン21 ステージ3,contest,21,3,,anomaly,"0.2,0.45,0.35","2,5,3","0,1,0","at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3"
