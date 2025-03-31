@@ -2,6 +2,7 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
+import { usePathname } from "@/i18n/routing";
 import {
   loadoutFromSearchParams,
   getSimulatorUrl,
@@ -15,6 +16,7 @@ const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const initial = useMemo(() => loadoutFromSearchParams(searchParams), []);
 
@@ -115,7 +117,7 @@ export function LoadoutContextProvider({ children }) {
 
   // Update browser URL when the loadout changes
   useEffect(() => {
-    if (!loaded) return;
+    if (!loaded || pathname !== "simulator") return;
     const url = new URL(window.location);
     url.search = loadoutToSearchParams(loadout).toString();
     window.history.replaceState(null, "", url);
