@@ -11,7 +11,7 @@ import { EntityTypes } from "@/utils/entities";
 import { comparePItems, compareSkillCards } from "@/utils/sort";
 import styles from "./EntityBank.module.scss";
 
-const HIDDEN_ITEM_IDS = [240, 242];
+const HIDDEN_ITEM_IDS = [240, 242, 245];
 const HIDDEN_CARD_IDS = [522, 524];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
