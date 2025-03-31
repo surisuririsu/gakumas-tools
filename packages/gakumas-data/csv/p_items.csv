@@ -242,3 +242,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 241,積み重ねた努力+,SSR,TRUE,anomaly,stage,pIdol,84,FALSE,"at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=8,limit:2"
 242,Pっち,SSR,FALSE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=3,do:goodConditionTurns+=3,do:concentration-=1"
 243,Pっち+,SSR,TRUE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=3,do:goodConditionTurns+=3,do:concentration-=1"
+244,夢へのスタートライン,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:goodConditionTurns>=3,do:goodConditionTurns+=3,do:fixedStamina-=1,limit:2"
+245,ギャルめいきんぐ！,SR,FALSE,sense,produce,support,,FALSE,
