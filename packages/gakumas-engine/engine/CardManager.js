@@ -48,6 +48,8 @@ export default class CardManager extends EngineComponent {
     state[S.cardsUsed] = 0;
     state[S.turnCardsUsed] = 0;
     state[S.turnCardsUpgraded] = 0;
+
+    state[S.pcchiCardsUsed] = 0;
   }
 
   isForceInitialHand(state, card) {

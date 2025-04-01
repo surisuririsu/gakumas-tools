@@ -240,7 +240,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 239,ひとりだちシューズ,SSR,FALSE,free,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedStamina+=maxStamina*0.15,limit:2"
 240,積み重ねた努力,SSR,FALSE,anomaly,stage,pIdol,84,FALSE,"at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=6,limit:2"
 241,積み重ねた努力+,SSR,TRUE,anomaly,stage,pIdol,84,FALSE,"at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=8,limit:2"
-242,Pっち,SSR,FALSE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=8,do:goodConditionTurns+=3,do:concentration-=1"
-243,Pっち+,SSR,TRUE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:cardsUsed%2==1,if:concentration>=3,do:goodConditionTurns+=3,do:concentration-=1"
+242,Pっち,SSR,FALSE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:concentration>=8,do:pcchiCardsUsed+=1;at:cardUsed,if:concentration>=8,if:pcchiCardsUsed%2==1,do:goodConditionTurns+=3,do:concentration-=1"
+243,Pっち+,SSR,TRUE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:concentration>=3,do:pcchiCardsUsed+=1;at:cardUsed,if:concentration>=3,if:pcchiCardsUsed%2==1,do:goodConditionTurns+=3,do:concentration-=1"
 244,夢へのスタートライン,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:goodConditionTurns>=3,do:goodConditionTurns+=3,do:fixedStamina-=1,limit:2"
 245,ギャルめいきんぐ！,SR,FALSE,sense,produce,support,,FALSE,
