@@ -88,8 +88,8 @@ export default function Simulator() {
 
   useEffect(() => {
     if (simulatorData) {
-      document.getElementById("bottom").scrollIntoView({
-        behavior: "instant",
+      document.getElementById("simulator_result").scrollIntoView({
+        behavior: "smooth",
       });
     }
   }, [simulatorData]);
