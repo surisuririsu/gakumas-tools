@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-04-01
+
+### Added
+
+- Sakura photograph Lilja and Sumika
+
 ## 2025-03-31
 
 ### Added
