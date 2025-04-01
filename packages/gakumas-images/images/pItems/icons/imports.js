@@ -160,6 +160,7 @@ import image_241 from "./241.png";
 import image_242 from "./242.png";
 import image_243 from "./243.png";
 import image_244 from "./244.png";
+import image_245 from "./245.png";
 import image_25 from "./25.png";
 import image_26 from "./26.png";
 import image_27 from "./27.png";
@@ -406,6 +407,7 @@ const IMAGES = {
   '242': image_242,
   '243': image_243,
   '244': image_244,
+  '245': image_245,
   '25': image_25,
   '26': image_26,
   '27': image_27,
