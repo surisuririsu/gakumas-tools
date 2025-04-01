@@ -175,6 +175,7 @@ export const ALL_FIELDS = [
 
   // Special
   "hajikeruMizushibukiTurnUsed",
+  "pcchiCardsUsed",
   "nullifyHold",
 ];
 

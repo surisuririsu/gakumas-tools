@@ -9,6 +9,10 @@ Dates are based on Eastern Time Zone.
 
 - Sakura photograph Lilja and Sumika
 
+### Fixed
+
+- Order of conditions for Pcchi effect activation
+
 ## 2025-03-31
 
 ### Added
