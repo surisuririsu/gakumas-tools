@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
@@ -18,6 +18,12 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
   );
 
   const [runToShow, setRunToShow] = useState("average");
+
+  useEffect(() => {
+    document.getElementById("bottom").scrollIntoView({
+      behavior: "instant",
+    });
+  }, [runToShow]);
 
   let logs, structuredLogs;
   if (runToShow == "min") {
@@ -68,15 +74,18 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
       <ButtonGroup
         selected={runToShow}
         options={OPTIONS}
-        onChange={(value) => setRunToShow(value == runToShow ? null : value)}
+        onChange={(value) => {
+          setRunToShow(value);
+        }}
       />
 
       {structuredLogs && <Logs logs={structuredLogs} idolId={idolId} />}
 
-      <a className={styles.toTop} href="#simulator_loadout">
+      {/* <a className={styles.toTop} href="#simulator_loadout">
         Top
         <FaCircleArrowUp />
-      </a>
+      </a> */}
+      <div id="bottom" />
     </div>
   );
 }
