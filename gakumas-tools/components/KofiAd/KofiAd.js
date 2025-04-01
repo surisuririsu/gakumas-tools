@@ -2,7 +2,6 @@ import Image from "@/components/Image";
 import styles from "./KofiAd.module.scss";
 
 export default function KofiAd() {
-  return null;
   return (
     <a
       className={styles.kofiAd}
