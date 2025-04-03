@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "yarn workspace gakumas-tools dev",
+    "build": "yarn workspace gakumas-tools build",
     "generate": "yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "backup-db": "yarn workspace gakumas-tools backup-db"
