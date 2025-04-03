@@ -4,7 +4,7 @@ import Preview from "@/components/Preview";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 export async function GET(request) {
-  const { searchParams, host, protocol } = new URL(request.url);
+  const { searchParams, protocol } = new URL(request.url);
 
   const loadout = loadoutFromSearchParams(searchParams);
   const idolConfig = new IdolConfig(loadout);
@@ -21,7 +21,7 @@ export async function GET(request) {
   return new ImageResponse(
     (
       <Preview
-        baseUrl={`${protocol}//${host}`}
+        baseUrl={`${protocol}//${process.env.VERCEL_PROJECT_PRODUCTION_URL}`}
         itemIds={pItemIds}
         skillCardIdGroups={skillCardIdGroups}
         customizationGroups={customizationGroups}
