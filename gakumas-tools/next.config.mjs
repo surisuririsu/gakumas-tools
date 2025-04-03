@@ -42,7 +42,9 @@ const nextConfig = {
     });
     return config;
   },
-  output: "standalone",
+  experimental: {
+    cpus: 1,
+  },
 };
 
 export default withNextIntl(nextConfig);
