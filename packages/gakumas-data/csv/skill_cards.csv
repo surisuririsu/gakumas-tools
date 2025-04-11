@@ -529,4 +529,4 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 528,対戦お願いします！,,SSR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,,do:cost-=2,"do:holdSelectedFromDeck,do:drawCard,do:cardUsesRemaining+=1",1,
 529,対戦お願いします！+,"23,89",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:holdSelectedFromDeck,do:drawCard,do:cardUsesRemaining+=1",1,
 530,勝負はこれから！,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:score+=2,do:genki+=2,do:halfCostTurns+=3;at:startOfTurn,do:drawCard,limit:1",1,
-531,勝負はこれから！+,,SSR,active,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=3,"do:score+=5,do:genki+=5,do:halfCostTurns+=3;at:startOfTurn,do:drawCard,limit:1",1,
+531,勝負はこれから！+,"2,26",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=3,"do:score+=5,do:genki+=5,do:halfCostTurns+=3;at:startOfTurn,do:drawCard,limit:1",1,
