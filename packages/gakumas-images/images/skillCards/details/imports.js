@@ -472,7 +472,13 @@ import image_522 from "./522.png";
 import image_523 from "./523.png";
 import image_524 from "./524.png";
 import image_525 from "./525.png";
+import image_526 from "./526.png";
+import image_527 from "./527.png";
+import image_528 from "./528.png";
+import image_529 from "./529.png";
 import image_53 from "./53.png";
+import image_530 from "./530.png";
+import image_531 from "./531.png";
 import image_54 from "./54.png";
 import image_55 from "./55.png";
 import image_56 from "./56.png";
@@ -999,7 +1005,13 @@ const IMAGES = {
   '523': image_523,
   '524': image_524,
   '525': image_525,
+  '526': image_526,
+  '527': image_527,
+  '528': image_528,
+  '529': image_529,
   '53': image_53,
+  '530': image_530,
+  '531': image_531,
   '54': image_54,
   '55': image_55,
   '56': image_56,

@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-04-10
+
+### Added
+
+- Sakura photograph Saki and 3-1 event support
+
 ## 2025-04-01
 
 ### Added

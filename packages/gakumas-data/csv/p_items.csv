@@ -244,3 +244,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 243,Pっち+,SSR,TRUE,sense,stage,pIdol,85,FALSE,"at:cardUsed,if:concentration>=3,do:pcchiCardsUsed+=1;at:cardUsed,if:concentration>=3,if:pcchiCardsUsed%2==1,do:goodConditionTurns+=3,do:concentration-=1"
 244,夢へのスタートライン,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:goodConditionTurns>=3,do:goodConditionTurns+=3,do:fixedStamina-=1,limit:2"
 245,ギャルめいきんぐ！,SR,FALSE,sense,produce,support,,FALSE,
+246,運命の出逢い,SSR,FALSE,anomaly,stage,pIdol,86,FALSE,"at:startOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,do:fixedStamina-=3,limit:1;at:startOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:startOfTurn,if:isFullPower,limit:1;at:startOfTurn,do:setStance(preservation),limit:1"
+247,運命の出逢い+,SSR,TRUE,anomaly,stage,pIdol,86,FALSE,"at:startOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,limit:1;at:startOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:startOfTurn,if:isFullPower,limit:1;at:startOfTurn,do:setStance(preservation),limit:1"
+248,絆のなわとび,SR,FALSE,anomaly,produce,support,,FALSE,
