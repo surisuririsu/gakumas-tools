@@ -79,6 +79,9 @@ import image_8 from "./8.png";
 import image_80 from "./80.png";
 import image_81 from "./81.png";
 import image_82 from "./82.png";
+import image_83 from "./83.png";
+import image_84 from "./84.png";
+import image_85 from "./85.png";
 import image_9 from "./9.png";
 
 const IMAGES = {
@@ -163,6 +166,9 @@ const IMAGES = {
   '80': image_80,
   '81': image_81,
   '82': image_82,
+  '83': image_83,
+  '84': image_84,
+  '85': image_85,
   '9': image_9,
 };
 
