@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-04-13
+
+### Fixed
+
+- Effect of taisen onegaishimasu!
+
 ## 2025-04-10
 
 ### Added
