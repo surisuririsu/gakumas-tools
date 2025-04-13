@@ -225,22 +225,6 @@ export default function NiaCalculator() {
           {actualRating} {actualRank ? `(${actualRank})` : null}
         </span>
       </section>
-
-      <span className={styles.note}>
-        {t.rich("niaNote", {
-          br: () => (
-            <>
-              <br />
-              <br />
-            </>
-          ),
-          link: (chunks) => (
-            <a href="https://x.com/surisuririsu" target="_blank">
-              {chunks}
-            </a>
-          ),
-        })}
-      </span>
     </div>
   );
 }
