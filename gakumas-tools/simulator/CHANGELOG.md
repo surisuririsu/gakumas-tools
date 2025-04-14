@@ -12,6 +12,8 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - Effect of taisen onegaishimasu!
+- Effect of chiisana ohisama
+- Full power charge consumed when stance locked
 
 ## 2025-04-10
 
