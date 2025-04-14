@@ -177,6 +177,13 @@ export const ALL_FIELDS = [
   "hajikeruMizushibukiTurnUsed",
   "pcchiCardsUsed",
   "nullifyHold",
+
+  // Delta
+  "goodImpressionTurnsDelta",
+  "motivationDelta",
+  "goodConditionTurnsDelta",
+  "concentrationDelta",
+  "staminaDelta",
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {

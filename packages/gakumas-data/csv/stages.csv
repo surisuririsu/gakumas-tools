@@ -77,3 +77,6 @@ id,name,type,season,stage,round,plan,criteria,turnCounts,firstTurns,effects
 76,シーズン21 ステージ1,contest,21,1,,sense,"0.2,0.45,0.35","2,6,4","0,1,0","at:startOfTurn,if:turnsElapsed==4,do:concentration+=2,do:goodConditionTurns+=7,limit:1"
 77,シーズン21 ステージ2,contest,21,2,,logic,"0.2,0.45,0.35","2,6,4","0,1,0","at:afterCardUsed,if:cardEffects&genki,do:genki+=1,do:goodImpressionTurns+=3,limit:3"
 78,シーズン21 ステージ3,contest,21,3,,anomaly,"0.2,0.45,0.35","2,5,3","0,1,0","at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3"
+79,シーズン22 ステージ1,contest,22,1,,sense,"0.25,0.25,0.5","3,2,5","0,0,1","at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1"
+80,シーズン22 ステージ2,contest,22,2,,logic,"0.25,0.25,0.5","2,2,4","0,0,1","at:startOfTurn,if:turnsElapsed==6,do:goodImpressionTurns*=1.5,limit:1;at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=6,do:goodImpressionTurns+=4"
+81,シーズン22 ステージ3,contest,22,3,,anomaly,"0.25,0.25,0.5","2,2,4","0,0,1","at:startOfTurn,if:isFullPower,do:score+=2+cumulativeFullPowerCharge*4,limit:3"
