@@ -169,21 +169,29 @@ export default class Executor extends EngineComponent {
 
       // Trigger increase effects
       for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-        if (increasedFields.has(INCREASE_TRIGGER_FIELDS[i])) {
+        const field = INCREASE_TRIGGER_FIELDS[i];
+        if (increasedFields.has(field)) {
+          const fieldName = ALL_FIELDS[field];
+          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            `${ALL_FIELDS[INCREASE_TRIGGER_FIELDS[i]]}Increased`
+            `${fieldName}Increased`
           );
+          delete state[S[`${fieldName}Delta`]];
         }
       }
 
       // Trigger decrease effects
       for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-        if (decreasedFields.has(DECREASE_TRIGGER_FIELDS[i])) {
+        const field = DECREASE_TRIGGER_FIELDS[i];
+        if (decreasedFields.has(field)) {
+          const fieldName = ALL_FIELDS[field];
+          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            `${ALL_FIELDS[DECREASE_TRIGGER_FIELDS[i]]}Decreased`
+            `${fieldName}Decreased`
           );
+          delete state[S[`${fieldName}Delta`]];
         }
       }
     }
