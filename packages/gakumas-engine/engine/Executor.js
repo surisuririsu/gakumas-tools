@@ -62,6 +62,8 @@ export default class Executor extends EngineComponent {
       fixedGenki: (...args) => this.resolveFixedGenki(...args),
       fixedStamina: (...args) => this.resolveFixedStamina(...args),
       score: (...args) => this.resolveScore(...args),
+      goodImpressionTurns: (...args) =>
+        this.resolveGoodImpressionTurns(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
       fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args),
@@ -233,6 +235,7 @@ export default class Executor extends EngineComponent {
           lhs
         ) ||
         (lhs == "score" && op == "+=") ||
+        (lhs == "goodImpressionTurns" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
@@ -436,6 +439,15 @@ export default class Executor extends EngineComponent {
     }
 
     state[S.score] += score;
+  }
+
+  resolveGoodImpressionTurns(state, goodImpressionTurns) {
+    // Apply double good impression turns
+    if (state[S.doubleGoodImpressionTurnsTurns]) {
+      goodImpressionTurns *= 2;
+    }
+
+    state[S.goodImpressionTurns] += goodImpressionTurns;
   }
 
   resolveGenki(state, genki) {
