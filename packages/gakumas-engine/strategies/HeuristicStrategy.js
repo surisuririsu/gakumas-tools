@@ -225,6 +225,15 @@ export default class HeuristicStrategy extends BaseStrategy {
     // Card uses remaining
     score += state[S.cardUsesRemaining] * 50;
 
+    // Double good impression turns
+    score +=
+      Math.min(
+        state[S.doubleGoodImpressionTurnsTurns],
+        state[S.turnsRemaining]
+      ) *
+      10 *
+      this.goodImpressionTurnsMultiplier;
+
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
 
