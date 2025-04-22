@@ -247,7 +247,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 246,運命の出逢い,SSR,FALSE,anomaly,stage,pIdol,86,FALSE,"at:startOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,do:fixedStamina-=3,limit:1;at:startOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:startOfTurn,if:isFullPower,limit:1;at:startOfTurn,do:setStance(preservation),limit:1"
 247,運命の出逢い+,SSR,TRUE,anomaly,stage,pIdol,86,FALSE,"at:startOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,limit:1;at:startOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:startOfTurn,if:isFullPower,limit:1;at:startOfTurn,do:setStance(preservation),limit:1"
 248,絆のなわとび,SR,FALSE,anomaly,produce,support,,FALSE,
-249,一番星の挑戦状,SSR,FALSE,logic,stage,pIdol,87,FALSE,"at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,limit:3"
+249,一番星の挑戦状,SSR,FALSE,logic,stage,pIdol,87,FALSE,"at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,do:fixedStamina-=1,limit:3"
 250,一番星の挑戦状+,SSR,TRUE,logic,stage,pIdol,87,FALSE,"at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,limit:3"
 251,幼馴染の意地,SSR,FALSE,logic,produce,support,,FALSE,
 252,嚙み締めたタオル,SR,FALSE,logic,produce,support,,FALSE,
