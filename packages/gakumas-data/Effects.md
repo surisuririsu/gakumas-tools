@@ -11,7 +11,9 @@ Effects can have multiple conditions and actions.
 phase,condition,action;phase,condition,condition,action,action,action
 ```
 
-### Example
+If an effect has no actions, its phase and conditions are applied to the next effect.
+
+### Examples
 
 ターン開始時、好調が 4 以上の場合、集中+4、好調+4 (ステージ内 1 回)
 アクティブスキルカード使用時、好印象の 100%スコア上昇
@@ -19,6 +21,11 @@ phase,condition,action;phase,condition,condition,action,action,action
 ```
 at:startOfTurn,if:goodConditionTurns>=4,do:concentration+=4,do:goodConditionTurns+=4,limit:1;
 at:activeCardUsed,do:score+=goodImpressionTurns
+```
+
+スキルカード使用時、好印象が3以上の場合、次のターンスキルカードを引く (ステージ内 1 回)
+```
+at:cardUsed,if:goodImpressionTurns>=3,limit:1;at:startOfTurn,do:drawCard,limit:1
 ```
 
 ## Phase
@@ -50,6 +57,9 @@ at:startOfTurn
 | 好調の効果ターンが増加後     | `goodConditionTurnsIncreased`  |
 | 集中が増加後                 | `concentrationIncreased`       |
 | 体力が減少後                 | `staminaDecreased`             |
+| スキルカードコストで強化状態を消費した時 | `buffCostConsumed` |
+| 指針が変更した時 | `stanceChanged` |
+
 
 ## Condition
 
@@ -87,6 +97,24 @@ Maximum number of times to activate an effect, marked by `limit:`
 limit:2
 ```
 
+## Growth target
+
+Indicates which skill cards to grow in a growth effect, marked by `target:`
+
+### Example
+
+手札
+
+```
+target:hand
+```
+
+山札のパラメータ増加値+5
+
+```
+target:deck,do:g.score+=5
+```
+
 ## State variables
 
 | Variable                   | Representation            |
@@ -108,17 +136,54 @@ limit:2
 | 集中                       | `concentration`           |
 | 好印象                     | `goodImpressionTurns`     |
 | やる気                     | `motivation`              |
+| 指針 | `stance` |
+| 変更前の指針 | `prevStance` |
+| 指針固定 | `lockStanceTurns` |
+| 全力値 | `fullPowerCharge` |
+| ステージ中の累計全力値 | `cumulativeFullPowerCharge` |
+| 熱気 | `enthusiasm` |
+| ステージ中強気になった回数 | `strengthTimes` |
+| ステージ中温存になった回数 | `preservationTimes` |
+| ステージ中全力になった回数 | `fullPowerTimes` |
 | 消費体力減少               | `halfCostTurns`           |
 | 消費体力増加               | `doubleCostTurns`         |
 | 消費体力削減               | `costReduction`           |
 | 消費体力追加               | `costIncrease`            |
 | スキルカード追加発動       | `doubleCardEffectCards`   |
+| 次に使用したスキルカードの消費体力を0にする | `nullifyCostCards` |
 | 元気無効                   | `nullifyGenkiTurns`       |
 | 低下状態無効               | `nullifyDebuff`           |
 | 使用スキルカード強化前 ID  | `usedCardId`              |
 | 使用スキルカード効果       | `cardEffects`             |
 | 集中適用倍数               | `concentrationMultiplier` |
 | やる気適用倍数             | `motivationMultiplier`    |
+| 好調効果適用倍数 | `goodConditionTurnsMultiplier` |
+| 好印象増加量増加+100% | `doubleGoodImpressionTurnsTurns` |
+| アクティブカード使用不可 | `noActiveTurns` |
+| メンタルカード使用不可 | `noMentalTurns` |
+| 不調 | `poorConditionTurns` |
+| ターン内使用したカード数 | `turnCardsUsed` |
+
+
+## Growth variables
+| Variable                   | Representation            |
+| -------------------------- | ------------------------- |
+| スコア | `g.score` |
+| スコア上昇回数 | `g.scoreTimes` |
+| コスト値 | `g.cost` |
+| 元気 | `g.genki` |
+| 好調 | `g.goodConditionTurns` |
+| 絶好調 | `g.perfectConditionTurns` |
+| 集中 | `g.concentration` |
+| 好印象 | `g.goodImpressionTurns` |
+| やる気 | `g.motivation` |
+| 全力値 | `g.fullPowerCharge` |
+| 消費軽減 | `g.halfCostTurns` |
+| 好印象分スコア | `g.scoreByGoodImpressionTurns` |
+| やる気分スコア | `g.scoreByMotivation` |
+| 元気分スコア | `g.scoreByGenki` |
+| 指針段階 | `g.stanceLevel` |
+
 
 ## Non-assignment actions
 
@@ -129,7 +194,15 @@ limit:2
 | 手札をすべて入れ替える                       | `exchangeHand`                |
 | ランダムな強化済みスキルカードを、手札に生成 | `addRandomUpgradedCardToHand` |
 | ランダムな手札 1 枚をレッスン中強化          | `upgradeRandomCardInHand`     |
+| 山札か捨て札にある特定のスキルカードを手札に移動 | `moveCardToHand(cardId, exact)` |
+| 除外にある特定のスキルカードを手札に移動 | `moveCardToHandFromRemoved(cardBaseId)` |
+| 特定のスキルカードを保留に移動 | `holdCard(cardBaseId)` |
+| このスキルカードを保留に移動 | `holdThisCard` |
+| 手札を選択し、保留に移動 | `holdSelectedFromHand` |
+| 山札を選択し、保留に移動 | `holdSelectedFromDeck` |
+| 山札か捨て札を選択し、保留に移動 | `holdSelectedFromDeckOrDiscards` |
 | スコア上昇量増加                             | `setScoreBuff(amount,turns)`  |
+| 指針を変更 | `setStance(stance)` |
 
 ### Example
 
@@ -139,4 +212,24 @@ limit:2
 ```
 do:setScoreBuff(0.3,5);
 do:setScoreBuff(0.15)
+```
+
+## TTL
+
+Time-to-live of an effect, in turns, marked by `ttl:`
+
+### Example
+
+1ターン有効
+
+```
+ttl:1
+```
+
+### Group
+
+Determines the order in which effects are activated. By default, all effects are in group 0, and activate in the order they are added. Effects with lower group activate earlier.
+
+```
+group:2
 ```
