@@ -1,4 +1,9 @@
-import { EOT_DECREMENT_FIELDS, S, UNFRESH_PHASES } from "../constants";
+import {
+  DEBUFF_FIELDS,
+  EOT_DECREMENT_FIELDS,
+  S,
+  UNFRESH_PHASES,
+} from "../constants";
 import EngineComponent from "./EngineComponent";
 
 export default class BuffManager extends EngineComponent {
@@ -27,6 +32,7 @@ export default class BuffManager extends EngineComponent {
     state[S.noActiveTurns] = 0;
     state[S.noMentalTurns] = 0;
     state[S.poorConditionTurns] = 0;
+    state[S.uneaseTurns] = 0;
 
     // Score buffs
     state[S.scoreBuffs] = [];
@@ -47,6 +53,7 @@ export default class BuffManager extends EngineComponent {
     state[S.fullPowerCharge] = 0;
     state[S.cumulativeFullPowerCharge] = 0;
     state[S.enthusiasm] = 0;
+    state[S.enthusiasmBonus] = 0;
     state[S.strengthTimes] = 0;
     state[S.preservationTimes] = 0;
     state[S.fullPowerTimes] = 0;
@@ -70,6 +77,19 @@ export default class BuffManager extends EngineComponent {
       amount,
       turns,
     });
+  }
+
+  removeDebuffs(state, amount) {
+    for (let i = 0; i < DEBUFF_FIELDS.length; i++) {
+      const field = DEBUFF_FIELDS[i];
+      if (state[field] > 0) {
+        state[field]--;
+        amount--;
+        if (amount <= 0) {
+          break;
+        }
+      }
+    }
   }
 
   decrementBuffTurns(state) {

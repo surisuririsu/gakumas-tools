@@ -29,13 +29,22 @@ export const DEFAULT_EFFECTS = [
   {
     phase: "stanceChanged",
     conditions: ["prevStance==preservation"],
-    actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
+    actions: [
+      "enthusiasm+=5+enthusiasmBonus",
+      "enthusiasmBonus=0",
+      "cardUsesRemaining+=1",
+    ],
     source: { type: "default", id: "温存" },
   },
   {
     phase: "stanceChanged",
     conditions: ["prevStance==preservation2"],
-    actions: ["enthusiasm+=8", "fixedGenki+=5", "cardUsesRemaining+=1"],
+    actions: [
+      "enthusiasm+=8+enthusiasmBonus",
+      "enthusiasmBonus=0",
+      "fixedGenki+=5",
+      "cardUsesRemaining+=1",
+    ],
     source: { type: "default", id: "温存2" },
   },
   {
@@ -77,6 +86,7 @@ export const PHASES = [
   "afterMentalCardUsed",
   "buffCostConsumed",
   "cardUsed",
+  "cardRemoved",
   "concentrationIncreased",
   "endOfTurn",
   "everyTurn",
@@ -118,6 +128,7 @@ export const ALL_FIELDS = [
   "noActiveTurns",
   "noMentalTurns",
   "poorConditionTurns",
+  "uneaseTurns",
   "scoreBuffs",
   "goodConditionTurns",
   "goodConditionTurnsMultiplier",
@@ -134,6 +145,7 @@ export const ALL_FIELDS = [
   "fullPowerCharge",
   "cumulativeFullPowerCharge",
   "enthusiasm",
+  "enthusiasmBonus",
   "strengthTimes",
   "preservationTimes",
   "fullPowerTimes",
@@ -176,6 +188,7 @@ export const ALL_FIELDS = [
 
   // Special
   "hajikeruMizushibukiTurnUsed",
+  "ameagariNoHanaTurn",
   "pcchiCardsUsed",
   "nullifyHold",
 
@@ -220,6 +233,7 @@ export const EOT_DECREMENT_FIELDS = [
   S.poorConditionTurns,
   S.noActiveTurns,
   S.noMentalTurns,
+  S.uneaseTurns,
 ];
 
 // Consumable buffs
@@ -238,6 +252,7 @@ export const DEBUFF_FIELDS = [
   S.nullifyGenkiTurns,
   S.noActiveTurns,
   S.noMentalTurns,
+  S.uneaseTurns,
   S.poorConditionTurns,
   S.lockStanceTurns,
 ];
@@ -284,6 +299,7 @@ export const LOGGED_FIELDS = [
   S.doubleGoodImpressionTurnsTurns,
   S.motivation,
   S.enthusiasm,
+  S.enthusiasmBonus,
   S.fullPowerCharge,
   S.lockStanceTurns,
   S.halfCostTurns,
@@ -299,6 +315,7 @@ export const LOGGED_FIELDS = [
   S.cardUsesRemaining,
   S.noActiveTurns,
   S.noMentalTurns,
+  S.uneaseTurns,
 ];
 
 export const GRAPHED_FIELDS = [

@@ -297,6 +297,11 @@ export default class CardManager extends EngineComponent {
       state[S.discardedCards].push(card);
     } else {
       state[S.removedCards].push(card);
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardRemoved",
+        conditionState
+      );
     }
 
     // End turn if no card uses left
@@ -371,6 +376,21 @@ export default class CardManager extends EngineComponent {
     });
     state[S.handCards].push(state[S.cardMap].length - 1);
     this.logger.log(state, "addRandomUpgradedCardToHand", {
+      type: "skillCard",
+      id: skillCard.id,
+    });
+  }
+
+  addCardToTopOfDeck(state, cardId) {
+    const skillCard = SkillCards.getById(cardId);
+
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard),
+      c11n: {},
+    });
+    state[S.deckCards].push(state[S.cardMap].length - 1);
+    this.logger.log(state, "addCardToTopOfDeck", {
       type: "skillCard",
       id: skillCard.id,
     });

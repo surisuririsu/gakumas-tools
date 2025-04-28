@@ -31,6 +31,8 @@ export default class Executor extends EngineComponent {
         engine.cardManager.upgradeRandomCardInHand(state),
       addRandomUpgradedCardToHand: (state) =>
         engine.cardManager.addRandomUpgradedCardToHand(state),
+      addCardToTopOfDeck: (state, cardId) =>
+        engine.cardManager.addCardToTopOfDeck(state, cardId),
       moveCardToHand: (state, cardId, exact) =>
         engine.cardManager.moveCardToHand(state, cardId, parseInt(exact, 10)),
       moveCardToHandFromRemoved: (state, cardBaseId) =>
@@ -54,6 +56,8 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      removeDebuffs: (state, amount) =>
+        engine.buffManager.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => engine.buffManager.setStance(state, stance),
     };
 
@@ -456,6 +460,11 @@ export default class Executor extends EngineComponent {
 
     // Apply motivation
     genki += state[S.motivation] * state[S.motivationMultiplier];
+
+    // Apply unease
+    if (state[S.uneaseTurns]) {
+      genki *= 0.67;
+    }
 
     state[S.genki] += genki;
   }
