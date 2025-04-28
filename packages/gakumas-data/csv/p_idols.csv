@@ -86,3 +86,6 @@ id,idolId,title,rarity,plan,recommendedEffect
 85,7,桜フォトグラフ,SSR,sense,goodConditionTurns
 86,1,桜フォトグラフ,SSR,anomaly,fullPower
 87,11,Our Chant,SSR,logic,goodImpressionTurns
+88,1,雨上がりのアイリス,SSR,logic,motivation
+89,2,雨上がりのアイリス,SSR,sense,goodConditionTurns
+90,3,雨上がりのアイリス,SSR,anomaly,strength

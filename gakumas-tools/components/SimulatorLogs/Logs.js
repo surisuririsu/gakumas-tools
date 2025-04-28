@@ -36,6 +36,14 @@ function Log({ line, idolId }) {
     return (
       <AddCard {...line.data} idolId={idolId} text={t("addedCardToHand")} />
     );
+  } else if (line.logType == "addCardToTopOfDeck") {
+    return (
+      <AddCard
+        {...line.data}
+        idolId={idolId}
+        text={t("addedCardToTopOfDeck")}
+      />
+    );
   } else if (line.logType == "upgradeRandomCardInHand") {
     return <AddCard {...line.data} idolId={idolId} text={t("upgradedCard")} />;
   } else if (line.logType == "growth") {

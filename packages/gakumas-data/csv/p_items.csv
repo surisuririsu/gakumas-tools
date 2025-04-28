@@ -251,3 +251,9 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 250,一番星の挑戦状+,SSR,TRUE,logic,stage,pIdol,87,FALSE,"at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,limit:3"
 251,幼馴染の意地,SSR,FALSE,logic,produce,support,,FALSE,
 252,嚙み締めたタオル,SR,FALSE,logic,produce,support,,FALSE,
+253,雨上がりの花,SSR,FALSE,logic,stage,pIdol,88,FALSE,"at:startOfTurn,do:motivation+=10,do:fixedStamina-=3,do:ameagariNoHanaTurn=turnsElapsed,limit:1;at:startOfTurn,limit:1;at:startOfTurn,if:turnsElapsed-ameagariNoHanaTurn==3,do:uneaseTurns+=5,limit:1"
+254,雨上がりの花+,SSR,TRUE,logic,stage,pIdol,88,FALSE,"at:startOfTurn,do:motivation+=10,do:fixedStamina-=3,do:ameagariNoHanaTurn=turnsElapsed,limit:1;at:startOfTurn,limit:1;at:startOfTurn,if:turnsElapsed-ameagariNoHanaTurn==3,do:uneaseTurns+=5,limit:1"
+255,雨上がりの女神,SSR,FALSE,sense,stage,pIdol,89,FALSE,"at:startOfTurn,do:cardUsesRemaining+=1,do:genki+=6,do:addCardToTopOfDeck(23),limit:5"
+256,雨上がりの女神+,SSR,TRUE,sense,stage,pIdol,89,FALSE,"at:startOfTurn,do:cardUsesRemaining+=1,do:genki+=6,do:addCardToTopOfDeck(23),limit:5"
+257,雨上がりの虹,SSR,FALSE,anomaly,stage,pIdol,90,FALSE,"at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4"
+258,雨上がりの虹+,SSR,TRUE,anomaly,stage,pIdol,90,FALSE,"at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4"

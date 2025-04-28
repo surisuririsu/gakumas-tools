@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-04-28
+
+### Added
+
+- Preview of Ameagari no Iris
+
 ## 2025-04-22
 
 ### Changed
