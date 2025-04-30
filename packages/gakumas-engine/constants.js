@@ -63,11 +63,7 @@ export const DEFAULT_EFFECTS = [
   {
     phase: "stanceChanged",
     conditions: ["stance==fullPower"],
-    actions: [
-      "cardUsesRemaining+=1",
-      "addHeldCardsToHand",
-      "fullPowerTimes+=1",
-    ],
+    actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
     source: { type: "default", id: "全力" },
   },
 ];
