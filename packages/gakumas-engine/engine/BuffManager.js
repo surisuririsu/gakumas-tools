@@ -16,6 +16,10 @@ export default class BuffManager extends EngineComponent {
       isNotStrength: (state) =>
         state[S.stance] == "none" || state[S.stance].startsWith("pre"),
       isFullPower: (state) => state[S.stance] == "fullPower",
+      stanceChangedTimes: (state) =>
+        state[S.strengthTimes] +
+        state[S.preservationTimes] +
+        state[S.fullPowerTimes],
     };
   }
 
@@ -83,7 +87,7 @@ export default class BuffManager extends EngineComponent {
     for (let i = 0; i < DEBUFF_FIELDS.length; i++) {
       const field = DEBUFF_FIELDS[i];
       if (state[field] > 0) {
-        state[field]--;
+        state[field] = 0;
         amount--;
         if (amount <= 0) {
           break;
@@ -150,6 +154,8 @@ export default class BuffManager extends EngineComponent {
         state[S.preservationTimes]++;
       } else if (state[S.stance].startsWith("strength")) {
         state[S.strengthTimes]++;
+      } else if (state[S.stance] == "fullPower") {
+        state[S.fullPowerTimes]++;
       }
     }
   }

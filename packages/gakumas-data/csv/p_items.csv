@@ -257,3 +257,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 256,雨上がりの女神+,SSR,TRUE,sense,stage,pIdol,89,FALSE,"at:startOfTurn,do:cardUsesRemaining+=1,do:genki+=6,do:addCardToTopOfDeck(23),limit:5"
 257,雨上がりの虹,SSR,FALSE,anomaly,stage,pIdol,90,FALSE,"at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4"
 258,雨上がりの虹+,SSR,TRUE,anomaly,stage,pIdol,90,FALSE,"at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4"
+259,パワーをくれるモノ,SSR,FALSE,free,produce,support,,FALSE,
+260,お残しにんじん,SR,FALSE,free,produce,support,,FALSE,

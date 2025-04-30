@@ -153,10 +153,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/* <>
-          ※ Season 22 preview is based only on the announced p-items and
+        <>
+          ※ Season 23 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
-        </> */}
+        </>
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
@@ -240,7 +240,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2025-04-28
+            {t("lastUpdated")}: 2025-04-30
           </a>
         </div>
         {!simulatorData && (
