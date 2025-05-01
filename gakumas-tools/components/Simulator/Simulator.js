@@ -154,7 +154,7 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <StageSelect />
-        {stage.type == "event" || stage.season == 23 ? (
+        {stage.type == "event" ? (
           t("enterPercents")
         ) : (
           <div className={styles.supportBonusInput}>
