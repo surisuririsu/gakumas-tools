@@ -41,7 +41,6 @@ export const DEFAULT_EFFECTS = [
     conditions: ["prevStance==preservation2"],
     actions: [
       "enthusiasm+=8+enthusiasmBonus",
-      "enthusiasmBonus=0",
       "fixedGenki+=5",
       "cardUsesRemaining+=1",
     ],
