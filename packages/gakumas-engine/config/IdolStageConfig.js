@@ -28,7 +28,7 @@ export default class IdolStageConfig {
     const { type, criteria, season } = stageConfig;
     const { params, supportBonus } = idolConfig;
 
-    if (type == "event" || season == 23) {
+    if (type == "event") {
       return {
         vocal: params.vocal / 100,
         dance: params.dance / 100,
@@ -37,6 +37,7 @@ export default class IdolStageConfig {
     }
 
     const hasFlatBonus = season == 13;
+    const hasFlatterBonus = season == 23;
 
     let multipliers = {};
 
@@ -66,8 +67,15 @@ export default class IdolStageConfig {
       } else if (param > 0) {
         multiplier = param * 5;
       }
+
+      if (hasFlatterBonus) multiplier += param;
+
       multiplier = multiplier * criterion + 100;
-      multiplier = Math.ceil(multiplier) * (1 + supportBonus);
+
+      multiplier =
+        Math.ceil(multiplier) *
+        (1 + supportBonus + (hasFlatterBonus ? 0.01 : 0));
+
       multiplier = Math.ceil(Math.floor(multiplier * 10) / 10);
       multipliers[key] = multiplier / 100;
     }
