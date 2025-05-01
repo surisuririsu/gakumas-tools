@@ -3,6 +3,16 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-05-01
+
+### Added
+
+- Unupgraded versions of Ameagari no Iris
+
+### Changed
+
+- Keep enthusiasm bonus after preservation effect
+
 ## 2025-04-30
 
 ### Added
