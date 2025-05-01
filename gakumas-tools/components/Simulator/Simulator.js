@@ -153,12 +153,8 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <>
-          ※ Season 23 preview is based only on the announced p-items and
-          criteria. Turn types are not yet known.
-        </>
         <StageSelect />
-        {stage.type == "event" ? (
+        {stage.type == "event" || stage.season == 23 ? (
           t("enterPercents")
         ) : (
           <div className={styles.supportBonusInput}>
