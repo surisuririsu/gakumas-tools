@@ -29,11 +29,7 @@ export const DEFAULT_EFFECTS = [
   {
     phase: "stanceChanged",
     conditions: ["prevStance==preservation"],
-    actions: [
-      "enthusiasm+=5+enthusiasmBonus",
-      "enthusiasmBonus=0",
-      "cardUsesRemaining+=1",
-    ],
+    actions: ["enthusiasm+=5+enthusiasmBonus", "cardUsesRemaining+=1"],
     source: { type: "default", id: "温存" },
   },
   {
