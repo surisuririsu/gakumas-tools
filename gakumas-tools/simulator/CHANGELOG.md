@@ -5,6 +5,10 @@ Dates are based on Eastern Time Zone.
 
 ## 2025-05-15
 
+### Added
+
+- Preview of Misuzu
+
 ### Fixed
 
 - Effect of Ano Hi no Vinyl-gasa should trigger before drawing cards

@@ -335,6 +335,8 @@ export default class Executor extends EngineComponent {
       cost *= 0.5;
     } else if (state[S.stance] == "preservation2") {
       cost *= 0.25;
+    } else if (state[S.stance] == "leisure") {
+      cost *= 0;
     }
 
     // Multiplicative cost buffs
@@ -424,6 +426,8 @@ export default class Executor extends EngineComponent {
         score *= 0.25;
       } else if (state[S.stance] == "fullPower") {
         score *= 3;
+      } else if (state[S.stance] == "leisure") {
+        score *= 0;
       }
 
       // Score buff effects

@@ -538,3 +538,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 537,希望が届くまで+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,89,FALSE,,do:cost-=5,"at:cardRemoved,do:goodConditionTurns+=2",1,
 538,あたらしい光,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,90,FALSE,,do:cost-=4,"do:setStance(preservation2),do:enthusiasmBonus+=5",1,
 539,あたらしい光+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,90,FALSE,,do:cost-=4,"do:setStance(preservation2),do:enthusiasmBonus+=8",1,
+542,休み休み、前へ,,SR,mental,anomaly,1,FALSE,TRUE,pIdol,92,TRUE,,do:cost-=3,"do:setStance(preservation);at:startOfTurn,if:isPreservation,do:setStance(leisure)",1,
+543,休み休み、前へ+,,SR,mental,anomaly,1,TRUE,TRUE,pIdol,92,TRUE,,do:cost-=3,"do:setStance(preservation);at:startOfTurn,if:isPreservation,do:setStance(leisure)",1,
+544,屋上からの景色,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,93,TRUE,,do:cost-=7,"do:fullPowerCharge+=3;target:effect(fullPowerCharge),do:g.score+=9;at:startOfTurn,if:isPreservation,do:setStance(leisure)",1,
+545,屋上からの景色+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,93,TRUE,,do:cost-=7,"do:fullPowerCharge+=3;target:effect(fullPowerCharge),do:g.score+=9;at:startOfTurn,if:isPreservation,do:setStance(leisure)",1,
