@@ -87,14 +87,14 @@
     "niaNote": "※ 随着我们进一步了解分数加成的参数和投票数的计算方法，本功能将持续更新。<br></br>如果您发现计算有误的情况，请将截图发送至此X账号 <link>@surisuririsu</link> ",
     "affectionAtStartOfProduce": "制作开始时好感度",
     "stage": "舞台",
-    "runN": "Run {num}",
-    "runN+": "Run {num}+",
-    "idol": "Idol",
+    "runN": "{num}回合",
+    "runN+": "{num}回合后",
+    "idol": "偶像",
     "evaluationCriteria": "评级标准",
     "paramsPreAudition": "属性（试镜前）",
     "paramBonusPct": "属性加成 %",
     "votesPreAudition": "票数（试镜前）",
-    "recommendedScores": "Recommended scores",
+    "recommendedScores": "推荐分数",
     "paramHighGrowthScores": "属性增长在超过此分数后会减缓",
     "paramMaximizingScores": "属性增长在超过此分数后会停止",
     "voteCount": "票数",
@@ -125,7 +125,7 @@
   "Dex": {
     "skillCards": "技能卡",
     "pItems": "P 道具",
-    "maxTimes": "Max {n}"
+    "maxTimes": "最大{n}回合"
   },
   "EntityBank": {
     "filter": "筛选"
@@ -133,9 +133,9 @@
   "EntityIcon": {
     "high": "H",
     "low": "L",
-    "planMismatch": "Plan mismatch",
-    "pIdolMismatch": "P-idol mismatch",
-    "idolMismatch": "Idol mismatch"
+    "planMismatch": "计划不匹配",
+    "pIdolMismatch": "P 偶像不匹配",
+    "idolMismatch": "偶像不匹配"
   },
   "EntityCustomizer": {
     "customization": "自定义"
@@ -189,7 +189,7 @@
     "enterPercents": "由于分数倍数的计算方式未知，请直接输入倍数（%）。",
     "custom": "自定义",
     "simulate": "模拟",
-    "provideData": "Provide data",
+    "provideData": "提供数据",
     "lastUpdated": "最后更新于"
   },
   "StageSelect": {
@@ -201,8 +201,8 @@
     "custom": "自定义"
   },
   "StageSummary": {
-    "contestStageName": "Season {season} - Stage {stage}",
-    "eventStageName": "{name} - Stage {stage} - Round {round}",
+    "contestStageName": "第 {season} 赛季 - 第 {stage} 舞台",
+    "eventStageName": "{name} - 第 {stage} 舞台 - {round} 回合",
     "custom": "自定义"
   },
   "StageCustomizer": {
@@ -280,8 +280,8 @@
     "nullifyDebuff": "负面状态无效",
     "poorConditionTurns": "不调",
     "nullifyCostCards": "体力消费无效",
-    "noActiveTurns": "No active cards",
-    "noMentalTurns": "No mental cards",
+    "noActiveTurns": "无法使用 A 卡",
+    "noMentalTurns": "无法使用 M 卡",
     "uneaseTurns": "不安",
     "scoreBuff": "分数上升量增加",
     "turn": "回合",
@@ -290,7 +290,7 @@
     "exchangedHand": "更换持有技能卡",
     "setEffect": "赋予持续效果",
     "addedCardToHand": "生成技能卡",
-    "addedCardToTopOfDeck": "Added card to top of deck",
+    "addedCardToTopOfDeck": "将技能卡生成至牌组顶端",
     "upgradedCard": "临时强化技能卡",
     "cardGrowth": "强化技能卡",
     "heldCard": "将技能卡移动到保留区",
@@ -312,11 +312,11 @@
     "mean": "平均",
     "median": "中值",
     "q1": "Q1",
-    "min": "Min"
+    "min": "最小"
   },
   "Rehearsal": {
     "addScreenshots": "添加竞技场配队结果的屏幕截图以解析分数。",
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
-    "stage": "Stage {n}"
+    "stage": "舞台 {n}"
   }
 }
