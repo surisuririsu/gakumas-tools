@@ -70,6 +70,13 @@ export default class TurnManager extends EngineComponent {
       multiplier: this.getTurnMultiplier(state),
     });
 
+    state[S.cardUsesRemaining] = 1;
+
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "beforeStartOfTurn"
+    );
+
     // Draw cards
     for (let i = 0; i < 3; i++) {
       this.engine.cardManager.drawCard(state);
@@ -85,7 +92,6 @@ export default class TurnManager extends EngineComponent {
       }
     }
 
-    state[S.cardUsesRemaining] = 1;
     this.engine.effectManager.triggerEffectsForPhase(state, "startOfTurn");
     this.engine.effectManager.triggerEffectsForPhase(state, "everyTurn");
   }
