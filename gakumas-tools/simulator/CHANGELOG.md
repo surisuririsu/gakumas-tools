@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-05-15
+
+### Fixed
+
+- Effect of Ano Hi no Vinyl-gasa should trigger before drawing cards
+
 ## 2025-05-01
 
 ### Added

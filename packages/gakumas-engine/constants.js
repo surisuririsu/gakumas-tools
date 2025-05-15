@@ -49,10 +49,9 @@ export const DEFAULT_EFFECTS = [
     source: { type: "default", id: "強気2" },
   },
   {
-    phase: "startOfTurn",
+    phase: "beforeStartOfTurn",
     conditions: ["lockStanceTurns==0", "fullPowerCharge>=10"],
     actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
-    group: -1,
     source: { type: "default", id: "全力" },
   },
   {
@@ -68,13 +67,14 @@ DEFAULT_EFFECTS.forEach((effect) => {
   effect.actions = effect.actions.map((x) => x.split(TOKEN_REGEX));
 });
 
-export const UNFRESH_PHASES = ["startOfTurn", "everyTurn"];
+export const UNFRESH_PHASES = ["beforeStartOfTurn", "startOfTurn", "everyTurn"];
 export const CHANGE_TRIGGER_PHASES = ["processCard", "processCost"];
 export const PHASES = [
   "activeCardUsed",
   "afterActiveCardUsed",
   "afterCardUsed",
   "afterMentalCardUsed",
+  "beforeStartOfTurn",
   "buffCostConsumed",
   "cardUsed",
   "cardRemoved",
