@@ -259,3 +259,9 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 258,雨上がりの虹+,SSR,TRUE,anomaly,stage,pIdol,90,FALSE,"at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4"
 259,パワーをくれるモノ,SSR,FALSE,free,produce,support,,FALSE,
 260,お残しにんじん,SR,FALSE,free,produce,support,,FALSE,
+263,そよ風に揺れる髪飾り,SR,FALSE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:3;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:3"
+264,そよ風に揺れる髪飾り+,SR,TRUE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:3;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:3"
+265,いつもの持ち物,SSR,FALSE,anomaly,stage,pIdol,93,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4"
+266,いつもの持ち物+,SSR,TRUE,anomaly,stage,pIdol,93,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4"
+267,思い出カタメコイメ,SSR,FALSE,anomaly,produce,support,,FALSE,
+268,おもてなしの気持ち,SR,FALSE,anomaly,produce,support,,FALSE,

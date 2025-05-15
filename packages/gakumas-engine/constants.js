@@ -9,6 +9,7 @@ export const STANCES = [
   "strength2",
   "preservation",
   "preservation2",
+  "leisure",
   "fullPower",
 ];
 
@@ -28,13 +29,13 @@ export const DEFAULT_EFFECTS = [
   },
   {
     phase: "stanceChanged",
-    conditions: ["prevStance==preservation"],
+    conditions: ["prevStance==preservation", "stance!=leisure"],
     actions: ["enthusiasm+=5+enthusiasmBonus", "cardUsesRemaining+=1"],
     source: { type: "default", id: "温存" },
   },
   {
     phase: "stanceChanged",
-    conditions: ["prevStance==preservation2"],
+    conditions: ["prevStance==preservation2", "stance!=leisure"],
     actions: [
       "enthusiasm+=8+enthusiasmBonus",
       "fixedGenki+=5",
@@ -59,6 +60,25 @@ export const DEFAULT_EFFECTS = [
     conditions: ["stance==fullPower"],
     actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
     source: { type: "default", id: "全力" },
+  },
+  {
+    phase: "stanceChanged",
+    conditions: ["prevStance==leisure"],
+    actions: ["fixedGenki+=5", "cardUsesRemaining+=1"],
+    source: { type: "default", id: "のんびり" },
+  },
+  {
+    phase: "stanceChanged",
+    conditions: ["prevStance==leisure", "stance==fullPower"],
+    targets: ["all"],
+    actions: ["g.score+=10"],
+    source: { type: "default", id: "のんびり" },
+  },
+  {
+    phase: "stanceChanged",
+    conditions: ["prevStance==leisure", "stance!=fullPower"],
+    actions: ["enthusiasm+=10+enthusiasmBonus"],
+    source: { type: "default", id: "のんびり" },
   },
 ];
 

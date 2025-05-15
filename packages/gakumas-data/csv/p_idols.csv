@@ -89,3 +89,6 @@ id,idolId,title,rarity,plan,recommendedEffect
 88,1,雨上がりのアイリス,SSR,logic,motivation
 89,2,雨上がりのアイリス,SSR,sense,goodConditionTurns
 90,3,雨上がりのアイリス,SSR,anomaly,strength
+91,12,学園生活,R,anomaly,fullPower
+92,12,ゆっくり、一歩ずつ,SR,anomaly,strength
+93,12,ツキノカメ,SSR,anomaly,fullPower
