@@ -58,10 +58,12 @@ function getPItemImages(pItemId) {
 }
 
 function getSkillCardImages(skillCardId, idolId) {
-  const fileName =
-    `${skillCardId}_${idolId}` in SKILL_CARD_ICONS
-      ? `${skillCardId}_${idolId}`
-      : skillCardId;
+  let fileName = skillCardId;
+  if (`${skillCardId}_${idolId}` in SKILL_CARD_ICONS) {
+    fileName = `${skillCardId}_${idolId}`;
+  } else if (`${skillCardId}_6` in SKILL_CARD_ICONS) {
+    fileName = `${skillCardId}_6`;
+  }
   return {
     _icon: SKILL_CARD_ICONS[fileName],
     icon: GK_IMG_BASE_URL
