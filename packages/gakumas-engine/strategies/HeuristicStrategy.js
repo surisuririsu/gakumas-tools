@@ -177,6 +177,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     ) {
       score += state[S.strengthTimes] * 40;
       score += state[S.preservationTimes] * 80;
+      score += state[S.leisureTimes] * 80;
       score += state[S.fullPowerTimes] * 80 * this.fullPowerMultiplier;
 
       //Enthusiasm
@@ -254,6 +255,8 @@ export default class HeuristicStrategy extends BaseStrategy {
     } else if (recommendedEffect == "motivation") {
       score += state[S.score] * 0.6;
     } else if (recommendedEffect == "strength") {
+      score += state[S.score] * 0.65;
+    } else if (recommendedEffect == "preservation") {
       score += state[S.score] * 0.65;
     } else if (recommendedEffect == "fullPower") {
       score += state[S.score] * 0.8;

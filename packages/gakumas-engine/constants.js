@@ -12,6 +12,7 @@ export const STANCES = [
   "leisure",
   "fullPower",
 ];
+export const SOURCE_TYPES = ["default", "produce", "pIdol", "support"];
 
 export const SET_OPERATOR = "&";
 export const BOOLEAN_OPERATORS = ["==", "!=", "<", ">", "<=", ">="];
@@ -159,6 +160,7 @@ export const ALL_FIELDS = [
   "enthusiasmBonus",
   "strengthTimes",
   "preservationTimes",
+  "leisureTimes",
   "fullPowerTimes",
   "freshBuffs",
 

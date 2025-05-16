@@ -61,6 +61,7 @@ export default class BuffManager extends EngineComponent {
     state[S.strengthTimes] = 0;
     state[S.preservationTimes] = 0;
     state[S.fullPowerTimes] = 0;
+    state[S.leisureTimes] = 0;
 
     // Buffs/debuffs protected from decrement
     state[S.freshBuffs] = {};
@@ -158,6 +159,8 @@ export default class BuffManager extends EngineComponent {
         state[S.strengthTimes]++;
       } else if (state[S.stance] == "fullPower") {
         state[S.fullPowerTimes]++;
+      } else if (state[S.stance] == "leisure") {
+        state[S.leisureTimes]++;
       }
     }
   }

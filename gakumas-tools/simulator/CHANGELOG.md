@@ -3,6 +3,17 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-05-16
+
+### Added
+
+- Preview of contest season 24
+- P-item from event
+
+### Changed
+
+- Updated Misuzu p-items and skill cards
+
 ## 2025-05-15
 
 ### Added

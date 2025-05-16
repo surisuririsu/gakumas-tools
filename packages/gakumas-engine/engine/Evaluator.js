@@ -7,6 +7,7 @@ import {
   SET_OPERATOR,
   STANCES,
   S,
+  SOURCE_TYPES,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -51,6 +52,11 @@ export default class Evaluator extends EngineComponent {
 
         // Phases
         if (PHASES.includes(tokens[0])) {
+          return tokens[0];
+        }
+
+        // Source types
+        if (SOURCE_TYPES.includes(tokens[0])) {
           return tokens[0];
         }
 
