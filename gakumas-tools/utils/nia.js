@@ -21,6 +21,7 @@ export const PARAM_ORDER_BY_IDOL = {
   9: [3, 2, 1],
   10: [2, 1, 3],
   11: [2, 3, 1],
+  12: [1, 3, 2],
 };
 
 export const PARAM_REGIMES_BY_ORDER_BY_STAGE = {
