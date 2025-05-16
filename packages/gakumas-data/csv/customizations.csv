@@ -37,6 +37,8 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 38,cardUsesRemaining1,スキルカード使用数+,effect,100,1,,,,do:cardUsesRemaining+=1,,
 39,upgradeHand1,スキルカード強化追加,effect,70,1,,,,do:upgradeHand,,
 37,removeLimit1,レッスン中1回の制限削除,effect,40,1,,,,,0,
+92,kyorikanEffect1,効果変更,effect,100,1,,,,"line:1,at:startOfTurn,if:stamina>=maxStamina*0.5,do:concentration+=2",,
+91,seisouEffect1,効果変更,effect,100,1,,,,"line:1,do:goodConditionTurnsMultiplier=2,do:score+=18;line:2,if:goodConditionTurns>=1,do:concentrationMultiplier=3,do:score+=20",,
 43,holdSelectedFromDeckAdd1,山札にあるカードを保留に追加,effect,40,1,,,,do:holdSelectedFromDeck,,
 40,strength1,強気+,effect,70,1,,,,,,"at:prestage,target:this,do:g.stanceLevel+=1"
 82,growAllScoreAdd1,成長追加,effect,70,1,,,,"target:all,do:g.score+=3",,
@@ -63,6 +65,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 26,genki1_9,元気+,genki,70,1,,,,,,"at:prestage,target:this,do:g.genki+=9"
 59,genki2,元気+,genki,"40,70",2,,,,,,"level:1,at:prestage,target:this,do:g.genki+=4;level:2,at:prestage,target:this,do:g.genki+=13"
 75,genki3,元気+,genki,"40,40,70",3,,,,,,"level:1,at:prestage,target:this,do:g.genki+=4;level:2,at:prestage,target:this,do:g.genki+=8;level:3,at:prestage,target:this,do:g.genki+=17"
+90,genkiAdd1_3_mm_1.5,元気追加,genki,100,1,,,,"do:motivationMultiplier=1.5,do:genki+=3",,
 27,genkiAdd1_4,元気追加,genki,70,1,,,,do:genki+=4,,
 28,genkiAdd1_9,元気追加,genki,70,1,,,,do:genki+=9,,
 2,score1_12,パラメータ+,score,70,1,,,,,,"at:prestage,target:this,do:g.score+=12"
