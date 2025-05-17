@@ -10,7 +10,12 @@ export default function CalculatorLayout({ children }) {
   const router = useRouter();
   const t = useTranslations("Calculator");
 
-  const currentScenario = pathname == "/calculator/hajime" ? "hajime" : "nia";
+  let currentScenario = null;
+  if (pathname == "/calculator/hajime") {
+    currentScenario = "hajime";
+  } else if (pathname == "/calculator/nia") {
+    currentScenario = "nia";
+  }
 
   const SCENARIO_OPTIONS = useMemo(
     () =>
@@ -23,12 +28,16 @@ export default function CalculatorLayout({ children }) {
 
   return (
     <div className={styles.calculator}>
-      <label>{t("scenario")}</label>
-      <ButtonGroup
-        options={SCENARIO_OPTIONS}
-        selected={currentScenario}
-        onChange={(val) => router.push(val)}
-      />
+      {currentScenario && (
+        <>
+          <label>{t("scenario")}</label>
+          <ButtonGroup
+            options={SCENARIO_OPTIONS}
+            selected={currentScenario}
+            onChange={(val) => router.push(val)}
+          />
+        </>
+      )}
       {children}
     </div>
   );
