@@ -123,6 +123,9 @@ export default class TurnManager extends EngineComponent {
     // Decrement effect ttl
     this.engine.effectManager.decrementTtl(state);
 
+    // Decrement effect delay
+    this.engine.effectManager.decrementDelay(state);
+
     // Discard hand
     this.engine.cardManager.discardHand(state);
 

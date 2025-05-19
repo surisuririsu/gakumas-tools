@@ -137,6 +137,12 @@ export default class EffectManager extends EngineComponent {
         continue;
       }
 
+      // Check delay
+      if (effect.delay != null && effect.delay >= 0) {
+        this.logger.debug("Effect delay", effect.delay);
+        continue;
+      }
+
       // Check conditions
       if (!skipConditions && effect.conditions) {
         let satisfied = true;
@@ -212,6 +218,14 @@ export default class EffectManager extends EngineComponent {
       if (state[S.effects][i].ttl == null || state[S.effects][i].ttl == -1)
         continue;
       state[S.effects][i].ttl--;
+    }
+  }
+
+  decrementDelay(state) {
+    for (let i = 0; i < state[S.effects].length; i++) {
+      if (state[S.effects][i].delay == null || state[S.effects][i].delay == -1)
+        continue;
+      state[S.effects][i].delay--;
     }
   }
 }

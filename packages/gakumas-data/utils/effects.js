@@ -25,6 +25,9 @@ export function serializeEffect(effect) {
       exp.push(`target:${target}`);
     });
   }
+  if (effect.delay) {
+    exp.push(`delay:${effect.delay}`);
+  }
   return exp.join(",");
 }
 
@@ -55,6 +58,8 @@ export function deserializeEffect(effectString) {
       acc.level = parseInt(expValue, 10);
     } else if (expKey == "line") {
       acc.line = parseInt(expValue, 10);
+    } else if (expKey == "delay") {
+      acc.delay = parseInt(expValue, 10);
     } else {
       console.warn("Unrecognized effect segment", effectString);
     }

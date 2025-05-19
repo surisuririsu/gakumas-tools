@@ -48,6 +48,11 @@ export default class StageLogger {
     if (state[S.scoreBuffs].length) {
       res[S.scoreBuffs] = deepCopy(state[S.scoreBuffs]);
     }
+    if (state[S.goodImpressionTurnsBuffs].length) {
+      res[S.goodImpressionTurnsBuffs] = deepCopy(
+        state[S.goodImpressionTurnsBuffs]
+      );
+    }
     return res;
   }
 }

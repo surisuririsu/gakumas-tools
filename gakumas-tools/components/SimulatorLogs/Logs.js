@@ -4,7 +4,7 @@ import AddCard from "./AddCard";
 import Diff from "./Diff";
 import Group from "./Group";
 import Hand from "./Hand";
-import SetScoreBuff from "./SetScoreBuff";
+import SetBuff from "./SetBuff";
 import Tile from "./Tile";
 import Turn from "./Turn";
 import styles from "./SimulatorLogs.module.scss";
@@ -25,7 +25,9 @@ function Log({ line, idolId }) {
   } else if (line.logType == "turn") {
     return <Turn {...line.data} childLogs={line.childLogs} idolId={idolId} />;
   } else if (line.logType == "setScoreBuff") {
-    return <SetScoreBuff {...line.data} />;
+    return <SetBuff label={t("scoreBuff")} {...line.data} />;
+  } else if (line.logType == "setGoodImpressionTurnsBuff") {
+    return <SetBuff label={t("goodImpressionTurnsBuff")} {...line.data} />;
   } else if (line.logType == "setEffect") {
     return <Tile text={t("setEffect")} />;
   } else if (line.logType == "upgradeHand") {
