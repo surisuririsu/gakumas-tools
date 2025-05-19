@@ -1,10 +1,10 @@
 import Image from "@/components/Image";
-import styles from "./Ad.module.scss";
+import styles from "./KofiAd.module.scss";
 
 export default function KofiAd() {
   return (
     <a
-      className={styles.ad}
+      className={styles.kofiAd}
       href="https://ko-fi.com/surisuririsu"
       target="_blank"
     >

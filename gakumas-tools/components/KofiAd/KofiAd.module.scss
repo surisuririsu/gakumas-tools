@@ -1,6 +1,6 @@
 @use "../../styles/colors";
 
-.ad {
+.kofiAd {
   width: 100%;
   height: 100%;
   display: flex;
@@ -13,10 +13,4 @@
   font-size: 18px;
   font-weight: 600;
   border: 1px solid colors.$black;
-}
-
-.flatButton {
-  pointer-events: none;
-  box-shadow: none;
-  border-radius: 12px;
 }

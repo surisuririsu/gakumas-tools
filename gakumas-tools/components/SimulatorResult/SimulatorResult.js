@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
-import Ad from "../Ad";
+import KofiAd from "../KofiAd";
 
 function SimulatorResult({ data, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
@@ -39,7 +39,7 @@ function SimulatorResult({ data, idolId, plan }) {
         idolId={idolId}
       />
 
-      <Ad />
+      <KofiAd />
     </div>
   );
 }
