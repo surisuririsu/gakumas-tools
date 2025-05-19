@@ -188,6 +188,16 @@ import image_267 from "./267.png";
 import image_268 from "./268.png";
 import image_269 from "./269.png";
 import image_27 from "./27.png";
+import image_270 from "./270.png";
+import image_271 from "./271.png";
+import image_272 from "./272.png";
+import image_273 from "./273.png";
+import image_274 from "./274.png";
+import image_275 from "./275.png";
+import image_276 from "./276.png";
+import image_277 from "./277.png";
+import image_278 from "./278.png";
+import image_279 from "./279.png";
 import image_28 from "./28.png";
 import image_29 from "./29.png";
 import image_3 from "./3.png";
@@ -459,6 +469,16 @@ const IMAGES = {
   '268': image_268,
   '269': image_269,
   '27': image_27,
+  '270': image_270,
+  '271': image_271,
+  '272': image_272,
+  '273': image_273,
+  '274': image_274,
+  '275': image_275,
+  '276': image_276,
+  '277': image_277,
+  '278': image_278,
+  '279': image_279,
   '28': image_28,
   '29': image_29,
   '3': image_3,

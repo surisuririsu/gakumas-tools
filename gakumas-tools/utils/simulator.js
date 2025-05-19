@@ -11,7 +11,7 @@ const DEFAULTS = {
   stageId: "85",
   supportBonus: "0",
   params: "1500-1500-1500-50",
-  pItemIds: "0-0-0",
+  pItemIds: "0-0-0-0",
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
   customizationGroups: "-----_-----",
 };

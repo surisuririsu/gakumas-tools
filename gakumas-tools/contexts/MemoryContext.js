@@ -11,7 +11,7 @@ export function MemoryContextProvider({ children }) {
   const [name, setName] = useState(null);
   const [pIdolId, setPIdolId] = useState(null);
   const [params, setParams] = useState([null, null, null, null]);
-  const [pItemIds, setPItemIds] = useState([0, 0, 0]);
+  const [pItemIds, setPItemIds] = useState([0, 0, 0, 0]);
   const [skillCardIds, setSkillCardIds] = useState([0, 0, 0, 0, 0, 0]);
   const [customizations, setCustomizations] = useState([
     {},
@@ -22,6 +22,13 @@ export function MemoryContextProvider({ children }) {
     {},
   ]);
   const { fetchMemories } = useContext(DataContext);
+
+  useEffect(() => {
+    // If fewer than 4 pItems, pad with 0s
+    if (pItemIds.length < 4) {
+      setPItemIds((cur) => cur.concat(new Array(4 - cur.length).fill(0)));
+    }
+  }, [pItemIds]);
 
   useEffect(() => {
     setSaveState("unsaved");
@@ -62,7 +69,7 @@ export function MemoryContextProvider({ children }) {
     setName(memory.name || null);
     setPIdolId(memory.pIdolId || null);
     setParams(memory.params || [null, null, null, null]);
-    setPItemIds(memory.pItemIds || [0, 0, 0]);
+    setPItemIds(memory.pItemIds || [0, 0, 0, 0]);
     setSkillCardIds(memory.skillCardIds || [0, 0, 0, 0, 0, 0]);
     if (memory.customizations) {
       setCustomizations(memory.customizations.map(fixCustomizations));

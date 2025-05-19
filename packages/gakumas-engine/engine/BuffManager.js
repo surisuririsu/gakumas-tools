@@ -38,8 +38,9 @@ export default class BuffManager extends EngineComponent {
     state[S.poorConditionTurns] = 0;
     state[S.uneaseTurns] = 0;
 
-    // Score buffs
+    // Buffs
     state[S.scoreBuffs] = [];
+    state[S.goodImpressionTurnsBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;
@@ -48,7 +49,6 @@ export default class BuffManager extends EngineComponent {
 
     // Logic
     state[S.goodImpressionTurns] = 0;
-    state[S.doubleGoodImpressionTurnsTurns] = 0;
     state[S.motivation] = 0;
 
     // Anomaly
@@ -79,6 +79,25 @@ export default class BuffManager extends EngineComponent {
       });
     }
     this.logger.log(state, "setScoreBuff", {
+      amount,
+      turns,
+    });
+  }
+
+  setGoodImpressionTurnsBuff(state, amount, turns) {
+    const buffIndex = state[S.goodImpressionTurnsBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.goodImpressionTurnsBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.goodImpressionTurnsBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setGoodImpressionTurnsBuff", {
       amount,
       turns,
     });
@@ -119,6 +138,20 @@ export default class BuffManager extends EngineComponent {
       }
       if (scoreBuffs[i].turns != 0) {
         state[S.scoreBuffs].push(scoreBuffs[i]);
+      }
+    }
+
+    // Good impression turns buffs
+    const goodImpressionTurnsBuffs = state[S.goodImpressionTurnsBuffs];
+    state[S.goodImpressionTurnsBuffs] = [];
+    for (let i = 0; i < goodImpressionTurnsBuffs.length; i++) {
+      if (goodImpressionTurnsBuffs[i].fresh) {
+        goodImpressionTurnsBuffs[i].fresh = false;
+      } else if (goodImpressionTurnsBuffs[i].turns) {
+        goodImpressionTurnsBuffs[i].turns--;
+      }
+      if (goodImpressionTurnsBuffs[i].turns != 0) {
+        state[S.goodImpressionTurnsBuffs].push(goodImpressionTurnsBuffs[i]);
       }
     }
   }

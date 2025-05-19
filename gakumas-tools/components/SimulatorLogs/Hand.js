@@ -8,30 +8,47 @@ import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./SimulatorLogs.module.scss";
 
+function HandStateLine({ k, state }) {
+  const t = useTranslations("stage");
+
+  let content = null;
+  if (k == S.scoreBuffs) {
+    content = state[k].map(({ amount, turns }) => (
+      <div key={turns}>
+        {t("scoreBuff")}{" "}
+        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      </div>
+    ));
+  } else if (k == S.goodImpressionTurnsBuffs) {
+    content = state[k].map(({ amount, turns }) => (
+      <div key={turns}>
+        {t("goodImpressionTurnsBuff")}{" "}
+        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      </div>
+    ));
+  } else {
+    content = (
+      <div>
+        {t(ALL_FIELDS[k])}{" "}
+        <span className={styles.blue}>
+          {isNaN(state[k]) ? t(state[k]) : state[k]}
+        </span>
+      </div>
+    );
+  }
+
+  return content;
+}
+
 function HandState({ state }) {
   const t = useTranslations("stage");
 
   return (
     <div className={styles.state}>
       {Object.keys(state).map((k) => (
-        <React.Fragment key={k}>
-          {k == S.scoreBuffs ? (
-            state[k].map(({ amount, turns }) => (
-              <div key={turns}>
-                {t("scoreBuff")}{" "}
-                <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-                {turns ? `(${t("numTurns", { num: turns })})` : ""}
-              </div>
-            ))
-          ) : (
-            <div>
-              {t(ALL_FIELDS[k])}{" "}
-              <span className={styles.blue}>
-                {isNaN(state[k]) ? t(state[k]) : state[k]}
-              </span>
-            </div>
-          )}
-        </React.Fragment>
+        <HandStateLine key={k} k={k} state={state} />
       ))}
     </div>
   );

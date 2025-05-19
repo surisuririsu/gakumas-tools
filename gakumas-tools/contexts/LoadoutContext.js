@@ -123,10 +123,17 @@ export function LoadoutContextProvider({ children }) {
     window.history.replaceState(null, "", url);
   }, [loadout]);
 
+  useEffect(() => {
+    // If fewer than 4 pItems, pad with 0s
+    if (pItemIds.length < 4) {
+      setPItemIds((cur) => cur.concat(new Array(4 - cur.length).fill(0)));
+    }
+  }, [pItemIds]);
+
   function clear() {
     setMemoryParams([null, null]);
     setParams([null, null, null, null]);
-    setPItemIds([0, 0, 0]);
+    setPItemIds([0, 0, 0, 0]);
     setSkillCardIdGroups([
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],

@@ -56,6 +56,12 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setGoodImpressionTurnsBuff: (state, amount, turns) =>
+        engine.buffManager.setGoodImpressionTurnsBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       removeDebuffs: (state, amount) =>
         engine.buffManager.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => engine.buffManager.setStance(state, stance),
@@ -450,10 +456,11 @@ export default class Executor extends EngineComponent {
   }
 
   resolveGoodImpressionTurns(state, goodImpressionTurns) {
-    // Apply double good impression turns
-    if (state[S.doubleGoodImpressionTurnsTurns]) {
-      goodImpressionTurns *= 2;
-    }
+    // Apply good impression turns buffs
+    goodImpressionTurns *= state[S.goodImpressionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
 
     state[S.goodImpressionTurns] += goodImpressionTurns;
   }
