@@ -519,7 +519,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 518,タフネス,,SR,mental,anomaly,63,FALSE,TRUE,produce,,FALSE,if:preservationTimes>=2,do:cost-=5,"do:setStance(preservation),do:cardUsesRemaining+=1;target:active,do:g.score+=14,do:g.cost-=1",1,
 519,タフネス+,"41,87",SR,mental,anomaly,63,TRUE,TRUE,produce,,FALSE,if:preservationTimes>=2,do:cost-=4,"do:setStance(preservation),do:cardUsesRemaining+=1;target:active,do:g.score+=18,do:g.cost-=1",1,
 520,夢色リップ,,SSR,mental,logic,64,FALSE,TRUE,produce,,FALSE,,do:cost-=4,"do:genki+=2,do:motivation+=4,do:setScoreBuff(0.1);if:goodImpressionTurns>=15;at:startOfTurn,do:goodImpressionTurns*=1.1,limit:3",1,
-521,夢色リップ+,"88,25",SSR,mental,logic,64,TRUE,TRUE,produce,,FALSE,,do:cost-=4,"do:genki+=2,do:motivation+=5,do:setScoreBuff(0.2);if:goodImpressionTurns>=15;at:startOfTurn,do:goodImpressionTurns*=1.1,limit:4",1,
+521,夢色リップ+,"88,27",SSR,mental,logic,64,TRUE,TRUE,produce,,FALSE,,do:cost-=4,"do:genki+=2,do:motivation+=5,do:setScoreBuff(0.2);if:goodImpressionTurns>=15;at:startOfTurn,do:goodImpressionTurns*=1.1,limit:4",1,
 522,放課後おしゃべり,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,84,FALSE,,do:cost-=7,"do:fullPowerCharge+=2;at:startOfTurn,do:score+=8+cumulativeFullPowerCharge*3,limit:1",1,
 523,放課後おしゃべり+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,84,FALSE,,do:cost-=6,"do:fullPowerCharge+=5;at:startOfTurn,do:score+=8+cumulativeFullPowerCharge*3,limit:1",1,
 524,ヒーローとの出会い,,SSR,mental,sense,1,FALSE,TRUE,pIdol,85,FALSE,,do:cost-=6,"do:goodConditionTurns+=4,do:concentration+=1;if:goodConditionTurns>=4,if:goodConditionTurns<12;at:startOfTurn,do:cardUsesRemaining+=1,limit:1;if:goodConditionTurns>=12;at:startOfTurn,do:cardUsesRemaining+=1,limit:2",1,

@@ -19,6 +19,7 @@ export const RATING_BY_PLACE = {
 };
 
 export const TARGET_RATING_BY_RANK = {
+  "SSS+": 23000,
   SSS: 20000,
   "SS+": 18000,
   SS: 16000,
