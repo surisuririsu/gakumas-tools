@@ -16,7 +16,7 @@ import Image from "@/components/Image";
 import { getScoresFromFile } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
-import KofiAd from "../KofiAd";
+import Ad from "../Ad";
 
 const MAX_WORKERS = 8;
 
@@ -149,7 +149,7 @@ function Rehearsal() {
       )}
 
       <div className={styles.ad}>
-        <KofiAd />
+        <Ad />
       </div>
     </div>
   );

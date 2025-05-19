@@ -17,7 +17,7 @@ import {
 } from "gakumas-engine";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import KofiAd from "@/components/KofiAd";
+import Ad from "@/components/Ad";
 import Loader from "@/components/Loader";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import ParametersInput from "@/components/ParametersInput";
@@ -245,7 +245,7 @@ export default function Simulator() {
         </div>
         {!simulatorData && (
           <div className={styles.ad}>
-            <KofiAd />
+            <Ad />
           </div>
         )}
       </div>
