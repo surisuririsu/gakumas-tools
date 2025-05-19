@@ -1,6 +1,9 @@
 import { TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 
-export const MAX_PARAMS = 2000;
+export const MAX_PARAMS_BY_DIFFICULTY = {
+  pro: 2000,
+  master: 2300,
+};
 
 export const MIN_VOTES_BY_STAGE = {
   melobang: 9000,
@@ -109,12 +112,18 @@ export function calculateGainedParams(stage, paramOrder, scores) {
   });
 }
 
-export function calculateMaxScores(stage, paramOrder, params, paramBonuses) {
+export function calculateMaxScores(
+  maxParams,
+  stage,
+  paramOrder,
+  params,
+  paramBonuses
+) {
   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
   return paramOrder.map((order, i) => {
     const regimes = paramRegimesByOrder[order];
     const maxGain = Math.ceil(
-      (MAX_PARAMS - params[i]) / (1 + paramBonuses[i] / 100)
+      (maxParams - params[i]) / (1 + paramBonuses[i] / 100)
     );
     let regime = regimes[0];
     for (let j = 1; j < regimes.length; j++) {
@@ -136,9 +145,24 @@ export function calculateBonusParams(gainedParams, paramBonuses) {
   );
 }
 
-export function calculatePostAuditionParams(params, gainedParams, bonusParams) {
+export function calculateChallengeParams(gainedParams, challengeParamBonus) {
+  return gainedParams.map((param) =>
+    Math.floor((param * challengeParamBonus) / 100)
+  );
+}
+
+export function calculatePostAuditionParams(
+  maxParams,
+  params,
+  gainedParams,
+  challengeParams,
+  bonusParams
+) {
   return params.map((param, i) =>
-    Math.min(param + gainedParams[i] + bonusParams[i], MAX_PARAMS)
+    Math.min(
+      param + gainedParams[i] + challengeParams[i] + bonusParams[i],
+      maxParams
+    )
   );
 }
 
@@ -219,8 +243,10 @@ export function calculateVoteRating(votes, voteRank) {
 }
 
 export function calculateRecommendedScores(
+  maxParams,
   stage,
   paramOrder,
+  challengeParamBonus,
   paramBonuses,
   affection,
   params,
@@ -229,7 +255,13 @@ export function calculateRecommendedScores(
   let sft = 0;
   const paramRegimesByOrder = PARAM_REGIMES_BY_ORDER_BY_STAGE[stage];
   const voteRegimes = VOTE_REGIMES_BY_STAGE[stage];
-  const maxScores = calculateMaxScores(stage, paramOrder, params, paramBonuses);
+  const maxScores = calculateMaxScores(
+    maxParams,
+    stage,
+    paramOrder,
+    params,
+    paramBonuses
+  );
   let recommendedScores = {};
   let currentScores = [0, 0, 0];
 
@@ -247,10 +279,16 @@ export function calculateRecommendedScores(
       currentScores
     );
     // console.log(gainedParams);
+    const challengeParams = calculateChallengeParams(
+      gainedParams,
+      challengeParamBonus
+    );
     const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
     const postAuditionParams = calculatePostAuditionParams(
+      maxParams,
       params,
       gainedParams,
+      challengeParams,
       bonusParams
     );
 

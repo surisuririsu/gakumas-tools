@@ -1,6 +1,10 @@
 @use "sass:color";
 @use "../../styles/colors";
 
+.bonus {
+  font-size: 0.8em;
+}
+
 .nia section {
   display: flex;
   flex-direction: column;
