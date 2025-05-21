@@ -92,6 +92,25 @@
   color: colors.$blue;
 }
 
+.flex {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  text-align: center;
+}
+
+.produceRank {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+
+  span {
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
 @container (width < 530px) {
   .recommendedScores {
     font-size: 12px;

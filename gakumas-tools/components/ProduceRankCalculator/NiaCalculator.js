@@ -13,6 +13,7 @@ import Table from "@/components/Table";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { getRank, TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 import {
+  BALANCE_BY_IDOL,
   calculateBonusParams,
   calculateChallengeParams,
   calculateGainedParams,
@@ -24,7 +25,8 @@ import {
   MAX_PARAMS_BY_DIFFICULTY,
   MIN_VOTES_BY_STAGE,
   PARAM_ORDER_BY_IDOL,
-  PARAM_REGIMES_BY_ORDER_BY_STAGE,
+  PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER,
+  VOTE_REGIMES_BY_DIFF_STAGE,
 } from "@/utils/nia";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
@@ -41,12 +43,15 @@ const IDOL_OPTIONS = Idols.getAll().map((idol) => ({
   alt: idol.name,
 }));
 
-const STAGE_OPTIONS = [
-  { value: "melobang", label: "メロBang!" },
-  { value: "galaxy", label: "GALAXY" },
-  { value: "quartet", label: "QUARTET" },
-  { value: "finale", label: "FINALE" },
-];
+const STAGE_OPTIONS_BY_DIFFICULTY = {
+  pro: [
+    { value: "melobang", label: "メロBang!" },
+    { value: "galaxy", label: "GALAXY" },
+    { value: "quartet", label: "QUARTET" },
+    { value: "finale", label: "FINALE" },
+  ],
+  master: [{ value: "finale", label: "FINALE" }],
+};
 
 const FINAL_AUDITIONS = ["quartet", "finale"];
 
@@ -55,7 +60,7 @@ export default function NiaCalculator() {
 
   const DIFFICULTY_OPTIONS = useMemo(
     () =>
-      ["pro"].map((difficulty) => ({
+      ["pro", "master"].map((difficulty) => ({
         value: difficulty,
         label: t(`difficulties.${difficulty}`),
       })),
@@ -65,7 +70,7 @@ export default function NiaCalculator() {
 
   const { idolId, setIdolId } = useContext(WorkspaceContext);
 
-  const [difficulty, setDifficulty] = useState("pro");
+  const [difficulty, setDifficulty] = useState("master");
   const [stage, setStage] = useState("finale");
   const [params, setParams] = useState([null, null, null]);
   const [challengeParamBonus, setChallengeParamBonus] = useState(null);
@@ -73,6 +78,14 @@ export default function NiaCalculator() {
   const [votes, setVotes] = useState(MIN_VOTES_BY_STAGE[stage]);
   const [affection, setAffection] = useState(20);
   const [scores, setScores] = useState([null, null, null]);
+
+  let paramRegimesByOrder =
+    PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER[difficulty][stage];
+  if (difficulty === "master") {
+    const balance = BALANCE_BY_IDOL[idolId];
+    paramRegimesByOrder = paramRegimesByOrder[balance];
+  }
+  const voteRegimes = VOTE_REGIMES_BY_DIFF_STAGE[difficulty][stage];
 
   useEffect(() => {
     if (votes < MIN_VOTES_BY_STAGE[stage]) {
@@ -82,11 +95,13 @@ export default function NiaCalculator() {
 
   const maxParams = MAX_PARAMS_BY_DIFFICULTY[difficulty];
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
+
   const recommendedScores = useMemo(() => {
     if (!FINAL_AUDITIONS.includes(stage)) return null;
     return calculateRecommendedScores(
+      paramRegimesByOrder,
+      voteRegimes,
       maxParams,
-      stage,
       paramOrder,
       challengeParamBonus,
       paramBonuses,
@@ -95,7 +110,11 @@ export default function NiaCalculator() {
       votes
     );
   }, [stage, paramOrder, paramBonuses, affection, params, votes]);
-  const gainedParams = calculateGainedParams(stage, paramOrder, scores);
+  const gainedParams = calculateGainedParams(
+    paramRegimesByOrder,
+    paramOrder,
+    scores
+  );
   const challengeParams = calculateChallengeParams(
     gainedParams,
     challengeParamBonus
@@ -109,7 +128,7 @@ export default function NiaCalculator() {
     bonusParams
   );
   const totalScore = scores.reduce((acc, cur) => acc + cur, 0);
-  const gainedVotes = calculateGainedVotes(stage, affection, totalScore);
+  const gainedVotes = calculateGainedVotes(voteRegimes, affection, totalScore);
   const totalVotes = votes + gainedVotes;
   const voteRank = getVoteRank(totalVotes);
 
@@ -131,7 +150,14 @@ export default function NiaCalculator() {
       <ButtonGroup
         options={DIFFICULTY_OPTIONS}
         selected={difficulty}
-        onChange={setDifficulty}
+        onChange={(diff) => {
+          if (diff === "master") {
+            setStage("finale");
+          } else {
+            setChallengeParamBonus(null);
+          }
+          setDifficulty(diff);
+        }}
       />
       <div className={styles.bonus}>
         {t("parameterLimit")}: {maxParams}
@@ -155,6 +181,14 @@ export default function NiaCalculator() {
             onChange={setAffection}
           />
 
+          <label>{t("paramBonusPct")}</label>
+          <ParametersInput
+            parameters={paramBonuses}
+            max={maxParams}
+            onChange={setParamBonuses}
+            round={false}
+          />
+
           {difficulty === "master" && (
             <>
               <label>{t("challengePItemsParamBonusPct")}</label>
@@ -168,20 +202,12 @@ export default function NiaCalculator() {
               />
             </>
           )}
-
-          <label>{t("paramBonusPct")}</label>
-          <ParametersInput
-            parameters={paramBonuses}
-            max={maxParams}
-            onChange={setParamBonuses}
-            round={false}
-          />
         </section>
 
         <section>
           <label>{t("stage")}</label>
           <ButtonGroup
-            options={STAGE_OPTIONS}
+            options={STAGE_OPTIONS_BY_DIFFICULTY[difficulty]}
             selected={stage}
             onChange={setStage}
           />
@@ -209,36 +235,42 @@ export default function NiaCalculator() {
             <label>{t("recommendedScores")}</label>
             <Table
               headers={TABLE_HEADERS}
-              rows={Object.keys(TARGET_RATING_BY_RANK).map((rank) => {
-                let row = [
-                  recommendedScores[rank] ? (
-                    <button onClick={() => setScores(recommendedScores[rank])}>
-                      <FaCircleChevronDown />
-                      <span className={styles.rankButtonLabel}>
-                        {rank} ({TARGET_RATING_BY_RANK[rank]})
-                      </span>
-                    </button>
-                  ) : (
-                    `${rank} (${TARGET_RATING_BY_RANK[rank]})`
-                  ),
-                ];
-                if (recommendedScores[rank]) {
-                  return row.concat(recommendedScores[rank]);
-                } else {
-                  return row.concat(["-", "-", "-"]);
-                }
-              })}
+              rows={Object.keys(TARGET_RATING_BY_RANK)
+                .slice(0, 8)
+                .map((rank) => {
+                  let row = [
+                    recommendedScores[rank] ? (
+                      <button
+                        onClick={() => setScores(recommendedScores[rank])}
+                      >
+                        <FaCircleChevronDown />
+                        <span className={styles.rankButtonLabel}>
+                          {rank} ({TARGET_RATING_BY_RANK[rank]})
+                        </span>
+                      </button>
+                    ) : (
+                      `${rank} (${TARGET_RATING_BY_RANK[rank]})`
+                    ),
+                  ];
+                  if (recommendedScores[rank]) {
+                    return row.concat(recommendedScores[rank]);
+                  } else {
+                    return row.concat(["-", "-", "-"]);
+                  }
+                })}
             />
           </section>
         )}
 
         <section>
-          <LineChart
-            paramOrder={paramOrder}
-            paramRegimes={PARAM_REGIMES_BY_ORDER_BY_STAGE[stage]}
-            scores={scores}
-            gainedParams={gainedParams}
-          />
+          {difficulty === "pro" && (
+            <LineChart
+              paramOrder={paramOrder}
+              paramRegimes={paramRegimesByOrder}
+              scores={scores}
+              gainedParams={gainedParams}
+            />
+          )}
 
           <label>{t("scores")}</label>
           <ParametersInput
@@ -250,33 +282,38 @@ export default function NiaCalculator() {
           <label>{t("gainedParams")}</label>
           <ParamBadges params={gainedParams} />
 
-          {difficulty === "master" && (
-            <>
-              <label>{t("challengeParams")}</label>
-              <ParamBadges params={challengeParams} />
-            </>
-          )}
-
           <label>{t("bonusParams")}</label>
           <ParamBadges params={bonusParams} />
+
+          {difficulty === "master" && <ParamBadges params={challengeParams} />}
 
           <label>{t("paramsPostAudition")}</label>
           <Params params={postAuditionParams} />
 
-          <label>{t("gainedVotes")}</label>
-          <div>+{gainedVotes}</div>
+          <div className={styles.flex}>
+            <div>
+              <label>{t("gainedVotes")}</label>
+              <div>+{gainedVotes}</div>
+            </div>
 
-          <label>{t("votesPostAudition")}</label>
-          <div>
-            {totalVotes}
-            {voteRank ? ` (${voteRank})` : null}
+            <div>
+              <label>{t("votesPostAudition")}</label>
+              <div>
+                {totalVotes}
+                {voteRank ? ` (${voteRank})` : null}
+              </div>
+            </div>
           </div>
 
-          <label>{t("produceRank")}</label>
-          <span>
-            {actualRating} {actualRank ? `(${actualRank})` : null}
-          </span>
+          <div className={styles.produceRank}>
+            <label>{t("produceRank")}</label>
+            <span>
+              {actualRating} {actualRank ? `(${actualRank})` : null}
+            </span>
+          </div>
         </section>
+
+        <span className={styles.note}>{t("niaNote")}</span>
       </div>
     </>
   );

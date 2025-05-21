@@ -1869,8 +1869,30 @@ import image_553_6 from "./553_6.png";
 import image_553_7 from "./553_7.png";
 import image_553_8 from "./553_8.png";
 import image_553_9 from "./553_9.png";
-import image_554 from "./554.png";
-import image_555 from "./555.png";
+import image_554_1 from "./554_1.png";
+import image_554_10 from "./554_10.png";
+import image_554_11 from "./554_11.png";
+import image_554_12 from "./554_12.png";
+import image_554_2 from "./554_2.png";
+import image_554_3 from "./554_3.png";
+import image_554_4 from "./554_4.png";
+import image_554_5 from "./554_5.png";
+import image_554_6 from "./554_6.png";
+import image_554_7 from "./554_7.png";
+import image_554_8 from "./554_8.png";
+import image_554_9 from "./554_9.png";
+import image_555_1 from "./555_1.png";
+import image_555_10 from "./555_10.png";
+import image_555_11 from "./555_11.png";
+import image_555_12 from "./555_12.png";
+import image_555_2 from "./555_2.png";
+import image_555_3 from "./555_3.png";
+import image_555_4 from "./555_4.png";
+import image_555_5 from "./555_5.png";
+import image_555_6 from "./555_6.png";
+import image_555_7 from "./555_7.png";
+import image_555_8 from "./555_8.png";
+import image_555_9 from "./555_9.png";
 import image_556 from "./556.png";
 import image_557 from "./557.png";
 import image_558 from "./558.png";
@@ -4096,8 +4118,30 @@ const IMAGES = {
   '553_7': image_553_7,
   '553_8': image_553_8,
   '553_9': image_553_9,
-  '554': image_554,
-  '555': image_555,
+  '554_1': image_554_1,
+  '554_10': image_554_10,
+  '554_11': image_554_11,
+  '554_12': image_554_12,
+  '554_2': image_554_2,
+  '554_3': image_554_3,
+  '554_4': image_554_4,
+  '554_5': image_554_5,
+  '554_6': image_554_6,
+  '554_7': image_554_7,
+  '554_8': image_554_8,
+  '554_9': image_554_9,
+  '555_1': image_555_1,
+  '555_10': image_555_10,
+  '555_11': image_555_11,
+  '555_12': image_555_12,
+  '555_2': image_555_2,
+  '555_3': image_555_3,
+  '555_4': image_555_4,
+  '555_5': image_555_5,
+  '555_6': image_555_6,
+  '555_7': image_555_7,
+  '555_8': image_555_8,
+  '555_9': image_555_9,
   '556': image_556,
   '557': image_557,
   '558': image_558,

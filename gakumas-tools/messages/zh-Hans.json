@@ -84,7 +84,7 @@
     "produceRank": "制作评级",
     "targetScore": "目标分数",
     "score": "最终得分",
-    "niaNote": "※ 随着我们进一步了解分数加成的参数和投票数的计算方法，本功能将持续更新。<br></br>如果您发现计算有误的情况，请将截图发送至此X账号 <link>@surisuririsu</link> ",
+    "niaNote": "※ 随着我们进一步了解分数加成的参数和投票数的计算方法，本功能将持续更新。",
     "affectionAtStartOfProduce": "制作开始时好感度",
     "stage": "舞台",
     "runN": "{num}回合",
