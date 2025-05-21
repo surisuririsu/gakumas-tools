@@ -153,6 +153,7 @@ export default function NiaCalculator() {
         onChange={(diff) => {
           if (diff === "master") {
             setStage("finale");
+            setAffection(20);
           } else {
             setChallengeParamBonus(null);
           }
@@ -174,12 +175,16 @@ export default function NiaCalculator() {
             />
           </div>
 
-          <label>{t("affectionAtStartOfProduce")}</label>
-          <ButtonGroup
-            options={AFFECTION_OPTIONS}
-            selected={affection}
-            onChange={setAffection}
-          />
+          {difficulty === "pro" && (
+            <>
+              <label>{t("affectionAtStartOfProduce")}</label>
+              <ButtonGroup
+                options={AFFECTION_OPTIONS}
+                selected={affection}
+                onChange={setAffection}
+              />
+            </>
+          )}
 
           <label>{t("paramBonusPct")}</label>
           <ParametersInput
