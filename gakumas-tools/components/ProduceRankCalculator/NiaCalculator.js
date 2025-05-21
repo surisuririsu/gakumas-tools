@@ -96,20 +96,20 @@ export default function NiaCalculator() {
   const maxParams = MAX_PARAMS_BY_DIFFICULTY[difficulty];
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
 
-  const recommendedScores = useMemo(() => {
-    if (!FINAL_AUDITIONS.includes(stage)) return null;
-    return calculateRecommendedScores(
-      paramRegimesByOrder,
-      voteRegimes,
-      maxParams,
-      paramOrder,
-      challengeParamBonus,
-      paramBonuses,
-      affection,
-      params,
-      votes
-    );
-  }, [stage, paramOrder, paramBonuses, affection, params, votes]);
+  const recommendedScores = FINAL_AUDITIONS.includes(stage)
+    ? calculateRecommendedScores(
+        paramRegimesByOrder,
+        voteRegimes,
+        maxParams,
+        paramOrder,
+        challengeParamBonus,
+        paramBonuses,
+        affection,
+        params,
+        votes
+      )
+    : null;
+
   const gainedParams = calculateGainedParams(
     paramRegimesByOrder,
     paramOrder,
