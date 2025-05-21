@@ -5,17 +5,17 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { COST_RANGES_BY_RANK } from "@/utils/contestPower";
+import { COST_RANGES, COST_RANGES_BY_RANK } from "@/utils/contestPower";
 import { generatePossibleMemories } from "@/utils/skillCardLottery";
 import AcquiredSkillCards from "./AcquiredSkillCards";
 import MemoryCalculatorResultList from "./MemoryCalculatorResultList";
 import TargetSkillCards from "./TargetSkillCards";
 import styles from "./MemoryCalculator.module.scss";
 
-const RANK_OPTIONS = ["B", "B+", "A", "A+", "S", "S+", "SS"].map((r) => ({
-  id: r,
-  iconSrc: `/ranks/${r}.png`,
-  alt: r,
+const RANK_OPTIONS = COST_RANGES.toReversed().map(({ rank }) => ({
+  id: rank,
+  iconSrc: `/ranks/${rank}.png`,
+  alt: rank,
 }));
 
 // Generates all combinations of target cards
