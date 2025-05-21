@@ -9,7 +9,7 @@ export function MemoryCalculatorContextProvider({ children }) {
   const [alternateSkillCardIds, _setAlternateSkillCardIds] = useState([]);
   const [targetNegations, _setTargetNegations] = useState([]);
   const [acquiredSkillCardIds, _setAcquiredSkillCardIds] = useState([0]);
-  const [rank, setRank] = useState("S+");
+  const [rank, setRank] = useState("SS");
 
   function setTargetSkillCardIds(callback) {
     let removedIndices = [];
