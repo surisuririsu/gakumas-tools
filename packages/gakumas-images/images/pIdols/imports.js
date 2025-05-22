@@ -83,10 +83,13 @@ import image_83 from "./83.png";
 import image_84 from "./84.png";
 import image_85 from "./85.png";
 import image_86 from "./86.png";
+import image_87 from "./87.png";
 import image_88 from "./88.png";
 import image_89 from "./89.png";
 import image_9 from "./9.png";
 import image_90 from "./90.png";
+import image_92 from "./92.png";
+import image_93 from "./93.png";
 
 const IMAGES = {
   '1': image_1,
@@ -174,10 +177,13 @@ const IMAGES = {
   '84': image_84,
   '85': image_85,
   '86': image_86,
+  '87': image_87,
   '88': image_88,
   '89': image_89,
   '9': image_9,
   '90': image_90,
+  '92': image_92,
+  '93': image_93,
 };
 
 export default IMAGES;
