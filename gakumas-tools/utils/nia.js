@@ -227,6 +227,7 @@ export const VOTE_REGIMES_BY_DIFF_STAGE = {
       { threshold: 0, multiplier: 1.299, constant: 522.5 },
     ],
     galaxy: [
+      { threshold: 258000, multiplier: 0, constant: 10666 },
       { threshold: 64500, multiplier: 0.00361, constant: 9739 },
       { threshold: 0, multiplier: 0.12028, constant: 2240.5 },
     ],
@@ -236,6 +237,7 @@ export const VOTE_REGIMES_BY_DIFF_STAGE = {
       { threshold: 0, multiplier: 0.14868, constant: 3150.5 },
     ],
     finale: [
+      { threshold: 798000, multiplier: 0, constant: 25334 },
       { threshold: 200000, multiplier: 0.0032025, constant: 22783 },
       { threshold: 0, multiplier: 0.1067045, constant: 2165 },
     ],
