@@ -476,10 +476,11 @@ export default class CardManager extends EngineComponent {
 
     // Discard cards if over limit
     if (state[S.heldCards].length > 2) {
-      state[S.heldCards] = state[S.heldCards].slice(1);
+      const discardedCard = state[S.heldCards].shift();
+      state[S.discardedCards].push(discardedCard);
       this.logger.log(state, "discardCard", {
         type: "skillCard",
-        id: state[S.cardMap][state[S.heldCards][0]].id,
+        id: state[S.cardMap][discardedCard].id,
       });
     }
   }
