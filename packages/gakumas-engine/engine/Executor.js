@@ -335,8 +335,8 @@ export default class Executor extends EngineComponent {
     if (state[S.nullifyCostCards]) return;
 
     // Apply growth
-    if (growth[S["growth.cost"]]) {
-      cost += growth[S["growth.cost"]];
+    if (growth[S["g.cost"]]) {
+      cost += growth[S["g.cost"]];
     }
 
     // Apply stance
