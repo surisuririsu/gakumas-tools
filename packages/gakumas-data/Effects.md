@@ -158,7 +158,6 @@ target:deck,do:g.score+=5
 | 集中適用倍数               | `concentrationMultiplier` |
 | やる気適用倍数             | `motivationMultiplier`    |
 | 好調効果適用倍数 | `goodConditionTurnsMultiplier` |
-| 好印象増加量増加+100% | `doubleGoodImpressionTurnsTurns` |
 | アクティブカード使用不可 | `noActiveTurns` |
 | メンタルカード使用不可 | `noMentalTurns` |
 | 不調 | `poorConditionTurns` |
@@ -202,6 +201,7 @@ target:deck,do:g.score+=5
 | 山札を選択し、保留に移動 | `holdSelectedFromDeck` |
 | 山札か捨て札を選択し、保留に移動 | `holdSelectedFromDeckOrDiscards` |
 | スコア上昇量増加                             | `setScoreBuff(amount,turns)`  |
+| 好印象増加量増加 | `setGoodImpressionTurnsBuff(amount,turns)` |
 | 指針を変更 | `setStance(stance)` |
 
 ### Example
@@ -224,6 +224,18 @@ Time-to-live of an effect, in turns, marked by `ttl:`
 
 ```
 ttl:1
+```
+
+## Delay
+
+Turns to delay an effect, marked by `delay:`
+
+### Example
+
+2ターン後
+
+```
+delay:1
 ```
 
 ### Group

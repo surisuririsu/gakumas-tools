@@ -186,6 +186,7 @@ export const ALL_FIELDS = [
   "g.score",
   "g.scoreTimes",
   "g.cost",
+  "g.typedCost",
   "g.genki",
   "g.goodConditionTurns",
   "g.perfectConditionTurns",

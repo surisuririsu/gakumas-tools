@@ -273,6 +273,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       [S["g.score"]]: 2,
       [S["g.scoreTimes"]]: 20,
       [S["g.cost"]]: 1,
+      [S["g.typedCost"]]: 1,
       [S["g.genki"]]: 1,
       [S["g.goodConditionTurns"]]: 1,
       [S["g.perfectConditionTurns"]]: 1,
