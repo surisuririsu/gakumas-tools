@@ -262,8 +262,8 @@ export default class Executor extends EngineComponent {
           intermediate += growth[S[`g.${lhs}`]];
         }
       } else if (op == "-=") {
-        if (growth?.[S["g.cost"]] && state[S.phase] == "processCost") {
-          rhs -= growth[S["g.cost"]];
+        if (growth?.[S["g.typedCost"]] && state[S.phase] == "processCost") {
+          rhs -= growth[S["g.typedCost"]];
           if (rhs < 0) rhs = 0;
         }
         intermediate -= rhs;
@@ -330,9 +330,14 @@ export default class Executor extends EngineComponent {
     console.warn(`Unrecognized special action: ${action}`);
   }
 
-  resolveCost(state, cost) {
+  resolveCost(state, cost, growth) {
     // Nullify cost
     if (state[S.nullifyCostCards]) return;
+
+    // Apply growth
+    if (growth[S["growth.cost"]]) {
+      cost += growth[S["growth.cost"]];
+    }
 
     // Apply stance
     if (state[S.stance].startsWith("strength")) {

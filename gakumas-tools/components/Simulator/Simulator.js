@@ -157,10 +157,6 @@ export default function Simulator() {
           ※ Season 24 preview is based only on the announced p-items and
           criteria. Turn types are not yet known.
         </> */}
-        <>
-          Known bug: Cost growth currently applies to all types of cost, not
-          just stamina
-        </>
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")

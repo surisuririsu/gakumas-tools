@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-05-24
+
+### Fixed
+
+- Stamina cost growth incorrectly applying to all types of cost
+
 ## 2025-05-23
 
 ### Fixed
