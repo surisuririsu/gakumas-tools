@@ -1,4 +1,4 @@
-import { Customizations, PItems, SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
@@ -57,6 +57,14 @@ export default class EffectManager extends EngineComponent {
     state[S.effects] = state[S.effects].filter(
       (effect) => effect.phase != "prestage"
     );
+  }
+
+  clearExpiredEffects(state) {
+    state[S.effects] = state[S.effects].filter((effect) => {
+      if (effect.limit != null && effect.limit < 1) return false;
+      if (effect.ttl != null && effect.ttl < 0) return false;
+      return true;
+    });
   }
 
   triggerEffectsForPhase(state, phase, conditionState) {
