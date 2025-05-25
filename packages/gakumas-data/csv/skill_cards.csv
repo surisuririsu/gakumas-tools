@@ -558,3 +558,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 557,インフルエンサー+,"93,42",SR,mental,anomaly,24,TRUE,TRUE,produce,,FALSE,,do:cost-=5,"target:mental,do:g.genki+=6,do:g.cost-=1;do:cardUsesRemaining+=1,do:drawCard",1,
 558,一心不乱,,SSR,mental,anomaly,38,FALSE,TRUE,produce,,FALSE,if:isStrength,do:cost-=3,"do:setStance(preservation);target:effect(strength),do:g.score+=37,do:g.cost-=7",1,
 559,一心不乱+,"41,28",SSR,mental,anomaly,38,TRUE,TRUE,produce,,FALSE,if:isStrength,do:cost-=3,"do:setStance(preservation);target:effect(strength),do:g.score+=45,do:g.cost-=7",1,
+560,次こそは、必ず,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,94,TRUE,,do:stamina-=6,"do:setStance(preservation);target:mental,do:g.genki+=11",1,
+561,次こそは、必ず+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,94,TRUE,,do:stamina-=6,"do:setStance(preservation);target:mental,do:g.genki+=11",1,
