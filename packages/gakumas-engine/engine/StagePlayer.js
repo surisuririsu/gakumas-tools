@@ -7,19 +7,17 @@ export default class StagePlayer {
   }
 
   play() {
-    let logs = [];
+    this.engine.logger.reset();
     let state = this.engine.getInitialState();
     state = this.engine.startStage(state);
 
     while (state[S.turnsRemaining] > 0) {
       state = this.strategy.evaluate(state).state;
-      logs.push(state.logs);
-      state.logs = [];
     }
 
     return {
       score: state[S.score],
-      logs,
+      logs: this.engine.logger.pickLogs(state),
       graphData: state.graphData,
     };
   }

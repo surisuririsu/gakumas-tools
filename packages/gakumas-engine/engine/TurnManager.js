@@ -1,4 +1,4 @@
-import { S } from "../constants";
+import { FULL_POWER_EFFECTS, GOOD_IMPRESSION_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shuffle } from "../utils";
 
@@ -72,6 +72,7 @@ export default class TurnManager extends EngineComponent {
 
     state[S.cardUsesRemaining] = 1;
 
+    this.engine.effectManager.triggerEffects(state, FULL_POWER_EFFECTS);
     this.engine.effectManager.triggerEffectsForPhase(
       state,
       "beforeStartOfTurn"
@@ -107,6 +108,9 @@ export default class TurnManager extends EngineComponent {
 
     // Trigger effects
     this.engine.effectManager.triggerEffectsForPhase(state, "endOfTurn");
+
+    // Good impression
+    this.engine.effectManager.triggerEffects(state, GOOD_IMPRESSION_EFFECTS);
 
     // Decrement buff turns
     this.engine.buffManager.decrementBuffTurns(state);

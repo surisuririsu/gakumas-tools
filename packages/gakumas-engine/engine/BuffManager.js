@@ -2,6 +2,7 @@ import {
   DEBUFF_FIELDS,
   EOT_DECREMENT_FIELDS,
   S,
+  STANCE_CHANGED_EFFECTS,
   UNFRESH_PHASES,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
@@ -185,6 +186,7 @@ export default class BuffManager extends EngineComponent {
       state[S.stance] != state[S.prevStance] &&
       state[S.stance] != `${state[S.prevStance]}2`
     ) {
+      this.engine.effectManager.triggerEffects(state, STANCE_CHANGED_EFFECTS);
       this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
       if (state[S.stance].startsWith("preservation")) {
         state[S.preservationTimes]++;

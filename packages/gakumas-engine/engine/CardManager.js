@@ -29,11 +29,16 @@ export default class CardManager extends EngineComponent {
     const cards = this.config.idol.cards.concat(
       this.config.defaultCardIds.map((id) => ({ id }))
     );
-    const cardMap = cards.map(({ id, customizations }) => ({
-      id,
-      baseId: getBaseId(SkillCards.getById(id)),
-      c11n: customizations || {},
-    }));
+    const cardMap = cards.map(({ id, customizations }) => {
+      const card = {
+        id,
+        baseId: getBaseId(SkillCards.getById(id)),
+      };
+      if (customizations && Object.keys(customizations).length) {
+        card.c11n = customizations;
+      }
+      return card;
+    });
 
     state[S.cardMap] = cardMap;
     state[S.deckCards] = cardMap.map((_, i) => i);
@@ -61,6 +66,7 @@ export default class CardManager extends EngineComponent {
       return true;
     }
     if (
+      c11n &&
       Object.keys(c11n)
         .filter((k) => c11n[k])
         .some((k) => Customizations.getById(k).forceInitialHand)
@@ -75,7 +81,7 @@ export default class CardManager extends EngineComponent {
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     let attr = skillCard[attribute] || [];
     const c11n = state[S.cardMap][card].c11n;
-    if (!Object.keys(c11n).length) return attr;
+    if (!c11n || !Object.keys(c11n).length) return attr;
 
     attr = [...attr];
     for (let k in c11n) {
@@ -298,6 +304,7 @@ export default class CardManager extends EngineComponent {
     } else if (!skillCard.limit) {
       state[S.discardedCards].push(card);
     } else if (
+      c11n &&
       Object.keys(c11n)
         .map(Customizations.getById)
         .some((c) => c11n[c.id] && c?.limit === 0)
@@ -380,7 +387,6 @@ export default class CardManager extends EngineComponent {
     state[S.cardMap].push({
       id: skillCard.id,
       baseId: getBaseId(skillCard),
-      c11n: {},
     });
     state[S.handCards].push(state[S.cardMap].length - 1);
     this.logger.log(state, "addRandomUpgradedCardToHand", {
@@ -395,7 +401,6 @@ export default class CardManager extends EngineComponent {
     state[S.cardMap].push({
       id: skillCard.id,
       baseId: getBaseId(skillCard),
-      c11n: {},
     });
     state[S.deckCards].push(state[S.cardMap].length - 1);
     this.logger.log(state, "addCardToTopOfDeck", {
