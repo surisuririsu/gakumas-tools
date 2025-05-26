@@ -2,7 +2,7 @@ import { S } from "../constants";
 import { deepCopy } from "../utils";
 import BaseStrategy from "./BaseStrategy";
 
-const MAX_DEPTH = 4;
+const MAX_DEPTH = 3;
 
 export default class HeuristicStrategy extends BaseStrategy {
   constructor(engine) {
@@ -37,8 +37,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       this.rootEffectCount = state[S.effects].length;
     }
 
-    const logIndex = state.logs.length;
-    this.engine.logger.log(state, "hand", null);
+    const logIndex = this.engine.logger.log(state, "hand", null);
 
     const futures = state[S.handCards].map((card) =>
       this.getFuture(state, card)
@@ -57,7 +56,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       maxScore = this.getStateScore(nextState);
     }
 
-    nextState.logs[logIndex].data = {
+    this.engine.logger.logs[logIndex].data = {
       handCards: state[S.handCards].map((card) => ({
         id: state[S.cardMap][card].id,
         c: state[S.cardMap][card].c11n,
@@ -147,7 +146,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     // Genki
     score +=
       state[S.genki] *
-      Math.tanh(state[S.turnsRemaining] / 2) *
+      Math.tanh(state[S.turnsRemaining] / 3) *
       0.7 *
       this.motivationMultiplier;
 

@@ -20,22 +20,44 @@ export const ADDITIVE_OPERATORS = ["+", "-"];
 export const MULTIPLICATIVE_OPERATORS = ["*", "/", "%"];
 export const ASSIGNMENT_OPERATORS = ["=", "+=", "-=", "*=", "/=", "%="];
 
+function formatEffect(effect) {
+  effect.conditions = effect.conditions.map((x) => x.split(TOKEN_REGEX));
+  effect.actions = effect.actions.map((x) => x.split(TOKEN_REGEX));
+  return effect;
+}
+
 export const DEFAULT_EFFECTS = [
   {
-    phase: "endOfTurn",
+    phase: "cardUsed",
+    conditions: ["stance==strength2"],
+    actions: ["fixedStamina-=1"],
+    source: { type: "default", id: "強気2" },
+  },
+].map(formatEffect);
+
+export const FULL_POWER_EFFECTS = [
+  {
+    conditions: ["lockStanceTurns==0", "fullPowerCharge>=10"],
+    actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
+    source: { type: "default", id: "全力" },
+  },
+].map(formatEffect);
+
+export const GOOD_IMPRESSION_EFFECTS = [
+  {
     conditions: ["goodImpressionTurns>=1"],
     actions: ["score+=goodImpressionTurns"],
-    group: 100,
     source: { type: "default", id: "好印象" },
   },
+].map(formatEffect);
+
+export const STANCE_CHANGED_EFFECTS = [
   {
-    phase: "stanceChanged",
     conditions: ["prevStance==preservation", "stance!=leisure"],
     actions: ["enthusiasm+=5+enthusiasmBonus", "cardUsesRemaining+=1"],
     source: { type: "default", id: "温存" },
   },
   {
-    phase: "stanceChanged",
     conditions: ["prevStance==preservation2", "stance!=leisure"],
     actions: [
       "enthusiasm+=8+enthusiasmBonus",
@@ -45,48 +67,27 @@ export const DEFAULT_EFFECTS = [
     source: { type: "default", id: "温存2" },
   },
   {
-    phase: "cardUsed",
-    conditions: ["stance==strength2"],
-    actions: ["fixedStamina-=1"],
-    source: { type: "default", id: "強気2" },
-  },
-  {
-    phase: "beforeStartOfTurn",
-    conditions: ["lockStanceTurns==0", "fullPowerCharge>=10"],
-    actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
-    source: { type: "default", id: "全力" },
-  },
-  {
-    phase: "stanceChanged",
-    conditions: ["stance==fullPower"],
-    actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
-    source: { type: "default", id: "全力" },
-  },
-  {
-    phase: "stanceChanged",
     conditions: ["prevStance==leisure"],
     actions: ["fixedGenki+=5", "cardUsesRemaining+=1"],
     source: { type: "default", id: "のんびり" },
   },
   {
-    phase: "stanceChanged",
     conditions: ["prevStance==leisure", "stance==fullPower"],
     targets: ["all"],
     actions: ["g.score+=10"],
     source: { type: "default", id: "のんびり" },
   },
   {
-    phase: "stanceChanged",
     conditions: ["prevStance==leisure", "stance!=fullPower"],
     actions: ["enthusiasm+=10+enthusiasmBonus"],
     source: { type: "default", id: "のんびり" },
   },
-];
-
-DEFAULT_EFFECTS.forEach((effect) => {
-  effect.conditions = effect.conditions.map((x) => x.split(TOKEN_REGEX));
-  effect.actions = effect.actions.map((x) => x.split(TOKEN_REGEX));
-});
+  {
+    conditions: ["stance==fullPower"],
+    actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
+    source: { type: "default", id: "全力" },
+  },
+].map(formatEffect);
 
 export const UNFRESH_PHASES = ["beforeStartOfTurn", "startOfTurn", "everyTurn"];
 export const CHANGE_TRIGGER_PHASES = ["processCard", "processCost"];

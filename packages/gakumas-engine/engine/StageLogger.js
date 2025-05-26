@@ -8,6 +8,10 @@ export default class StageLogger {
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
       state.graphData[GRAPHED_FIELDS[i]] = [];
     }
+  }
+
+  reset() {
+    this.logs = [];
     this.disabled = false;
   }
 
@@ -19,9 +23,18 @@ export default class StageLogger {
     this.disabled = false;
   }
 
+  pickLogs(state) {
+    const logs = state.logs.map((logIndex) => this.logs[logIndex]);
+    this.logs = [];
+    return logs;
+  }
+
   log(state, logType, data) {
     if (this.disabled) return;
-    state.logs.push({ logType, data });
+    this.logs.push({ logType, data });
+    const idx = this.logs.length - 1;
+    state.logs.push(idx);
+    return idx;
   }
 
   debug(...args) {
