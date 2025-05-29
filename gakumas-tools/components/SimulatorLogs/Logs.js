@@ -34,7 +34,7 @@ function Log({ line, idolId }) {
     return <Tile text={t("upgradedHand")} />;
   } else if (line.logType == "exchangeHand") {
     return <Tile text={t("exchangedHand")} />;
-  } else if (line.logType == "addRandomUpgradedCardToHand") {
+  } else if (line.logType == "addCardToHand") {
     return (
       <AddCard {...line.data} idolId={idolId} text={t("addedCardToHand")} />
     );

@@ -3,6 +3,13 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-05-28
+
+### Added
+
+- Howling China and Rinami
+- New p-items
+
 ## 2025-05-26
 
 ### Fixed

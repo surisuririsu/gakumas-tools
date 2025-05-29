@@ -389,7 +389,7 @@ export default class CardManager extends EngineComponent {
       baseId: getBaseId(skillCard),
     });
     state[S.handCards].push(state[S.cardMap].length - 1);
-    this.logger.log(state, "addRandomUpgradedCardToHand", {
+    this.logger.log(state, "addCardToHand", {
       type: "skillCard",
       id: skillCard.id,
     });
@@ -404,6 +404,20 @@ export default class CardManager extends EngineComponent {
     });
     state[S.deckCards].push(state[S.cardMap].length - 1);
     this.logger.log(state, "addCardToTopOfDeck", {
+      type: "skillCard",
+      id: skillCard.id,
+    });
+  }
+
+  addCardToHand(state, cardId) {
+    const skillCard = SkillCards.getById(cardId);
+
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard),
+    });
+    state[S.handCards].push(state[S.cardMap].length - 1);
+    this.logger.log(state, "addCardToHand", {
       type: "skillCard",
       id: skillCard.id,
     });
