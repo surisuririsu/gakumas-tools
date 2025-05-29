@@ -33,6 +33,8 @@ export default class Executor extends EngineComponent {
         engine.cardManager.addRandomUpgradedCardToHand(state),
       addCardToTopOfDeck: (state, cardId) =>
         engine.cardManager.addCardToTopOfDeck(state, cardId),
+      addCardToHand: (state, cardId) =>
+        engine.cardManager.addCardToHand(state, cardId),
       moveCardToHand: (state, cardId, exact) =>
         engine.cardManager.moveCardToHand(state, cardId, parseInt(exact, 10)),
       moveCardToHandFromRemoved: (state, cardBaseId) =>

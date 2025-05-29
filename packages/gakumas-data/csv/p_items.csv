@@ -278,7 +278,12 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 277,N.I.Aライト（金白）,SSR,FALSE,logic,stage,produce,,FALSE,
 278,N.I.Aバンド（金黒）,SSR,FALSE,anomaly,stage,produce,,FALSE,
 279,N.I.Aライト（金黒）,SSR,FALSE,anomaly,stage,produce,,FALSE,
-280,伝説のidol装備,SSR,FALSE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isStrength,if:genki>=50,do:score+=genki*5,do:genki=0,limit:2"
+280,伝説のidol装備,SSR,FALSE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isStrength,if:genki>=50,do:score+=genki*4.4,do:genki=0,do:fixedStamina-=2,limit:2"
 281,伝説のidol装備+,SSR,TRUE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isStrength,if:genki>=50,do:score+=genki*5,do:genki=0,limit:2"
 282,居残りの生徒会室,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:strengthTimes>=3,do:enthusiasmBonus+=10,limit:1"
 283,のびのびバンド,SR,FALSE,anomaly,produce,support,,FALSE,
+284,世界を救ったマイク,SSR,FALSE,sense,stage,pIdol,95,FALSE,"at:cardUsed,if:cardEffects&concentration,do:halfCostTurns+=2,limit:2"
+285,世界を救ったマイク+,SSR,TRUE,sense,stage,pIdol,95,FALSE,"at:cardUsed,if:cardEffects&concentration,do:halfCostTurns+=2,limit:3"
+286,勝利をその手に,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(111),limit:1"
+287,迷子のお呼び出し,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(131),limit:1"
+288,麻央にぴったし,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(421),limit:1"
