@@ -55,19 +55,33 @@ export default class IdolStageConfig {
       const criterion = criteria[key];
 
       let multiplier = 0;
-      if (param > 1200) {
-        multiplier = param + 300 * 10;
-        if (hasFlatBonus) {
-          multiplier += param - 1200;
+      if (season < 25) {
+        if (param > 1200) {
+          multiplier = param + 300 * 10;
+          if (hasFlatBonus) {
+            multiplier += param - 1200;
+          }
+        } else if (param > 900) {
+          multiplier = param * 2 + 300 * 6;
+        } else if (param > 600) {
+          multiplier = param * 3 + 300 * 3;
+        } else if (param > 300) {
+          multiplier = param * 4 + 300;
+        } else if (param > 0) {
+          multiplier = param * 5;
         }
-      } else if (param > 900) {
-        multiplier = param * 2 + 300 * 6;
-      } else if (param > 600) {
-        multiplier = param * 3 + 300 * 3;
-      } else if (param > 300) {
-        multiplier = param * 4 + 300;
-      } else if (param > 0) {
-        multiplier = param * 5;
+      } else {
+        if (param > 1800) {
+          multiplier = param * 1.5 + 1800;
+        } else if (param > 1200) {
+          multiplier = param * 2 + 700;
+        } else if (param > 600) {
+          multiplier = param * 2.5 + 300;
+        } else if (param > 300) {
+          multiplier = param * 3;
+        } else if (param > 0) {
+          multiplier = param * 4 - 250;
+        }
       }
 
       if (hasFlatterBonus) multiplier += param;
