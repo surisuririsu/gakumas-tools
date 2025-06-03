@@ -154,9 +154,7 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <>
-          ※ Season 25 preview is based only on the announced p-items and
-          criteria. Turn types are not yet known. First turn is set to Da for
-          now.
+          ※ Season 25 score multiplier is inaccurate for parameters above 2400.
         </>
         <StageSelect />
         {stage.type == "event" ? (
