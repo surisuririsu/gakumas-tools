@@ -5,6 +5,12 @@ Dates are based on Eastern Time Zone.
 
 ## 2025-06-02
 
+### Changed
+
+- Contest season 25 turn counts and probabilities, parameter bonus calculation (incomplete)
+
+## 2025-06-02
+
 ### Added
 
 - Preview of contest season 25
