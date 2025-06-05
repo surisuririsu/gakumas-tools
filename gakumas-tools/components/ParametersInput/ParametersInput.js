@@ -5,7 +5,7 @@ import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
 const MIN = 0;
-const MAX = 2000;
+const MAX = 2400;
 
 function ParametersInput({
   parameters,
