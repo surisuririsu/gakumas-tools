@@ -1,16 +1,16 @@
 import { setRequestLocale } from "next-intl/server";
-import NiaCalculator from "@/components/ProduceRankCalculator/NiaCalculator";
+import HajimeCalculator from "@/components/ProduceRankCalculator/HajimeCalculator";
 import { generateMetadataForTool } from "@/utils/metadata";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("niaCalculator", locale);
+  return await generateMetadataForTool("produceRankCalculator", locale);
 }
 
-export default async function NiaProduceRankCalculatorPage({ params }) {
+export default async function HajimeProduceRankCalculatorPage({ params }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <NiaCalculator />;
+  return <HajimeCalculator />;
 }

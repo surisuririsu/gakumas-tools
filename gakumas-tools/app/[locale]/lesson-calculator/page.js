@@ -1,16 +1,8 @@
-import { setRequestLocale } from "next-intl/server";
-import LessonCalculator from "@/components/LessonCalculator";
-import { generateMetadataForTool } from "@/utils/metadata";
-
-export async function generateMetadata({ params }) {
-  const { locale } = await params;
-
-  return await generateMetadataForTool("lessonCalculator", locale);
-}
+import { redirect } from "@/i18n/routing";
 
 export default async function LessonCalculatorPage({ params }) {
   const { locale } = await params;
-  setRequestLocale(locale);
 
-  return <LessonCalculator />;
+  redirect({ href: "/calculator/hajime/lesson", locale });
+  return null;
 }

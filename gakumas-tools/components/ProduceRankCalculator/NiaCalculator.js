@@ -56,7 +56,7 @@ const STAGE_OPTIONS_BY_DIFFICULTY = {
 const FINAL_AUDITIONS = ["quartet", "finale"];
 
 export default function NiaCalculator() {
-  const t = useTranslations("ProduceRankCalculator");
+  const t = useTranslations("Calculator");
 
   const DIFFICULTY_OPTIONS = useMemo(
     () =>
