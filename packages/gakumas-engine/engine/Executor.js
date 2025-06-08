@@ -64,6 +64,12 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setGoodImpressionTurnsEffectBuff: (state, amount, turns) =>
+        engine.buffManager.setGoodImpressionTurnsEffectBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       removeDebuffs: (state, amount) =>
         engine.buffManager.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => engine.buffManager.setStance(state, stance),

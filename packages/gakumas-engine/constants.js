@@ -46,7 +46,7 @@ export const FULL_POWER_EFFECTS = [
 export const GOOD_IMPRESSION_EFFECTS = [
   {
     conditions: ["goodImpressionTurns>=1"],
-    actions: ["score+=goodImpressionTurns"],
+    actions: ["score+=goodImpressionTurns*goodImpressionTurnsEffectBuff"],
     source: { type: "default", id: "好印象" },
   },
 ].map(formatEffect);
@@ -144,6 +144,7 @@ export const ALL_FIELDS = [
   "uneaseTurns",
   "scoreBuffs",
   "goodImpressionTurnsBuffs",
+  "goodImpressionTurnsEffectBuffs",
   "goodConditionTurns",
   "goodConditionTurnsMultiplier",
   "perfectConditionTurns",
