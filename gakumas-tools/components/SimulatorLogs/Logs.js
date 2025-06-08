@@ -28,6 +28,10 @@ function Log({ line, idolId }) {
     return <SetBuff label={t("scoreBuff")} {...line.data} />;
   } else if (line.logType == "setGoodImpressionTurnsBuff") {
     return <SetBuff label={t("goodImpressionTurnsBuff")} {...line.data} />;
+  } else if (line.logType == "setGoodImpressionTurnsEffectBuff") {
+    return (
+      <SetBuff label={t("goodImpressionTurnsEffectBuff")} {...line.data} />
+    );
   } else if (line.logType == "setEffect") {
     return <Tile text={t("setEffect")} />;
   } else if (line.logType == "upgradeHand") {

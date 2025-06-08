@@ -21,6 +21,11 @@ export default class BuffManager extends EngineComponent {
         state[S.strengthTimes] +
         state[S.preservationTimes] +
         state[S.fullPowerTimes],
+      goodImpressionTurnsEffectBuff: (state) =>
+        state[S.goodImpressionTurnsEffectBuffs].reduce(
+          (acc, buff) => acc + buff.amount,
+          1
+        ),
     };
   }
 
@@ -42,6 +47,7 @@ export default class BuffManager extends EngineComponent {
     // Buffs
     state[S.scoreBuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
+    state[S.goodImpressionTurnsEffectBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;
@@ -104,6 +110,25 @@ export default class BuffManager extends EngineComponent {
     });
   }
 
+  setGoodImpressionTurnsEffectBuff(state, amount, turns) {
+    const buffIndex = state[S.goodImpressionTurnsEffectBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.goodImpressionTurnsEffectBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.goodImpressionTurnsEffectBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setGoodImpressionTurnsEffectBuff", {
+      amount,
+      turns,
+    });
+  }
+
   removeDebuffs(state, amount) {
     for (let i = 0; i < DEBUFF_FIELDS.length; i++) {
       const field = DEBUFF_FIELDS[i];
@@ -153,6 +178,23 @@ export default class BuffManager extends EngineComponent {
       }
       if (goodImpressionTurnsBuffs[i].turns != 0) {
         state[S.goodImpressionTurnsBuffs].push(goodImpressionTurnsBuffs[i]);
+      }
+    }
+
+    // Good impression turns effect buffs
+    const goodImpressionTurnsEffectBuffs =
+      state[S.goodImpressionTurnsEffectBuffs];
+    state[S.goodImpressionTurnsEffectBuffs] = [];
+    for (let i = 0; i < goodImpressionTurnsEffectBuffs.length; i++) {
+      if (goodImpressionTurnsEffectBuffs[i].fresh) {
+        goodImpressionTurnsEffectBuffs[i].fresh = false;
+      } else if (goodImpressionTurnsEffectBuffs[i].turns) {
+        goodImpressionTurnsEffectBuffs[i].turns--;
+      }
+      if (goodImpressionTurnsEffectBuffs[i].turns != 0) {
+        state[S.goodImpressionTurnsEffectBuffs].push(
+          goodImpressionTurnsEffectBuffs[i]
+        );
       }
     }
   }
