@@ -11,9 +11,9 @@ export default function CalculatorLayout({ children }) {
   const t = useTranslations("Calculator");
 
   let currentScenario = null;
-  if (pathname == "/calculator/hajime") {
+  if (pathname.startsWith("/calculator/hajime")) {
     currentScenario = "hajime";
-  } else if (pathname == "/calculator/nia") {
+  } else if (pathname.startsWith("/calculator/nia")) {
     currentScenario = "nia";
   }
 
@@ -21,7 +21,7 @@ export default function CalculatorLayout({ children }) {
     () =>
       ["hajime", "nia"].map((scenario) => ({
         value: scenario,
-        label: t(scenario),
+        label: t(`scenarios.${scenario}`),
       })),
     [t]
   );
@@ -34,7 +34,7 @@ export default function CalculatorLayout({ children }) {
           <ButtonGroup
             options={SCENARIO_OPTIONS}
             selected={currentScenario}
-            onChange={(val) => router.push(val)}
+            onChange={(val) => router.push(`/calculator/${val}`)}
           />
         </>
       )}

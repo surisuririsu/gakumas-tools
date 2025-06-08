@@ -1,16 +1,8 @@
-import { setRequestLocale } from "next-intl/server";
-import HajimeCalculator from "@/components/ProduceRankCalculator/HajimeCalculator";
-import { generateMetadataForTool } from "@/utils/metadata";
+import { redirect } from "@/i18n/routing";
 
-export async function generateMetadata({ params }) {
+export default async function HajimeCalculatorPage({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("produceRankCalculator", locale);
-}
-
-export default async function ProduceRankCalculatorPage({ params }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-
-  return <HajimeCalculator />;
+  redirect({ href: "/calculator/hajime/produce-rank", locale });
+  return null;
 }

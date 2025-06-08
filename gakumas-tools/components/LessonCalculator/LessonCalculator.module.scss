@@ -1,15 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
 
-.lessonCalculator {
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
 .results {
   table-layout: fixed;
   width: 100%;

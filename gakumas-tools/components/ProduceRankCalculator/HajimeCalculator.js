@@ -17,7 +17,7 @@ import {
 import styles from "./ProduceRankCalculator.module.scss";
 
 function HajimeCalculator() {
-  const t = useTranslations("ProduceRankCalculator");
+  const t = useTranslations("Calculator");
 
   const DIFFICULTY_OPTIONS = useMemo(
     () =>

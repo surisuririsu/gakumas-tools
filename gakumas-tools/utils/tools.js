@@ -14,11 +14,6 @@ export const TOOLS = {
     path: "/calculator",
     pinnable: true,
   },
-  lessonCalculator: {
-    icon: <FaAnglesUp />,
-    path: "/lesson-calculator",
-    pinnable: true,
-  },
   memoryCalculator: {
     icon: <FaPercent />,
     path: "/memory-calculator",

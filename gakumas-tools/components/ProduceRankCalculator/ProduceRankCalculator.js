@@ -4,10 +4,11 @@ import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import HajimeCalculator from "./HajimeCalculator";
 import NiaCalculator from "./NiaCalculator";
+import LessonCalculator from "../LessonCalculator";
 import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
-  const t = useTranslations("ProduceRankCalculator");
+  const t = useTranslations("Calculator");
 
   const SCENARIO_OPTIONS = useMemo(
     () =>
@@ -18,7 +19,17 @@ function ProduceRankCalculator() {
     [t]
   );
 
+  const CALCULATOR_OPTIONS = useMemo(
+    () =>
+      ["produce-rank", "lesson"].map((calculator) => ({
+        value: calculator,
+        label: t(`calculators.${calculator}`),
+      })),
+    [t]
+  );
+
   const [scenario, setScenario] = useState("nia");
+  const [calculator, setCalculator] = useState("produce-rank");
 
   return (
     <div className={styles.produceRankCalculator}>
@@ -29,7 +40,23 @@ function ProduceRankCalculator() {
         onChange={setScenario}
       />
 
-      {scenario == "nia" ? <NiaCalculator /> : <HajimeCalculator />}
+      {scenario == "hajime" && (
+        <>
+          <label>{t("calculator")}</label>
+          <ButtonGroup
+            options={CALCULATOR_OPTIONS}
+            selected={calculator}
+            onChange={setCalculator}
+          />
+        </>
+      )}
+      {scenario == "nia" ? (
+        <NiaCalculator />
+      ) : calculator == "produce-rank" ? (
+        <HajimeCalculator />
+      ) : (
+        <LessonCalculator />
+      )}
     </div>
   );
 }

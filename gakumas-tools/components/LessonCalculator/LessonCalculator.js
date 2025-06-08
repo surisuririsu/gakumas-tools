@@ -30,7 +30,7 @@ function LessonCalculator() {
   const lessons = LESSONS_BY_DIFFICULTY[difficulty];
 
   return (
-    <div className={styles.lessonCalculator}>
+    <>
       <label>{t("difficulty")}</label>
       <ButtonGroup
         options={DIFFICULTY_OPTIONS}
@@ -112,7 +112,7 @@ function LessonCalculator() {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 }
 
