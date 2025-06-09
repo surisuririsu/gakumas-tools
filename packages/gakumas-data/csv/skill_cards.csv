@@ -562,5 +562,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 561,次こそは、必ず+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,94,TRUE,,do:stamina-=6,"do:setStance(preservation);target:mental,do:g.genki+=11",1,
 562,どんな世界でも,,SSR,active,sense,1,FALSE,TRUE,pIdol,95,FALSE,,do:cost-=4,"do:concentrationMultiplier=2,do:score+=7,do:cardUsesRemaining+=1",1,
 563,どんな世界でも+,,SSR,active,sense,1,TRUE,TRUE,pIdol,95,FALSE,,do:cost-=4,"do:concentrationMultiplier=2,do:score+=17,do:cardUsesRemaining+=1",1,
-564,戦う理由,,SSR,mental,logic,1,FALSE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1",,
+564,戦う理由,,SSR,mental,logic,1,FALSE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=2,do:goodImpressionTurns+=3,do:goodImpressionTurns*=1.1",,
 565,戦う理由+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1",,

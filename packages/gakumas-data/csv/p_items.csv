@@ -287,7 +287,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 286,勝利をその手に,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(111),limit:1"
 287,迷子のお呼び出し,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(131),limit:1"
 288,麻央にぴったし,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfStage,do:addCardToHand(421),limit:1"
-289, シルヴェスタ出撃！,SSR,FALSE,logic,stage,pIdol,96,FALSE,"at:endOfTurn,if:turnsElapsed%2==1,if:numRemovedCards<=8,do:setGoodImpressionTurnsEffectBuff(0.7,3)"
+289, シルヴェスタ出撃！,SSR,FALSE,logic,stage,pIdol,96,FALSE,"at:endOfTurn,if:turnsElapsed%2==1,if:numRemovedCards<=8,do:setGoodImpressionTurnsEffectBuff(0.7,3),do:fixedStamina-=1"
 290, シルヴェスタ出撃！+,SSR,TRUE,logic,stage,pIdol,96,FALSE,"at:endOfTurn,if:turnsElapsed%2==1,if:numRemovedCards<=8,do:setGoodImpressionTurnsEffectBuff(0.7,3)"
 291,おとものミミズク,SSR,FALSE,logic,produce,support,,FALSE,
 292,へとへとできゅー,SR,FALSE,logic,produce,support,,FALSE,
