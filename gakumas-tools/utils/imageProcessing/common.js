@@ -1,4 +1,4 @@
-export const DEBUG = false;
+export const DEBUG = true;
 
 export function loadImageFromFile(file) {
   return new Promise((resolve) => {

@@ -22,7 +22,7 @@ function Memories() {
 
   useEffect(() => {
     if (status == "authenticated" && !memories.length) {
-      fetchMemories();
+      // fetchMemories();
     }
   }, [status]);
 
