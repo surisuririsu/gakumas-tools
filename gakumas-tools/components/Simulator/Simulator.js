@@ -76,6 +76,7 @@ export default function Simulator() {
     if (navigator.hardwareConcurrency) {
       numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
     }
+    setNumRuns(Math.floor((numWorkers * 250) / 200) * 200);
 
     workersRef.current = [];
     for (let i = 0; i < numWorkers; i++) {
