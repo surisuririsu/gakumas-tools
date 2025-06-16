@@ -9,7 +9,6 @@ import AreaPlot from "@/components/AreaPlot";
 import BoxPlot from "@/components/BoxPlot";
 import ButtonGroup from "@/components/ButtonGroup";
 import DistributionPlot from "@/components/DistributionPlot";
-import { NUM_RUNS } from "@/simulator/constants";
 import styles from "./SimulatorResult.module.scss";
 
 const HISTOGRAM = <AiOutlineBarChart />;
@@ -20,7 +19,7 @@ export default function SimulatorResultGraphs({ data, plan }) {
   const t = useTranslations("SimulatorResultGraphs");
 
   const [graphType, setGraphType] = useState("histogram");
-  const label = `${t("score")} (n=${NUM_RUNS})`;
+  const label = `${t("score")} (n=${data.scores.length})`;
 
   return (
     <div>

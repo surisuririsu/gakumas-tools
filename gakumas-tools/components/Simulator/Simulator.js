@@ -27,7 +27,7 @@ import StageSelect from "@/components/StageSelect";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
-import { MAX_WORKERS, NUM_RUNS, SYNC } from "@/simulator/constants";
+import { MAX_WORKERS, DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
 import { logEvent } from "@/utils/logging";
 import {
   bucketScores,
@@ -56,6 +56,7 @@ export default function Simulator() {
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
+  const [numRuns, setNumRuns] = useState(DEFAULT_NUM_RUNS);
   const workersRef = useRef();
 
   const config = useMemo(() => {
@@ -113,11 +114,11 @@ export default function Simulator() {
     console.time("simulation");
 
     if (SYNC || !workersRef.current) {
-      const result = simulate(config, strategy, NUM_RUNS);
+      const result = simulate(config, strategy, numRuns);
       setResult(result);
     } else {
       const numWorkers = workersRef.current.length;
-      const runsPerWorker = Math.round(NUM_RUNS / numWorkers);
+      const runsPerWorker = Math.round(numRuns / numWorkers);
 
       let promises = [];
       for (let i = 0; i < numWorkers; i++) {
@@ -221,11 +222,19 @@ export default function Simulator() {
             </option>
           ))}
         </select>
+        <input
+          type="range"
+          value={numRuns}
+          onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
+          min={200}
+          max={4000}
+          step={200}
+        />
         <Button style="blue" onClick={runSimulation} disabled={running}>
-          {running ? <Loader /> : t("simulate")}
+          {running ? <Loader /> : `${t("simulate")} (n=${numRuns})`}
         </Button>
         <SimulatorButtons />
-        <div className={styles.url}>{simulatorUrl}</div>
+        {/* <div className={styles.url}>{simulatorUrl}</div> */}
         <div className={styles.subLinks}>
           <a
             href={`https://docs.google.com/forms/d/e/1FAIpQLScNquedw8Lp2yVfZjoBFMjQxIFlX6-rkzDWIJTjWPdQVCJbiQ/viewform?usp=pp_url&entry.1787906485=${encodeURIComponent(
@@ -239,7 +248,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2025-06-08
+            {t("lastUpdated")}: 2025-06-17
           </a>
         </div>
         {!simulatorData && (

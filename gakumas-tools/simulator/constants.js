@@ -1,5 +1,5 @@
 export const SYNC = false;
-export const NUM_RUNS = 2000;
+export const DEFAULT_NUM_RUNS = 2000;
 export const BUCKET_SIZE = 1000;
 export const MAX_WORKERS = 8;
 
