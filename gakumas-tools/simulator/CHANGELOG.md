@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-06-17
+
+### Added
+
+- Slider for number of runs to simulate
+
 ## 2025-06-08
 
 ### Added
