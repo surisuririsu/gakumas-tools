@@ -70,6 +70,12 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setConcentrationBuff: (state, amount, turns) =>
+        engine.buffManager.setConcentrationBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       removeDebuffs: (state, amount) =>
         engine.buffManager.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => engine.buffManager.setStance(state, stance),
@@ -82,6 +88,7 @@ export default class Executor extends EngineComponent {
       score: (...args) => this.resolveScore(...args),
       goodImpressionTurns: (...args) =>
         this.resolveGoodImpressionTurns(...args),
+      concentration: (...args) => this.resolveConcentration(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
       fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args),
@@ -254,6 +261,7 @@ export default class Executor extends EngineComponent {
         ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "goodImpressionTurns" && op == "+=") ||
+        (lhs == "concentration" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
@@ -476,6 +484,16 @@ export default class Executor extends EngineComponent {
     );
 
     state[S.goodImpressionTurns] += goodImpressionTurns;
+  }
+
+  resolveConcentration(state, concentration) {
+    // Apply concentration buffs
+    concentration *= state[S.concentrationBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+
+    state[S.concentration] += concentration;
   }
 
   resolveGenki(state, genki) {

@@ -48,6 +48,7 @@ export default class BuffManager extends EngineComponent {
     state[S.scoreBuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.concentrationBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;
@@ -129,6 +130,25 @@ export default class BuffManager extends EngineComponent {
     });
   }
 
+  setConcentrationBuff(state, amount, turns) {
+    const buffIndex = state[S.concentrationBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.concentrationBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.concentrationBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setConcentrationBuff", {
+      amount,
+      turns,
+    });
+  }
+
   removeDebuffs(state, amount) {
     for (let i = 0; i < DEBUFF_FIELDS.length; i++) {
       const field = DEBUFF_FIELDS[i];
@@ -195,6 +215,20 @@ export default class BuffManager extends EngineComponent {
         state[S.goodImpressionTurnsEffectBuffs].push(
           goodImpressionTurnsEffectBuffs[i]
         );
+      }
+    }
+
+    // Concentration buffs
+    const concentrationBuffs = state[S.concentrationBuffs];
+    state[S.concentrationBuffs] = [];
+    for (let i = 0; i < concentrationBuffs.length; i++) {
+      if (concentrationBuffs[i].fresh) {
+        concentrationBuffs[i].fresh = false;
+      } else if (concentrationBuffs[i].turns) {
+        concentrationBuffs[i].turns--;
+      }
+      if (concentrationBuffs[i].turns != 0) {
+        state[S.concentrationBuffs].push(concentrationBuffs[i]);
       }
     }
   }

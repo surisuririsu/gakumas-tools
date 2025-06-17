@@ -9,6 +9,7 @@ Dates are based on Eastern Time Zone.
 
 - Slider for number of runs to simulate
 - Preview of contest season 26
+- Preview of Love & Joy Sumika
 
 ## 2025-06-08
 
