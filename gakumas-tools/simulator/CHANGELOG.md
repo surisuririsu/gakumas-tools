@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Added
 
 - Slider for number of runs to simulate
+- Preview of contest season 26
 
 ## 2025-06-08
 
