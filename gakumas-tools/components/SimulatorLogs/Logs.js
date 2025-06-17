@@ -32,6 +32,8 @@ function Log({ line, idolId }) {
     return (
       <SetBuff label={t("goodImpressionTurnsEffectBuff")} {...line.data} />
     );
+  } else if (line.logType == "setConcentrationBuff") {
+    return <SetBuff label={t("concentrationBuff")} {...line.data} />;
   } else if (line.logType == "setEffect") {
     return <Tile text={t("setEffect")} />;
   } else if (line.logType == "upgradeHand") {

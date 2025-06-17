@@ -54,6 +54,7 @@ export default class CardManager extends EngineComponent {
     state[S.removedCards] = [];
     state[S.heldCards] = [];
     state[S.cardsUsed] = 0;
+    state[S.activeCardsUsed] = 0;
     state[S.turnCardsUsed] = 0;
     state[S.turnCardsUpgraded] = 0;
 
@@ -269,6 +270,9 @@ export default class CardManager extends EngineComponent {
     // Increment counters
     state[S.cardsUsed]++;
     state[S.turnCardsUsed]++;
+    if (skillCard.type == "active") {
+      state[S.activeCardsUsed]++;
+    }
 
     // Trigger effects after card used
     conditionState = shallowCopy(state);
