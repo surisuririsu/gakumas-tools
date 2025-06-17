@@ -293,3 +293,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 292,へとへとできゅー,SR,FALSE,logic,produce,support,,FALSE,
 293,あの日の約束,SSR,FALSE,sense,stage,pIdol,97,FALSE,"at:activeCardUsed,if:activeCardsUsed%2==1,do:setConcentrationBuff(0.25,5),limit:3"
 294,あの日の約束+,SSR,TRUE,sense,stage,pIdol,97,FALSE,"at:activeCardUsed,if:activeCardsUsed%2==1,do:setConcentrationBuff(0.25,5),limit:3"
+295,包まれるやさしさ,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:goodConditionTurns>=10,do:perfectConditionTurns+=4,do:genki+=10,limit:1"
