@@ -55,13 +55,6 @@
   },
   "Calculator": {
     "scenario": "剧本",
-    "hajime": "初",
-    "nia": "N.I.A",
-    "produce-rank": "制作评级",
-    "lesson": "训练"
-  },
-  "ProduceRankCalculator": {
-    "scenario": "剧本",
     "scenarios": {
       "hajime": "初",
       "nia": "N.I.A"
