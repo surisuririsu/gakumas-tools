@@ -88,14 +88,6 @@ export default function Simulator() {
     return () => workersRef.current?.forEach((worker) => worker.terminate());
   }, []);
 
-  useEffect(() => {
-    if (simulatorData) {
-      document.getElementById("simulator_result").scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  }, [simulatorData]);
-
   const setResult = useCallback(
     (result) => {
       const bucketedScores = bucketScores(result.scores);
