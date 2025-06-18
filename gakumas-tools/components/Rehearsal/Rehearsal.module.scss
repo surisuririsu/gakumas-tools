@@ -56,3 +56,54 @@
 .ad {
   margin-top: 24px;
 }
+
+.chartButtons {
+  background-color: colors.$white-dark;
+
+  th {
+    padding: 0;
+  }
+
+  button {
+    width: 100%;
+    border: 1px solid colors.$black-light;
+    border-radius: 4px;
+    padding: 8px;
+
+    &.selected {
+      border-color: colors.$gk-orange;
+      background-color: colors.$gk-orange;
+      color: colors.$white;
+    }
+
+    &:hover {
+      border-color: colors.$gk-orange;
+      background-color: colors.$gk-orange-extra-light;
+      color: colors.$gk-red-orange;
+    }
+  }
+}
+
+.statsWrapper {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.stats {
+  text-align: center;
+
+  thead {
+    background-color: color.adjust(colors.$gk-orange, $lightness: 20%);
+  }
+
+  tbody {
+    background-color: color.adjust(colors.$gk-orange, $lightness: 40%);
+  }
+
+  th {
+    width: 25%;
+  }
+}

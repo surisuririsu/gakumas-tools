@@ -17,15 +17,19 @@ import { getScoresFromFile } from "@/utils/imageProcessing/rehearsal";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
 import KofiAd from "../KofiAd";
+import DistributionPlot from "../DistributionPlot";
+import { bucketScores } from "@/utils/simulator";
 
 const MAX_WORKERS = 8;
 
 function Rehearsal() {
   const t = useTranslations("Rehearsal");
+  const tRes = useTranslations("SimulatorResult");
 
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState(null);
   const workersRef = useRef();
 
   useEffect(() => {
@@ -100,6 +104,32 @@ function Rehearsal() {
     [data]
   );
 
+  const selectedData = useMemo(() => {
+    if (selected == null) return null;
+    const scores = boxPlotData[selected % 3].data[Math.floor(selected / 3)];
+    let median = null;
+    if (scores.length) {
+      const sorted = [...scores].sort((a, b) => a - b);
+      const mid = Math.floor(scores.length / 2);
+      if (scores.length % 2 === 0) {
+        median = Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+      } else {
+        median = Math.round(sorted[mid]);
+      }
+    }
+
+    return {
+      scores,
+      bucketedScores: bucketScores(scores),
+      min: Math.min(...scores),
+      average: Math.round(
+        scores.reduce((acc, cur) => acc + cur, 0) / scores.length
+      ),
+      median,
+      max: Math.max(...scores),
+    };
+  }, [selected, boxPlotData]);
+
   return (
     <div className={styles.rehearsal}>
       <div className={styles.help}>
@@ -142,8 +172,38 @@ function Rehearsal() {
             data={boxPlotData}
             showLegend={false}
           />
+          {selected !== null && (
+            <div className={styles.statsWrapper}>
+              <table className={styles.stats}>
+                <thead>
+                  <tr>
+                    <th>{tRes("min")}</th>
+                    <th>{tRes("average")}</th>
+                    <th>{tRes("median")}</th>
+                    <th>{tRes("max")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{selectedData.min}</td>
+                    <td>{selectedData.average}</td>
+                    <td>{selectedData.median}</td>
+                    <td>{selectedData.max}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <DistributionPlot
+                label={`${t("score")} (n=${selectedData.scores.length})`}
+                data={selectedData.bucketedScores}
+              />
+            </div>
+          )}
           <div className={styles.tableWrapper}>
-            <RehearsalTable data={data} />
+            <RehearsalTable
+              data={data}
+              selected={selected}
+              onChartClick={(x) => setSelected(x == selected ? null : x)}
+            />
           </div>
         </>
       )}
