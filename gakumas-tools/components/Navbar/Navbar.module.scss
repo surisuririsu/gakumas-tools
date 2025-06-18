@@ -2,20 +2,22 @@
 @use "../../styles/colors";
 
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
   z-index: 10;
   min-height: 48px;
   display: flex;
   align-items: center;
-  box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.75);
+  box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
+  margin: 8px;
+  padding: 0 8px;
+  border-radius: 24px;
   background-color: colors.$white;
   color: colors.$black-light;
 
   h1 {
     margin: 0 8px;
-
-    @media only screen and (max-width: 600px) {
-      display: none;
-    }
   }
 }
 
@@ -39,4 +41,14 @@
 
 .active {
   color: colors.$gk-orange;
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar {
+    right: 0;
+
+    h1 {
+      display: none;
+    }
+  }
 }

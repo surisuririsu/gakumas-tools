@@ -6,7 +6,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
-import ToolHeader from "@/components/ToolHeader";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
@@ -52,8 +51,8 @@ export default async function RootLayout({ params, children }) {
       <body className={inter.className}>
         <SessionContextProvider session={session}>
           <NextIntlClientProvider messages={messages}>
-            <Navbar />
             <WorkspaceContextProvider>
+              <Navbar />
               <DataContextProvider>
                 <MemoryCalculatorContextProvider>
                   <MemoryContextProvider>
@@ -63,10 +62,7 @@ export default async function RootLayout({ params, children }) {
                           <ModalContextProvider>
                             <div className={styles.tools}>
                               <PinnedTools />
-                              <main>
-                                <ToolHeader />
-                                {children}
-                              </main>
+                              <main>{children}</main>
                             </div>
                           </ModalContextProvider>
                         </LoadoutContextProvider>

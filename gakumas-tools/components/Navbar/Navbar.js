@@ -1,6 +1,7 @@
 "use client";
 import { memo } from "react";
 import { useTranslations } from "next-intl";
+import ToolHeader from "@/components/ToolHeader";
 import { Link, usePathname } from "@/i18n/routing";
 import { TOOLS } from "@/utils/tools";
 import NavbarLink from "./NavbarLink";
@@ -30,6 +31,7 @@ function Navbar() {
       </div>
 
       <NavbarMenu />
+      <ToolHeader />
     </nav>
   );
 }
