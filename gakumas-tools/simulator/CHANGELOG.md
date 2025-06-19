@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Changed
 
 - Updated score multipliers for season 26
+- Updated Love & Joy Sumika
 
 ## 2025-06-17
 
