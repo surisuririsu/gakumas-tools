@@ -564,5 +564,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 563,どんな世界でも+,,SSR,active,sense,1,TRUE,TRUE,pIdol,95,FALSE,,do:cost-=4,"do:concentrationMultiplier=2,do:score+=17,do:cardUsesRemaining+=1",1,
 564,戦う理由,,SSR,mental,logic,1,FALSE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=2,do:goodImpressionTurns+=3,do:goodImpressionTurns*=1.1",,
 565,戦う理由+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1",,
-566,もうためらわない,,SSR,active,sense,1,FALSE,TRUE,pIdol,97,FALSE,,do:stamina-=3,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
+566,もうためらわない,,SSR,active,sense,1,FALSE,TRUE,pIdol,97,FALSE,,do:stamina-=6,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
 567,もうためらわない+,,SSR,active,sense,1,TRUE,TRUE,pIdol,97,FALSE,,do:stamina-=3,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
