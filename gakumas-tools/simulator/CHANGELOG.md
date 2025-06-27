@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-06-27
+
+### Added
+
+- Preview of CM Misuzu
+
 ## 2025-06-19
 
 ### Changed

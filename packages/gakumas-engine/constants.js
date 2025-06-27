@@ -103,6 +103,7 @@ export const PHASES = [
   "concentrationIncreased",
   "endOfTurn",
   "everyTurn",
+  "genkiIncreased",
   "goodConditionTurnsIncreased",
   "goodImpressionTurnsIncreased",
   "mentalCardUsed",
@@ -143,6 +144,7 @@ export const ALL_FIELDS = [
   "poorConditionTurns",
   "uneaseTurns",
   "scoreBuffs",
+  "scoreDebuffs",
   "goodImpressionTurnsBuffs",
   "goodImpressionTurnsEffectBuffs",
   "concentrationBuffs",
@@ -211,6 +213,7 @@ export const ALL_FIELDS = [
   // Delta
   "goodImpressionTurnsDelta",
   "motivationDelta",
+  "genkiDelta",
   "goodConditionTurnsDelta",
   "concentrationDelta",
   "staminaDelta",
@@ -275,6 +278,7 @@ export const DEBUFF_FIELDS = [
 export const INCREASE_TRIGGER_FIELDS = [
   S.goodImpressionTurns,
   S.motivation,
+  S.genki,
   S.goodConditionTurns,
   S.concentration,
 ];

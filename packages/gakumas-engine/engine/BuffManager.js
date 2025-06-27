@@ -46,6 +46,7 @@ export default class BuffManager extends EngineComponent {
 
     // Buffs
     state[S.scoreBuffs] = [];
+    state[S.scoreDebuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
     state[S.concentrationBuffs] = [];
@@ -87,6 +88,23 @@ export default class BuffManager extends EngineComponent {
       });
     }
     this.logger.log(state, "setScoreBuff", {
+      amount,
+      turns,
+    });
+  }
+
+  setScoreDebuff(state, amount, turns) {
+    const buffIndex = state[S.scoreDebuffs].findIndex((b) => b.turns == turns);
+    if (buffIndex != -1) {
+      state[S.scoreDebuffs][buffIndex].amount += amount;
+    } else {
+      state[S.scoreDebuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setScoreDebuff", {
       amount,
       turns,
     });
@@ -184,6 +202,20 @@ export default class BuffManager extends EngineComponent {
       }
       if (scoreBuffs[i].turns != 0) {
         state[S.scoreBuffs].push(scoreBuffs[i]);
+      }
+    }
+
+    // Score debuffs
+    const scoreDebuffs = state[S.scoreDebuffs];
+    state[S.scoreDebuffs] = [];
+    for (let i = 0; i < scoreDebuffs.length; i++) {
+      if (scoreDebuffs[i].fresh) {
+        scoreDebuffs[i].fresh = false;
+      } else if (scoreDebuffs[i].turns) {
+        scoreDebuffs[i].turns--;
+      }
+      if (scoreDebuffs[i].turns != 0) {
+        state[S.scoreDebuffs].push(scoreDebuffs[i]);
       }
     }
 

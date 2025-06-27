@@ -286,6 +286,7 @@
     "noMentalTurns": "无法使用 M 卡",
     "uneaseTurns": "不安",
     "scoreBuff": "分数上升量增加",
+    "scoreDebuff": "分数上升量减小",
     "goodImpressionTurnsBuff": "好印象上升量增加",
     "goodImpressionTurnsEffectBuff": "好印象强化",
     "concentrationBuff": "集中上升量增加",

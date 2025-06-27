@@ -288,6 +288,7 @@
     "noMentalTurns": "メンタルスキルカード使用不可",
     "uneaseTurns": "不安",
     "scoreBuff": "スコア上昇量増加",
+    "scoreDebuff": "スコア上昇量減少",
     "goodImpressionTurnsBuff": "好印象増加量増加",
     "goodImpressionTurnsEffectBuff": "好印象強化",
     "concentrationBuff": "集中増加量増加",

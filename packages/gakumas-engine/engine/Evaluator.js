@@ -36,7 +36,7 @@ export default class Evaluator extends EngineComponent {
       // Single tokens
       if (tokens.length == 1) {
         // State variables
-        if (S[tokens[0]] in state) {
+        if (tokens[0] in S && S[tokens[0]] in state) {
           return state[S[tokens[0]]];
         }
 

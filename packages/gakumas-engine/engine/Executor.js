@@ -58,6 +58,12 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setScoreDebuff: (state, amount, turns) =>
+        engine.buffManager.setScoreDebuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       setGoodImpressionTurnsBuff: (state, amount, turns) =>
         engine.buffManager.setGoodImpressionTurnsBuff(
           state,
@@ -459,6 +465,12 @@ export default class Executor extends EngineComponent {
 
       // Score buff effects
       score *= state[S.scoreBuffs].reduce((acc, cur) => acc + cur.amount, 1);
+
+      // // Score debuff effects
+      score *= Math.max(
+        state[S.scoreDebuffs].reduce((acc, cur) => acc - cur.amount, 1),
+        0
+      );
 
       // Apply poor condition
       if (state[S.poorConditionTurns]) {
