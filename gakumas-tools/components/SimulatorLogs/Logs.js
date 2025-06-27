@@ -26,6 +26,8 @@ function Log({ line, idolId }) {
     return <Turn {...line.data} childLogs={line.childLogs} idolId={idolId} />;
   } else if (line.logType == "setScoreBuff") {
     return <SetBuff label={t("scoreBuff")} {...line.data} />;
+  } else if (line.logType == "setScoreDebuff") {
+    return <SetBuff label={t("scoreDebuff")} {...line.data} />;
   } else if (line.logType == "setGoodImpressionTurnsBuff") {
     return <SetBuff label={t("goodImpressionTurnsBuff")} {...line.data} />;
   } else if (line.logType == "setGoodImpressionTurnsEffectBuff") {
