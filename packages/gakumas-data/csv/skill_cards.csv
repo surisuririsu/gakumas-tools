@@ -566,5 +566,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 565,戦う理由+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1",,
 566,もうためらわない,,SSR,active,sense,1,FALSE,TRUE,pIdol,97,FALSE,,do:stamina-=6,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
 567,もうためらわない+,,SSR,active,sense,1,TRUE,TRUE,pIdol,97,FALSE,,do:stamina-=3,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
-568,憧れのアイドル,,SSR,active,logic,1,FALSE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=3;at:startOfTurn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.3",,
-569,憧れのアイドル+,,SSR,active,logic,1,TRUE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=3;at:startOfTurn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.3",,
+568,憧れのアイドル,,SSR,active,logic,1,FALSE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=3;at:startOfTurn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.3",1,
+569,憧れのアイドル+,,SSR,active,logic,1,TRUE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=3;at:startOfTurn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.3",1,
