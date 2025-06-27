@@ -14,6 +14,7 @@ import {
   CHANGE_TRIGGER_PHASES,
   ALL_FIELDS,
   BUFF_FIELDS,
+  DEBUFF_SPECIAL_ACTIONS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "../utils";
@@ -331,12 +332,20 @@ export default class Executor extends EngineComponent {
 
   executeSpecialAction(state, action, growth) {
     if (action in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(action)) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
       this.specialActions[action](state);
       return;
     }
 
     const match = action.match(FUNCTION_CALL_REGEX);
     if (match[1] in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(match[1])) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
       const args = match[2].split(",");
       if (growth && growth[S["g.stanceLevel"]] && match[1] == "setStance") {
         if (args[0].startsWith("str")) {
