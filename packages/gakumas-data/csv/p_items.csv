@@ -295,6 +295,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 294,あの日の約束+,SSR,TRUE,sense,stage,pIdol,97,FALSE,"at:activeCardUsed,if:activeCardsUsed%2==1,do:setConcentrationBuff(0.25,5),limit:3"
 295,包まれるやさしさ,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:goodConditionTurns>=10,do:perfectConditionTurns+=4,do:genki+=10,limit:1"
 296,お似合いネクタイ,SR,FALSE,sense,produce,support,,FALSE,
-297,太陽を追い越す歌声,SSR,FALSE,logic,stage,pIdol,98,FALSE,"at:cardUsed,if:usedCardBaseId==132,do:motivation+=15,do:halfCostTurns+=5,do:setScoreDebuff(0.5,2),limit:1;at:cardUsed,if:usedCardBaseId==132,limit:1;at:startOfTurn,do:setScoreBuff(0.5,5),delay:2,limit:1"
+297,太陽を追い越す歌声,SSR,FALSE,logic,stage,pIdol,98,FALSE,"at:cardUsed,if:usedCardBaseId==132,do:motivation+=15,do:halfCostTurns+=5,do:setScoreDebuff(0.75,2),limit:1;at:cardUsed,if:usedCardBaseId==132,limit:1;at:startOfTurn,do:setScoreBuff(0.5,4),delay:2,limit:1"
 298,太陽を追い越す歌声+,SSR,TRUE,logic,stage,pIdol,98,FALSE,"at:cardUsed,if:usedCardBaseId==132,do:motivation+=15,do:halfCostTurns+=5,do:setScoreDebuff(0.5,2),limit:1;at:cardUsed,if:usedCardBaseId==132,limit:1;at:startOfTurn,do:setScoreBuff(0.5,5),delay:2,limit:1"
 299,手作りサブスク弁当,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfTurn,if:isVocalTurn,if:genki>=30,do:goodImpressionTurns+=4,do:motivation+=4,do:genki+=2,limit:1"
