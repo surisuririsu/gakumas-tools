@@ -8,7 +8,7 @@ import {
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
-  stageId: "91",
+  stageId: "94",
   supportBonus: "0",
   params: "1500-1500-1500-50",
   pItemIds: "0-0-0-0",
