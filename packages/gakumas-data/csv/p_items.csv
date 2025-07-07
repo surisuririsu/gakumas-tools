@@ -304,3 +304,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 303,初陣の証・美鈴+,R,TRUE,logic,stage,pIdol,100,FALSE,"at:startOfTurn,do:nullifyGenkiTurns+=2,limit:1;at:startOfTurn,delay:2,do:motivation+=10,limit:1"
 304,初陣の証・佑芽,R,FALSE,sense,stage,pIdol,101,FALSE,"at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:2"
 305,初陣の証・佑芽+,R,TRUE,sense,stage,pIdol,101,FALSE,"at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.3,limit:2"
+306,好き嫌い禁止！,SSR,FALSE,free,stage,support,,TRUE,"at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedGenki+=10,limit:1"
