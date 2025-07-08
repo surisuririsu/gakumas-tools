@@ -261,8 +261,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 260,お残しにんじん,SR,FALSE,free,produce,support,,FALSE,
 261,休憩中のおやつ,R,FALSE,anomaly,stage,pIdol,91,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*0.6,limit:3"
 262,休憩中のおやつ+,R,TRUE,anomaly,stage,pIdol,91,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*0.6"
-263,そよ風に揺れる髪飾り,SR,FALSE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:3;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:3"
-264,そよ風に揺れる髪飾り+,SR,TRUE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:2;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:2"
+263,そよ風に揺れる髪飾り,SR,FALSE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:2;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:2"
+264,そよ風に揺れる髪飾り+,SR,TRUE,anomaly,stage,pIdol,92,FALSE,"at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:3;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:3"
 265,いつもの持ち物,SSR,FALSE,anomaly,stage,pIdol,93,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4,do:fixedStamina-=1"
 266,いつもの持ち物+,SSR,TRUE,anomaly,stage,pIdol,93,FALSE,"at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4"
 267,思い出カタメコイメ,SSR,FALSE,anomaly,produce,support,,FALSE,
