@@ -10,6 +10,10 @@ Dates are based on Eastern Time Zone.
 - New p-item
 - Customizations for FMW, LSM, Sekaiichi
 
+### Fixed
+
+- Season 27 Stage 2 effect order
+
 ## 2025-07-04
 
 ### Added
