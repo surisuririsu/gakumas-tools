@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Fixed
 
 - Condition of お姉ちゃんだもの！
+- Effect duration for LSM customization
 
 ## 2025-07-08
 
