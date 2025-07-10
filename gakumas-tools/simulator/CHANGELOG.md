@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-07-09
+
+### Fixed
+
+- Condition of お姉ちゃんだもの！
+
 ## 2025-07-08
 
 ### Fixed
