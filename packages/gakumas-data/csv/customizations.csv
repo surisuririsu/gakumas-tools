@@ -41,7 +41,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 92,kyorikanEffect1,効果変更,effect,100,1,,,,"line:1,at:startOfTurn,if:stamina>=maxStamina*0.5,do:concentration+=2",,
 91,seisouEffect1,効果変更,effect,100,1,,,,"line:1,do:goodConditionTurnsMultiplier=2,do:score+=18;line:2,if:goodConditionTurns>=1,do:concentrationMultiplier=3,do:score+=20",,
 96,goodImpressionTurnsEffectBuffAdd1_50_5,効果追加,effect,100,1,,,,"do:setGoodImpressionTurnsEffectBuff(0.5,5)",,
-95,lsmEffectAdd1,効果追加,effect,100,1,,,,"at:endOfTurn,do:score+=5,do:fixedStamina-=1,limit:3",,
+95,lsmEffectAdd1,効果追加,effect,100,1,,,,"at:endOfTurn,do:score+=5,do:fixedStamina-=1,limit:4",,
 94,turnAdd1,効果追加,effect,100,1,,,,do:turnsRemaining+=1,,
 40,strength1,強気+,effect,70,1,,,,,,"at:prestage,target:this,do:g.stanceLevel+=1"
 93,strengthAdd1,強気追加,effect,70,1,,,,do:setStance(strength),,
