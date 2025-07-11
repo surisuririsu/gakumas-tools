@@ -1,0 +1,331 @@
+{
+  "metadata": {
+    "title": "Gakumas Tools - 학원마스 툴",
+    "description": "Gakumas Tools는 하츠보시 학원의 프로듀서과 학생들을 위한 유용한 도구의 모음집입니다. 프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션, P 아이템과 스킬 카드 정보 보기 등 편리한 기능을 제공합니다. 아이돌들을 빛내 주세요!"
+  },
+  "tools": {
+    "home": {
+      "title": "홈",
+      "description": "도구 일람"
+    },
+    "produceRankCalculator": {
+      "title": "프로듀스 평가 계산기",
+      "description": "프로듀스 평가에 필요한 최종시험 스코어 계산하기"
+    },
+    "niaCalculator": {
+      "title": "N.I.A 계산기",
+      "description": "N.I.A 오디션 보너스와 프로듀스 평가 계산하기"
+    },
+    "lessonCalculator": {
+      "title": "레슨 패러미터 계산기",
+      "description": "레슨에 의한 패러미터 상승량 계산하기"
+    },
+    "dex": {
+      "title": "P 도감",
+      "description": "P 아이템과 스킬 카드 정보 보기"
+    },
+    "memoryCalculator": {
+      "title": "메모리 생성 확률 계산기",
+      "description": "원하는 메모리의 생성 확률 계산"
+    },
+    "memories": {
+      "title": "메모리",
+      "description": "메모리를 생성 및 저장하고, P아이템과 스킬 카드로 검색하기"
+    },
+    "simulator": {
+      "title": "콘테스트 시뮬레이터",
+      "description": "콘테스트 편성 및 코스트 계산 후, 시뮬레이터로 스코어 예측하기"
+    },
+    "rehearsal": {
+      "title": "리허설 스코어 불러오기",
+      "description": "리허설 스크린샷으로부터 스코어 불러오기"
+    }
+  },
+  "NavbarMenu": {
+    "menu": "메뉴",
+    "signInWithDiscord": "Discord로 로그인",
+    "home": "홈",
+    "gakumasContestWiki": "학원마스 콘테스트 위키",
+    "sendFeedback": "피드백 보내기",
+    "signOut": "로그아웃"
+  },
+  "Welcome": {
+    "title": "Gakumas Tools - 학원마스 툴",
+    "introduction": "프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션 등 편리한 기능을 제공합니다."
+  },
+  "Calculator": {
+    "scenario": "시나리오",
+    "scenarios": {
+      "hajime": "하지메",
+      "nia": "N.I.A"
+    },
+    "calculator": "계산기",
+    "calculators": {
+      "produce-rank": "프로듀스 평가",
+      "lesson": "레슨"
+    },
+    "difficulty": "난이도",
+    "difficulties": {
+      "regular": "레귤러",
+      "pro": "프로",
+      "master": "마스터"
+    },
+    "places": {
+      "1": "1위",
+      "2": "2위",
+      "3": "3위",
+      "4": "4위 이하"
+    },
+    "parameterLimit": "패러미터 상한",
+    "finalExamPlacement": "최종시험 순위",
+    "parameter": "패러미터",
+    "parameters": "패러미터",
+    "parametersPreAudition": "패러미터 (오디션 전)",
+    "parametersPostAudition": "패러미터 (오디션 후)",
+    "targetScores": "목표 스코어",
+    "produceRank": "프로듀스 평가",
+    "targetScore": "목표 스코어",
+    "score": "스코어",
+    "niaNote": "※오디션 보너스 패러미터나 득표 수의 계산방법이 확인되는 대로, 관련 기능을 업데이트할 예정입니다.",
+    "affectionAtStartOfProduce": "프로듀스 개시시 친애도",
+    "stage": "스테이지",
+    "runN": "Run {num}",
+    "runN+": "Run {num}+",
+    "idol": "아이돌",
+    "evaluationCriteria": "심사 기준",
+    "paramsPreAudition": "패러미터 (오디션 전)",
+    "challengePItemsParamBonusPct": "챌린지 P 아이템 패러미터 보너스 %",
+    "paramBonusPct": "패러미터 보너스 %",
+    "votesPreAudition": "팬 득표수 (오디션 전)",
+    "recommendedScores": "권장 스코어",
+    "paramHighGrowthScores": "이 이상의 점수에서는 패러미터 상승량이 낮습니다.",
+    "paramMaximizingScores": "이 이상의 점수에서는 패러미터가 상승하지 않습니다.",
+    "voteCount": "팬 득표수",
+    "scores": "스코어",
+    "gainedParams": "패러미터 상한",
+    "challengeParams": "챌린지 P 아이템 보너스",
+    "bonusParams": "패러미터 보너스",
+    "paramsPostAudition": "패러미터 (오디션 후)",
+    "gainedVotes": "팬 득표수 상한",
+    "votesPostAudition": "팬 득표수 (오디션 후)"
+  },
+  "LessonCalculator": {
+    "difficulties": {
+      "regular": "레귤러",
+      "pro": "프로",
+      "master": "마스터"
+    },
+    "difficulty": "난이도",
+    "lessonBonus": "레슨 보너스 %",
+    "limitIncrease": "상한 증가",
+    "lessons": "레슨",
+    "week": "주",
+    "type": "레슨",
+    "normal": "통상",
+    "sp": "SP",
+    "oikomi": "추격",
+    "score": "스코어"
+  },
+  "Dex": {
+    "skillCards": "스킬 카드",
+    "pItems": "P 아이템",
+    "maxTimes": "최대 {n}회"
+  },
+  "EntityBank": {
+    "filter": "필터"
+  },
+  "EntityIcon": {
+    "high": "고",
+    "low": "저",
+    "planMismatch": "플랜 불일치",
+    "pIdolMismatch": "P 아이돌 불일치",
+    "idolMismatch": "아이돌 불일치"
+  },
+  "EntityCustomizer": {
+    "customization": "커스터마이즈"
+  },
+  "CustomizationModal": {
+    "apply": "적용"
+  },
+  "MemoryCalculator": {
+    "note": "※표시된 확률은 모든 메모리가 동일한 확률로 생성된다는 전제 하에 계산된 추정값으로, 실제 확률과는 차이가 있을 수 있습니다.",
+    "target": "원하는 조합",
+    "acquired": "획득 스킬 카드 (강화 전후 포함)",
+    "produceRank": "프로듀스 평가",
+    "costRange": "코스트 범위",
+    "success": "성공",
+    "failure": "실패"
+  },
+  "TargetSkillCards": {
+    "acquired": "획득 완료"
+  },
+  "MemorySummaryActionButtons": {
+    "edit": "편집"
+  },
+  "MemoryEditorModal": {
+    "name": "이름",
+    "contestPower": "종합력",
+    "cost": "코스트"
+  },
+  "ParametersInput": {
+    "stamina": "체력"
+  },
+  "MemoriesNudge": {
+    "create": "메모리 생성하기",
+    "import": "스크린샷으로부터 메모리 불러오기"
+  },
+  "MemorySave": {
+    "save": "저장",
+    "saveAsNew": "새로 저장",
+    "signInToSave": "Discord로 로그인하여 저장"
+  },
+  "MemoriesHeader": {
+    "selected": "{num}개의 메모리 선택됨",
+    "delete": "삭제하기"
+  },
+  "MemoryImporterModal": {
+    "importMemories": "스크린샷으로부터 메모리 불러오기",
+    "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상횡에 따라 수초에서 수분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다.권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
+    "progress": "진행도: {progress}/{total}"
+  },
+  "Simulator": {
+    "supportBonus": "서포트 보너스 %",
+    "enterPercents": "계산식이 밝혀지지 않았으므로 스코어 보너스 %를 직접 입력해 주세요.",
+    "custom": "커스텀",
+    "simulate": "실행",
+    "provideData": "데이터 제공하기",
+    "lastUpdated": "최종 업데이트"
+  },
+  "StageSelect": {
+    "placeholder": "스테이지 선택"
+  },
+  "StageSelectModal": {
+    "contest": "콘테스트",
+    "event": "이벤트",
+    "custom": "커스텀"
+  },
+  "StageSummary": {
+    "contestStageName": "시즌 {season} - 스테이지 {stage}",
+    "eventStageName": "{name} - 스테이지 {stage} - 라운드 {round}",
+    "custom": "커스텀"
+  },
+  "StageCustomizer": {
+    "turnCounts": "턴 수",
+    "firstTurn": "첫 턴 비율",
+    "criteria": "심사 기준",
+    "effects": "스테이지 효과",
+    "effectFormat": "효과 형식",
+    "defaultCards": "기본 카드",
+    "contest": "콘테스트",
+    "event": "이벤트",
+    "apply": "적용"
+  },
+  "LoadoutSkillCardGroup": {
+    "cost": "코스트"
+  },
+  "SimulatorSubTools": {
+    "costRanges": "코스트 범위",
+    "history": "내역 β",
+    "defaultCards": "기본 카드"
+  },
+  "CostRanges": {
+    "rank": "랭크",
+    "min": "하한",
+    "max": "상한"
+  },
+  "SimulatorButtons": {
+    "confirm": "편성을 초기화할까요?",
+    "clear": "초기화",
+    "manageLoadouts": "저장 및 불러오기 β"
+  },
+  "ConfirmModal": {
+    "cancel": "취소",
+    "ok": "OK"
+  },
+  "SimulatorResult": {
+    "min": "최솟값",
+    "average": "평균값",
+    "median": "중앙값",
+    "max": "최댓값",
+    "logs": "로그"
+  },
+  "SimulatorResultGraphs": {
+    "score": "스코어"
+  },
+  "stage": {
+    "turnsRemaining": "남은 턴 수",
+    "cardUsesRemaining": "스킬 카드 사용 횟수",
+    "stamina": "체력",
+    "genki": "원기",
+    "score": "스코어",
+    "goodConditionTurns": "호조",
+    "perfectConditionTurns": "절호조",
+    "concentration": "집중",
+    "goodImpressionTurns": "호인상",
+    "motivation": "의욕",
+    "stance": "지침",
+    "none": "없음",
+    "preservation": "온존 1",
+    "preservation2": "온존 2",
+    "leisure": "여유",
+    "strength": "강기 1",
+    "strength2": "강기 2",
+    "fullPower": "전력",
+    "fullPowerCharge": "전력치",
+    "lockStanceTurns": "지침 고정",
+    "enthusiasm": "열의",
+    "enthusiasmBonus": "열의 추가",
+    "halfCostTurns": "소비 체력 경감",
+    "doubleCostTurns": "소비 체력 증가",
+    "costReduction": "소비 체력 감소",
+    "costIncrease": "소비 체력 추가",
+    "doubleCardEffectCards": "스킬 카드 추가 발동",
+    "nullifyGenkiTurns": "원기 증가 무효",
+    "nullifyDebuff": "저하 상태 비활성화",
+    "poorConditionTurns": "부조화",
+    "nullifyCostCards": "체력 소비 무효",
+    "noActiveTurns": "액티브 스킬 카드 사용 불가",
+    "noMentalTurns": "멘탈 스킬 카드 사용 불가",
+    "uneaseTurns": "불안",
+    "scoreBuff": "스코어 상승량 증가",
+    "scoreDebuff": "스코어 상승량 감소",
+    "goodImpressionTurnsBuff": "호인상 증가량 증가",
+    "goodImpressionTurnsEffectBuff": "호인상 강화",
+    "concentrationBuff": "집중 증가량 증가",
+    "turn": "턴",
+    "cardDrawn": "드로우한 카드",
+    "upgradedHand": "손패를 모두 레슨 중 강화",
+    "exchangedHand": "손패를 모두 변경",
+    "setEffect": "지속 효과 부여",
+    "addedCardToHand": "손패에 스킬 카드 생성",
+    "addedCardToTopOfDeck": "스킬 카드를 덱 위에 생성",
+    "upgradedCard": "스킬 카드를 레슨 중 강화",
+    "cardGrowth": "스킬 카드 성장",
+    "heldCard": "스킬 카드를 보류로 이동",
+    "discardedCard": "스킬 카드를 버림패로 이동",
+    "movedCardToHand": "스킬 카드를 손패로 이동",
+    "effect": "지속 효과",
+    "stageEffect": "스테이지 효과",
+    "skillCard": "스킬 카드",
+    "pItem": "P 아이템",
+    "numTurns": "{num} 턴",
+    "hand": "손패",
+    "turnN": "{n} 턴",
+    "average": "평균치",
+    "unplayable": "사용 불가"
+  },
+  "BoxPlot": {
+    "max": "최대",
+    "q3": "Q3",
+    "mean": "평균",
+    "median": "중앙",
+    "q1": "Q1",
+    "min": "최소"
+  },
+  "Rehearsal": {
+    "addScreenshots": "리허설 결과 스크린샷으로부터 스코어를 불러옵니다.",
+    "accuracyNotGuaranteed": "정확도는 보장되지 않습니다. 스크린샷과 비교하여 결과를 확인하는 것을 권장합니다.",
+    "stage": "스테이지 {n}",
+    "score": "스코어"
+  }
+}
