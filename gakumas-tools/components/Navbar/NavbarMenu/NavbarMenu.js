@@ -103,6 +103,11 @@ function NavbarMenu() {
             简体中文
           </Link>
         )}
+        {locale != "ko" && (
+          <Link href={pathname} locale="ko">
+            한국어
+          </Link>
+        )}
 
         {status == "authenticated" && (
           <button onClick={signOut}>{t("signOut")}</button>
