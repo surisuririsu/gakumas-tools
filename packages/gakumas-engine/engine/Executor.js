@@ -320,7 +320,7 @@ export default class Executor extends EngineComponent {
       // Round whole fields
       for (let i = 0; i < WHOLE_FIELDS.length; i++) {
         if (WHOLE_FIELDS[i] in state) {
-          state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]]);
+          state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]].toFixed(2));
         }
       }
 
