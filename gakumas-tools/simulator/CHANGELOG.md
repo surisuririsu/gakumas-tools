@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ### Added
 
 - Sunfaded Hiro preview
+- Fixed 金魚すくいで勝負 type
 
 ## 2025-07-09
 
