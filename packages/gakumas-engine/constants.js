@@ -54,13 +54,16 @@ export const GOOD_IMPRESSION_EFFECTS = [
 export const STANCE_CHANGED_EFFECTS = [
   {
     conditions: ["prevStance==preservation", "stance!=leisure"],
-    actions: ["enthusiasm+=5+enthusiasmBonus", "cardUsesRemaining+=1"],
+    actions: [
+      "enthusiasm+=5*enthusiasmMultiplier+enthusiasmBonus*enthusiasmMultiplier",
+      "cardUsesRemaining+=1",
+    ],
     source: { type: "default", id: "温存" },
   },
   {
     conditions: ["prevStance==preservation2", "stance!=leisure"],
     actions: [
-      "enthusiasm+=8+enthusiasmBonus",
+      "enthusiasm+=8*enthusiasmMultiplier+enthusiasmBonus*enthusiasmMultiplier",
       "fixedGenki+=5",
       "cardUsesRemaining+=1",
     ],
@@ -163,6 +166,7 @@ export const ALL_FIELDS = [
   "cumulativeFullPowerCharge",
   "enthusiasm",
   "enthusiasmBonus",
+  "enthusiasmMultiplier",
   "strengthTimes",
   "preservationTimes",
   "leisureTimes",
@@ -306,6 +310,7 @@ export const WHOLE_FIELDS = [
   S.concentration,
   S.goodImpressionTurns,
   S.motivation,
+  S.enthusiasm,
 ];
 
 export const LOGGED_FIELDS = [
@@ -320,6 +325,7 @@ export const LOGGED_FIELDS = [
   S.motivation,
   S.enthusiasm,
   S.enthusiasmBonus,
+  S.enthusiasmMultiplier,
   S.fullPowerCharge,
   S.lockStanceTurns,
   S.halfCostTurns,

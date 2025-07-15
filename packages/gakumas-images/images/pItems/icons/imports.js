@@ -229,7 +229,11 @@ import image_303 from "./303.png";
 import image_304 from "./304.png";
 import image_305 from "./305.png";
 import image_306 from "./306.png";
+import image_307 from "./307.png";
+import image_308 from "./308.png";
+import image_309 from "./309.png";
 import image_31 from "./31.png";
+import image_310 from "./310.png";
 import image_32 from "./32.png";
 import image_33 from "./33.png";
 import image_34 from "./34.png";
@@ -537,7 +541,11 @@ const IMAGES = {
   '304': image_304,
   '305': image_305,
   '306': image_306,
+  '307': image_307,
+  '308': image_308,
+  '309': image_309,
   '31': image_31,
+  '310': image_310,
   '32': image_32,
   '33': image_33,
   '34': image_34,
