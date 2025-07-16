@@ -8,7 +8,11 @@ Dates are based on Eastern Time Zone.
 ### Added
 
 - Sunfaded Hiro preview
+
+### Fixed
+
 - Fixed 金魚すくいで勝負 type
+- Fixed バスに揺られて plan
 
 ## 2025-07-09
 

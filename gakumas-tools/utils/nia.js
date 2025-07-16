@@ -39,7 +39,7 @@ export const BALANCE_BY_IDOL = {
   9: "flat",
   10: "flat",
   11: "flat",
-  12: "flat",
+  12: "skew",
 };
 
 export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
