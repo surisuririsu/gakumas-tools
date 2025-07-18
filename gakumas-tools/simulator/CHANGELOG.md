@@ -7,6 +7,8 @@ Dates are based on Eastern Time Zone.
 ## 2025-07-18
 
 - Added Sunfaded Hiro
+- Test changelog script
+- Testing changelog script 2
 
 ## 2025-07-15
 
