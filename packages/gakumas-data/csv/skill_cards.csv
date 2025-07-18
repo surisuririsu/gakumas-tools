@@ -574,5 +574,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 573,初めての息+,,R,mental,logic,1,TRUE,TRUE,pIdol,100,FALSE,,do:cost-=2,"do:genki+=7,do:motivation+=3",1,
 574,初めての神降臨,,R,mental,sense,1,FALSE,TRUE,pIdol,101,FALSE,,do:cost-=2,"do:concentration+=2,do:goodConditionTurns+=2",1,
 575,初めての神降臨+,,R,mental,sense,1,TRUE,TRUE,pIdol,101,FALSE,,do:cost-=1,"do:concentration+=2,do:goodConditionTurns+=3",1,
-576,日が差す方へ,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,102,FALSE,if:isStrength,do:stamina-=1,"do:setStance(preservation),do:genki+=8,do:enthusiasmBonus+=10;target:mental,do:g.cost-=1",,
+576,日が差す方へ,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,102,FALSE,if:isStrength,do:stamina-=1,"do:setStance(preservation),do:genki+=5,do:enthusiasmBonus+=8;target:mental,do:g.cost-=1",,
 577,日が差す方へ+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,102,FALSE,if:isStrength,do:stamina-=1,"do:setStance(preservation),do:genki+=8,do:enthusiasmBonus+=10;target:mental,do:g.cost-=1",,

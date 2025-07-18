@@ -23,7 +23,7 @@ export function simulate(idolStageConfig, strategyName, numRuns) {
       maxRun = result;
     }
     totalScore += result.score;
-    averageScore = Math.round(totalScore / i + 1);
+    averageScore = Math.round(totalScore / (i + 1));
     if (
       !averageRun ||
       Math.abs(result.score - averageScore) <
