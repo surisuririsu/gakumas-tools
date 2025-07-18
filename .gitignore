@@ -16,4 +16,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 .venv/
+
+# Custom
 .env
+screenshots/
