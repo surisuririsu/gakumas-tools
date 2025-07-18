@@ -14,6 +14,9 @@ export function formatStageName(stage, t) {
       round: stage.round,
     });
   }
+  if (stage.preview) {
+    stageName += "*";
+  }
   return stageName;
 }
 

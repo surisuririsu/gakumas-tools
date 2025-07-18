@@ -188,6 +188,8 @@
   },
   "Simulator": {
     "supportBonus": "支援加成 %",
+    "multiplierNote": "※ 分数倍数对超过2400的属性不准确。",
+    "previewNote": "※ 竞技场预览仅基于已公布的 P 道具和评审标准，回合类型尚未确定。",
     "enterPercents": "由于分数倍数的计算方式未知，请直接输入倍数（%）。",
     "custom": "自定义",
     "simulate": "模拟",
