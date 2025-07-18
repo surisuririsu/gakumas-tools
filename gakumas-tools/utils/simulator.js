@@ -1,4 +1,4 @@
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards, Stages } from "gakumas-data";
 import { GRAPHED_FIELDS } from "gakumas-engine";
 import { BUCKET_SIZE } from "@/simulator/constants";
 import {
@@ -8,8 +8,9 @@ import {
 import { deserializeIds, serializeIds } from "./ids";
 
 const DEFAULTS = {
-  stageId: "94",
-  supportBonus: "0",
+  stageId: Stages.getAll().findLast((s) => s.type == "contest" && !s.preview)
+    .id,
+  supportBonus: "4",
   params: "1500-1500-1500-50",
   pItemIds: "0-0-0-0",
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
