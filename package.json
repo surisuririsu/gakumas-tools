@@ -4,8 +4,9 @@
   "scripts": {
     "dev": "yarn workspace gakumas-tools dev",
     "build": "yarn workspace gakumas-tools build",
-    "generate": "yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
+    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
+    "changelog": "./scripts/changelog.sh",
     "backup-db": "yarn workspace gakumas-tools backup-db"
   },
   "workspaces": [
