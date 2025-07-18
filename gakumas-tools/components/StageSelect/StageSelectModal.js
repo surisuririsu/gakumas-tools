@@ -20,7 +20,7 @@ export default function StageSelectModal() {
   const STAGE_TYPE_OPTIONS = [
     { value: "contest", label: t("contest") },
     { value: "event", label: t("event") },
-    // { value: "custom", label: t("custom") },
+    { value: "custom", label: t("custom") },
   ];
 
   const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
