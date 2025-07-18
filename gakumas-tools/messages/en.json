@@ -188,6 +188,8 @@
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
+    "multiplierNote": "※ Score multiplier is inaccurate for parameters above 2400.",
+    "previewNote": "※ Stage preview is based only on the announced p-items and criteria. Turn types are not yet known.",
     "enterPercents": "Since the score multiplier calculation is unknown, please enter the multipliers (%) directly.",
     "custom": "Custom",
     "simulate": "Simulate",

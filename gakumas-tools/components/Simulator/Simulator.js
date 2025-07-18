@@ -147,11 +147,8 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/* <div>
-          ※ Season 27 preview is based only on the announced p-items and
-          criteria. Turn types are not yet known.
-        </div> */}
-        <div>※ Score multiplier is inaccurate for parameters above 2400.</div>
+        <div>{t("multiplierNote")}</div>
+        {stage.preview && <div>{t("previewNote")}</div>}
         <StageSelect />
         {stage.type == "event" ? (
           t("enterPercents")
@@ -167,7 +164,6 @@ export default function Simulator() {
             />
           </div>
         )}
-
         <div className={styles.params}>
           <ParametersInput
             parameters={loadout.params}
