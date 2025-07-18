@@ -3,6 +3,12 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-07-18
+
+### Added
+
+- Sunfaded Hiro
+
 ## 2025-07-15
 
 ### Added
