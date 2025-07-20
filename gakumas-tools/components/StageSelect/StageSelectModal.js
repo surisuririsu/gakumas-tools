@@ -43,27 +43,27 @@ export default function StageSelectModal() {
         options={STAGE_TYPE_OPTIONS}
         onChange={setStageType}
       />
-      {/* {stageType == "custom" ? (
+      {stageType == "custom" ? (
         <div className={styles.customizer}>
           <StageCustomizer
             initialStage={stage}
             onApply={(value) => setStage("custom", value)}
           />
         </div>
-      ) : ( */}
-      <div className={styles.stageList}>
-        {stages.map((stage) => (
-          <button
-            key={stage.id}
-            className={styles.option}
-            value={stage.id}
-            onClick={() => setStage(stage.id, {})}
-          >
-            <StageSummary stage={stage} />
-          </button>
-        ))}
-      </div>
-      {/* )} */}
+      ) : (
+        <div className={styles.stageList}>
+          {stages.map((stage) => (
+            <button
+              key={stage.id}
+              className={styles.option}
+              value={stage.id}
+              onClick={() => setStage(stage.id, {})}
+            >
+              <StageSummary stage={stage} />
+            </button>
+          ))}
+        </div>
+      )}
     </Modal>
   );
 }
