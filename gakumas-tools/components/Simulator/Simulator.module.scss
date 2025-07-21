@@ -1,5 +1,13 @@
 @use "../../styles/colors";
 
+.oshi {
+  font-size: 24px;
+  font-weight: bold;
+  color: colors.$blue;
+  text-decoration: underline;
+  text-align: center;
+}
+
 .loadoutEditor {
   display: flex;
   flex-wrap: wrap;
