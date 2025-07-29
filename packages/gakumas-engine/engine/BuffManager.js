@@ -291,6 +291,20 @@ export default class BuffManager extends EngineComponent {
       }
     }
 
+    // Good condition turns buffs
+    const goodConditionTurnsBuffs = state[S.goodConditionTurnsBuffs];
+    state[S.goodConditionTurnsBuffs] = [];
+    for (let i = 0; i < goodConditionTurnsBuffs.length; i++) {
+      if (goodConditionTurnsBuffs[i].fresh) {
+        goodConditionTurnsBuffs[i].fresh = false;
+      } else if (goodConditionTurnsBuffs[i].turns) {
+        goodConditionTurnsBuffs[i].turns--;
+      }
+      if (goodConditionTurnsBuffs[i].turns != 0) {
+        state[S.goodConditionTurnsBuffs].push(goodConditionTurnsBuffs[i]);
+      }
+    }
+
     // Concentration buffs
     const concentrationBuffs = state[S.concentrationBuffs];
     state[S.concentrationBuffs] = [];
@@ -302,6 +316,20 @@ export default class BuffManager extends EngineComponent {
       }
       if (concentrationBuffs[i].turns != 0) {
         state[S.concentrationBuffs].push(concentrationBuffs[i]);
+      }
+    }
+
+    // Full power charge buffs
+    const fullPowerChargeBuffs = state[S.fullPowerChargeBuffs];
+    state[S.fullPowerChargeBuffs] = [];
+    for (let i = 0; i < fullPowerChargeBuffs.length; i++) {
+      if (fullPowerChargeBuffs[i].fresh) {
+        fullPowerChargeBuffs[i].fresh = false;
+      } else if (fullPowerChargeBuffs[i].turns) {
+        fullPowerChargeBuffs[i].turns--;
+      }
+      if (fullPowerChargeBuffs[i].turns != 0) {
+        state[S.fullPowerChargeBuffs].push(fullPowerChargeBuffs[i]);
       }
     }
   }

@@ -314,6 +314,7 @@ export const WHOLE_FIELDS = [
   S.concentration,
   S.goodImpressionTurns,
   S.motivation,
+  S.fullPowerCharge,
   S.enthusiasm,
 ];
 
