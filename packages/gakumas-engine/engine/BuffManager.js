@@ -221,6 +221,7 @@ export default class BuffManager extends EngineComponent {
     }
   }
 
+  // TODO: Refactor this GARBAGE WTF
   decrementBuffTurns(state) {
     // General buffs
     for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
