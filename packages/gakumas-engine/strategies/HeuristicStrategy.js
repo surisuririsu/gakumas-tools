@@ -246,6 +246,27 @@ export default class HeuristicStrategy extends BaseStrategy {
       state[S.goodImpressionTurns] *
       this.goodImpressionTurnsMultiplier;
 
+    // Good condition turns buffs
+    score +=
+      state[S.goodConditionTurnsBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+        0
+      ) * this.goodConditionTurnsMultiplier;
+
+    // Concentration buffs
+    score +=
+      state[S.concentrationBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+        0
+      ) * this.concentrationMultiplier;
+
+    // Full power charge buffs
+    score +=
+      state[S.fullPowerChargeBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+        0
+      ) * this.fullPowerMultiplier;
+
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
 
