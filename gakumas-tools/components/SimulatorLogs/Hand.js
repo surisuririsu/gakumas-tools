@@ -44,10 +44,26 @@ function HandStateLine({ k, state }) {
         {turns ? `(${t("numTurns", { num: turns })})` : ""}
       </div>
     ));
+  } else if (k == S.goodConditionTurnsBuffs) {
+    content = state[k].map(({ amount, turns }) => (
+      <div key={turns}>
+        {t("goodConditionTurnsBuff")}{" "}
+        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      </div>
+    ));
   } else if (k == S.concentrationBuffs) {
     content = state[k].map(({ amount, turns }) => (
       <div key={turns}>
         {t("concentrationBuff")}{" "}
+        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      </div>
+    ));
+  } else if (k == S.fullPowerChargeBuffs) {
+    content = state[k].map(({ amount, turns }) => (
+      <div key={turns}>
+        {t("fullPowerChargeBuff")}{" "}
         <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
         {turns ? `(${t("numTurns", { num: turns })})` : ""}
       </div>

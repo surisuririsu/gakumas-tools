@@ -59,6 +59,7 @@ export default class CardManager extends EngineComponent {
     state[S.turnCardsUpgraded] = 0;
 
     state[S.pcchiCardsUsed] = 0;
+    state[S.natsuyaCardsUsed] = 0;
   }
 
   isForceInitialHand(state, card) {
@@ -481,7 +482,7 @@ export default class CardManager extends EngineComponent {
       state[S.removedCards].splice(index, 1);
       state[S.handCards].push(card);
 
-      this.logger.log(state, "moveCardToHand", {
+      this.logger.log(state, "removedCard", {
         type: "skillCard",
         id: state[S.cardMap][card].id,
       });
@@ -557,6 +558,26 @@ export default class CardManager extends EngineComponent {
       state[S.handCards].push(card);
 
       this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: state[S.cardMap][card].id,
+      });
+    }
+  }
+
+  removeTroubleFromDeckOrDiscards(state) {
+    const troubleCards = state[S.cardMap].filter((c) => c.type == "trouble");
+    if (!troubleCards.length) return;
+
+    const card = troubleCards[Math.floor(Math.random() * troubleCards.length)];
+    let index = state[S.deckCards].indexOf(card);
+    let pile = S.deckCards;
+    if (index == -1) {
+      index = state[S.discardedCards].indexOf(card);
+      pile = S.discardedCards;
+    }
+    if (index != -1) {
+      state[pile].splice(index, 1);
+      this.logger.log(state, "removeCard", {
         type: "skillCard",
         id: state[S.cardMap][card].id,
       });

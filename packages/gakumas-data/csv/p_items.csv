@@ -309,3 +309,10 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 308,原点へのチケット+,SSR,TRUE,anomaly,stage,pIdol,102,FALSE,"at:staminaDecreased,do:enthusiasmMultiplier+=0.6,limit:3"
 309,面白くて心配な子,SSR,FALSE,anomaly,produce,support,,FALSE,
 310,ビシッビシッ竹刀,SR,FALSE,anomaly,produce,support,,FALSE,
+311,咲き誇る星,SSR,FALSE,logic,stage,pIdol,103,FALSE,"at:afterMentalCardUsed,if:genki>=30,do:goodImpressionTurns+=genki*0.5,do:goodImpressionTurns+=5,limit:1"
+312,咲き誇る星+,SSR,TRUE,logic,stage,pIdol,103,FALSE,"at:afterMentalCardUsed,if:genki>=30,do:goodImpressionTurns+=genki*0.5,do:goodImpressionTurns+=5,limit:1"
+313,夜闇の星,SSR,FALSE,sense,stage,pIdol,104,FALSE,"at:startOfTurn,if:turnsElapsed==3,do:setGoodConditionTurnsBuff(0.5,5),limit:1,group:1"
+314,夜闇の星+,SSR,TRUE,sense,stage,pIdol,104,FALSE,"at:startOfTurn,if:turnsElapsed==3,do:setGoodConditionTurnsBuff(0.5,5),limit:1,group:1"
+315,夢見る星,SSR,FALSE,anomaly,stage,pIdol,105,FALSE,"at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,do:setFullPowerChargeBuff(0.5,1);at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2;at:startOfTurn,do:setStance(preservation2),limit:1,group:0"
+316,夢見る星+,SSR,TRUE,anomaly,stage,pIdol,105,FALSE,"at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,do:setFullPowerChargeBuff(0.5,1);at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2;at:startOfTurn,do:setStance(preservation2),limit:1,group:0"
+317,おさぼりタオル,SR,FALSE,free,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,do:fixedGenki+=4,limit:1;at:startOfTurn,if:isDanceTurn,limit:1;at:startOfTurn,do:nullifyDebuff+=1,limit:1"

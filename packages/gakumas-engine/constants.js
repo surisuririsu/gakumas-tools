@@ -153,6 +153,7 @@ export const ALL_FIELDS = [
   "concentrationBuffs",
   "goodConditionTurns",
   "goodConditionTurnsMultiplier",
+  "goodConditionTurnsBuffs",
   "perfectConditionTurns",
   "concentration",
   "concentrationMultiplier",
@@ -163,6 +164,7 @@ export const ALL_FIELDS = [
   "prevStance",
   "lockStanceTurns",
   "fullPowerCharge",
+  "fullPowerChargeBuffs",
   "cumulativeFullPowerCharge",
   "enthusiasm",
   "enthusiasmBonus",
@@ -212,6 +214,7 @@ export const ALL_FIELDS = [
 
   // Special
   "pcchiCardsUsed",
+  "natsuyaCardsUsed",
   "nullifyHold",
 
   // Delta
@@ -287,6 +290,7 @@ export const INCREASE_TRIGGER_FIELDS = [
   S.genki,
   S.goodConditionTurns,
   S.concentration,
+  S.fullPowerCharge,
 ];
 
 export const DECREASE_TRIGGER_FIELDS = [S.stamina];
