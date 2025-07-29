@@ -109,6 +109,7 @@ export default class Executor extends EngineComponent {
       score: (...args) => this.resolveScore(...args),
       goodImpressionTurns: (...args) =>
         this.resolveGoodImpressionTurns(...args),
+      goodConditionTurns: (...args) => this.resolveGoodConditionTurns(...args),
       concentration: (...args) => this.resolveConcentration(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
@@ -282,6 +283,7 @@ export default class Executor extends EngineComponent {
         ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "goodImpressionTurns" && op == "+=") ||
+        (lhs == "goodConditionTurns" && op == "+=") ||
         (lhs == "concentration" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
@@ -521,6 +523,16 @@ export default class Executor extends EngineComponent {
     state[S.goodImpressionTurns] += goodImpressionTurns;
   }
 
+  resolveGoodConditionTurns(state, goodConditionTurns) {
+    // Apply good condition turns buffs
+    goodConditionTurns *= state[S.goodConditionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+
+    state[S.goodConditionTurns] += goodConditionTurns;
+  }
+
   resolveConcentration(state, concentration) {
     // Apply concentration buffs
     concentration *= state[S.concentrationBuffs].reduce(
@@ -584,6 +596,11 @@ export default class Executor extends EngineComponent {
 
   resolveFullPowerCharge(state, fullPowerCharge) {
     if (fullPowerCharge > 0) {
+      // Apply full power charge buffs
+      fullPowerCharge *= state[S.fullPowerChargeBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        1
+      );
       state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
     state[S.fullPowerCharge] += fullPowerCharge;
