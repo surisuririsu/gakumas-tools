@@ -51,6 +51,8 @@ export default class Executor extends EngineComponent {
         engine.cardManager.holdSelectedFrom(state, "deck", "discards"),
       addHeldCardsToHand: (state) =>
         engine.cardManager.addHeldCardsToHand(state),
+      removeTroubleFromDeckOrDiscards: (state) =>
+        engine.cardManager.removeTroubleFromDeckOrDiscards(state),
 
       // Buffs
       setScoreBuff: (state, amount, turns) =>
@@ -77,8 +79,20 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setGoodConditionTurnsBuff: (state, amount, turns) =>
+        engine.buffManager.setGoodConditionTurnsBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       setConcentrationBuff: (state, amount, turns) =>
         engine.buffManager.setConcentrationBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setFullPowerChargeBuff: (state, amount, turns) =>
+        engine.buffManager.setFullPowerChargeBuff(
           state,
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null

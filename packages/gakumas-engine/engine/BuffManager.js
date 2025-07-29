@@ -49,7 +49,9 @@ export default class BuffManager extends EngineComponent {
     state[S.scoreDebuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
+    state[S.fullPowerChargeBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;
@@ -149,6 +151,25 @@ export default class BuffManager extends EngineComponent {
     });
   }
 
+  setGoodConditionTurnsBuff(state, amount, turns) {
+    const buffIndex = state[S.goodConditionTurnsBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.goodConditionTurnsBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.goodConditionTurnsBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setGoodConditionTurnsBuff", {
+      amount,
+      turns,
+    });
+  }
+
   setConcentrationBuff(state, amount, turns) {
     const buffIndex = state[S.concentrationBuffs].findIndex(
       (b) => b.turns == turns
@@ -163,6 +184,25 @@ export default class BuffManager extends EngineComponent {
       });
     }
     this.logger.log(state, "setConcentrationBuff", {
+      amount,
+      turns,
+    });
+  }
+
+  setFullPowerChargeBuff(state, amount, turns) {
+    const buffIndex = state[S.fullPowerChargeBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.fullPowerChargeBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.fullPowerChargeBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setFullPowerChargeBuff", {
       amount,
       turns,
     });
