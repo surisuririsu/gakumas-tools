@@ -1,0 +1,15 @@
+@use "../../styles/colors";
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: colors.$black-dark;
+  border-top: 2px solid colors.$gk-orange;
+  border-bottom: 2px solid colors.$gk-orange;
+  margin-bottom: 16px;
+
+  iframe {
+    max-width: 100%;
+  }
+}
