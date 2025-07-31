@@ -1,0 +1,50 @@
+@use "sass:color";
+@use "../../styles/colors";
+
+.oshi {
+  z-index: 1;
+
+  button {
+    background-color: colors.$gk-orange;
+    color: colors.$white;
+    border-radius: 0 0 16px 16px;
+    padding: 4px 8px;
+    box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: colors.$gk-red-orange;
+    }
+  }
+}
+
+.expand {
+  width: 100%;
+}
+
+.close {
+  width: 32px;
+  height: 24px;
+  margin-bottom: -24px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  resize: vertical;
+  overflow: hidden;
+  height: 300px;
+  background-color: colors.$black-dark;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media only screen and (max-height: 800px) {
+  .wrapper {
+    height: 35dvh;
+  }
+}

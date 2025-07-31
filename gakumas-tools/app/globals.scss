@@ -11,13 +11,13 @@ body {
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: colors.$white-dark;
 }
 
 main {
   min-width: 350px;
   flex: 1;
-  padding-top: 64px;
   color: colors.$black-dark;
   overflow: auto;
   container-type: inline-size;
