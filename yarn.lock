@@ -4370,6 +4370,7 @@ __metadata:
     next: "npm:^15.3.5"
     next-auth: "npm:^4.24.11"
     next-intl: "npm:^4.3.4"
+    re-resizable: "npm:^6.11.2"
     react: "npm:^19.1.0"
     react-chartjs-2: "npm:^5.3.0"
     react-dom: "npm:^19.1.0"
@@ -6830,6 +6831,16 @@ __metadata:
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: 10c0/900a93d3cdae3acd7d16f642c29a642aea32c2026446151f0778c62ac089d4b8e6c986811076e1ae180a694cedf077d453a11b58ff0a865629a4f82ab558e102
+  languageName: node
+  linkType: hard
+
+"re-resizable@npm:^6.11.2":
+  version: 6.11.2
+  resolution: "re-resizable@npm:6.11.2"
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/964c37b02b03ba9103fd67e4a486cf8cb57856eb92508677d8e2a350ec2b2a978014ed7dd4e2531c90ba89eedb0982b613590311471bfd66b14fdec709a09f17
   languageName: node
   linkType: hard
 

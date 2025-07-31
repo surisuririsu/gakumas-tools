@@ -23,6 +23,7 @@
 }
 
 .close {
+  position: absolute;
   width: 32px;
   height: 24px;
   margin-bottom: -24px;
@@ -32,9 +33,6 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
-  resize: vertical;
-  overflow: hidden;
-  height: 300px;
   background-color: colors.$black-dark;
 
   iframe {
@@ -43,8 +41,9 @@
   }
 }
 
-@media only screen and (max-height: 800px) {
-  .wrapper {
-    height: 35dvh;
-  }
+.handle {
+  border-style: solid;
+  border-color: colors.$white;
+  border-width: 3px 0;
+  background-color: colors.$gk-orange;
 }

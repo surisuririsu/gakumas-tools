@@ -5677,6 +5677,7 @@ const RAW_RUNTIME_STATE =
           ["next", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:15.3.5"],\
           ["next-auth", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:4.24.11"],\
           ["next-intl", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:4.3.4"],\
+          ["re-resizable", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:6.11.2"],\
           ["react", "npm:19.1.0"],\
           ["react-chartjs-2", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:5.3.0"],\
           ["react-dom", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:19.1.0"],\
@@ -8555,6 +8556,32 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/queue-microtask-npm-1.2.3-fcc98e4e2d-10c0.zip/node_modules/queue-microtask/",\
         "packageDependencies": [\
           ["queue-microtask", "npm:1.2.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["re-resizable", [\
+      ["npm:6.11.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/re-resizable-npm-6.11.2-819f581159-10c0.zip/node_modules/re-resizable/",\
+        "packageDependencies": [\
+          ["re-resizable", "npm:6.11.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:6.11.2", {\
+        "packageLocation": "./.yarn/__virtual__/re-resizable-virtual-81c79d15a7/4/AppData/Local/Yarn/Berry/cache/re-resizable-npm-6.11.2-819f581159-10c0.zip/node_modules/re-resizable/",\
+        "packageDependencies": [\
+          ["@types/react", null],\
+          ["@types/react-dom", null],\
+          ["re-resizable", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:6.11.2"],\
+          ["react", "npm:19.1.0"],\
+          ["react-dom", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:19.1.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\

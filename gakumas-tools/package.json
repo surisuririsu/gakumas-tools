@@ -21,6 +21,7 @@
     "next": "^15.3.5",
     "next-auth": "^4.24.11",
     "next-intl": "^4.3.4",
+    "re-resizable": "^6.11.2",
     "react": "^19.1.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.1.0",
