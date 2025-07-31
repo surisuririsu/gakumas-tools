@@ -1,8 +1,6 @@
 @use "../../styles/colors";
 
 .toolHeader {
-  position: absolute;
-  right: -32px;
   color: colors.$black;
   transition: color 0.2s;
 

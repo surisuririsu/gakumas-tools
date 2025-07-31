@@ -4,7 +4,6 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { getServerSession } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
 import { DataContextProvider } from "@/contexts/DataContext";
@@ -63,10 +62,7 @@ export default async function RootLayout({ params, children }) {
                           <ModalContextProvider>
                             <div className={styles.tools}>
                               <PinnedTools />
-                              <main>
-                                <Hero />
-                                {children}
-                              </main>
+                              <main>{children}</main>
                             </div>
                           </ModalContextProvider>
                         </LoadoutContextProvider>
