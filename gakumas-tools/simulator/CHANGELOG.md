@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-07-31
+
+- Update Star-mine p-idols
+
 ## 2025-07-29
 
 - Add preview of Star-mine p-idols
