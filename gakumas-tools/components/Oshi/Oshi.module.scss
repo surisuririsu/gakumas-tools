@@ -4,11 +4,14 @@
 .oshi {
   z-index: 1;
 
-  button {
-    background-color: colors.$gk-orange;
-    color: colors.$white;
+  button,
+  a {
+    display: block;
     border-radius: 0 0 16px 16px;
+    background-color: colors.$gk-orange;
     padding: 4px 8px;
+    color: colors.$white;
+    text-align: center;
     box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
     transition: background-color 0.2s;
 
