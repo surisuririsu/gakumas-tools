@@ -12,6 +12,7 @@ Dates are based on Eastern Time Zone.
 - Adjust behavior of 夢見る星, あの日、この場所で+
 - Include delayed effects in evaluation
 - Add preview of contest season 29
+- Include delayed effects in cardEffects
 
 ## 2025-07-31
 

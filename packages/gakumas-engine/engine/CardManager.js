@@ -108,7 +108,7 @@ export default class CardManager extends EngineComponent {
     const effects = this.getLines(state, card, "effects");
     for (let i = 0; i < effects.length; i++) {
       const effect = effects[i];
-      if (effect.phase || !effect.actions) continue;
+      if (!effect.actions) continue;
       for (let j = 0; j < effect.actions.length; j++) {
         const tokens = effect.actions[j];
         if (!tokens?.[0]?.length) continue;
