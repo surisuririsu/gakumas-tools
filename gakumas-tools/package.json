@@ -31,8 +31,7 @@
     "react-window": "^1.8.11",
     "sass": "^1.89.2",
     "sharp": "^0.34.2",
-    "tesseract.js": "^6.0.1",
-    "video.js": "^8.23.3"
+    "tesseract.js": "^6.0.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
