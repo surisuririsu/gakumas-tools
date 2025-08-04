@@ -6,6 +6,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-04
+
+- Adjust behavior of 夢見る星, あの日、この場所で+
+
 ## 2025-07-31
 
 - Update Star-mine p-idols

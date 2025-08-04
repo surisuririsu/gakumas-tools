@@ -498,9 +498,11 @@ export default class CardManager extends EngineComponent {
         id: state[S.cardMap][card].id,
       });
     }
+  }
 
-    // Discard cards if over limit
-    if (state[S.heldCards].length > 2) {
+  enforceHoldLimit(state) {
+    // If holding more than 2 cards, discard until only 2 are held
+    while (state[S.heldCards].length > 2) {
       const discardedCard = state[S.heldCards].shift();
       state[S.discardedCards].push(discardedCard);
       this.logger.log(state, "discardCard", {
@@ -510,7 +512,7 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  holdSelectedFrom(state, ...sources) {
+  holdSelectedFrom(state, sources, num = 1) {
     if (state[S.nullifyHold]) return;
 
     // Collect cards from specified sources
@@ -520,19 +522,24 @@ export default class CardManager extends EngineComponent {
     if (!cards.length) return;
 
     // Pick card to hold based on strategy
-    let indexToHold = this.engine.strategy.pickCardToHold(state, cards);
-    if (indexToHold < 0) return;
+    let indicesToHold = this.engine.strategy.pickCardsToHold(state, cards, num);
+    if (indicesToHold.length === 0) return;
 
-    // Find card and move to hold
-    for (let i = 0; i < sources.length; i++) {
-      if (indexToHold < sourceCards[i].length) {
-        const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
-        this.hold(state, card);
-        return;
-      } else {
-        indexToHold -= sourceCards[i].length;
+    // Find cards and move to hold
+    for (let j = 0; j < indicesToHold.length; j++) {
+      let indexToHold = indicesToHold[j];
+      for (let i = 0; i < sources.length; i++) {
+        if (indexToHold < sourceCards[i].length) {
+          const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
+          this.hold(state, card);
+          break;
+        } else {
+          indexToHold -= sourceCards[i].length;
+        }
       }
     }
+
+    this.enforceHoldLimit(state);
   }
 
   holdCard(state, cardBaseId) {
@@ -545,10 +552,13 @@ export default class CardManager extends EngineComponent {
         break;
       }
     }
+
+    this.enforceHoldLimit(state);
   }
 
   holdThisCard(state) {
     this.hold(state, state[S.usedCard]);
+    this.enforceHoldLimit(state);
     state[S.thisCardHeld] = true;
   }
 
