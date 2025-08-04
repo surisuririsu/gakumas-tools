@@ -105,7 +105,13 @@ export default class HeuristicStrategy extends BaseStrategy {
       const postEffectState = deepCopy(previewState);
       this.engine.effectManager.triggerEffects(
         postEffectState,
-        [{ ...effect, phase: null }],
+        [
+          {
+            ...effect,
+            phase: null,
+            delay: effect.delay - previewState[S.turnsRemaining],
+          },
+        ],
         null,
         null,
         true
