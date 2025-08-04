@@ -1011,6 +1011,13 @@ const RAW_RUNTIME_STATE =
           ["regenerator-runtime", "npm:0.14.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.28.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@babel-runtime-npm-7.28.2-0c89c5b111-10c0.zip/node_modules/@babel/runtime/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.28.2"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@babel/template", [\
@@ -3485,6 +3492,67 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@videojs/http-streaming", [\
+      ["npm:3.17.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@videojs-http-streaming-npm-3.17.2-a55b3dc025-10c0.zip/node_modules/@videojs/http-streaming/",\
+        "packageDependencies": [\
+          ["@videojs/http-streaming", "npm:3.17.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:3.17.2", {\
+        "packageLocation": "./.yarn/__virtual__/@videojs-http-streaming-virtual-561ada11ed/4/AppData/Local/Yarn/Berry/cache/@videojs-http-streaming-npm-3.17.2-a55b3dc025-10c0.zip/node_modules/@videojs/http-streaming/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@types/video.js", null],\
+          ["@videojs/http-streaming", "virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:3.17.2"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["aes-decrypter", "npm:4.0.2"],\
+          ["global", "npm:4.4.0"],\
+          ["m3u8-parser", "npm:7.2.0"],\
+          ["mpd-parser", "npm:1.3.1"],\
+          ["mux.js", "npm:7.1.0"],\
+          ["video.js", "npm:8.23.4"]\
+        ],\
+        "packagePeers": [\
+          "@types/video.js",\
+          "video.js"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@videojs/vhs-utils", [\
+      ["npm:4.1.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@videojs-vhs-utils-npm-4.1.1-4b25fdb37d-10c0.zip/node_modules/@videojs/vhs-utils/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["global", "npm:4.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@videojs/xhr", [\
+      ["npm:2.7.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@videojs-xhr-npm-2.7.0-6c3f44c163-10c0.zip/node_modules/@videojs/xhr/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.28.2"],\
+          ["@videojs/xhr", "npm:2.7.0"],\
+          ["global", "npm:4.4.0"],\
+          ["is-function", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@xmldom/xmldom", [\
+      ["npm:0.8.10", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/@xmldom-xmldom-npm-0.8.10-c1bd991e61-10c0.zip/node_modules/@xmldom/xmldom/",\
+        "packageDependencies": [\
+          ["@xmldom/xmldom", "npm:0.8.10"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["abbrev", [\
       ["npm:3.0.0", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/abbrev-npm-3.0.0-946682a7b1-10c0.zip/node_modules/abbrev/",\
@@ -3541,6 +3609,19 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/acorn",\
           "acorn"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["aes-decrypter", [\
+      ["npm:4.0.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/aes-decrypter-npm-4.0.2-78a607e38c-10c0.zip/node_modules/aes-decrypter/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["aes-decrypter", "npm:4.0.2"],\
+          ["global", "npm:4.4.0"],\
+          ["pkcs7", "npm:1.0.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4611,6 +4692,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/dom-accessibility-api-npm-0.6.3-0345e4dede-10c0.zip/node_modules/dom-accessibility-api/",\
         "packageDependencies": [\
           ["dom-accessibility-api", "npm:0.6.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["dom-walk", [\
+      ["npm:0.1.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/dom-walk-npm-0.1.2-7d20a1a8d8-10c0.zip/node_modules/dom-walk/",\
+        "packageDependencies": [\
+          ["dom-walk", "npm:0.1.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -5687,7 +5777,8 @@ const RAW_RUNTIME_STATE =
           ["react-window", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:1.8.11"],\
           ["sass", "npm:1.89.2"],\
           ["sharp", "npm:0.34.2"],\
-          ["tesseract.js", "npm:6.0.1"]\
+          ["tesseract.js", "npm:6.0.1"],\
+          ["video.js", "npm:8.23.4"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -5831,6 +5922,17 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["glob-parent", "npm:6.0.2"],\
           ["is-glob", "npm:4.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["global", [\
+      ["npm:4.4.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/global-npm-4.4.0-888ee8033d-10c0.zip/node_modules/global/",\
+        "packageDependencies": [\
+          ["global", "npm:4.4.0"],\
+          ["min-document", "npm:2.19.0"],\
+          ["process", "npm:0.11.10"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6287,6 +6389,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/is-fullwidth-code-point-npm-3.0.0-1ecf4ebee5-10c0.zip/node_modules/is-fullwidth-code-point/",\
         "packageDependencies": [\
           ["is-fullwidth-code-point", "npm:3.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["is-function", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/is-function-npm-1.0.2-90ac01927b-10c0.zip/node_modules/is-function/",\
+        "packageDependencies": [\
+          ["is-function", "npm:1.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7444,6 +7555,18 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["m3u8-parser", [\
+      ["npm:7.2.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/m3u8-parser-npm-7.2.0-66414d0c9c-10c0.zip/node_modules/m3u8-parser/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["global", "npm:4.4.0"],\
+          ["m3u8-parser", "npm:7.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["make-dir", [\
       ["npm:4.0.0", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/make-dir-npm-4.0.0-ec3cd921cc-10c0.zip/node_modules/make-dir/",\
@@ -7545,6 +7668,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/mimic-fn-npm-2.1.0-4fbeb3abb4-10c0.zip/node_modules/mimic-fn/",\
         "packageDependencies": [\
           ["mimic-fn", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["min-document", [\
+      ["npm:2.19.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/min-document-npm-2.19.0-458cdb3d84-10c0.zip/node_modules/min-document/",\
+        "packageDependencies": [\
+          ["dom-walk", "npm:0.1.2"],\
+          ["min-document", "npm:2.19.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7735,11 +7868,35 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["mpd-parser", [\
+      ["npm:1.3.1", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/mpd-parser-npm-1.3.1-51727d193c-10c0.zip/node_modules/mpd-parser/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["@xmldom/xmldom", "npm:0.8.10"],\
+          ["global", "npm:4.4.0"],\
+          ["mpd-parser", "npm:1.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["ms", [\
       ["npm:2.1.3", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/ms-npm-2.1.3-81ff3cfac1-10c0.zip/node_modules/ms/",\
         "packageDependencies": [\
           ["ms", "npm:2.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["mux.js", [\
+      ["npm:7.1.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/mux.js-npm-7.1.0-d8866a410b-10c0.zip/node_modules/mux.js/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.28.2"],\
+          ["global", "npm:4.4.0"],\
+          ["mux.js", "npm:7.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8400,6 +8557,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["pkcs7", [\
+      ["npm:1.0.4", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/pkcs7-npm-1.0.4-bfa07f6dac-10c0.zip/node_modules/pkcs7/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.28.2"],\
+          ["pkcs7", "npm:1.0.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["pkg-dir", [\
       ["npm:4.2.0", {\
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/pkg-dir-npm-4.2.0-2b5d0a8d32-10c0.zip/node_modules/pkg-dir/",\
@@ -8506,6 +8673,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/proc-log-npm-5.0.0-405173f9b4-10c0.zip/node_modules/proc-log/",\
         "packageDependencies": [\
           ["proc-log", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["process", [\
+      ["npm:0.11.10", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/process-npm-0.11.10-aeb3b641ae-10c0.zip/node_modules/process/",\
+        "packageDependencies": [\
+          ["process", "npm:0.11.10"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10080,6 +10256,69 @@ const RAW_RUNTIME_STATE =
           ["@types/istanbul-lib-coverage", "npm:2.0.6"],\
           ["convert-source-map", "npm:2.0.0"],\
           ["v8-to-istanbul", "npm:9.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["video.js", [\
+      ["npm:8.23.4", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/video.js-npm-8.23.4-75bfe87039-10c0.zip/node_modules/video.js/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.10"],\
+          ["@videojs/http-streaming", "virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:3.17.2"],\
+          ["@videojs/vhs-utils", "npm:4.1.1"],\
+          ["@videojs/xhr", "npm:2.7.0"],\
+          ["aes-decrypter", "npm:4.0.2"],\
+          ["global", "npm:4.4.0"],\
+          ["m3u8-parser", "npm:7.2.0"],\
+          ["mpd-parser", "npm:1.3.1"],\
+          ["mux.js", "npm:7.1.0"],\
+          ["video.js", "npm:8.23.4"],\
+          ["videojs-contrib-quality-levels", "virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:4.1.0"],\
+          ["videojs-font", "npm:4.2.0"],\
+          ["videojs-vtt.js", "npm:0.15.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["videojs-contrib-quality-levels", [\
+      ["npm:4.1.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/videojs-contrib-quality-levels-npm-4.1.0-1e51f22a8e-10c0.zip/node_modules/videojs-contrib-quality-levels/",\
+        "packageDependencies": [\
+          ["videojs-contrib-quality-levels", "npm:4.1.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:4.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/videojs-contrib-quality-levels-virtual-c345e8ae7b/4/AppData/Local/Yarn/Berry/cache/videojs-contrib-quality-levels-npm-4.1.0-1e51f22a8e-10c0.zip/node_modules/videojs-contrib-quality-levels/",\
+        "packageDependencies": [\
+          ["@types/video.js", null],\
+          ["global", "npm:4.4.0"],\
+          ["video.js", "npm:8.23.4"],\
+          ["videojs-contrib-quality-levels", "virtual:75bfe8703931af1cf90676cd6a65b07025666baab07bafd286327f8d23fa3edb1f08d3f88e03f3f1b76d9108ef9eb0b8af85f701002b25523042c5dbf536c2d7#npm:4.1.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/video.js",\
+          "video.js"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["videojs-font", [\
+      ["npm:4.2.0", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/videojs-font-npm-4.2.0-727f2a5576-10c0.zip/node_modules/videojs-font/",\
+        "packageDependencies": [\
+          ["videojs-font", "npm:4.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["videojs-vtt.js", [\
+      ["npm:0.15.5", {\
+        "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/videojs-vtt.js-npm-0.15.5-c232c5bdef-10c0.zip/node_modules/videojs-vtt.js/",\
+        "packageDependencies": [\
+          ["global", "npm:4.4.0"],\
+          ["videojs-vtt.js", "npm:0.15.5"]\
         ],\
         "linkType": "HARD"\
       }]\
