@@ -13,9 +13,9 @@ export default class BaseStrategy {
 
   /**
    * Given a state and list of cards, selects a card to hold.
-   * Returns the index of the card to hold.
+   * Returns the indices of the cards to hold.
    */
-  pickCardToHold(state, cards) {
-    throw new Error("pickCardToHold is not implemented!");
+  pickCardsToHold(state, cards, num = 1) {
+    throw new Error("pickCardsToHold is not implemented!");
   }
 }

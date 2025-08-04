@@ -525,7 +525,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 524,ヒーローとの出会い,,SSR,mental,sense,1,FALSE,TRUE,pIdol,85,FALSE,,do:cost-=6,"do:goodConditionTurns+=4,do:concentration+=1;if:goodConditionTurns>=4,if:goodConditionTurns<12;at:startOfTurn,do:cardUsesRemaining+=1,limit:1;if:goodConditionTurns>=12;at:startOfTurn,do:cardUsesRemaining+=1,limit:2",1,
 525,ヒーローとの出会い+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,85,FALSE,,do:cost-=4,"do:goodConditionTurns+=4,do:concentration+=2;if:goodConditionTurns>=4,if:goodConditionTurns<12;at:startOfTurn,do:cardUsesRemaining+=1,limit:1;if:goodConditionTurns>=12;at:startOfTurn,do:cardUsesRemaining+=1,limit:2",1,
 526,あの日、この場所で,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,86,FALSE,,do:stamina-=6,"do:fullPowerCharge+=10,do:holdSelectedFromDeckOrDiscards",1,
-527,あの日、この場所で+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,86,FALSE,,do:stamina-=4,"do:fullPowerCharge+=10,do:holdSelectedFromDeckOrDiscards,do:holdSelectedFromDeckOrDiscards",1,
+527,あの日、この場所で+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,86,FALSE,,do:stamina-=4,"do:fullPowerCharge+=10,do:holdSelectedFromDeckOrDiscards(2)",1,
 528,対戦お願いします！,,SSR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,,do:cost-=2,"do:holdSelectedFromDeckOrDiscards,do:drawCard,do:cardUsesRemaining+=1",1,
 529,対戦お願いします！+,"23,89",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:holdSelectedFromDeckOrDiscards,do:drawCard,do:cardUsesRemaining+=1",1,
 530,勝負はこれから！,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:score+=2,do:genki+=2,do:halfCostTurns+=3;at:startOfTurn,do:drawCard,limit:1",1,

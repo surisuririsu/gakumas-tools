@@ -336,13 +336,16 @@ export default class HeuristicStrategy extends BaseStrategy {
     return Math.round(previewState[S.score]);
   }
 
-  pickCardToHold(state, cards) {
+  pickCardsToHold(state, cards, num = 1) {
     let scores = [];
     for (let i = 0; i < cards.length; i++) {
       scores.push(this.evaluateForHold(state, cards[i]));
     }
-    const maxScore = Math.max(...scores);
-    const maxIndex = scores.indexOf(maxScore);
-    return maxIndex;
+    const sortedIndices = scores
+      .map((score, index) => ({ score, index }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, num)
+      .map((item) => item.index);
+    return sortedIndices;
   }
 }
