@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     border-radius: 0 0 16px 16px;
-    background-color: colors.$gk-orange;
+    background-color: colors.$blue;
     padding: 4px 8px;
     color: colors.$white;
     text-align: center;
@@ -17,7 +17,7 @@
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: colors.$gk-red-orange;
+      background-color: colors.$blue-dark;
     }
   }
 }
