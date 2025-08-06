@@ -19,7 +19,7 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      今夜20時に、
+      今夜8時に、
       <IdolIcon idolId={6} />
       伊藤舞音・浅見香月の『おかづラジオ』3回目の配信があります！
       <br />
