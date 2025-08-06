@@ -99,5 +99,5 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 98,シーズン28 ステージ2,contest,FALSE,28,2,,anomaly,"0.45,0.2,0.35","6,2,4","1,0,0","at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10"
 99,シーズン28 ステージ3,contest,FALSE,28,3,,anomaly,"0.45,0.2,0.35","6,2,4","1,0,0","at:afterActiveCardUsed,if:stamina<=maxStamina*0.5,do:score+=2,do:score+=2,limit:2"
 100,シーズン29 ステージ1,contest,FALSE,29,1,,sense,"0.2,0.5,0.3","3,6,3","0,1,0","at:startOfTurn,do:setConcentrationBuff(0.25,6),limit:1"
-101,シーズン29 ステージ2,contest,FALSE,29,2,,logic,"0.2,0.5,0.3","3,6,3","0,1,0","at:cardUsed,if:turnCardsUsed%2==1,do:setGoodImpressionTurnsBuff(0.5,1);at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1,group:1"
+101,シーズン29 ステージ2,contest,FALSE,29,2,,logic,"0.2,0.5,0.3","3,6,3","0,1,0","at:cardUsed,if:turnCardsUsed%2==1,do:setGoodImpressionTurnsBuff(0.5,1),group:11;at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1,group:1"
 102,シーズン29 ステージ3,contest,FALSE,29,3,,anomaly,"0.2,0.5,0.3","2,4,2","0,1,0","at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:mental,do:g.genki+=8,limit:2;at:stanceChanged,if:parentPhase==processCard,if:isPreservation,do:fixedStamina-=2,limit:2"
