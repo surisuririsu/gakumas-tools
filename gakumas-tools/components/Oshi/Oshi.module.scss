@@ -4,9 +4,10 @@
 .oshi {
   z-index: 1;
 
-  button,
-  a {
-    display: block;
+  & > button,
+  & > a {
+    display: flex;
+    justify-content: center;
     border-radius: 0 0 16px 16px;
     background-color: colors.$gk-orange;
     padding: 4px 8px;
@@ -36,6 +37,7 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
+  padding-bottom: 5px;
   background-color: colors.$black-dark;
 
   iframe {
