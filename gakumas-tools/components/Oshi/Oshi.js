@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Resizable } from "re-resizable";
+import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export default function Oshi({ text, initiallyExpanded, videoId, url }) {
@@ -30,14 +31,7 @@ export default function Oshi({ text, initiallyExpanded, videoId, url }) {
               handleClasses={{ bottom: styles.handle }}
               enable={{ bottom: true }}
             >
-              <iframe
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
+              <YouTubeVideo videoId={videoId} />
             </Resizable>
             <button className={styles.close} onClick={() => setExpanded(false)}>
               ×
