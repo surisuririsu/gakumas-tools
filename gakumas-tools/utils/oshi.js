@@ -24,6 +24,7 @@ export const OSHI_PROPS = {
       <IdolIcon idolId={10} />
     </>
   ),
+  initiallyExpanded: true,
   url: "https://asobichannel.asobistore.jp/watch/9f01driiwg2",
 };
 
