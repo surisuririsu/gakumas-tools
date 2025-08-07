@@ -29,21 +29,23 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      今日18時に、
-      <IdolIcon idolId={5} />
-      「花岩香奈のはないわーるど！」に
-      <IdolIcon idolId={6} />
-      伊藤舞音さんがゲストで登場します！
-      <br />
-      一部無料で視聴できるので、ぜひ観てみてください！
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://audee-membership.jp/hanaiwa-kana/live/smQ6XCWdgM2La2LJiKjPeiy7",
-};
+export const OSHI_PROPS = null;
+
+// export const OSHI_PROPS = {
+//   text: (
+//     <div>
+//       今日18時に、
+//       <IdolIcon idolId={5} />
+//       「花岩香奈のはないわーるど！」に
+//       <IdolIcon idolId={6} />
+//       伊藤舞音さんがゲストで登場します！
+//       <br />
+//       一部無料で視聴できるので、ぜひ観てみてください！
+//     </div>
+//   ),
+//   initiallyExpanded: true,
+//   url: "https://audee-membership.jp/hanaiwa-kana/live/smQ6XCWdgM2La2LJiKjPeiy7",
+// };
 
 // export const OSHI_PROPS = {
 //   text: (
