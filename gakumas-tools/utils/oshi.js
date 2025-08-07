@@ -41,6 +41,7 @@ export const OSHI_PROPS = {
       一部無料で視聴できるので、ぜひ観てみてください！
     </div>
   ),
+  initiallyExpanded: true,
   url: "https://audee-membership.jp/hanaiwa-kana/live/smQ6XCWdgM2La2LJiKjPeiy7",
 };
 
