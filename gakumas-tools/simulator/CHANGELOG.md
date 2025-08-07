@@ -7,6 +7,16 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+
+## 2025-08-06
+
+- Change order of stage 2 effect
+
+## 2025-08-05
+
+- Update turn counts for S29
+
 ## 2025-08-04
 
 - Adjust behavior of 夢見る星, あの日、この場所で+
