@@ -10,14 +10,30 @@ export default function Oshi({ text, initiallyExpanded, videoId, url }) {
   if (url) {
     return (
       <div className={styles.oshi}>
-        <a
-          className={styles.expand}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {text}
-        </a>
+        {expanded ? (
+          <a
+            className={styles.expand}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setExpanded(false)}
+          >
+            {text}
+          </a>
+        ) : (
+          <button className={styles.expand} onClick={() => setExpanded(true)}>
+            <div
+              style={{
+                display: "inline-block",
+                marginRight: 8,
+                backgroundColor: "#ff3333",
+                borderRadius: 5,
+                width: 10,
+                height: 10,
+              }}
+            />{" "}
+          </button>
+        )}
       </div>
     );
   } else if (videoId) {
