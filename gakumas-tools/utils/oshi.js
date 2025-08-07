@@ -2,6 +2,19 @@ import { Idols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 
+const Badge = () => (
+  <div
+    style={{
+      display: "inline-block",
+      marginRight: 8,
+      backgroundColor: "#ff3333",
+      borderRadius: 5,
+      width: 10,
+      height: 10,
+    }}
+  />
+);
+
 const IdolIcon = ({ idolId }) => {
   const idol = Idols.getById(idolId);
   return (
@@ -18,15 +31,30 @@ const IdolIcon = ({ idolId }) => {
 
 export const OSHI_PROPS = {
   text: (
-    <>
-      「初星学園放送部 #49」を聴きましょう！
+    <div>
+      今日18時に、
+      <IdolIcon idolId={5} />
+      「花岩香奈のはないわーるど！」に
       <IdolIcon idolId={6} />
-      <IdolIcon idolId={10} />
-    </>
+      伊藤舞音さんがゲストで登場します！
+      <br />
+      一部無料で視聴できるので、ぜひ観てみてください！
+    </div>
   ),
-  initiallyExpanded: true,
-  url: "https://asobichannel.asobistore.jp/watch/9f01driiwg2",
+  url: "https://audee-membership.jp/hanaiwa-kana/live/smQ6XCWdgM2La2LJiKjPeiy7",
 };
+
+// export const OSHI_PROPS = {
+//   text: (
+//     <>
+//       「初星学園放送部 #49」を聴きましょう！
+//       <IdolIcon idolId={6} />
+//       <IdolIcon idolId={10} />
+//     </>
+//   ),
+//   initiallyExpanded: true,
+//   url: "https://asobichannel.asobistore.jp/watch/9f01driiwg2",
+// };
 
 // export const OSHI_PROPS = {
 //   text: (
