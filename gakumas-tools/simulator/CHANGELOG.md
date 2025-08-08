@@ -9,6 +9,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-08
+
+- Add preview of Jibaku Kotone
+
 ## 2025-08-06
 
 - Change order of stage 2 effect

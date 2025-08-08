@@ -586,3 +586,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 585,夏夜に咲く思い出+,"29,83",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=7,"do:removeTroubleFromDeckOrDiscards,do:cardUsesRemaining+=1;at:cardUsed,do:natsuyaCardsUsed+=1;at:cardUsed,if:natsuyaCardsUsed%5==4,do:score+=4",1,
 586,月明りに包まれて,,SSR,mental,free,1,FALSE,TRUE,support,,TRUE,,do:cost-=5,"do:costReduction+=1,do:cardUsesRemaining+=1",1,
 587,月明りに包まれて+,"29,27",SSR,mental,free,1,TRUE,TRUE,support,,TRUE,,do:cost-=2,"do:costReduction+=1,do:cardUsesRemaining+=1",1,
+588,自己肯定感爆上げ↑↑,,SSR,mental,sense,1,FALSE,TRUE,pIdol,106,FALSE,,do:stamina-=2,"do:concentration+=1;at:mentalCardUsed,do:concentration+=2",1,
+589,自己肯定感爆上げ↑↑+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,106,FALSE,,do:stamina-=2,"do:concentration+=1;at:mentalCardUsed,do:concentration+=2",1,

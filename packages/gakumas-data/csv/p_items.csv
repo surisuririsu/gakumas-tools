@@ -317,3 +317,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 316,夢見る星+,SSR,TRUE,anomaly,stage,pIdol,105,FALSE,"at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,do:setFullPowerChargeBuff(0.5,1),group:11;at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,group:11;at:startOfTurn,do:setStance(preservation2),limit:1,group:11"
 317,おさぼりタオル,SR,FALSE,free,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,do:fixedGenki+=4,limit:1;at:startOfTurn,if:isDanceTurn,limit:1;at:startOfTurn,do:nullifyDebuff+=1,limit:1"
 318,わいわいタンバリン,SSR,FALSE,free,produce,support,,FALSE,
+319,しゅきしゅきはーと,SSR,FALSE,sense,stage,pIdol,106,FALSE,"at:afterMentalCardUsed,if:concentration>=13,do:genki+=10,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1"
+320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,"at:afterMentalCardUsed,if:concentration>=13,do:genki+=10,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1"
