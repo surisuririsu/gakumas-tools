@@ -11,6 +11,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-20
+
+- Add season 30 preview
+
 ## 2025-08-12
 
 - Update Jibaku Kotone
