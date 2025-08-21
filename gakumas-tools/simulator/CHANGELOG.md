@@ -12,6 +12,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-21
+
+- Update S30 contest
+
 ## 2025-08-20
 
 - Add season 30 preview
