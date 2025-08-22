@@ -307,6 +307,7 @@
     "heldCard": "スキルカードを保留に移動",
     "discardedCard": "スキルカードを捨札に移動",
     "movedCardToHand": "スキルカードを手札に移動",
+    "movedCardToTopOfDeck": "スキルカードを山札の上に移動",
     "effect": "持続効果",
     "stageEffect": "ステージ効果",
     "skillCard": "スキルカード",

@@ -489,6 +489,47 @@ export default class CardManager extends EngineComponent {
     }
   }
 
+  moveSSRToTopOfDeck(state, num) {
+    let ssrCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        const skillCard = SkillCards.getById(card.id);
+        if (skillCard.rarity === "SSR") {
+          ssrCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!ssrCards.length) return;
+    for (let i = 0; i < num && ssrCards.length; i++) {
+      const pick = ssrCards.splice(
+        Math.floor(getRand() * ssrCards.length),
+        1
+      )[0];
+
+      // Sort remaining cards by index descending to avoid index shifting issues
+      const remainingFromSamePile = ssrCards.filter(
+        (card) => card.pile === pick.pile
+      );
+      remainingFromSamePile.sort((a, b) => b.index - a.index);
+
+      // Update indexes for cards after the removed one
+      for (let card of remainingFromSamePile) {
+        if (card.index > pick.index) {
+          card.index--;
+        }
+      }
+
+      state[pick.pile].splice(pick.index, 1);
+      state[S.deckCards].push(pick.cardIdx);
+      this.logger.log(state, "moveCardToTopOfDeck", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id,
+      });
+    }
+  }
+
   hold(state, card) {
     // Hold the card
     if (card != null) {

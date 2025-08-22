@@ -13,6 +13,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-22
+
+- Update for level cap 70
+
 ## 2025-08-21
 
 - Update S30 contest

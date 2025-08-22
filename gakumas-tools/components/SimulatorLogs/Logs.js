@@ -70,6 +70,14 @@ function Log({ line, idolId }) {
     return (
       <AddCard {...line.data} idolId={idolId} text={t("movedCardToHand")} />
     );
+  } else if (line.logType == "moveCardToTopOfDeck") {
+    return (
+      <AddCard
+        {...line.data}
+        idolId={idolId}
+        text={t("movedCardToTopOfDeck")}
+      />
+    );
   }
 }
 

@@ -307,6 +307,7 @@
     "heldCard": "Held card",
     "discardedCard": "Discarded card",
     "movedCardToHand": "Moved card to hand",
+    "movedCardToTopOfDeck": "Moved card to top of deck",
     "effect": "Effect",
     "stageEffect": "Stage effect",
     "skillCard": "Skill card",
