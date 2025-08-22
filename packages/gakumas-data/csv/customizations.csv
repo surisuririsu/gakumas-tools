@@ -95,3 +95,4 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 49,scoreByGoodImpressionTurns2,好印象分パラメータ+,score,"40,70",2,,,,,,"level:1,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.35;level:2,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=1.15"
 66,scoreByGoodImpressionTurns3,好印象分パラメータ+,score,"40,40,70",3,,,,,,"level:1,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.35;level:2,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.7;level:3,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=1.5"
 7,scoreByGoodImpressionTurnsAdd1,好印象分パラメータ追加,score,70,1,,,,do:score+=goodImpressionTurns*0.6,,
+97,hachikuCondition1,条件変更,effect,70,1,,"line:1,if:goodConditionTurns>=4",,,,

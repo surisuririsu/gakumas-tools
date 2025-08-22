@@ -543,6 +543,16 @@ import image_587 from "./587.png";
 import image_588 from "./588.png";
 import image_589 from "./589.png";
 import image_59 from "./59.png";
+import image_590 from "./590.png";
+import image_591 from "./591.png";
+import image_592 from "./592.png";
+import image_593 from "./593.png";
+import image_594 from "./594.png";
+import image_595 from "./595.png";
+import image_596 from "./596.png";
+import image_597 from "./597.png";
+import image_598 from "./598.png";
+import image_599 from "./599.png";
 import image_6 from "./6.png";
 import image_60 from "./60.png";
 import image_61 from "./61.png";
@@ -1134,6 +1144,16 @@ const IMAGES = {
   '588': image_588,
   '589': image_589,
   '59': image_59,
+  '590': image_590,
+  '591': image_591,
+  '592': image_592,
+  '593': image_593,
+  '594': image_594,
+  '595': image_595,
+  '596': image_596,
+  '597': image_597,
+  '598': image_598,
+  '599': image_599,
   '6': image_6,
   '60': image_60,
   '61': image_61,

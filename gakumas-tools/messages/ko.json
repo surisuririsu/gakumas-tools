@@ -307,6 +307,7 @@
     "heldCard": "스킬 카드를 보류로 이동",
     "discardedCard": "스킬 카드를 버림패로 이동",
     "movedCardToHand": "스킬 카드를 손패로 이동",
+    "movedCardToTopOfDeck": "스킬 카드를 덱 위로 이동",
     "effect": "지속 효과",
     "stageEffect": "스테이지 효과",
     "skillCard": "스킬 카드",
