@@ -1,4 +1,4 @@
-import { DEBUG } from "./constants";
+import { DEBUG } from "./constants.js";
 
 const seed = 610397104;
 
