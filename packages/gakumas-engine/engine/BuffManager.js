@@ -4,8 +4,8 @@ import {
   S,
   STANCE_CHANGED_EFFECTS,
   UNFRESH_PHASES,
-} from "../constants";
-import EngineComponent from "./EngineComponent";
+} from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
 
 export default class BuffManager extends EngineComponent {
   constructor(engine) {
@@ -379,6 +379,17 @@ export default class BuffManager extends EngineComponent {
   }
 
   resetStance(state) {
+    // Check if player will immediately re-enter full power stance
+    // This fix only applies when currently in fullPower stance
+    if (state[S.stance] === "fullPower" && 
+        state[S.lockStanceTurns] == 0 && 
+        state[S.fullPowerCharge] >= 10) {
+      // Direct transition from fullPower to fullPower - don't change prevStance
+      // This prevents 達成感 from triggering inappropriately
+      state[S.fullPowerCharge] -= 10;
+      return; // Skip the stance change phase entirely
+    }
+    
     state[S.prevStance] = state[S.stance];
     state[S.stance] = "none";
     this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
