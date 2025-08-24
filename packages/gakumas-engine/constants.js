@@ -37,6 +37,11 @@ export const DEFAULT_EFFECTS = [
 
 export const FULL_POWER_EFFECTS = [
   {
+    conditions: ["stance==fullPower"],
+    actions: ["setStance(none)"],
+    source: { type: "default", id: "全力" },
+  },
+  {
     conditions: ["lockStanceTurns==0", "fullPowerCharge>=10"],
     actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
     source: { type: "default", id: "全力" },
