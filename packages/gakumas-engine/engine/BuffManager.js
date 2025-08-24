@@ -338,7 +338,7 @@ export default class BuffManager extends EngineComponent {
   setStance(state, stance) {
     // Stance locked
     if (state[S.lockStanceTurns]) return;
-    if (state[S.stance] == "fullPower") return;
+    if (state[S.stance] == "fullPower" && stance != "none") return;
     if (state[S.stance] == "leisure" && stance.startsWith("preservation"))
       return;
 
@@ -381,6 +381,5 @@ export default class BuffManager extends EngineComponent {
   resetStance(state) {
     state[S.prevStance] = state[S.stance];
     state[S.stance] = "none";
-    this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
   }
 }

@@ -72,6 +72,7 @@ export default class TurnManager extends EngineComponent {
 
     state[S.cardUsesRemaining] = 1;
 
+    state[S.prevStance] = "none";
     this.engine.effectManager.triggerEffects(state, FULL_POWER_EFFECTS);
     this.engine.effectManager.triggerEffectsForPhase(
       state,
@@ -120,9 +121,6 @@ export default class TurnManager extends EngineComponent {
     state[S.turnCardsUsed] = 0;
     state[S.turnCardsUpgraded] = 0;
     state[S.enthusiasm] = 0;
-    if (state[S.stance] == "fullPower") {
-      this.engine.buffManager.resetStance(state);
-    }
 
     this.engine.effectManager.decrementTtl(state);
     this.engine.effectManager.decrementDelay(state);
