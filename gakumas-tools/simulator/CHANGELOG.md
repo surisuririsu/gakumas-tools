@@ -15,6 +15,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-25
+
+- Fix lock stance turns being applied to full power ending
+
 ## 2025-08-24
 
 - Change behavior of full power stance reset to trigger at beforeStartOfTurn
