@@ -337,8 +337,10 @@ export default class BuffManager extends EngineComponent {
 
   setStance(state, stance) {
     // Stance locked
-    if (state[S.lockStanceTurns]) return;
-    if (state[S.stance] == "fullPower" && stance != "none") return;
+    if (state[S.stance] == "fullPower") {
+      if (stance != "none") return;
+    } else if (state[S.lockStanceTurns]) return;
+
     if (state[S.stance] == "leisure" && stance.startsWith("preservation"))
       return;
 
