@@ -44,6 +44,14 @@ function HandStateLine({ k, state }) {
         {turns ? `(${t("numTurns", { num: turns })})` : ""}
       </div>
     ));
+  } else if (k == S.motivationBuffs) {
+    content = state[k].map(({ amount, turns }) => (
+      <div key={turns}>
+        {t("motivationBuff")}{" "}
+        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      </div>
+    ));
   } else if (k == S.goodConditionTurnsBuffs) {
     content = state[k].map(({ amount, turns }) => (
       <div key={turns}>

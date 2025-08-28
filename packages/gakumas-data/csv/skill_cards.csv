@@ -598,3 +598,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 597,破竹の勢い+,"97,54,14",SR,active,sense,69,TRUE,TRUE,produce,,FALSE,if:goodConditionTurns>=8,do:cost-=2,"do:concentration+=7;at:startOfTurn,do:score+=5,limit:4",1,
 598,天賦の才,,SSR,mental,sense,70,FALSE,TRUE,produce,,FALSE,,do:stamina-=5,"do:goodConditionTurns+=3,do:concentration+=2,do:moveSSRToTopOfDeck(3);at:startOfTurn,do:cardUsesRemaining+=1,limit:1",1,
 599,天賦の才+,"17,13",SSR,mental,sense,70,TRUE,TRUE,produce,,FALSE,,do:stamina-=4,"do:goodConditionTurns+=4,do:concentration+=3,do:moveSSRToTopOfDeck(3);at:startOfTurn,do:cardUsesRemaining+=1,limit:1",1,
+600,ドラマチックホリデー,,SSR,mental,logic,1,FALSE,TRUE,pIdol,107,FALSE,,do:cost-=5,"do:motivation+=3;at:activeCardUsed,if:motivation>=6,do:holidayCardsUsed+=1;at:activeCardUsed,if:motivation>=6,if:holidayCardsUsed%2==1,do:genki+=8",1,
+601,ドラマチックホリデー+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,107,FALSE,,do:cost-=5,"do:motivation+=3;at:activeCardUsed,if:motivation>=6,do:holidayCardsUsed+=1;at:activeCardUsed,if:motivation>=6,if:holidayCardsUsed%2==1,do:genki+=8",1,

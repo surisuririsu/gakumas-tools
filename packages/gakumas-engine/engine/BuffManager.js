@@ -49,6 +49,7 @@ export default class BuffManager extends EngineComponent {
     state[S.scoreDebuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.motivationBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
@@ -146,6 +147,25 @@ export default class BuffManager extends EngineComponent {
       });
     }
     this.logger.log(state, "setGoodImpressionTurnsEffectBuff", {
+      amount,
+      turns,
+    });
+  }
+
+  setMotivationBuff(state, amount, turns) {
+    const buffIndex = state[S.motivationBuffs].findIndex(
+      (b) => b.turns == turns
+    );
+    if (buffIndex != -1) {
+      state[S.motivationBuffs][buffIndex].amount += amount;
+    } else {
+      state[S.motivationBuffs].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+      });
+    }
+    this.logger.log(state, "setMotivationBuff", {
       amount,
       turns,
     });
@@ -289,6 +309,20 @@ export default class BuffManager extends EngineComponent {
         state[S.goodImpressionTurnsEffectBuffs].push(
           goodImpressionTurnsEffectBuffs[i]
         );
+      }
+    }
+
+    // Motivation buffs
+    const motivationBuffs = state[S.motivationBuffs];
+    state[S.motivationBuffs] = [];
+    for (let i = 0; i < motivationBuffs.length; i++) {
+      if (motivationBuffs[i].fresh) {
+        motivationBuffs[i].fresh = false;
+      } else if (motivationBuffs[i].turns) {
+        motivationBuffs[i].turns--;
+      }
+      if (motivationBuffs[i].turns != 0) {
+        state[S.motivationBuffs].push(motivationBuffs[i]);
       }
     }
 
