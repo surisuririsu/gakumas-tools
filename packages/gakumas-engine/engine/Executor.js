@@ -81,6 +81,12 @@ export default class Executor extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setMotivationBuff: (state, amount, turns) =>
+        engine.buffManager.setMotivationBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       setGoodConditionTurnsBuff: (state, amount, turns) =>
         engine.buffManager.setGoodConditionTurnsBuff(
           state,

@@ -321,3 +321,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,"at:afterMentalCardUsed,if:concentration>=13,do:genki+=10,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1"
 321,ピークタイムフラッグ,SSR,FALSE,sense,produce,support,,FALSE,
 322,ふっかつのアイス,SR,FALSE,sense,produce,support,,FALSE,
+323,ミラクルヘッド,SSR,FALSE,logic,stage,pIdol,107,FALSE,"at:startOfTurn,do:setMotivationBuff(0.5,3),limit:1;at:startOfTurn,if:turnsElapsed==1,do:genki+=2,limit:1"
+324,ミラクルヘッド+,SSR,TRUE,logic,stage,pIdol,107,FALSE,"at:startOfTurn,do:setMotivationBuff(0.5,3),limit:1;at:startOfTurn,if:turnsElapsed==1,do:genki+=2,limit:1"
+325,体力作りの教材？,SSR,FALSE,logic,produce,support,,FALSE,
+326,落ち葉つかみの型,SR,FALSE,logic,produce,support,,FALSE,

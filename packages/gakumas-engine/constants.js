@@ -165,6 +165,7 @@ export const ALL_FIELDS = [
   "goodImpressionTurns",
   "motivation",
   "motivationMultiplier",
+  "motivationBuffs",
   "stance",
   "prevStance",
   "lockStanceTurns",
@@ -220,6 +221,7 @@ export const ALL_FIELDS = [
   // Special
   "pcchiCardsUsed",
   "natsuyaCardsUsed",
+  "holidayCardsUsed",
   "nullifyHold",
 
   // Delta

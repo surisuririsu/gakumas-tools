@@ -74,6 +74,9 @@ export default class StageLogger {
         state[S.goodImpressionTurnsEffectBuffs]
       );
     }
+    if (state[S.motivationBuffs].length) {
+      res[S.motivationBuffs] = deepCopy(state[S.motivationBuffs]);
+    }
     if (state[S.goodConditionTurnsBuffs].length) {
       res[S.goodConditionTurnsBuffs] = deepCopy(
         state[S.goodConditionTurnsBuffs]

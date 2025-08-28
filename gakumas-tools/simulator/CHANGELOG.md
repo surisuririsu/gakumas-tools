@@ -16,6 +16,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-08-28
+
+- Added preview of na now mao
+
 ## 2025-08-25
 
 - Fix lock stance turns being applied to full power ending
