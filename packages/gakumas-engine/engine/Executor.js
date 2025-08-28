@@ -117,6 +117,7 @@ export default class Executor extends EngineComponent {
       score: (...args) => this.resolveScore(...args),
       goodImpressionTurns: (...args) =>
         this.resolveGoodImpressionTurns(...args),
+      motivation: (...args) => this.resolveMotivation(...args),
       goodConditionTurns: (...args) => this.resolveGoodConditionTurns(...args),
       concentration: (...args) => this.resolveConcentration(...args),
       genki: (...args) => this.resolveGenki(...args),
@@ -291,6 +292,7 @@ export default class Executor extends EngineComponent {
         ) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "goodImpressionTurns" && op == "+=") ||
+        (lhs == "motivation" && op == "+=") ||
         (lhs == "goodConditionTurns" && op == "+=") ||
         (lhs == "concentration" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
@@ -529,6 +531,16 @@ export default class Executor extends EngineComponent {
     );
 
     state[S.goodImpressionTurns] += goodImpressionTurns;
+  }
+
+  resolveMotivation(state, motivation) {
+    // Apply motivation buffs
+    motivation *= state[S.motivationBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+
+    state[S.motivation] += motivation;
   }
 
   resolveGoodConditionTurns(state, goodConditionTurns) {
