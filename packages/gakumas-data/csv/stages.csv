@@ -107,3 +107,6 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 106,シーズン31 ステージ1,contest,TRUE,31,1,,logic,"0.45,0.35,0.2","6,4,2","1,0,0","at:startOfTurn,do:motivation+=5,limit:3"
 107,シーズン31 ステージ2,contest,TRUE,31,2,,logic,"0.45,0.35,0.2","4,2,2","1,0,0","at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1,group:1;at:startOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1,group:1"
 108,シーズン31 ステージ3,contest,TRUE,31,3,,anomaly,"0.45,0.35,0.2","6,4,2","1,0,0","at:stanceChanged,if:stance==fullPower,if:turnsRemaining<=3,do:score+=consumedStamina*1.5,limit:3"
+109,ライブツアーイベント 大阪編,event,FALSE,2,A,1,sense,"0.3,0.4,0.3","3,5,4","0,1,0","at:endOfTurn,if:turnsElapsed>=4,if:concentration>=20,do:score+=3,do:score+=3;at:cardUsed,if:cardEffects&concentration,if:concentration>=8,do:concentration+=5,do:goodConditionTurns+=1,limit:3"
+110,ライブツアーイベント 大阪編,event,FALSE,2,B,1,logic,"0.3,0.4,0.3","3,4,3","0,1,0","at:startOfTurn,if:turnsElapsed==7,if:genki>=40,do:moveActiveCardsToDeckFromRemoved;at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1"
+111,ライブツアーイベント 大阪編,event,FALSE,2,C,1,anomaly,"0.25,0.25,0.5","2,2,4","0,0,1","at:startOfTurn,if:turnsElapsed==5,if:cumulativeFullPowerCharge>=8,target:all,do:g.scoreTimes+=1;at:startOfTurn,if:stance==fullPower,do:score+=2+cumulativeFullPowerCharge*4,limit:3"

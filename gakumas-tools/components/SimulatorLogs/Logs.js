@@ -80,6 +80,14 @@ function Log({ line, idolId }) {
         text={t("movedCardToTopOfDeck")}
       />
     );
+  } else if (line.logType == "moveCardToDeckAtRandom") {
+    return (
+      <AddCard
+        {...line.data}
+        idolId={idolId}
+        text={t("movedCardToDeckAtRandom")}
+      />
+    );
   }
 }
 
