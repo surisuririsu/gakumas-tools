@@ -309,6 +309,7 @@
     "discardedCard": "スキルカードを捨札に移動",
     "movedCardToHand": "スキルカードを手札に移動",
     "movedCardToTopOfDeck": "スキルカードを山札の上に移動",
+    "movedCardToDeckAtRandom": "スキルカードを山札のランダムな位置に移動",
     "effect": "持続効果",
     "stageEffect": "ステージ効果",
     "skillCard": "スキルカード",

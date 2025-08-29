@@ -531,6 +531,29 @@ export default class CardManager extends EngineComponent {
     }
   }
 
+  moveActiveCardsToDeckFromRemoved(state) {
+    let cards = state[S.cardMap]
+      .map((c, i) => (state[S.removedCards].includes(i) && 
+                      SkillCards.getById(c.id).type == "active") ? i : -1)
+      .filter((i) => i != -1);
+
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+      const index = state[S.removedCards].indexOf(card);
+      if (index != -1) {
+        state[S.removedCards].splice(index, 1);
+        const insertIndex = Math.floor(getRand() * state[S.deckCards].length);
+        state[S.deckCards].splice(insertIndex, 0, card);
+
+        this.logger.log(state, "moveCardToDeckAtRandom", {
+          type: "skillCard",
+          id: state[S.cardMap][card].id,
+        });
+      }
+    });
+  }
+
   hold(state, card) {
     // Hold the card
     if (card != null) {

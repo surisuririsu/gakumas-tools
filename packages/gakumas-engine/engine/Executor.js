@@ -55,6 +55,8 @@ export default class Executor extends EngineComponent {
         engine.cardManager.addHeldCardsToHand(state),
       removeTroubleFromDeckOrDiscards: (state) =>
         engine.cardManager.removeTroubleFromDeckOrDiscards(state),
+      moveActiveCardsToDeckFromRemoved: (state) =>
+        engine.cardManager.moveActiveCardsToDeckFromRemoved(state),
 
       // Buffs
       setScoreBuff: (state, amount, turns) =>
