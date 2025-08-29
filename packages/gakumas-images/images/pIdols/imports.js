@@ -1,5 +1,9 @@
 import image_1 from "./1.png";
 import image_10 from "./10.png";
+import image_102 from "./102.png";
+import image_104 from "./104.png";
+import image_105 from "./105.png";
+import image_106 from "./106.png";
 import image_11 from "./11.png";
 import image_12 from "./12.png";
 import image_13 from "./13.png";
@@ -99,6 +103,10 @@ import image_99 from "./99.png";
 const IMAGES = {
   '1': image_1,
   '10': image_10,
+  '102': image_102,
+  '104': image_104,
+  '105': image_105,
+  '106': image_106,
   '11': image_11,
   '12': image_12,
   '13': image_13,
