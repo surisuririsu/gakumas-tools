@@ -56,12 +56,38 @@ function Rehearsal() {
     setTotal(files.length);
     setProgress(0);
 
-    console.time("All results parsed");
+    const csvFiles = files.filter(
+      (f) => f.type === "text/csv" || f.name.endsWith(".csv")
+    );
+    const imageFiles = files.filter((f) => !csvFiles.includes(f));
 
     let results = [];
+
+    if (csvFiles.length) {
+      for (const file of csvFiles) {
+        const text = await file.text();
+        const rows = text
+          .trim()
+          .split("\n")
+          .map((line) => line.split(",").map(Number));
+        const parsed = rows.map((row) => [
+          row.slice(0, 3),
+          row.slice(3, 6),
+          row.slice(6, 9),
+        ]);
+        results = results.concat(parsed);
+      }
+      setData(results);
+      setProgress(csvFiles.length);
+      return;
+    }
+
+    if (!imageFiles.length) return;
+    console.time("All results parsed");
+
     const batchSize = workersRef.current.length;
-    for (let i = 0; i < files.length; i += batchSize) {
-      const batch = files.slice(i, i + batchSize);
+    for (let i = 0; i < imageFiles.length; i += batchSize) {
+      const batch = imageFiles.slice(i, i + batchSize);
       const promises = batch.map(async (file, j) => {
         const worker = await workersRef.current[j % workersRef.current.length];
         const scores = await getScoresFromFile(file, worker);
@@ -151,6 +177,7 @@ function Rehearsal() {
         type="file"
         id="input"
         multiple
+        accept="image/*,.csv,text/csv"
         onChange={handleFiles}
       />
 
