@@ -8,7 +8,13 @@ import React, {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { FaCheck, FaDownload } from "react-icons/fa6";
+import {
+  FaCheck,
+  FaDownload,
+  FaFileCsv,
+  FaFileImage,
+  FaUpload,
+} from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
@@ -172,6 +178,10 @@ function Rehearsal() {
           {t("accuracyNotGuaranteed")}
         </p>
       </div>
+      <label htmlFor="input" className={styles.uploadLabel}>
+        <FaFileImage />
+        <FaFileCsv />
+      </label>
       <input
         className={styles.files}
         type="file"
@@ -179,6 +189,7 @@ function Rehearsal() {
         multiple
         accept="image/*,.csv,text/csv"
         onChange={handleFiles}
+        style={{ display: "none" }}
       />
 
       {progress != null && (

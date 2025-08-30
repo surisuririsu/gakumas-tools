@@ -16,14 +16,6 @@
   gap: 16px;
 }
 
-.files {
-  width: 100%;
-  margin-top: 16px;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: colors.$gk-orange-extra-light;
-}
-
 .progress {
   margin-top: 4px;
   display: flex;
@@ -106,4 +98,21 @@
   th {
     width: 25%;
   }
+}
+
+.uploadLabel {
+  display: inline-flex;
+  justify-content: center;
+  gap: 8px;
+  border: 2px dashed colors.$gk-orange;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: colors.$gk-orange-extra-light;
+  cursor: pointer;
+  font-size: 32px;
+  transition: background-color 0.2s;
+}
+
+.uploadLabel:hover {
+  background-color: colors.$white-dark;
 }

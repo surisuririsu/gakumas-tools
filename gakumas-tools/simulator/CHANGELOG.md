@@ -3,26 +3,6 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 2025-08-30
-
-- Accept CSV files in rehearsal tool
-
 ## 2025-08-29
 
 - Update for Miracle Na Now Mao and Sumika
