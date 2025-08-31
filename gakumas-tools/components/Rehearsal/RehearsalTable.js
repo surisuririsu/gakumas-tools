@@ -1,5 +1,5 @@
 import React from "react";
-import { AiOutlineBarChart } from "react-icons/ai";
+import { AiOutlineBarChart, AiOutlineBoxPlot } from "react-icons/ai";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import styles from "./Rehearsal.module.scss";
 
@@ -26,7 +26,14 @@ export default function RehearsalTable({
     <table>
       <thead>
         <tr className={styles.chartButtons}>
-          <th />
+          <th>
+            <button
+              className={selected == null ? styles.selected : null}
+              onClick={() => onChartClick(null)}
+            >
+              <AiOutlineBoxPlot />
+            </button>
+          </th>
           {[...Array(9)].map((_, i) => (
             <th key={i}>
               <button

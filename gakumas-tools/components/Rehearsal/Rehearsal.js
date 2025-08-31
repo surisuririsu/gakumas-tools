@@ -203,39 +203,43 @@ function Rehearsal() {
           <Button style="blue" onClick={download}>
             <FaDownload /> CSV
           </Button>
-          <BoxPlot
-            labels={[0, 1, 2].map(
-              (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`
-            )}
-            data={boxPlotData}
-            showLegend={false}
-          />
-          {selected !== null && (
-            <div className={styles.statsWrapper}>
-              <table className={styles.stats}>
-                <thead>
-                  <tr>
-                    <th>{tRes("min")}</th>
-                    <th>{tRes("average")}</th>
-                    <th>{tRes("median")}</th>
-                    <th>{tRes("max")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{selectedData.min}</td>
-                    <td>{selectedData.average}</td>
-                    <td>{selectedData.median}</td>
-                    <td>{selectedData.max}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <DistributionPlot
-                label={`${t("score")} (n=${selectedData.scores.length})`}
-                data={selectedData.bucketedScores}
+
+          <div className={styles.statsWrapper}>
+            {selected !== null ? (
+              <>
+                <table className={styles.stats}>
+                  <thead>
+                    <tr>
+                      <th>{tRes("min")}</th>
+                      <th>{tRes("average")}</th>
+                      <th>{tRes("median")}</th>
+                      <th>{tRes("max")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{selectedData.min}</td>
+                      <td>{selectedData.average}</td>
+                      <td>{selectedData.median}</td>
+                      <td>{selectedData.max}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <DistributionPlot
+                  label={`${t("score")} (n=${selectedData.scores.length})`}
+                  data={selectedData.bucketedScores}
+                />
+              </>
+            ) : (
+              <BoxPlot
+                labels={[0, 1, 2].map(
+                  (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`
+                )}
+                data={boxPlotData}
+                showLegend={false}
               />
-            </div>
-          )}
+            )}
+          </div>
           <div className={styles.tableWrapper}>
             <RehearsalTable
               data={data}
