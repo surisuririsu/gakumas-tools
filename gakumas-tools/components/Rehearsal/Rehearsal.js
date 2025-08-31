@@ -241,6 +241,7 @@ function Rehearsal() {
               data={data}
               selected={selected}
               onChartClick={(x) => setSelected(x == selected ? null : x)}
+              onRowDelete={(i) => setData((d) => d.filter((_, j) => j !== i))}
             />
           </div>
         </>
