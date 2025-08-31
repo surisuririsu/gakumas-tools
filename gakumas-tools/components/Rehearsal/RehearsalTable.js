@@ -1,6 +1,6 @@
 import React from "react";
 import { AiOutlineBarChart } from "react-icons/ai";
-import { FaRegCircleXmark, FaPenToSquare } from "react-icons/fa6";
+import { FaRegCircleXmark } from "react-icons/fa6";
 import styles from "./Rehearsal.module.scss";
 
 export default function RehearsalTable({
@@ -9,13 +9,11 @@ export default function RehearsalTable({
   onChartClick,
   onRowDelete,
 }) {
-  const minValue = Math.min(...data.flat(2).filter((x) => x !== "?"));
-  const maxValue = Math.max(...data.flat(2).filter((x) => x !== "?"));
-  // Helper to get color based on value
+  const minValue = Math.min(...data.flat(2));
+  const maxValue = Math.max(...data.flat(2));
+
   function getCellColor(value) {
-    if (value === "?") return {};
     const percent = (value - minValue) / (maxValue - minValue || 1);
-    // Interpolate between white (#fff) and #f39800
     const r = Math.round(255 + percent * (243 - 255));
     const g = Math.round(255 + percent * (152 - 255));
     const b = Math.round(255 + percent * (0 - 255));
