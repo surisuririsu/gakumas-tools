@@ -14,9 +14,9 @@ export default function RehearsalTable({
 
   function getCellColor(value) {
     const percent = (value - minValue) / (maxValue - minValue || 1);
-    const r = Math.round(255 + percent * (243 - 255));
-    const g = Math.round(255 + percent * (152 - 255));
-    const b = Math.round(255 + percent * (0 - 255));
+    const r = Math.round(255 + percent * (68 - 255));
+    const g = Math.round(255 + percent * (187 - 255));
+    const b = Math.round(255 + percent * (255 - 255));
     return {
       background: `rgb(${r},${g},${b})`,
     };
