@@ -90,12 +90,12 @@ export default function Simulator() {
 
   const setResult = useCallback(
     (result) => {
-      const bucketedScores = bucketScores(result.scores);
+      const { bucketedScores, bucketSize } = bucketScores(result.scores);
       const medianScore = getMedianScore(result.scores);
 
       console.timeEnd("simulation");
 
-      setSimulatorData({ bucketedScores, medianScore, ...result });
+      setSimulatorData({ bucketedScores, medianScore, bucketSize, ...result });
       setRunning(false);
     },
     [setSimulatorData, setRunning]
