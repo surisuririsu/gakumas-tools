@@ -34,7 +34,11 @@ export default function SimulatorResultGraphs({ data, plan }) {
         onChange={setGraphType}
       />
       {graphType == "histogram" && (
-        <DistributionPlot label={label} data={data.bucketedScores} />
+        <DistributionPlot
+          label={label}
+          data={data.bucketedScores}
+          bucketSize={data.bucketSize}
+        />
       )}
       {graphType == "boxplot" && (
         <BoxPlot
