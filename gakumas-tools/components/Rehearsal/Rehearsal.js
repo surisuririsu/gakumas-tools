@@ -233,7 +233,7 @@ function Rehearsal() {
                 label={`${t("score")} (n=${selectedData.scores.length})`}
                 data={selectedData.bucketedScores}
                 bucketSize={selectedData.bucketSize}
-                color="rgba(68, 187, 255, 0.5)"
+                color="rgba(68, 187, 255, 0.75)"
               />
             </div>
           )}

@@ -27,7 +27,7 @@ function DistributionPlot({ label, data, bucketSize, color }) {
       {
         label,
         data: Object.values(data),
-        backgroundColor: color || "rgba(243, 152, 0, 0.5)",
+        backgroundColor: color || "rgba(243, 152, 0, 0.75)",
       },
     ],
   };
