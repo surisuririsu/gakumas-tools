@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { BUCKET_SIZE } from "@/simulator/constants";
+import { MIN_BUCKET_SIZE } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -20,14 +20,14 @@ ChartJS.register(
   Legend
 );
 
-function DistributionPlot({ label, data }) {
+function DistributionPlot({ label, data, bucketSize, color }) {
   const formattedData = {
-    labels: Object.keys(data).map((k) => k * BUCKET_SIZE),
+    labels: Object.keys(data).map((k) => k * bucketSize),
     datasets: [
       {
         label,
         data: Object.values(data),
-        backgroundColor: "rgba(255, 118, 0, 0.5)",
+        backgroundColor: color || "rgba(243, 152, 0, 0.75)",
       },
     ],
   };
