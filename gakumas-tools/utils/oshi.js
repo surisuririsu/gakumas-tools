@@ -32,16 +32,14 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      今夜20時に、
+      今夜20時に
       <IdolIcon idolId={6} />
       伊藤舞音・浅見香月の『おかづラジオ』5回目の配信があります！
-      <br />
       <IdolIcon idolId={5} />
-      花岩香奈さんもゲストで登場します！
-      <br />
-      一部無料で視聴できるので、ぜひ観てみてください！
+      花岩香奈さんもゲストで登場します！ぜひ観てみてください！
     </div>
   ),
+  initiallyExpanded: true,
   url: "https://nicochannel.jp/okazuradio/live/smXBG4dkhNHQJqMb774yQNyr",
 };
 
