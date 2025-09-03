@@ -39,7 +39,7 @@ export const OSHI_PROPS = {
       伊藤舞音さんがゲスト出演します！
     </div>
   ),
-  // initiallyExpanded: true,
+  initiallyExpanded: true,
   url: "https://nicochannel.jp/usui/live/smJwrvRwxbnuTZLz3cbbzNYi",
 };
 
