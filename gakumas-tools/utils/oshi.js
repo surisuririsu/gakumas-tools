@@ -32,18 +32,32 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      今夜19時に、
-      <IdolIcon idolId={9} />
-      「薄井友里のツイてる！フロンティア」に
+      <IdolIcon idolId={12} />
+      <IdolIcon idolId={10} />
       <IdolIcon idolId={6} />
-      伊藤舞音さんがゲストで登場します！
-      <br />
-      一部無料で視聴できるので、ぜひ観てみてください！
+      <IdolIcon idolId={8} />
+      「Let's GO!! ICHI-NO-NI!!」
     </div>
   ),
-  // initiallyExpanded: true,
-  url: "https://nicochannel.jp/usui/live/smJwrvRwxbnuTZLz3cbbzNYi",
+  initiallyExpanded: true,
+  videoId: "RYMg75Xn6sw",
 };
+
+// export const OSHI_PROPS = {
+//   text: (
+//     <div>
+//       今夜19時に、
+//       <IdolIcon idolId={9} />
+//       「薄井友里のツイてる！フロンティア」に
+//       <IdolIcon idolId={6} />
+//       伊藤舞音さんがゲストで登場します！
+//       <br />
+//       一部無料で視聴できるので、ぜひ観てみてください！
+//     </div>
+//   ),
+//   // initiallyExpanded: true,
+//   url: "https://nicochannel.jp/usui/live/smJwrvRwxbnuTZLz3cbbzNYi",
+// };
 
 // export const OSHI_PROPS = {
 //   text: (
