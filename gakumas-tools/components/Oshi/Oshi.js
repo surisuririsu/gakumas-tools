@@ -22,7 +22,7 @@ export default function Oshi({ text, initiallyExpanded, videoId, url }) {
           </a>
         ) : (
           <button className={styles.expand} onClick={() => setExpanded(true)}>
-            <div
+            {/* <div
               style={{
                 display: "inline-block",
                 marginRight: 8,
@@ -31,7 +31,7 @@ export default function Oshi({ text, initiallyExpanded, videoId, url }) {
                 width: 10,
                 height: 10,
               }}
-            />{" "}
+            /> */}{" "}
           </button>
         )}
       </div>

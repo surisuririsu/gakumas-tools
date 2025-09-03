@@ -1,6 +1,6 @@
 import { PIdols, PItems, SkillCards, Stages } from "gakumas-data";
 import { GRAPHED_FIELDS } from "gakumas-engine";
-import { BUCKET_SIZE } from "@/simulator/constants";
+import { MIN_BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
   serializeCustomizations,
@@ -90,8 +90,15 @@ export function loadoutToSearchParams(loadout) {
 
 export function bucketScores(scores) {
   let data = {};
+
+  const maxScore = Math.max(...scores);
+  const minScore = Math.min(...scores);
+  const bucketSize =
+    MIN_BUCKET_SIZE *
+    Math.max(Math.floor((maxScore - minScore) / MIN_BUCKET_SIZE / 100), 1);
+
   for (let score of scores) {
-    const bucket = Math.floor(score / BUCKET_SIZE);
+    const bucket = Math.floor(score / bucketSize);
     data[bucket] = (data[bucket] || 0) + 1;
   }
 
@@ -102,7 +109,10 @@ export function bucketScores(scores) {
     if (!data[i]) data[i] = 0;
   }
 
-  return data;
+  return {
+    bucketedScores: data,
+    bucketSize,
+  };
 }
 
 export function getMedianScore(scores) {

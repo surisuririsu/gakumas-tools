@@ -8,13 +8,7 @@ import React, {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import {
-  FaCheck,
-  FaDownload,
-  FaFileCsv,
-  FaFileImage,
-  FaUpload,
-} from "react-icons/fa6";
+import { FaCheck, FaDownload, FaFileCsv, FaFileImage } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
@@ -150,9 +144,12 @@ function Rehearsal() {
       }
     }
 
+    const { bucketedScores, bucketSize } = bucketScores(scores);
+
     return {
       scores,
-      bucketedScores: bucketScores(scores),
+      bucketedScores,
+      bucketSize,
       min: Math.min(...scores),
       average: Math.round(
         scores.reduce((acc, cur) => acc + cur, 0) / scores.length
@@ -204,42 +201,42 @@ function Rehearsal() {
             <FaDownload /> CSV
           </Button>
 
-          <div className={styles.statsWrapper}>
-            {selected !== null ? (
-              <>
-                <table className={styles.stats}>
-                  <thead>
-                    <tr>
-                      <th>{tRes("min")}</th>
-                      <th>{tRes("average")}</th>
-                      <th>{tRes("median")}</th>
-                      <th>{tRes("max")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{selectedData.min}</td>
-                      <td>{selectedData.average}</td>
-                      <td>{selectedData.median}</td>
-                      <td>{selectedData.max}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <DistributionPlot
-                  label={`${t("score")} (n=${selectedData.scores.length})`}
-                  data={selectedData.bucketedScores}
-                />
-              </>
-            ) : (
-              <BoxPlot
-                labels={[0, 1, 2].map(
-                  (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`
-                )}
-                data={boxPlotData}
-                showLegend={false}
-              />
+          <BoxPlot
+            labels={[0, 1, 2].map(
+              (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`
             )}
-          </div>
+            data={boxPlotData}
+            showLegend={false}
+          />
+
+          {selected !== null && (
+            <div className={styles.statsWrapper}>
+              <table className={styles.stats}>
+                <thead>
+                  <tr>
+                    <th>{tRes("min")}</th>
+                    <th>{tRes("average")}</th>
+                    <th>{tRes("median")}</th>
+                    <th>{tRes("max")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{selectedData.min}</td>
+                    <td>{selectedData.average}</td>
+                    <td>{selectedData.median}</td>
+                    <td>{selectedData.max}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <DistributionPlot
+                label={`${t("score")} (n=${selectedData.scores.length})`}
+                data={selectedData.bucketedScores}
+                bucketSize={selectedData.bucketSize}
+                color="rgba(68, 187, 255, 0.75)"
+              />
+            </div>
+          )}
           <div className={styles.tableWrapper}>
             <RehearsalTable
               data={data}
