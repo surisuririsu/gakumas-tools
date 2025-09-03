@@ -32,13 +32,11 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      今夜19時に、
+      今夜19時に
       <IdolIcon idolId={9} />
       「薄井友里のツイてる！フロンティア」に
       <IdolIcon idolId={6} />
-      伊藤舞音さんがゲストで登場します！
-      <br />
-      一部無料で視聴できるので、ぜひ観てみてください！
+      伊藤舞音さんがゲスト出演します！
     </div>
   ),
   // initiallyExpanded: true,
