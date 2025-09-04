@@ -2,19 +2,6 @@ import { Idols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 
-const Badge = () => (
-  <div
-    style={{
-      display: "inline-block",
-      marginRight: 8,
-      backgroundColor: "#ff3333",
-      borderRadius: 5,
-      width: 10,
-      height: 10,
-    }}
-  />
-);
-
 const IdolIcon = ({ idolId }) => {
   const idol = Idols.getById(idolId);
   return (
