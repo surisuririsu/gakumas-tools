@@ -4,7 +4,26 @@ import { Resizable } from "re-resizable";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export default function Oshi({ text, initiallyExpanded, videoId, url }) {
+const Badge = () => (
+  <div
+    style={{
+      display: "inline-block",
+      marginRight: 8,
+      backgroundColor: "#ff3333",
+      borderRadius: 5,
+      width: 10,
+      height: 10,
+    }}
+  />
+);
+
+export default function Oshi({
+  text,
+  initiallyExpanded,
+  hasBadge,
+  videoId,
+  url,
+}) {
   const [expanded, setExpanded] = useState(initiallyExpanded);
 
   if (url) {
@@ -22,16 +41,7 @@ export default function Oshi({ text, initiallyExpanded, videoId, url }) {
           </a>
         ) : (
           <button className={styles.expand} onClick={() => setExpanded(true)}>
-            {/* <div
-              style={{
-                display: "inline-block",
-                marginRight: 8,
-                backgroundColor: "#ff3333",
-                borderRadius: 5,
-                width: 10,
-                height: 10,
-              }}
-            /> */}{" "}
+            {hasBadge && <Badge />}{" "}
           </button>
         )}
       </div>
