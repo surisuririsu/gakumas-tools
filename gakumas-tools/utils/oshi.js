@@ -26,7 +26,6 @@ export const OSHI_PROPS = {
       「Let's GO!! ICHI-NO-NI!!」
     </div>
   ),
-  initiallyExpanded: true,
   videoId: "RYMg75Xn6sw",
 };
 
