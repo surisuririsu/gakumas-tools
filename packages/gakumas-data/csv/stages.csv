@@ -104,3 +104,6 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 103,シーズン30 ステージ1,contest,FALSE,30,1,,sense,"0.363636,0.272727,0.363636","5,3,4","0.9,0,0.1","at:startOfTurn,do:setConcentrationBuff(0.25,6),limit:1"
 104,シーズン30 ステージ2,contest,FALSE,30,2,,logic,"0.363636,0.272727,0.363636","5,3,4","0.9,0,0.1","at:startOfTurn,do:motivation+=5,limit:3"
 105,シーズン30 ステージ3,contest,FALSE,30,3,,anomaly,"0.363636,0.272727,0.363636","5,3,4","0.9,0,0.1","at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10"
+106,シーズン31 ステージ1,contest,TRUE,31,1,,logic,"0.45,0.35,0.2","6,4,2","1,0,0","at:startOfTurn,do:motivation+=5,limit:3"
+107,シーズン31 ステージ2,contest,TRUE,31,2,,logic,"0.45,0.35,0.2","4,2,2","1,0,0","at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1,group:1;at:startOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1,group:1"
+108,シーズン31 ステージ3,contest,TRUE,31,3,,anomaly,"0.45,0.35,0.2","6,4,2","1,0,0","at:stanceChanged,if:stance==fullPower,if:turnsRemaining<=3,do:score+=consumedStamina*1.5,limit:3"
