@@ -309,6 +309,7 @@
     "discardedCard": "将技能卡移动到弃牌堆",
     "movedCardToHand": "将技能卡移动到手牌",
     "movedCardToTopOfDeck": "将技能卡移动到牌组顶端",
+    "movedCardToDeckAtRandom": "将技能卡移动到牌组随机位置",
     "effect": "发动效果",
     "stageEffect": "舞台效果",
     "skillCard": "技能卡",

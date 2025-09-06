@@ -309,6 +309,7 @@
     "discardedCard": "스킬 카드를 버림패로 이동",
     "movedCardToHand": "스킬 카드를 손패로 이동",
     "movedCardToTopOfDeck": "스킬 카드를 덱 위로 이동",
+    "movedCardToDeckAtRandom": "스킬 카드를 덱의 랜덤한 위치로 이동",
     "effect": "지속 효과",
     "stageEffect": "스테이지 효과",
     "skillCard": "스킬 카드",

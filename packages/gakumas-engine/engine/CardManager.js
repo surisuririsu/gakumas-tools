@@ -533,13 +533,17 @@ export default class CardManager extends EngineComponent {
 
   moveActiveCardsToDeckFromRemoved(state) {
     let cards = state[S.cardMap]
-      .map((c, i) => (state[S.removedCards].includes(i) && 
-                      SkillCards.getById(c.id).type == "active") ? i : -1)
+      .map((c, i) =>
+        state[S.removedCards].includes(i) &&
+        SkillCards.getById(c.id).type == "active"
+          ? i
+          : -1
+      )
       .filter((i) => i != -1);
 
     if (!cards.length) return;
 
-    cards.forEach(card => {
+    cards.forEach((card) => {
       const index = state[S.removedCards].indexOf(card);
       if (index != -1) {
         state[S.removedCards].splice(index, 1);
