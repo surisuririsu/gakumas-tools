@@ -9,7 +9,6 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { MIN_BUCKET_SIZE } from "@/simulator/constants";
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +26,7 @@ function DistributionPlot({ label, data, bucketSize, color }) {
       {
         label,
         data: Object.values(data),
-        backgroundColor: color || "rgba(243, 152, 0, 0.75)",
+        backgroundColor: color || "rgba(243, 152, 0, 0.6)",
       },
     ],
   };
