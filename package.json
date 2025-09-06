@@ -14,5 +14,8 @@
     "gakumas-tools",
     "packages/*"
   ],
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.9.2",
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
 }
