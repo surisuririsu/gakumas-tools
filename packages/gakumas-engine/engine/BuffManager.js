@@ -80,152 +80,83 @@ export default class BuffManager extends EngineComponent {
     state[S.freshBuffs] = {};
   }
 
-  setScoreBuff(state, amount, turns) {
-    const buffIndex = state[S.scoreBuffs].findIndex((b) => b.turns == turns);
+  setBuff(state, field, amount, turns, logLabel) {
+    const buffIndex = state[field].findIndex((b) => b.turns == turns);
     if (buffIndex != -1) {
-      state[S.scoreBuffs][buffIndex].amount += amount;
+      state[field][buffIndex].amount += amount;
     } else {
-      state[S.scoreBuffs].push({
+      state[field].push({
         amount,
         turns,
         fresh: !UNFRESH_PHASES.includes(state[S.phase]),
       });
     }
-    this.logger.log(state, "setScoreBuff", {
+    this.logger.log(state, logLabel, {
       amount,
       turns,
     });
+  }
+
+  setScoreBuff(state, amount, turns) {
+    this.setBuff(state, S.scoreBuffs, amount, turns, "setScoreBuff");
   }
 
   setScoreDebuff(state, amount, turns) {
-    const buffIndex = state[S.scoreDebuffs].findIndex((b) => b.turns == turns);
-    if (buffIndex != -1) {
-      state[S.scoreDebuffs][buffIndex].amount += amount;
-    } else {
-      state[S.scoreDebuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setScoreDebuff", {
-      amount,
-      turns,
-    });
+    this.setBuff(state, S.scoreDebuffs, amount, turns, "setScoreDebuff");
   }
 
   setGoodImpressionTurnsBuff(state, amount, turns) {
-    const buffIndex = state[S.goodImpressionTurnsBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.goodImpressionTurnsBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.goodImpressionTurnsBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setGoodImpressionTurnsBuff", {
+    this.setBuff(
+      state,
+      S.goodImpressionTurnsBuffs,
       amount,
       turns,
-    });
+      "setGoodImpressionTurnsBuff"
+    );
   }
 
   setGoodImpressionTurnsEffectBuff(state, amount, turns) {
-    const buffIndex = state[S.goodImpressionTurnsEffectBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.goodImpressionTurnsEffectBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.goodImpressionTurnsEffectBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setGoodImpressionTurnsEffectBuff", {
+    this.setBuff(
+      state,
+      S.goodImpressionTurnsEffectBuffs,
       amount,
       turns,
-    });
+      "setGoodImpressionTurnsEffectBuff"
+    );
   }
 
   setMotivationBuff(state, amount, turns) {
-    const buffIndex = state[S.motivationBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.motivationBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.motivationBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setMotivationBuff", {
-      amount,
-      turns,
-    });
+    this.setBuff(state, S.motivationBuffs, amount, turns, "setMotivationBuff");
   }
 
   setGoodConditionTurnsBuff(state, amount, turns) {
-    const buffIndex = state[S.goodConditionTurnsBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.goodConditionTurnsBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.goodConditionTurnsBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setGoodConditionTurnsBuff", {
+    this.setBuff(
+      state,
+      S.goodConditionTurnsBuffs,
       amount,
       turns,
-    });
+      "setGoodConditionTurnsBuff"
+    );
   }
 
   setConcentrationBuff(state, amount, turns) {
-    const buffIndex = state[S.concentrationBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.concentrationBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.concentrationBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setConcentrationBuff", {
+    this.setBuff(
+      state,
+      S.concentrationBuffs,
       amount,
       turns,
-    });
+      "setConcentrationBuff"
+    );
   }
 
   setFullPowerChargeBuff(state, amount, turns) {
-    const buffIndex = state[S.fullPowerChargeBuffs].findIndex(
-      (b) => b.turns == turns
-    );
-    if (buffIndex != -1) {
-      state[S.fullPowerChargeBuffs][buffIndex].amount += amount;
-    } else {
-      state[S.fullPowerChargeBuffs].push({
-        amount,
-        turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
-      });
-    }
-    this.logger.log(state, "setFullPowerChargeBuff", {
+    this.setBuff(
+      state,
+      S.fullPowerChargeBuffs,
       amount,
       turns,
-    });
+      "setFullPowerChargeBuff"
+    );
   }
 
   removeDebuffs(state, amount) {
@@ -241,7 +172,6 @@ export default class BuffManager extends EngineComponent {
     }
   }
 
-  // TODO: Refactor this GARBAGE WTF
   decrementBuffTurns(state) {
     // General buffs
     for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
@@ -253,118 +183,29 @@ export default class BuffManager extends EngineComponent {
       }
     }
 
-    // Score buffs
-    const scoreBuffs = state[S.scoreBuffs];
-    state[S.scoreBuffs] = [];
-    for (let i = 0; i < scoreBuffs.length; i++) {
-      if (scoreBuffs[i].fresh) {
-        scoreBuffs[i].fresh = false;
-      } else if (scoreBuffs[i].turns) {
-        scoreBuffs[i].turns--;
-      }
-      if (scoreBuffs[i].turns != 0) {
-        state[S.scoreBuffs].push(scoreBuffs[i]);
-      }
-    }
+    const buffArrayFields = [
+      S.scoreBuffs,
+      S.scoreDebuffs,
+      S.goodImpressionTurnsBuffs,
+      S.goodImpressionTurnsEffectBuffs,
+      S.motivationBuffs,
+      S.goodConditionTurnsBuffs,
+      S.concentrationBuffs,
+      S.fullPowerChargeBuffs,
+    ];
 
-    // Score debuffs
-    const scoreDebuffs = state[S.scoreDebuffs];
-    state[S.scoreDebuffs] = [];
-    for (let i = 0; i < scoreDebuffs.length; i++) {
-      if (scoreDebuffs[i].fresh) {
-        scoreDebuffs[i].fresh = false;
-      } else if (scoreDebuffs[i].turns) {
-        scoreDebuffs[i].turns--;
-      }
-      if (scoreDebuffs[i].turns != 0) {
-        state[S.scoreDebuffs].push(scoreDebuffs[i]);
-      }
-    }
-
-    // Good impression turns buffs
-    const goodImpressionTurnsBuffs = state[S.goodImpressionTurnsBuffs];
-    state[S.goodImpressionTurnsBuffs] = [];
-    for (let i = 0; i < goodImpressionTurnsBuffs.length; i++) {
-      if (goodImpressionTurnsBuffs[i].fresh) {
-        goodImpressionTurnsBuffs[i].fresh = false;
-      } else if (goodImpressionTurnsBuffs[i].turns) {
-        goodImpressionTurnsBuffs[i].turns--;
-      }
-      if (goodImpressionTurnsBuffs[i].turns != 0) {
-        state[S.goodImpressionTurnsBuffs].push(goodImpressionTurnsBuffs[i]);
-      }
-    }
-
-    // Good impression turns effect buffs
-    const goodImpressionTurnsEffectBuffs =
-      state[S.goodImpressionTurnsEffectBuffs];
-    state[S.goodImpressionTurnsEffectBuffs] = [];
-    for (let i = 0; i < goodImpressionTurnsEffectBuffs.length; i++) {
-      if (goodImpressionTurnsEffectBuffs[i].fresh) {
-        goodImpressionTurnsEffectBuffs[i].fresh = false;
-      } else if (goodImpressionTurnsEffectBuffs[i].turns) {
-        goodImpressionTurnsEffectBuffs[i].turns--;
-      }
-      if (goodImpressionTurnsEffectBuffs[i].turns != 0) {
-        state[S.goodImpressionTurnsEffectBuffs].push(
-          goodImpressionTurnsEffectBuffs[i]
-        );
-      }
-    }
-
-    // Motivation buffs
-    const motivationBuffs = state[S.motivationBuffs];
-    state[S.motivationBuffs] = [];
-    for (let i = 0; i < motivationBuffs.length; i++) {
-      if (motivationBuffs[i].fresh) {
-        motivationBuffs[i].fresh = false;
-      } else if (motivationBuffs[i].turns) {
-        motivationBuffs[i].turns--;
-      }
-      if (motivationBuffs[i].turns != 0) {
-        state[S.motivationBuffs].push(motivationBuffs[i]);
-      }
-    }
-
-    // Good condition turns buffs
-    const goodConditionTurnsBuffs = state[S.goodConditionTurnsBuffs];
-    state[S.goodConditionTurnsBuffs] = [];
-    for (let i = 0; i < goodConditionTurnsBuffs.length; i++) {
-      if (goodConditionTurnsBuffs[i].fresh) {
-        goodConditionTurnsBuffs[i].fresh = false;
-      } else if (goodConditionTurnsBuffs[i].turns) {
-        goodConditionTurnsBuffs[i].turns--;
-      }
-      if (goodConditionTurnsBuffs[i].turns != 0) {
-        state[S.goodConditionTurnsBuffs].push(goodConditionTurnsBuffs[i]);
-      }
-    }
-
-    // Concentration buffs
-    const concentrationBuffs = state[S.concentrationBuffs];
-    state[S.concentrationBuffs] = [];
-    for (let i = 0; i < concentrationBuffs.length; i++) {
-      if (concentrationBuffs[i].fresh) {
-        concentrationBuffs[i].fresh = false;
-      } else if (concentrationBuffs[i].turns) {
-        concentrationBuffs[i].turns--;
-      }
-      if (concentrationBuffs[i].turns != 0) {
-        state[S.concentrationBuffs].push(concentrationBuffs[i]);
-      }
-    }
-
-    // Full power charge buffs
-    const fullPowerChargeBuffs = state[S.fullPowerChargeBuffs];
-    state[S.fullPowerChargeBuffs] = [];
-    for (let i = 0; i < fullPowerChargeBuffs.length; i++) {
-      if (fullPowerChargeBuffs[i].fresh) {
-        fullPowerChargeBuffs[i].fresh = false;
-      } else if (fullPowerChargeBuffs[i].turns) {
-        fullPowerChargeBuffs[i].turns--;
-      }
-      if (fullPowerChargeBuffs[i].turns != 0) {
-        state[S.fullPowerChargeBuffs].push(fullPowerChargeBuffs[i]);
+    for (const field of buffArrayFields) {
+      const buffs = state[field];
+      state[field] = [];
+      for (let i = 0; i < buffs.length; i++) {
+        if (buffs[i].fresh) {
+          buffs[i].fresh = false;
+        } else if (buffs[i].turns) {
+          buffs[i].turns--;
+        }
+        if (buffs[i].turns != 0) {
+          state[field].push(buffs[i]);
+        }
       }
     }
   }
