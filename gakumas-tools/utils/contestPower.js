@@ -2,6 +2,7 @@ import { PItems, SkillCards } from "gakumas-data";
 import { countCustomizations } from "./customizations";
 
 export const COST_RANGES = [
+  { rank: "SSS+", min: 546, max: 858 },
   { rank: "SSS", min: 546, max: 858 },
   { rank: "SS+", min: 651, max: 858 },
   { rank: "SS", min: 651, max: 804 },
