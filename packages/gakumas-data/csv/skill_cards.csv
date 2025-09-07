@@ -602,3 +602,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 601,ドラマチックホリデー+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,107,FALSE,,do:cost-=5,"do:motivation+=3;at:activeCardUsed,if:motivation>=6,do:holidayCardsUsed+=1;at:activeCardUsed,if:motivation>=6,if:holidayCardsUsed%2==1,do:genki+=8",1,
 602,爆盛れ最強ルック♪,,SSR,mental,logic,1,FALSE,TRUE,pIdol,108,FALSE,,do:cost-=5,"do:genki+=3,do:goodImpressionTurns+=4,do:motivation+=3",1,
 603,爆盛れ最強ルック♪+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,108,FALSE,,do:cost-=5,"do:genki+=3,do:goodImpressionTurns+=6,do:motivation+=3",1,
+604,でこれーとまじっく,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,109,FALSE,,do:stamina-=1,"do:fullPowerCharge+=2,do:genki+=9,do:score+=cumulativeFullPowerCharge*1.5",1,
+605,でこれーとまじっく+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,109,FALSE,,do:stamina-=1,"do:fullPowerCharge+=2,do:genki+=9,do:score+=cumulativeFullPowerCharge*1.5",1,

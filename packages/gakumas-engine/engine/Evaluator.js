@@ -8,6 +8,7 @@ import {
   STANCES,
   S,
   SOURCE_TYPES,
+  FUNCTION_CALL_REGEX,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -38,6 +39,13 @@ export default class Evaluator extends EngineComponent {
         // State variables
         if (tokens[0] in S && S[tokens[0]] in state) {
           return state[S[tokens[0]]];
+        }
+
+        // Function calls
+        const match = tokens[0].match(FUNCTION_CALL_REGEX);
+        if (match[1] in this.variableResolvers && match[2]) {
+          const args = match[2].split(',');
+          return this.variableResolvers[match[1]](state, ...args);
         }
 
         // Variable resolvers
