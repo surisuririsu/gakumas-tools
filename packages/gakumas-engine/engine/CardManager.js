@@ -23,6 +23,7 @@ export default class CardManager extends EngineComponent {
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
       numHeldCards: (state) => state[S.heldCards].length,
       numRemovedCards: (state) => state[S.removedCards].length,
+      countRemovedCardsByBaseId: (state, baseId) => this.getTargetCards(state, baseId, null).size,
     };
   }
 
