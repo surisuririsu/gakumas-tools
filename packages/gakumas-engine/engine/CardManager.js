@@ -23,7 +23,7 @@ export default class CardManager extends EngineComponent {
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
       numHeldCards: (state) => state[S.heldCards].length,
       numRemovedCards: (state) => state[S.removedCards].length,
-      countRemovedCardsByBaseId: (state, baseId) => this.getTargetCards(state, baseId, null).size,
+      countRemovedCardsByBaseId: (state, baseId) => this.getTargetRuleCards(state, `removed*${baseId}`, null).size,
     };
   }
 
@@ -704,6 +704,10 @@ export default class CardManager extends EngineComponent {
     } else if (target == "held") {
       for (let k = 0; k < state[S.heldCards].length; k++) {
         targetCards.add(state[S.heldCards][k]);
+      }
+    } else if (target == "removed") {
+      for (let k = 0; k < state[S.removedCards].length; k++) {
+        targetCards.add(state[S.removedCards][k]);
       }
     } else if (target == "all") {
       for (let k = 0; k < state[S.cardMap].length; k++) {
