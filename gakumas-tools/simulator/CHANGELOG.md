@@ -6,6 +6,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-09-08
+
+- Update Na Now Hiro, add WS, Hakusen, TLOS custom
+
 ## 2025-09-07
 
 - Preview of Na Now Hiro
