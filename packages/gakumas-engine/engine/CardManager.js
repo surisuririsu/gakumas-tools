@@ -23,7 +23,7 @@ export default class CardManager extends EngineComponent {
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
       numHeldCards: (state) => state[S.heldCards].length,
       numRemovedCards: (state) => state[S.removedCards].length,
-      countRemovedCardsByBaseId: (state, baseId) => this.getTargetRuleCards(state, `removed*${baseId}`, null).size,
+      countCards: (state, targetRule) => this.getTargetRuleCards(state, targetRule.replaceAll('\\', '*'), null).size,
     };
   }
 
@@ -700,6 +700,10 @@ export default class CardManager extends EngineComponent {
     } else if (target == "deck") {
       for (let k = 0; k < state[S.deckCards].length; k++) {
         targetCards.add(state[S.deckCards][k]);
+      }
+    } else if (target == "discarded") {
+      for (let k = 0; k < state[S.discardedCards].length; k++) {
+        targetCards.add(state[S.discardedCards][k]);
       }
     } else if (target == "held") {
       for (let k = 0; k < state[S.heldCards].length; k++) {
