@@ -11,6 +11,7 @@ Dates are based on Eastern Time Zone.
 ## 2025-09-10
 
 - Fix holding multiple cards
+- Add preview of 36CUBU Rinami
 
 ## 2025-09-08
 
