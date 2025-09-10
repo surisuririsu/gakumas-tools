@@ -583,7 +583,6 @@ export default class CardManager extends EngineComponent {
   }
 
   holdSelectedFrom(state, sources, num = 1) {
-    let flag = 0;
     if (state[S.nullifyHold]) return;
 
     // Collect cards from specified sources
@@ -603,7 +602,6 @@ export default class CardManager extends EngineComponent {
         if (indexToHold < sourceCards[i].length) {
           const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
           this.hold(state, card);
-          flag++;
           break;
         } else {
           indexToHold -= sourceCards[i].length;
