@@ -65,12 +65,13 @@ export async function getMemoryFromFile(file, engWorker, pItemSession, pItemEmbe
   }
 
   const params = extractParams(paramsLine);
-  const pItems = await extractPItems(img, pItemBoxes, pItemSession, pItemEmbeddings);
-  const skillCards = await extractSkillCards(
-    img,
-    skillCardBoxes,
-    skillCardSession,
-    skillCardEmbeddings
+  const pItems = await extractEntities(img, pItemBoxes, pItemSession, pItemEmbeddings);
+  const skillCards = await extractEntities(img, skillCardBoxes, skillCardSession, skillCardEmbeddings);
+
+  console.log("Extracted p-items:", pItems.map((id) => PItems.getById(id)?.name || id));
+  console.log(
+    "Extracted skill cards:",
+    skillCards.map((id) => SkillCards.getById(id)?.name || id)
   );
 
   const itemsPIdolId = pItems
@@ -165,14 +166,14 @@ export function extractParams(line) {
 
 const ICON_SIZE = 64;
 
-async function extractPItems(img, boxes, session, embeddings) {
+async function extractEntities(img, boxes, session, embeddings) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
   // Draw section of the image from first box to canvas
   canvas.width = ICON_SIZE;
   canvas.height = ICON_SIZE;
-  const pItemIds = [];
+  const entityIds = [];
 
   for (let i = 0; i < boxes.length; i++) {
     const box = boxes[i];
@@ -189,11 +190,13 @@ async function extractPItems(img, boxes, session, embeddings) {
     );
 
     if (DEBUG) {
+      document.body.append(canvas);
+
       // Download as file
       const dataUrl = canvas.toDataURL("image/webp");
       const link = document.createElement("a");
       link.setAttribute("href", dataUrl);
-      link.setAttribute("download", `p_item_${i}_${Date.now()}.webp`);
+      link.setAttribute("download", `entity_${i}_${Date.now()}.webp`);
       document.body.append(link);
       link.click();
       document.body.removeChild(link);
@@ -214,146 +217,25 @@ async function extractPItems(img, boxes, session, embeddings) {
     ]);
     const output = await session.run({ input: tensor });
     const embedding = output.embedding.data;
+
     // Compute similarities
     const sims = Object.entries(embeddings).map(([id, emb]) => ({
       id,
       similarity: cosineSimilarity(embedding, emb),
     }));
+
     // Sort and take top 3
     sims.sort((a, b) => b.similarity - a.similarity);
+
     if (sims[0].similarity < 0.9) {
       continue;
     }
-    const itemId = sims[0].id.split("_")[0];
-    pItemIds.push(itemId);
+
+    const entityId = sims[0].id.split("_")[0];
+    entityIds.push(entityId);
   }
 
-  if (DEBUG) {
-  document.body.append(canvas);
-  }
-
-  console.log(
-    "Extracted P-Items:",
-    pItemIds.map((id) => PItems.getById(id)?.name || id)
-  );
-
-  return pItemIds;
-}
-
-async function extractSkillCards(img, boxes, session, embeddings) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  // Draw section of the image from first box to canvas
-  canvas.width = ICON_SIZE;
-  canvas.height = ICON_SIZE;
-  const skillCardIds = [];
-
-  for (let i = 0; i < boxes.length; i++) {
-    const box = boxes[i];
-    ctx.drawImage(
-      img,
-      box.x,
-      box.y,
-      box.width,
-      box.height,
-      0,
-      0,
-      ICON_SIZE,
-      ICON_SIZE
-    );
-
-    if (DEBUG) {
-      // Download as file
-      const dataUrl = canvas.toDataURL("image/webp");
-      const link = document.createElement("a");
-      link.setAttribute("href", dataUrl);
-      link.setAttribute("download", `skill_card_${i}_${Date.now()}.webp`);
-      document.body.append(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    const imageData = ctx.getImageData(0, 0, ICON_SIZE, ICON_SIZE).data;
-    const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
-    for (let j = 0; j < ICON_SIZE * ICON_SIZE; j++) {
-      input[j] = imageData[j * 4] / 255;
-      input[j + ICON_SIZE * ICON_SIZE] = imageData[j * 4 + 1] / 255;
-      input[j + 2 * ICON_SIZE * ICON_SIZE] = imageData[j * 4 + 2] / 255;
-    }
-    const tensor = new ort.Tensor("float32", input, [
-      1,
-      3,
-      ICON_SIZE,
-      ICON_SIZE,
-    ]);
-    const output = await session.run({ input: tensor });
-    const embedding = output.embedding.data;
-    // Compute similarities
-    const sims = Object.entries(embeddings).map(([id, emb]) => ({
-      id,
-      similarity: cosineSimilarity(embedding, emb),
-    }));
-    // Sort and take top 3
-    sims.sort((a, b) => b.similarity - a.similarity);
-    if (sims[0].similarity < 0.9) {
-      continue;
-    }
-    const itemId = sims[0].id.split("_")[0];
-    skillCardIds.push(itemId);
-  }
-
-  if (DEBUG) {
-    document.body.append(canvas);
-  }
-
-    console.log(
-      "Extracted skill cards:",
-      skillCardIds.map((id) => SkillCards.getById(id)?.name || id)
-    );
-
-  return skillCardIds;
-}
-
-// Search for rows of black pixels marking edge of item/card
-function locateEntities(canvas, searchArea, threshold) {
-  const ctx = canvas.getContext("2d");
-  const d = ctx.getImageData(
-    searchArea.x,
-    searchArea.y,
-    searchArea.width,
-    searchArea.height
-  );
-
-  if (DEBUG) {
-    const nc = document.createElement("canvas");
-    nc.width = searchArea.width;
-    nc.height = searchArea.height;
-    const nctx = nc.getContext("2d");
-    nctx.putImageData(d, 0, 0);
-    document.body.append(nc);
-  }
-
-  let consecutivePixels = 0;
-  let coords = [];
-  for (let i = 0; i < searchArea.height; i++) {
-    for (let j = 0; j < searchArea.width; j++) {
-      const dIndex = (i * searchArea.width + j) * 4;
-      // Check if pixel is black
-      if (d.data[dIndex] == 0) {
-        consecutivePixels++;
-      } else {
-        // If we have enough consecutive pixels, increment detected entities
-        if (consecutivePixels > threshold) {
-          coords.push({ x: searchArea.x + j, y: searchArea.y + i });
-        }
-        consecutivePixels = 0;
-      }
-    }
-    if (coords.length) break;
-  }
-
-  return coords;
+  return entityIds;
 }
 
 const cosineSimilarity = (a, b) => {
