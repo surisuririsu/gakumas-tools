@@ -223,14 +223,10 @@ async function extractEntities(img, boxes, session, embeddings) {
       id,
       similarity: cosineSimilarity(embedding, emb),
     }));
-
-    // Sort and take top 3
     sims.sort((a, b) => b.similarity - a.similarity);
-
     if (sims[0].similarity < 0.9) {
       continue;
     }
-
     const entityId = sims[0].id.split("_")[0];
     entityIds.push(entityId);
   }
