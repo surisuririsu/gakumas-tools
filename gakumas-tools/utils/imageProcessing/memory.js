@@ -1,32 +1,29 @@
-import { getImageProps } from "next/image";
-import { Idols, PIdols, PItems, SkillCards } from "gakumas-data";
-import gkImg from "gakumas-images";
+import { PItems, SkillCards } from "gakumas-data";
+import * as ort from "onnxruntime-web";
 import {
   DEBUG,
-  getGameRegion,
   getBlackCanvas,
   getWhiteCanvas,
   loadImageFromFile,
   extractLines,
 } from "./common";
 import { calculateContestPower } from "../contestPower";
-import * as ort from "onnxruntime-web";
 
 const PARAMS_REGEXP = new RegExp(/^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/gm);
 
-export async function getMemoryFromFile(file, engWorker, session, embeddings) {
+export async function getMemoryFromFile(file, engWorker, pItemSession, pItemEmbeddings, skillCardSession, skillCardEmbeddings) {
   const img = await loadImageFromFile(file);
   const blackCanvas = getBlackCanvas(img);
   const whiteCanvas = getWhiteCanvas(img);
 
-  // const engWhiteResult = await engWorker.recognize(whiteCanvas);
+  const engWhiteResult = await engWorker.recognize(whiteCanvas);
   const engBlackResult = await engWorker.recognize(
     blackCanvas,
     {},
     { blocks: true }
   );
 
-  // const powerCandidates = extractPower(engWhiteResult);
+  const powerCandidates = extractPower(engWhiteResult);
   const blackLines = extractLines(engBlackResult);
   const paramsLineIndex = blackLines.findIndex(({ text }) =>
     PARAMS_REGEXP.test(text)
@@ -68,44 +65,34 @@ export async function getMemoryFromFile(file, engWorker, session, embeddings) {
   }
 
   const params = extractParams(paramsLine);
-  const pItems = await extractPItems(img, pItemBoxes, session, embeddings);
+  const pItems = await extractPItems(img, pItemBoxes, pItemSession, pItemEmbeddings);
   const skillCards = await extractSkillCards(
     img,
     skillCardBoxes,
-    session,
-    embeddings
+    skillCardSession,
+    skillCardEmbeddings
   );
 
-  return;
-
-  const items = [];
-  const itemsPIdolId = items
+  const itemsPIdolId = pItems
     .filter((c) => !!c)
     .map(PItems.getById)
     .find((item) => item.pIdolId)?.pIdolId;
 
-  const cards = await extractCards(
-    img,
-    blackCanvas,
-    itemsPIdolId,
-    sess,
-    embeddings
-  );
-  const cardsPIdolId = cards
+  const cardsPIdolId = skillCards
     .filter((c) => !!c)
     .map(SkillCards.getById)
     .find((card) => card.pIdolId)?.pIdolId;
 
   // Pad items and cards to fixed number
-  while (items.length < 3) {
-    items.push(0);
+  while (pItems.length < 3) {
+    pItems.push(0);
   }
-  while (cards.length < 6) {
-    cards.push(0);
+  while (skillCards.length < 6) {
+    skillCards.push(0);
   }
 
   // Calculate contest power and flag those that are mismatched with the screenshot
-  const calculatedPower = calculateContestPower(params, items, cards, []);
+  const calculatedPower = calculateContestPower(params, pItems, skillCards, []);
   const flag =
     !powerCandidates.includes(calculatedPower) || itemsPIdolId != cardsPIdolId;
 
@@ -113,8 +100,8 @@ export async function getMemoryFromFile(file, engWorker, session, embeddings) {
     name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
     pIdolId: cardsPIdolId,
     params,
-    pItemIds: items,
-    skillCardIds: cards,
+    pItemIds: pItems,
+    skillCardIds: skillCards,
   };
 }
 
@@ -158,12 +145,6 @@ function getSkillCardBoundingBoxes(anchorPoint, contentWidth) {
   return skillCardBoxes;
 }
 
-// Size and bounds of images to compare
-// Downsize images to sample surrounding colors
-const COMP_SIZE = 40;
-const DRAW_AREA = [0, 0, COMP_SIZE, COMP_SIZE];
-const COMP_AREA = [2, 2, COMP_SIZE - 4, COMP_SIZE - 4];
-
 // Read contest power from OCR result
 const POWER_REGEXP = new RegExp(/\d+/gm);
 export function extractPower(result) {
@@ -187,10 +168,12 @@ const ICON_SIZE = 64;
 async function extractPItems(img, boxes, session, embeddings) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+
   // Draw section of the image from first box to canvas
   canvas.width = ICON_SIZE;
   canvas.height = ICON_SIZE;
   const pItemIds = [];
+
   for (let i = 0; i < boxes.length; i++) {
     const box = boxes[i];
     ctx.drawImage(
@@ -205,14 +188,16 @@ async function extractPItems(img, boxes, session, embeddings) {
       ICON_SIZE
     );
 
-    // Download as file
-    const dataUrl = canvas.toDataURL("image/webp");
-    const link = document.createElement("a");
-    link.setAttribute("href", dataUrl);
-    link.setAttribute("download", `p_item_${i}_${Date.now()}.webp`);
-    document.body.append(link);
-    link.click();
-    document.body.removeChild(link);
+    if (DEBUG) {
+      // Download as file
+      const dataUrl = canvas.toDataURL("image/webp");
+      const link = document.createElement("a");
+      link.setAttribute("href", dataUrl);
+      link.setAttribute("download", `p_item_${i}_${Date.now()}.webp`);
+      document.body.append(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
     const imageData = ctx.getImageData(0, 0, ICON_SIZE, ICON_SIZE).data;
     const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
@@ -236,11 +221,16 @@ async function extractPItems(img, boxes, session, embeddings) {
     }));
     // Sort and take top 3
     sims.sort((a, b) => b.similarity - a.similarity);
+    if (sims[0].similarity < 0.9) {
+      continue;
+    }
     const itemId = sims[0].id.split("_")[0];
     pItemIds.push(itemId);
   }
 
+  if (DEBUG) {
   document.body.append(canvas);
+  }
 
   console.log(
     "Extracted P-Items:",
@@ -253,10 +243,12 @@ async function extractPItems(img, boxes, session, embeddings) {
 async function extractSkillCards(img, boxes, session, embeddings) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+
   // Draw section of the image from first box to canvas
   canvas.width = ICON_SIZE;
   canvas.height = ICON_SIZE;
   const skillCardIds = [];
+
   for (let i = 0; i < boxes.length; i++) {
     const box = boxes[i];
     ctx.drawImage(
@@ -271,14 +263,16 @@ async function extractSkillCards(img, boxes, session, embeddings) {
       ICON_SIZE
     );
 
-    // Download as file
-    const dataUrl = canvas.toDataURL("image/webp");
-    const link = document.createElement("a");
-    link.setAttribute("href", dataUrl);
-    link.setAttribute("download", `skill_card_${i}_${Date.now()}.webp`);
-    document.body.append(link);
-    link.click();
-    document.body.removeChild(link);
+    if (DEBUG) {
+      // Download as file
+      const dataUrl = canvas.toDataURL("image/webp");
+      const link = document.createElement("a");
+      link.setAttribute("href", dataUrl);
+      link.setAttribute("download", `skill_card_${i}_${Date.now()}.webp`);
+      document.body.append(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
     const imageData = ctx.getImageData(0, 0, ICON_SIZE, ICON_SIZE).data;
     const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
@@ -302,16 +296,21 @@ async function extractSkillCards(img, boxes, session, embeddings) {
     }));
     // Sort and take top 3
     sims.sort((a, b) => b.similarity - a.similarity);
+    if (sims[0].similarity < 0.9) {
+      continue;
+    }
     const itemId = sims[0].id.split("_")[0];
     skillCardIds.push(itemId);
   }
 
-  document.body.append(canvas);
+  if (DEBUG) {
+    document.body.append(canvas);
+  }
 
-  console.log(
-    "Extracted skill cards:",
-    skillCardIds.map((id) => SkillCards.getById(id)?.name || id)
-  );
+    console.log(
+      "Extracted skill cards:",
+      skillCardIds.map((id) => SkillCards.getById(id)?.name || id)
+    );
 
   return skillCardIds;
 }
@@ -368,203 +367,3 @@ const cosineSimilarity = (a, b) => {
   }
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 };
-
-// Compare detected areas with item/card icons to find most similar
-async function identifyEntities(
-  img,
-  coords,
-  width,
-  plusIndex,
-  session,
-  embeddings
-) {
-  const memCanvas = new OffscreenCanvas(64, 64);
-  const memCtx = memCanvas.getContext("2d");
-
-  const detectedEntities = [];
-  for (let index in coords) {
-    const [x, y] = coords[index];
-    // Draw the region to a 64x64 canvas for model input
-    memCtx.clearRect(0, 0, 64, 64);
-    memCtx.drawImage(img, x, y, width, width, 0, 0, 64, 64);
-    const imageData = memCtx.getImageData(0, 0, 64, 64).data;
-
-    if (DEBUG) {
-      const nc = document.createElement("canvas");
-      nc.width = 64;
-      nc.height = 64;
-      const nctx = nc.getContext("2d");
-      nctx.drawImage(img, x, y, width, width, 0, 0, 64, 64);
-      document.body.append(nc);
-    }
-
-    const input = new Float32Array(3 * 64 * 64);
-    for (let i = 0; i < 64 * 64; i++) {
-      input[i] = imageData[i * 4] / 255;
-      input[i + 64 * 64] = imageData[i * 4 + 1] / 255;
-      input[i + 2 * 64 * 64] = imageData[i * 4 + 2] / 255;
-    }
-
-    const tensor = new ort.Tensor("float32", input, [1, 3, 64, 64]);
-    const output = await session.run({ input: tensor });
-    const embedding = output.embedding.data;
-
-    // Compute similarities
-    const sims = Object.entries(embeddings).map(([id, emb]) => ({
-      id,
-      similarity: cosineSimilarity(embedding, emb),
-    }));
-
-    // Sort and take top 3
-    sims.sort((a, b) => b.similarity - a.similarity);
-    detectedEntities.push(sims[0].id.split("_")[0]);
-  }
-
-  return detectedEntities;
-}
-
-export async function extractItems(img, blackCanvas, sess, embeddings) {
-  // Find p-items label
-  const labelLine = extractLines(result).find(({ text }) =>
-    text.replaceAll(" ", "").startsWith("Pアイテム")
-  );
-  if (!labelLine) return [];
-  const labelBounds = labelLine.bbox;
-  const labelWidth = labelBounds.x1 - labelBounds.x0;
-  const labelHeight = labelBounds.y1 - labelBounds.y0;
-
-  // Locate items and calculate width
-  const searchAreaTop = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1,
-    width: Math.floor(labelWidth * 4),
-    height: labelHeight * 2,
-  };
-  const searchAreaBottom = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelHeight * 4,
-    width: Math.floor(labelWidth * 4),
-    height: labelHeight * 2,
-  };
-  const topCoords = locateEntities(
-    blackCanvas,
-    searchAreaTop,
-    Math.floor(labelWidth * 0.3)
-  );
-  const bottomCoords = locateEntities(
-    blackCanvas,
-    searchAreaBottom,
-    Math.floor(labelWidth * 0.5)
-  );
-  if (!topCoords.length || !bottomCoords.length) {
-    return [];
-  }
-  const itemWidth = bottomCoords[0].y - topCoords[0].y;
-
-  // Generate item coordinates
-  const [x, y] = getGameRegion(img);
-  let itemCoords = [];
-  for (let coord of bottomCoords) {
-    itemCoords.push([x + coord.x - itemWidth * 0.9, y + coord.y - itemWidth]);
-  }
-
-  // Identify items
-  const plusIndex =
-    (Math.round(COMP_SIZE * 0.0625) * COMP_SIZE +
-      Math.round(COMP_SIZE * 0.85)) *
-    4;
-  const detectedItems = await identifyEntities(
-    img,
-    itemCoords,
-    itemWidth,
-    // itemImageData,
-    plusIndex,
-    sess,
-    embeddings
-  );
-
-  return detectedItems;
-}
-
-export async function extractCards(
-  img,
-  blackCanvas,
-  itemsPIdolId,
-  sess,
-  embeddings
-) {
-  // Find skill cards label
-  const labelLine = extractLines(result).find(({ text }) =>
-    text.replaceAll(" ", "").startsWith("スキルカード")
-  );
-  if (!labelLine) return [];
-  const labelBounds = labelLine.bbox;
-  const labelWidth = labelBounds.x1 - labelBounds.x0;
-  const labelHeight = labelBounds.y1 - labelBounds.y0;
-
-  // Locate cards and calculate width
-  const searchArea1Top = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1,
-    width: Math.floor(labelWidth * 5.5),
-    height: labelHeight * 2,
-  };
-  const searchArea1Bottom = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelWidth,
-    width: Math.floor(labelWidth * 4),
-    height: labelHeight * 2,
-  };
-  const searchArea2Top = {
-    x: labelBounds.x0 - labelHeight,
-    y: labelBounds.y1 + labelWidth * 1.35,
-    width: Math.floor(labelWidth * 5.5),
-    height: labelHeight * 2,
-  };
-  const topCoords1 = locateEntities(
-    blackCanvas,
-    searchArea1Top,
-    Math.floor(labelWidth * 0.7)
-  );
-  const bottomCoords1 = locateEntities(
-    blackCanvas,
-    searchArea1Bottom,
-    Math.floor(labelWidth * 0.7)
-  );
-  const topCoords2 = locateEntities(
-    blackCanvas,
-    searchArea2Top,
-    Math.floor(labelWidth * 0.7)
-  );
-  if (!topCoords1.length || !bottomCoords1.length) {
-    return [];
-  }
-  const cardWidth = bottomCoords1[0].y - topCoords1[0].y;
-
-  // Generate card coordinates 1
-  const [x, y] = getGameRegion(img);
-  let cardCoords = [];
-  for (let coord of topCoords1) {
-    cardCoords.push([x + coord.x - cardWidth * 0.935, y + coord.y]);
-  }
-  for (let coord of topCoords2) {
-    cardCoords.push([x + coord.x - cardWidth * 0.935, y + coord.y + 1]);
-  }
-
-  // Identify signature card
-  const plusIndex =
-    (Math.round(COMP_SIZE * 0.4375) * COMP_SIZE +
-      Math.round(COMP_SIZE * 0.85)) *
-    4;
-
-  const idolId = PIdols.getById(itemsPIdolId)?.idolId || 1;
-  const detectedCards = await identifyEntities(
-    img,
-    cardCoords,
-    cardWidth,
-    plusIndex,
-    sess,
-    embeddings
-  );
-  return detectedCards;
-}
