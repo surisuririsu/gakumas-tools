@@ -3,6 +3,7 @@ import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import { ENTITY_DATA_BY_TYPE, EntityTypes } from "@/utils/entities";
+import { useDrag, useDrop } from "@/utils/safeDnd";
 import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
 import TierIndicator from "./TierIndicator";
@@ -11,15 +12,34 @@ import styles from "./EntityIcon.module.scss";
 function EntityIcon({
   type,
   id,
+  index,
   customizations,
   indications,
   idolId,
   size = "large",
   onClick,
+  onSwap,
   showTier,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const { icon } = gkImg(entity, idolId);
+
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "ENTITY_ICON",
+    item: { type, id, index },
+  });
+
+  const [, dropRef] = useDrop({
+    accept: "ENTITY_ICON",
+    drop: (item) => {
+      if (item.type != type) {
+        return;
+      }
+      if (onSwap) {
+        onSwap(item.index, index);
+      }
+    },
+  });
 
   let unwrappedElement = null;
   if (entity) {
@@ -52,8 +72,10 @@ function EntityIcon({
 
   if (onClick) {
     return (
-      <button className={className} onClick={() => onClick(entity || {})}>
-        {unwrappedElement}
+        <button ref={dragRef} className={className} onClick={() => onClick(entity || {})}>
+          <div ref={dropRef} className={styles.dropArea}>
+            {unwrappedElement}
+          </div>
       </button>
     );
   } else {

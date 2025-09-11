@@ -9,6 +9,7 @@ function StageSkillCards({
   skillCardIds,
   customizations,
   replaceSkillCardId,
+  swapSkillCardIds,
   replaceCustomizations,
   indications,
   idolId,
@@ -24,6 +25,7 @@ function StageSkillCards({
           key={`${index}_${skillCardId}`}
           type={EntityTypes.SKILL_CARD}
           id={skillCardId}
+          index={groupIndex * 6 + index}
           customizations={customizations?.[index]}
           indications={indications?.[index]}
           onClick={() =>
@@ -44,6 +46,7 @@ function StageSkillCards({
               />
             )
           }
+          onSwap={swapSkillCardIds}
           idolId={idolId}
           size={size}
         />

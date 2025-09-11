@@ -50,6 +50,7 @@ export default function Simulator() {
     setSupportBonus,
     setParams,
     replacePItemId,
+    swapPItemIds,
     pushLoadoutHistory,
   } = useContext(LoadoutContext);
   const { plan, idolId } = useContext(WorkspaceContext);
@@ -194,6 +195,7 @@ export default function Simulator() {
             <StagePItems
               pItemIds={loadout.pItemIds}
               replacePItemId={replacePItemId}
+              swapPItemIds={swapPItemIds}
               indications={pItemIndications}
               size="medium"
             />

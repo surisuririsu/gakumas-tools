@@ -27,6 +27,7 @@ function LoadoutSkillCardGroup({
   const {
     loadout,
     replaceSkillCardId,
+    swapSkillCardIds,
     replaceCustomizations,
     insertSkillCardIdGroup,
     deleteSkillCardIdGroup,
@@ -54,6 +55,7 @@ function LoadoutSkillCardGroup({
         skillCardIds={skillCardIds}
         customizations={customizations}
         replaceSkillCardId={replaceSkillCardId}
+        swapSkillCardIds={swapSkillCardIds}
         replaceCustomizations={replaceCustomizations}
         indications={indications}
         idolId={idolId}

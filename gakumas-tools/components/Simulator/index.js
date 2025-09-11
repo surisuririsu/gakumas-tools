@@ -1,1 +1,1 @@
-export { default } from "./Simulator";
+export { default } from "./SimulatorWithDnd";

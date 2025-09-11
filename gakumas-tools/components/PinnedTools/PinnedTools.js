@@ -15,7 +15,7 @@ const TOOL_COMPONENTS = {
     import("@/components/ProduceRankCalculator")
   ),
   rehearsal: dynamic(() => import("@/components/Rehearsal")),
-  simulator: dynamic(() => import("@/components/Simulator")),
+  simulator: dynamic(() => import("@/components/Simulator/Simulator")),
 };
 
 function PinnedTools() {
