@@ -3,11 +3,11 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
+import * as ort from "onnxruntime-web";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
-import * as ort from "onnxruntime-web";
 
 const MAX_WORKERS = 1;
 
@@ -48,9 +48,13 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.time("All memories parsed");
 
-    const sess = await ort.InferenceSession.create("/p_item_model.onnx");
-    const res = await fetch("/p_item_embeddings.json");
-    const embeddings = await res.json();
+    const p_sess = await ort.InferenceSession.create("/p_item_model.onnx");
+    const p_res = await fetch("/p_item_embeddings.json");
+    const p_embeddings = await p_res.json();
+
+    const s_sess = await ort.InferenceSession.create("/skill_card_model.onnx");
+    const s_res = await fetch("/skill_card_embeddings.json");
+    const s_embeddings = await s_res.json();
 
     let results = [];
     const batchSize = engWorkersRef.current.length;
@@ -64,8 +68,10 @@ function MemoryImporterModal({ onSuccess }) {
         const memory = await getMemoryFromFile(
           file,
           engWorker,
-          sess,
-          embeddings
+          p_sess,
+          p_embeddings,
+          s_sess,
+          s_embeddings
         );
         setProgress((p) => p + 1);
         return memory;
@@ -76,7 +82,7 @@ function MemoryImporterModal({ onSuccess }) {
     }
 
     console.timeEnd("All memories parsed");
-    // onSuccess(results);
+    onSuccess(results);
   }, []);
 
   return (

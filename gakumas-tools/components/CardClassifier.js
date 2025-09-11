@@ -16,8 +16,8 @@ export default function CardClassifier() {
 
   useEffect(() => {
     const init = async () => {
-      const sess = await ort.InferenceSession.create("/p_item_model.onnx");
-      const res = await fetch("/p_item_embeddings.json");
+      const sess = await ort.InferenceSession.create("/skill_card_model.onnx");
+      const res = await fetch("/skill_card_embeddings.json");
       const json = await res.json();
       setSession(sess);
       setEmbeddings(json);
@@ -111,7 +111,7 @@ export default function CardClassifier() {
                 <Image
                   src={
                     gkImg(
-                      PItems.getById(r.id.split("_")[0]),
+                      SkillCards.getById(r.id.split("_")[0]),
                       r.id.includes("_") ? r.id.split("_")[1] : null
                     ).icon
                   }
