@@ -3,17 +3,13 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
+import * as ort from "onnxruntime-web";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
-import {
-  getSignatureSkillCardsImageData,
-  getNonSignatureSkillCardsImageData,
-  getPItemsImageData,
-  getMemoryFromFile,
-} from "@/utils/imageProcessing/memory";
+import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import styles from "./MemoryImporterModal.module.scss";
 
-const MAX_WORKERS = 8;
+const MAX_WORKERS = 1;
 
 function MemoryImporterModal({ onSuccess }) {
   const t = useTranslations("MemoryImporterModal");
@@ -21,16 +17,12 @@ function MemoryImporterModal({ onSuccess }) {
   const [total, setTotal] = useState("?");
   const [progress, setProgress] = useState(null);
   const engWorkersRef = useRef();
-  const jpnWorkersRef = useRef();
-  const signatureSkillCardsImageData = useRef();
-  const nonSignatureSkillCardsImageData = useRef();
-  const itemImageData = useRef();
 
   useEffect(() => {
     let numWorkers = 1;
     if (navigator.hardwareConcurrency) {
       numWorkers = Math.ceil(
-        Math.min(navigator.hardwareConcurrency, MAX_WORKERS) / 2
+        Math.min(navigator.hardwareConcurrency, MAX_WORKERS)
       );
     }
 
@@ -39,21 +31,8 @@ function MemoryImporterModal({ onSuccess }) {
       engWorkersRef.current.push(createWorker("eng", 1));
     }
 
-    jpnWorkersRef.current = [];
-    for (let i = 0; i < numWorkers; i++) {
-      jpnWorkersRef.current.push(createWorker("jpn", 1));
-    }
-
-    signatureSkillCardsImageData.current = getSignatureSkillCardsImageData();
-    nonSignatureSkillCardsImageData.current =
-      getNonSignatureSkillCardsImageData();
-    itemImageData.current = getPItemsImageData();
-
     return () => {
       engWorkersRef.current?.forEach(async (worker) =>
-        (await worker).terminate()
-      );
-      jpnWorkersRef.current?.forEach(async (worker) =>
         (await worker).terminate()
       );
     };
@@ -69,11 +48,11 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.time("All memories parsed");
 
-    const entityImageData = {
-      signatureSkillCards: await signatureSkillCardsImageData.current,
-      nonSignatureSkillCards: await nonSignatureSkillCardsImageData.current,
-      pItems: await itemImageData.current,
-    };
+    const pItemSession = await ort.InferenceSession.create("/p_item_model.onnx");
+    const pItemEmbeddings = await fetch("/p_item_embeddings.json").then((r) => r.json());
+
+    const skillCardSession = await ort.InferenceSession.create("/skill_card_model.onnx");
+    const skillCardEmbeddings = await fetch("/skill_card_embeddings.json").then((r) => r.json());
 
     let results = [];
     const batchSize = engWorkersRef.current.length;
@@ -83,14 +62,14 @@ function MemoryImporterModal({ onSuccess }) {
         const engWorker = await engWorkersRef.current[
           j % engWorkersRef.current.length
         ];
-        const jpnWorker = await jpnWorkersRef.current[
-          j % jpnWorkersRef.current.length
-        ];
+
         const memory = await getMemoryFromFile(
           file,
           engWorker,
-          jpnWorker,
-          entityImageData
+          pItemSession,
+          pItemEmbeddings,
+          skillCardSession,
+          skillCardEmbeddings
         );
         setProgress((p) => p + 1);
         return memory;
