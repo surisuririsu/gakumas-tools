@@ -48,13 +48,11 @@ function MemoryImporterModal({ onSuccess }) {
 
     console.time("All memories parsed");
 
-    const p_sess = await ort.InferenceSession.create("/p_item_model.onnx");
-    const p_res = await fetch("/p_item_embeddings.json");
-    const p_embeddings = await p_res.json();
+    const pItemSession = await ort.InferenceSession.create("/p_item_model.onnx");
+    const pItemEmbeddings = await fetch("/p_item_embeddings.json").then((r) => r.json());
 
-    const s_sess = await ort.InferenceSession.create("/skill_card_model.onnx");
-    const s_res = await fetch("/skill_card_embeddings.json");
-    const s_embeddings = await s_res.json();
+    const skillCardSession = await ort.InferenceSession.create("/skill_card_model.onnx");
+    const skillCardEmbeddings = await fetch("/skill_card_embeddings.json").then((r) => r.json());
 
     let results = [];
     const batchSize = engWorkersRef.current.length;
@@ -68,10 +66,10 @@ function MemoryImporterModal({ onSuccess }) {
         const memory = await getMemoryFromFile(
           file,
           engWorker,
-          p_sess,
-          p_embeddings,
-          s_sess,
-          s_embeddings
+          pItemSession,
+          pItemEmbeddings,
+          skillCardSession,
+          skillCardEmbeddings
         );
         setProgress((p) => p + 1);
         return memory;
