@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import {
   FaCirclePlus,
@@ -6,9 +7,11 @@ import {
   FaCircleArrowDown,
   FaCircleXmark,
   FaEllipsis,
+  FaImage,
   FaFilm,
 } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
+import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
@@ -24,8 +27,10 @@ function LoadoutSkillCardGroup({
   idolId,
 }) {
   const t = useTranslations("LoadoutSkillCardGroup");
+  const { status } = useSession();
   const {
     loadout,
+    setMemory,
     replaceSkillCardId,
     swapSkillCardIds,
     replaceCustomizations,
@@ -33,7 +38,7 @@ function LoadoutSkillCardGroup({
     deleteSkillCardIdGroup,
     swapSkillCardIdGroups,
   } = useContext(LoadoutContext);
-  const { setModal } = useContext(ModalContext);
+  const { setModal, closeModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
 
   const cost = useMemo(
@@ -71,11 +76,30 @@ function LoadoutSkillCardGroup({
           onClick={() => setExpanded(false)}
         >
           <button
-            className={styles.pickButton}
-            onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
+            className={styles.importButton}
+            onClick={() =>
+              setModal(
+                <MemoryImporterModal
+                  multiple={false}
+                  onSuccess={(memories) => {
+                    setMemory(memories[0], groupIndex);
+                    closeModal();
+                  }}
+                />
+              )
+            }
           >
-            <FaFilm />
+            <FaImage />
           </button>
+
+          {status == "authenticated" && (
+            <button
+              className={styles.pickButton}
+              onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
+            >
+              <FaFilm />
+            </button>
+          )}
 
           <button
             className={styles.addButton}
