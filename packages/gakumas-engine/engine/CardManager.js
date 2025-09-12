@@ -23,7 +23,9 @@ export default class CardManager extends EngineComponent {
         state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
       numHeldCards: (state) => state[S.heldCards].length,
       numRemovedCards: (state) => state[S.removedCards].length,
-      countCards: (state, targetRule) => this.getTargetRuleCards(state, targetRule.replaceAll('\\', '*'), null).size,
+      countCards: (state, targetRule) =>
+        this.getTargetRuleCards(state, targetRule.replaceAll("\\", "*"), null)
+          .size,
     };
   }
 
@@ -592,7 +594,9 @@ export default class CardManager extends EngineComponent {
     if (!cards.length) return;
 
     // Pick card to hold based on strategy
-    let indicesToHold = this.engine.strategy.pickCardsToHold(state, cards, num).sort((a, b) => b - a);
+    let indicesToHold = this.engine.strategy
+      .pickCardsToHold(state, cards, num)
+      .sort((a, b) => b - a);
     if (indicesToHold.length === 0) return;
 
     // Find cards and move to hold

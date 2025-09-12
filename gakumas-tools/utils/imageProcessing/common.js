@@ -9,18 +9,10 @@ export function loadImageFromFile(file) {
   });
 }
 
-export function getGameRegion(img) {
-  let width = img.width;
-  const height = img.height;
-  if (img.width > (img.height * 9) / 16) {
-    width = Math.round((img.height * 9) / 16);
-  }
-  return [Math.round((img.width - width) / 2), 0, width, height];
-}
-
 // Get a canvas with image black/white filtered
 function getPreprocessedCanvas(img, textColorFn) {
-  const [x, y, width, height] = getGameRegion(img);
+  const width = img.width;
+  const height = img.height;
   let canvas;
   if (DEBUG) {
     canvas = document.createElement("canvas");
@@ -30,7 +22,7 @@ function getPreprocessedCanvas(img, textColorFn) {
     canvas = new OffscreenCanvas(width, height);
   }
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+  ctx.drawImage(img, 0, 0);
   let d = ctx.getImageData(0, 0, width, height);
   for (var i = 0; i < d.data.length; i += 4) {
     if (textColorFn(d.data[i], d.data[i + 1], d.data[i + 2])) {

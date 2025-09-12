@@ -11,7 +11,14 @@ import { calculateContestPower } from "../contestPower";
 
 const PARAMS_REGEXP = new RegExp(/^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/gm);
 
-export async function getMemoryFromFile(file, engWorker, pItemSession, pItemEmbeddings, skillCardSession, skillCardEmbeddings) {
+export async function getMemoryFromFile(
+  file,
+  engWorker,
+  pItemSession,
+  pItemEmbeddings,
+  skillCardSession,
+  skillCardEmbeddings
+) {
   const img = await loadImageFromFile(file);
   const blackCanvas = getBlackCanvas(img);
   const whiteCanvas = getWhiteCanvas(img);
@@ -42,33 +49,36 @@ export async function getMemoryFromFile(file, engWorker, pItemSession, pItemEmbe
 
   // Draw boxes for debugging
   if (DEBUG) {
-    const debugCanvas = document.createElement("canvas");
-    debugCanvas.width = img.width;
-    debugCanvas.height = img.height;
-    const debugCtx = debugCanvas.getContext("2d");
-    debugCtx.drawImage(img, 0, 0);
-    debugCtx.strokeStyle = "red";
-    debugCtx.lineWidth = 2;
-    debugCtx.strokeRect(
-      paramsLine.bbox.x0,
-      paramsLine.bbox.y0,
-      paramsLine.bbox.x1 - paramsLine.bbox.x0,
-      paramsLine.bbox.y1 - paramsLine.bbox.y0
-    );
-    pItemBoxes.forEach((box) => {
-      debugCtx.strokeRect(box.x, box.y, box.width, box.height);
-    });
-    skillCardBoxes.forEach((box) => {
-      debugCtx.strokeRect(box.x, box.y, box.width, box.height);
-    });
-    document.body.append(debugCanvas);
+    debugBoundingBoxes(img, [
+      {
+        x: paramsLine.bbox.x0,
+        y: paramsLine.bbox.y0,
+        width: paramsLine.bbox.x1 - paramsLine.bbox.x0,
+        height: paramsLine.bbox.y1 - paramsLine.bbox.y0,
+      },
+      ...pItemBoxes,
+      ...skillCardBoxes,
+    ]);
   }
 
   const params = extractParams(paramsLine);
-  const pItems = await extractEntities(img, pItemBoxes, pItemSession, pItemEmbeddings);
-  const skillCards = await extractEntities(img, skillCardBoxes, skillCardSession, skillCardEmbeddings);
+  const pItems = await extractEntities(
+    img,
+    pItemBoxes,
+    pItemSession,
+    pItemEmbeddings
+  );
+  const skillCards = await extractEntities(
+    img,
+    skillCardBoxes,
+    skillCardSession,
+    skillCardEmbeddings
+  );
 
-  console.log("Extracted p-items:", pItems.map((id) => PItems.getById(id)?.name || id));
+  console.log(
+    "Extracted p-items:",
+    pItems.map((id) => PItems.getById(id)?.name || id)
+  );
   console.log(
     "Extracted skill cards:",
     skillCards.map((id) => SkillCards.getById(id)?.name || id)
@@ -83,14 +93,6 @@ export async function getMemoryFromFile(file, engWorker, pItemSession, pItemEmbe
     .filter((c) => !!c)
     .map(SkillCards.getById)
     .find((card) => card.pIdolId)?.pIdolId;
-
-  // Pad items and cards to fixed number
-  while (pItems.length < 3) {
-    pItems.push(0);
-  }
-  while (skillCards.length < 6) {
-    skillCards.push(0);
-  }
 
   // Calculate contest power and flag those that are mismatched with the screenshot
   const calculatedPower = calculateContestPower(params, pItems, skillCards, []);
@@ -144,6 +146,20 @@ function getSkillCardBoundingBoxes(anchorPoint, contentWidth) {
     });
   }
   return skillCardBoxes;
+}
+
+function debugBoundingBoxes(img, boxes) {
+  const debugCanvas = document.createElement("canvas");
+  debugCanvas.width = img.width;
+  debugCanvas.height = img.height;
+  const debugCtx = debugCanvas.getContext("2d");
+  debugCtx.drawImage(img, 0, 0);
+  debugCtx.strokeStyle = "red";
+  debugCtx.lineWidth = 2;
+  boxes.forEach((box) => {
+    debugCtx.strokeRect(box.x, box.y, box.width, box.height);
+  });
+  document.body.append(debugCanvas);
 }
 
 // Read contest power from OCR result
@@ -224,11 +240,8 @@ async function extractEntities(img, boxes, session, embeddings) {
       similarity: cosineSimilarity(embedding, emb),
     }));
     sims.sort((a, b) => b.similarity - a.similarity);
-    if (sims[0].similarity < 0.9) {
-      continue;
-    }
     const entityId = sims[0].id.split("_")[0];
-    entityIds.push(entityId);
+    entityIds.push(entityId === "0" ? 0 : parseInt(entityId, 10));
   }
 
   return entityIds;
