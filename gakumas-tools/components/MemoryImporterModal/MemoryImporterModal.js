@@ -11,7 +11,7 @@ import styles from "./MemoryImporterModal.module.scss";
 
 const MAX_WORKERS = 1;
 
-function MemoryImporterModal({ onSuccess }) {
+function MemoryImporterModal({ onSuccess, multiple = true }) {
   const t = useTranslations("MemoryImporterModal");
 
   const [total, setTotal] = useState("?");
@@ -96,8 +96,8 @@ function MemoryImporterModal({ onSuccess }) {
       <h3>{t("importMemories")}</h3>
       <div className={styles.help}>
         <Image
-          src="/memory_importer_reference.png"
-          width={152}
+          src="/memory_importer_reference.jpg"
+          width={178}
           height={360}
           alt=""
         />
@@ -113,7 +113,8 @@ function MemoryImporterModal({ onSuccess }) {
         className={styles.files}
         type="file"
         id="input"
-        multiple
+        multiple={multiple}
+        accept="image/*"
         onChange={handleFiles}
       />
 
