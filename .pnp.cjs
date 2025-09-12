@@ -48,8 +48,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["gakumas-tools-monorepo", "workspace:."],\
-          ["prettier", "npm:3.6.2"]\
+          ["gakumas-tools-monorepo", "workspace:."]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -5917,8 +5916,7 @@ const RAW_RUNTIME_STATE =
       ["workspace:.", {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["gakumas-tools-monorepo", "workspace:."],\
-          ["prettier", "npm:3.6.2"]\
+          ["gakumas-tools-monorepo", "workspace:."]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -8749,15 +8747,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../AppData/Local/Yarn/Berry/cache/prelude-ls-npm-1.2.1-3e4d272a55-10c0.zip/node_modules/prelude-ls/",\
         "packageDependencies": [\
           ["prelude-ls", "npm:1.2.1"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["prettier", [\
-      ["npm:3.6.2", {\
-        "packageLocation": "./.yarn/unplugged/prettier-npm-3.6.2-2668152203/node_modules/prettier/",\
-        "packageDependencies": [\
-          ["prettier", "npm:3.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\

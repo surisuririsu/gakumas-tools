@@ -44,7 +44,7 @@ export default class Evaluator extends EngineComponent {
         // Function calls
         const match = tokens[0].match(FUNCTION_CALL_REGEX);
         if (match[1] in this.variableResolvers && match[2]) {
-          const args = match[2].split(',');
+          const args = match[2].split(",");
           return this.variableResolvers[match[1]](state, ...args);
         }
 
