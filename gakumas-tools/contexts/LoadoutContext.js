@@ -138,7 +138,10 @@ export function LoadoutContextProvider({ children }) {
       [0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0],
     ]);
-    setCustomizationGroups([[], []]);
+    setCustomizationGroups([
+      [{}, {}, {}, {}, {}, {}],
+      [{}, {}, {}, {}, {}, {}],
+    ]);
   }
 
   function replacePItemId(index, itemId) {
