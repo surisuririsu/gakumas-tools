@@ -105,6 +105,7 @@ export async function getMemoryFromFile(
     params,
     pItemIds: pItems,
     skillCardIds: skillCards,
+    customizations: [{}, {}, {}, {}, {}, {}],
   };
 }
 
