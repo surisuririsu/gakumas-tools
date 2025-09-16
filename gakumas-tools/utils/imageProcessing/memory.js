@@ -15,9 +15,9 @@ export async function getMemoryFromFile(
   file,
   engWorker,
   pItemSession,
-  pItemEmbeddings,
+  pItemClasses,
   skillCardSession,
-  skillCardEmbeddings
+  skillCardClasses
 ) {
   const img = await loadImageFromFile(file);
   const blackCanvas = getBlackCanvas(img);
@@ -66,13 +66,13 @@ export async function getMemoryFromFile(
     img,
     pItemBoxes,
     pItemSession,
-    pItemEmbeddings
+    pItemClasses
   );
   const skillCards = await extractEntities(
     img,
     skillCardBoxes,
     skillCardSession,
-    skillCardEmbeddings
+    skillCardClasses
   );
 
   console.log(
@@ -183,7 +183,7 @@ export function extractParams(line) {
 
 const ICON_SIZE = 64;
 
-async function extractEntities(img, boxes, session, embeddings) {
+async function extractEntities(img, boxes, session, classes) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
@@ -233,29 +233,11 @@ async function extractEntities(img, boxes, session, embeddings) {
       ICON_SIZE,
     ]);
     const output = await session.run({ input: tensor });
-    const embedding = output.embedding.data;
-
-    // Compute similarities
-    const sims = Object.entries(embeddings).map(([id, emb]) => ({
-      id,
-      similarity: cosineSimilarity(embedding, emb),
-    }));
-    sims.sort((a, b) => b.similarity - a.similarity);
-    const entityId = sims[0].id.split("_")[0];
+    const logits = output.classifier.data;
+    const predictedClass = logits.indexOf(Math.max(...logits));
+    const entityId = classes[predictedClass].split("_")[0];
     entityIds.push(entityId === "0" ? 0 : parseInt(entityId, 10));
   }
 
   return entityIds;
 }
-
-const cosineSimilarity = (a, b) => {
-  let dot = 0,
-    normA = 0,
-    normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-};
