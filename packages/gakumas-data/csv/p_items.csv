@@ -333,3 +333,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 332,かごいっぱいの成果,SR,FALSE,anomaly,produce,support,,FALSE,
 333,アイドルになりたい,SSR,FALSE,logic,stage,pIdol,110,FALSE,"at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:3"
 334,アイドルになりたい+,SSR,TRUE,logic,stage,pIdol,110,FALSE,"at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:3"
+335,月刊アニメトーク♪,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,do:goodImpressionTurns+=3,do:moveSSRToHand(1),limit:1"
+336,メリハリストレッチ,SR,FALSE,logic,produce,support,,FALSE,
