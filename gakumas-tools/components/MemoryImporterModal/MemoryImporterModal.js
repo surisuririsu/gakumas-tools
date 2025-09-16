@@ -7,6 +7,7 @@ import * as ort from "onnxruntime-web";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
+import { logEvent } from "@/utils/logging";
 import styles from "./MemoryImporterModal.module.scss";
 
 const MAX_WORKERS = 1;
@@ -88,6 +89,11 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
     }
 
     console.timeEnd("All memories parsed");
+
+    logEvent("memories.import", {
+      num: results.length,
+    });
+
     onSuccess(results);
   }, []);
 
