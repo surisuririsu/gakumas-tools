@@ -148,15 +148,6 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {/* <div className={styles.oshi}>
-          <a
-            href="https://asobistage.asobistore.jp/event/idolmaster_orch_2025/ticket"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            シミュなんか回してないでオケマス観ましょう！！
-          </a>
-        </div> */}
         <div>{t("multiplierNote")}</div>
         {stage.preview && <div>{t("previewNote")}</div>}
         <StageSelect />
