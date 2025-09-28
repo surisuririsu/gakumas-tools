@@ -11,6 +11,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-09-28
+
+- Add preview of gamushara kotone
+
 ## 2025-09-23
 
 - Adjust S32 turn rates
