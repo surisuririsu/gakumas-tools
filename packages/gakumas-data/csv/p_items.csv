@@ -335,7 +335,9 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 334,アイドルになりたい+,SSR,TRUE,logic,stage,pIdol,110,FALSE,"at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:3"
 335,月刊アニメトーク♪,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,do:goodImpressionTurns+=3,do:moveSSRToHand(1),limit:1"
 336,メリハリストレッチ,SR,FALSE,logic,produce,support,,FALSE,
-337,フレフレあたし！,SSR,FALSE,sense,stage,pIdol,111,FALSE,"at:afterActiveCardUsed,if:perfectConditionTurns>=1,do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:2"
+337,フレフレあたし！,SSR,FALSE,sense,stage,pIdol,111,FALSE,"at:afterActiveCardUsed,if:perfectConditionTurns>=1,do:cardUsesRemaining+=1,do:drawCard,do:fixedStamina-=1,limit:2"
 338,フレフレあたし！+,SSR,TRUE,sense,stage,pIdol,111,FALSE,"at:afterActiveCardUsed,if:perfectConditionTurns>=1,do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:2"
 339,お礼のティーセット,SSR,FALSE,sense,produce,support,,FALSE,
 340,びっくり仮装グッズ,SR,FALSE,sense,produce,support,,FALSE,
+341,ごちゃまぜパッション,SSR,FALSE,anomaly,stage,pIdol,112,FALSE,"at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=6,limit:1"
+342,ごちゃまぜパッション+,SSR,TRUE,anomaly,stage,pIdol,112,FALSE,"at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=10,limit:1"

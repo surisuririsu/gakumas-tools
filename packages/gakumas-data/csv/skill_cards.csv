@@ -608,5 +608,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 607,微熱ノスタルジー+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,110,FALSE,if:goodImpressionTurns>=10,do:stamina-=5,"do:genki+=6,do:motivation+=4,do:goodImpressionTurns+=2*countCards(deck)+2*countCards(discarded),do:cardUsesRemaining+=1",1,
 608,勝利をつかめ！,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:nullifyCostCards+=1,do:drawCard,do:cardUsesRemaining+=1",1,
 609,勝利をつかめ！+,"36,39",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=1,"do:nullifyCostCards+=1,do:drawCard,do:cardUsesRemaining+=1",1,
-610,かましちゃえ♪,,SSR,active,sense,1,FALSE,TRUE,pIdol,111,FALSE,,do:cost-=3,"do:goodConditionTurns+=3,do:perfectConditionTurns+=2;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5",,
+610,かましちゃえ♪,,SSR,active,sense,1,FALSE,TRUE,pIdol,111,FALSE,,do:cost-=3,"do:goodConditionTurns+=2,do:perfectConditionTurns+=1;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5",,
 611,かましちゃえ♪+,,SSR,active,sense,1,TRUE,TRUE,pIdol,111,FALSE,,do:cost-=3,"do:goodConditionTurns+=3,do:perfectConditionTurns+=2;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5",,
+612,泥臭くあれ！,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,112,FALSE,,do:cost-=8,"do:setStance(strength),do:score+=10,do:genki+=5;at:startOfTurn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4",1,
+613,泥臭くあれ！+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,112,FALSE,,do:cost-=6,"do:setStance(strength),do:score+=10,do:genki+=10;at:startOfTurn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4",1,

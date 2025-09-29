@@ -12,6 +12,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-09-29
+
+- Add gamushara Kotone and Saki
+
 ## 2025-09-28
 
 - Add preview of gamushara kotone
