@@ -16,16 +16,4 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      今日20時に、「三宅麻理恵のゲーマーズギルド」に
-      <IdolIcon idolId={6} />
-      伊藤舞音さんがゲストで出演します！
-      <br />
-      番組前半はどなたでもご視聴いただけます！
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://live.nicovideo.jp/watch/lv348799112",
-};
+export const OSHI_PROPS = null;
