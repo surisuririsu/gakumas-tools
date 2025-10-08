@@ -113,3 +113,6 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 112,シーズン32 ステージ1,contest,FALSE,32,1,,sense,"0.2,0.4,0.4","3,5,4","0,0.9,0.1","at:cardUsed,if:cardEffects&perfectConditionTurns,do:goodConditionTurns+=3,limit:5"
 113,シーズン32 ステージ2,contest,FALSE,32,2,,logic,"0.2,0.4,0.4","2,3,3","0,0.75,0.25","at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1,group:1;at:startOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1,group:1"
 114,シーズン32 ステージ3,contest,FALSE,32,3,,anomaly,"0.2,0.4,0.4","2,4,4","0,0.9,0.1","at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3"
+115,シーズン33 ステージ1,contest,TRUE,33,1,,sense,"0.35,0.45,0.2","2,4,2","0,1,0","at:cardUsed,if:turnsRemaining<=3,if:cardRarity==SSR,do:setScoreBuff(0.25,3),limit:3"
+116,シーズン33 ステージ2,contest,TRUE,33,2,,logic,"0.35,0.45,0.2","4,6,2","0,1,0","at:cardUsed,if:cardSourceType==pIdol,if:genki>=15,do:score+=goodImpressionTurns*3,limit:3;at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1,group:1"
+117,シーズン33 ステージ3,contest,TRUE,33,3,,anomaly,"0.35,0.45,0.2","4,6,2","0,1,0","at:afterActiveCardUsed,if:stamina<=maxStamina*0.5,do:score+=2,do:score+=2,limit:2"
