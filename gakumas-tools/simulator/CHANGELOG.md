@@ -13,6 +13,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-10-08
+
+- Add preview of contest season 33
+
 ## 2025-09-29
 
 - Add gamushara Kotone and Saki
