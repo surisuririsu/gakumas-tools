@@ -341,3 +341,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 340,びっくり仮装グッズ,SR,FALSE,sense,produce,support,,FALSE,
 341,ごちゃまぜパッション,SSR,FALSE,anomaly,stage,pIdol,112,FALSE,"at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=6,limit:1"
 342,ごちゃまぜパッション+,SSR,TRUE,anomaly,stage,pIdol,112,FALSE,"at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=10,limit:1"
+343,高くジャンプ！,SSR,FALSE,logic,stage,pIdol,113,FALSE,"at:cardUsed,if:turnCardsUsed%2==1,do:genki+=7,do:setGoodImpressionTurnsBuff(0.5,1),limit:2"
+344,高くジャンプ！+,SSR,TRUE,logic,stage,pIdol,113,FALSE,"at:cardUsed,if:turnCardsUsed%2==1,do:genki+=7,do:setGoodImpressionTurnsBuff(0.5,1),limit:2"
+345,激痛のちぽかぽか,SR,FALSE,logic,produce,support,,FALSE,

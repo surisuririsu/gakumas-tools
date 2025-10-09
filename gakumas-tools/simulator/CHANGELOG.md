@@ -14,6 +14,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-10-09
+
+- Add preview of Gamushara Temari
+
 ## 2025-10-08
 
 - Add preview of contest season 33

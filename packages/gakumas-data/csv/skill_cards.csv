@@ -612,3 +612,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 611,かましちゃえ♪+,,SSR,active,sense,1,TRUE,TRUE,pIdol,111,FALSE,,do:cost-=3,"do:goodConditionTurns+=3,do:perfectConditionTurns+=2;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5",,
 612,泥臭くあれ！,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,112,FALSE,,do:cost-=8,"do:setStance(strength),do:score+=10,do:genki+=5;at:startOfTurn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4",1,
 613,泥臭くあれ！+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,112,FALSE,,do:cost-=6,"do:setStance(strength),do:score+=10,do:genki+=10;at:startOfTurn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4",1,
+614,空まで一直線,,SSR,mental,logic,1,FALSE,TRUE,pIdol,113,FALSE,,do:cost-=0,"do:goodImpressionTurns+=4,do:setGoodImpressionTurnsEffectBuff(0.2),do:cardUsesRemaining+=1,do:doubleCostTurns+=1",,
+615,空まで一直線+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,113,FALSE,,do:cost-=0,"do:goodImpressionTurns+=4,do:setGoodImpressionTurnsEffectBuff(0.2),do:cardUsesRemaining+=1,do:doubleCostTurns+=1",,
+616,対象、ロックオン,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:startOfTurn,do:drawCard,limit:3",,
+617,対象、ロックオン+,,SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,do:cost-=4,"do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:startOfTurn,do:drawCard,limit:3",,
