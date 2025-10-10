@@ -3,21 +3,9 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-10-10
 
-
-
-
-
-
-
-
-
-
-
-
-## 2025-10-09
-
-- Add preview of Gamushara Temari
+- Add Gamushara Temari
 
 ## 2025-10-08
 
