@@ -117,9 +117,9 @@ export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
     finale: {
       flat: {
         1: [
-          { threshold: 135000, multiplier: 0, constant: 172 },
-          { threshold: 28050, multiplier: 0.000756, constant: 69 },
-          { threshold: 0, multiplier: 0.0032, constant: 0 },
+          { threshold: 134210, multiplier: 0, constant: 172 },
+          { threshold: 66600, multiplier: 0.000756, constant: 69 },
+          { threshold: 0, multiplier: 0.0018, constant: 0 },
         ],
         2: [
           { threshold: 63750, multiplier: 0, constant: 142 },
