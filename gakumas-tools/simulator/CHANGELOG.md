@@ -3,6 +3,11 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+
+## 2025-10-21
+
+- Update Sora to Yakusoku China
+
 ## 2025-10-20
 
 - Add Sora to Yakusoku China preview

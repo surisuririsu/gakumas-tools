@@ -344,7 +344,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 343,高くジャンプ！,SSR,FALSE,logic,stage,pIdol,113,FALSE,"at:cardUsed,if:turnCardsUsed%2==1,do:genki+=5,do:setGoodImpressionTurnsBuff(0.5,1),do:fixedStamina-=1,limit:2"
 344,高くジャンプ！+,SSR,TRUE,logic,stage,pIdol,113,FALSE,"at:cardUsed,if:turnCardsUsed%2==1,do:genki+=7,do:setGoodImpressionTurnsBuff(0.5,1),limit:2"
 345,激痛のちぽかぽか,SR,FALSE,logic,produce,support,,FALSE,
-346,届けたい想い,SSR,FALSE,sense,stage,pIdol,114,FALSE,"at:startOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:3,group:11"
+346,届けたい想い,SSR,FALSE,sense,stage,pIdol,114,FALSE,"at:startOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.2,do:fixedStamina-=1,limit:3,group:11"
 347,届けたい想い+,SSR,TRUE,sense,stage,pIdol,114,FALSE,"at:startOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:3,group:11"
-348,げきげんようレッスン,SR,FALSE,sense,produce,support,,FALSE,
-349,げきげんようレッスン+,SR,TRUE,sense,produce,support,,FALSE,
+348,ごきげんようレッスン,SR,FALSE,sense,produce,support,,FALSE,
