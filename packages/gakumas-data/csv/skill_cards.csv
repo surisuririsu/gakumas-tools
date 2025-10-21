@@ -616,3 +616,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 615,空まで一直線+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,113,FALSE,,do:cost-=0,"do:goodImpressionTurns+=4,do:setGoodImpressionTurnsEffectBuff(0.2),do:cardUsesRemaining+=1,do:doubleCostTurns+=1",,
 616,対象、ロックオン,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:startOfTurn,do:drawCard,limit:3",1,
 617,対象、ロックオン+,"29,20",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,do:cost-=2,"do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:startOfTurn,do:drawCard,limit:3",1,
+618,世界一の勇気,,SSR,active,sense,1,FALSE,TRUE,pIdol,114,FALSE,,do:cost-=0,"do:score+=goodConditionTurns*11,do:goodConditionTurns=0",1,
+619,世界一の勇気+,,SSR,active,sense,1,TRUE,TRUE,pIdol,114,FALSE,,do:cost-=0,"do:score+=goodConditionTurns*11,do:goodConditionTurns=0",1,
+620,ほぐれるひととき,,SSR,mental,sense,1,FALSE,TRUE,support,,FALSE,if:turnsElapsed>=2,do:goodConditionTurns-=1,"do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:startOfTurn,do:concentration+=4,limit:1",1,
+621,ほぐれるひととき+,,SSR,mental,sense,1,TRUE,TRUE,support,,FALSE,if:turnsElapsed>=2,do:goodConditionTurns-=1,"do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:startOfTurn,do:concentration+=4,limit:1",1,
