@@ -3,6 +3,10 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2025-10-20
+
+- Add Sora to Yakusoku China preview
+
 ## 2025-10-10
 
 - Add Gamushara Temari
