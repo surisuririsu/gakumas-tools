@@ -17,7 +17,7 @@ const IdolIcon = ({ idolId }) => {
 };
 
 export const OSHI_PROPS = {
-  text: "「初星学園HR #STEP3 倉本千奈」",
-  initiallyExpanded: false,
-  videoId: "MI6U0TrImdo",
+  text: "「空と約束」",
+  initiallyExpanded: true,
+  videoId: "WxFmsuy4nrM",
 };
