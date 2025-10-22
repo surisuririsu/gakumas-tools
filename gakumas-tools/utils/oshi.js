@@ -18,6 +18,6 @@ const IdolIcon = ({ idolId }) => {
 
 export const OSHI_PROPS = {
   text: "「空と約束」",
-  initiallyExpanded: true,
+  initiallyExpanded: false,
   videoId: "WxFmsuy4nrM",
 };
