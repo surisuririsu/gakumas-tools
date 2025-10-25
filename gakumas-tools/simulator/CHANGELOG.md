@@ -4,6 +4,11 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+## 2025-10-25
+
+- Added preview of S34, changed start of turn and start of stage behavior
+
 ## 2025-10-21
 
 - Update Sora to Yakusoku China

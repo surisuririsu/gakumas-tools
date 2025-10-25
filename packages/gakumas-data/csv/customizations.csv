@@ -64,7 +64,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 88,yumelipEffect1,条件変更,effect,70,1,,,,"line:2,if:goodImpressionTurns>=10",,
 41,preservation1,温存+,effect,70,1,,,,,,"at:prestage,target:this,do:g.stanceLevel+=1"
 89,preservationAdd1,温存追加,effect,70,1,,,,do:setStance(preservation),,
-42,preservationNextTurnAdd1,温存追加,effect,70,1,,,,"at:startOfTurn,do:setStance(preservation),limit:1",,
+42,preservationNextTurnAdd1,温存追加,effect,70,1,,,,"at:turn,do:setStance(preservation),limit:1",,
 36,forceInitialHand1,開始時手札に入る,effect,70,1,TRUE,,,,,
 25,genki1_4,元気+,genki,70,1,,,,,,"at:prestage,target:this,do:g.genki+=4"
 26,genki1_9,元気+,genki,70,1,,,,,,"at:prestage,target:this,do:g.genki+=9"
@@ -80,7 +80,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 64,score3_3,パラメータ+,score,"40,40,70",3,,,,,,"level:1,at:prestage,target:this,do:g.score+=3;level:2,at:prestage,target:this,do:g.score+=6;level:3,at:prestage,target:this,do:g.score+=15"
 65,score3_6,パラメータ+,score,"40,40,70",3,,,,,,"level:1,at:prestage,target:this,do:g.score+=6;level:2,at:prestage,target:this,do:g.score+=12;level:3,at:prestage,target:this,do:g.score+=30"
 4,scoreTimes1,パラメータ上昇回数+,score,100,1,,,,,,"at:prestage,target:this,do:g.scoreTimes+=1"
-99,oneMoreStepEffect1,パラメータ追加,score,100,1,,,,"at:startOfTurn,do:score+=5,limit:2",,
+99,oneMoreStepEffect1,パラメータ追加,score,100,1,,,,"at:turn,do:score+=5,limit:2",,
 79,scoreAdd1_12,パラメータ追加,score,70,1,,,,do:score+=12,,
 3,scoreAdd1_6,パラメータ追加,score,70,1,,,,do:score+=6,,
 8,scoreByMotivation1,やる気分パラメータ+,score,70,1,,,,,,"at:prestage,target:this,do:g.scoreByMotivation+=1.4"
