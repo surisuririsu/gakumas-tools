@@ -58,6 +58,7 @@ export default class StageEngine {
     this.effectManager.clearPrestageEffects(state);
     this.logger.enable();
     this.effectManager.triggerEffectsForPhase(state, "startOfStage");
+    this.effectManager.triggerEffectsForPhase(state, "afterStartOfStage");
     this.logger.pushGraphData(state);
     this.turnManager.startTurn(state);
     return state;
