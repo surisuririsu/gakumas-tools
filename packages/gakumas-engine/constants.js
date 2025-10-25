@@ -98,13 +98,21 @@ export const STANCE_CHANGED_EFFECTS = [
   },
 ].map(formatEffect);
 
-export const UNFRESH_PHASES = ["beforeStartOfTurn", "startOfTurn", "everyTurn"];
+export const UNFRESH_PHASES = [
+  "beforeStartOfTurn",
+  "startOfTurn",
+  "afterStartOfTurn",
+  "turn",
+  "everyTurn",
+];
 export const CHANGE_TRIGGER_PHASES = ["processCard", "processCost"];
 export const PHASES = [
   "activeCardUsed",
   "afterActiveCardUsed",
   "afterCardUsed",
   "afterMentalCardUsed",
+  "afterStartOfStage",
+  "afterStartOfTurn",
   "beforeStartOfTurn",
   "buffCostConsumed",
   "cardUsed",
@@ -118,12 +126,13 @@ export const PHASES = [
   "mentalCardUsed",
   "motivationIncreased",
   "prestage",
+  "processCard",
+  "processCost",
   "staminaDecreased",
   "stanceChanged",
   "startOfStage",
   "startOfTurn",
-  "processCost",
-  "processCard",
+  "turn",
 ];
 
 export const ALL_FIELDS = [
