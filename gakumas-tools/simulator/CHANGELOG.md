@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-10-27
+
+- Updated first turn rates for S34"
+
 ## 2025-10-25
 
 - Added preview of S34, changed start of turn and start of stage behavior
