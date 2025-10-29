@@ -18,14 +18,11 @@ const IdolIcon = ({ idolId }) => {
 
 export const OSHI_PROPS = {
   text: (
-    <div>
+    <>
+      「初星学園放送部 #61」を聴きましょう！
       <IdolIcon idolId={6} />
-      伊藤舞音さんが出演された「ぷちうるふ1stみーてぃん2025」限定配信中！
-      <br />
-      ゴールドメンバーになると昼夜両部観れます！カラオケパートもあるよ！🎶
-    </div>
+    </>
   ),
-  initiallyExpanded: false,
-  hasBadge: true,
-  url: "https://nicochannel.jp/okazuradio/video/smVVkucXkDVDepfujx96xgCf",
+  initiallyExpanded: true,
+  url: "https://asobichannel.asobistore.jp/watch/nevm9w5s96vn",
 };
