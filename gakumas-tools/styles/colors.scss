@@ -77,3 +77,10 @@ $sena: #f6ae54;
 $misuzu: #7a99cf;
 
 $class-1-2: #6db5aa;
+
+$housoubu: linear-gradient(100deg, #88b1fe, #fbb0b2);
+$housoubu-light: linear-gradient(
+  100deg,
+  color.adjust(#88b1fe, $lightness: -10%),
+  color.adjust(#fbb0b2, $lightness: -10%)
+);
