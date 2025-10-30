@@ -18,11 +18,14 @@ const IdolIcon = ({ idolId }) => {
 
 export const OSHI_PROPS = {
   text: (
-    <>
-      「初星学園放送部 #61」を聴きましょう！
+    <div>
+      <IdolIcon idolId={8} />
+      川村玲奈の「ウラめしや Kawamura」
+      <br />
+      初回ゲストは伊藤舞音さん
       <IdolIcon idolId={6} />
-    </>
+    </div>
   ),
   initiallyExpanded: true,
-  url: "https://asobichannel.asobistore.jp/watch/nevm9w5s96vn",
+  url: "https://nicochannel.jp/kawamura/live/sm3h5SGaesj2UHrdxc7hjYxU",
 };
