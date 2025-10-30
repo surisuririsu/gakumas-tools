@@ -6,6 +6,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-10-30
+
+- Add Mite preview
+
 ## 2025-10-27
 
 - Updated first turn rates for S34"
