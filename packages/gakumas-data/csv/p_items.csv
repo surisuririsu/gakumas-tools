@@ -347,3 +347,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 346,届けたい想い,SSR,FALSE,sense,stage,pIdol,114,FALSE,"at:afterStartOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.2,do:fixedStamina-=1,limit:3"
 347,届けたい想い+,SSR,TRUE,sense,stage,pIdol,114,FALSE,"at:afterStartOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:3"
 348,ごきげんようレッスン,SR,FALSE,sense,produce,support,,FALSE,
+349,水も滴る王子様,SSR,FALSE,sense,stage,pIdol,115,FALSE,"at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=3,limit:1"
+350,水も滴る王子様+,SSR,TRUE,sense,stage,pIdol,115,FALSE,"at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=3,limit:1"
