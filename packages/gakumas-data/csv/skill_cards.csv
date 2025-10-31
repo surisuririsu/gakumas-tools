@@ -620,5 +620,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 619,世界一の勇気+,,SSR,active,sense,1,TRUE,TRUE,pIdol,114,FALSE,,do:cost-=0,"do:score+=goodConditionTurns*11,do:goodConditionTurns=0",1,
 620,ほぐれるひととき,,SSR,mental,sense,1,FALSE,TRUE,support,,FALSE,if:turnsElapsed>=2,do:goodConditionTurns-=1,"do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:turn,do:concentration+=4,limit:1",1,
 621,ほぐれるひととき+,"31,14",SSR,mental,sense,1,TRUE,TRUE,support,,FALSE,if:turnsElapsed>=2,do:goodConditionTurns-=1,"do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:turn,do:concentration+=6,limit:1",1,
-622,見つけた世界で,,SSR,mental,sense,1,FALSE,TRUE,pIdol,115,FALSE,,do:cost-=1,do:concentration+=goodConditionTurns,1,
+622,見つけた世界で,,SSR,mental,sense,1,FALSE,TRUE,pIdol,115,FALSE,,do:cost-=4,do:concentration+=goodConditionTurns,1,
 623,見つけた世界で+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,115,FALSE,,do:cost-=1,do:concentration+=goodConditionTurns,1,
+624,奥義、受け流し！,,SSR,active,sense,1,FALSE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=4;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=4,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=4,limit:1",1,
+625,奥義、受け流し！+,"101,100",SSR,active,sense,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=8;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=8,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=8,limit:1",1,
