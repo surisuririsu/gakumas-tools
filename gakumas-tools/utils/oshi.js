@@ -19,13 +19,10 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      <IdolIcon idolId={8} />
-      川村玲奈の「ウラめしや Kawamura」
-      <br />
-      初回ゲストは伊藤舞音さん
       <IdolIcon idolId={6} />
+      伊藤舞音さんが出演される音楽×百合ドラマ『ステラ・カデンツァ』本日発売です！
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://nicochannel.jp/kawamura/live/sm3h5SGaesj2UHrdxc7hjYxU",
+  url: "https://booth.pm/ja/items/7472130",
 };
