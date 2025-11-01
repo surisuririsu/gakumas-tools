@@ -16,13 +16,4 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      <IdolIcon idolId={6} />
-      伊藤舞音さんが出演される音楽×百合ドラマ『ステラ・カデンツァ』本日発売です！
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://booth.pm/ja/items/7472130",
-};
+export const OSHI_PROPS = null;
