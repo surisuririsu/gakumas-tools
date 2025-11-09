@@ -9,15 +9,16 @@
     display: flex;
     justify-content: center;
     border-radius: 0 0 16px 16px;
-    background: colors.$pxw-mao;
+    background: colors.$sumika;
     padding: 4px 8px;
-    color: colors.$white;
+    // color: colors.$white;
+    color: color.adjust(colors.$sumika, $lightness: -30%);
     text-align: center;
     box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: color.adjust(colors.$pxw-mao, $lightness: -10%);
+      background-color: color.adjust(colors.$sumika, $lightness: -10%);
     }
   }
 }
