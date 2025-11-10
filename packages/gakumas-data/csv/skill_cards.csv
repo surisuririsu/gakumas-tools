@@ -624,3 +624,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 623,見つけた世界で+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,115,FALSE,,do:cost-=1,do:concentration+=goodConditionTurns,1,
 624,奥義、受け流し！,,SSR,active,sense,1,FALSE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=4;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=4,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=4,limit:1",1,
 625,奥義、受け流し！+,"101,100",SSR,active,sense,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=8;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=8,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=8,limit:1",1,
+626,執念キャッチャー,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:stamina-=1,"do:fixedGenki+=5;if:stamina>=maxStamina*0.5,do:cardUsesRemaining+=1",1,
+627,執念キャッチャー+,"30,83",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:stamina-=1,"do:fixedGenki+=10;if:stamina>=maxStamina*0.5,do:cardUsesRemaining+=1",1,
