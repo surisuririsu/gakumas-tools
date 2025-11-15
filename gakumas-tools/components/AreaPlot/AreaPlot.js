@@ -67,6 +67,10 @@ function AreaPlot({ data, plan }) {
               label: t("motivation"),
               color: "rgba(214, 214, 214, 0.25)",
             },
+            prideTurns: {
+              label: t("prideTurns"),
+              color: "rgba(255, 182, 193, 0.25)",
+            },
           }
         : {}),
     }),

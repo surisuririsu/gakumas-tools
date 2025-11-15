@@ -222,6 +222,9 @@ export default class HeuristicStrategy extends BaseStrategy {
       0.45 *
       this.motivationMultiplier;
 
+    // Pride turns
+    score += state[S.prideTurns] * state[S.turnsRemaining] * 0.2;
+
     // Score buffs
     score +=
       state[S.scoreBuffs].reduce(
