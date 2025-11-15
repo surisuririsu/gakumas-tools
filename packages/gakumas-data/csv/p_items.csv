@@ -350,3 +350,11 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 349,水も滴る王子様,SSR,FALSE,sense,stage,pIdol,115,FALSE,"at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=1,limit:1"
 350,水も滴る王子様+,SSR,TRUE,sense,stage,pIdol,115,FALSE,"at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=3,limit:1"
 351,おひるねブランケット,SR,FALSE,sense,produce,support,,FALSE,
+352,ふさわしい、私,SSR,FALSE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+353,ふさわしい、私+,SSR,TRUE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+354,ふさわしい、私,SSR,FALSE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+355,ふさわしい、私+,SSR,TRUE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+356,ふさわしい、私,SSR,FALSE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+357,ふさわしい、私+,SSR,TRUE,logic,stage,pIdol,116,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
+358,寝心地は良好,SSR,FALSE,logic,stage,support,,FALSE,"at:motivationIncreased,if:isDanceTurn,do:setGoodImpressionTurnsBuff(0.5,2),do:setMotivationBuff(0.5,2),limit:1"
+359,お直し刺繍セット,SR,FALSE,logic,produce,support,,FALSE,

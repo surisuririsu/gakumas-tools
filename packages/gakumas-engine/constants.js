@@ -176,6 +176,7 @@ export const ALL_FIELDS = [
   "motivation",
   "motivationMultiplier",
   "motivationBuffs",
+  "prideTurns",
   "stance",
   "prevStance",
   "lockStanceTurns",
@@ -268,6 +269,7 @@ export const EOT_DECREMENT_FIELDS = [
   S.goodConditionTurns,
   S.perfectConditionTurns,
   S.goodImpressionTurns,
+  S.prideTurns,
   S.lockStanceTurns,
   S.halfCostTurns,
   S.doubleCostTurns,
@@ -331,6 +333,7 @@ export const WHOLE_FIELDS = [
   S.concentration,
   S.goodImpressionTurns,
   S.motivation,
+  S.prideTurns,
   S.fullPowerCharge,
   S.cumulativeFullPowerCharge,
   S.enthusiasm,
@@ -346,6 +349,7 @@ export const LOGGED_FIELDS = [
   S.concentration,
   S.goodImpressionTurns,
   S.motivation,
+  S.prideTurns,
   S.enthusiasm,
   S.enthusiasmBonus,
   S.enthusiasmMultiplier,
@@ -375,6 +379,7 @@ export const GRAPHED_FIELDS = [
   S.concentration,
   S.goodImpressionTurns,
   S.motivation,
+  S.prideTurns,
 ];
 
 export const FIELDS_TO_DIFF = [

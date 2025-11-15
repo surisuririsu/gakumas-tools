@@ -62,6 +62,7 @@ export default class BuffManager extends EngineComponent {
     // Logic
     state[S.goodImpressionTurns] = 0;
     state[S.motivation] = 0;
+    state[S.prideTurns] = 0;
 
     // Anomaly
     state[S.stance] = "none";
