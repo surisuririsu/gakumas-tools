@@ -114,4 +114,6 @@ id,idolId,title,rarity,plan,recommendedEffect
 113,2,がむしゃらに行こう！,SSR,logic,goodImpressionTurns
 114,6,空と約束,SSR,sense,goodConditionTurns
 115,4,見て,SSR,sense,concentration
-116,13,理論武装して,SSR,logic,motivation
+116,13,初,R,logic,motivation
+117,13,初志貫徹,SR,logic,motivation
+118,13,理論武装して,SSR,logic,motivation
