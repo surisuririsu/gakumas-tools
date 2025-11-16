@@ -155,6 +155,7 @@ export function LoadoutContextProvider({ children }) {
   // Update browser URL when the loadout changes
   useEffect(() => {
     if (!loaded || pathname !== "/simulator") return;
+    if (stage.type === "linkContest") return;
     const url = new URL(window.location);
     url.search = loadoutToSearchParams(loadout).toString();
     window.history.replaceState(null, "", url);
