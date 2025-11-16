@@ -1,0 +1,40 @@
+@use "../../styles/colors";
+
+.loadoutEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 4px;
+  overflow: auto;
+}
+
+.typeMultipliers {
+  display: flex;
+  font-size: 14px;
+
+  & > div {
+    flex: 1;
+    text-align: center;
+  }
+
+  div:nth-child(1) {
+    color: #f23584;
+  }
+  div:nth-child(2) {
+    color: #1c85ed;
+  }
+  div:nth-child(3) {
+    color: #f7b12e;
+  }
+}
+
+.pItemsRow {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  color: colors.$black;
+}
+
+.pItems {
+  flex: 1;
+}

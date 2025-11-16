@@ -12,6 +12,7 @@ import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
 const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
+const LOADOUTS_HISTORY_STORAGE_KEY = "gakumas-tools.loadouts-history";
 
 const LoadoutContext = createContext();
 
@@ -34,6 +35,7 @@ export function LoadoutContextProvider({ children }) {
     initial.customizationGroups
   );
   const [loadoutHistory, setLoadoutHistory] = useState([]);
+  const [loadoutsHistory, setLoadoutsHistory] = useState([]);
 
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
@@ -62,6 +64,9 @@ export function LoadoutContextProvider({ children }) {
       customizationGroups,
     ]
   );
+
+  const [currentLoadoutIndex, setCurrentLoadoutIndex] = useState(0);
+  const [loadouts, setLoadouts] = useState([loadout]);
 
   const simulatorUrl = getSimulatorUrl(loadout);
 
@@ -103,8 +108,31 @@ export function LoadoutContextProvider({ children }) {
       setLoadoutHistory(data);
       if (!initial.hasDataFromParams) setLoadout(data[0]);
     }
+
+    const loadoutsHistoryString = localStorage.getItem(
+      LOADOUTS_HISTORY_STORAGE_KEY
+    );
+    if (loadoutsHistoryString) {
+      const data = JSON.parse(loadoutsHistoryString);
+      setLoadouts(data[0]);
+    }
+
     setLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (stage.type === "linkContest") {
+      if (loadouts.length <= stage.linkTurnCounts.length) {
+        setLoadouts((cur) => {
+          const next = [...cur];
+          while (next.length < stage.linkTurnCounts.length) {
+            next.push(loadout);
+          }
+          return next;
+        });
+      }
+    }
+  }, [stage]);
 
   // Update local storage when history changed
   useEffect(() => {
@@ -115,12 +143,35 @@ export function LoadoutContextProvider({ children }) {
     );
   }, [loadoutHistory]);
 
+  // Update local storage when history changed
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(
+      LOADOUTS_HISTORY_STORAGE_KEY,
+      JSON.stringify(loadoutsHistory)
+    );
+  }, [loadoutsHistory]);
+
   // Update browser URL when the loadout changes
   useEffect(() => {
     if (!loaded || pathname !== "/simulator") return;
     const url = new URL(window.location);
     url.search = loadoutToSearchParams(loadout).toString();
     window.history.replaceState(null, "", url);
+  }, [loadout]);
+
+  // Update link loadouts when loadout changes
+  useEffect(() => {
+    if (stage.type == "linkContest") {
+      setLoadouts((cur) => {
+        const next = [...cur];
+        next[currentLoadoutIndex] = loadout;
+        for (let i = 0; i < next.length; i++) {
+          next[i].stageId = loadout.stageId;
+        }
+        return next;
+      });
+    }
   }, [loadout]);
 
   useEffect(() => {
@@ -263,7 +314,7 @@ export function LoadoutContextProvider({ children }) {
   };
 
   function setMemory(memory, index) {
-    const multiplier = index ? 0.2 : 1;
+    const multiplier = stage.type !== "linkContest" && index ? 0.2 : 1;
 
     if (!memoryParams.some((p) => p)) {
       setParams([0, 0, 0, 0]);
@@ -305,6 +356,11 @@ export function LoadoutContextProvider({ children }) {
   const pushLoadoutHistory = () => {
     if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
     setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
+  };
+
+  const pushLoadoutsHistory = () => {
+    if (JSON.stringify(loadouts) == JSON.stringify(loadoutsHistory[0])) return;
+    setLoadoutsHistory((cur) => [loadouts, ...cur].slice(0, 10));
   };
 
   async function saveLoadout(name) {
@@ -353,9 +409,14 @@ export function LoadoutContextProvider({ children }) {
         simulatorUrl,
         loadoutHistory,
         pushLoadoutHistory,
+        pushLoadoutsHistory,
         saveLoadout,
         fetchLoadouts,
         deleteLoadouts,
+        loadouts,
+        setLoadouts,
+        currentLoadoutIndex,
+        setCurrentLoadoutIndex,
       }}
     >
       {children}

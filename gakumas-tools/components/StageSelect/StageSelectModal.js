@@ -11,16 +11,22 @@ import StageSummary from "./StageSummary";
 import styles from "./StageSelect.module.scss";
 
 const allStages = Stages.getAll().sort(compareStages);
-const contestStages = allStages.filter((s) => s.type == "contest");
-const eventStages = allStages.filter((s) => s.type == "event");
+const stagesByType = allStages.reduce((acc, stage) => {
+  if (!acc[stage.type]) {
+    acc[stage.type] = [];
+  }
+  acc[stage.type].push(stage);
+  return acc;
+}, {});
 
 export default function StageSelectModal() {
   const t = useTranslations("StageSelectModal");
 
   const STAGE_TYPE_OPTIONS = [
     { value: "contest", label: t("contest") },
+    { value: "linkContest", label: t("linkContest") },
     { value: "event", label: t("event") },
-    { value: "custom", label: t("custom") },
+    // { value: "custom", label: t("custom") },
   ];
 
   const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
@@ -33,7 +39,7 @@ export default function StageSelectModal() {
     closeModal();
   }
 
-  const stages = stageType == "event" ? eventStages : contestStages;
+  const stages = stagesByType[stageType] || [];
 
   return (
     <Modal>

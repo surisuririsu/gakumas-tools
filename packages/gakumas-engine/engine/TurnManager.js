@@ -15,23 +15,24 @@ export default class TurnManager extends EngineComponent {
 
   initializeState(state) {
     state[S.turnsElapsed] = 0;
-    state[S.turnsRemaining] = this.config.stage.turnCount;
+    state[S.turnsRemaining] = this.getConfig(state).stage.turnCount;
     state[S.turnTypes] = this.generateTurnTypes();
+    state[S.linkPhase] = 0;
   }
 
   getTurnType(state) {
     return state[S.turnTypes][
-      Math.min(state[S.turnsElapsed], this.config.stage.turnCount - 1)
+      Math.min(state[S.turnsElapsed], this.getConfig(state).stage.turnCount - 1)
     ];
   }
 
   getTurnMultiplier(state) {
     const turnType = this.getTurnType(state);
-    return this.config.typeMultipliers[turnType];
+    return this.getConfig(state).typeMultipliers[turnType];
   }
 
   generateTurnTypes() {
-    const { turnCounts, firstTurns, criteria } = this.config.stage;
+    const { turnCounts, firstTurns, criteria } = this.engine.config.stage;
 
     // Initialize remaining counts for each turn type
     const remainingTurns = { ...turnCounts };
@@ -105,7 +106,7 @@ export default class TurnManager extends EngineComponent {
     if (state[S.cardUsesRemaining] > 0) {
       state[S.stamina] = Math.min(
         state[S.stamina] + 2,
-        this.config.idol.params.stamina
+        this.getConfig(state).idol.params.stamina
       );
     }
 
@@ -138,6 +139,20 @@ export default class TurnManager extends EngineComponent {
 
     // Start next turn
     if (state[S.turnsRemaining] > 0) {
+      const stageConfig = this.getConfig(state).stage;
+      if (stageConfig.type === "linkContest") {
+        const { linkPhaseChangeTurns } = stageConfig;
+        for (let i = 0; i < linkPhaseChangeTurns.length; i++) {
+          if (
+            state[S.turnsElapsed] == linkPhaseChangeTurns[i] &&
+            i < this.engine.linkConfigs.length - 1
+          ) {
+            this.engine.changeIdol(state);
+            break;
+          }
+        }
+      }
+
       this.startTurn(state);
     }
   }
