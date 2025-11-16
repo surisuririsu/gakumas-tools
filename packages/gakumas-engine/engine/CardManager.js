@@ -59,6 +59,14 @@ export default class CardManager extends EngineComponent {
     state[S.cardMap] = cardMaps.flat();
 
     this.changeIdol(state);
+
+    state[S.heldCards] = [];
+    state[S.cardsUsed] = 0;
+    state[S.activeCardsUsed] = 0;
+
+    state[S.pcchiCardsUsed] = 0;
+    state[S.natsuyaCardsUsed] = 0;
+    state[S.holidayCardsUsed] = 0;
   }
 
   changeIdol(state) {
@@ -87,15 +95,8 @@ export default class CardManager extends EngineComponent {
     state[S.handCards] = [];
     state[S.discardedCards] = [];
     state[S.removedCards] = [];
-    state[S.heldCards] = [];
-    state[S.cardsUsed] = 0;
-    state[S.activeCardsUsed] = 0;
     state[S.turnCardsUsed] = 0;
     state[S.turnCardsUpgraded] = 0;
-
-    state[S.pcchiCardsUsed] = 0;
-    state[S.natsuyaCardsUsed] = 0;
-    state[S.holidayCardsUsed] = 0;
   }
 
   isForceInitialHand(state, card) {
