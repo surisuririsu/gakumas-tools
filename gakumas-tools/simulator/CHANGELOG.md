@@ -3,16 +3,11 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
-
-
-
-
-
-
 ## 2025-11-16
 
 - Initial implementation of link contest
 - Update Tsubame
+- Fixed first turns for link contest preseason stage a
 
 ## 2025-10-31
 

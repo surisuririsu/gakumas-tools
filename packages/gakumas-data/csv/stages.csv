@@ -119,6 +119,6 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 118,シーズン34 ステージ1,contest,FALSE,34,1,,sense,"0.4,0.3,0.3","3,3,2","0.8,0.2,0","at:cardUsed,if:turnsRemaining<=3,if:cardRarity==SSR,do:setScoreBuff(0.25,3),limit:3",
 119,シーズン34 ステージ2,contest,FALSE,34,2,,sense,"0.4,0.3,0.3","3,3,2","0.8,0.2,0","at:mentalCardUsed,do:goodConditionTurns+=3,do:setConcentrationBuff(0.25,2),limit:3",
 120,シーズン34 ステージ3,contest,FALSE,34,3,,logic,"0.4,0.3,0.3","4,3,3","0.8,0.2,0","at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1",
-121,プレシーズンA,linkContest,FALSE,0,A,,sense,"0.4,0.2,0.4","5,3,4","0.8,0.2,0","at:mentalCardUsed,do:goodConditionTurns+=3,do:setConcentrationBuff(0.25,2),limit:3","4,4,4"
+121,プレシーズンA,linkContest,FALSE,0,A,,sense,"0.4,0.2,0.4","5,3,4","0.8,0,0.2","at:mentalCardUsed,do:goodConditionTurns+=3,do:setConcentrationBuff(0.25,2),limit:3","4,4,4"
 122,プレシーズンB,linkContest,FALSE,0,B,,logic,"0.3,0.5,0.2","3,6,3","0,1,0","at:endOfTurn,if:goodImpressionTurns>=15,do:score+=genki*1.3","4,4,4"
 123,プレシーズンC,linkContest,FALSE,0,C,,anomaly,"0.45,0.2,0.35","6,2,4","1,0,0","at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10","4,4,4"
