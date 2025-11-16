@@ -5,6 +5,8 @@ import { shallowCopy } from "../utils";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {
+    const config = this.getConfig(state);
+
     state[S.effects] = [];
 
     // Set default effects
@@ -12,18 +14,32 @@ export default class EffectManager extends EngineComponent {
     this.setEffects(state, DEFAULT_EFFECTS);
 
     // Set stage effects
-    this.logger.debug("Setting stage effects", this.config.stage.effects);
-    this.setEffects(state, this.config.stage.effects, { type: "stage" });
+    this.logger.debug("Setting stage effects", config.stage.effects);
+    this.setEffects(state, config.stage.effects, { type: "stage" });
 
     // Set p-item effects
-    const { pItemIds } = this.config.idol;
-    for (let i = 0; i < pItemIds.length; i++) {
-      const pItem = PItems.getById(pItemIds[i]);
-      this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
-      this.setEffects(state, pItem.effects, { type: "pItem", id: pItemIds[i] });
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+
+    for (let c = 0; c < configs.length; c++) {
+      const { pItemIds } = configs[c].idol;
+      for (let i = 0; i < pItemIds.length; i++) {
+        const pItem = PItems.getById(pItemIds[i]);
+        this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
+        this.setEffects(state, pItem.effects, {
+          type: "pItem",
+          id: pItemIds[i],
+        });
+      }
     }
 
     // Set growth effects
+    this.initializeGrowthEffects(state);
+  }
+
+  initializeGrowthEffects(state) {
     for (let i = 0; i < state[S.cardMap].length; i++) {
       const skillCardId = state[S.cardMap][i].id;
 

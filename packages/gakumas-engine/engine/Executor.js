@@ -167,9 +167,10 @@ export default class Executor extends EngineComponent {
       }
 
       // Clamp values
+      const config = this.getConfig(state);
       if (state[S.stamina] < 0) state[S.stamina] = 0;
-      if (state[S.stamina] > this.config.idol.params.stamina) {
-        state[S.stamina] = this.config.idol.params.stamina;
+      if (state[S.stamina] > config.idol.params.stamina) {
+        state[S.stamina] = config.idol.params.stamina;
       }
       if (state[S.phase] != "processCost" && state[S.concentration] < 0) {
         state[S.concentration] = 0;

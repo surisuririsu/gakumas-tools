@@ -1,8 +1,8 @@
 import { StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
 import { formatRun, mergeGraphDatas } from "@/utils/simulator";
 
-export function simulate(idolStageConfig, strategyName, numRuns) {
-  const engine = new StageEngine(idolStageConfig);
+export function simulate(idolStageConfig, linkConfigs, strategyName, numRuns) {
+  const engine = new StageEngine(idolStageConfig, linkConfigs);
   const strategy = new STRATEGIES[strategyName](engine);
   engine.strategy = strategy;
 

@@ -9,6 +9,7 @@ export default class StageConfig {
       firstTurns,
       criteria,
       effects,
+      linkTurnCounts,
     } = stage;
     this.type = type;
     this.plan = plan;
@@ -19,5 +20,15 @@ export default class StageConfig {
     this.criteria = criteria;
     this.effects = effects;
     this.turnCount = turnCounts.vocal + turnCounts.dance + turnCounts.visual;
+    this.linkTurnCounts = linkTurnCounts;
+    this.linkPhaseChangeTurns = this.calculateLinkPhaseChangeTurns();
+  }
+
+  calculateLinkPhaseChangeTurns() {
+    let cumulativeTurns = 0;
+    return this.linkTurnCounts.map((turnCount) => {
+      cumulativeTurns += turnCount;
+      return cumulativeTurns;
+    });
   }
 }

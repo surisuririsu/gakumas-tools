@@ -18,7 +18,7 @@ export default class Evaluator extends EngineComponent {
     super(engine);
 
     this.variableResolvers = {
-      maxStamina: () => this.config.idol.params.stamina,
+      maxStamina: (state) => this.getConfig(state).idol.params.stamina,
       clearRatio: () => 0,
       ...this.engine.turnManager.variableResolvers,
       ...this.engine.cardManager.variableResolvers,

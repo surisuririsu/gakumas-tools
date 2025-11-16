@@ -16,6 +16,14 @@
   }
 }
 
+@mixin link-colors {
+  @each $i, $link-color in (1: #e0041b, 2: #027cba, 3: #f6c117) {
+    &:nth-child(#{$i}) {
+      @content ($link-color);
+    }
+  }
+}
+
 @mixin c11n-colors {
   @each $type,
     $c11n-color

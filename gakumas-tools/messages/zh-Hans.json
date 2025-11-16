@@ -191,6 +191,7 @@
     "multiplierNote": "※ 分数倍数对超过2400的属性不准确。",
     "previewNote": "※ 竞技场预览仅基于已公布的 P 道具和评审标准，回合类型尚未确定。",
     "enterPercents": "由于分数倍数的计算方式未知，请直接输入倍数（%）。",
+    "linkContestNote": "Link contest behavior may not be accurately simulated. Deduplication of p-items and skill cards across idols is not yet implemented. Please deduplicate and add default cards manually in the loadout editor.",
     "custom": "自定义",
     "simulate": "模拟",
     "provideData": "提供数据",
@@ -201,6 +202,7 @@
   },
   "StageSelectModal": {
     "contest": "竞技场",
+    "linkContest": "Link Contest",
     "event": "活动",
     "custom": "自定义"
   },
@@ -319,7 +321,8 @@
     "hand": "持有技能卡",
     "turnN": "回合 {n}",
     "average": "平均值",
-    "unplayable": "无法使用"
+    "unplayable": "无法使用",
+    "linkPhaseChange": "Idol changed"
   },
   "BoxPlot": {
     "max": "最大",

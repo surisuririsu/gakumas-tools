@@ -191,6 +191,7 @@
     "multiplierNote": "※ Score multiplier is inaccurate for parameters above 2400.",
     "previewNote": "※ Stage preview is based only on the announced p-items and criteria. Turn types are not yet known.",
     "enterPercents": "Since the score multiplier calculation is unknown, please enter the multipliers (%) directly.",
+    "linkContestNote": "Link contest behavior may not be accurately simulated. Deduplication of p-items and skill cards across idols is not yet implemented. Please deduplicate and add default cards manually in the loadout editor.",
     "custom": "Custom",
     "simulate": "Simulate",
     "provideData": "Provide data",
@@ -201,6 +202,7 @@
   },
   "StageSelectModal": {
     "contest": "Contest",
+    "linkContest": "Link Contest",
     "event": "Event",
     "custom": "Custom"
   },
@@ -319,7 +321,8 @@
     "hand": "Hand",
     "turnN": "Turn {n}",
     "average": "Average",
-    "unplayable": "Unplayable"
+    "unplayable": "Unplayable",
+    "linkPhaseChange": "Idol changed"
   },
   "BoxPlot": {
     "max": "Max",
