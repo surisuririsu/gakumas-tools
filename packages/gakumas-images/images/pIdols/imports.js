@@ -4,10 +4,7 @@ import image_102 from "./102.png";
 import image_104 from "./104.png";
 import image_105 from "./105.png";
 import image_106 from "./106.png";
-import image_107 from "./107.png";
 import image_11 from "./11.png";
-import image_111 from "./111.png";
-import image_114 from "./114.png";
 import image_12 from "./12.png";
 import image_13 from "./13.png";
 import image_14 from "./14.png";
@@ -99,7 +96,6 @@ import image_91 from "./91.png";
 import image_92 from "./92.png";
 import image_93 from "./93.png";
 import image_94 from "./94.png";
-import image_95 from "./95.png";
 import image_97 from "./97.png";
 import image_98 from "./98.png";
 import image_99 from "./99.png";
@@ -111,10 +107,7 @@ const IMAGES = {
   '104': image_104,
   '105': image_105,
   '106': image_106,
-  '107': image_107,
   '11': image_11,
-  '111': image_111,
-  '114': image_114,
   '12': image_12,
   '13': image_13,
   '14': image_14,
@@ -206,7 +199,6 @@ const IMAGES = {
   '92': image_92,
   '93': image_93,
   '94': image_94,
-  '95': image_95,
   '97': image_97,
   '98': image_98,
   '99': image_99,
