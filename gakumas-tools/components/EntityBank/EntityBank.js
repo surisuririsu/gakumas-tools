@@ -40,10 +40,10 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
       pIdolIds,
     });
     const nonSignatureEntities = Entities.getFiltered({
-      rarities: ["R", "SR", "SSR"],
+      rarities: ["N", "R", "SR", "SSR"],
       plans: [plan, "free"],
       modes: ["stage"],
-      sourceTypes: ["produce", "support"],
+      sourceTypes: ["default", "produce", "support"],
     }).sort(compareFn);
     entities = signatureEntities.concat(nonSignatureEntities);
   } else {

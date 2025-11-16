@@ -7,7 +7,7 @@ import { FALLBACK_STAGE } from "@/simulator/constants";
 import { formatStageName } from "@/utils/stages";
 import styles from "./LoadoutHistory.module.scss";
 
-function LoadoutSummary({ loadout }) {
+function LoadoutSummary({ loadout, showStage = true }) {
   const t = useTranslations("StageSummary");
 
   const { stageId, customStage, pItemIds, skillCardIdGroups } = loadout;
@@ -40,7 +40,9 @@ function LoadoutSummary({ loadout }) {
               />
             ))}
         </div>
-        <span className={styles.stage}>{formatStageName(stage, t)}</span>
+        {showStage && (
+          <span className={styles.stage}>{formatStageName(stage, t)}</span>
+        )}
       </div>
       <div className={styles.cards}>
         {skillCardIdGroups.map((group, j) => (

@@ -10,7 +10,7 @@ import { deserializeIds, serializeIds } from "./ids";
 const DEFAULTS = {
   stageId: Stages.getAll().findLast((s) => s.type == "contest" && !s.preview)
     .id,
-  supportBonus: "4",
+  supportBonus: "0.04",
   params: "1500-1500-1500-50",
   pItemIds: "0-0-0-0",
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",

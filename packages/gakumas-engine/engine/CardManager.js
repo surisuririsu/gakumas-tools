@@ -31,22 +31,53 @@ export default class CardManager extends EngineComponent {
   }
 
   initializeState(state) {
-    const cards = this.config.idol.cards.concat(
-      this.config.defaultCardIds.map((id) => ({ id }))
-    );
-    const cardMap = cards.map(({ id, customizations }) => {
-      const card = {
-        id,
-        baseId: getBaseId(SkillCards.getById(id)),
-      };
-      if (customizations && Object.keys(customizations).length) {
-        card.c11n = customizations;
-      }
-      return card;
-    });
+    const config = this.getConfig(state);
 
-    state[S.cardMap] = cardMap;
-    state[S.deckCards] = cardMap.map((_, i) => i);
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+
+    const cardMaps = [];
+    for (let c = 0; c < configs.length; c++) {
+      const cards = configs[c].idol.cards.concat(
+        configs[c].defaultCardIds.map((id) => ({ id }))
+      );
+      const cardMap = cards.map(({ id, customizations }) => {
+        const card = {
+          id,
+          baseId: getBaseId(SkillCards.getById(id)),
+        };
+        if (customizations && Object.keys(customizations).length) {
+          card.c11n = customizations;
+        }
+        return card;
+      });
+      cardMaps.push(cardMap);
+    }
+
+    state[S.cardMap] = cardMaps.flat();
+
+    this.changeIdol(state);
+  }
+
+  changeIdol(state) {
+    const config = this.getConfig(state);
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+    let index = 0;
+    for (let c = 0; c < state[S.linkPhase]; c++) {
+      index += configs[c].idol.cards.length + configs[c].defaultCardIds.length;
+    }
+
+    let deckCards = [];
+    const numCards = config.idol.cards.length + config.defaultCardIds.length;
+    for (let i = 0; i < numCards; i++) {
+      deckCards.push(index + i);
+    }
+    state[S.deckCards] = deckCards;
     shuffle(state[S.deckCards]);
     state[S.deckCards].sort((a, b) => {
       if (this.isForceInitialHand(state, a)) return 1;
@@ -396,7 +427,7 @@ export default class CardManager extends EngineComponent {
   addRandomUpgradedCardToHand(state) {
     const validSkillCards = SkillCards.getFiltered({
       rarities: ["R", "SR", "SSR"],
-      plans: [this.config.idol.plan, "free"],
+      plans: [this.getConfig(state).idol.plan, "free"],
       sourceTypes: ["produce"],
     }).filter((card) => card.upgraded);
     const skillCard =

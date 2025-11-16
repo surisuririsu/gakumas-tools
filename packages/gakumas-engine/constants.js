@@ -147,6 +147,7 @@ export const ALL_FIELDS = [
   "turnsElapsed",
   "turnsRemaining",
   "turnTypes",
+  "linkPhase",
 
   // Buffs
   "halfCostTurns",
