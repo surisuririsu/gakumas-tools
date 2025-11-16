@@ -1,7 +1,7 @@
 import { simulate } from ".";
 
 addEventListener("message", (e) => {
-  const { idolStageConfig, strategyName, numRuns } = e.data;
-  const result = simulate(idolStageConfig, strategyName, numRuns);
+  const { idolStageConfig, linkConfigs, strategyName, numRuns } = e.data;
+  const result = simulate(idolStageConfig, linkConfigs, strategyName, numRuns);
   postMessage(result);
 });

@@ -1,4 +1,6 @@
+@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 
 .oshi {
   font-size: 24px;
@@ -23,6 +25,55 @@
   overflow: auto;
 }
 
+.loadoutTabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loadoutTab {
+  display: flex;
+  gap: 4px;
+
+  @include mixins.link-colors using ($link-color) {
+    .selectButton {
+      background-color: color.scale($link-color, $lightness: 20%);
+
+      &:hover {
+        background-color: color.scale($link-color, $lightness: 60%);
+      }
+    }
+  }
+}
+
+// .loadoutTabButtons {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 4px;
+//   color: colors.$white;
+// }
+
+.selectButton {
+  padding: 8px;
+  border-radius: 4px;
+  color: colors.$white;
+}
+
+// .deleteButton {
+//   background-color: colors.$red-light;
+//   padding: 4px;
+//   border-radius: 4px;
+
+//   &:hover {
+//     background-color: colors.$red-extra-light;
+//   }
+// }
+
+.loadoutSummary {
+  flex: 1;
+  padding: 0 4px;
+}
+
 .note a {
   color: colors.$blue-dark;
   text-decoration: underline;
@@ -34,37 +85,6 @@
   input {
     width: 80px;
   }
-}
-
-.typeMultipliers {
-  display: flex;
-  font-size: 14px;
-
-  & > div {
-    flex: 1;
-    text-align: center;
-  }
-
-  div:nth-child(1) {
-    color: #f23584;
-  }
-  div:nth-child(2) {
-    color: #1c85ed;
-  }
-  div:nth-child(3) {
-    color: #f7b12e;
-  }
-}
-
-.pItemsRow {
-  display: flex;
-  align-items: center;
-  padding-right: 8px;
-  color: colors.$black;
-}
-
-.pItems {
-  flex: 1;
 }
 
 .expanderButtons {

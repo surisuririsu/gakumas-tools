@@ -8,6 +8,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-11-16
+
+- Initial implementation of link contest
+
 ## 2025-10-31
 
 - Update Mite Mao

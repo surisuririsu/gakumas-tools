@@ -88,6 +88,8 @@ function Log({ line, idolId }) {
         text={t("movedCardToDeckAtRandom")}
       />
     );
+  } else if (line.logType == "linkPhaseChange") {
+    return <Tile text={t("linkPhaseChange")} />;
   }
 }
 

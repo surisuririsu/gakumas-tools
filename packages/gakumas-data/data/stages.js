@@ -13,6 +13,9 @@ STAGES.forEach((stage) => {
     .map((p) => parseFloat(p));
   stage.firstTurns = { vocal: voFt, dance: daFt, visual: viFt };
   stage.effects = deserializeEffectSequence(stage.effects);
+  stage.linkTurnCounts = stage.linkTurnCounts
+    .split(",")
+    .map((p) => parseInt(p, 10));
 });
 
 const STAGES_BY_ID = STAGES.reduce((acc, cur) => {
