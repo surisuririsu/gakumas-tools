@@ -115,6 +115,9 @@ export function LoadoutContextProvider({ children }) {
     if (loadoutsHistoryString) {
       const data = JSON.parse(loadoutsHistoryString);
       setLoadouts(data[0]);
+      if (data[0][0]) {
+        setLoadout(data[0][0]);
+      }
     }
 
     setLoaded(true);
