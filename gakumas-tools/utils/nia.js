@@ -25,6 +25,7 @@ export const PARAM_ORDER_BY_IDOL = {
   10: [2, 1, 3],
   11: [2, 3, 1],
   12: [1, 3, 2],
+  13: [2, 1, 3],
 };
 
 export const BALANCE_BY_IDOL = {
@@ -40,6 +41,7 @@ export const BALANCE_BY_IDOL = {
   10: "flat",
   11: "flat",
   12: "skew",
+  13: "skew",
 };
 
 export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
