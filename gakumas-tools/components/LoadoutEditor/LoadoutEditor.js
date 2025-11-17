@@ -1,7 +1,7 @@
 "use client";
 import { useContext } from "react";
 import { useTranslations } from "next-intl";
-import ParametersInput from "@/components/ParametersInput";
+import LoadoutParams from "@/components/LoadoutParams";
 import StagePItems from "@/components/StagePItems";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import LoadoutContext from "@/contexts/LoadoutContext";
@@ -22,22 +22,12 @@ export default function LoadoutEditor({ config, idolId }) {
 
   return (
     <div className={styles.loadoutEditor}>
-      <div className={styles.params}>
-        <ParametersInput
-          parameters={loadout.params}
-          onChange={setParams}
-          withStamina
-          max={10000}
-        />
-        <div className={styles.typeMultipliers}>
-          {Object.keys(config.typeMultipliers).map((param) => (
-            <div key={param}>
-              {Math.round(config.typeMultipliers[param] * 100)}%
-            </div>
-          ))}
-          <div />
-        </div>
-      </div>
+      <LoadoutParams
+        params={loadout.params}
+        onChange={setParams}
+        withStamina
+        typeMultipliers={config.typeMultipliers}
+      />
       <div className={styles.pItemsRow}>
         <div className={styles.pItems}>
           <StagePItems

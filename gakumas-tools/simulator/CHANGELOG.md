@@ -3,6 +3,11 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+
+## 2025-11-17
+
+- Automatically sync params for link contest loadouts
+
 ## 2025-11-16
 
 - Initial implementation of link contest

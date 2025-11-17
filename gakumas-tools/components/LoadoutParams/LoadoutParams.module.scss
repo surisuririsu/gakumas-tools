@@ -1,0 +1,15 @@
+@use "../../styles/mixins";
+
+.typeMultipliers {
+  display: flex;
+  font-size: 14px;
+
+  & > div {
+    flex: 1;
+    text-align: center;
+
+    @include mixins.param-colors using ($param-color) {
+      color: $param-color;
+    }
+  }
+}

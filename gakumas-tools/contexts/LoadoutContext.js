@@ -172,6 +172,7 @@ export function LoadoutContextProvider({ children }) {
         next[currentLoadoutIndex] = loadout;
         for (let i = 0; i < next.length; i++) {
           next[i].stageId = loadout.stageId;
+          next[i].params = [...loadout.params.slice(0, 3), next[i].params[3]];
         }
         return next;
       });
