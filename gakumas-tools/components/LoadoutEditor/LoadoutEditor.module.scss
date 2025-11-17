@@ -6,26 +6,7 @@
   gap: 8px;
   padding: 0 4px;
   overflow: auto;
-}
-
-.typeMultipliers {
-  display: flex;
-  font-size: 14px;
-
-  & > div {
-    flex: 1;
-    text-align: center;
-  }
-
-  div:nth-child(1) {
-    color: #f23584;
-  }
-  div:nth-child(2) {
-    color: #1c85ed;
-  }
-  div:nth-child(3) {
-    color: #f7b12e;
-  }
+  width: 100%;
 }
 
 .pItemsRow {
