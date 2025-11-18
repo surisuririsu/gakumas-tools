@@ -12,7 +12,7 @@ import styles from "./Simulator.module.scss";
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
-  const { clear, simulatorUrl } = useContext(LoadoutContext);
+  const { clear, simulatorUrl, stage } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
 
@@ -27,30 +27,34 @@ function SimulatorButtons() {
         {t("clear")}
       </Button>
 
-      <Button
-        style="blue-secondary"
-        onClick={() => setModal(<LoadoutManagerModal />)}
-      >
-        {t("manageLoadouts")}
-      </Button>
+      {stage.type !== "linkContest" && (
+        <>
+          <Button
+            style="blue-secondary"
+            onClick={() => setModal(<LoadoutManagerModal />)}
+          >
+            {t("manageLoadouts")}
+          </Button>
 
-      <Button
-        style="blue-secondary"
-        onClick={() => {
-          navigator.clipboard.writeText(simulatorUrl);
-          setLinkCopied(true);
-          setTimeout(() => setLinkCopied(false), 3000);
-        }}
-      >
-        {linkCopied ? (
-          <FaCheck />
-        ) : (
-          <>
-            <FaRegCopy />
-            URL
-          </>
-        )}
-      </Button>
+          <Button
+            style="blue-secondary"
+            onClick={() => {
+              navigator.clipboard.writeText(simulatorUrl);
+              setLinkCopied(true);
+              setTimeout(() => setLinkCopied(false), 3000);
+            }}
+          >
+            {linkCopied ? (
+              <FaCheck />
+            ) : (
+              <>
+                <FaRegCopy />
+                URL
+              </>
+            )}
+          </Button>
+        </>
+      )}
     </div>
   );
 }
