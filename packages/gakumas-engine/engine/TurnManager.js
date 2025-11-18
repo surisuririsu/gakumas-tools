@@ -62,7 +62,7 @@ export default class TurnManager extends EngineComponent {
     return [firstTurn, ...randomTurns, ...lastThreeTurns];
   }
 
-  startTurn(state) {
+  startTurn(state, forceInitialHand = false) {
     this.logger.debug("Starting turn", state[S.turnsElapsed] + 1);
 
     this.logger.log(state, "startTurn", {
@@ -87,7 +87,7 @@ export default class TurnManager extends EngineComponent {
     }
 
     // Add forced initial hand cards
-    if (state[S.turnsElapsed] == 0) {
+    if (state[S.turnsElapsed] == 0 || forceInitialHand) {
       for (let i = 0; i < 2; i++) {
         const card = this.engine.cardManager.peekDeck(state);
         if (
@@ -142,6 +142,7 @@ export default class TurnManager extends EngineComponent {
 
     // Start next turn
     if (state[S.turnsRemaining] > 0) {
+      let forceInitialHand = false;
       const stageConfig = this.getConfig(state).stage;
       if (stageConfig.type === "linkContest") {
         const { linkPhaseChangeTurns } = stageConfig;
@@ -151,12 +152,13 @@ export default class TurnManager extends EngineComponent {
             i < this.engine.linkConfigs.length - 1
           ) {
             this.engine.changeIdol(state);
+            forceInitialHand = true;
             break;
           }
         }
       }
 
-      this.startTurn(state);
+      this.startTurn(state, forceInitialHand);
     }
   }
 }
