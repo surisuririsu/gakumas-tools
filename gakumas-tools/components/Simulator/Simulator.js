@@ -250,14 +250,14 @@ export default function Simulator() {
         <SimulatorButtons />
         {/* <div className={styles.url}>{simulatorUrl}</div> */}
         <div className={styles.subLinks}>
-          <a
+          {/* <a
             href={`https://docs.google.com/forms/d/e/1FAIpQLScNquedw8Lp2yVfZjoBFMjQxIFlX6-rkzDWIJTjWPdQVCJbiQ/viewform?usp=pp_url&entry.1787906485=${encodeURIComponent(
               simulatorUrl
             )}`}
             target="_blank"
           >
             {t("provideData")}
-          </a>
+          </a> */}
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
