@@ -88,6 +88,24 @@ if:cardRarity==SSR
 if:cardSourceType==pIdol
 ```
 
+指針が全力の場合
+
+```
+if:isFullPower
+```
+
+ボーカルターンの場合
+
+```
+if:isVocalTurn
+```
+
+前のフェーズがカード処理の場合
+
+```
+if:parentPhase==processCard
+```
+
 ## Action
 
 State changes to execute, marked with `do:`
@@ -146,11 +164,15 @@ target:deck,do:g.score+=5
 | 体力 (元気適用)            | `cost`                    |
 | スコア                     | `score`                   |
 | ステージ中使用したカード数 | `cardsUsed`               |
+| ステージ中使用したアクティブカード数 | `activeCardsUsed`     |
 | 好調                       | `goodConditionTurns`      |
 | 絶好調                     | `perfectConditionTurns`   |
 | 集中                       | `concentration`           |
 | 好印象                     | `goodImpressionTurns`     |
 | やる気                     | `motivation`              |
+| ボーカルプラン値           | `vocal`                   |
+| ダンスプラン値             | `dance`                   |
+| ビジュアルプラン値         | `visual`                  |
 | 指針 | `stance` |
 | 変更前の指針 | `prevStance` |
 | 指針固定 | `lockStanceTurns` |
@@ -172,6 +194,7 @@ target:deck,do:g.score+=5
 | 使用スキルカード効果       | `cardEffects`             |
 | 使用スキルカードの入手元   | `cardSourceType`          |
 | 使用スキルカードのレアリティ | `cardRarity`            |
+| 使用スキルカードのベース ID | `usedCardBaseId`         |
 | 集中適用倍数               | `concentrationMultiplier` |
 | やる気適用倍数             | `motivationMultiplier`    |
 | 好調効果適用倍数 | `goodConditionTurnsMultiplier` |
@@ -179,6 +202,19 @@ target:deck,do:g.score+=5
 | メンタルカード使用不可 | `noMentalTurns` |
 | 不調 | `poorConditionTurns` |
 | ターン内使用したカード数 | `turnCardsUsed` |
+| 保留カード数 | `numHeldCards` |
+| 除外カード数 | `numRemovedCards` |
+| 前のフェーズ | `parentPhase` |
+| 指針変更回数 | `stanceChangedTimes` |
+| ボーカルターンかどうか | `isVocalTurn` |
+| ダンスターンかどうか | `isDanceTurn` |
+| ビジュアルターンかどうか | `isVisualTurn` |
+| 指針が強気かどうか | `isStrength` |
+| 指針が温存かどうか | `isPreservation` |
+| 指針が全力かどうか | `isFullPower` |
+| 好印象の増加量 | `goodImpressionTurnsDelta` |
+| 集中の増加量 | `concentrationDelta` |
+| 元気の増加量 | `genkiDelta` |
 
 
 ## Growth variables
