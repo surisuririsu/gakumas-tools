@@ -68,12 +68,24 @@ at:startOfTurn
 
 Conditions that must be met for the effect to activate, marked with `if:`
 
-### Example
+### Examples
 
 好印象が 4 以上の場合
 
 ```
 if:goodImpressionTurns>=4
+```
+
+使用スキルカードのレアリティが SSR の場合
+
+```
+if:cardRarity==SSR
+```
+
+使用スキルカードの入手元がプロデュースアイドルの場合
+
+```
+if:cardSourceType==pIdol
 ```
 
 ## Action
@@ -158,6 +170,8 @@ target:deck,do:g.score+=5
 | 低下状態無効               | `nullifyDebuff`           |
 | 使用スキルカード強化前 ID  | `usedCardId`              |
 | 使用スキルカード効果       | `cardEffects`             |
+| 使用スキルカードの入手元   | `cardSourceType`          |
+| 使用スキルカードのレアリティ | `cardRarity`            |
 | 集中適用倍数               | `concentrationMultiplier` |
 | やる気適用倍数             | `motivationMultiplier`    |
 | 好調効果適用倍数 | `goodConditionTurnsMultiplier` |
