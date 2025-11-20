@@ -16,13 +16,4 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      <IdolIcon idolId={6} />
-      「伊藤舞音のおいでよ まおーこく」だい8かい
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://www.youtube.com/watch?v=iQNQIn3C7zk",
-};
+export const OSHI_PROPS = null;
