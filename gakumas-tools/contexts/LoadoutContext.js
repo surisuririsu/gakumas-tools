@@ -7,16 +7,12 @@ import { getSimulatorUrl } from "@/utils/simulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
-const LOADOUT_HISTORY_STORAGE_KEY = "gakumas-tools.loadout-history";
-const LOADOUTS_HISTORY_STORAGE_KEY = "gakumas-tools.loadouts-history";
-
 const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const pathname = usePathname();
   const { loadoutFromUrl, updateUrl } = useContext(LoadoutUrlContext);
 
-  const [loaded, setLoaded] = useState(false);
   const [memoryParams, setMemoryParams] = useState([null, null]);
   const [stageId, setStageId] = useState(loadoutFromUrl.stageId);
   const [customStage, setCustomStage] = useState(null);
@@ -29,8 +25,6 @@ export function LoadoutContextProvider({ children }) {
   const [customizationGroups, setCustomizationGroups] = useState(
     loadoutFromUrl.customizationGroups
   );
-  const [loadoutHistory, setLoadoutHistory] = useState([]);
-  const [loadoutsHistory, setLoadoutsHistory] = useState([]);
 
   let stage = FALLBACK_STAGE;
   if (stageId == "custom") {
@@ -93,68 +87,22 @@ export function LoadoutContextProvider({ children }) {
     }
   };
 
-  // Load history and latest loadout from local storage on mount
   useEffect(() => {
-    const loadoutHistoryString = localStorage.getItem(
-      LOADOUT_HISTORY_STORAGE_KEY
-    );
-    if (loadoutHistoryString) {
-      const data = JSON.parse(loadoutHistoryString);
-      setLoadoutHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) setLoadout(data[0]);
-    }
+    if (stage.type !== "linkContest") return;
+    if (loadouts.length == stage.linkTurnCounts.length) return;
 
-    const loadoutsHistoryString = localStorage.getItem(
-      LOADOUTS_HISTORY_STORAGE_KEY
-    );
-    if (loadoutsHistoryString) {
-      const data = JSON.parse(loadoutsHistoryString);
-      if (!loadoutFromUrl.hasDataFromParams) {
-        setLoadouts(data[0]);
-        if (data[0][0]) {
-          setLoadout(data[0][0]);
-        }
+    setLoadouts((cur) => {
+      const next = [...cur];
+      while (next.length < stage.linkTurnCounts.length) {
+        next.push(loadout);
       }
-    }
-
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
-    if (stage.type === "linkContest") {
-      if (loadouts.length <= stage.linkTurnCounts.length) {
-        setLoadouts((cur) => {
-          const next = [...cur];
-          while (next.length < stage.linkTurnCounts.length) {
-            next.push(loadout);
-          }
-          return next;
-        });
-      }
-    }
+      return next;
+    });
   }, [stage]);
-
-  // Update local storage when history changed
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUT_HISTORY_STORAGE_KEY,
-      JSON.stringify(loadoutHistory)
-    );
-  }, [loadoutHistory]);
-
-  // Update local storage when history changed
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUTS_HISTORY_STORAGE_KEY,
-      JSON.stringify(loadoutsHistory)
-    );
-  }, [loadoutsHistory]);
 
   // Update browser URL when the loadout changes
   useEffect(() => {
-    if (!loaded || pathname !== "/simulator") return;
+    if (pathname !== "/simulator") return;
     updateUrl(loadout);
   }, [loadout]);
 
@@ -352,16 +300,6 @@ export function LoadoutContextProvider({ children }) {
     });
   }
 
-  const pushLoadoutHistory = () => {
-    if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
-    setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
-  };
-
-  const pushLoadoutsHistory = () => {
-    if (JSON.stringify(loadouts) == JSON.stringify(loadoutsHistory[0])) return;
-    setLoadoutsHistory((cur) => [loadouts, ...cur].slice(0, 10));
-  };
-
   async function saveLoadout(name) {
     const response = await fetch("/api/loadout", {
       method: "POST",
@@ -406,9 +344,6 @@ export function LoadoutContextProvider({ children }) {
         swapSkillCardIdGroups,
         stage,
         simulatorUrl,
-        loadoutHistory,
-        pushLoadoutHistory,
-        pushLoadoutsHistory,
         saveLoadout,
         fetchLoadouts,
         deleteLoadouts,

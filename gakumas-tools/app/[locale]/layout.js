@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
+import { LoadoutHistoryContextProvider } from "@/contexts/LoadoutHistoryContext";
 import { LoadoutUrlContextProvider } from "@/contexts/LoadoutUrlContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
@@ -61,12 +62,14 @@ export default async function RootLayout({ params, children }) {
                       <Suspense>
                         <LoadoutUrlContextProvider>
                           <LoadoutContextProvider>
-                            <ModalContextProvider>
-                              <div className={styles.tools}>
-                                <PinnedTools />
-                                <main>{children}</main>
-                              </div>
-                            </ModalContextProvider>
+                            <LoadoutHistoryContextProvider>
+                              <ModalContextProvider>
+                                <div className={styles.tools}>
+                                  <PinnedTools />
+                                  <main>{children}</main>
+                                </div>
+                              </ModalContextProvider>
+                            </LoadoutHistoryContextProvider>
                           </LoadoutContextProvider>
                         </LoadoutUrlContextProvider>
                       </Suspense>
