@@ -1,6 +1,5 @@
 import { memo } from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
+import { List } from "react-window";
 import MemoryCalculatorResult from "./MemoryCalculatorResult";
 
 const ROW_HEIGHT = 72;
@@ -24,18 +23,12 @@ function MemoryCalculatorResultList({ memories, idolId }) {
     <div
       style={{ height: Math.min(memories.length, WINDOW_SIZE) * ROW_HEIGHT }}
     >
-      <AutoSizer>
-        {({ width, height }) => (
-          <List
-            height={height}
-            itemCount={memories.length}
-            itemSize={ROW_HEIGHT}
-            width={width}
-          >
-            {memo(Row)}
-          </List>
-        )}
-      </AutoSizer>
+      <List
+        rowComponent={memo(Row)}
+        rowCount={memories.length}
+        rowHeight={ROW_HEIGHT}
+        rowProps={{ memories }}
+      />
     </div>
   );
 }

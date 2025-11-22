@@ -1,7 +1,6 @@
 "use client";
 import { memo } from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
+import { List } from "react-window";
 import MemorySummary from "@/components/MemorySummary";
 import MemoriesNudge from "./MemoriesNudge";
 import styles from "./Memories.module.scss";
@@ -14,7 +13,7 @@ function MemoriesList({
   setSelectedMemories,
   onPick,
 }) {
-  const Row = ({ index, style }) => {
+  const Row = ({ memories, index, style }) => {
     const memory = memories[index];
     return (
       <div className={styles.memoryTile} style={style}>
@@ -44,18 +43,12 @@ function MemoriesList({
   return (
     <div className={styles.list}>
       {memories.length ? (
-        <AutoSizer>
-          {({ width, height }) => (
-            <List
-              height={height}
-              itemCount={memories.length}
-              itemSize={110}
-              width={width}
-            >
-              {memo(Row)}
-            </List>
-          )}
-        </AutoSizer>
+        <List
+          rowComponent={memo(Row)}
+          rowCount={memories.length}
+          rowHeight={110}
+          rowProps={{ memories }}
+        />
       ) : (
         <MemoriesNudge />
       )}
