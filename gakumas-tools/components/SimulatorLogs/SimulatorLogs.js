@@ -2,8 +2,9 @@ import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
-import styles from "./SimulatorLogs.module.scss";
+import { structureLogs } from "@/utils/simulator";
 import Logs from "./Logs";
+import styles from "./SimulatorLogs.module.scss";
 
 function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
   const t = useTranslations("SimulatorResult");
@@ -28,40 +29,7 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
     logs = maxRun.logs;
   }
 
-  if (logs) {
-    let i = 0;
-    let inTurn = false;
-
-    function getLogGroup() {
-      let group = [];
-      while (i < logs.length) {
-        const log = logs[i];
-        if (log.logType == "entityStart") {
-          i++;
-          const childLogs = getLogGroup();
-          group.push({ logType: "group", entity: log.data, childLogs });
-          i++;
-        } else if (log.logType == "entityEnd") {
-          return group;
-        } else if (log.logType == "startTurn") {
-          if (inTurn) {
-            inTurn = false;
-            return group;
-          }
-          inTurn = true;
-          i++;
-          const childLogs = getLogGroup();
-          group.push({ logType: "turn", data: log.data, childLogs });
-        } else {
-          group.push(log);
-          i++;
-        }
-      }
-      return group;
-    }
-
-    structuredLogs = getLogGroup();
-  }
+  structuredLogs = structureLogs(logs);
 
   return (
     <div className={styles.simulatorLogs}>

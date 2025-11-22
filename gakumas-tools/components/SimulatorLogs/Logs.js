@@ -4,12 +4,13 @@ import AddCard from "./AddCard";
 import Diff from "./Diff";
 import Group from "./Group";
 import Hand from "./Hand";
+import InteractiveHand from "./InteractiveHand";
 import SetBuff from "./SetBuff";
 import Tile from "./Tile";
 import Turn from "./Turn";
 import styles from "./SimulatorLogs.module.scss";
 
-function Log({ line, idolId }) {
+function Log({ line, idolId, pendingDecision, onDecision }) {
   const t = useTranslations("stage");
 
   if (line.logType == "diff") {
@@ -17,13 +18,38 @@ function Log({ line, idolId }) {
   } else if (line.logType == "drawCard") {
     return <AddCard {...line.data} idolId={idolId} text={t("cardDrawn")} />;
   } else if (line.logType == "hand") {
-    return <Hand {...line.data} idolId={idolId} />;
+    if (line.isPending) {
+      return (
+        <InteractiveHand
+          {...line.data}
+          idolId={idolId}
+          pendingDecision={pendingDecision}
+          onDecision={onDecision}
+        />
+      );
+    } else {
+      return <Hand {...line.data} idolId={idolId} hideScores={!!onDecision} />;
+    }
   } else if (line.logType == "group") {
     return (
-      <Group entity={line.entity} childLogs={line.childLogs} idolId={idolId} />
+      <Group
+        entity={line.entity}
+        childLogs={line.childLogs}
+        idolId={idolId}
+        pendingDecision={pendingDecision}
+        onDecision={onDecision}
+      />
     );
   } else if (line.logType == "turn") {
-    return <Turn {...line.data} childLogs={line.childLogs} idolId={idolId} />;
+    return (
+      <Turn
+        {...line.data}
+        childLogs={line.childLogs}
+        idolId={idolId}
+        pendingDecision={pendingDecision}
+        onDecision={onDecision}
+      />
+    );
   } else if (line.logType == "setScoreBuff") {
     return <SetBuff label={t("scoreBuff")} {...line.data} />;
   } else if (line.logType == "setScoreDebuff") {
@@ -93,11 +119,17 @@ function Log({ line, idolId }) {
   }
 }
 
-function Logs({ logs, idolId }) {
+function Logs({ logs, idolId, pendingDecision, onDecision }) {
   return (
     <div className={styles.logs}>
       {logs.map((line, i) => (
-        <Log key={i} line={line} idolId={idolId} />
+        <Log
+          key={i}
+          line={line}
+          idolId={idolId}
+          pendingDecision={pendingDecision}
+          onDecision={onDecision}
+        />
       ))}
     </div>
   );

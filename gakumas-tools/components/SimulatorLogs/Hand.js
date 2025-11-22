@@ -2,107 +2,13 @@ import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
-import { ALL_FIELDS, S } from "gakumas-engine";
 import EntityIcon from "@/components/EntityIcon";
 import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
+import HandState from "./HandState";
 import styles from "./SimulatorLogs.module.scss";
 
-function HandStateLine({ k, state }) {
-  const t = useTranslations("stage");
-
-  let content = null;
-  if (k == S.scoreBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("scoreBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.scoreDebuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("scoreDebuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.goodImpressionTurnsBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("goodImpressionTurnsBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.goodImpressionTurnsEffectBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("goodImpressionTurnsEffectBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.motivationBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("motivationBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.goodConditionTurnsBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("goodConditionTurnsBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.concentrationBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("concentrationBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else if (k == S.fullPowerChargeBuffs) {
-    content = state[k].map(({ amount, turns }) => (
-      <div key={turns}>
-        {t("fullPowerChargeBuff")}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
-      </div>
-    ));
-  } else {
-    content = (
-      <div>
-        {t(ALL_FIELDS[k])}{" "}
-        <span className={styles.blue}>
-          {isNaN(state[k]) ? t(state[k]) : state[k]}
-        </span>
-      </div>
-    );
-  }
-
-  return content;
-}
-
-function HandState({ state }) {
-  const t = useTranslations("stage");
-
-  return (
-    <div className={styles.state}>
-      {Object.keys(state).map((k) => (
-        <HandStateLine key={k} k={k} state={state} />
-      ))}
-    </div>
-  );
-}
-
-function Hand({ handCards, scores, selectedIndex, state, idolId }) {
+function Hand({ handCards, scores, selectedIndex, state, idolId, hideScores }) {
   const t = useTranslations("stage");
 
   const [expanded, setExpanded] = useState(false);
@@ -136,9 +42,11 @@ function Hand({ handCards, scores, selectedIndex, state, idolId }) {
               />
             </div>
             {SkillCards.getById(card.id).name}
-            <span className={styles.cardScore}>
-              {scores[i] == -Infinity ? t("unplayable") : scores[i]}
-            </span>
+            {!hideScores && (
+              <span className={styles.cardScore}>
+                {scores[i] == -Infinity ? t("unplayable") : scores[i]}
+              </span>
+            )}
           </div>
         ))}
       </div>
