@@ -1,13 +1,9 @@
 "use client";
-import { createContext, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Stages } from "gakumas-data";
 import { usePathname } from "@/i18n/routing";
-import {
-  loadoutFromSearchParams,
-  getSimulatorUrl,
-  loadoutToSearchParams,
-} from "@/utils/simulator";
+import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
+import { getSimulatorUrl } from "@/utils/simulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
@@ -18,21 +14,20 @@ const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const initial = useMemo(() => loadoutFromSearchParams(searchParams), []);
+  const { loadoutFromUrl, updateUrl } = useContext(LoadoutUrlContext);
 
   const [loaded, setLoaded] = useState(false);
   const [memoryParams, setMemoryParams] = useState([null, null]);
-  const [stageId, setStageId] = useState(initial.stageId);
+  const [stageId, setStageId] = useState(loadoutFromUrl.stageId);
   const [customStage, setCustomStage] = useState(null);
-  const [supportBonus, setSupportBonus] = useState(initial.supportBonus);
-  const [params, setParams] = useState(initial.params);
-  const [pItemIds, setPItemIds] = useState(initial.pItemIds);
+  const [supportBonus, setSupportBonus] = useState(loadoutFromUrl.supportBonus);
+  const [params, setParams] = useState(loadoutFromUrl.params);
+  const [pItemIds, setPItemIds] = useState(loadoutFromUrl.pItemIds);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
-    initial.skillCardIdGroups
+    loadoutFromUrl.skillCardIdGroups
   );
   const [customizationGroups, setCustomizationGroups] = useState(
-    initial.customizationGroups
+    loadoutFromUrl.customizationGroups
   );
   const [loadoutHistory, setLoadoutHistory] = useState([]);
   const [loadoutsHistory, setLoadoutsHistory] = useState([]);
@@ -106,7 +101,7 @@ export function LoadoutContextProvider({ children }) {
     if (loadoutHistoryString) {
       const data = JSON.parse(loadoutHistoryString);
       setLoadoutHistory(data);
-      if (!initial.hasDataFromParams) setLoadout(data[0]);
+      if (!loadoutFromUrl.hasDataFromParams) setLoadout(data[0]);
     }
 
     const loadoutsHistoryString = localStorage.getItem(
@@ -114,7 +109,7 @@ export function LoadoutContextProvider({ children }) {
     );
     if (loadoutsHistoryString) {
       const data = JSON.parse(loadoutsHistoryString);
-      if (!initial.hasDataFromParams) {
+      if (!loadoutFromUrl.hasDataFromParams) {
         setLoadouts(data[0]);
         if (data[0][0]) {
           setLoadout(data[0][0]);
@@ -160,16 +155,7 @@ export function LoadoutContextProvider({ children }) {
   // Update browser URL when the loadout changes
   useEffect(() => {
     if (!loaded || pathname !== "/simulator") return;
-    const url = new URL(window.location);
-    if (stage.type === "linkContest") {
-      if (url.searchParams.size) {
-        window.history.replaceState(null, "", url.pathname);
-        return;
-      }
-    } else {
-      url.search = loadoutToSearchParams(loadout).toString();
-      window.history.replaceState(null, "", url);
-    }
+    updateUrl(loadout);
   }, [loadout]);
 
   // Update link loadouts when loadout changes
