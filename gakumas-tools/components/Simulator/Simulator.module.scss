@@ -46,28 +46,11 @@
   }
 }
 
-// .loadoutTabButtons {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 4px;
-//   color: colors.$white;
-// }
-
 .selectButton {
   padding: 8px;
   border-radius: 4px;
   color: colors.$white;
 }
-
-// .deleteButton {
-//   background-color: colors.$red-light;
-//   padding: 4px;
-//   border-radius: 4px;
-
-//   &:hover {
-//     background-color: colors.$red-extra-light;
-//   }
-// }
 
 .loadoutSummary {
   flex: 1;

@@ -1,0 +1,51 @@
+@use "../../styles/colors";
+
+.manualPlay {
+  flex: 1;
+  max-width: min(100%, 800px);
+  padding: 4px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: colors.$black-dark;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 4px;
+  margin-bottom: 24px;
+  font-size: 12px;
+}
+
+.holdCard {
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 2px solid colors.$gray-light;
+  border-radius: 8px;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: colors.$blue;
+  }
+
+  &.selected {
+    border-color: colors.$gk-orange;
+    background: colors.$gk-orange-extra-light;
+    box-shadow: 0 0 8px colors.$gk-orange;
+  }
+}
+
+.imgWrapper {
+  width: 60px;
+}
+
+.toTop {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px;
+  color: colors.$blue;
+}

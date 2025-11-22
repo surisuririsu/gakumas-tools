@@ -195,7 +195,13 @@
     "custom": "커스텀",
     "simulate": "실행",
     "provideData": "데이터 제공하기",
-    "lastUpdated": "최종 업데이트"
+    "lastUpdated": "최종 업데이트",
+    "start": "시작",
+    "restart": "재시작"
+  },
+  "StrategyPicker": {
+    "auto": "자동",
+    "manual": "수동"
   },
   "StageSelect": {
     "placeholder": "스테이지 선택"
@@ -322,7 +328,10 @@
     "turnN": "{n} 턴",
     "average": "평균치",
     "unplayable": "사용 불가",
-    "linkPhaseChange": "Idol changed"
+    "linkPhaseChange": "Idol changed",
+    "skip": "스킵",
+    "selectCardsToHold": "{num}장의 카드를 선택",
+    "confirm": "확인"
   },
   "BoxPlot": {
     "max": "최대",

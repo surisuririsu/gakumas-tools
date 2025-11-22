@@ -195,7 +195,13 @@
     "custom": "カスタム",
     "simulate": "実行",
     "provideData": "データを提供する",
-    "lastUpdated": "最終更新"
+    "lastUpdated": "最終更新",
+    "start": "開始",
+    "restart": "再開"
+  },
+  "StrategyPicker": {
+    "auto": "自動",
+    "manual": "手動"
   },
   "StageSelect": {
     "placeholder": "ステージ選択"
@@ -322,7 +328,10 @@
     "turnN": "{n}ターン目",
     "average": "平均値",
     "unplayable": "使用不可",
-    "linkPhaseChange": "アイドル交代"
+    "linkPhaseChange": "アイドル交代",
+    "skip": "スキップ",
+    "selectCardsToHold": "{num}枚のカードを選択",
+    "confirm": "確認"
   },
   "BoxPlot": {
     "max": "最大",

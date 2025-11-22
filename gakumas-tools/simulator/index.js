@@ -1,7 +1,12 @@
 import { StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
 import { formatRun, mergeGraphDatas } from "@/utils/simulator";
 
-export function simulate(idolStageConfig, linkConfigs, strategyName, numRuns) {
+export async function simulate(
+  idolStageConfig,
+  linkConfigs,
+  strategyName,
+  numRuns
+) {
   const engine = new StageEngine(idolStageConfig, linkConfigs);
   const strategy = new STRATEGIES[strategyName](engine);
   engine.strategy = strategy;
@@ -13,7 +18,7 @@ export function simulate(idolStageConfig, linkConfigs, strategyName, numRuns) {
   let graphDatas = [];
 
   for (let i = 0; i < numRuns; i++) {
-    const result = new StagePlayer(engine, strategy).play();
+    const result = await new StagePlayer(engine, strategy).play();
 
     // Track min/average/max runs
     if (!minRun || result.score < minRun.score) {
