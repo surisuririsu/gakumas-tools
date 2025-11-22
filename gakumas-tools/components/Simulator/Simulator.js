@@ -24,6 +24,7 @@ import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
 import SimulatorResult from "@/components/SimulatorResult";
 import StageSelect from "@/components/StageSelect";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
@@ -41,13 +42,14 @@ export default function Simulator() {
     loadout,
     simulatorUrl,
     setSupportBonus,
-    pushLoadoutHistory,
-    pushLoadoutsHistory,
     loadouts,
     setLoadout,
     currentLoadoutIndex,
     setCurrentLoadoutIndex,
   } = useContext(LoadoutContext);
+  const { pushLoadoutHistory, pushLoadoutsHistory } = useContext(
+    LoadoutHistoryContext
+  );
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);

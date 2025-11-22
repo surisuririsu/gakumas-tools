@@ -3,14 +3,14 @@ import { useTranslations } from "next-intl";
 import CostRanges from "@/components/CostRanges";
 import LoadoutHistory from "@/components/LoadoutHistory";
 import DefaultCards from "@/components/DefaultCards";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import c from "@/utils/classNames";
 import styles from "./Simulator.module.scss";
 
 function SimulatorSubTools({ defaultCardIds }) {
   const t = useTranslations("SimulatorSubTools");
 
-  const { loadoutHistory } = useContext(LoadoutContext);
+  const { loadoutHistory } = useContext(LoadoutHistoryContext);
   const [activeSubTool, setActiveSubTool] = useState(null);
 
   const toggleSubTool = (subTool) => {

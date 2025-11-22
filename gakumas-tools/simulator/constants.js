@@ -19,4 +19,5 @@ export const FALLBACK_STAGE = {
     visual: 0,
   },
   effects: [],
+  linkTurnCounts: [],
 };
