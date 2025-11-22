@@ -7,6 +7,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import Navbar from "@/components/Navbar";
 import PinnedTools from "@/components/PinnedTools";
 import { DataContextProvider } from "@/contexts/DataContext";
+import { LoadoutApiContextProvider } from "@/contexts/LoadoutApiContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
 import { LoadoutHistoryContextProvider } from "@/contexts/LoadoutHistoryContext";
 import { LoadoutUrlContextProvider } from "@/contexts/LoadoutUrlContext";
@@ -62,14 +63,16 @@ export default async function RootLayout({ params, children }) {
                       <Suspense>
                         <LoadoutUrlContextProvider>
                           <LoadoutContextProvider>
-                            <LoadoutHistoryContextProvider>
-                              <ModalContextProvider>
-                                <div className={styles.tools}>
-                                  <PinnedTools />
-                                  <main>{children}</main>
-                                </div>
-                              </ModalContextProvider>
-                            </LoadoutHistoryContextProvider>
+                            <LoadoutApiContextProvider>
+                              <LoadoutHistoryContextProvider>
+                                <ModalContextProvider>
+                                  <div className={styles.tools}>
+                                    <PinnedTools />
+                                    <main>{children}</main>
+                                  </div>
+                                </ModalContextProvider>
+                              </LoadoutHistoryContextProvider>
+                            </LoadoutApiContextProvider>
                           </LoadoutContextProvider>
                         </LoadoutUrlContextProvider>
                       </Suspense>
