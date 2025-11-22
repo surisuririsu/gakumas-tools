@@ -3,8 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { FaCircleXmark, FaRegTrashCan } from "react-icons/fa6";
-import { FixedSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import { List } from "react-window";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Input from "@/components/Input";
@@ -118,18 +117,12 @@ export default function LoadoutManagerModal() {
           </div>
 
           <div className={styles.loadoutList}>
-            <AutoSizer>
-              {({ width, height }) => (
-                <List
-                  height={height}
-                  itemCount={loadouts.length}
-                  itemSize={172}
-                  width={width}
-                >
-                  {Row}
-                </List>
-              )}
-            </AutoSizer>
+            <List
+              rowComponent={Row}
+              rowCount={loadouts.length}
+              rowHeight={172}
+              rowProps={{ loadouts }}
+            />
           </div>
         </>
       )}
