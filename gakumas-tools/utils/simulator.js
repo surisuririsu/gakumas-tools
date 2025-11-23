@@ -317,14 +317,14 @@ export function structureLogs(logs) {
     let group = [];
     while (i < logs.length) {
       const log = logs[i];
-      if (log.logType == "entityStart") {
+      if (log.logType === "entityStart") {
         i++;
         const childLogs = getLogGroup();
         group.push({ logType: "group", entity: log.data, childLogs });
         i++;
-      } else if (log.logType == "entityEnd") {
+      } else if (log.logType === "entityEnd") {
         return group;
-      } else if (log.logType == "startTurn") {
+      } else if (log.logType === "startTurn") {
         if (inTurn) {
           inTurn = false;
           return group;

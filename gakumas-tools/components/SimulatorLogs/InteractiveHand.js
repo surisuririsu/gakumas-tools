@@ -66,7 +66,7 @@ function InteractiveHand({
             className={c(
               styles.handCard,
               i === selectedIndex && styles.selected,
-              scores[i] == -Infinity && styles.unusable,
+              scores[i] === -Infinity && styles.unusable,
               styles.interactive,
               !isCardUsable(i) && styles.unusable
             )}

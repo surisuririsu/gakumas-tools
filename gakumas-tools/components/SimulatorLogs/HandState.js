@@ -39,8 +39,6 @@ function HandStateLine({ k, state }) {
 }
 
 function HandState({ state }) {
-  const t = useTranslations("stage");
-
   return (
     <div className={styles.state}>
       {Object.keys(state).map((k) => (
