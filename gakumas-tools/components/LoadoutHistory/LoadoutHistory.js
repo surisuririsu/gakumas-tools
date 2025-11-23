@@ -6,7 +6,7 @@ import LoadoutSummary from "./LoadoutSummary";
 import styles from "./LoadoutHistory.module.scss";
 
 function LoadoutHistory() {
-  const { setLoadout } = useContext(LoadoutContext);
+  const { setLoadout, setLoadouts } = useContext(LoadoutContext);
   const { loadoutHistory } = useContext(LoadoutHistoryContext);
 
   return (
@@ -15,9 +15,14 @@ function LoadoutHistory() {
         <Button
           key={i}
           className={styles.summary}
-          onClick={() => setLoadout(loadout)}
+          onClick={() => {
+            setLoadout(loadout);
+            if (loadout.loadouts) {
+              setLoadouts(loadout.loadouts);
+            }
+          }}
         >
-          <LoadoutSummary loadout={loadout} setLoadout={setLoadout} />
+          <LoadoutSummary loadout={loadout} />
         </Button>
       ))}
     </div>
