@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
 import {
   loadoutFromSearchParams,
+  loadoutsFromSearchParams,
+  loadoutsToSearchParams,
   loadoutToSearchParams,
 } from "@/utils/simulator";
 
@@ -15,8 +17,12 @@ export function LoadoutUrlContextProvider({ children }) {
     () => loadoutFromSearchParams(searchParams),
     []
   );
+  const loadoutsFromUrl = useMemo(
+    () => loadoutsFromSearchParams(searchParams),
+    []
+  );
 
-  const updateUrl = (loadout) => {
+  const updateUrl = (loadout, loadouts) => {
     const url = new URL(window.location);
 
     if (loadout.stageId === "custom") {
@@ -27,18 +33,18 @@ export function LoadoutUrlContextProvider({ children }) {
     const stage = Stages.getById(loadout.stageId);
 
     if (stage.type === "linkContest") {
-      if (url.searchParams.size) {
-        window.history.replaceState(null, "", url.pathname);
-      }
-      return;
+      url.search = loadoutsToSearchParams(loadouts).toString();
+    } else {
+      url.search = loadoutToSearchParams(loadout).toString();
     }
 
-    url.search = loadoutToSearchParams(loadout).toString();
     window.history.replaceState(null, "", url);
   };
 
   return (
-    <LoadoutUrlContext.Provider value={{ loadoutFromUrl, updateUrl }}>
+    <LoadoutUrlContext.Provider
+      value={{ loadoutFromUrl, loadoutsFromUrl, updateUrl }}
+    >
       {children}
     </LoadoutUrlContext.Provider>
   );

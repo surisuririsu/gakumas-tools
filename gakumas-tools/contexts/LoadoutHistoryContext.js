@@ -9,7 +9,7 @@ const LOADOUTS_HISTORY_STORAGE_KEY = "gakumas-tools.loadouts-history";
 const LoadoutHistoryContext = createContext();
 
 export function LoadoutHistoryContextProvider({ children }) {
-  const { loadoutFromUrl } = useContext(LoadoutUrlContext);
+  const { loadoutFromUrl, loadoutsFromUrl } = useContext(LoadoutUrlContext);
   const { loadout, loadouts, setLoadout, setLoadouts } =
     useContext(LoadoutContext);
   const [loaded, setLoaded] = useState(false);
@@ -23,7 +23,19 @@ export function LoadoutHistoryContextProvider({ children }) {
     if (loadoutHistoryString) {
       const data = JSON.parse(loadoutHistoryString);
       setLoadoutHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) setLoadout(data[0]);
+
+      if (loadoutFromUrl.hasDataFromParams || loadoutsFromUrl.length) {
+        setLoaded(true);
+        return;
+      }
+
+      setLoadout(data[0]);
+      if (data[0].loadouts) {
+        setLoadouts(data[0].loadouts);
+        localStorage.removeItem(LOADOUTS_HISTORY_STORAGE_KEY);
+        setLoaded(true);
+        return;
+      }
     }
 
     const loadoutsHistoryString = localStorage.getItem(
@@ -32,11 +44,15 @@ export function LoadoutHistoryContextProvider({ children }) {
     if (loadoutsHistoryString) {
       const data = JSON.parse(loadoutsHistoryString);
       setLoadoutsHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) {
-        setLoadouts(data[0]);
-        if (data[0][0]) {
-          setLoadout(data[0][0]);
-        }
+
+      if (loadoutFromUrl.hasDataFromParams || loadoutsFromUrl.length) {
+        setLoaded(true);
+        return;
+      }
+
+      setLoadouts(data[0]);
+      if (data[0][0]) {
+        setLoadout(data[0][0]);
       }
     }
 
@@ -51,22 +67,23 @@ export function LoadoutHistoryContextProvider({ children }) {
     );
   }, [loadoutHistory]);
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUTS_HISTORY_STORAGE_KEY,
-      JSON.stringify(loadoutsHistory)
-    );
-  }, [loadoutsHistory]);
-
   const pushLoadoutHistory = () => {
-    if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
+    if (JSON.stringify(loadout) === JSON.stringify(loadoutHistory[0])) return;
     setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
   };
 
   const pushLoadoutsHistory = () => {
-    if (JSON.stringify(loadouts) == JSON.stringify(loadoutsHistory[0])) return;
-    setLoadoutsHistory((cur) => [loadouts, ...cur].slice(0, 10));
+    if (JSON.stringify(loadouts) === JSON.stringify(loadoutHistory[0].loadouts))
+      return;
+    setLoadoutHistory((cur) =>
+      [
+        {
+          ...loadouts[0],
+          loadouts,
+        },
+        ...cur,
+      ].slice(0, 10)
+    );
   };
 
   return (
