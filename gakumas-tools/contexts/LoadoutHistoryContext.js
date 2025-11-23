@@ -9,7 +9,7 @@ const LOADOUTS_HISTORY_STORAGE_KEY = "gakumas-tools.loadouts-history";
 const LoadoutHistoryContext = createContext();
 
 export function LoadoutHistoryContextProvider({ children }) {
-  const { loadoutFromUrl } = useContext(LoadoutUrlContext);
+  const { loadoutFromUrl, loadoutsFromUrl } = useContext(LoadoutUrlContext);
   const { loadout, loadouts, setLoadout, setLoadouts } =
     useContext(LoadoutContext);
   const [loaded, setLoaded] = useState(false);
@@ -23,13 +23,18 @@ export function LoadoutHistoryContextProvider({ children }) {
     if (loadoutHistoryString) {
       const data = JSON.parse(loadoutHistoryString);
       setLoadoutHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) {
-        setLoadout(data[0]);
-        if (data[0].loadouts) {
-          setLoadouts(data[0].loadouts);
-          localStorage.removeItem(LOADOUTS_HISTORY_STORAGE_KEY);
-          return;
-        }
+
+      if (loadoutFromUrl.hasDataFromParams || loadoutsFromUrl.length) {
+        setLoaded(true);
+        return;
+      }
+
+      setLoadout(data[0]);
+      if (data[0].loadouts) {
+        setLoadouts(data[0].loadouts);
+        localStorage.removeItem(LOADOUTS_HISTORY_STORAGE_KEY);
+        setLoaded(true);
+        return;
       }
     }
 
@@ -39,11 +44,15 @@ export function LoadoutHistoryContextProvider({ children }) {
     if (loadoutsHistoryString) {
       const data = JSON.parse(loadoutsHistoryString);
       setLoadoutsHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) {
-        setLoadouts(data[0]);
-        if (data[0][0]) {
-          setLoadout(data[0][0]);
-        }
+
+      if (loadoutFromUrl.hasDataFromParams || loadoutsFromUrl.length) {
+        setLoaded(true);
+        return;
+      }
+
+      setLoadouts(data[0]);
+      if (data[0][0]) {
+        setLoadout(data[0][0]);
       }
     }
 
