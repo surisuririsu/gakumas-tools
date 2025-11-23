@@ -42,7 +42,7 @@ export default function HoldModal({ decision, onDecision, idolId }) {
                 <EntityIcon
                   type={EntityTypes.SKILL_CARD}
                   id={card.id}
-                  customizations={card.c}
+                  customizations={card.c11n}
                   idolId={idolId}
                   size="fill"
                 />

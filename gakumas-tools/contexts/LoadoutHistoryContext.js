@@ -68,12 +68,12 @@ export function LoadoutHistoryContextProvider({ children }) {
   }, [loadoutHistory]);
 
   const pushLoadoutHistory = () => {
-    if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
+    if (JSON.stringify(loadout) === JSON.stringify(loadoutHistory[0])) return;
     setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
   };
 
   const pushLoadoutsHistory = () => {
-    if (JSON.stringify(loadouts) == JSON.stringify(loadoutHistory[0].loadouts))
+    if (JSON.stringify(loadouts) === JSON.stringify(loadoutHistory[0].loadouts))
       return;
     setLoadoutHistory((cur) =>
       [
