@@ -6,7 +6,7 @@ import Image from "@/components/Image";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
 
-function Group({ entity, childLogs, idolId }) {
+function Group({ entity, childLogs, idolId, pendingDecision, onDecision }) {
   const t = useTranslations("stage");
 
   let resolvedEntity = null;
@@ -49,7 +49,12 @@ function Group({ entity, childLogs, idolId }) {
         )}
       </div>
       <div className={styles.childLogs}>
-        <Logs logs={childLogs} idolId={idolId} />
+        <Logs
+          logs={childLogs}
+          idolId={idolId}
+          pendingDecision={pendingDecision}
+          onDecision={onDecision}
+        />
       </div>
     </div>
   );

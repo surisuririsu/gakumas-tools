@@ -6,13 +6,18 @@ export default class StagePlayer {
     this.strategy = strategy;
   }
 
-  play() {
+  async play() {
     this.engine.logger.reset();
     let state = this.engine.getInitialState();
     state = this.engine.startStage(state);
 
     while (state[S.turnsRemaining] > 0) {
-      state = this.strategy.evaluate(state).state;
+      const decision = await this.strategy.evaluate(state);
+      try {
+        state = this.engine.executeDecision(state, decision);
+      } catch (e) {
+        state = await this.strategy.handleException(e, state, decision);
+      }
     }
 
     return {

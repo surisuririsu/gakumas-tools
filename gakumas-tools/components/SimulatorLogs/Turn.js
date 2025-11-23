@@ -4,7 +4,15 @@ import Logs from "./Logs";
 import c from "@/utils/classNames";
 import styles from "./SimulatorLogs.module.scss";
 
-function Turn({ num, type, multiplier, childLogs, idolId }) {
+function Turn({
+  num,
+  type,
+  multiplier,
+  childLogs,
+  idolId,
+  pendingDecision,
+  onDecision,
+}) {
   const t = useTranslations("stage");
 
   return (
@@ -16,7 +24,12 @@ function Turn({ num, type, multiplier, childLogs, idolId }) {
         </span>
       </div>
       <div className={styles.childLogs}>
-        <Logs logs={childLogs} idolId={idolId} />
+        <Logs
+          logs={childLogs}
+          idolId={idolId}
+          pendingDecision={pendingDecision}
+          onDecision={onDecision}
+        />
       </div>
     </div>
   );

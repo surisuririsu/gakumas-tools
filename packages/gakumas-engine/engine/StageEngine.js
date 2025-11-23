@@ -83,6 +83,16 @@ export default class StageEngine {
     return this.cardManager.isCardUsable(state, card);
   }
 
+  executeDecision(state, decision) {
+    if (decision.state) {
+      return decision.state;
+    } else if (decision.card !== null) {
+      return this.useCard(state, decision.card);
+    } else {
+      return this.endTurn(state);
+    }
+  }
+
   useCard(prevState, card) {
     const state = deepCopy(prevState);
     this.cardManager.useCard(state, card);

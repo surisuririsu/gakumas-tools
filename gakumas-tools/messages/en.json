@@ -195,7 +195,13 @@
     "custom": "Custom",
     "simulate": "Simulate",
     "provideData": "Provide data",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "start": "Start",
+    "restart": "Restart"
+  },
+  "StrategyPicker": {
+    "auto": "Auto",
+    "manual": "Manual"
   },
   "StageSelect": {
     "placeholder": "Select stage"
@@ -322,7 +328,10 @@
     "turnN": "Turn {n}",
     "average": "Average",
     "unplayable": "Unplayable",
-    "linkPhaseChange": "Idol changed"
+    "linkPhaseChange": "Idol changed",
+    "skip": "Skip",
+    "selectCardsToHold": "Select {num} {num, plural, =1 {card} other {cards}} to hold",
+    "confirm": "Confirm"
   },
   "BoxPlot": {
     "max": "Max",
