@@ -19,9 +19,16 @@ const DEFAULTS = {
 
 const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
 
-export function getSimulatorUrl(loadout) {
-  const searchParams = loadoutToSearchParams(loadout);
-  return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
+export function getSimulatorUrl(loadout, loadouts) {
+  if (loadout.stageId === "custom") return null;
+  const stage = Stages.getById(loadout.stageId);
+  if (stage.type === "linkContest") {
+    const searchParams = loadoutsToSearchParams(loadouts);
+    return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
+  } else {
+    const searchParams = loadoutToSearchParams(loadout);
+    return `${SIMULATOR_BASE_URL}/?${searchParams.toString()}`;
+  }
 }
 
 export function loadoutFromSearchParams(searchParams) {
@@ -77,7 +84,9 @@ export function loadoutToSearchParams(loadout) {
   } = loadout;
   const searchParams = new URLSearchParams();
   searchParams.set("stage", stageId);
-  searchParams.set("support_bonus", supportBonus);
+  if (supportBonus) {
+    searchParams.set("support_bonus", supportBonus);
+  }
   searchParams.set("params", serializeIds(params));
   searchParams.set("items", serializeIds(pItemIds));
   searchParams.set("cards", skillCardIdGroups.map(serializeIds).join("_"));
@@ -85,6 +94,33 @@ export function loadoutToSearchParams(loadout) {
     "customizations",
     customizationGroups.map(serializeCustomizations).join("_")
   );
+  return searchParams;
+}
+
+export function loadoutsFromSearchParams(searchParams) {
+  let loadouts = [];
+  const loadoutParams = searchParams.getAll("loadout");
+  for (let param of loadoutParams) {
+    const paramString = decodeURIComponent(param);
+    const paramSearchParams = new URLSearchParams(paramString);
+    const loadout = loadoutFromSearchParams(paramSearchParams);
+    loadouts.push(loadout);
+  }
+  return loadouts;
+}
+
+export function loadoutsToSearchParams(loadouts) {
+  const searchParams = new URLSearchParams();
+  for (let loadout of loadouts) {
+    const loadoutSearchParams = loadoutToSearchParams({
+      ...loadout,
+      supportBonus: null,
+    });
+    searchParams.append(
+      "loadout",
+      encodeURIComponent(loadoutSearchParams.toString())
+    );
+  }
   return searchParams;
 }
 

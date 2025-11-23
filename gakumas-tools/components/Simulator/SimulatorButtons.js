@@ -28,32 +28,32 @@ function SimulatorButtons() {
       </Button>
 
       {stage.type !== "linkContest" && (
-        <>
-          <Button
-            style="blue-secondary"
-            onClick={() => setModal(<LoadoutManagerModal />)}
-          >
-            {t("manageLoadouts")}
-          </Button>
+        <Button
+          style="blue-secondary"
+          onClick={() => setModal(<LoadoutManagerModal />)}
+        >
+          {t("manageLoadouts")}
+        </Button>
+      )}
 
-          <Button
-            style="blue-secondary"
-            onClick={() => {
-              navigator.clipboard.writeText(simulatorUrl);
-              setLinkCopied(true);
-              setTimeout(() => setLinkCopied(false), 3000);
-            }}
-          >
-            {linkCopied ? (
-              <FaCheck />
-            ) : (
-              <>
-                <FaRegCopy />
-                URL
-              </>
-            )}
-          </Button>
-        </>
+      {!!simulatorUrl && (
+        <Button
+          style="blue-secondary"
+          onClick={() => {
+            navigator.clipboard.writeText(simulatorUrl);
+            setLinkCopied(true);
+            setTimeout(() => setLinkCopied(false), 3000);
+          }}
+        >
+          {linkCopied ? (
+            <FaCheck />
+          ) : (
+            <>
+              <FaRegCopy />
+              URL
+            </>
+          )}
+        </Button>
       )}
     </div>
   );
