@@ -11,19 +11,22 @@ const LoadoutContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const pathname = usePathname();
-  const { loadoutFromUrl, updateUrl } = useContext(LoadoutUrlContext);
+  const { loadoutFromUrl, loadoutsFromUrl, updateUrl } =
+    useContext(LoadoutUrlContext);
+
+  const initialLoadout = loadoutsFromUrl[0] || loadoutFromUrl;
 
   const [memoryParams, setMemoryParams] = useState([null, null]);
-  const [stageId, setStageId] = useState(loadoutFromUrl.stageId);
+  const [stageId, setStageId] = useState(initialLoadout.stageId);
   const [customStage, setCustomStage] = useState(null);
-  const [supportBonus, setSupportBonus] = useState(loadoutFromUrl.supportBonus);
-  const [params, setParams] = useState(loadoutFromUrl.params);
-  const [pItemIds, setPItemIds] = useState(loadoutFromUrl.pItemIds);
+  const [supportBonus, setSupportBonus] = useState(initialLoadout.supportBonus);
+  const [params, setParams] = useState(initialLoadout.params);
+  const [pItemIds, setPItemIds] = useState(initialLoadout.pItemIds);
   const [skillCardIdGroups, setSkillCardIdGroups] = useState(
-    loadoutFromUrl.skillCardIdGroups
+    initialLoadout.skillCardIdGroups
   );
   const [customizationGroups, setCustomizationGroups] = useState(
-    loadoutFromUrl.customizationGroups
+    initialLoadout.customizationGroups
   );
 
   let stage = FALLBACK_STAGE;
@@ -55,9 +58,11 @@ export function LoadoutContextProvider({ children }) {
   );
 
   const [currentLoadoutIndex, setCurrentLoadoutIndex] = useState(0);
-  const [loadouts, setLoadouts] = useState([loadout]);
+  const [loadouts, setLoadouts] = useState(
+    loadoutsFromUrl.length ? loadoutsFromUrl : [loadout]
+  );
 
-  const simulatorUrl = getSimulatorUrl(loadout);
+  const simulatorUrl = getSimulatorUrl(loadout, loadouts);
 
   const setLoadout = (loadout) => {
     setStageId(loadout.stageId);
@@ -103,7 +108,7 @@ export function LoadoutContextProvider({ children }) {
   // Update browser URL when the loadout changes
   useEffect(() => {
     if (pathname !== "/simulator") return;
-    updateUrl(loadout);
+    updateUrl(loadout, loadouts);
   }, [loadout]);
 
   // Update link loadouts when loadout changes

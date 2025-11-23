@@ -23,7 +23,14 @@ export function LoadoutHistoryContextProvider({ children }) {
     if (loadoutHistoryString) {
       const data = JSON.parse(loadoutHistoryString);
       setLoadoutHistory(data);
-      if (!loadoutFromUrl.hasDataFromParams) setLoadout(data[0]);
+      if (!loadoutFromUrl.hasDataFromParams) {
+        setLoadout(data[0]);
+        if (data[0].loadouts) {
+          setLoadouts(data[0].loadouts);
+          localStorage.removeItem(LOADOUTS_HISTORY_STORAGE_KEY);
+          return;
+        }
+      }
     }
 
     const loadoutsHistoryString = localStorage.getItem(
@@ -51,22 +58,23 @@ export function LoadoutHistoryContextProvider({ children }) {
     );
   }, [loadoutHistory]);
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      LOADOUTS_HISTORY_STORAGE_KEY,
-      JSON.stringify(loadoutsHistory)
-    );
-  }, [loadoutsHistory]);
-
   const pushLoadoutHistory = () => {
     if (JSON.stringify(loadout) == JSON.stringify(loadoutHistory[0])) return;
     setLoadoutHistory((cur) => [loadout, ...cur].slice(0, 10));
   };
 
   const pushLoadoutsHistory = () => {
-    if (JSON.stringify(loadouts) == JSON.stringify(loadoutsHistory[0])) return;
-    setLoadoutsHistory((cur) => [loadouts, ...cur].slice(0, 10));
+    if (JSON.stringify(loadouts) == JSON.stringify(loadoutHistory[0].loadouts))
+      return;
+    setLoadoutHistory((cur) =>
+      [
+        {
+          ...loadouts[0],
+          loadouts,
+        },
+        ...cur,
+      ].slice(0, 10)
+    );
   };
 
   return (
