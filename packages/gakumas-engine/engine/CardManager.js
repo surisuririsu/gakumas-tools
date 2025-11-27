@@ -871,7 +871,7 @@ export default class CardManager extends EngineComponent {
     } else if (/^effect\(.+\)$/.test(target)) {
       const effect = target.match(/^effect\((.+)\)/)[1];
       for (let k = 0; k < state[S.cardMap].length; k++) {
-        if (this.this.getCardEffects(state, k).has(effect)) {
+        if (this.getCardEffects(state, k).has(effect)) {
           targetCards.add(k);
         }
       }
