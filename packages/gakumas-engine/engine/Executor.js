@@ -24,94 +24,8 @@ export default class Executor extends EngineComponent {
     super(engine);
 
     this.specialActions = {
-      // Cards
-      drawCard: (state) => engine.cardManager.drawCard(state),
-      upgradeHand: (state) => engine.cardManager.upgradeHand(state),
-      exchangeHand: (state) => engine.cardManager.exchangeHand(state),
-      upgradeRandomCardInHand: (state) =>
-        engine.cardManager.upgradeRandomCardInHand(state),
-      addRandomUpgradedCardToHand: (state) =>
-        engine.cardManager.addRandomUpgradedCardToHand(state),
-      addCardToTopOfDeck: (state, cardId) =>
-        engine.cardManager.addCardToTopOfDeck(state, cardId),
-      addCardToHand: (state, cardId) =>
-        engine.cardManager.addCardToHand(state, cardId),
-      moveCardToHand: (state, cardId, exact) =>
-        engine.cardManager.moveCardToHand(state, cardId, parseInt(exact, 10)),
-      moveCardToHandFromRemoved: (state, cardBaseId) =>
-        engine.cardManager.moveCardToHandFromRemoved(state, cardBaseId),
-      moveSSRToTopOfDeck: (state, num) =>
-        engine.cardManager.moveSSRToTopOfDeck(state, num),
-      moveSSRToHand: (state, num) =>
-        engine.cardManager.moveSSRToHand(state, num),
-      holdCard: (state, cardBaseId) =>
-        engine.cardManager.holdCard(state, parseInt(cardBaseId, 10)),
-      holdThisCard: (state) => engine.cardManager.holdThisCard(state),
-      holdSelectedFromHand: (state, num = 1) =>
-        engine.cardManager.holdSelectedFrom(state, ["hand"], num),
-      holdSelectedFromDeck: (state, num = 1) =>
-        engine.cardManager.holdSelectedFrom(state, ["deck"], num),
-      holdSelectedFromDeckOrDiscards: (state, num = 1) =>
-        engine.cardManager.holdSelectedFrom(state, ["deck", "discards"], num),
-      addHeldCardsToHand: (state) =>
-        engine.cardManager.addHeldCardsToHand(state),
-      removeTroubleFromDeckOrDiscards: (state) =>
-        engine.cardManager.removeTroubleFromDeckOrDiscards(state),
-      moveActiveCardsToDeckFromRemoved: (state) =>
-        engine.cardManager.moveActiveCardsToDeckFromRemoved(state),
-
-      // Buffs
-      setScoreBuff: (state, amount, turns) =>
-        engine.buffManager.setScoreBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setScoreDebuff: (state, amount, turns) =>
-        engine.buffManager.setScoreDebuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setGoodImpressionTurnsBuff: (state, amount, turns) =>
-        engine.buffManager.setGoodImpressionTurnsBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setGoodImpressionTurnsEffectBuff: (state, amount, turns) =>
-        engine.buffManager.setGoodImpressionTurnsEffectBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setMotivationBuff: (state, amount, turns) =>
-        engine.buffManager.setMotivationBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setGoodConditionTurnsBuff: (state, amount, turns) =>
-        engine.buffManager.setGoodConditionTurnsBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setConcentrationBuff: (state, amount, turns) =>
-        engine.buffManager.setConcentrationBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      setFullPowerChargeBuff: (state, amount, turns) =>
-        engine.buffManager.setFullPowerChargeBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null
-        ),
-      removeDebuffs: (state, amount) =>
-        engine.buffManager.removeDebuffs(state, parseInt(amount, 10)),
-      setStance: (state, stance) => engine.buffManager.setStance(state, stance),
+      ...this.engine.cardManager.specialActions,
+      ...this.engine.buffManager.specialActions,
     };
 
     this.intermediateResolvers = {
@@ -126,6 +40,7 @@ export default class Executor extends EngineComponent {
       concentration: (...args) => this.resolveConcentration(...args),
       genki: (...args) => this.resolveGenki(...args),
       stamina: (...args) => this.resolveStamina(...args),
+      enthusiasm: (...args) => this.resolveEnthusiasm(...args),
       fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args),
     };
   }
@@ -399,6 +314,7 @@ export default class Executor extends EngineComponent {
     // Apply growth
     if (growth[S["g.cost"]]) {
       cost += growth[S["g.cost"]];
+      if (cost > 0) cost = 0;
     }
 
     // Apply stance
@@ -626,6 +542,16 @@ export default class Executor extends EngineComponent {
     if (stamina < 0) {
       state[S.consumedStamina] -= stamina;
     }
+  }
+
+  resolveEnthusiasm(state, enthusiasm) {
+    enthusiasm += state[S.enthusiasmBonus];
+    enthusiasm *= state[S.enthusiasmMultiplier];
+    enthusiasm *= state[S.enthusiasmBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.enthusiasm] += enthusiasm;
   }
 
   resolveFullPowerCharge(state, fullPowerCharge) {

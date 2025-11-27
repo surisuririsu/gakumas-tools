@@ -1,6 +1,18 @@
 import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
 import { deepCopy } from "../utils";
 
+const LOGGED_BUFFS_FIELDS = [
+  S.scoreBuffs,
+  S.scoreDebuffs,
+  S.goodImpressionTurnsBuffs,
+  S.goodImpressionTurnsEffectBuffs,
+  S.motivationBuffs,
+  S.goodConditionTurnsBuffs,
+  S.concentrationBuffs,
+  S.enthusiasmBuffs,
+  S.fullPowerChargeBuffs,
+];
+
 export default class StageLogger {
   initializeState(state) {
     state.logs = [];
@@ -58,36 +70,13 @@ export default class StageLogger {
         res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
       }
     }
-    if (state[S.scoreBuffs].length) {
-      res[S.scoreBuffs] = deepCopy(state[S.scoreBuffs]);
+
+    for (let field of LOGGED_BUFFS_FIELDS) {
+      if (state[field]?.length) {
+        res[field] = deepCopy(state[field]);
+      }
     }
-    if (state[S.scoreDebuffs].length) {
-      res[S.scoreDebuffs] = deepCopy(state[S.scoreDebuffs]);
-    }
-    if (state[S.goodImpressionTurnsBuffs].length) {
-      res[S.goodImpressionTurnsBuffs] = deepCopy(
-        state[S.goodImpressionTurnsBuffs]
-      );
-    }
-    if (state[S.goodImpressionTurnsEffectBuffs].length) {
-      res[S.goodImpressionTurnsEffectBuffs] = deepCopy(
-        state[S.goodImpressionTurnsEffectBuffs]
-      );
-    }
-    if (state[S.motivationBuffs].length) {
-      res[S.motivationBuffs] = deepCopy(state[S.motivationBuffs]);
-    }
-    if (state[S.goodConditionTurnsBuffs].length) {
-      res[S.goodConditionTurnsBuffs] = deepCopy(
-        state[S.goodConditionTurnsBuffs]
-      );
-    }
-    if (state[S.concentrationBuffs].length) {
-      res[S.concentrationBuffs] = deepCopy(state[S.concentrationBuffs]);
-    }
-    if (state[S.fullPowerChargeBuffs].length) {
-      res[S.fullPowerChargeBuffs] = deepCopy(state[S.fullPowerChargeBuffs]);
-    }
+
     return res;
   }
 }

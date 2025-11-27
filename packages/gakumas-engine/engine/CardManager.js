@@ -28,6 +28,40 @@ export default class CardManager extends EngineComponent {
         this.getTargetRuleCards(state, targetRule.replaceAll("\\", "*"), null)
           .size,
     };
+
+    this.specialActions = {
+      drawCard: (state) => this.drawCard(state),
+      upgradeHand: (state) => this.upgradeHand(state),
+      exchangeHand: (state) => this.exchangeHand(state),
+      upgradeRandomCardInHand: (state) => this.upgradeRandomCardInHand(state),
+      addRandomUpgradedCardToHand: (state) =>
+        this.addRandomUpgradedCardToHand(state),
+      addCardToTopOfDeck: (state, cardId) =>
+        this.addCardToTopOfDeck(state, cardId),
+      addCardToHand: (state, cardId) => this.addCardToHand(state, cardId),
+      moveCardToHand: (state, cardId, exact) =>
+        this.moveCardToHand(state, cardId, parseInt(exact, 10)),
+      moveCardToHandFromRemoved: (state, cardBaseId) =>
+        this.moveCardToHandFromRemoved(state, cardBaseId),
+      moveSSRToTopOfDeck: (state, num) => this.moveSSRToTopOfDeck(state, num),
+      moveSSRToHand: (state, num) => this.moveSSRToHand(state, num),
+      movePreservationCardToHand: (state) =>
+        this.movePreservationCardToHand(state),
+      holdCard: (state, cardBaseId) =>
+        this.holdCard(state, parseInt(cardBaseId, 10)),
+      holdThisCard: (state) => this.holdThisCard(state),
+      holdSelectedFromHand: (state, num = 1) =>
+        this.holdSelectedFrom(state, ["hand"], num),
+      holdSelectedFromDeck: (state, num = 1) =>
+        this.holdSelectedFrom(state, ["deck"], num),
+      holdSelectedFromDeckOrDiscards: (state, num = 1) =>
+        this.holdSelectedFrom(state, ["deck", "discards"], num),
+      addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
+      removeTroubleFromDeckOrDiscards: (state) =>
+        this.removeTroubleFromDeckOrDiscards(state),
+      moveActiveCardsToDeckFromRemoved: (state) =>
+        this.moveActiveCardsToDeckFromRemoved(state),
+    };
   }
 
   initializeState(state) {
@@ -614,6 +648,29 @@ export default class CardManager extends EngineComponent {
     }
   }
 
+  movePreservationCardToHand(state) {
+    let preservationCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (this.getCardEffects(state, cardIdx).has("preservation")) {
+          preservationCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!preservationCards.length) return;
+
+    const pick =
+      preservationCards[Math.floor(getRand() * preservationCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id,
+    });
+  }
+
   moveActiveCardsToDeckFromRemoved(state) {
     let cards = state[S.cardMap]
       .map((c, i) =>
@@ -814,7 +871,7 @@ export default class CardManager extends EngineComponent {
     } else if (/^effect\(.+\)$/.test(target)) {
       const effect = target.match(/^effect\((.+)\)/)[1];
       for (let k = 0; k < state[S.cardMap].length; k++) {
-        if (this.engine.cardManager.getCardEffects(state, k).has(effect)) {
+        if (this.this.getCardEffects(state, k).has(effect)) {
           targetCards.add(k);
         }
       }
