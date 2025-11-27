@@ -27,6 +27,66 @@ export default class BuffManager extends EngineComponent {
           1
         ),
     };
+
+    this.specialActions = {
+      setScoreBuff: (state, amount, turns) =>
+        this.setScoreBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setScoreDebuff: (state, amount, turns) =>
+        this.setScoreDebuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setGoodImpressionTurnsBuff: (state, amount, turns) =>
+        this.setGoodImpressionTurnsBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setGoodImpressionTurnsEffectBuff: (state, amount, turns) =>
+        this.setGoodImpressionTurnsEffectBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setMotivationBuff: (state, amount, turns) =>
+        this.setMotivationBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setGoodConditionTurnsBuff: (state, amount, turns) =>
+        this.setGoodConditionTurnsBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setConcentrationBuff: (state, amount, turns) =>
+        this.setConcentrationBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setEnthusiasmBuff: (state, amount, turns) =>
+        this.setEnthusiasmBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      setFullPowerChargeBuff: (state, amount, turns) =>
+        this.setFullPowerChargeBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
+      removeDebuffs: (state, amount) =>
+        this.removeDebuffs(state, parseInt(amount, 10)),
+      setStance: (state, stance) => this.setStance(state, stance),
+    };
   }
 
   initializeState(state) {
@@ -52,6 +112,7 @@ export default class BuffManager extends EngineComponent {
     state[S.motivationBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
+    state[S.enthusiasmBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
 
     // Sense
@@ -150,6 +211,10 @@ export default class BuffManager extends EngineComponent {
     );
   }
 
+  setEnthusiasmBuff(state, amount, turns) {
+    this.setBuff(state, S.enthusiasmBuffs, amount, turns, "setEnthusiasmBuff");
+  }
+
   setFullPowerChargeBuff(state, amount, turns) {
     this.setBuff(
       state,
@@ -192,6 +257,7 @@ export default class BuffManager extends EngineComponent {
       S.motivationBuffs,
       S.goodConditionTurnsBuffs,
       S.concentrationBuffs,
+      S.enthusiasmBuffs,
       S.fullPowerChargeBuffs,
     ];
 

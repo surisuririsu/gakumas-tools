@@ -60,19 +60,12 @@ export const GOOD_IMPRESSION_EFFECTS = [
 export const STANCE_CHANGED_EFFECTS = [
   {
     conditions: ["prevStance==preservation", "stance!=leisure"],
-    actions: [
-      "enthusiasm+=5*enthusiasmMultiplier+enthusiasmBonus*enthusiasmMultiplier",
-      "cardUsesRemaining+=1",
-    ],
+    actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
     source: { type: "default", id: "温存" },
   },
   {
     conditions: ["prevStance==preservation2", "stance!=leisure"],
-    actions: [
-      "enthusiasm+=8*enthusiasmMultiplier+enthusiasmBonus*enthusiasmMultiplier",
-      "fixedGenki+=5",
-      "cardUsesRemaining+=1",
-    ],
+    actions: ["enthusiasm+=8", "fixedGenki+=5", "cardUsesRemaining+=1"],
     source: { type: "default", id: "温存2" },
   },
   {
@@ -88,7 +81,7 @@ export const STANCE_CHANGED_EFFECTS = [
   },
   {
     conditions: ["prevStance==leisure", "stance!=fullPower"],
-    actions: ["enthusiasm+=10+enthusiasmBonus"],
+    actions: ["enthusiasm+=10"],
     source: { type: "default", id: "のんびり" },
   },
   {
@@ -187,6 +180,7 @@ export const ALL_FIELDS = [
   "enthusiasm",
   "enthusiasmBonus",
   "enthusiasmMultiplier",
+  "enthusiasmBuffs",
   "strengthTimes",
   "preservationTimes",
   "leisureTimes",

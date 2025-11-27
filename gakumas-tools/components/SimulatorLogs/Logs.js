@@ -10,14 +10,46 @@ import Tile from "./Tile";
 import Turn from "./Turn";
 import styles from "./SimulatorLogs.module.scss";
 
+const BUFF_LOG_TYPES = {
+  setScoreBuff: "scoreBuff",
+  setScoreDebuff: "scoreDebuff",
+  setGoodImpressionTurnsBuff: "goodImpressionTurnsBuff",
+  setGoodImpressionTurnsEffectBuff: "goodImpressionTurnsEffectBuff",
+  setMotivationBuff: "motivationBuff",
+  setGoodConditionTurnsBuff: "goodConditionTurnsBuff",
+  setConcentrationBuff: "concentrationBuff",
+  setEnthusiasmBuff: "enthusiasmBuff",
+  setFullPowerChargeBuff: "fullPowerChargeBuff",
+};
+
+const TILE_LOG_TYPES = {
+  setEffect: "setEffect",
+  upgradeHand: "upgradedHand",
+  exchangeHand: "exchangedHand",
+  linkPhaseChange: "linkPhaseChange",
+};
+
+const ADD_CARD_LOG_TYPES = {
+  drawCard: "cardDrawn",
+  addCardToHand: "addedCardToHand",
+  addCardToTopOfDeck: "addedCardToTopOfDeck",
+  upgradeRandomCardInHand: "upgradedCard",
+  growth: "cardGrowth",
+  holdCard: "heldCard",
+  discardCard: "discardedCard",
+  moveCardToHand: "movedCardToHand",
+  moveCardToTopOfDeck: "movedCardToTopOfDeck",
+  moveCardToDeckAtRandom: "movedCardToDeckAtRandom",
+};
+
 function Log({ line, idolId, pendingDecision, onDecision }) {
   const t = useTranslations("stage");
 
   if (line.logType == "diff") {
     return <Diff {...line.data} />;
-  } else if (line.logType == "drawCard") {
-    return <AddCard {...line.data} idolId={idolId} text={t("cardDrawn")} />;
-  } else if (line.logType == "hand") {
+  }
+
+  if (line.logType == "hand") {
     if (line.isPending) {
       return (
         <InteractiveHand
@@ -50,72 +82,24 @@ function Log({ line, idolId, pendingDecision, onDecision }) {
         onDecision={onDecision}
       />
     );
-  } else if (line.logType == "setScoreBuff") {
-    return <SetBuff label={t("scoreBuff")} {...line.data} />;
-  } else if (line.logType == "setScoreDebuff") {
-    return <SetBuff label={t("scoreDebuff")} {...line.data} />;
-  } else if (line.logType == "setGoodImpressionTurnsBuff") {
-    return <SetBuff label={t("goodImpressionTurnsBuff")} {...line.data} />;
-  } else if (line.logType == "setGoodImpressionTurnsEffectBuff") {
-    return (
-      <SetBuff label={t("goodImpressionTurnsEffectBuff")} {...line.data} />
-    );
-  } else if (line.logType == "setMotivationBuff") {
-    return <SetBuff label={t("motivationBuff")} {...line.data} />;
-  } else if (line.logType == "setGoodConditionTurnsBuff") {
-    return <SetBuff label={t("goodConditionTurnsBuff")} {...line.data} />;
-  } else if (line.logType == "setConcentrationBuff") {
-    return <SetBuff label={t("concentrationBuff")} {...line.data} />;
-  } else if (line.logType == "setFullPowerChargeBuff") {
-    return <SetBuff label={t("fullPowerChargeBuff")} {...line.data} />;
-  } else if (line.logType == "setEffect") {
-    return <Tile text={t("setEffect")} />;
-  } else if (line.logType == "upgradeHand") {
-    return <Tile text={t("upgradedHand")} />;
-  } else if (line.logType == "exchangeHand") {
-    return <Tile text={t("exchangedHand")} />;
-  } else if (line.logType == "addCardToHand") {
-    return (
-      <AddCard {...line.data} idolId={idolId} text={t("addedCardToHand")} />
-    );
-  } else if (line.logType == "addCardToTopOfDeck") {
+  }
+
+  if (BUFF_LOG_TYPES[line.logType]) {
+    return <SetBuff label={t(BUFF_LOG_TYPES[line.logType])} {...line.data} />;
+  }
+
+  if (TILE_LOG_TYPES[line.logType]) {
+    return <Tile text={t(TILE_LOG_TYPES[line.logType])} />;
+  }
+
+  if (ADD_CARD_LOG_TYPES[line.logType]) {
     return (
       <AddCard
         {...line.data}
         idolId={idolId}
-        text={t("addedCardToTopOfDeck")}
+        text={t(ADD_CARD_LOG_TYPES[line.logType])}
       />
     );
-  } else if (line.logType == "upgradeRandomCardInHand") {
-    return <AddCard {...line.data} idolId={idolId} text={t("upgradedCard")} />;
-  } else if (line.logType == "growth") {
-    return <AddCard {...line.data} idolId={idolId} text={t("cardGrowth")} />;
-  } else if (line.logType == "holdCard") {
-    return <AddCard {...line.data} idolId={idolId} text={t("heldCard")} />;
-  } else if (line.logType == "discardCard") {
-    return <AddCard {...line.data} idolId={idolId} text={t("discardedCard")} />;
-  } else if (line.logType == "moveCardToHand") {
-    return (
-      <AddCard {...line.data} idolId={idolId} text={t("movedCardToHand")} />
-    );
-  } else if (line.logType == "moveCardToTopOfDeck") {
-    return (
-      <AddCard
-        {...line.data}
-        idolId={idolId}
-        text={t("movedCardToTopOfDeck")}
-      />
-    );
-  } else if (line.logType == "moveCardToDeckAtRandom") {
-    return (
-      <AddCard
-        {...line.data}
-        idolId={idolId}
-        text={t("movedCardToDeckAtRandom")}
-      />
-    );
-  } else if (line.logType == "linkPhaseChange") {
-    return <Tile text={t("linkPhaseChange")} />;
   }
 }
 
