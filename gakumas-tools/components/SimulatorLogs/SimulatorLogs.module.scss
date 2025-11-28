@@ -141,6 +141,21 @@
     padding: 16px;
   }
 
+  .stateContent {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .turnIndicatorWrapper {
+    flex-shrink: 0;
+  }
+
+  .stateLines {
+    flex: 1;
+    min-width: 0;
+  }
+
   .handCards {
     display: flex;
     align-items: stretch;

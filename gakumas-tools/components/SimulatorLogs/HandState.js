@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { ALL_FIELDS, S } from "gakumas-engine";
+import TurnIndicator from "./TurnIndicator";
 import styles from "./SimulatorLogs.module.scss";
 
 const BUFFS_MAP = {
@@ -40,11 +41,20 @@ function HandStateLine({ k, state }) {
 }
 
 function HandState({ state }) {
+  const { turn, ...rest } = state;
+
   return (
     <div className={styles.state}>
-      {Object.keys(state).map((k) => (
-        <HandStateLine key={k} k={k} state={state} />
-      ))}
+      <div className={styles.stateContent}>
+        <div className={styles.turnIndicatorWrapper}>
+          <TurnIndicator turn={turn} />
+        </div>
+        <div className={styles.stateLines}>
+          {Object.keys(rest).map((k) => (
+            <HandStateLine key={k} k={k} state={rest} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
