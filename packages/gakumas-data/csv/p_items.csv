@@ -358,6 +358,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 357,ふさわしい、私+,SSR,TRUE,logic,stage,pIdol,118,FALSE,"at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2"
 358,寝心地は良好,SSR,FALSE,logic,stage,support,,FALSE,"at:motivationIncreased,if:isDanceTurn,do:setGoodImpressionTurnsBuff(0.5,2),do:setMotivationBuff(0.5,2),limit:1"
 359,お直し刺繍セット,SR,FALSE,logic,produce,support,,FALSE,
-360,地球とランデブー！,SSR,FALSE,anomaly,stage,pIdol,119,FALSE,"at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=15,do:g.cost-=3,limit:2"
+360,地球とランデブー！,SSR,FALSE,anomaly,stage,pIdol,119,FALSE,"at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=10,do:g.cost-=4,limit:2"
 361,地球とランデブー！+,SSR,TRUE,anomaly,stage,pIdol,119,FALSE,"at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=15,do:g.cost-=3,limit:2"
 362,たたいてかぶって,SR,FALSE,anomaly,stage,support,,FALSE,"at:afterStartOfTurn,if:isDanceTurn,if:isStrength,target:hand,do:g.cost+=3,limit:1"
+363,めちゃかわプリ,SSR,FALSE,free,stage,support,,FALSE,"at:afterStartOfTurn,if:lastUsedCardType==active,do:movePIdolCardToHand,do:upgradeRandomCardInHand,limit:1"

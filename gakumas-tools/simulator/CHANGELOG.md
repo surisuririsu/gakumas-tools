@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-11-28
+
+- Update gu-su-pi-
+
 ## 2025-11-27
 
 - Add preview of gu-su-pi-
