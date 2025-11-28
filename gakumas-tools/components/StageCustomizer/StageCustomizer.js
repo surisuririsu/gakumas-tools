@@ -44,7 +44,9 @@ function StageCustomizer({ initialStage, onApply }) {
     serializeEffectSequence(initialStage.effects).replaceAll(";", ";\n")
   );
   const [defaultCardSet, setDefaultCardSet] = useState(
-    initialStage.defaultCardSet || initialStage.type
+    initialStage.defaultCardSet || initialStage.type != "linkContest"
+      ? initialStage.type
+      : "contest"
   );
 
   const DEFAULT_CARD_SET_OPTIONS = [
@@ -65,6 +67,7 @@ function StageCustomizer({ initialStage, onApply }) {
       firstTurns: normalizeFirstTurns(firstTurns),
       criteria: normalizeCriteria(criteria),
       effects: deserializeEffectSequence(effects.replace(/\s/g, "")),
+      linkTurnCounts: [],
       defaultCardSet,
     });
   }

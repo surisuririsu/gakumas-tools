@@ -26,7 +26,7 @@ export default function StageSelectModal() {
     { value: "contest", label: t("contest") },
     { value: "linkContest", label: t("linkContest") },
     { value: "event", label: t("event") },
-    // { value: "custom", label: t("custom") },
+    { value: "custom", label: t("custom") },
   ];
 
   const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
