@@ -19,9 +19,12 @@ export default class CardManager extends EngineComponent {
         this.getCardSourceType(state, state[S.usedCard]),
       cardRarity: (state) => this.getCardRarity(state, state[S.usedCard]),
       usedCardId: (state) =>
-        state[S.usedCard] && state[S.cardMap][state[S.usedCard]].id,
+        state[S.usedCard] != null && state[S.cardMap][state[S.usedCard]].id,
       usedCardBaseId: (state) =>
-        state[S.usedCard] && state[S.cardMap][state[S.usedCard]].baseId,
+        state[S.usedCard] != null && state[S.cardMap][state[S.usedCard]].baseId,
+      lastUsedCardType: (state) =>
+        state[S.lastUsedCard] != null &&
+        SkillCards.getById(state[S.cardMap][state[S.lastUsedCard]].id).type,
       numHeldCards: (state) => state[S.heldCards].length,
       numRemovedCards: (state) => state[S.removedCards].length,
       countCards: (state, targetRule) =>
@@ -47,6 +50,7 @@ export default class CardManager extends EngineComponent {
       moveSSRToHand: (state, num) => this.moveSSRToHand(state, num),
       movePreservationCardToHand: (state) =>
         this.movePreservationCardToHand(state),
+      movePIdolCardToHand: (state) => this.movePIdolCardToHand(state),
       holdCard: (state, cardBaseId) =>
         this.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => this.holdThisCard(state),
@@ -97,6 +101,8 @@ export default class CardManager extends EngineComponent {
     state[S.heldCards] = [];
     state[S.cardsUsed] = 0;
     state[S.activeCardsUsed] = 0;
+    state[S.usedCard] = null;
+    state[S.lastUsedCard] = null;
 
     state[S.pcchiCardsUsed] = 0;
     state[S.natsuyaCardsUsed] = 0;
@@ -373,8 +379,8 @@ export default class CardManager extends EngineComponent {
       );
     }
 
-    // Reset used card
-    delete state[S.usedCard];
+    state[S.lastUsedCard] = state[S.usedCard];
+    state[S.usedCard] = null;
 
     this.logger.log(state, "entityEnd", {
       type: "skillCard",
@@ -662,6 +668,28 @@ export default class CardManager extends EngineComponent {
 
     const pick =
       preservationCards[Math.floor(getRand() * preservationCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id,
+    });
+  }
+
+  movePIdolCardToHand(state) {
+    let pIdolCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (this.getCardSourceType(state, cardIdx) === "pIdol") {
+          pIdolCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!pIdolCards.length) return;
+
+    const pick = pIdolCards[Math.floor(getRand() * pIdolCards.length)];
     state[pick.pile].splice(pick.index, 1);
     state[S.handCards].push(pick.cardIdx);
 

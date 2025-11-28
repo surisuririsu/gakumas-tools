@@ -5,6 +5,7 @@ import {
   NUMBER_REGEX,
   PHASES,
   SET_OPERATOR,
+  SKILL_CARD_TYPES,
   STANCES,
   S,
   SOURCE_TYPES,
@@ -71,6 +72,11 @@ export default class Evaluator extends EngineComponent {
 
         // Rarities
         if (RARITIES.includes(tokens[0])) {
+          return tokens[0];
+        }
+
+        // Skill card types
+        if (SKILL_CARD_TYPES.includes(tokens[0])) {
           return tokens[0];
         }
 

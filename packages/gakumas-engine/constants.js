@@ -12,6 +12,7 @@ export const STANCES = [
   "leisure",
   "fullPower",
 ];
+export const SKILL_CARD_TYPES = ["active", "mental", "trouble"];
 export const SOURCE_TYPES = ["default", "produce", "pIdol", "support"];
 export const RARITIES = ["N", "R", "SR", "SSR"];
 
@@ -200,6 +201,7 @@ export const ALL_FIELDS = [
   "turnCardsUpgraded",
   "thisCardHeld",
   "usedCard",
+  "lastUsedCard",
 
   // Effects
   "effects",
