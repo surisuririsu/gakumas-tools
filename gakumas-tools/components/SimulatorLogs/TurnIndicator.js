@@ -4,20 +4,16 @@ export default function TurnIndicator({ turn }) {
   const { types, remaining, multiplier } = turn;
   const totalTurns = types.length;
   const turnsElapsed = totalTurns - remaining;
-  const gapAngle = 5; // Gap in degrees between segments
+  const gapAngle = 5;
   const segmentAngle = 360 / totalTurns;
 
-  // Only render remaining turns
   const remainingTurns = types.slice(turnsElapsed);
-
-  // Get current turn type for multiplier coloring
   const currentTurnType = types[turnsElapsed];
 
   return (
     <div className={styles.turnIndicatorContainer}>
       <div className={styles.turnIndicator}>
         <svg className={styles.ring} viewBox="0 0 100 100">
-          {/* Draw segments */}
           {remainingTurns.map((turnType, remainingIndex) => {
             const index = turnsElapsed + remainingIndex;
             const startAngle = -index * segmentAngle - gapAngle / 2;
@@ -56,6 +52,27 @@ export default function TurnIndicator({ turn }) {
               />
             );
           })}
+
+          {remainingTurns.length > 0 &&
+            (() => {
+              const firstSegmentIndex = turnsElapsed;
+              const currentStartAngle =
+                -firstSegmentIndex * segmentAngle - gapAngle / 2;
+              const currentEndAngle =
+                -(firstSegmentIndex + 1) * segmentAngle + gapAngle / 2;
+              const segmentMiddleAngle =
+                (currentStartAngle + currentEndAngle) / 2;
+              const pointerRotation = segmentMiddleAngle + 90;
+
+              return (
+                <g transform={`rotate(${pointerRotation} 50 50)`}>
+                  <polygon
+                    points="50,10 40,-2 60,-2"
+                    className={styles.pointer}
+                  />
+                </g>
+              );
+            })()}
         </svg>
 
         <div className={styles.center}>
