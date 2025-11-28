@@ -546,7 +546,6 @@ export default class Executor extends EngineComponent {
 
   resolveEnthusiasm(state, enthusiasm) {
     enthusiasm += state[S.enthusiasmBonus];
-    enthusiasm *= state[S.enthusiasmMultiplier];
     enthusiasm *= state[S.enthusiasmBuffs].reduce(
       (acc, cur) => acc + cur.amount,
       1

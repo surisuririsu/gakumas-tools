@@ -203,13 +203,26 @@ export default class HeuristicStrategy extends BaseStrategy {
 
       //Enthusiasm
       score += state[S.enthusiasm] * 5;
-      if (state[S.turnsRemaining]) {
-        score += state[S.enthusiasmBonus] * 5 * state[S.enthusiasmMultiplier];
-      }
 
       // Full power charge
       score +=
         state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
+
+      // Enthusiasm buffs
+      score +=
+        state[S.enthusiasmBuffs].reduce(
+          (acc, cur) =>
+            acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+          0
+        ) * 5;
+
+      // Full power charge buffs
+      score +=
+        state[S.fullPowerChargeBuffs].reduce(
+          (acc, cur) =>
+            acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+          0
+        ) * this.fullPowerMultiplier;
 
       // Growth
       score += this.getGrowthScore(state) * 0.2 * state[S.turnsRemaining];
@@ -284,13 +297,6 @@ export default class HeuristicStrategy extends BaseStrategy {
         (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
         0
       ) * this.concentrationMultiplier;
-
-    // Full power charge buffs
-    score +=
-      state[S.fullPowerChargeBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) * this.fullPowerMultiplier;
 
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
