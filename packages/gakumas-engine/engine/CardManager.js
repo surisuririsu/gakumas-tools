@@ -514,41 +514,29 @@ export default class CardManager extends EngineComponent {
 
   // From deck/discards
   moveCardToHand(state, cardId, exact) {
-    let cards = state[S.cardMap]
-      .map((c, i) => {
-        if (state[S.handCards].includes(i)) return -1;
-        if (exact && c.id == cardId) return i;
-        if (!exact && c.baseId == cardId) return i;
-        return -1;
-      })
-      .filter((i) => i != -1);
-
-    if (!cards.length) return;
-
-    const card = cards[Math.floor(getRand() * cards.length)];
-
-    let index = state[S.deckCards].indexOf(card);
-    if (index != -1) {
-      state[S.deckCards].splice(index, 1);
-      state[S.handCards].push(card);
-
-      this.logger.log(state, "moveCardToHand", {
-        type: "skillCard",
-        id: state[S.cardMap][card].id,
-      });
-      return;
+    let matchingCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        if (exact && card.id == cardId) {
+          matchingCards.push({ pile, index: i, cardIdx });
+        } else if (!exact && card.baseId == cardId) {
+          matchingCards.push({ pile, index: i, cardIdx });
+        }
+      }
     }
-    index = state[S.discardedCards].indexOf(card);
-    if (index != -1) {
-      state[S.discardedCards].splice(index, 1);
-      state[S.handCards].push(card);
 
-      this.logger.log(state, "moveCardToHand", {
-        type: "skillCard",
-        id: state[S.cardMap][card].id,
-      });
-      return;
-    }
+    if (!matchingCards.length) return;
+
+    const pick = matchingCards[Math.floor(getRand() * matchingCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id,
+    });
   }
 
   moveCardToHandFromRemoved(state, cardBaseId) {
@@ -893,6 +881,13 @@ export default class CardManager extends EngineComponent {
     } else if (["active", "mental"].includes(target)) {
       for (let k = 0; k < state[S.cardMap].length; k++) {
         if (SkillCards.getById(state[S.cardMap][k].id).type == target) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^sourceType\(.+\)$/.test(target)) {
+      const sourceType = target.match(/^sourceType\((.+)\)/)[1];
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (this.getCardSourceType(state, k) == sourceType) {
           targetCards.add(k);
         }
       }

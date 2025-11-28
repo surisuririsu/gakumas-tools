@@ -9,6 +9,7 @@ Dates are based on Eastern Time Zone.
 ## 2025-11-28
 
 - Update gu-su-pi-
+- Preview of S35, fix moveCardToHand for link contest
 
 ## 2025-11-27
 

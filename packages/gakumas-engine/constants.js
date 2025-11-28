@@ -335,6 +335,17 @@ export const WHOLE_FIELDS = [
   S.enthusiasm,
 ];
 
+export const NON_NEGATIVE_FIELDS = [
+  S.stamina,
+  S.genki,
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge,
+];
+
 export const LOGGED_FIELDS = [
   S.stamina,
   S.genki,

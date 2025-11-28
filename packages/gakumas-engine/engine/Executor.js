@@ -1,20 +1,21 @@
 import {
-  UNFRESH_PHASES,
-  WHOLE_FIELDS,
+  ALL_FIELDS,
   ASSIGNMENT_OPERATORS,
+  BUFF_FIELDS,
+  CHANGE_TRIGGER_PHASES,
   DEBUFF_FIELDS,
+  DEBUFF_SPECIAL_ACTIONS,
   DECREASE_TRIGGER_FIELDS,
   EOT_DECREMENT_FIELDS,
   FIELDS_TO_DIFF,
   FUNCTION_CALL_REGEX,
+  GROWABLE_FIELDS,
   INCREASE_TRIGGER_FIELDS,
   LOGGED_FIELDS,
+  NON_NEGATIVE_FIELDS,
   S,
-  GROWABLE_FIELDS,
-  CHANGE_TRIGGER_PHASES,
-  ALL_FIELDS,
-  BUFF_FIELDS,
-  DEBUFF_SPECIAL_ACTIONS,
+  UNFRESH_PHASES,
+  WHOLE_FIELDS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { formatDiffField } from "../utils";
@@ -83,12 +84,13 @@ export default class Executor extends EngineComponent {
 
       // Clamp values
       const config = this.getConfig(state);
-      if (state[S.stamina] < 0) state[S.stamina] = 0;
       if (state[S.stamina] > config.idol.params.stamina) {
         state[S.stamina] = config.idol.params.stamina;
       }
-      if (state[S.phase] != "processCost" && state[S.concentration] < 0) {
-        state[S.concentration] = 0;
+      for (let i = 0; i < NON_NEGATIVE_FIELDS.length; i++) {
+        if (state[NON_NEGATIVE_FIELDS[i]] < 0) {
+          state[NON_NEGATIVE_FIELDS[i]] = 0;
+        }
       }
     }
 
