@@ -34,22 +34,20 @@
 .loadoutTab {
   display: flex;
   gap: 4px;
-
-  @include mixins.link-colors using ($link-color) {
-    .selectButton {
-      background-color: color.scale($link-color, $lightness: 20%);
-
-      &:hover {
-        background-color: color.scale($link-color, $lightness: 60%);
-      }
-    }
-  }
 }
 
 .selectButton {
-  padding: 8px;
-  border-radius: 4px;
-  color: colors.$white;
+  padding: 8px 2px;
+  border-radius: 100px;
+  color: colors.$gray;
+  border: 1px solid colors.$gray;
+  writing-mode: vertical-lr;
+  font-weight: 600;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
+  }
 }
 
 .loadoutSummary {
