@@ -14,6 +14,11 @@ const LOGGED_BUFFS_FIELDS = [
 ];
 
 export default class StageLogger {
+  constructor(engine) {
+    this.engine = engine;
+    this.reset();
+  }
+
   initializeState(state) {
     state.logs = [];
     state.graphData = {};
@@ -76,6 +81,12 @@ export default class StageLogger {
         res[field] = deepCopy(state[field]);
       }
     }
+
+    res.turn = {
+      types: state[S.turnTypes],
+      remaining: state[S.turnsRemaining],
+      multiplier: this.engine.turnManager.getTurnMultiplier(state),
+    };
 
     return res;
   }

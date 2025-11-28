@@ -12,7 +12,7 @@ export default class StageEngine {
   constructor(config, linkConfigs) {
     this.config = config;
     this.linkConfigs = linkConfigs;
-    this.logger = new StageLogger();
+    this.logger = new StageLogger(this);
     this.cardManager = new CardManager(this);
     this.effectManager = new EffectManager(this);
     this.buffManager = new BuffManager(this);
