@@ -217,6 +217,7 @@ export default class Executor extends EngineComponent {
         (lhs == "motivation" && op == "+=") ||
         (lhs == "goodConditionTurns" && op == "+=") ||
         (lhs == "concentration" && op == "+=") ||
+        (lhs == "enthusiasm" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
