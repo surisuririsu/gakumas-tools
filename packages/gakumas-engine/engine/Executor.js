@@ -209,15 +209,14 @@ export default class Executor extends EngineComponent {
       // Special cases with intermediates
       let intermediateField = null;
       if (
-        ["cost", "fixedGenki", "fixedStamina", "fullPowerCharge"].includes(
-          lhs
-        ) ||
+        ["cost", "fixedGenki", "fixedStamina"].includes(lhs) ||
         (lhs == "score" && op == "+=") ||
         (lhs == "goodImpressionTurns" && op == "+=") ||
         (lhs == "motivation" && op == "+=") ||
         (lhs == "goodConditionTurns" && op == "+=") ||
         (lhs == "concentration" && op == "+=") ||
         (lhs == "enthusiasm" && op == "+=") ||
+        (lhs == "fullPowerCharge" && op == "+=") ||
         (lhs == "genki" && op == "+=") ||
         (lhs == "stamina" && op == "-=")
       ) {
