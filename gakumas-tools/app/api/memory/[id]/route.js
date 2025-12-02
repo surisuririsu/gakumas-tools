@@ -10,7 +10,7 @@ export async function PUT(request, { params: routeParams }) {
   }
   const userId = session.user.id;
 
-  const id = new ObjectId(await routeParams.id);
+  const id = new ObjectId((await routeParams).id);
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
     await request.json();
 
