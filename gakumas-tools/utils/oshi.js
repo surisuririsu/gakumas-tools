@@ -19,13 +19,10 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
+      おかづラジオ×アイラハルカの「ないしょ話」第5回は伊藤舞音さん
       <IdolIcon idolId={6} />
-      『伊藤舞音と浅見香月のおかづラジオ』#11ゲストは天音ゆかりさん
-      <IdolIcon idolId={13} />
-      <br />
-      全編無料で視聴できます！
     </div>
   ),
+  url: "https://gs-ch.com/articles/contents/arn8NfJkzu7ADMkiwjo3jnVC",
   initiallyExpanded: true,
-  url: "https://nicochannel.jp/okazuradio/video/smmRyqszeP2Pxm6mA4HRHHEG",
 };
