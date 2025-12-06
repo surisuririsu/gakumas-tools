@@ -19,10 +19,9 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      おかづラジオ×アイラハルカの「ないしょ話」第5回は伊藤舞音さん
-      <IdolIcon idolId={6} />
+      「十王星南 生誕ミニライブ2025」
+      <IdolIcon idolId={11} />
     </div>
   ),
-  url: "https://gs-ch.com/articles/contents/arn8NfJkzu7ADMkiwjo3jnVC",
-  initiallyExpanded: true,
+  videoId: "JN74QXOJQaA",
 };
