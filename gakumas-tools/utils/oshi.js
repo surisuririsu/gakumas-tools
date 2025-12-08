@@ -16,12 +16,4 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      「十王星南 生誕ミニライブ2025」
-      <IdolIcon idolId={11} />
-    </div>
-  ),
-  videoId: "JN74QXOJQaA",
-};
+export const OSHI_PROPS = null;
