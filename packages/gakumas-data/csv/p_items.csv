@@ -362,5 +362,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 361,地球とランデブー！+,SSR,TRUE,anomaly,stage,pIdol,119,FALSE,"at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=15,do:g.cost-=3,limit:2"
 362,たたいてかぶって,SR,FALSE,anomaly,stage,support,,FALSE,"at:afterStartOfTurn,if:isDanceTurn,if:isStrength,target:hand,do:g.cost+=3,limit:1"
 363,めちゃかわプリ,SSR,FALSE,free,stage,support,,FALSE,"at:afterStartOfTurn,if:lastUsedCardType==active,do:movePIdolCardToHand,do:upgradeRandomCardInHand,limit:1"
-364,交わした約束,SSR,FALSE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:3;at:endOfTurn,if:fullPowerCharge>=10,limit:3;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1"
+364,交わした約束,SSR,FALSE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:2;at:endOfTurn,if:fullPowerCharge>=10,limit:2;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1"
 365,交わした約束+,SSR,TRUE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:3;at:endOfTurn,if:fullPowerCharge>=10,limit:3;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1"
+366,完全制覇でポン,SSR,FALSE,anomaly,produce,support,,FALSE,
+367,ゲレンデを翔ける赤,SR,FALSE,anomaly,produce,support,,FALSE,
