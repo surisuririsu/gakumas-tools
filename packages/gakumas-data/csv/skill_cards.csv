@@ -636,5 +636,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 635,グーチョキパーデポン+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,119,FALSE,,do:cost-=3,"do:setStance(strength),do:score+=10",1,"at:stanceChanged;if:parentPhase==processCard,if:isStrength,target:this,do:g.score+=5"
 636,いたずらサンタさん,,SSR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,,do:cost-=6,"do:setStance(preservation2),do:setEnthusiasmBuff(0.5,3),do:cardUsesRemaining+=1",1,
 637,いたずらサンタさん+,"29,28",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=3,"do:setStance(preservation2),do:setEnthusiasmBuff(0.5,3),do:cardUsesRemaining+=1",1,
-638,あふれ出る想い,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=4,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=3,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3,delay:1",,
-639,あふれ出る想い+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=4,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=3,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3,delay:1",,
+638,あふれ出る想い,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=6,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=2,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3",,
+639,あふれ出る想い+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=4,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=3,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3",,

@@ -9,6 +9,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-08
+
+- Update Atmosphere Lilja
+
 ## 2025-12-04
 
 - Add preview of Atmosphere Lilja
