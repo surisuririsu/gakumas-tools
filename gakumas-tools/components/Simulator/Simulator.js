@@ -133,6 +133,11 @@ export default function Simulator() {
     setSimulatorData(null);
     setPendingDecision(null);
 
+    pushLoadoutHistory();
+    if (stage.type === "linkContest") {
+      pushLoadoutsHistory();
+    }
+
     const engine = new StageEngine(config, linkConfigs);
 
     const wrappedInputCallback = async (decision) => {
@@ -155,11 +160,6 @@ export default function Simulator() {
     const result = await player.play();
     setSimulatorData({ logs: result.logs });
     setRunning(false);
-
-    pushLoadoutHistory();
-    if (stage.type === "linkContest") {
-      pushLoadoutsHistory();
-    }
   }
 
   async function runSimulation() {
