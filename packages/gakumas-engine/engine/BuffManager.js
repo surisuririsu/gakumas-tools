@@ -86,6 +86,12 @@ export default class BuffManager extends EngineComponent {
       removeDebuffs: (state, amount) =>
         this.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => this.setStance(state, stance),
+      decreaseFullPowerCharge: (state, amount) => {
+        state[S.fullPowerCharge] = Math.max(
+          0,
+          state[S.fullPowerCharge] - parseInt(amount, 10)
+        );
+      },
     };
   }
 

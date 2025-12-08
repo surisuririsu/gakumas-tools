@@ -2,7 +2,7 @@ import { FaLink } from "react-icons/fa6";
 
 export function formatStageName(stage, t) {
   let stageName = "";
-  if (stage.type == "custom") {
+  if (stage.id == "custom") {
     stageName = t("custom");
   } else if (stage.type == "contest") {
     stageName = t("contestStageName", {
@@ -34,7 +34,7 @@ export function formatStageName(stage, t) {
 
 export function formatStageShortName(stage, t) {
   let stageName = "";
-  if (stage.type == "custom") {
+  if (stage.id == "custom") {
     stageName = t("custom");
   } else if (stage.type == "contest") {
     stageName = `${stage.season} - ${stage.stage}`;

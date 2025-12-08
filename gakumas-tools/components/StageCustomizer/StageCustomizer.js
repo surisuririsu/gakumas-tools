@@ -31,6 +31,7 @@ function normalizeFirstTurns(firstTurns) {
 function StageCustomizer({ initialStage, onApply }) {
   const t = useTranslations("StageCustomizer");
 
+  const [type, setType] = useState(initialStage.type);
   const [turnCounts, setTurnCounts] = useState(
     Object.values(initialStage.turnCounts)
   );
@@ -43,21 +44,17 @@ function StageCustomizer({ initialStage, onApply }) {
   const [effects, setEffects] = useState(
     serializeEffectSequence(initialStage.effects).replaceAll(";", ";\n")
   );
-  const [defaultCardSet, setDefaultCardSet] = useState(
-    initialStage.defaultCardSet || initialStage.type != "linkContest"
-      ? initialStage.type
-      : "contest"
-  );
 
-  const DEFAULT_CARD_SET_OPTIONS = [
+  const TYPE_OPTIONS = [
     { value: "contest", label: t("contest") },
+    { value: "linkContest", label: t("linkContest") },
     { value: "event", label: t("event") },
   ];
 
   function apply() {
     onApply({
       id: "custom",
-      type: "custom",
+      type,
       plan: "free",
       turnCounts: {
         vocal: turnCounts[0] || 0,
@@ -68,12 +65,14 @@ function StageCustomizer({ initialStage, onApply }) {
       criteria: normalizeCriteria(criteria),
       effects: deserializeEffectSequence(effects.replace(/\s/g, "")),
       linkTurnCounts: [],
-      defaultCardSet,
     });
   }
 
   return (
     <div className={styles.stageCustomizer}>
+      <label>{t("type")}</label>
+      <ButtonGroup selected={type} options={TYPE_OPTIONS} onChange={setType} />
+
       <label>{t("turnCounts")}</label>
       <ParametersInput
         parameters={turnCounts}
@@ -110,13 +109,6 @@ function StageCustomizer({ initialStage, onApply }) {
           {t("effectFormat")}
         </a>
       </div>
-
-      <label>{t("defaultCards")}</label>
-      <ButtonGroup
-        selected={defaultCardSet}
-        options={DEFAULT_CARD_SET_OPTIONS}
-        onChange={setDefaultCardSet}
-      />
 
       <Button className={styles.apply} style="primary" onClick={apply}>
         {t("apply")}

@@ -297,7 +297,10 @@ export const DEBUFF_FIELDS = [
   S.lockStanceTurns,
 ];
 
-export const DEBUFF_SPECIAL_ACTIONS = ["setScoreDebuff"];
+export const DEBUFF_SPECIAL_ACTIONS = [
+  "setScoreDebuff",
+  "decreaseFullPowerCharge",
+];
 
 export const INCREASE_TRIGGER_FIELDS = [
   S.goodImpressionTurns,
