@@ -69,7 +69,7 @@ export default class Executor extends EngineComponent {
     state[S.motivationMultiplier] = 1;
 
     // Execute actions
-    const scoreTimes = state[S.cardMap][card]?.growth?.[S["g.scoreTimes"]];
+    let scoreTimes = state[S.cardMap][card]?.growth?.[S["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
       this.executeAction(state, actions[i], card);
 
@@ -79,6 +79,7 @@ export default class Executor extends EngineComponent {
           for (let j = 0; j < scoreTimes; j++) {
             this.executeAction(state, actions[i], card);
           }
+          scoreTimes = null;
         }
       }
 

@@ -11,6 +11,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-11
+
+- Limit score times growth to apply only once per action group
+
 ## 2025-12-09
 
 - Fix effect order
