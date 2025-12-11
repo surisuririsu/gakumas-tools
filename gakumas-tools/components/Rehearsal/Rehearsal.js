@@ -24,9 +24,8 @@ import {
   getScoresFromImage,
 } from "@/utils/imageProcessing/rehearsal";
 import {
-  extractFramesFromVideo,
+  extractCandidateFrames,
   canvasToImage,
-  getAverageBrightness,
 } from "@/utils/imageProcessing/videoFrameExtractor";
 import RehearsalTable from "./RehearsalTable";
 import styles from "./Rehearsal.module.scss";
@@ -111,33 +110,17 @@ function Rehearsal() {
       for (const videoFile of videoFiles) {
         try {
           console.log(`Processing video: ${videoFile.name}`);
-          setProcessingStatus(`Extracting frames from video...`);
-          const frames = await extractFramesFromVideo(videoFile, 200);
-          console.log(`Extracted ${frames.length} frames from video`);
-          setProcessingStatus(`Analyzing ${frames.length} frames...`);
+          setProcessingStatus(
+            `Analyzing video and detecting rehearsal results...`
+          );
 
-          const brightnesses = frames.map((frame, i) => {
-            const brightness = getAverageBrightness(frame);
-            console.log(`Frame ${i}: brightness = ${brightness.toFixed(1)}`);
-            return brightness;
-          });
-
-          const candidateFrames = [];
-          for (let i = 0; i < frames.length - 1; i++) {
-            const currentBrightness = brightnesses[i];
-            const nextBrightness = brightnesses[i + 1];
-
-            if (currentBrightness < 180 && nextBrightness > 180) {
-              console.log(
-                `Frame ${i}: Detected transition to loading screen (brightness: ${currentBrightness.toFixed(
-                  1
-                )} -> ${nextBrightness.toFixed(1)})`
-              );
-              candidateFrames.push(i);
-            }
-          }
-
-          console.log(`Found ${candidateFrames.length} candidate frames.`);
+          // Extract only candidate frames (just before brightness transitions)
+          const candidateFrames = await extractCandidateFrames(
+            videoFile,
+            200,
+            180
+          );
+          console.log(`Found ${candidateFrames.length} candidate frames`);
 
           setProcessingStatus(
             `Found ${candidateFrames.length} potential rehearsal results. Reading scores...`
@@ -163,26 +146,21 @@ function Rehearsal() {
               }/${candidateFrames.length})...`
             );
 
-            const batchPromises = batch.map(async (frameIndex, j) => {
+            const batchPromises = batch.map(async (canvas, j) => {
               const worker = await workersRef.current[
                 j % workersRef.current.length
               ];
 
-              for (let i = 0; i < 5; i++) {
-                const indexToProcess = frameIndex - i;
-                if (indexToProcess < 0) continue;
+              const img = await canvasToImage(canvas);
+              const scores = await getScoresFromImage(img, worker);
 
-                const img = await canvasToImage(frames[indexToProcess]);
-                const scores = await getScoresFromImage(img, worker);
-
-                if (scores && scores.length === 3) {
-                  console.log(
-                    `Frame ${indexToProcess}: Found valid result: ${scores
-                      .flat()
-                      .join(",")}`
-                  );
-                  return scores;
-                }
+              if (scores && scores.length === 3) {
+                console.log(
+                  `Candidate frame ${
+                    batchStart + j
+                  }: Found valid result: ${scores.flat().join(",")}`
+                );
+                return scores;
               }
               return null;
             });

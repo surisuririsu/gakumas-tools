@@ -1,4 +1,8 @@
-export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
+export async function extractCandidateFrames(
+  videoFile,
+  intervalMs = 500,
+  brightnessThreshold = 180
+) {
   return new Promise((resolve, reject) => {
     const video = document.createElement("video");
     const blobURL = URL.createObjectURL(videoFile);
@@ -6,20 +10,16 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
     video.preload = "metadata";
     video.src = blobURL;
     video.muted = true;
-    video.playsInline = true; // Critical for iOS/mobile
+    video.playsInline = true;
 
-    const frames = [];
+    const candidateFrames = [];
+    const brightnesses = [];
     let seekTimeout = null;
 
-    // Timeout to detect if video loading fails silently
     const loadTimeout = setTimeout(() => {
       URL.revokeObjectURL(blobURL);
-      reject(
-        new Error(
-          "Video loading timed out. The video format may not be supported on this device."
-        )
-      );
-    }, 30000); // 30 second timeout
+      reject(new Error("Video loading timed out."));
+    }, 30000);
 
     const cleanup = () => {
       clearTimeout(loadTimeout);
@@ -27,11 +27,6 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
     };
 
     video.addEventListener("loadedmetadata", () => {
-      console.log(
-        `Video loaded: ${video.duration}s, ${video.videoWidth}x${video.videoHeight}`
-      );
-
-      // Check if video metadata is valid
       if (
         !video.duration ||
         video.duration === Infinity ||
@@ -39,11 +34,7 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
       ) {
         cleanup();
         URL.revokeObjectURL(blobURL);
-        reject(
-          new Error(
-            "Invalid video duration. This video format may not be fully supported on mobile."
-          )
-        );
+        reject(new Error("Invalid video duration."));
         return;
       }
 
@@ -57,86 +48,138 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
       const duration = video.duration;
       const frameCount = Math.floor((duration * 1000) / intervalMs);
       let currentFrame = 0;
-      let lastSeekTime = Date.now();
 
-      const captureFrame = () => {
+      // Reusable canvas for brightness detection
+      let tempCanvas;
+      if (typeof OffscreenCanvas !== "undefined") {
+        tempCanvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
+      } else {
+        tempCanvas = document.createElement("canvas");
+        tempCanvas.width = video.videoWidth;
+        tempCanvas.height = video.videoHeight;
+      }
+      const tempCtx = tempCanvas.getContext("2d");
+
+      // First pass: collect all brightnesses
+      const firstPassSeek = () => {
         if (currentFrame >= frameCount) {
-          cleanup();
-          URL.revokeObjectURL(blobURL);
-          console.log(`Extraction complete: ${frames.length} frames captured`);
-          resolve(frames);
+          // First pass complete, now identify transitions
+          console.log(`Analyzed ${brightnesses.length} frames for transitions`);
+          const transitions = [];
+
+          for (let i = 0; i < brightnesses.length - 1; i++) {
+            if (
+              brightnesses[i] < brightnessThreshold &&
+              brightnesses[i + 1] > brightnessThreshold
+            ) {
+              console.log(
+                `Transition detected at frame ${i}: ${brightnesses[i].toFixed(
+                  1
+                )} -> ${brightnesses[i + 1].toFixed(1)}`
+              );
+              transitions.push(i);
+            }
+          }
+
+          // Now extract only those specific frames
+          console.log(
+            `Found ${transitions.length} transitions, extracting those frames...`
+          );
+          currentFrame = 0;
+
+          const secondPassSeek = () => {
+            if (currentFrame >= transitions.length) {
+              cleanup();
+              URL.revokeObjectURL(blobURL);
+              console.log(
+                `Extraction complete: ${candidateFrames.length} candidate frames`
+              );
+              resolve(candidateFrames);
+              return;
+            }
+
+            const frameIndex = transitions[currentFrame];
+            const targetTime = (frameIndex * intervalMs) / 1000;
+
+            if (seekTimeout) clearTimeout(seekTimeout);
+            seekTimeout = setTimeout(() => {
+              cleanup();
+              URL.revokeObjectURL(blobURL);
+              reject(
+                new Error(`Second pass seek timeout at frame ${frameIndex}`)
+              );
+            }, 10000);
+
+            video.currentTime = targetTime;
+            currentFrame++;
+          };
+
+          // Handle second pass seeks
+          const secondPassHandler = () => {
+            if (seekTimeout) clearTimeout(seekTimeout);
+
+            try {
+              let canvas;
+              if (typeof OffscreenCanvas !== "undefined") {
+                canvas = new OffscreenCanvas(
+                  video.videoWidth,
+                  video.videoHeight
+                );
+              } else {
+                canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+              }
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              candidateFrames.push(canvas);
+
+              setTimeout(secondPassSeek, 0);
+            } catch (error) {
+              cleanup();
+              URL.revokeObjectURL(blobURL);
+              reject(new Error(`Failed to capture frame: ${error.message}`));
+            }
+          };
+
+          video.removeEventListener("seeked", firstPassHandler);
+          video.addEventListener("seeked", secondPassHandler);
+          secondPassSeek();
           return;
         }
 
         const targetTime = (currentFrame * intervalMs) / 1000;
-        console.log(
-          `Seeking to frame ${currentFrame} at ${targetTime.toFixed(2)}s`
-        );
 
-        // Reset seek timeout
         if (seekTimeout) clearTimeout(seekTimeout);
         seekTimeout = setTimeout(() => {
           cleanup();
           URL.revokeObjectURL(blobURL);
-          reject(
-            new Error(
-              `Seek operation timed out at frame ${currentFrame}. Captured ${frames.length} frames before timeout.`
-            )
-          );
-        }, 10000); // 10 second timeout per seek
+          reject(new Error(`First pass seek timeout at frame ${currentFrame}`));
+        }, 10000);
 
-        lastSeekTime = Date.now();
         video.currentTime = targetTime;
         currentFrame++;
       };
 
-      video.addEventListener("seeked", () => {
+      const firstPassHandler = () => {
         if (seekTimeout) clearTimeout(seekTimeout);
 
-        console.log(
-          `Seeked to ${video.currentTime.toFixed(2)}s (took ${
-            Date.now() - lastSeekTime
-          }ms)`
-        );
-
         try {
-          // Use OffscreenCanvas if available (more efficient, doesn't trigger layout/paint)
-          let canvas;
-          if (typeof OffscreenCanvas !== "undefined") {
-            canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
-          } else {
-            canvas = document.createElement("canvas");
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-          }
+          tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+          const brightness = getAverageBrightness(tempCanvas);
+          brightnesses.push(brightness);
 
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-          frames.push(canvas);
-          console.log(`Captured frame ${frames.length}`);
-
-          // Use setTimeout to allow UI updates on mobile
-          setTimeout(captureFrame, 0);
+          setTimeout(firstPassSeek, 0);
         } catch (error) {
           cleanup();
           URL.revokeObjectURL(blobURL);
-          reject(new Error(`Failed to capture frame: ${error.message}`));
+          reject(new Error(`Failed to analyze frame: ${error.message}`));
         }
-      });
+      };
 
-      video.addEventListener("error", (e) => {
-        cleanup();
-        URL.revokeObjectURL(blobURL);
-        reject(
-          new Error(
-            `Video error during playback: ${e.message || "Unknown error"}`
-          )
-        );
-      });
-
-      // Start capturing
-      captureFrame();
+      video.addEventListener("seeked", firstPassHandler);
+      firstPassSeek();
     });
 
     video.addEventListener("error", (e) => {
@@ -144,11 +187,10 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
       URL.revokeObjectURL(blobURL);
       const errorMsg = video.error
         ? `Video error (code ${video.error.code}): ${video.error.message}`
-        : `Failed to load video: ${e.message || "Unknown error"}`;
+        : `Failed to load video`;
       reject(new Error(errorMsg));
     });
 
-    // Try to load the video
     video.load();
   });
 }
