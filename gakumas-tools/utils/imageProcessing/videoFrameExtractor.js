@@ -100,9 +100,16 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
         );
 
         try {
-          const canvas = document.createElement("canvas");
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
+          // Use OffscreenCanvas if available (more efficient, doesn't trigger layout/paint)
+          let canvas;
+          if (typeof OffscreenCanvas !== "undefined") {
+            canvas = new OffscreenCanvas(video.videoWidth, video.videoHeight);
+          } else {
+            canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+          }
+
           const ctx = canvas.getContext("2d");
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -147,10 +154,21 @@ export async function extractFramesFromVideo(videoFile, intervalMs = 500) {
 }
 
 export function canvasToImage(canvas) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.src = canvas.toDataURL();
+  return new Promise(async (resolve, reject) => {
+    try {
+      const img = new Image();
+      img.onload = () => resolve(img);
+
+      // OffscreenCanvas uses convertToBlob(), regular canvas uses toDataURL()
+      if (canvas.convertToBlob) {
+        const blob = await canvas.convertToBlob();
+        img.src = URL.createObjectURL(blob);
+      } else {
+        img.src = canvas.toDataURL();
+      }
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
