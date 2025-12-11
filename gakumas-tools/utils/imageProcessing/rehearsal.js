@@ -8,6 +8,13 @@ export async function getScoresFromFile(file, worker) {
   return scores;
 }
 
+export async function getScoresFromImage(img, worker) {
+  const whiteCanvas = getWhiteCanvas(img, 160);
+  const result = await worker.recognize(whiteCanvas, {}, { blocks: true });
+  const scores = extractScores(result);
+  return scores;
+}
+
 export function extractScores(result) {
   let scores = [];
 
