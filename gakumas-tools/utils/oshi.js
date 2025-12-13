@@ -19,11 +19,12 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      「三宅麻理恵のゲーマーズギルド」第99.99回 ゲストは
+      『THE IDOLM@STER M@STERS OF IDOL WORLD 2025』配信チケット販売中
+      <br />
       <IdolIcon idolId={6} />
-      伊藤舞音さんです！
+      倉本千奈ちゃんはDAY2に出演します！
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://live.nicovideo.jp/watch/lv349301451",
+  url: "https://asobistage.asobistore.jp/event/idolmaster_idolworld2025/ticket",
 };
