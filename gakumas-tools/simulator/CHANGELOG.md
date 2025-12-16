@@ -12,6 +12,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-16
+
+- S36 preview
+
 ## 2025-12-11
 
 - Limit score times growth to apply only once per action group
