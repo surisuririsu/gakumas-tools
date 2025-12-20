@@ -183,7 +183,7 @@
   },
   "MemoryImporterModal": {
     "importMemories": "스크린샷으로부터 메모리 불러오기",
-    "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상횡에 따라 수초에서 수분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다.권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
+    "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상황에 따라 몇 초에서 몇 분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다. 권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
     "progress": "진행도: {progress}/{total}"
   },
   "Simulator": {
@@ -191,7 +191,7 @@
     "multiplierNote": "※ 스코어 보너스는 2400을 초과하는 파라미터에 대해 정확하지 않습니다.",
     "previewNote": "※ 스테이지 프리뷰는 발표된 P 아이템과 심사 기준에만 기반합니다. 턴 타입은 아직 알려지지 않았습니다.",
     "enterPercents": "계산식이 밝혀지지 않았으므로 스코어 보너스 %를 직접 입력해 주세요.",
-    "linkContestNote": "Link contest behavior may not be accurately simulated. Deduplication of p-items and skill cards across idols is not yet implemented. Please deduplicate and add default cards manually in the loadout editor.",
+    "linkContestNote": "링크 콘테스트의 행동은 정확하게 재현되지 않을 수 있습니다. 아이돌 간 P 아이템과 스킬 카드들의 중복 제거는 아직 구현되지 않았습니다. 직접 중복을 제거하고 기본 카드를 추가해 주세요.",
     "custom": "커스텀",
     "simulate": "실행",
     "provideData": "데이터 제공하기",
@@ -208,7 +208,7 @@
   },
   "StageSelectModal": {
     "contest": "콘테스트",
-    "linkContest": "Link Contest",
+    "linkContest": "링크 콘테스트",
     "event": "이벤트",
     "custom": "커스텀"
   },
@@ -271,7 +271,7 @@
     "concentration": "집중",
     "goodImpressionTurns": "호인상",
     "motivation": "의욕",
-    "prideTurns": "Pride",
+    "prideTurns": "프라이드",
     "stance": "지침",
     "none": "없음",
     "preservation": "온존 1",
@@ -303,7 +303,7 @@
     "motivationBuff": "의욕 증가량 증가",
     "goodConditionTurnsBuff": "호조 증가량 증가",
     "concentrationBuff": "집중 증가량 증가",
-    "enthusiasmBuff": "熱意増加",
+    "enthusiasmBuff": "열의 증가",
     "fullPowerChargeBuff": "전력치 증가량 증가",
     "turn": "턴",
     "cardDrawn": "드로우한 카드",
@@ -328,7 +328,7 @@
     "turnN": "{n} 턴",
     "average": "평균치",
     "unplayable": "사용 불가",
-    "linkPhaseChange": "Idol changed",
+    "linkPhaseChange": "아이돌 교대",
     "skip": "스킵",
     "selectCardsToHold": "{num}장의 카드를 선택",
     "confirm": "확인"
