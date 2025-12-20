@@ -17,6 +17,7 @@ Dates are based on Eastern Time Zone.
 ## 2025-12-20
 
 - Add preview of CM Tsubame
+- Update Ume tokkun 7
 
 ## 2025-12-16
 

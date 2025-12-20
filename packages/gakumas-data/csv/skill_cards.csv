@@ -271,7 +271,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 270,打倒お姉ちゃん,,SR,active,logic,1,FALSE,TRUE,pIdol,30,FALSE,,do:stamina-=4,"do:genki+=3,do:score+=genki",1,
 271,打倒お姉ちゃん+,,SR,active,logic,1,TRUE,TRUE,pIdol,30,FALSE,,do:stamina-=4,"do:genki+=3,do:score+=genki*1.4",1,
 272,おっきなおにぎり,,SSR,mental,logic,1,FALSE,TRUE,pIdol,31,FALSE,,do:stamina-=3,do:genki+=5*cardsUsed+2,1,
-273,おっきなおにぎり+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,31,FALSE,,do:stamina-=3,do:genki+=8*cardsUsed+2,1,
+273,おっきなおにぎり+,"102,38",SSR,mental,logic,1,TRUE,TRUE,pIdol,31,FALSE,,do:stamina-=3,do:genki+=8*cardsUsed+2,1,
 274,キメ顔で自撮り,,SR,mental,sense,1,FALSE,TRUE,support,,FALSE,,do:cost-=4,"do:goodConditionTurns+=3,do:concentration+=2;if:stamina>=maxStamina*0.5;at:turn,do:drawCard,limit:1",1,
 275,キメ顔で自撮り+,"52,54,3",SR,mental,sense,1,TRUE,TRUE,support,,FALSE,,do:cost-=4,"do:goodConditionTurns+=4,do:concentration+=3;if:stamina>=maxStamina*0.5;at:turn,do:drawCard,limit:1",1,
 276,みずたまりスキップ,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:stamina-=1,"do:genki+=3,do:cardUsesRemaining+=1",1,
