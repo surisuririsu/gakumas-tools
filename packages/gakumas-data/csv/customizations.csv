@@ -100,3 +100,4 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 7,scoreByGoodImpressionTurnsAdd1,好印象分パラメータ追加,score,70,1,,,,do:score+=goodImpressionTurns*0.6,,
 100,ukenagashiEffect1_1,条件変更(集中),effect,70,1,,,,"line:2,if:concentration>=10",,
 101,ukenagashiEffect1_2,条件変更(好調),effect,70,1,,,,"line:4,if:goodConditionTurns>=8",,
+102,onigiriEffect1,効果変更,effect,100,1,,,,"line:1,at:activeCardUsed,do:onigiriCardsUsed+=1;at:activeCardUsed,if:onigiriCardsUsed%3==2,do:genki+=12*cardsUsed+2,limit:2",,
