@@ -16,4 +16,8 @@ const IdolIcon = ({ idolId }) => {
   );
 };
 
-export const OSHI_PROPS = null;
+export const OSHI_PROPS = {
+  text: "「初星学園HR ～年末まったり3時間SP～」",
+  initiallyExpanded: false,
+  videoId: "0DmHYUQrsig",
+};
