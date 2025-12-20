@@ -553,7 +553,7 @@ export default class CardManager extends EngineComponent {
       state[S.removedCards].splice(index, 1);
       state[S.handCards].push(card);
 
-      this.logger.log(state, "removedCard", {
+      this.logger.log(state, "moveCardToHand", {
         type: "skillCard",
         id: state[S.cardMap][card].id,
       });

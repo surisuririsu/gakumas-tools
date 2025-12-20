@@ -366,3 +366,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 365,交わした約束+,SSR,TRUE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:3;at:endOfTurn,if:fullPowerCharge>=10,limit:3;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1"
 366,完全制覇でポン,SSR,FALSE,anomaly,produce,support,,FALSE,
 367,ゲレンデを翔ける赤,SR,FALSE,anomaly,produce,support,,FALSE,
+368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,"at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=9,limit:1"
+369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,"at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=9,limit:1"

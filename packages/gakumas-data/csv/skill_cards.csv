@@ -638,3 +638,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 637,いたずらサンタさん+,"29,28",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=3,"do:setStance(preservation2),do:setEnthusiasmBuff(0.5,3),do:cardUsesRemaining+=1",1,
 638,あふれ出る想い,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=6,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=2,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3",,
 639,あふれ出る想い+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,120,FALSE,,do:fullPowerCharge-=4,"do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=3,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3",,
+640,ダークヒーローの誕生,,SSR,active,sense,1,FALSE,TRUE,pIdol,121,TRUE,,do:cost-=2,"do:setScoreBuff(0.1);at:endOfTurn,if:turnsRemaining==1,do:goodConditionTurnsMultiplier=2,do:score+=50",1,
+641,ダークヒーローの誕生+,,SSR,active,sense,1,TRUE,TRUE,pIdol,121,TRUE,,do:cost-=2,"do:setScoreBuff(0.1);at:endOfTurn,if:turnsRemaining==1,do:goodConditionTurnsMultiplier=2,do:score+=50",1,
