@@ -13,6 +13,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-20
+
+- Add preview of CM Tsubame
+
 ## 2025-12-16
 
 - S36 preview
