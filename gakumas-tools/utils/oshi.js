@@ -17,7 +17,12 @@ const IdolIcon = ({ idolId }) => {
 };
 
 export const OSHI_PROPS = {
-  text: "「初星学園HR ～年末まったり3時間SP～」",
-  initiallyExpanded: false,
-  videoId: "0DmHYUQrsig",
+  text: (
+    <div>
+      <IdolIcon idolId={6} />
+      「伊藤舞音のおいでよ まおーこくだい9かい」
+    </div>
+  ),
+  initiallyExpanded: true,
+  url: "https://www.youtube.com/watch?v=XDT1HNaCAeA",
 };

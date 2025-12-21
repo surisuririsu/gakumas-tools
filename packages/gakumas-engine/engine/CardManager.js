@@ -279,12 +279,10 @@ export default class CardManager extends EngineComponent {
       .map((c) => c.actions)
       .flat();
     const previewState = shallowCopy(state);
-    previewState[S.phase] = "processCost";
+    previewState[S.phase] = "checkCost";
     for (let i = 0; i < cost.length; i++) {
       this.engine.executor.executeAction(previewState, cost[i], card);
     }
-    delete previewState[S.phase];
-
     for (let i = 0; i < COST_FIELDS.length; i++) {
       if (previewState[COST_FIELDS[i]] < 0) return false;
     }

@@ -266,7 +266,11 @@ export default class Executor extends EngineComponent {
           intermediate += growth[G[`g.${lhs}`]];
         }
       } else if (op == "-=") {
-        if (growth?.[G["g.typedCost"]] && state[S.phase] == "processCost") {
+        if (
+          growth?.[G["g.typedCost"]] &&
+          (state[S.phase] == "processCost" || state[S.phase] == "checkCost") &&
+          lhs == "stamina"
+        ) {
           rhs -= growth[G["g.typedCost"]];
           if (rhs < 0) rhs = 0;
         }

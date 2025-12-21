@@ -122,6 +122,7 @@ export const PHASES = [
   "prestage",
   "processCard",
   "processCost",
+  "checkCost",
   "staminaDecreased",
   "stanceChanged",
   "startOfStage",
