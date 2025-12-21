@@ -29,7 +29,7 @@ export default class StageEngine {
   }
 
   getInitialState(skipEffects = false) {
-    const state = {};
+    const state = [];
 
     // Logs
     this.logger.initializeState(state);

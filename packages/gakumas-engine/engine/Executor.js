@@ -9,6 +9,7 @@ import {
   EOT_DECREMENT_FIELDS,
   FIELDS_TO_DIFF,
   FUNCTION_CALL_REGEX,
+  G,
   GROWABLE_FIELDS,
   INCREASE_TRIGGER_FIELDS,
   LOGGED_FIELDS,
@@ -48,8 +49,39 @@ export default class Executor extends EngineComponent {
 
   executeGrowthActions(growth, actions) {
     for (let i = 0; i < actions.length; i++) {
-      this.executeAction(growth, actions[i]);
+      this.executeGrowthAction(growth, actions[i]);
     }
+  }
+
+  executeGrowthAction(growth, action) {
+    const tokens = action;
+
+    // Assignments
+    if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
+      const lhs = tokens[0];
+      const op = tokens[1];
+      const rhsTokens = tokens.slice(2);
+      if (rhsTokens.length != 1) {
+        throw new Error(`Invalid growth action RHS: ${action}`);
+      }
+      const rhs = parseFloat(rhsTokens[0]);
+
+      let intermediate = growth[G[lhs]] || 0;
+
+      // Execute operation
+      if (op == "=") {
+        intermediate = rhs;
+      } else if (op == "+=") {
+        intermediate += rhs;
+      } else if (op == "-=") {
+        intermediate -= rhs;
+      }
+
+      growth[G[lhs]] = intermediate;
+
+      return;
+    }
+    console.warn(`Invalid growth action: ${action}`);
   }
 
   executeActions(state, actions, card) {
@@ -69,7 +101,7 @@ export default class Executor extends EngineComponent {
     state[S.motivationMultiplier] = 1;
 
     // Execute actions
-    let scoreTimes = state[S.cardMap][card]?.growth?.[S["g.scoreTimes"]];
+    let scoreTimes = state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
       this.executeAction(state, actions[i], card);
 
@@ -158,7 +190,7 @@ export default class Executor extends EngineComponent {
             state,
             `${fieldName}Increased`
           );
-          delete state[S[`${fieldName}Delta`]];
+          state[S[`${fieldName}Delta`]] = 0;
         }
       }
 
@@ -172,7 +204,7 @@ export default class Executor extends EngineComponent {
             state,
             `${fieldName}Decreased`
           );
-          delete state[S[`${fieldName}Delta`]];
+          state[S[`${fieldName}Delta`]] = 0;
         }
       }
     }
@@ -230,12 +262,12 @@ export default class Executor extends EngineComponent {
         intermediate = rhs;
       } else if (op == "+=") {
         intermediate += rhs;
-        if (growth?.[S[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
-          intermediate += growth[S[`g.${lhs}`]];
+        if (growth?.[G[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
+          intermediate += growth[G[`g.${lhs}`]];
         }
       } else if (op == "-=") {
-        if (growth?.[S["g.typedCost"]] && state[S.phase] == "processCost") {
-          rhs -= growth[S["g.typedCost"]];
+        if (growth?.[G["g.typedCost"]] && state[S.phase] == "processCost") {
+          rhs -= growth[G["g.typedCost"]];
           if (rhs < 0) rhs = 0;
         }
         intermediate -= rhs;
@@ -296,7 +328,7 @@ export default class Executor extends EngineComponent {
         return;
       }
       const args = match[2].split(",");
-      if (growth && growth[S["g.stanceLevel"]] && match[1] == "setStance") {
+      if (growth && growth[G["g.stanceLevel"]] && match[1] == "setStance") {
         if (args[0].startsWith("str")) {
           args[0] = "strength2";
         } else if (args[0].startsWith("pre")) {
@@ -315,8 +347,8 @@ export default class Executor extends EngineComponent {
     if (state[S.nullifyCostCards]) return;
 
     // Apply growth
-    if (growth[S["g.cost"]]) {
-      cost += growth[S["g.cost"]];
+    if (growth[G["g.cost"]]) {
+      cost += growth[G["g.cost"]];
       if (cost > 0) cost = 0;
     }
 
@@ -372,21 +404,21 @@ export default class Executor extends EngineComponent {
   resolveScore(state, score, growth, rhsTokens) {
     // Apply growth
     if (
-      growth[S["g.scoreByGoodImpressionTurns"]] &&
+      growth[G["g.scoreByGoodImpressionTurns"]] &&
       rhsTokens.includes("goodImpressionTurns")
     ) {
       score +=
         state[S.goodImpressionTurns] *
-        growth[S["g.scoreByGoodImpressionTurns"]];
+        growth[G["g.scoreByGoodImpressionTurns"]];
     } else if (
-      growth[S["g.scoreByMotivation"]] &&
+      growth[G["g.scoreByMotivation"]] &&
       rhsTokens.includes("motivation")
     ) {
-      score += state[S.motivation] * growth[S["g.scoreByMotivation"]];
-    } else if (growth[S["g.scoreByGenki"]] && rhsTokens.includes("genki")) {
-      score += state[S.genki] * growth[S["g.scoreByGenki"]];
-    } else if (growth[S["g.score"]]) {
-      score += growth[S["g.score"]];
+      score += state[S.motivation] * growth[G["g.scoreByMotivation"]];
+    } else if (growth[G["g.scoreByGenki"]] && rhsTokens.includes("genki")) {
+      score += state[S.genki] * growth[G["g.scoreByGenki"]];
+    } else if (growth[G["g.score"]]) {
+      score += growth[G["g.score"]];
     }
 
     if (score > 0) {

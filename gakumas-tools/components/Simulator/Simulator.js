@@ -141,7 +141,7 @@ export default function Simulator() {
     const engine = new StageEngine(config, linkConfigs);
 
     const wrappedInputCallback = async (decision) => {
-      const currentLogs = decision.state.logs.map(
+      const currentLogs = decision.state[S.logs].map(
         (logIndex) => engine.logger.logs[logIndex]
       );
       currentLogs[currentLogs.length - 1] = {

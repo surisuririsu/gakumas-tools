@@ -1,4 +1,4 @@
-import { S } from "../constants";
+import { G, S } from "../constants";
 import { deepCopy } from "../utils";
 import BaseStrategy from "./BaseStrategy";
 
@@ -332,22 +332,22 @@ export default class HeuristicStrategy extends BaseStrategy {
   getGrowthScore(state) {
     let growthScore = 0;
     const multipliers = {
-      [S["g.score"]]: 2,
-      [S["g.scoreTimes"]]: 20,
-      [S["g.cost"]]: 1,
-      [S["g.typedCost"]]: 1,
-      [S["g.genki"]]: 1,
-      [S["g.goodConditionTurns"]]: 1,
-      [S["g.perfectConditionTurns"]]: 1,
-      [S["g.concentration"]]: 2,
-      [S["g.goodImpressionTurns"]]: 1,
-      [S["g.motivation"]]: 1,
-      [S["g.fullPowerCharge"]]: 1,
-      [S["g.halfCostTurns"]]: 1,
-      [S["g.scoreByGoodImpressionTurns"]]: 20,
-      [S["g.scoreByMotivation"]]: 20,
-      [S["g.scoreByGenki"]]: 20,
-      [S["g.stanceLevel"]]: 2,
+      [G["g.score"]]: 2,
+      [G["g.scoreTimes"]]: 20,
+      [G["g.cost"]]: 1,
+      [G["g.typedCost"]]: 1,
+      [G["g.genki"]]: 1,
+      [G["g.goodConditionTurns"]]: 1,
+      [G["g.perfectConditionTurns"]]: 1,
+      [G["g.concentration"]]: 2,
+      [G["g.goodImpressionTurns"]]: 1,
+      [G["g.motivation"]]: 1,
+      [G["g.fullPowerCharge"]]: 1,
+      [G["g.halfCostTurns"]]: 1,
+      [G["g.scoreByGoodImpressionTurns"]]: 20,
+      [G["g.scoreByMotivation"]]: 20,
+      [G["g.scoreByGenki"]]: 20,
+      [G["g.stanceLevel"]]: 2,
     };
     for (let { growth } of state[S.cardMap]) {
       if (!growth) continue;
@@ -362,7 +362,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     let previewState = this.engine.getInitialState(true);
     previewState[S.cardMap] = deepCopy(state[S.cardMap]);
     this.engine.buffManager.setStance(previewState, "fullPower");
-    previewState[S.nullifyHold] = true;
+    previewState[S.nullifyHold] = 1;
     previewState = this.engine.useCard(previewState, card);
     return Math.round(previewState[S.score]);
   }
