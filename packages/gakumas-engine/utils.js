@@ -36,7 +36,7 @@ export function formatDiffField(value) {
 }
 
 export function shallowCopy(state) {
-  return { ...state };
+  return [...state];
 }
 
 export function deepCopy(state) {

@@ -145,6 +145,17 @@ export default class BuffManager extends EngineComponent {
 
     // Buffs/debuffs protected from decrement
     state[S.freshBuffs] = {};
+
+    // Deltas
+    state[S.goodImpressionTurnsDelta] = 0;
+    state[S.motivationDelta] = 0;
+    state[S.genkiDelta] = 0;
+    state[S.goodConditionTurnsDelta] = 0;
+    state[S.concentrationDelta] = 0;
+    state[S.staminaDelta] = 0;
+
+    // Other
+    state[S.nullifyHold] = 0;
   }
 
   setBuff(state, field, amount, turns, logLabel) {

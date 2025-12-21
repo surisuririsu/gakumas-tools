@@ -130,6 +130,10 @@ export const PHASES = [
 ];
 
 export const ALL_FIELDS = [
+  // Logging
+  "logs",
+  "graphData",
+
   // General
   "cardUsesRemaining",
   "stamina",
@@ -207,24 +211,6 @@ export const ALL_FIELDS = [
   "phase",
   "parentPhase",
 
-  // Growth
-  "g.score",
-  "g.scoreTimes",
-  "g.cost",
-  "g.typedCost",
-  "g.genki",
-  "g.goodConditionTurns",
-  "g.perfectConditionTurns",
-  "g.concentration",
-  "g.goodImpressionTurns",
-  "g.motivation",
-  "g.fullPowerCharge",
-  "g.halfCostTurns",
-  "g.scoreByGoodImpressionTurns",
-  "g.scoreByMotivation",
-  "g.scoreByGenki",
-  "g.stanceLevel",
-
   // Special
   "pcchiCardsUsed",
   "natsuyaCardsUsed",
@@ -242,6 +228,30 @@ export const ALL_FIELDS = [
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {
+  acc[cur] = i;
+  return acc;
+}, {});
+
+export const GROWTH_FIELDS = [
+  "g.score",
+  "g.scoreTimes",
+  "g.cost",
+  "g.typedCost",
+  "g.genki",
+  "g.goodConditionTurns",
+  "g.perfectConditionTurns",
+  "g.concentration",
+  "g.goodImpressionTurns",
+  "g.motivation",
+  "g.fullPowerCharge",
+  "g.halfCostTurns",
+  "g.scoreByGoodImpressionTurns",
+  "g.scoreByMotivation",
+  "g.scoreByGenki",
+  "g.stanceLevel",
+];
+
+export const G = GROWTH_FIELDS.reduce((acc, cur, i) => {
   acc[cur] = i;
   return acc;
 }, {});
