@@ -9,15 +9,15 @@
     display: flex;
     justify-content: center;
     border-radius: 0 0 16px 16px;
-    background: colors.$maokoku;
+    background: colors.$payton;
     padding: 4px 8px;
-    color: colors.$black-dark;
+    color: colors.$white;
     text-align: center;
     box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: color.adjust(colors.$maokoku, $lightness: -10%);
+      background-color: color.adjust(colors.$payton, $lightness: -10%);
     }
   }
 }
