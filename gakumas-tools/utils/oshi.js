@@ -19,10 +19,12 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
+      ペイトン尚未の「クリエイト倶楽部」第46回
+      <br />
+      ゲストは伊藤舞音さん！
       <IdolIcon idolId={6} />
-      「伊藤舞音のおいでよ まおーこくだい9かい」
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://www.youtube.com/watch?v=XDT1HNaCAeA",
+  url: "https://nicochannel.jp/paytoncreate/live/smU2C6Bs83dEcYrnQcHKFMo6",
 };
