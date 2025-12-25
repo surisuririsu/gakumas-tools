@@ -19,12 +19,11 @@ const IdolIcon = ({ idolId }) => {
 export const OSHI_PROPS = {
   text: (
     <div>
-      ペイトン尚未の「クリエイト倶楽部」第46回
-      <br />
-      ゲストは伊藤舞音さん！
+      「MISHIMA LIVE READING PROJECT-Vol.1」
+      伊藤舞音さんが出演する1月28日19:00公演のチケット残りわずか！
       <IdolIcon idolId={6} />
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://nicochannel.jp/paytoncreate/live/smU2C6Bs83dEcYrnQcHKFMo6",
+  url: "https://www.confetti-web.com/events/12918",
 };
