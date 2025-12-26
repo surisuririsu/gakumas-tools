@@ -14,6 +14,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-26
+
+- Add new cards and icons
+
 ## 2025-12-20
 
 - Add preview of CM Tsubame

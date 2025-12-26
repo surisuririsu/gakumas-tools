@@ -2,10 +2,9 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import Oshi from "@/components/Oshi";
+import Oshi, { OSHI_PROPS } from "@/components/Oshi";
 import ToolHeader from "@/components/ToolHeader";
 import c from "@/utils/classNames";
-import { OSHI_PROPS } from "@/utils/oshi";
 import { TOOLS } from "@/utils/tools";
 import NavbarLink from "./NavbarLink";
 import NavbarMenu from "./NavbarMenu";

@@ -368,3 +368,11 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 367,ゲレンデを翔ける赤,SR,FALSE,anomaly,produce,support,,FALSE,
 368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,"at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=9,limit:1"
 369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,"at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=9,limit:1"
+370,無我の境地,SSR,FALSE,sense,produce,support,,FALSE,
+371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:fixedStamina+=7,do:removeBasicCard"
+372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:goodConditionTurns+=5,do:removeBasicCard"
+373,ガラスはつみ (橙),SSR,FALSE,sense,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:concentration+=5,do:removeBasicCard"
+374,はつぼしメダル (白),SSR,FALSE,logic,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:goodImpressionTurns+=5,do:removeBasicCard"
+375,ガラスはつみ (白),SSR,FALSE,logic,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:motivation+=5,do:removeBasicCard"
+376,はつぼしメダル (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,target:effect(strength),do:g.score+=10;at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:removeBasicCard"
+377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,"at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,target:effect(fullPowerCharge),do:g.score+=10;at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:removeBasicCard"

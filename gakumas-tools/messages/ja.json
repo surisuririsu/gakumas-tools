@@ -295,6 +295,7 @@
     "nullifyCostCards": "体力消費無効",
     "noActiveTurns": "アクティブスキルカード使用不可",
     "noMentalTurns": "メンタルスキルカード使用不可",
+    "noCardUseTurns": "スキルカード使用不可",
     "uneaseTurns": "不安",
     "scoreBuff": "スコア上昇量増加",
     "scoreDebuff": "スコア上昇量減少",

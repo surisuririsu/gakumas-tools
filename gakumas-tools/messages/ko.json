@@ -295,6 +295,7 @@
     "nullifyCostCards": "체력 소비 무효",
     "noActiveTurns": "액티브 스킬 카드 사용 불가",
     "noMentalTurns": "멘탈 스킬 카드 사용 불가",
+    "noCardUseTurns": "스킬 카드 사용 불가",
     "uneaseTurns": "불안",
     "scoreBuff": "스코어 상승량 증가",
     "scoreDebuff": "스코어 상승량 감소",

@@ -2,7 +2,7 @@ import { TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 
 export const MAX_PARAMS_BY_DIFFICULTY = {
   pro: 2000,
-  master: 2300,
+  master: 2600,
 };
 
 export const MIN_VOTES_BY_STAGE = {
