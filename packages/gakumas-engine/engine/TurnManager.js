@@ -111,6 +111,7 @@ export default class TurnManager extends EngineComponent {
         state[S.stamina] + 2,
         this.getConfig(state).idol.params.stamina
       );
+      this.engine.effectManager.triggerEffectsForPhase(state, "turnSkipped");
     }
 
     // Trigger effects

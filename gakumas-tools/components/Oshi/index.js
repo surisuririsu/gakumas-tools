@@ -1,1 +1,1 @@
-export { default } from "./Oshi";
+export { default, OSHI_PROPS } from "./Oshi";

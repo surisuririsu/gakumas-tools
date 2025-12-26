@@ -110,6 +110,7 @@ export const PHASES = [
   "beforeStartOfTurn",
   "buffCostConsumed",
   "cardUsed",
+  "cardMovedToHand",
   "cardRemoved",
   "concentrationIncreased",
   "endOfTurn",
@@ -128,6 +129,7 @@ export const PHASES = [
   "startOfStage",
   "startOfTurn",
   "turn",
+  "turnSkipped",
 ];
 
 export const ALL_FIELDS = [
@@ -206,6 +208,8 @@ export const ALL_FIELDS = [
   "thisCardHeld",
   "usedCard",
   "lastUsedCard",
+  "movedCard",
+  "noCardUseTurns",
 
   // Effects
   "effects",
@@ -286,6 +290,7 @@ export const EOT_DECREMENT_FIELDS = [
   S.noActiveTurns,
   S.noMentalTurns,
   S.uneaseTurns,
+  S.noCardUseTurns,
 ];
 
 // Consumable buffs
@@ -307,6 +312,7 @@ export const DEBUFF_FIELDS = [
   S.uneaseTurns,
   S.poorConditionTurns,
   S.lockStanceTurns,
+  S.noCardUseTurns,
 ];
 
 export const DEBUFF_SPECIAL_ACTIONS = [
@@ -389,6 +395,7 @@ export const LOGGED_FIELDS = [
   S.cardUsesRemaining,
   S.noActiveTurns,
   S.noMentalTurns,
+  S.noCardUseTurns,
   S.uneaseTurns,
 ];
 
