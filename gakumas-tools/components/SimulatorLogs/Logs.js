@@ -33,6 +33,7 @@ const ADD_CARD_LOG_TYPES = {
   drawCard: "cardDrawn",
   addCardToHand: "addedCardToHand",
   addCardToTopOfDeck: "addedCardToTopOfDeck",
+  addCardToDeckAtRandom: "addedCardToDeckAtRandom",
   upgradeRandomCardInHand: "upgradedCard",
   growth: "cardGrowth",
   holdCard: "heldCard",
@@ -40,6 +41,7 @@ const ADD_CARD_LOG_TYPES = {
   moveCardToHand: "movedCardToHand",
   moveCardToTopOfDeck: "movedCardToTopOfDeck",
   moveCardToDeckAtRandom: "movedCardToDeckAtRandom",
+  removeCard: "removedCard",
 };
 
 function Log({ line, idolId, pendingDecision, onDecision }) {

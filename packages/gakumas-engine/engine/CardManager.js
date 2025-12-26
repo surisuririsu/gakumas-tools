@@ -522,7 +522,7 @@ export default class CardManager extends EngineComponent {
     const cardIdx = state[S.cardMap].length - 1;
     const insertPos = Math.floor(getRand() * (state[S.deckCards].length + 1));
     state[S.deckCards].splice(insertPos, 0, cardIdx);
-    this.logger.log(state, "addCardToDeck", {
+    this.logger.log(state, "addCardToDeckAtRandom", {
       type: "skillCard",
       id: skillCard.id,
     });
