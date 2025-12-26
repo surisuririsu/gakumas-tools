@@ -443,15 +443,6 @@ export default class Executor extends EngineComponent {
             state[S.goodConditionTurnsMultiplier];
       }
 
-      // Apply pride
-      if (state[S.prideTurns]) {
-        const buffAmount = Math.min(
-          state[S.goodImpressionTurns],
-          state[S.motivation]
-        );
-        score *= 1 + Math.min(buffAmount * 0.02, 0.5);
-      }
-
       // Apply stance
       if (state[S.stance] == "strength") {
         score *= 2;
@@ -467,10 +458,26 @@ export default class Executor extends EngineComponent {
         score *= 0;
       }
 
-      // Score buff effects
-      score *= state[S.scoreBuffs].reduce((acc, cur) => acc + cur.amount, 1);
+      // Round
+      score = Math.ceil(score);
 
-      // // Score debuff effects
+      // Score buff effects
+      let scoreBuff = state[S.scoreBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        0
+      );
+
+      if (state[S.prideTurns]) {
+        const buffAmount = Math.min(
+          state[S.goodImpressionTurns],
+          state[S.motivation]
+        );
+        scoreBuff += Math.min(buffAmount * 0.02, 0.5);
+      }
+
+      score *= 1 + scoreBuff;
+
+      // Score debuff effects
       score *= Math.max(
         state[S.scoreDebuffs].reduce((acc, cur) => acc - cur.amount, 1),
         0
