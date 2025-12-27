@@ -15,6 +15,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-27
+
+- Fix typed cost growth
+
 ## 2025-12-26
 
 - Add new cards and icons
