@@ -689,7 +689,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 688,レスポンスの基本,,N,mental,anomaly,1,FALSE,FALSE,default,,FALSE,,do:cost-=2,"do:genki+=4,do:fullPowerCharge+=2,do:holdSelectedFromHand",1,
 689,レスポンスの基本+,,N,mental,anomaly,1,TRUE,FALSE,default,,FALSE,,do:cost-=2,"do:genki+=6,do:fullPowerCharge+=3,do:holdSelectedFromHand",1,
 690,軌道修正,,R,active,sense,51,FALSE,FALSE,produce,,FALSE,,do:cost-=4,"do:score+=6,do:concentration+=2;if:unremovedTroubleCards>=2,do:score+=3",1,
-691,軌道修正+,"16,70,28",R,active,sense,51,TRUE,FALSE,produce,,FALSE,,do:cost-=3,"do:score+=6,do:concentration+=3;if:unremovedTroubleCards>=2,do:score+=3",1,
+691,軌道修正+,"14,70,28",R,active,sense,51,TRUE,FALSE,produce,,FALSE,,do:cost-=3,"do:score+=6,do:concentration+=3;if:unremovedTroubleCards>=2,do:score+=3",1,
 692,パンプアップ,,R,active,sense,52,FALSE,FALSE,produce,,FALSE,,do:cost-=4,"do:score+=6,do:goodConditionTurns+=2;if:unremovedTroubleCards>=2,do:score+=4",1,
 693,パンプアップ+,"18,68,28",R,active,sense,52,TRUE,FALSE,produce,,FALSE,,do:cost-=3,"do:score+=6,do:goodConditionTurns+=3;if:unremovedTroubleCards>=2,do:score+=4",1,
 694,おまもりミラクル,,R,active,logic,51,FALSE,FALSE,produce,,FALSE,,do:cost-=3,"do:goodImpressionTurns+=2,do:score+=goodImpressionTurns*0.6;if:unremovedTroubleCards>=2,do:score+=goodImpressionTurns*0.4",1,
