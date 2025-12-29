@@ -327,8 +327,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 326,落ち葉つかみの型,SR,FALSE,logic,produce,support,,FALSE,
 327,シェアハピ缶バッジ,SSR,FALSE,logic,stage,pIdol,108,FALSE,"at:everyTurn,if:turnsElapsed%2==1,do:fixedStamina+=3,do:goodImpressionTurns+=1,limit:2"
 328,シェアハピ缶バッジ+,SSR,TRUE,logic,stage,pIdol,108,FALSE,"at:everyTurn,if:turnsElapsed%2==1,do:fixedStamina+=3,do:goodImpressionTurns+=2,limit:2"
-329,たくやきテクノドッグ,SSR,FALSE,anomaly,stage,pIdol,109,FALSE,"at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=5,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,do:holdCard(604),limit:3"
-330,たくやきテクノドッグ+,SSR,TRUE,anomaly,stage,pIdol,109,FALSE,"at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=12,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,do:holdCard(604),limit:3"
+329,たこやきテクノドッグ,SSR,FALSE,anomaly,stage,pIdol,109,FALSE,"at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=5,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,do:holdCard(604),limit:3"
+330,たこやきテクノドッグ+,SSR,TRUE,anomaly,stage,pIdol,109,FALSE,"at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=12,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\604)>=1,do:holdCard(604),limit:3"
 331,しぼまない思い出,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfTurn,if:isVocalTurn,if:stanceChangedTimes>=4,do:setScoreBuff(0.25,1),do:genki+=8,limit:2"
 332,かごいっぱいの成果,SR,FALSE,anomaly,produce,support,,FALSE,
 333,アイドルになりたい,SSR,FALSE,logic,stage,pIdol,110,FALSE,"at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:2"
