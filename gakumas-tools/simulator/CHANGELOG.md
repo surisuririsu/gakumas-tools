@@ -16,6 +16,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2025-12-29
+
+- Fix kidoushuusei customizations, add tsubame icon variants
+
 ## 2025-12-27
 
 - Fix typed cost growth
