@@ -9,7 +9,7 @@ export const OSHI_PROPS = {
   text: (
     <div>
       「MISHIMA LIVE READING PROJECT-Vol.1」
-      伊藤舞音さんが出演する1月28日19:00公演のチケット残りわずか！
+      伊藤舞音さんが出演する1月28日公演②のチケット残りわずか！
       <IdolIcon idolId={6} />
     </div>
   ),
