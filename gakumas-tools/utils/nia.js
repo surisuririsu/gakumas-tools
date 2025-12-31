@@ -200,9 +200,15 @@ export function calculateBonusParams(gainedParams, paramBonuses) {
   );
 }
 
-export function calculateChallengeParams(gainedParams, challengeParamBonus) {
-  return gainedParams.map((param) =>
-    Math.floor((param * challengeParamBonus) / 100)
+export function calculateChallengeParams(
+  gainedParams,
+  bonusParams,
+  challengeParamBonus
+) {
+  return gainedParams.map(
+    (param, i) =>
+      Math.floor((param * challengeParamBonus) / 100) +
+      Math.floor((bonusParams[i] * challengeParamBonus) / 100)
   );
 }
 
@@ -349,11 +355,12 @@ export function calculateRecommendedScores(
       currentScores
     );
     // console.log(gainedParams);
+    const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
     const challengeParams = calculateChallengeParams(
       gainedParams,
+      bonusParams,
       challengeParamBonus
     );
-    const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
     const postAuditionParams = calculatePostAuditionParams(
       maxParams,
       params,
