@@ -120,35 +120,35 @@ export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
       flat: {
         1: [
           { threshold: 134210, multiplier: 0, constant: 172 },
-          { threshold: 66600, multiplier: 0.000756, constant: 69 },
-          { threshold: 0, multiplier: 0.0018, constant: 0 },
+          { threshold: 66600, multiplier: 0.000756, constant: 70 },
+          { threshold: 0, multiplier: 0.0018, constant: 0.5 },
         ],
         2: [
           { threshold: 63750, multiplier: 0, constant: 142 },
-          { threshold: 31600, multiplier: 0.00124, constant: 62 },
-          { threshold: 0, multiplier: 0.0032, constant: 0 },
+          { threshold: 31350, multiplier: 0.001276, constant: 61 },
+          { threshold: 0, multiplier: 0.00325, constant: 0 },
         ],
         3: [
-          { threshold: 36900, multiplier: 0, constant: 116 },
-          { threshold: 17600, multiplier: 0.00183, constant: 48.5 },
-          { threshold: 0, multiplier: 0.0046, constant: 0 },
+          { threshold: 36500, multiplier: 0, constant: 116 },
+          { threshold: 17600, multiplier: 0.00182, constant: 50 },
+          { threshold: 0, multiplier: 0.00465, constant: 0 },
         ],
       },
       skew: {
         1: [
-          { threshold: 136000, multiplier: 0, constant: 215 },
-          { threshold: 43920, multiplier: 0.00092, constant: 89 },
-          { threshold: 0, multiplier: 0.00292, constant: 0 },
+          { threshold: 136070, multiplier: 0, constant: 215 },
+          { threshold: 65350, multiplier: 0.000915, constant: 90.5 },
+          { threshold: 0, multiplier: 0.0023, constant: 0 },
         ],
         2: [
-          { threshold: 63000, multiplier: 0, constant: 129 },
-          { threshold: 30600, multiplier: 0.0012, constant: 52.5 },
-          { threshold: 0, multiplier: 0.00292, constant: 0 },
+          { threshold: 63250, multiplier: 0, constant: 129 },
+          { threshold: 30900, multiplier: 0.00117, constant: 55 },
+          { threshold: 0, multiplier: 0.00295, constant: 0 },
         ],
         3: [
-          { threshold: 36000, multiplier: 0, constant: 86 },
-          { threshold: 18000, multiplier: 0.00133, constant: 37 },
-          { threshold: 0, multiplier: 0.0034, constant: 0 },
+          { threshold: 36100, multiplier: 0, constant: 86 },
+          { threshold: 17800, multiplier: 0.00136, constant: 37 },
+          { threshold: 0, multiplier: 0.003465, constant: 0 },
         ],
       },
     },
@@ -161,7 +161,7 @@ export function calculateGainedParams(paramRegimesByOrder, paramOrder, scores) {
     for (let j = 0; j < regimes.length; j++) {
       const { threshold, multiplier, constant } = regimes[j];
       if (scores[i] > threshold) {
-        return Math.ceil(scores[i] * multiplier + constant);
+        return Math.floor(scores[i] * multiplier + constant);
       }
     }
     return 0;
@@ -246,10 +246,10 @@ export const VOTE_REGIMES_BY_DIFF_STAGE = {
   },
   master: {
     finale: [
-      { threshold: 1200800, multiplier: 0, constant: 32668 },
-      { threshold: 640900, multiplier: 0.004127, constant: 27713 },
-      { threshold: 260410, multiplier: 0.018215, constant: 18684 },
-      { threshold: 0, multiplier: 0.075927, constant: 3655 },
+      { threshold: 1200582, multiplier: 0, constant: 32668 },
+      { threshold: 640882, multiplier: 0.004126232489, constant: 27714.07 },
+      { threshold: 260417, multiplier: 0.01821637749, constant: 18683.95 },
+      { threshold: 0, multiplier: 0.07592333987, constant: 3656.17 },
     ],
   },
 };
@@ -283,9 +283,10 @@ const VOTE_RANKS = [
   { rank: "SSS", threshold: 140000 },
   { rank: "SS+", threshold: 120000 },
   { rank: "SS", threshold: 100000 },
-  { rank: "S+", threshold: 80000 },
-  { rank: "S", threshold: 60000 },
-  { rank: "A+", threshold: 40000 },
+  { rank: "S+", threshold: 80001 },
+  { rank: "S", threshold: 60001 },
+  { rank: "A+", threshold: 40001 },
+  { rank: "A", threshold: 20001 },
 ];
 
 export function getVoteRank(votes) {
@@ -298,17 +299,18 @@ export function getVoteRank(votes) {
 }
 
 const FAN_RATING_BY_VOTE_RANK = {
+  A: { base: 300, multiplier: 0.085 },
   "A+": { base: 900, multiplier: 0.07 },
   S: { base: 1200, multiplier: 0.065 },
   "S+": { base: 1600, multiplier: 0.06 },
-  SS: { base: 2100, multiplier: 0.055 },
+  SS: { base: 2600, multiplier: 0.05 },
   "SS+": { base: 3800, multiplier: 0.04 },
   SSS: { base: 5200, multiplier: 0.03 },
 };
 
 export function calculateVoteRating(votes, voteRank) {
   const { base, multiplier } = FAN_RATING_BY_VOTE_RANK[voteRank];
-  return base + Math.ceil(votes * multiplier);
+  return base + Math.floor(votes * multiplier);
 }
 
 export function calculateRecommendedScores(
