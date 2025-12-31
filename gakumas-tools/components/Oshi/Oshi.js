@@ -5,17 +5,7 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      「MISHIMA LIVE READING PROJECT-Vol.1」
-      伊藤舞音さんが出演する1月28日公演②のチケット残りわずか！
-      <IdolIcon idolId={6} />
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://www.confetti-web.com/events/12918",
-};
+export const OSHI_PROPS = null;
 
 export default function Oshi({
   text,
