@@ -220,14 +220,15 @@
     "custom": "커스텀"
   },
   "StageCustomizer": {
+    "type": "타입",
+    "contest": "콘테스트",
+    "linkContest": "링크 콘테스트",
+    "event": "이벤트",
     "turnCounts": "턴 수",
     "firstTurn": "첫 턴 비율",
     "criteria": "심사 기준",
     "effects": "스테이지 효과",
     "effectFormat": "효과 형식",
-    "defaultCards": "기본 카드",
-    "contest": "콘테스트",
-    "event": "이벤트",
     "apply": "적용"
   },
   "LoadoutSkillCardGroup": {
