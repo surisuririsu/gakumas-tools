@@ -68,7 +68,8 @@
     "difficulties": {
       "regular": "Regular",
       "pro": "Pro",
-      "master": "Master"
+      "master": "Master",
+      "legend": "Legend"
     },
     "places": {
       "1": "1st",
@@ -77,6 +78,7 @@
       "4": "其他名次"
     },
     "parameterLimit": "属性上限",
+    "midtermScore": "期中考试分数",
     "finalExamPlacement": "期末考试名次",
     "parameter": "属性加成",
     "parameters": "属性",

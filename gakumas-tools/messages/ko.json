@@ -68,7 +68,8 @@
     "difficulties": {
       "regular": "레귤러",
       "pro": "프로",
-      "master": "마스터"
+      "master": "마스터",
+      "legend": "레전드"
     },
     "places": {
       "1": "1위",
@@ -77,6 +78,7 @@
       "4": "4위 이하"
     },
     "parameterLimit": "패러미터 상한",
+    "midtermScore": "중간시험 스코어",
     "finalExamPlacement": "최종시험 순위",
     "parameter": "패러미터",
     "parameters": "패러미터",
