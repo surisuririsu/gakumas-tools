@@ -73,7 +73,7 @@ export default function NiaCalculator() {
   const [difficulty, setDifficulty] = useState("master");
   const [stage, setStage] = useState("finale");
   const [params, setParams] = useState([null, null, null]);
-  const [challengeParamBonus, setChallengeParamBonus] = useState(40);
+  const [challengeParamBonus, setChallengeParamBonus] = useState(55);
   const [paramBonuses, setParamBonuses] = useState([null, null, null]);
   const [votes, setVotes] = useState(MIN_VOTES_BY_STAGE[stage]);
   const [affection, setAffection] = useState(20);
@@ -203,7 +203,7 @@ export default function NiaCalculator() {
                 placeholder="%"
                 onChange={setChallengeParamBonus}
                 min={0}
-                max={40}
+                max={55}
               />
             </>
           )}
