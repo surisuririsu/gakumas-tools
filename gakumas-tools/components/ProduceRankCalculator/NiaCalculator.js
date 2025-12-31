@@ -254,15 +254,22 @@ export default function NiaCalculator() {
                       >
                         <FaCircleChevronDown />
                         <span className={styles.rankButtonLabel}>
-                          {rank} ({TARGET_RATING_BY_RANK[rank]})
+                          {rank} ({TARGET_RATING_BY_RANK[rank].toLocaleString()}
+                          )
                         </span>
                       </button>
                     ) : (
-                      `${rank} (${TARGET_RATING_BY_RANK[rank]})`
+                      `${rank} (${TARGET_RATING_BY_RANK[
+                        rank
+                      ].toLocaleString()})`
                     ),
                   ];
                   if (recommendedScores[rank]) {
-                    return row.concat(recommendedScores[rank]);
+                    return row.concat(
+                      recommendedScores[rank].map((score) =>
+                        score.toLocaleString()
+                      )
+                    );
                   } else {
                     return row.concat(["-", "-", "-"]);
                   }
@@ -302,13 +309,13 @@ export default function NiaCalculator() {
           <div className={styles.flex}>
             <div>
               <label>{t("gainedVotes")}</label>
-              <div>+{gainedVotes}</div>
+              <div>+{gainedVotes.toLocaleString()}</div>
             </div>
 
             <div>
               <label>{t("votesPostAudition")}</label>
               <div>
-                {totalVotes}
+                {totalVotes.toLocaleString()}
                 {voteRank ? ` (${voteRank})` : null}
               </div>
             </div>
@@ -317,7 +324,8 @@ export default function NiaCalculator() {
           <div className={styles.produceRank}>
             <label>{t("produceRank")}</label>
             <span>
-              {actualRating} {actualRank ? `(${actualRank})` : null}
+              {actualRating.toLocaleString()}{" "}
+              {actualRank ? `(${actualRank})` : null}
             </span>
           </div>
         </section>
