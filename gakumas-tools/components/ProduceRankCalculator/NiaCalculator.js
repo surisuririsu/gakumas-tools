@@ -50,7 +50,10 @@ const STAGE_OPTIONS_BY_DIFFICULTY = {
     { value: "quartet", label: "QUARTET" },
     { value: "finale", label: "FINALE" },
   ],
-  master: [{ value: "finale", label: "FINALE" }],
+  master: [
+    { value: "quartet", label: "QUARTET" },
+    { value: "finale", label: "FINALE" },
+  ],
 };
 
 const FINAL_AUDITIONS = ["quartet", "finale"];

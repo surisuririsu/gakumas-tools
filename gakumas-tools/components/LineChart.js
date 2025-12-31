@@ -30,7 +30,7 @@ export default function LineChart({
   scores,
   gainedParams,
 }) {
-  const t = useTranslations("ProduceRankCalculator");
+  const t = useTranslations("Calculator");
 
   const options = {
     scales: {
