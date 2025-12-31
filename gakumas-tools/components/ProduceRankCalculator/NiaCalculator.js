@@ -115,11 +115,11 @@ export default function NiaCalculator() {
     paramOrder,
     scores
   );
+  const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
   const challengeParams = calculateChallengeParams(
-    gainedParams,
+    gainedParams.map((p, i) => p + bonusParams[i]),
     challengeParamBonus
   );
-  const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
   const postAuditionParams = calculatePostAuditionParams(
     maxParams,
     params,
