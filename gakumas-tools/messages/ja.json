@@ -68,7 +68,8 @@
     "difficulties": {
       "regular": "レギュラー",
       "pro": "プロ",
-      "master": "マスター"
+      "master": "マスター",
+      "legend": "レジェンド"
     },
     "places": {
       "1": "1位",
@@ -77,6 +78,7 @@
       "4": "4位以下"
     },
     "parameterLimit": "パラメータ上限",
+    "midtermScore": "中間試験スコア",
     "finalExamPlacement": "最終試験順位",
     "parameter": "パラメータ",
     "parameters": "パラメータ",
