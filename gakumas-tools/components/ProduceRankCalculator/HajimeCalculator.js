@@ -40,7 +40,7 @@ function HajimeCalculator() {
 
   const TABLE_HEADERS = [t("produceRank"), t("targetScore")];
 
-  const [difficulty, setDifficulty] = useState("master");
+  const [difficulty, setDifficulty] = useState("legend");
   const [place, setPlace] = useState(1);
   const [params, setParams] = useState([null, null, null]);
   const [midtermScore, setMidtermScore] = useState("");
