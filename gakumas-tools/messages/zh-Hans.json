@@ -220,14 +220,15 @@
     "custom": "自定义"
   },
   "StageCustomizer": {
+    "type": "类型",
+    "contest": "竞技场",
+    "linkContest": "链接竞技场",
+    "event": "活动",
     "turnCounts": "回合数",
     "firstTurn": "首回合比例",
     "criteria": "审查基准",
     "effects": "场地效果",
     "effectFormat": "语法格式",
-    "defaultCards": "基本卡组",
-    "contest": "竞技场",
-    "event": "活动",
     "apply": "应用"
   },
   "LoadoutSkillCardGroup": {

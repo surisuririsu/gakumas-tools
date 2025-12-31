@@ -220,14 +220,15 @@
     "custom": "Custom"
   },
   "StageCustomizer": {
+    "type": "Type",
+    "contest": "Contest",
+    "linkContest": "Link Contest",
+    "event": "Event",
     "turnCounts": "Turn counts",
     "firstTurn": "First turn rate",
     "criteria": "Criteria",
     "effects": "Effects",
     "effectFormat": "Effect format",
-    "defaultCards": "Default cards",
-    "contest": "Contest",
-    "event": "Event",
     "apply": "Apply"
   },
   "LoadoutSkillCardGroup": {
