@@ -116,6 +116,42 @@ export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
     },
   },
   master: {
+    quartet: {
+      flat: {
+        1: [
+          { threshold: 70300, multiplier: 0, constant: 145 },
+          { threshold: 34210, multiplier: 0.001194, constant: 61.08 },
+          { threshold: 0, multiplier: 0.002965, constant: 0.5 },
+        ],
+        2: [
+          { threshold: 32870, multiplier: 0, constant: 120 },
+          { threshold: 16050, multiplier: 0.00213, constant: 50 },
+          { threshold: 0, multiplier: 0.00512, constant: 2 },
+        ],
+        3: [
+          { threshold: 18670, multiplier: 0, constant: 98 },
+          { threshold: 9120, multiplier: 0.00308, constant: 40.5 },
+          { threshold: 0, multiplier: 0.00741, constant: 1 },
+        ],
+      },
+      skew: {
+        1: [
+          { threshold: 70750, multiplier: 0, constant: 182 },
+          { threshold: 34133, multiplier: 0.00148, constant: 77.3 },
+          { threshold: 0, multiplier: 0.00373, constant: 0.5 },
+        ],
+        2: [
+          { threshold: 32900, multiplier: 0, constant: 109 },
+          { threshold: 15970, multiplier: 0.0019, constant: 46.5 },
+          { threshold: 0, multiplier: 0.00475, constant: 1 },
+        ],
+        3: [
+          { threshold: 19570, multiplier: 0, constant: 73 },
+          { threshold: 9000, multiplier: 0.0023, constant: 30 },
+          { threshold: 0, multiplier: 0.0056, constant: 0 },
+        ],
+      },
+    },
     finale: {
       flat: {
         1: [
@@ -251,6 +287,12 @@ export const VOTE_REGIMES_BY_DIFF_STAGE = {
     ],
   },
   master: {
+    quartet: [
+      { threshold: 239970, multiplier: 0, constant: 25334 },
+      { threshold: 180000, multiplier: 0.02800776858, constant: 18612.6 },
+      { threshold: 119982, multiplier: 0.08399651702, constant: 8534.93 },
+      { threshold: 0, multiplier: 0.1289162297, constant: 3145.5 },
+    ],
     finale: [
       { threshold: 1200582, multiplier: 0, constant: 32668 },
       { threshold: 640882, multiplier: 0.004126232489, constant: 27714.07 },
