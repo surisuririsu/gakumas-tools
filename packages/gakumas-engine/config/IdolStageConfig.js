@@ -28,7 +28,7 @@ export default class IdolStageConfig {
     const { type, criteria, season } = stageConfig;
     const { params, supportBonus } = idolConfig;
 
-    if (type !== "contest") {
+    if (type !== "contest" || season >= 37) {
       return {
         vocal: params.vocal / 100,
         dance: params.dance / 100,

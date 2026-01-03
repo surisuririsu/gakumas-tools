@@ -204,10 +204,9 @@ export default function Simulator() {
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
         <div>{t("multiplierNote")}</div>
-        <div>※ Some card effects may be inaccurate.</div>
         {stage.preview && <div>{t("previewNote")}</div>}
         <StageSelect />
-        {stage.type !== "contest" ? (
+        {stage.type !== "contest" || stage.season >= 37 ? (
           t("enterPercents")
         ) : (
           <div className={styles.supportBonusInput}>
