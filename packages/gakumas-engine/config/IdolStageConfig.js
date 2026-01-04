@@ -14,21 +14,22 @@ const EVENT_DEFAULT_CARD_IDS_BY_RECOMMENDED_EFFECT = {
 };
 
 export default class IdolStageConfig {
-  constructor(idolConfig, stageConfig) {
+  constructor(idolConfig, stageConfig, enterPercents) {
     this.idol = idolConfig;
     this.stage = stageConfig;
     this.typeMultipliers = this.calculateTypeMultipliers(
       idolConfig,
-      stageConfig
+      stageConfig,
+      enterPercents
     );
     this.defaultCardIds = this.getDefaultCardIds(idolConfig, stageConfig);
   }
 
-  calculateTypeMultipliers(idolConfig, stageConfig) {
+  calculateTypeMultipliers(idolConfig, stageConfig, enterPercents) {
     const { type, criteria, season } = stageConfig;
     const { params, supportBonus } = idolConfig;
 
-    if (type !== "contest" || season >= 37) {
+    if (type !== "contest" || enterPercents) {
       return {
         vocal: params.vocal / 100,
         dance: params.dance / 100,
@@ -70,7 +71,7 @@ export default class IdolStageConfig {
         } else if (param > 0) {
           multiplier = param * 5;
         }
-      } else {
+      } else if (season < 37) {
         if (param > 2500) {
           multiplier = param + 3000;
           multiplier += (param - 2500) * 0.2;
@@ -84,6 +85,18 @@ export default class IdolStageConfig {
           multiplier = param * 3;
         } else if (param > 0) {
           multiplier = param * 4 - 250;
+        }
+      } else {
+        if (param > 2700) {
+          multiplier = param * 0.9175 + 2902.5;
+        } else if (param > 2100) {
+          multiplier = param * 1.275 + 1915;
+        } else if (param > 1500) {
+          multiplier = param * 1.7 + 1020;
+        } else if (param > 900) {
+          multiplier = param * 2.1225 + 387.5;
+        } else if (param > 0) {
+          multiplier = param * 2.55;
         }
       }
 
