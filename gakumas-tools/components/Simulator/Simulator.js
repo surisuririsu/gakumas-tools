@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
+import { FaArrowsRotate, FaHashtag, FaPercent } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import {
   IdolConfig,
@@ -19,6 +20,7 @@ import {
   S,
 } from "gakumas-engine";
 import Button from "@/components/Button";
+import IconButton from "@/components/IconButton";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
 import Loader from "@/components/Loader";
@@ -32,7 +34,6 @@ import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { MAX_WORKERS, DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
-import { logEvent } from "@/utils/logging";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import ManualPlay from "./ManualPlay";
 import SimulatorButtons from "./SimulatorButtons";
@@ -62,6 +63,7 @@ export default function Simulator() {
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
   const [numRuns, setNumRuns] = useState(DEFAULT_NUM_RUNS);
+  const [enterPercents, setEnterPercents] = useState(false);
   const workersRef = useRef();
 
   const [pendingDecision, setPendingDecision] = useState(null);
@@ -70,8 +72,8 @@ export default function Simulator() {
   const config = useMemo(() => {
     const idolConfig = new IdolConfig(loadout);
     const stageConfig = new StageConfig(stage);
-    return new IdolStageConfig(idolConfig, stageConfig);
-  }, [loadout, stage, loadouts]);
+    return new IdolStageConfig(idolConfig, stageConfig, enterPercents);
+  }, [loadout, stage, enterPercents]);
 
   const manualInputCallback = useCallback((decision) => {
     return new Promise((resolve) => {
@@ -93,9 +95,9 @@ export default function Simulator() {
     return loadouts.map((ld) => {
       const idolConfig = new IdolConfig(ld);
       const stageConfig = new StageConfig(stage);
-      return new IdolStageConfig(idolConfig, stageConfig);
+      return new IdolStageConfig(idolConfig, stageConfig, enterPercents);
     });
-  }, [loadouts, stage]);
+  }, [loadouts, stage, enterPercents]);
 
   // Set up web workers on mount
   useEffect(() => {
@@ -206,18 +208,32 @@ export default function Simulator() {
         <div>{t("multiplierNote")}</div>
         {stage.preview && <div>{t("previewNote")}</div>}
         <StageSelect />
-        {stage.type !== "contest" || stage.season >= 37 ? (
+        {stage.type !== "contest" ? (
           t("enterPercents")
         ) : (
-          <div className={styles.supportBonusInput}>
-            <label>{t("supportBonus")}</label>
-            <Input
-              type="number"
-              value={parseFloat(((loadout.supportBonus || 0) * 100).toFixed(2))}
-              onChange={(value) =>
-                setSupportBonus(parseFloat((value / 100).toFixed(4)))
-              }
-            />
+          <div className={styles.percentRow}>
+            <div className={styles.enterPercentsToggle}>
+              <IconButton
+                icon={FaArrowsRotate}
+                size="small"
+                onClick={() => setEnterPercents(!enterPercents)}
+              />
+              {enterPercents ? <FaPercent /> : <FaHashtag />}
+            </div>
+            {!enterPercents && (
+              <div className={styles.supportBonusInput}>
+                <label>{t("supportBonus")}</label>
+                <Input
+                  type="number"
+                  value={parseFloat(
+                    ((loadout.supportBonus || 0) * 100).toFixed(2)
+                  )}
+                  onChange={(value) =>
+                    setSupportBonus(parseFloat((value / 100).toFixed(4)))
+                  }
+                />
+              </div>
+            )}
           </div>
         )}
         {stage.type == "linkContest" && <div>{t("linkContestNote")}</div>}
@@ -299,7 +315,7 @@ export default function Simulator() {
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
           >
-            {t("lastUpdated")}: 2026-01-02
+            {t("lastUpdated")}: 2026-01-04
           </a>
         </div>
         {!simulatorData && (
