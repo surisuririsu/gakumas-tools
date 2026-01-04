@@ -22,6 +22,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-01-04
 
 - Update score multiplier calculation for S37, make % entry toggleable
+- Add preview of superlative
 
 ## 2026-01-02
 
