@@ -87,8 +87,8 @@ export default class IdolStageConfig {
           multiplier = param * 4 - 250;
         }
       } else {
-        if (param > 2700) {
-          multiplier = param * 0.9175 + 2902.5;
+        if (param > 2800) {
+          multiplier = param * 0.8525 + 3095;
         } else if (param > 2100) {
           multiplier = param * 1.275 + 1915;
         } else if (param > 1500) {
