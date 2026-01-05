@@ -727,9 +727,9 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 726,最強パフォーマー,,L,mental,logic,1,FALSE,TRUE,produce,,FALSE,if:motivation>=9,do:cost-=6,"do:cardUsesRemaining+=1,do:motivation+=5;at:staminaDecreased,do:motivationMultiplier=2,do:genki+=4",,
 727,エキスパート,,L,mental,anomaly,1,FALSE,TRUE,produce,,FALSE,if:stanceChangedTimes>=4,do:cost-=2,"do:useRandomCardFree(held),do:cardUsesRemaining+=1;at:turn,do:setStance(preservation),limit:1",,"at:cardMovedToHand,if:movedCardId==727,do:holdSelectedFromDeckOrDiscards"
 728,レジェンドスター,,L,mental,anomaly,1,FALSE,TRUE,produce,,FALSE,,do:cost-=6,"do:cardUsesRemaining+=1,do:drawCard,do:drawCard;if:preservationTimes>=2,do:turnsRemaining+=1;if:strengthTimes>=2,do:turnsRemaining+=1;if:fullPowerTimes>=2,do:turnsRemaining+=1;at:stanceChanged,if:isFullPower,if:turnsRemaining<=3,do:setScoreBuff(1.2,1),limit:3",1,
-729,夢と現境界線,,SSR,active,logic,1,FALSE,TRUE,pIdol,122,FALSE,,do:cost-=4,"do:cardUsesRemaining+=1;if:motivation<=8,do:goodImpressionTurns*=1.1;if:motivation>=9,do:score+=goodImpressionTurns*2.5",,
+729,夢と現境界線,,SSR,active,logic,1,FALSE,TRUE,pIdol,122,FALSE,,do:cost-=4,"do:cardUsesRemaining+=1;if:motivation<=8,do:goodImpressionTurns*=1.1;if:motivation>=9,do:score+=goodImpressionTurns*1.4",,
 730,夢と現境界線+,,SSR,active,logic,1,TRUE,TRUE,pIdol,122,FALSE,,do:cost-=4,"do:cardUsesRemaining+=1;if:motivation<=8,do:goodImpressionTurns*=1.1;if:motivation>=9,do:score+=goodImpressionTurns*2.5",,
 731,あこがれ不良ムーブ,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:motivation-=3,"do:goodImpressionTurns+=3,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1;if:motivation>=6,do:drawCard,do:drawCard",1,
-732,あこがれ不良ムーブ+,,SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,do:motivation-=3,"do:goodImpressionTurns+=3,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1;if:motivation>=6,do:drawCard,do:drawCard",1,
+732,あこがれ不良ムーブ+,"19,34",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,do:motivation-=2,"do:goodImpressionTurns+=4,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1;if:motivation>=6,do:drawCard,do:drawCard",1,
 733,味見はいかが,,SR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=5,"do:removeTroubleFromDeckOrDiscards,do:goodImpressionTurns+=4,do:motivation+=3",1,
-734,味見はいかが+,,SR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=5,"do:removeTroubleFromDeckOrDiscards,do:goodImpressionTurns+=4,do:motivation+=3",1,
+734,味見はいかが+,"55,56,83",SR,mental,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=3,"do:removeTroubleFromDeckOrDiscards,do:goodImpressionTurns+=4,do:motivation+=3",1,
