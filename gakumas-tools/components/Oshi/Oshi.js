@@ -5,7 +5,21 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = null;
+export const OSHI_PROPS = {
+  text: (
+    <div>
+      2月1日
+      <IdolIcon idolId={9} />
+      『薄井友里の#サシバナ』第3部のゲストに伊藤舞音さん
+      <IdolIcon idolId={6} />
+      が出演！
+      <br />
+      チケット先行は1月9日(金)23:59まで！
+    </div>
+  ),
+  initiallyExpanded: true,
+  url: "https://ch.nicovideo.jp/voicegarage/blomaga/ar2225847",
+};
 
 export default function Oshi({
   text,
