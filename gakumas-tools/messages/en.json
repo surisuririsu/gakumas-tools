@@ -232,7 +232,14 @@
     "apply": "Apply"
   },
   "LoadoutSkillCardGroup": {
-    "cost": "Cost"
+    "cost": "Cost",
+    "memoryCalculator": "Memory calculator",
+    "memories": "Memories",
+    "importMemory": "Import memory from screenshot",
+    "addRow": "Add row",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "removeRow": "Remove row"
   },
   "SimulatorSubTools": {
     "costRanges": "Cost ranges",

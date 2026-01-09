@@ -232,7 +232,14 @@
     "apply": "適用"
   },
   "LoadoutSkillCardGroup": {
-    "cost": "コスト"
+    "cost": "コスト",
+    "memoryCalculator": "メモリー計算機",
+    "memories": "メモリー",
+    "importMemory": "スクショからメモリーを読み取る",
+    "addRow": "行を追加",
+    "moveUp": "上に移動",
+    "moveDown": "下に移動",
+    "removeRow": "行を削除"
   },
   "SimulatorSubTools": {
     "costRanges": "コスト範囲",
