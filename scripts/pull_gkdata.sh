@@ -16,6 +16,7 @@ declare -A tabs=(
   ["p_items"]=$GID_P_ITEMS
   ["skill_cards"]=$GID_SKILL_CARDS
   ["customizations"]=$GID_CUSTOMIZATIONS
+  ["p_drinks"]=$GID_P_DRINKS
 )
 
 for name in "${!tabs[@]}"; do

@@ -30,7 +30,9 @@ export default function ManualPlay({
           </a>
         </>
       )}
-      {pendingDecision?.type === "HOLD_SELECTION" && (
+      {["HOLD_SELECTION", "MOVE_TO_HAND_SELECTION"].includes(
+        pendingDecision?.type
+      ) && (
         <HoldModal
           decision={pendingDecision}
           onDecision={onDecision}

@@ -27,7 +27,14 @@ export default function HoldModal({ decision, onDecision, idolId }) {
 
   return (
     <Modal dismissable={false}>
-      <h3>{t("selectCardsToHold", { num })}</h3>
+      <h3>
+        {t(
+          decision.type == "HOLD_SELECTION"
+            ? "selectCardsToHold"
+            : "selectCardsToMoveToHand",
+          { num }
+        )}
+      </h3>
       <div className={styles.cardGrid}>
         {cards.map((cardIndex, arrayIndex) => {
           const card = state[S.cardMap][cardIndex];

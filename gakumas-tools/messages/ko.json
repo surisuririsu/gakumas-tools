@@ -129,6 +129,7 @@
   "Dex": {
     "skillCards": "스킬 카드",
     "pItems": "P 아이템",
+    "pDrinks": "P 드링크",
     "maxTimes": "최대 {n}회"
   },
   "EntityBank": {
@@ -344,6 +345,7 @@
     "linkPhaseChange": "아이돌 교대",
     "skip": "스킵",
     "selectCardsToHold": "{num}장의 카드를 선택",
+    "selectCardsToMoveToHand": "{num}장의 카드를 선택",
     "confirm": "확인"
   },
   "BoxPlot": {

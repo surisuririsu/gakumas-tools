@@ -129,6 +129,7 @@
   "Dex": {
     "skillCards": "技能卡",
     "pItems": "P 道具",
+    "pDrinks": "P 饮料",
     "maxTimes": "最大{n}回合"
   },
   "EntityBank": {
@@ -344,6 +345,7 @@
     "linkPhaseChange": "偶像更换",
     "skip": "跳过",
     "selectCardsToHold": "选择 {num} 张卡片",
+    "selectCardsToMoveToHand": "选择 {num} 张卡片",
     "confirm": "确认"
   },
   "BoxPlot": {

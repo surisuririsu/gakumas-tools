@@ -129,6 +129,7 @@
   "Dex": {
     "skillCards": "Skill cards",
     "pItems": "P-items",
+    "pDrinks": "P-drinks",
     "maxTimes": "Max {n}"
   },
   "EntityBank": {
@@ -344,6 +345,7 @@
     "linkPhaseChange": "Idol changed",
     "skip": "Skip",
     "selectCardsToHold": "Select {num} {num, plural, =1 {card} other {cards}} to hold",
+    "selectCardsToMoveToHand": "Select {num} {num, plural, =1 {card} other {cards}} to move to hand",
     "confirm": "Confirm"
   },
   "BoxPlot": {

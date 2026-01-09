@@ -2,6 +2,8 @@ import glob
 
 image_dirs = [
     "idols",
+    "pDrinks/icons",
+    "pDrinks/details",
     "pIdols",
     "pItems/icons",
     "pItems/details",

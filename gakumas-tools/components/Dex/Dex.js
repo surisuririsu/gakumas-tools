@@ -14,6 +14,7 @@ function Dex() {
     () => [
       { value: EntityTypes.SKILL_CARD, label: t("skillCards") },
       { value: EntityTypes.P_ITEM, label: t("pItems") },
+      { value: EntityTypes.P_DRINK, label: t("pDrinks") },
     ],
     [t]
   );
