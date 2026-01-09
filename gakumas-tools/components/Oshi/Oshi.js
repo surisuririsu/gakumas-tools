@@ -8,17 +8,12 @@ import styles from "./Oshi.module.scss";
 export const OSHI_PROPS = {
   text: (
     <div>
-      2月1日
-      <IdolIcon idolId={9} />
-      『薄井友里の#サシバナ』第3部のゲストに伊藤舞音さん
+      おかづラジオ×アイラハルカの「ないしょ話」第9回は伊藤舞音さん
       <IdolIcon idolId={6} />
-      が出演！
-      <br />
-      チケット先行は1月9日(金)23:59まで！
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://ch.nicovideo.jp/voicegarage/blomaga/ar2225847",
+  url: "https://gs-ch.com/articles/contents/arUjfsE6u32Bd9U9jzm8KAJX",
 };
 
 export default function Oshi({
