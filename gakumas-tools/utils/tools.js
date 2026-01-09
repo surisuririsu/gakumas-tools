@@ -1,5 +1,4 @@
 import {
-  FaAnglesUp,
   FaBook,
   FaCalculator,
   FaChartSimple,

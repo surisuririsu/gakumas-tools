@@ -232,7 +232,14 @@
     "apply": "应用"
   },
   "LoadoutSkillCardGroup": {
-    "cost": "容量"
+    "cost": "容量",
+    "memoryCalculator": "记忆计算器",
+    "memories": "记忆",
+    "importMemory": "从截图导入记忆",
+    "addRow": "添加行",
+    "moveUp": "上移",
+    "moveDown": "下移",
+    "removeRow": "删除行"
   },
   "SimulatorSubTools": {
     "costRanges": "容量范围",

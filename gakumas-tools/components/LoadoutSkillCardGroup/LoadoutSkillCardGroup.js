@@ -93,7 +93,7 @@ function LoadoutSkillCardGroup({
               router.push("/memory-calculator");
             }}
           >
-            <FaPercent />
+            <FaPercent title={t("memoryCalculator")} />
           </button>
 
           {status == "authenticated" && (
@@ -101,7 +101,7 @@ function LoadoutSkillCardGroup({
               className={styles.pickButton}
               onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
             >
-              <FaFilm />
+              <FaFilm title={t("memories")} />
             </button>
           )}
 
@@ -119,14 +119,14 @@ function LoadoutSkillCardGroup({
               )
             }
           >
-            <FaImage />
+            <FaImage title={t("importMemory")} />
           </button>
 
           <button
             className={styles.addButton}
             onClick={() => insertSkillCardIdGroup(groupIndex + 1)}
           >
-            <FaCirclePlus />
+            <FaCirclePlus title={t("addRow")} />
           </button>
 
           <button
@@ -134,7 +134,7 @@ function LoadoutSkillCardGroup({
             onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex - 1)}
             disabled={groupIndex < 1}
           >
-            <FaCircleArrowUp />
+            <FaCircleArrowUp title={t("moveUp")} />
           </button>
 
           <button
@@ -142,7 +142,7 @@ function LoadoutSkillCardGroup({
             onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex + 1)}
             disabled={groupIndex >= loadout.skillCardIdGroups.length - 1}
           >
-            <FaCircleArrowDown />
+            <FaCircleArrowDown title={t("moveDown")} />
           </button>
 
           <button
@@ -150,7 +150,7 @@ function LoadoutSkillCardGroup({
             onClick={() => deleteSkillCardIdGroup(groupIndex)}
             disabled={loadout.skillCardIdGroups.length < 2}
           >
-            <FaCircleXmark />
+            <FaCircleXmark title={t("removeRow")} />
           </button>
         </div>
         <button

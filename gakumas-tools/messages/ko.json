@@ -232,7 +232,14 @@
     "apply": "적용"
   },
   "LoadoutSkillCardGroup": {
-    "cost": "코스트"
+    "cost": "코스트",
+    "memoryCalculator": "메모리 계산기",
+    "memories": "메모리",
+    "importMemory": "스크린샷에서 메모리 불러오기",
+    "addRow": "행 추가",
+    "moveUp": "위로 이동",
+    "moveDown": "아래로 이동",
+    "removeRow": "행 삭제"
   },
   "SimulatorSubTools": {
     "costRanges": "코스트 범위",
