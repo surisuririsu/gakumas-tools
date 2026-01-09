@@ -4,6 +4,8 @@ from PIL import Image
 
 IMAGE_SIZES = {
     "idols": 24,
+    "pDrinks/details": 500,
+    "pDrinks/icons": 96,
     "pIdols": 96,
     "pItems/details": 500,
     "pItems/icons": 96,

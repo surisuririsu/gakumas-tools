@@ -42,6 +42,8 @@ export default class CardManager extends EngineComponent {
       upgradeRandomCardInHand: (state) => this.upgradeRandomCardInHand(state),
       addRandomUpgradedCardToHand: (state) =>
         this.addRandomUpgradedCardToHand(state),
+      addRandomUpgradedSSRCardToHand: (state) =>
+        this.addRandomUpgradedCardToHand(state, ["SSR"]),
       addCardToTopOfDeck: (state, cardId) =>
         this.addCardToTopOfDeck(state, cardId),
       addCardToDeck: (state, cardId) => this.addCardToDeck(state, cardId),
@@ -50,6 +52,8 @@ export default class CardManager extends EngineComponent {
         this.moveCardToHand(state, cardId, parseInt(exact, 10)),
       moveCardToHandFromRemoved: (state, cardBaseId) =>
         this.moveCardToHandFromRemoved(state, cardBaseId),
+      moveSelectedFromDeckOrDiscardsToHand: (state, num = 1) =>
+        this.moveSelectedCardToHand(state, ["deck", "discards"], num),
       moveSSRToTopOfDeck: (state, num) => this.moveSSRToTopOfDeck(state, num),
       moveSSRToHand: (state, num) => this.moveSSRToHand(state, num),
       movePreservationCardToHand: (state) =>
@@ -479,9 +483,9 @@ export default class CardManager extends EngineComponent {
     });
   }
 
-  addRandomUpgradedCardToHand(state) {
+  addRandomUpgradedCardToHand(state, rarities = ["R", "SR", "SSR"]) {
     const validSkillCards = SkillCards.getFiltered({
-      rarities: ["R", "SR", "SSR"],
+      rarities: rarities,
       plans: [this.getConfig(state).idol.plan, "free"],
       sourceTypes: ["produce"],
     }).filter((card) => card.upgraded);
@@ -789,8 +793,49 @@ export default class CardManager extends EngineComponent {
     }
   }
 
+  moveSelectedCardToHand(state, sources, num = 1) {
+    if (state[S.nullifySelect]) return;
+
+    // Collect cards from specified sources
+    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
+    const sourceCards = sourceKeys.map((k) => state[k]);
+    const cards = [].concat(...sourceCards);
+    if (!cards.length) return;
+
+    // Pick card to move based on strategy (may throw exception if async)
+    const indicesToMove = this.engine.strategy.pickCardsToMoveToHand(
+      state,
+      cards,
+      num
+    );
+    indicesToMove.sort((a, b) => b - a);
+    if (indicesToMove.length === 0) return;
+    // Find cards and move to hand
+    for (let j = 0; j < indicesToMove.length; j++) {
+      let indexToMove = indicesToMove[j];
+      for (let i = 0; i < sources.length; i++) {
+        if (indexToMove < sourceCards[i].length) {
+          const card = state[sourceKeys[i]].splice(indexToMove, 1)[0];
+          state[S.handCards].push(card);
+          state[S.movedCard] = card;
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            "cardMovedToHand"
+          );
+          this.logger.log(state, "moveCardToHand", {
+            type: "skillCard",
+            id: state[S.cardMap][card].id,
+          });
+          break;
+        } else {
+          indexToMove -= sourceCards[i].length;
+        }
+      }
+    }
+  }
+
   holdSelectedFrom(state, sources, num = 1) {
-    if (state[S.nullifyHold]) return;
+    if (state[S.nullifySelect]) return;
 
     // Collect cards from specified sources
     const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);

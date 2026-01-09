@@ -7,8 +7,11 @@ import EntityIcon from "@/components/EntityIcon";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import c from "@/utils/classNames";
-import { EntityTypes } from "@/utils/entities";
-import { comparePItems, compareSkillCards } from "@/utils/sort";
+import {
+  COMPARE_FN_BY_TYPE,
+  ENTITY_DATA_BY_TYPE,
+  EntityTypes,
+} from "@/utils/entities";
 import styles from "./EntityBank.module.scss";
 
 const HIDDEN_ITEM_IDS = [];
@@ -27,24 +30,28 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   );
 
   let entities = [];
-  const Entities = type == EntityTypes.SKILL_CARD ? SkillCards : PItems;
-  const compareFn =
-    type == EntityTypes.SKILL_CARD ? compareSkillCards : comparePItems;
+  const Entities = ENTITY_DATA_BY_TYPE[type];
+  const compareFn = COMPARE_FN_BY_TYPE[type];
 
   if (filter) {
-    const pIdolIds = PIdols.getFiltered({
-      idolIds: [idolId],
-      plans: [plan],
-    }).map((pi) => pi.id);
-    const signatureEntities = Entities.getFiltered({
-      pIdolIds,
-    });
+    let signatureEntities = [];
+    if (type !== EntityTypes.P_DRINK) {
+      const pIdolIds = PIdols.getFiltered({
+        idolIds: [idolId],
+        plans: [plan],
+      }).map((pi) => pi.id);
+      signatureEntities = Entities.getFiltered({
+        pIdolIds,
+      });
+    }
+
     const nonSignatureEntities = Entities.getFiltered({
       rarities: ["N", "R", "SR", "SSR"],
       plans: [plan, "free"],
       modes: ["stage"],
       sourceTypes: ["default", "produce", "support"],
     }).sort(compareFn);
+
     entities = signatureEntities.concat(nonSignatureEntities);
   } else {
     entities = Entities.getAll().sort(compareFn);

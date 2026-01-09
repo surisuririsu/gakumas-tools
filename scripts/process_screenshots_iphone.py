@@ -43,3 +43,20 @@ for filename in os.listdir("screenshots/skill_cards"):
             os.path.join("packages/gakumas-images/images/skillCards/details", filename)
         )
         os.remove(os.path.join("screenshots/skill_cards", filename))
+
+for filename in os.listdir("screenshots/p_drinks"):
+    # Crop the icon and description
+    if filename.endswith(".png"):
+        im = Image.open(os.path.join("screenshots/p_drinks", filename))
+        width, height = im.size
+        icon = im.crop((57, 407, 57 + 245, 407 + 245)).resize((130, 130))
+        description = im.crop((33, 383, 33 + 1140, 383 + 491)).resize((348, 150))
+
+        # Save the cropped images
+        icon.save(
+            os.path.join("packages/gakumas-images/images/pDrinks/icons", filename)
+        )
+        description.save(
+            os.path.join("packages/gakumas-images/images/pDrinks/details", filename)
+        )
+        os.remove(os.path.join("screenshots/p_drinks", filename))

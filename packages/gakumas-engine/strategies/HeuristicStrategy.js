@@ -362,7 +362,7 @@ export default class HeuristicStrategy extends BaseStrategy {
     let previewState = this.engine.getInitialState(true);
     previewState[S.cardMap] = deepCopy(state[S.cardMap]);
     this.engine.buffManager.setStance(previewState, "fullPower");
-    previewState[S.nullifyHold] = 1;
+    previewState[S.nullifySelect] = 1;
     previewState = this.engine.useCard(previewState, card);
     return Math.round(previewState[S.score]);
   }
@@ -378,5 +378,9 @@ export default class HeuristicStrategy extends BaseStrategy {
       .slice(0, num)
       .map((item) => item.index);
     return sortedIndices;
+  }
+
+  pickCardsToMoveToHand(state, cards, num = 1) {
+    return this.pickCardsToHold(state, cards, num);
   }
 }

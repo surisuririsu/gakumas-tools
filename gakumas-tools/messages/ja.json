@@ -129,6 +129,7 @@
   "Dex": {
     "skillCards": "スキルカード",
     "pItems": "Pアイテム",
+    "pDrinks": "Pドリンク",
     "maxTimes": "最大{n}回"
   },
   "EntityBank": {
@@ -344,6 +345,7 @@
     "linkPhaseChange": "アイドル交代",
     "skip": "スキップ",
     "selectCardsToHold": "{num}枚のカードを選択",
+    "selectCardsToMoveToHand": "{num}枚のカードを選択",
     "confirm": "確認"
   },
   "BoxPlot": {

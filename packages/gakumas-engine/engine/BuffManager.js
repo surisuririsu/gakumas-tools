@@ -156,7 +156,7 @@ export default class BuffManager extends EngineComponent {
     state[S.staminaDelta] = 0;
 
     // Other
-    state[S.nullifyHold] = 0;
+    state[S.nullifySelect] = 0;
   }
 
   setBuff(state, field, amount, turns, logLabel) {
