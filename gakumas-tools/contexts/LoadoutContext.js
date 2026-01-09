@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Stages } from "gakumas-data";
 import { usePathname } from "@/i18n/routing";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
+import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { getSimulatorUrl } from "@/utils/simulator";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
@@ -13,6 +14,7 @@ export function LoadoutContextProvider({ children }) {
   const pathname = usePathname();
   const { loadoutFromUrl, loadoutsFromUrl, updateUrl } =
     useContext(LoadoutUrlContext);
+  const { setPlan } = useContext(WorkspaceContext);
 
   const initialLoadout = loadoutsFromUrl[0] || loadoutFromUrl;
 
@@ -93,6 +95,10 @@ export function LoadoutContextProvider({ children }) {
   };
 
   useEffect(() => {
+    if (["sense", "logic", "anomaly"].includes(stage.plan)) {
+      setPlan(stage.plan);
+    }
+
     if (stage.type !== "linkContest") return;
     if (loadouts.length == stage.linkTurnCounts.length) return;
 

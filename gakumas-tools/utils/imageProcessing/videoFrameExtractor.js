@@ -19,7 +19,7 @@ export async function extractCandidateFrames(
     const loadTimeout = setTimeout(() => {
       URL.revokeObjectURL(blobURL);
       reject(new Error("Video loading timed out."));
-    }, 30000);
+    }, 300000);
 
     const cleanup = () => {
       clearTimeout(loadTimeout);
