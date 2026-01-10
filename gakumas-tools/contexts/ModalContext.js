@@ -25,11 +25,13 @@ export function ModalContextProvider({ children }) {
   }
 
   function setModal(modal) {
-    // Store the original focused element when opening the first modal
-    if (modals.length === 0) {
-      originalFocusRef.current = document.activeElement;
-    }
-    _setModals(modals.concat(modal));
+    _setModals((cur) => {
+      // Store the original focused element when opening the first modal
+      if (cur.length === 0) {
+        originalFocusRef.current = document.activeElement;
+      }
+      return cur.concat(modal);
+    });
   }
 
   const getModalStackDepth = () => modals.length;
