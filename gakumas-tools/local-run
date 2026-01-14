@@ -1,0 +1,174 @@
+#!/bin/bash
+
+# Gakumas Tools Local Runner
+
+SCRIPT_DIR="local-scripts"
+
+function show_help {
+    echo "Usage: ./local-run <command> [args...]"
+    echo ""
+    echo "Commands:"
+    echo "  sim <season-stage> [options]    Run simulation (wrapper for my-simulator.mjs)"
+    echo "  dump <pIdolId> <output_dir>     Dump memories from MongoDB"
+    echo "  opt <source> <stage> <runs>     Optimize memories (files or mongodb)"
+    echo "  opt-remote <stage> <runs> ...   Optimize memories using DB config from .env.local"
+    echo "  synthesis <main> <sub> <stage> ... Simulate synthesis options for a deck"
+    echo "  csv                             Generate p_idols.csv"
+    echo "  power <memory_file>             Calculate stage power for a memory"
+    echo "  help                            Show this help message"
+    echo ""
+}
+
+
+# Load .env.local if present
+if [ -f .env.local ]; then
+    set -a
+    source .env.local
+    set +a
+fi
+
+if [ $# -eq 0 ]; then
+    show_help
+    exit 1
+fi
+
+COMMAND=$1
+shift
+
+case $COMMAND in
+    sim)
+        yarn node "$SCRIPT_DIR/my-simulator.mjs" "$@"
+        ;;
+    dump)
+        yarn node "$SCRIPT_DIR/dump-memories.mjs" "$@"
+        ;;
+    opt)
+        # Execute from workspace root to ensure PnP works correctly
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        # Resolve 'source' to absolute path if it's a local file/dir
+        SOURCE="$1"
+        if [[ "$SOURCE" != "mongodb://"* && "$SOURCE" != /* ]]; then
+            SOURCE="$(pwd)/$SOURCE"
+        fi
+        shift
+
+        cd "$ROOT_DIR"
+        yarn node "./$REL_SCRIPT_DIR/boot.mjs" "$SOURCE" "$@"
+        ;;
+    opt-remote)
+        # opt-remote logic now relies on global env check
+        
+        if [ -z "$MONGODB_URI" ]; then
+            echo "Error: MONGODB_URI not found in .env.local or environment."
+            exit 1
+        fi
+        
+        STAGE=$1
+        RUNS=$2
+        
+        if [ -z "$STAGE" ] || [ -z "$RUNS" ]; then
+            echo "Usage: ./local-run opt-remote <stage> <runs> [idolName] [plan]"
+            exit 1
+        fi
+        
+        shift 2
+        
+        IDOL_NAME=""
+        PLAN=""
+        EXTRA_ARGS=""
+
+        while [[ $# -gt 0 ]]; do
+            case $1 in
+                --synth)
+                    EXTRA_ARGS="$EXTRA_ARGS $1"
+                    shift
+                    # Check if next arg is a number (integer)
+                    if [[ "$1" =~ ^[0-9]+$ ]]; then
+                        EXTRA_ARGS="$EXTRA_ARGS $1"
+                        shift
+                    fi
+                    ;;
+                --*)
+                    EXTRA_ARGS="$EXTRA_ARGS $1"
+                    shift
+                    ;;
+                *)
+                    if [ -z "$IDOL_NAME" ]; then
+                         IDOL_NAME=$1
+                    elif [ -z "$PLAN" ]; then
+                         PLAN=$1
+                    fi
+                    shift
+                    ;;
+            esac
+        done
+        
+        if [ ! -z "$IDOL_NAME" ]; then
+            EXTRA_ARGS="$EXTRA_ARGS --idolName $IDOL_NAME"
+        fi
+        if [ ! -z "$PLAN" ]; then
+            EXTRA_ARGS="$EXTRA_ARGS --plan $PLAN"
+        fi
+        echo "Running optimization against $MONGODB_URI..." >&2
+        
+        # Execute from workspace root to ensure PnP works correctly
+        # Store current dir to return if needed, or just run subshell
+        
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        
+        # Run boot.mjs which registers loader and imports the main script
+        # Use yarn node to ensure environment setup (PnP etc)
+        yarn node "./$REL_SCRIPT_DIR/boot.mjs" "$MONGODB_URI" "$STAGE" "$RUNS" $EXTRA_ARGS
+        ;;
+    synthesis)
+        MAIN_FILE=$1
+        SUB_FILE=$2
+        STAGE=$3
+        RUNS=$4
+        
+        if [ -z "$MAIN_FILE" ] || [ -z "$SUB_FILE" ] || [ -z "$STAGE" ] || [ -z "$RUNS" ]; then
+            echo "Usage: ./local-run synthesis <main_json> <sub_json> <stage> <runs> [idolName] [plan]"
+            exit 1
+        fi
+        
+        shift 4
+        # Remaining args passed as idolName/plan filters
+        
+        # Execute from workspace root
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        cd "$ROOT_DIR"
+        
+        # We need a dedicated boot script for synthesis?
+        # Actually boot.mjs hardcodes './optimize-memories-parallel.mjs'.
+        # We should make boot.mjs generic or create boot-synthesis.mjs.
+        # Let's create boot-synthesis.mjs for clarity.
+        yarn node "./$REL_SCRIPT_DIR/boot-synthesis.mjs" "$MAIN_FILE" "$SUB_FILE" "$STAGE" "$RUNS" "$@"
+        ;;
+    csv)
+        yarn node "$SCRIPT_DIR/generate-csv.mjs" "$@"
+        ;;
+    power)
+        yarn node "$SCRIPT_DIR/calculate-power.mjs" "$@"
+        ;;
+    stats)
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        yarn node "./$REL_SCRIPT_DIR/boot-stats.mjs" "$@"
+        ;;
+    help)
+        show_help
+        ;;
+    *)
+        echo "Unknown command: $COMMAND"
+        show_help
+        exit 1
+        ;;
+esac
