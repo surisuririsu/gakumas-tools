@@ -7,7 +7,6 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
@@ -36,12 +35,7 @@
     "tesseract.js": "^6.0.1"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.7",
-    "jest": "^30.2.0",
-    "jest-environment-jsdom": "^30.2.0"
+    "eslint-config-next": "^16.0.7"
   }
 }
