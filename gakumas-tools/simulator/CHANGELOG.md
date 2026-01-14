@@ -20,6 +20,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-01-14
+
+- Add preview of Ittai itsu kara
+
 ## 2026-01-05
 
 - Update Superlative Misuzu and event support
