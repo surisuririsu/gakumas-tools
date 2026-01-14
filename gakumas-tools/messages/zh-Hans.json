@@ -304,6 +304,7 @@
     "nullifyDebuff": "负面状态无效",
     "poorConditionTurns": "不调",
     "nullifyCostCards": "体力消费无效",
+    "nullifyCostActiveCards": "体力消费无效（A 卡）",
     "noActiveTurns": "无法使用 A 卡",
     "noMentalTurns": "无法使用 M 卡",
     "noCardUseTurns": "无法使用技能卡",

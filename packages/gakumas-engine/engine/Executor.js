@@ -346,9 +346,6 @@ export default class Executor extends EngineComponent {
   }
 
   resolveCost(state, cost, growth) {
-    // Nullify cost
-    if (state[S.nullifyCostCards]) return;
-
     // Apply growth
     if (growth[G["g.cost"]]) {
       cost += growth[G["g.cost"]];

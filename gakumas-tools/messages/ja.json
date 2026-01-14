@@ -304,6 +304,7 @@
     "nullifyDebuff": "低下状態無効",
     "poorConditionTurns": "不調",
     "nullifyCostCards": "体力消費無効",
+    "nullifyCostActiveCards": "アクティブスキルカード体力消費無効",
     "noActiveTurns": "アクティブスキルカード使用不可",
     "noMentalTurns": "メンタルスキルカード使用不可",
     "noCardUseTurns": "スキルカード使用不可",

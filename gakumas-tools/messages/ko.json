@@ -304,6 +304,7 @@
     "nullifyDebuff": "저하 상태 비활성화",
     "poorConditionTurns": "부조화",
     "nullifyCostCards": "체력 소비 무효",
+    "nullifyCostActiveCards": "액티브 스킬 카드 체력 소비 무효",
     "noActiveTurns": "액티브 스킬 카드 사용 불가",
     "noMentalTurns": "멘탈 스킬 카드 사용 불가",
     "noCardUseTurns": "스킬 카드 사용 불가",

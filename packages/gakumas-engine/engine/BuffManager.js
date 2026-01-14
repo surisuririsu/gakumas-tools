@@ -102,6 +102,7 @@ export default class BuffManager extends EngineComponent {
     state[S.costReduction] = 0;
     state[S.costIncrease] = 0;
     state[S.nullifyCostCards] = 0;
+    state[S.nullifyCostActiveCards] = 0;
     state[S.nullifyDebuff] = 0;
     state[S.nullifyGenkiTurns] = 0;
     state[S.doubleCardEffectCards] = 0;
