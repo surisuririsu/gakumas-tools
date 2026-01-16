@@ -1,11 +1,14 @@
 import image_1 from "./1.png";
+import image_2 from "./2.png";
+import image_3 from "./3.png";
+import image_4 from "./4.png";
+import image_5 from "./5.png";
+import image_6 from "./6.png";
+import image_7 from "./7.png";
+import image_8 from "./8.png";
+import image_9 from "./9.png";
 import image_10 from "./10.png";
-import image_102 from "./102.png";
-import image_104 from "./104.png";
-import image_105 from "./105.png";
-import image_106 from "./106.png";
 import image_11 from "./11.png";
-import image_114 from "./114.png";
 import image_12 from "./12.png";
 import image_13 from "./13.png";
 import image_14 from "./14.png";
@@ -14,7 +17,6 @@ import image_16 from "./16.png";
 import image_17 from "./17.png";
 import image_18 from "./18.png";
 import image_19 from "./19.png";
-import image_2 from "./2.png";
 import image_20 from "./20.png";
 import image_21 from "./21.png";
 import image_22 from "./22.png";
@@ -25,7 +27,6 @@ import image_26 from "./26.png";
 import image_27 from "./27.png";
 import image_28 from "./28.png";
 import image_29 from "./29.png";
-import image_3 from "./3.png";
 import image_30 from "./30.png";
 import image_31 from "./31.png";
 import image_32 from "./32.png";
@@ -36,7 +37,6 @@ import image_36 from "./36.png";
 import image_37 from "./37.png";
 import image_38 from "./38.png";
 import image_39 from "./39.png";
-import image_4 from "./4.png";
 import image_40 from "./40.png";
 import image_41 from "./41.png";
 import image_42 from "./42.png";
@@ -47,7 +47,6 @@ import image_46 from "./46.png";
 import image_47 from "./47.png";
 import image_48 from "./48.png";
 import image_49 from "./49.png";
-import image_5 from "./5.png";
 import image_50 from "./50.png";
 import image_51 from "./51.png";
 import image_52 from "./52.png";
@@ -58,7 +57,6 @@ import image_56 from "./56.png";
 import image_57 from "./57.png";
 import image_58 from "./58.png";
 import image_59 from "./59.png";
-import image_6 from "./6.png";
 import image_60 from "./60.png";
 import image_61 from "./61.png";
 import image_62 from "./62.png";
@@ -69,7 +67,6 @@ import image_66 from "./66.png";
 import image_67 from "./67.png";
 import image_68 from "./68.png";
 import image_69 from "./69.png";
-import image_7 from "./7.png";
 import image_70 from "./70.png";
 import image_71 from "./71.png";
 import image_72 from "./72.png";
@@ -80,7 +77,6 @@ import image_76 from "./76.png";
 import image_77 from "./77.png";
 import image_78 from "./78.png";
 import image_79 from "./79.png";
-import image_8 from "./8.png";
 import image_80 from "./80.png";
 import image_81 from "./81.png";
 import image_82 from "./82.png";
@@ -91,7 +87,6 @@ import image_86 from "./86.png";
 import image_87 from "./87.png";
 import image_88 from "./88.png";
 import image_89 from "./89.png";
-import image_9 from "./9.png";
 import image_90 from "./90.png";
 import image_91 from "./91.png";
 import image_92 from "./92.png";
@@ -100,16 +95,24 @@ import image_94 from "./94.png";
 import image_97 from "./97.png";
 import image_98 from "./98.png";
 import image_99 from "./99.png";
+import image_102 from "./102.png";
+import image_104 from "./104.png";
+import image_105 from "./105.png";
+import image_106 from "./106.png";
+import image_114 from "./114.png";
 
 const IMAGES = {
   '1': image_1,
+  '2': image_2,
+  '3': image_3,
+  '4': image_4,
+  '5': image_5,
+  '6': image_6,
+  '7': image_7,
+  '8': image_8,
+  '9': image_9,
   '10': image_10,
-  '102': image_102,
-  '104': image_104,
-  '105': image_105,
-  '106': image_106,
   '11': image_11,
-  '114': image_114,
   '12': image_12,
   '13': image_13,
   '14': image_14,
@@ -118,7 +121,6 @@ const IMAGES = {
   '17': image_17,
   '18': image_18,
   '19': image_19,
-  '2': image_2,
   '20': image_20,
   '21': image_21,
   '22': image_22,
@@ -129,7 +131,6 @@ const IMAGES = {
   '27': image_27,
   '28': image_28,
   '29': image_29,
-  '3': image_3,
   '30': image_30,
   '31': image_31,
   '32': image_32,
@@ -140,7 +141,6 @@ const IMAGES = {
   '37': image_37,
   '38': image_38,
   '39': image_39,
-  '4': image_4,
   '40': image_40,
   '41': image_41,
   '42': image_42,
@@ -151,7 +151,6 @@ const IMAGES = {
   '47': image_47,
   '48': image_48,
   '49': image_49,
-  '5': image_5,
   '50': image_50,
   '51': image_51,
   '52': image_52,
@@ -162,7 +161,6 @@ const IMAGES = {
   '57': image_57,
   '58': image_58,
   '59': image_59,
-  '6': image_6,
   '60': image_60,
   '61': image_61,
   '62': image_62,
@@ -173,7 +171,6 @@ const IMAGES = {
   '67': image_67,
   '68': image_68,
   '69': image_69,
-  '7': image_7,
   '70': image_70,
   '71': image_71,
   '72': image_72,
@@ -184,7 +181,6 @@ const IMAGES = {
   '77': image_77,
   '78': image_78,
   '79': image_79,
-  '8': image_8,
   '80': image_80,
   '81': image_81,
   '82': image_82,
@@ -195,7 +191,6 @@ const IMAGES = {
   '87': image_87,
   '88': image_88,
   '89': image_89,
-  '9': image_9,
   '90': image_90,
   '91': image_91,
   '92': image_92,
@@ -204,6 +199,11 @@ const IMAGES = {
   '97': image_97,
   '98': image_98,
   '99': image_99,
+  '102': image_102,
+  '104': image_104,
+  '105': image_105,
+  '106': image_106,
+  '114': image_114,
 };
 
 export default IMAGES;
