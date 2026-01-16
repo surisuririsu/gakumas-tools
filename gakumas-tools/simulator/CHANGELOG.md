@@ -25,6 +25,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-01-16
 
 - Add ittaiitsukara temari
+- Fix samuzora recital stamina cost
 
 ## 2026-01-14
 

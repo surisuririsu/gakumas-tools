@@ -736,4 +736,4 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 735,置き去りな自分,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,123,FALSE,,do:cost-=5,"do:setStance(preservation),do:fullPowerCharge+=2;target:active*effect(fullPowerCharge),do:g.score+=40,do:g.cost-=8",1,
 736,置き去りな自分+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,123,FALSE,,do:cost-=5,"do:setStance(preservation),do:fullPowerCharge+=2;target:active*effect(fullPowerCharge),do:g.score+=50,do:g.cost-=8",1,
 737,寒空リサイタル,,SSR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,,do:cost-=6,"do:genki+=7,do:fullPowerCharge+=1;at:mentalCardUsed,if:stance!=fullPower,do:fullPowerCharge+=2,limit:3",1,
-738,寒空リサイタル+,"26,103",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=2,"do:genki+=7,do:fullPowerCharge+=2;at:mentalCardUsed,if:stance!=fullPower,do:fullPowerCharge+=2,limit:3",1,
+738,寒空リサイタル+,"26,103",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,do:cost-=5,"do:genki+=7,do:fullPowerCharge+=2;at:mentalCardUsed,if:stance!=fullPower,do:fullPowerCharge+=2,limit:3",1,
