@@ -1,19 +1,25 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
-import Button from "@/components/Button";
+import { Link } from "@/i18n/routing";
 import { TOOLS } from "@/utils/tools";
+import styles from "./Welcome.module.scss";
 
 function ToolsList() {
   const t = useTranslations("tools");
 
   return (
-    <ul>
+    <ul className={styles.toolsGrid}>
       {Object.keys(TOOLS).map((key) => (
         <li key={key}>
-          <Button ariaLabel={t(`${key}.title`)} href={TOOLS[key].path}>
-            {TOOLS[key].icon}
-          </Button>
-          {t(`${key}.description`)}
+          <Link className={styles.toolCard} href={TOOLS[key].path}>
+            <span className={styles.toolIcon}>{TOOLS[key].icon}</span>
+            <div className={styles.toolInfo}>
+              <span className={styles.toolTitle}>{t(`${key}.title`)}</span>
+              <span className={styles.toolDescription}>
+                {t(`${key}.description`)}
+              </span>
+            </div>
+          </Link>
         </li>
       ))}
     </ul>
