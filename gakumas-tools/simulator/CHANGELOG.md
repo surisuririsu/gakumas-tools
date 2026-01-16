@@ -21,6 +21,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-01-16
+
+- Add ittaiitsukara temari
+
 ## 2026-01-14
 
 - Add preview of Ittai itsu kara

@@ -1,4 +1,5 @@
 import glob
+import os
 
 image_dirs = [
     "idols",
@@ -13,8 +14,9 @@ image_dirs = [
 
 for dir in image_dirs:
     ids = [
-        path.split("\\")[1].split(".")[0] for path in glob.glob(f"images/{dir}/*.png")
+        os.path.splitext(os.path.basename(path))[0] for path in glob.glob(f"images/{dir}/*.png")
     ]
+    ids.sort(key=lambda x: int(x))
 
     with open(f"images/{dir}/imports.js", "w", encoding="utf-8") as f:
         for id in ids:
