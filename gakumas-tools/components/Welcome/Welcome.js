@@ -8,8 +8,10 @@ function Welcome() {
 
   return (
     <div className={styles.welcome}>
-      <h2>{t("title")}</h2>
-      <p>{t("introduction")}</p>
+      <div className={styles.hero}>
+        <h2>{t("title")}</h2>
+        <p>{t("introduction")}</p>
+      </div>
       <ToolsList />
     </div>
   );

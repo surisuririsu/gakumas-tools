@@ -1,31 +1,104 @@
+@use "sass:color";
+@use "../../styles/colors";
+
 .welcome {
-  max-width: 800px;
+  max-width: 900px;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 24px;
   margin: auto;
   padding: 32px;
+}
 
-  ul {
-    list-style-type: none;
-    display: grid;
-    gap: 8px;
+.hero {
+  text-align: center;
+  padding: 24px 0 16px;
 
-    li {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, colors.$gk-orange, colors.$gk-red-orange);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+  }
 
-      a {
-        min-width: 60px;
-      }
+  p {
+    color: colors.$gray-dark;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
 
-      span {
-        display: flex;
-        justify-content: center;
-      }
+.toolsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+  }
+}
+
+.toolCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  width: 100%;
+  background: colors.$white;
+  border: 1px solid colors.$gray-extra-light;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: colors.$gk-orange-light;
+    box-shadow: 0 4px 20px color.adjust(colors.$gk-orange, $alpha: -0.85);
+    transform: translateY(-2px);
+
+    .toolIcon {
+      background: colors.$gk-orange;
+      color: colors.$white;
     }
   }
+}
+
+.toolIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  background: colors.$gk-orange-extra-light;
+  color: colors.$gk-orange;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.toolInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toolTitle {
+  font-weight: 600;
+  color: colors.$black;
+  font-size: 1rem;
+}
+
+.toolDescription {
+  color: colors.$gray-dark;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
