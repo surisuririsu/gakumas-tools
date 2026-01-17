@@ -19,13 +19,31 @@ export function formatMemory(memory) {
 
     // Skill Cards
     if (memory.skillCardIds && memory.skillCardIds.length > 0) {
-        memory.skillCardIds.sort((a, b) => a - b).forEach(id => {
+        memory.skillCardIds.sort((a, b) => {
+            const cardA = SkillCards.getById(a);
+            const cardB = SkillCards.getById(b);
+            if (!cardA) return 1;
+            if (!cardB) return -1;
+
+            // Priority: Unique (pIdol) < Support (support) < Regular (others)
+            const typePriority = { pIdol: 0, support: 1 };
+            const typeA = typePriority[cardA.sourceType] ?? 2;
+            const typeB = typePriority[cardB.sourceType] ?? 2;
+
+            if (typeA !== typeB) return typeA - typeB;
+
+            // Rarity: R < SR < SSR (for Regular/Support)
+            const rarityPriority = { R: 0, SR: 1, SSR: 2 };
+            const rarityA = rarityPriority[cardA.rarity] ?? 0;
+            const rarityB = rarityPriority[cardB.rarity] ?? 0;
+
+            if (rarityA !== rarityB) return rarityA - rarityB;
+
+            return a - b; // fallback to ID
+        }).forEach(id => {
             const card = SkillCards.getById(id);
             const cardName = card ? card.name : `Unknown Card (${id})`;
-            const rarity = card ? card.rarity : "?";
-            // output += `- [${rarity}] ${cardName}\n`;
-            // User requested simple list, maybe with rarity?
-            // "200%スマイル+" implies name + upgrade status? (Upgrade is distinct ID)
+            // const rarity = card ? card.rarity : "?";
             output += `- ${cardName}\n`;
         });
     } else {

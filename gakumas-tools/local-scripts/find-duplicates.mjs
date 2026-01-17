@@ -151,9 +151,29 @@ async function run() {
 
                     console.log(`\n## グループ: ${groupIndex} (数: ${group.length})`);
 
+                    const referenceMem = group[0]; // Highest power is reference
+                    const refCards = new Set(referenceMem.skillCardIds || []);
+
                     for (const mem of group) {
                         const stats = (mem.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                        console.log(formatMemory(mem).trim() + ` (Stats: ${stats})`);
+
+                        let additionalInfo = `(Stats: ${stats}`;
+
+                        // Calculate match with reference (if distinct)
+                        if (mem._id !== referenceMem._id) {
+                            const myCards = mem.skillCardIds || [];
+                            let matchCount = 0;
+                            for (const id of myCards) {
+                                if (refCards.has(id)) matchCount++;
+                            }
+                            const totalSlots = Math.max(refCards.size, myCards.length);
+                            additionalInfo += `, Match: ${matchCount}/${totalSlots}`;
+                        } else {
+                            additionalInfo += `, Reference`;
+                        }
+                        additionalInfo += `)`;
+
+                        console.log(formatMemory(mem).trim() + ` ${additionalInfo}`);
                     }
                     groupIndex++;
                 }
