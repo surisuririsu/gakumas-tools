@@ -2,7 +2,7 @@
 import { MongoClient } from "mongodb";
 import fs from "fs";
 import path from "path";
-import { Idols } from "gakumas-data"; // Note: format-memory uses PIdols/SkillCards etc.
+import { Idols, PIdols } from "gakumas-data"; // Note: format-memory uses PIdols/SkillCards etc.
 import { formatMemory } from "./lib/format-memory.mjs";
 
 async function run() {
@@ -12,6 +12,52 @@ async function run() {
     if (!uri) {
         console.error("エラー: MONGODB_URI が設定されていません。");
         process.exit(1);
+    }
+
+    const args = process.argv.slice(2);
+    let query = {};
+    let similarityMode = false;
+    let targetPlan = null;
+    let targetIdol = null;
+    let threshold = 4; // Default similarity threshold (matches)
+
+    if (args.length >= 2) {
+        similarityMode = true;
+        targetPlan = args[0].toLowerCase(); // e.g., "sense"
+        targetIdol = args[1].toLowerCase(); // e.g., "kotone"
+        if (args[2]) threshold = parseInt(args[2], 10);
+
+        // Name to ID map (Keep in sync with dump-memories.mjs)
+        const nameToId = {
+            "saki": 1, "temari": 2, "kotone": 3, "mao": 4, "lilja": 5, "china": 6,
+            "sumika": 7, "hiro": 8, "rina": 9, "rinami": 9, "ume": 10, "sena": 11, "misuzu": 12, "tsubame": 13
+        };
+
+        const idolId = nameToId[targetIdol];
+        if (!idolId) {
+            console.error(`エラー: アイドル名 '${targetIdol}' が見つかりません。`);
+            console.error("使用可能な名前: " + Object.keys(nameToId).join(", "));
+            process.exit(1);
+        }
+
+        const validPlans = ["sense", "logic", "anomaly"];
+        if (!validPlans.includes(targetPlan)) {
+            console.error(`エラー: プラン '${targetPlan}' が無効です。使用可能なプラン: ${validPlans.join(", ")}`);
+            process.exit(1);
+        }
+
+        const targetPIdols = PIdols.getAll().filter(p => p.idolId === idolId && p.plan === targetPlan);
+        const pIdolIds = targetPIdols.map(p => p.id);
+
+        if (pIdolIds.length === 0) {
+            console.log(`条件に一致するPアイドルが見つかりませんでした (Idol: ${targetIdol}, Plan: ${targetPlan})`);
+            process.exit(0);
+        }
+
+        query = { pIdolId: { $in: pIdolIds } };
+        console.log(`モード: 類似検索 (Plan: ${targetPlan}, Idol: ${targetIdol}, Threshold: ${threshold} matches)`);
+    } else {
+        console.log("モード: 完全一致検索 (全件)");
     }
 
     const client = new MongoClient(uri);
@@ -25,7 +71,7 @@ async function run() {
 
         // Fetch all memories
         // Schema is actually flat, not nested under "data"
-        const memories = await collection.find({}).project({
+        const memories = await collection.find(query).project({
             _id: 1,
             pIdolId: 1,
             skillCardIds: 1,
@@ -33,84 +79,157 @@ async function run() {
             name: 1
         }).toArray();
 
-        // if (memories.length > 0) { console.log("Memory Sample:", JSON.stringify(memories[0], null, 2)); }
+        console.error(`対象メモリー数: ${memories.length}`);
 
-        console.error(`総メモリー数: ${memories.length}`);
+        if (similarityMode) {
+            // SIMILARITY CHECK LOGIC
+            // 1. Build Adjacency Matrix
+            const adj = new Array(memories.length).fill(0).map(() => []);
 
-        // Group by pIdolId
-        const byPIdol = {};
-        for (const mem of memories) {
-            if (!byPIdol[mem.pIdolId]) byPIdol[mem.pIdolId] = [];
-            byPIdol[mem.pIdolId].push(mem);
-        }
+            for (let i = 0; i < memories.length; i++) {
+                for (let j = i + 1; j < memories.length; j++) {
+                    const cardsA = new Set(memories[i].skillCardIds || []);
+                    const cardsB = memories[j].skillCardIds || [];
 
-        const candidates = [];
+                    let matchCount = 0;
+                    for (const id of cardsB) {
+                        if (cardsA.has(id)) matchCount++;
+                    }
 
-        console.log("# メモリーダイエットレポート（重複度）");
-
-        let headerPrinted = false;
-        let groupIndex = 1;
-        let anyDuplicateFound = false;
-
-        for (const [pIdolId, group] of Object.entries(byPIdol)) {
-            // Group by Signature (Sorted Skill IDs)
-            const bySig = {};
-            for (const mem of group) {
-                if (!mem.skillCardIds) continue;
-                const sig = mem.skillCardIds.slice().sort((a, b) => a - b).join(",");
-                if (!bySig[sig]) bySig[sig] = [];
-                bySig[sig].push(mem);
+                    if (matchCount >= threshold) {
+                        adj[i].push(j);
+                        adj[j].push(i);
+                    }
+                }
             }
 
-            for (const [sig, dupeGroup] of Object.entries(bySig)) {
-                if (dupeGroup.length > 1) {
-                    anyDuplicateFound = true;
-                    // Sort by Total Stats (Vo+Da+Vi) DESC
-                    // params is [Vo, Da, Vi, Stamina?], we sum first 3
-                    dupeGroup.sort((a, b) => {
+            // 2. Find Connected Components
+            const visited = new Set();
+            const groups = [];
+
+            for (let i = 0; i < memories.length; i++) {
+                if (visited.has(i)) continue;
+
+                const component = [];
+                const queue = [i];
+                visited.add(i);
+
+                while (queue.length > 0) {
+                    const u = queue.shift();
+                    component.push(memories[u]);
+
+                    for (const v of adj[u]) {
+                        if (!visited.has(v)) {
+                            visited.add(v);
+                            queue.push(v);
+                        }
+                    }
+                }
+
+                if (component.length > 1) {
+                    groups.push(component);
+                }
+            }
+
+            // 3. Output Report
+            if (groups.length === 0) {
+                console.log("\n条件を満たす類似メモリーグループは見つかりませんでした。");
+            } else {
+                console.log("# メモリーダイエットレポート（類似）");
+                let groupIndex = 1;
+
+                // Sort groups by size?
+                // groups.sort((a, b) => b.length - a.length);
+
+                for (const group of groups) {
+                    // Sort within group by Power DESC
+                    group.sort((a, b) => {
                         const sumA = (a.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
                         const sumB = (b.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
                         return sumB - sumA;
                     });
 
-                    console.log(`\n## 対象: ${groupIndex}`);
+                    console.log(`\n## グループ: ${groupIndex} (数: ${group.length})`);
 
-                    for (const mem of dupeGroup) {
-                        // Calculate Stats for display
+                    for (const mem of group) {
                         const stats = (mem.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                        // Print using formatter
-                        // Format:
-                        // ### [Idol] [P-Idol] - (MemoryName)
-                        // - Skill ...
                         console.log(formatMemory(mem).trim() + ` (Stats: ${stats})`);
                     }
-
-                    // Add candidates (losers)
-                    const keeper = dupeGroup[0];
-                    const keeperPower = (keeper.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                    const losers = dupeGroup.slice(1);
-
-                    for (const loser of losers) {
-                        const loserPower = (loser.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                        candidates.push({
-                            id: loser._id,
-                            name: loser.name,
-                            power: loserPower,
-                            pIdolId: parseInt(pIdolId),
-                            reason: `Duplicate of ${keeper.name} (Stats: ${keeperPower})`
-                        });
-                    }
-
                     groupIndex++;
                 }
             }
-        }
 
-        if (!anyDuplicateFound) {
-            console.log("\n重複メモリーは見つかりませんでした。");
         } else {
-            console.log(`\n発見された冗長メモリー: ${candidates.length} 件`);
-            // fs.writeFileSync("candidates.json", JSON.stringify(candidates, null, 2));
+            // EXISTING EXACT MATCH LOGIC
+            // Group by pIdolId
+            const byPIdol = {};
+            for (const mem of memories) {
+                if (!byPIdol[mem.pIdolId]) byPIdol[mem.pIdolId] = [];
+                byPIdol[mem.pIdolId].push(mem);
+            }
+
+            const candidates = [];
+
+            console.log("# メモリーダイエットレポート（重複度）");
+
+            let groupIndex = 1;
+            let anyDuplicateFound = false;
+
+            for (const [pIdolId, group] of Object.entries(byPIdol)) {
+                // Group by Signature (Sorted Skill IDs)
+                const bySig = {};
+                for (const mem of group) {
+                    if (!mem.skillCardIds) continue;
+                    const sig = mem.skillCardIds.slice().sort((a, b) => a - b).join(",");
+                    if (!bySig[sig]) bySig[sig] = [];
+                    bySig[sig].push(mem);
+                }
+
+                for (const [sig, dupeGroup] of Object.entries(bySig)) {
+                    if (dupeGroup.length > 1) {
+                        anyDuplicateFound = true;
+                        // Sort by Total Stats (Vo+Da+Vi) DESC
+                        // params is [Vo, Da, Vi, Stamina?], we sum first 3
+                        dupeGroup.sort((a, b) => {
+                            const sumA = (a.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                            const sumB = (b.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                            return sumB - sumA;
+                        });
+
+                        console.log(`\n## 対象: ${groupIndex}`);
+
+                        for (const mem of dupeGroup) {
+                            const stats = (mem.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                            console.log(formatMemory(mem).trim() + ` (Stats: ${stats})`);
+                        }
+
+                        // Add candidates (losers)
+                        const keeper = dupeGroup[0];
+                        const keeperPower = (keeper.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                        const losers = dupeGroup.slice(1);
+
+                        for (const loser of losers) {
+                            const loserPower = (loser.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                            candidates.push({
+                                id: loser._id,
+                                name: loser.name,
+                                power: loserPower,
+                                pIdolId: parseInt(pIdolId),
+                                reason: `Duplicate of ${keeper.name} (Stats: ${keeperPower})`
+                            });
+                        }
+
+                        groupIndex++;
+                    }
+                }
+            }
+
+            if (!anyDuplicateFound) {
+                console.log("\n重複メモリーは見つかりませんでした。");
+            } else {
+                console.log(`\n発見された冗長メモリー: ${candidates.length} 件`);
+                // fs.writeFileSync("candidates.json", JSON.stringify(candidates, null, 2));
+            }
         }
 
     } catch (e) {
