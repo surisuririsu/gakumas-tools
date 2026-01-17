@@ -53,7 +53,8 @@ async function run() {
 
         // Regex to parse name: YY/MM/DD[Sep]Score
         // Matches: Group 1 (Date), Group 2 (Separator), Group 3 (Score)
-        const nameRegex = /^(\d{2}\/\d{2}\/\d{2})([ 　🔒🔑🛠️])(\d+)$/u;
+        // Use (.+?) to capture any separator (Space, Icon+VS16, etc.) non-greedily
+        const nameRegex = /^(\d{2}\/\d{2}\/\d{2})(.+?)(\d+)$/u;
 
         console.log("--- メモリー一覧レポート ---");
 
