@@ -40,7 +40,11 @@ case $COMMAND in
         yarn node "$SCRIPT_DIR/my-simulator.mjs" "$@"
         ;;
     dump)
-        yarn node "$SCRIPT_DIR/dump-memories.mjs" "$@"
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        yarn node "./$REL_SCRIPT_DIR/boot-dump.mjs" "$@"
         ;;
     opt)
         # Execute from workspace root to ensure PnP works correctly
