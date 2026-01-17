@@ -17,7 +17,25 @@ export function formatMemory(memory) {
 
     let output = `### ${idolName}${pIdolName} - (${memName})\n`;
 
+    // P-Items
+    output += `#### Pアイテム\n`;
+    if (memory.pItemIds && memory.pItemIds.length > 0) {
+        const validItems = memory.pItemIds.filter(id => id !== 0 && id != null);
+        if (validItems.length > 0) {
+            validItems.forEach(id => {
+                const item = PItems.getById(id);
+                const itemName = item ? item.name : `Unknown Item (${id})`;
+                output += `- ${itemName}\n`;
+            });
+        } else {
+            output += `- (No P-Items)\n`;
+        }
+    } else {
+        output += `- (No P-Items)\n`;
+    }
+
     // Skill Cards
+    output += `#### スキルカード\n`;
     if (memory.skillCardIds && memory.skillCardIds.length > 0) {
         memory.skillCardIds.sort((a, b) => {
             const cardA = SkillCards.getById(a);

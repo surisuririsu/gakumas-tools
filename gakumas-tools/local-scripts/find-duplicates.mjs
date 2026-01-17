@@ -50,7 +50,7 @@ async function run() {
             if (pIdolIds.length === 0) return 0;
 
             const memories = await collection.find({ pIdolId: { $in: pIdolIds } }).project({
-                _id: 1, pIdolId: 1, skillCardIds: 1, params: 1, name: 1
+                _id: 1, pIdolId: 1, skillCardIds: 1, pItemIds: 1, params: 1, name: 1
             }).toArray();
 
             if (memories.length < 2) return 0;
@@ -171,7 +171,7 @@ async function run() {
             // To keep the file clean, I'll copy the previous Hash-based Logic here.
 
             const memories = await collection.find({}).project({
-                _id: 1, pIdolId: 1, skillCardIds: 1, params: 1, name: 1
+                _id: 1, pIdolId: 1, skillCardIds: 1, pItemIds: 1, params: 1, name: 1
             }).toArray();
             console.error(`総メモリー数: ${memories.length}`);
 
