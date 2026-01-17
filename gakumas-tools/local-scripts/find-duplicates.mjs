@@ -82,52 +82,48 @@ async function run() {
         console.error(`対象メモリー数: ${memories.length}`);
 
         if (similarityMode) {
-            // SIMILARITY CHECK LOGIC
-            // 1. Build Adjacency Matrix
-            const adj = new Array(memories.length).fill(0).map(() => []);
+            // SIMILARITY CHECK LOGIC: Greedy Star Clustering
+            // 1. Sort all memories by Power (Stats) DESC
+            // This ensures the "Reference" is always the strongest one available.
+            memories.sort((a, b) => {
+                const sumA = (a.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                const sumB = (b.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
+                return sumB - sumA;
+            });
 
-            for (let i = 0; i < memories.length; i++) {
-                for (let j = i + 1; j < memories.length; j++) {
-                    const cardsA = new Set(memories[i].skillCardIds || []);
-                    const cardsB = memories[j].skillCardIds || [];
-
-                    let matchCount = 0;
-                    for (const id of cardsB) {
-                        if (cardsA.has(id)) matchCount++;
-                    }
-
-                    if (matchCount >= threshold) {
-                        adj[i].push(j);
-                        adj[j].push(i);
-                    }
-                }
-            }
-
-            // 2. Find Connected Components
             const visited = new Set();
             const groups = [];
 
             for (let i = 0; i < memories.length; i++) {
                 if (visited.has(i)) continue;
 
-                const component = [];
-                const queue = [i];
+                // memA is the Center/Reference (Strongest available)
+                const memA = memories[i];
+                const cardsA = new Set(memA.skillCardIds || []);
+
+                const group = [memA];
                 visited.add(i);
 
-                while (queue.length > 0) {
-                    const u = queue.shift();
-                    component.push(memories[u]);
+                for (let j = i + 1; j < memories.length; j++) {
+                    if (visited.has(j)) continue;
 
-                    for (const v of adj[u]) {
-                        if (!visited.has(v)) {
-                            visited.add(v);
-                            queue.push(v);
-                        }
+                    const memB = memories[j];
+                    const cardsB = memB.skillCardIds || [];
+
+                    let matchCount = 0;
+                    for (const id of cardsB) {
+                        if (cardsA.has(id)) matchCount++;
+                    }
+
+                    // Strict Threshold Check against the Reference
+                    if (matchCount >= threshold) {
+                        group.push(memB);
+                        visited.add(j);
                     }
                 }
 
-                if (component.length > 1) {
-                    groups.push(component);
+                if (group.length > 1) {
+                    groups.push(group);
                 }
             }
 
@@ -138,20 +134,11 @@ async function run() {
                 console.log("# メモリーダイエットレポート（類似）");
                 let groupIndex = 1;
 
-                // Sort groups by size?
-                // groups.sort((a, b) => b.length - a.length);
-
                 for (const group of groups) {
-                    // Sort within group by Power DESC
-                    group.sort((a, b) => {
-                        const sumA = (a.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                        const sumB = (b.params || []).slice(0, 3).reduce((acc, v) => acc + (v || 0), 0);
-                        return sumB - sumA;
-                    });
-
+                    // Group is already sorted by Power (center is index 0)
                     console.log(`\n## グループ: ${groupIndex} (数: ${group.length})`);
 
-                    const referenceMem = group[0]; // Highest power is reference
+                    const referenceMem = group[0];
                     const refCards = new Set(referenceMem.skillCardIds || []);
 
                     for (const mem of group) {
