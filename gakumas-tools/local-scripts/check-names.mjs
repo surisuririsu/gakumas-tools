@@ -29,11 +29,11 @@ async function run() {
         // Regex: 
         // Start ^
         // YY/MM/DD : \d{2}\/\d{2}\/\d{2}
-        // Separator: Space (half/full) or Lock (🔒) : [ 　🔒]
+        // Separator: Space / Lock (🔒) / Key (🔑) / Hammer (🛠️) : [ 　🔒🔑🛠️]
         // Score: digits : \d+
         // End $
         // Use 'u' flag to handle Emoji correctly (Surrogate pairs)
-        const validNameRegex = /^\d{2}\/\d{2}\/\d{2}[ 　🔒]\d+$/u;
+        const validNameRegex = /^\d{2}\/\d{2}\/\d{2}[ 　🔒🔑🛠️]\d+$/u;
 
         const invalidMemories = memories.filter(m => {
             if (!m.name) return true; // Null/Empty name is invalid

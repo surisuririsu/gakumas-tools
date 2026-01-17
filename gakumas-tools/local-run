@@ -170,6 +170,23 @@ case $COMMAND in
         cd "$ROOT_DIR"
         yarn node "./$REL_SCRIPT_DIR/boot-duplicates.mjs" "$@"
         ;;
+    check-names)
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        yarn node "./$REL_SCRIPT_DIR/boot-check-names.mjs" "$@"
+        ;;
+    migrate-icons)
+        # Execute from workspace root
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        # Accesses .env.local variables via sourcing in this script
+        # No bootloader needed as it doesn't use gakumas-data
+        yarn node "./$REL_SCRIPT_DIR/migrate-icons.mjs" "$@"
+        ;;
     help)
         show_help
         ;;
