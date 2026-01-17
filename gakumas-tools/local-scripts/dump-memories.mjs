@@ -12,8 +12,10 @@ if (!MONGODB_URI) {
 const client = new MongoClient(MONGODB_URI);
 
 const IDOL_ORDER = [
-    "saki", "temari", "kotone", "tsubame",
-    "mao", "lilja", "china",
+    "saki", "temari", "kotone",
+    "tsubame", // 13
+    "mao",     // 4
+    "lilja", "china",
     "sumika", "hiro", "sena",
     "misuzu", "ume", "rinami"
 ];
@@ -117,8 +119,8 @@ async function run() {
             const quotient = Math.floor(total / 3);
             const remainder = total % 3;
 
-            // Output Header
-            console.log(`\n## ${idolNameJp}`);
+            // Output Header with Stats
+            console.log(`\n## ${idolNameJp}: 合計 ${total} 枚 ( 3 × ${quotient} + ${remainder} )`);
 
             // Output Table with Row Number
             console.log("| | 1列目 | 2列目 | 3列目 |");
@@ -139,8 +141,6 @@ async function run() {
 
                 console.log(`| ${rowNum} | ${cells.join(" | ")} |`);
             }
-
-            console.log(`\n合計 ${total} 枚 ( 3 × ${quotient} + ${remainder} )`);
         }
 
     } catch (e) {
