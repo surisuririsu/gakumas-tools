@@ -32,7 +32,8 @@ async function run() {
         // Separator: Space (half/full) or Lock (🔒) : [ 　🔒]
         // Score: digits : \d+
         // End $
-        const validNameRegex = /^\d{2}\/\d{2}\/\d{2}[ 　🔒]\d+$/;
+        // Use 'u' flag to handle Emoji correctly (Surrogate pairs)
+        const validNameRegex = /^\d{2}\/\d{2}\/\d{2}[ 　🔒]\d+$/u;
 
         const invalidMemories = memories.filter(m => {
             if (!m.name) return true; // Null/Empty name is invalid
