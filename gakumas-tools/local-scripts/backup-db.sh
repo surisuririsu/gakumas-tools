@@ -11,7 +11,7 @@ PI_HOST="192.168.100.23"
 
 # 2. MongoDB Info
 # Assumes MongoDB is running in a Docker container named "mongo" on the Pi
-CONTAINER_NAME="mongo"
+CONTAINER_NAME="mongodb"
 DB_NAME="gakumas-tools"
 
 # 3. Backup Destination
