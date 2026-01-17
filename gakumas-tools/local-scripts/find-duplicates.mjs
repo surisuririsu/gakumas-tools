@@ -110,8 +110,7 @@ async function run() {
             console.log("\n重複メモリーは見つかりませんでした。");
         } else {
             console.log(`\n発見された冗長メモリー: ${candidates.length} 件`);
-            console.log(`削除候補リストを 'candidates.json' に保存します。`);
-            fs.writeFileSync("candidates.json", JSON.stringify(candidates, null, 2));
+            // fs.writeFileSync("candidates.json", JSON.stringify(candidates, null, 2));
         }
 
     } catch (e) {
