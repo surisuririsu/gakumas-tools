@@ -95,7 +95,17 @@ async function run() {
             }
 
             if (groups.length > 0) {
-                console.log(`\n### ${idolName} (${plan}) - Found ${groups.length} groups`);
+                // Determine Japanese names
+                const jpPlan = {
+                    "sense": "センス",
+                    "logic": "ロジック",
+                    "anomaly": "アノマリー"
+                }[plan] || plan;
+
+                const idolObj = Idols.getById(idolId);
+                const jpName = idolObj ? idolObj.name : idolName;
+
+                console.log(`\n# ${jpPlan} - ${jpName} (${groups.length} グループ)`);
                 let groupIndex = 1;
                 for (const group of groups) {
                     console.log(`\n## グループ: ${groupIndex} (数: ${group.length})`);
