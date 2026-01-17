@@ -59,6 +59,10 @@ async function run() {
         const nameRegex = /^(\d{2}\/\d{2}\/\d{2})(.+?)(\d+)$/u;
 
         console.log("# メモリー一覧レポート");
+        console.log("---");
+        console.log("- ソート: 入手");
+        console.log("- フィルタ: 「プロデュース」以外のタグ");
+        console.log("---");
 
         for (const idolKey of idolsToProcess) {
             const idolId = NAME_TO_ID[idolKey];
