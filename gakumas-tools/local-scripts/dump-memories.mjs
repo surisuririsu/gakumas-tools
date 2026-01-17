@@ -56,7 +56,7 @@ async function run() {
         // Use (.+?) to capture any separator (Space, Icon+VS16, etc.) non-greedily
         const nameRegex = /^(\d{2}\/\d{2}\/\d{2})(.+?)(\d+)$/u;
 
-        console.log("--- メモリー一覧レポート ---");
+        console.log("# メモリー一覧レポート");
 
         for (const idolKey of idolsToProcess) {
             const idolId = NAME_TO_ID[idolKey];
