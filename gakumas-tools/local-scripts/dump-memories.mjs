@@ -114,11 +114,12 @@ async function run() {
             // Output Header
             console.log(`\n## ${idolNameJp}`);
 
-            // Output Table
-            console.log("| 1列目 | 2列目 | 3列目 |");
-            console.log("| --: | --: | --: |");
+            // Output Table with Row Number
+            console.log("| | 1列目 | 2列目 | 3列目 |");
+            console.log("| --: | --: | --: | --: |");
 
             for (let i = 0; i < total; i += 3) {
+                const rowNum = (i / 3) + 1;
                 const rowItems = parsedMemories.slice(i, i + 3);
                 const cells = rowItems.map(item => {
                     if (item.score === "N/A") return item.date; // Just print name if invalid
@@ -130,7 +131,7 @@ async function run() {
                     cells.push("");
                 }
 
-                console.log(`| ${cells.join(" | ")} |`);
+                console.log(`| ${rowNum} | ${cells.join(" | ")} |`);
             }
 
             console.log(`\n合計 ${total} 枚 ( 3 × ${quotient} + ${remainder} )`);
