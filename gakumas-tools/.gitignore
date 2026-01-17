@@ -31,3 +31,4 @@ next-env.d.ts
 /dump
 *-dump/
 test-dump/
+candidates.json

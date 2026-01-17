@@ -163,6 +163,13 @@ case $COMMAND in
         cd "$ROOT_DIR"
         yarn node "./$REL_SCRIPT_DIR/boot-stats.mjs" "$@"
         ;;
+    diet)
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        yarn node "./$REL_SCRIPT_DIR/boot-duplicates.mjs" "$@"
+        ;;
     help)
         show_help
         ;;
