@@ -12,15 +12,17 @@ if (!MONGODB_URI) {
 const client = new MongoClient(MONGODB_URI);
 
 const IDOL_ORDER = [
-    "saki", "temari", "kotone",
+    "saki", "temari", "kotone", "tsubame",
     "mao", "lilja", "china",
-    "sumika", "hiro", "rina",
-    "ume", "sena", "misuzu", "tsubame"
+    "sumika", "hiro", "sena",
+    "misuzu", "ume", "rinami"
 ];
 
 const NAME_TO_ID = {
-    "saki": 1, "temari": 2, "kotone": 3, "mao": 4, "lilja": 5, "china": 6,
-    "sumika": 7, "hiro": 8, "rina": 9, "rinami": 9, "ume": 10, "sena": 11, "misuzu": 12, "tsubame": 13
+    "saki": 1, "temari": 2, "kotone": 3, "tsubame": 13,
+    "mao": 4, "lilja": 5, "china": 6,
+    "sumika": 7, "hiro": 8, "sena": 11,
+    "misuzu": 12, "ume": 10, "rinami": 9, "rina": 9
 };
 
 async function run() {

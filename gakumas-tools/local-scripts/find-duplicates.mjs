@@ -21,8 +21,10 @@ async function run() {
     let threshold = 4;
 
     const nameToId = {
-        "saki": 1, "temari": 2, "kotone": 3, "mao": 4, "lilja": 5, "china": 6,
-        "sumika": 7, "hiro": 8, "rina": 9, "rinami": 9, "ume": 10, "sena": 11, "misuzu": 12, "tsubame": 13
+        "saki": 1, "temari": 2, "kotone": 3, "tsubame": 13,
+        "mao": 4, "lilja": 5, "china": 6,
+        "sumika": 7, "hiro": 8, "sena": 11,
+        "misuzu": 12, "ume": 10, "rinami": 9, "rina": 9
     };
 
     if (args.length >= 2) {
