@@ -6,7 +6,7 @@
 # ==========================================
 
 # 1. Raspberry Pi Connection Info
-PI_USER="pi"
+PI_USER="shigehiro"
 PI_HOST="192.168.100.23"
 
 # 2. MongoDB Info
