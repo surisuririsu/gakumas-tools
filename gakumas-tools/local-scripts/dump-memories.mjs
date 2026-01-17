@@ -51,12 +51,9 @@ async function run() {
         const db = client.db(MONGODB_DB);
         const collection = db.collection("memories");
 
-        // Pre-fetch all memories for efficiency if 'all', or just query per idol?
-        // Querying per idol is fine for 13 queries. Only ~1000 items total.
-
         // Regex to parse name: YY/MM/DD[Sep]Score
-        // Matches: Group 1 (Date), Group 2 (Score)
-        const nameRegex = /^(\d{2}\/\d{2}\/\d{2})[ 　🔒🔑🛠️](\d+)$/u;
+        // Matches: Group 1 (Date), Group 2 (Separator), Group 3 (Score)
+        const nameRegex = /^(\d{2}\/\d{2}\/\d{2})([ 　🔒🔑🛠️])(\d+)$/u;
 
         console.log("--- メモリー一覧レポート ---");
 
@@ -78,10 +75,15 @@ async function run() {
             const parsedMemories = memories.map(m => {
                 const match = m.name ? m.name.match(nameRegex) : null;
                 if (match) {
+                    const separator = match[2];
+                    // If separator is space, treat as empty for display. If icon, keep it.
+                    const displaySep = (separator === ' ' || separator === '　') ? '' : separator;
+
                     return {
                         original: m,
                         date: match[1],
-                        score: match[2],
+                        score: match[3],
+                        separator: displaySep,
                         sortKey: match[1] // Date string YY/MM/DD sorts correctly alphabetically
                     };
                 } else {
@@ -90,6 +92,7 @@ async function run() {
                         original: m,
                         date: m.name || "Unknown",
                         score: "N/A",
+                        separator: "",
                         sortKey: "00/00/00" // Bottom
                     };
                 }
@@ -118,7 +121,7 @@ async function run() {
                 const rowItems = parsedMemories.slice(i, i + 3);
                 const cells = rowItems.map(item => {
                     if (item.score === "N/A") return item.date; // Just print name if invalid
-                    return `${item.date}<br>${item.score}`;
+                    return `${item.date}<br>${item.separator}${item.score}`;
                 });
 
                 // Pad with empty cells if < 3
