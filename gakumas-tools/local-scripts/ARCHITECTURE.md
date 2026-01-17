@@ -60,3 +60,35 @@ graph TD
 1.  **Mac mini** で機能を開発・修正。
 2.  **Mac mini** から `git push origin master` (送信先は Pi Git)。
 3.  **PC-8001** で `git pull` し、最新機能を利用開始。
+
+## 外出先からの利用 (Remote Access)
+
+Tailscale (VPN) を利用することで、外出先の PC-8001 からも安全に自宅の Raspberry Pi にアクセスできます。
+
+### 構成
+*   **Raspberry Pi**: Tailscale 導入済み。
+*   **PC-8001 (Linux環境)**: Tailscale を導入し、Pi と同じ VPN ネットワークに参加させます。
+
+### 推奨設定:「常に Tailscale IP を使う」
+自宅（LAN）でも外出先（WAN）でも設定を切り替えずに済むよう、PC-8001 からの接続先を **Tailscale IP (100.x.x.x)** に統一することをお勧めします。
+
+#### 1. 接続先の変更 (Git)
+PC-8001 上で、リモート URL を LAN IP から Tailscale IP に変更します。
+
+```bash
+# 現在の設定を確認
+git remote -v
+
+# Tailscale IP に変更 (例: 100.101.102.103)
+git remote set-url origin shigehiro@100.101.102.103:git/gakumas-tools.git
+```
+
+#### 2. 接続先の変更 (MongoDB)
+PC-8001 上の `.env.local` を編集します。
+
+```bash
+# .env.local
+MONGODB_URI=mongodb://100.101.102.103:27017/gakumas
+```
+
+これにより、PC-8001 がどこにあっても、インターネットさえ繋がっていれば `git pull` や `local-run` が実行可能になります。
