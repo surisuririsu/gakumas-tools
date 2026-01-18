@@ -5,7 +5,11 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = null;
+export const OSHI_PROPS = {
+  text: "伊藤舞音のおいでよまおーこくだい10かい",
+  initiallyExpanded: true,
+  url: "https://www.youtube.com/watch?v=136W_0OjNm0",
+}
 
 export default function Oshi({
   text,
