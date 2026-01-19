@@ -6,7 +6,7 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: "伊藤舞音のおいでよまおーこくだい10かい",
+  text: <div><IdolIcon idolId={6} />伊藤舞音のおいでよまおーこくだい10かい</div>,
   initiallyExpanded: true,
   url: "https://www.youtube.com/watch?v=136W_0OjNm0",
 }
