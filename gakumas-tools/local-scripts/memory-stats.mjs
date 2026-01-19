@@ -89,7 +89,7 @@ async function run() {
         console.log("| アイドル | センス | ロジック | アノマリー | 計 |");
         console.log("| :-- | --: | --: | --: | --: |");
 
-        // Column Totals
+        // Calculate Totals First
         let totalSense = 0;
         let totalLogic = 0;
         let totalAnomaly = 0;
@@ -97,19 +97,40 @@ async function run() {
 
         for (const key of IDOL_ORDER) {
             const row = stats[key];
-            const idolId = NAME_TO_ID[key];
-            const idolInfo = Idols.getById(idolId);
-            const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key; // Ensure single space if needed, or stick to data
-
-            console.log(`| ${idolNameJp} | ${row.sense} | ${row.logic} | ${row.anomaly} | ${row.total} |`);
-
             totalSense += row.sense;
             totalLogic += row.logic;
             totalAnomaly += row.anomaly;
             grandTotal += row.total;
         }
 
-        console.log(`| 計 | ${totalSense} | ${totalLogic} | ${totalAnomaly} | ${grandTotal} |`);
+        // Helper to format cell with percentage
+        const fmt = (val, total) => {
+            if (total === 0) return "0<br>0.0%";
+            const pct = ((val / total) * 100).toFixed(1);
+            return `${val}<br>${pct}%`;
+        };
+
+        // Output Rows
+        for (const key of IDOL_ORDER) {
+            const row = stats[key];
+            const idolId = NAME_TO_ID[key];
+            const idolInfo = Idols.getById(idolId);
+            const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+
+            const senseCell = fmt(row.sense, grandTotal);
+            const logicCell = fmt(row.logic, grandTotal);
+            const anomalyCell = fmt(row.anomaly, grandTotal);
+            const totalCell = fmt(row.total, grandTotal);
+
+            console.log(`| ${idolNameJp} | ${senseCell} | ${logicCell} | ${anomalyCell} | ${totalCell} |`);
+        }
+
+        const totalSenseCell = fmt(totalSense, grandTotal);
+        const totalLogicCell = fmt(totalLogic, grandTotal);
+        const totalAnomalyCell = fmt(totalAnomaly, grandTotal);
+        const grandTotalCell = fmt(grandTotal, grandTotal);
+
+        console.log(`| 計 | ${totalSenseCell} | ${totalLogicCell} | ${totalAnomalyCell} | ${grandTotalCell} |`);
 
     } catch (e) {
         console.error("エラー:", e);
