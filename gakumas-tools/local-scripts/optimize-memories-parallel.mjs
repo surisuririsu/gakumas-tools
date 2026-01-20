@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 import { Worker } from 'worker_threads';
 import os from 'os';
 import { MongoClient } from "mongodb";
-import { recommendSynthesis } from "./optimize-synthesis.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,19 +19,6 @@ const ALL_IDOL_NAMES = [
     "saki", "temari", "kotone", "tsubame", "mao", "lilja", "china",
     "sumika", "hiro", "sena", "misuzu", "ume", "rinami"
 ];
-
-// Prevent crash on pipe/stream errors (e.g. EPIPE, ETIMEDOUT)
-// This is critical for long running remote processes
-[process.stdout, process.stderr].forEach(stream => {
-    stream.on('error', (err) => {
-        if (err.code === 'EPIPE' || err.code === 'ETIMEDOUT') {
-            // Ignore stream errors (client disconnected or pipe broke)
-            return;
-        }
-        // Re-throw other errors if possible, or log them?
-        // Logging might fail if stderr is broken, so just silence.
-    });
-});
 
 async function run() {
     const rawArgs = process.argv.slice(2);
@@ -54,7 +40,7 @@ async function run() {
     if (args.length < 3) {
         console.error("使用法: yarn node local-scripts/optimize-memories-parallel.mjs <source> <season-stage> <num_runs> [options]");
         console.error("  <source>: ディレクトリパス または MongoDB URI (mongodb://...)");
-        console.error("  <options>: --idolName <name>, --plan <sense|logic|anomaly> (DBモード時のみ有効), --showWorst (低スコアワースト10を表示), --synth (ベスト版の合成提案)");
+        console.error("  <options>: --idolName <name>, --plan <sense|logic|anomaly> (DBモード時のみ有効), --showWorst (低スコアワースト10を表示)");
         process.exit(1);
     }
 
@@ -71,6 +57,12 @@ async function run() {
     if (!contestStage) {
         console.error(`ステージが見つかりません: シーズン${season} ステージ${stageNumber}`);
         process.exit(1);
+    }
+
+    // Auto-detect plan from stage definition if not provided
+    if (!options.plan && contestStage.plan && contestStage.plan !== 'free') {
+        options.plan = contestStage.plan;
+        console.error(`ステージ情報からプランを自動設定しました: ${options.plan}`);
     }
 
     // Determine execution plan
@@ -254,68 +246,6 @@ async function run() {
         console.log("---");
         console.log("");
 
-        // Synthesis Recommendation
-        if (options.synth && allResults.length > 0) {
-            const synthLimit = options.synth === true ? 1 : parseInt(options.synth, 10);
-            const targets = allResults.slice(0, synthLimit);
-
-            for (let i = 0; i < targets.length; i++) {
-                const target = targets[i];
-                const mainMem = memories.find(m => m.filename === target.mainFilename);
-                const subMem = memories.find(m => m.filename === target.subFilename);
-
-                if (!mainMem || !subMem) continue;
-
-                const rankStr = synthLimit > 1 ? ` (Rank #${i + 1})` : "";
-
-                // Check if main memory is already synthesized (Locked)
-                if (mainMem.data.name && mainMem.data.name.includes("🔒")) {
-                    console.log(`## メモリー合成提案${rankStr}: スキップ (合成済のため)`);
-                    console.log(`対象: ${mainMem.data.name}`);
-                    console.log("");
-                    continue;
-                }
-
-                // Show progress for each rank to keep user informed
-                console.error(`シミュレーション中... (合成候補の探索 Rank #${i + 1})`);
-
-                try {
-                    const synthResults = await recommendSynthesis(mainMem.data, subMem.data, contestStage.id, numRuns);
-
-                    if (synthResults.length > 0) {
-                        const baselineScore = target.score;
-                        const bestResult = synthResults[0];
-                        const diff = Math.round(bestResult.score - baselineScore);
-                        const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
-
-                        console.log(`## メモリー合成提案${rankStr}: ${diffStr}`);
-                        console.log("| スロット | 合成前 | 合成後 | スコア例 | 増分 |");
-                        console.log("| --: | :-- | --: | --: | --: |");
-
-                        synthResults.slice(0, 3).forEach(res => {
-                            const match = res.mainName.match(/Slot (\d+): (.+) -> (.+)/);
-                            if (match) {
-                                const slot = match[1];
-                                const before = match[2];
-                                const after = match[3];
-                                const diff = Math.round(res.score - baselineScore);
-                                const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
-                                console.log(`| ${slot} | ${before} | ${after} | ${Math.round(res.score).toLocaleString()} | ${diffStr} |`);
-                            } else {
-                                console.log(`| - | ${res.mainName} | - | ${Math.round(res.score).toLocaleString()} | - |`);
-                            }
-                        });
-                        console.log(""); // Spacing
-                    } else {
-                        console.log(`## メモリー合成提案${rankStr}: 提案なし`);
-                        console.log("（有効な改善案が見つかりませんでした）\n");
-                    }
-                } catch (e) {
-                    console.error("合成シミュレーションエラー:", e.message);
-                }
-            }
-        }
-
         // Memory Rankings (Average Score as Main) - Only if --showWorst is specified
         if (options.showWorst) {
             const memoryStats = {};
@@ -422,9 +352,4 @@ async function loadMemoriesFromDB(uri, options) {
     }
 }
 
-run()
-    .then(() => process.exit(0))
-    .catch(e => {
-        console.error(e);
-        process.exit(1);
-    });
+run();

@@ -1,13 +1,13 @@
-export { default as Customizations } from "./customizations";
-export { default as Idols } from "./idols";
-export { default as PDrinks } from "./pDrinks";
-export { default as PIdols } from "./pIdols";
-export { default as PItems } from "./pItems";
-export { default as SkillCards } from "./skillCards";
-export { default as Stages } from "./stages";
+export { default as Customizations } from "./customizations.js";
+export { default as Idols } from "./idols.js";
+export { default as PDrinks } from "./pDrinks.js";
+export { default as PIdols } from "./pIdols.js";
+export { default as PItems } from "./pItems.js";
+export { default as SkillCards } from "./skillCards.js";
+export { default as Stages } from "./stages.js";
 export {
   serializeEffect,
   deserializeEffect,
   serializeEffectSequence,
   deserializeEffectSequence,
-} from "../utils/effects";
+} from "../utils/effects.js";

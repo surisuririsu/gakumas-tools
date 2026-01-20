@@ -1,5 +1,5 @@
-import CUSTOMIZATIONS from "../json/customizations.json";
-import { deserializeEffectSequence } from "../utils/effects";
+import CUSTOMIZATIONS from "../json/customizations.json" with { type: "json" };
+import { deserializeEffectSequence } from "../utils/effects.js";
 
 CUSTOMIZATIONS.forEach((customization) => {
   customization.conditions = deserializeEffectSequence(

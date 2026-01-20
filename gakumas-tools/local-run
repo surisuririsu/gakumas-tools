@@ -15,6 +15,10 @@ function show_help {
     echo "  synthesis <main> <sub> <stage> ... Simulate synthesis options for a deck"
     echo "  csv                             Generate p_idols.csv"
     echo "  power <memory_file>             Calculate stage power for a memory"
+    echo "  stats                           Show memory statistics"
+    echo "  diet                            Remove duplicate memories"
+    echo "  check-names                     Check idol names"
+    echo "  migrate-icons                   Migrate icons"
     echo "  help                            Show this help message"
     echo ""
 }

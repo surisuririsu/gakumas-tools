@@ -1,6 +1,6 @@
-import P_ITEMS from "../json/p_items.json";
-import { getPItemContestPower } from "../utils/contestPower";
-import { deserializeEffectSequence } from "../utils/effects";
+import P_ITEMS from "../json/p_items.json" with { type: "json" };
+import { getPItemContestPower } from "../utils/contestPower.js";
+import { deserializeEffectSequence } from "../utils/effects.js";
 
 P_ITEMS.forEach((pItem) => {
   pItem._type = "pItem";
