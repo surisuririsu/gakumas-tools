@@ -17,9 +17,9 @@ import {
   S,
   UNFRESH_PHASES,
   WHOLE_FIELDS,
-} from "../constants";
-import EngineComponent from "./EngineComponent";
-import { formatDiffField } from "../utils";
+} from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
+import { formatDiffField } from "../utils.js";
 
 export default class Executor extends EngineComponent {
   constructor(engine) {
@@ -436,7 +436,7 @@ export default class Executor extends EngineComponent {
             (state[S.perfectConditionTurns]
               ? state[S.goodConditionTurns] * 0.1
               : 0)) *
-            state[S.goodConditionTurnsMultiplier];
+          state[S.goodConditionTurnsMultiplier];
       }
 
       // Apply stance

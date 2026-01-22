@@ -91,7 +91,8 @@ parentPort.on('message', async (task) => {
             score: avgScore,
             min: minScore,
             max: maxScore,
-            median: medianScore
+            median: medianScore,
+            meta: main.meta // Pass through metadata
         });
 
         // Notify progress one by one or in batch? 

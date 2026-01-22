@@ -1,5 +1,5 @@
-import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
-import { deepCopy } from "../utils";
+import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants.js";
+import { deepCopy } from "../utils.js";
 
 const LOGGED_BUFFS_FIELDS = [
   S.scoreBuffs,

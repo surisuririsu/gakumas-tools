@@ -1,5 +1,5 @@
 import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data";
-import { getBaseId } from "../utils";
+import { getBaseId } from "../utils.js";
 
 export default class IdolConfig {
   constructor(loadout) {

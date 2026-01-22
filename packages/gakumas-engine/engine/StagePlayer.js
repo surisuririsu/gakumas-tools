@@ -1,4 +1,4 @@
-import { S } from "../constants";
+import { S } from "../constants.js";
 
 export default class StagePlayer {
   constructor(engine, strategy) {

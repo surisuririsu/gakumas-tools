@@ -11,8 +11,8 @@ import {
   SOURCE_TYPES,
   RARITIES,
   FUNCTION_CALL_REGEX,
-} from "../constants";
-import EngineComponent from "./EngineComponent";
+} from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
 
 export default class Evaluator extends EngineComponent {
   constructor(engine) {

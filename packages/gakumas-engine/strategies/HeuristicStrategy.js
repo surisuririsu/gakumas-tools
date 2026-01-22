@@ -1,6 +1,6 @@
-import { G, S } from "../constants";
-import { deepCopy } from "../utils";
-import BaseStrategy from "./BaseStrategy";
+import { G, S } from "../constants.js";
+import { deepCopy } from "../utils.js";
+import BaseStrategy from "./BaseStrategy.js";
 
 const MAX_DEPTH = 3;
 
@@ -122,7 +122,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       (acc, cur) =>
         acc +
         (config.typeMultipliers[cur] * config.stage.turnCounts[cur]) /
-          config.stage.turnCount,
+        config.stage.turnCount,
       0
     );
   }

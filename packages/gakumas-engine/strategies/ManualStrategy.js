@@ -1,5 +1,5 @@
-import { S } from "../constants";
-import BaseStrategy from "./BaseStrategy";
+import { S } from "../constants.js";
+import BaseStrategy from "./BaseStrategy.js";
 
 export class HoldSelectionRequest extends Error {
   constructor(state, cards, num) {

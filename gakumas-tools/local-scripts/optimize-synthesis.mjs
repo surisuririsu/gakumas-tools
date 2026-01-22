@@ -5,15 +5,25 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import os from 'os';
 import { Worker } from 'worker_threads';
-import { Stages } from './lib/gakumas-data/index.js';
+import { Stages } from 'gakumas-data';
 
 // Configuration
 const { MONGODB_URI, MONGODB_DB } = process.env;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Load Skill Cards Metadata
-const skillCardsPath = path.join(__dirname, 'lib/gakumas-data/json/skill_cards.json');
-const skillCardsData = JSON.parse(fs.readFileSync(skillCardsPath, 'utf8'));
+// We need to resolve where gakumas-data is located or use require.
+// But as we are ESM, let's use the package's data. 
+// Actually, 'gakumas-data' exports SkillCards. Let's use that instead of reading raw JSON if possible,
+// but the current logic reads JSON for metadata (params etc?).
+// checking gakumas-data export... it exports SkillCards.
+// Let's import SkillCards from gakumas-data too.
+import { SkillCards } from 'gakumas-data';
+
+// However, SkillCards.getAll() might return instances or objects. 
+// Existing code expects raw JSON structure.
+// Let's assume SkillCards.getAll() returns the list of cards.
+const skillCardsData = SkillCards.getAll();
 const skillCardsMap = new Map(skillCardsData.map(c => [c.id, c]));
 
 function getCard(id) {

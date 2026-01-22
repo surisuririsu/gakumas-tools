@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { Worker } from 'worker_threads';
 import os from 'os';
 import { MongoClient } from "mongodb";
+import { recommendSynthesis } from "./optimize-synthesis.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,7 +49,41 @@ async function run() {
     const [seasonStr, stageStr] = args[1].split("-");
     const season = parseInt(seasonStr, 10);
     const stageNumber = parseInt(stageStr, 10);
-    const numRuns = parseInt(args[2], 10);
+
+    let numRuns = parseInt(args[2], 10);
+
+    // Check if args[2] was purely a number, or if it contained extra text (e.g. "100　all" due to full-width space)
+    const runsStr = String(numRuns);
+    if (!isNaN(numRuns) && args[2] && args[2] != runsStr) {
+        // There is extra content. Be robust and try to find idolName/all in it.
+        // Replace full-width space with half-width space and trim
+        const fixedArg = args[2].replace(/　/g, ' ').trim();
+        // Remove the number part
+        const remainder = fixedArg.replace(new RegExp(`^${runsStr}\\s*`), "").toLowerCase();
+
+        if (remainder === 'all' || IDOL_NAME_TO_ID[remainder]) {
+            console.error(`警告: 引数 '${args[2]}' に余分な文字列が含まれていますが、アイドル指定 '${remainder}' として解釈しました。`);
+            if (!options.idolName) {
+                options.idolName = remainder;
+            }
+        }
+    }
+
+    if (isNaN(numRuns)) {
+        // Fallback: Check if args[2] is an idol name or 'all'
+        const candidate = args[2] ? args[2].toLowerCase() : "";
+        if (candidate === 'all' || IDOL_NAME_TO_ID[candidate]) {
+            console.error(`試行回数が指定されていません。デフォルト値(3000)を使用し、'${args[2]}' をアイドル指定として扱います。`);
+            numRuns = 3000;
+            // Override options.idolName if not already set (though CLI arg usually handles this matches logic)
+            if (!options.idolName) {
+                options.idolName = candidate;
+            }
+        } else {
+            console.error(`エラー: 試行回数 '${args[2]}' が不正です。数値または有効なアイドル名を指定してください。`);
+            process.exit(1);
+        }
+    }
 
     // Load Stage
     const stages = Stages.getAll();
@@ -282,6 +317,41 @@ async function run() {
             console.log("");
         } else {
             // Just empty line and separator if not showing worst
+        }
+
+        // Logic for --synth option
+        if (options.synth && allResults.length > 0) {
+            const best = allResults[0];
+            const mainMem = memories.find(m => m.filename === best.mainFilename);
+            const subMem = memories.find(m => m.filename === best.subFilename);
+
+            if (mainMem && subMem) {
+                console.error("\n--- 合成最適化シミュレーションを開始 ---");
+                console.error(`Base Main: ${mainMem.data.name || "Unknown"} (Score: ${Math.round(best.score)})`);
+
+                try {
+                    // Reuse numRuns or use default/specified value? 
+                    // Usually we want robust runs for this. Let's use the same numRuns as the main loop.
+                    const synthResults = await recommendSynthesis(mainMem.data, subMem.data, contestStage.id, numRuns);
+
+                    if (synthResults.length > 0) {
+                        console.log(`\n### 推奨合成結果 (TOP 10)`);
+                        console.log("| スコア | Slot | 変更内容 |");
+                        console.log("| --: | :-- | :-- |");
+
+                        synthResults.slice(0, 10).forEach(res => {
+                            const diff = Math.round(res.score - best.score);
+                            const diffStr = diff > 0 ? `(+${diff})` : `(${diff})`;
+                            console.log(`| ${Math.round(res.score)} ${diffStr} | ${res.meta.slot} | ${res.meta.originalName} -> ${res.meta.newName} |`);
+                        });
+                    } else {
+                        console.log("\n有効な合成候補が見つかりませんでした。");
+                    }
+                } catch (e) {
+                    console.error("合成シミュレーション エラー:", e);
+                }
+                console.log("");
+            }
         }
     }
 }

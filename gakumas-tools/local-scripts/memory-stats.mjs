@@ -53,84 +53,173 @@ async function run() {
 
         const results = await collection.aggregate(pipeline).toArray();
 
-        // Initialize Matrix
-        // structure: stats[idolKey] = { sense: 0, logic: 0, anomaly: 0, total: 0 }
         const stats = {};
         for (const key of IDOL_ORDER) {
             stats[key] = { sense: 0, logic: 0, anomaly: 0, total: 0 };
         }
 
-        // Processing Results
-        for (const res of results) {
-            const pIdolId = res._id;
-            const count = res.count;
-            const pIdol = PIdols.getById(pIdolId);
+        // Check for Idol Name Argument
+        const args = process.argv.slice(2);
+        let targetIdolId = null;
+        let targetIdolName = "";
+        let targetIdolKey = "";
 
-            if (!pIdol) continue; // Unknown P-Idol
-
-            // Find Idol Key (English) from ID
-            const idolId = pIdol.idolId;
-            const idolKey = Object.keys(NAME_TO_ID).find(key => NAME_TO_ID[key] === idolId && key !== 'rina'); // prefer rinami key or main key
-
-            // Just use the first matching key from our orderly list to be safe
-            const targetKey = IDOL_ORDER.find(k => NAME_TO_ID[k] === idolId);
-
-            if (targetKey && stats[targetKey]) {
-                const plan = pIdol.plan; // "sense", "logic", "anomaly"
-                if (stats[targetKey][plan] !== undefined) {
-                    stats[targetKey][plan] += count;
-                    stats[targetKey].total += count;
-                }
+        if (args.length > 0) {
+            const arg = args[0].toLowerCase();
+            if (arg === "all") {
+                // handled below
+            } else if (NAME_TO_ID[arg]) {
+                targetIdolId = NAME_TO_ID[arg];
+                targetIdolKey = arg;
+                const idolInfo = Idols.getById(targetIdolId);
+                targetIdolName = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : arg;
+            } else {
+                console.error(`エラー: アイドル名 '${arg}' が見つかりません。`);
+                process.exit(1);
             }
         }
 
-        // Output Markdown Table
-        console.log("# メモリー統計情報");
-        console.log("| アイドル | センス | ロジック | アノマリー | 計 |");
-        console.log("| :-- | --: | --: | --: | --: |");
+        // Helper function for generating stats for a single idol
+        const generateIdolStats = async (idolId, idolName) => {
+            const pIdols = PIdols.getAll().filter(p => p.idolId === idolId);
+            const pIdolIds = pIdols.map(p => p.id);
 
-        // Calculate Totals First
-        let totalSense = 0;
-        let totalLogic = 0;
-        let totalAnomaly = 0;
-        let grandTotal = 0;
+            const idolMemories = await collection.find({ pIdolId: { $in: pIdolIds } }).toArray();
 
-        for (const key of IDOL_ORDER) {
-            const row = stats[key];
-            totalSense += row.sense;
-            totalLogic += row.logic;
-            totalAnomaly += row.anomaly;
-            grandTotal += row.total;
-        }
+            const songStats = [];
 
-        // Helper to format cell with percentage
-        const fmt = (val, total) => {
-            if (total === 0) return "0<br>0.0%";
-            const pct = ((val / total) * 100).toFixed(1);
-            return `${val}<br>${pct}%`;
+            for (const mem of idolMemories) {
+                const pIdol = PIdols.getById(mem.pIdolId);
+                if (!pIdol) continue;
+
+                const plan = pIdol.plan;
+                const title = pIdol.title;
+
+                let entry = songStats.find(s => s.plan === plan && s.title === title);
+                if (!entry) {
+                    entry = { plan, title, count: 0 };
+                    songStats.push(entry);
+                }
+                entry.count++;
+            }
+
+            const planOrder = { "sense": 1, "logic": 2, "anomaly": 3 };
+            songStats.sort((a, b) => {
+                if (planOrder[a.plan] !== planOrder[b.plan]) {
+                    return planOrder[a.plan] - planOrder[b.plan];
+                }
+                return a.title.localeCompare(b.title, 'ja');
+            });
+
+            const grandTotal = idolMemories.length;
+
+            console.log(`# メモリー統計情報 (${idolName})`);
+            console.log("| プラン | 楽曲 | 枚数 |");
+            console.log("| :-- | :-- | --: |");
+
+            const fmt = (val, total) => {
+                if (total === 0) return "0<br>0.0%";
+                const pct = ((val / total) * 100).toFixed(1);
+                return `${val}<br>${pct}%`;
+            };
+
+            for (const entry of songStats) {
+                const planName = PLAN_NAME[entry.plan] || entry.plan;
+                const valCell = fmt(entry.count, grandTotal);
+                console.log(`| ${planName} | ${entry.title} | ${valCell} |`);
+            }
+
+            const totalCell = fmt(grandTotal, grandTotal);
+            console.log(`| 計 | | ${totalCell} |`);
+            console.log(""); // Empty line for separation
         };
 
-        // Output Rows
-        for (const key of IDOL_ORDER) {
-            const row = stats[key];
-            const idolId = NAME_TO_ID[key];
-            const idolInfo = Idols.getById(idolId);
-            const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+        if (targetIdolId) {
+            await generateIdolStats(targetIdolId, targetIdolName);
+        } else if (args.length > 0 && args[0].toLowerCase() === 'all') {
+            for (const key of IDOL_ORDER) {
+                const idolId = NAME_TO_ID[key];
+                const idolInfo = Idols.getById(idolId);
+                const idolName = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+                await generateIdolStats(idolId, idolName);
+            }
+        } else if (false) {
+            // Placeholder to keep the else if structure if needed, but we jump to else
+        } else {
+            // --- Overall Stats (Original Logic) ---
 
-            const senseCell = fmt(row.sense, grandTotal);
-            const logicCell = fmt(row.logic, grandTotal);
-            const anomalyCell = fmt(row.anomaly, grandTotal);
-            const totalCell = fmt(row.total, grandTotal);
+            const results = await collection.aggregate(pipeline).toArray();
 
-            console.log(`| ${idolNameJp} | ${senseCell} | ${logicCell} | ${anomalyCell} | ${totalCell} |`);
+            // Processing Results
+            for (const res of results) {
+                const pIdolId = res._id;
+                const count = res.count;
+                const pIdol = PIdols.getById(pIdolId);
+
+                if (!pIdol) continue; // Unknown P-Idol
+
+                // Find Idol Key (English) from ID
+                const idolId = pIdol.idolId;
+                // Just use the first matching key from our orderly list to be safe
+                const targetKey = IDOL_ORDER.find(k => NAME_TO_ID[k] === idolId);
+
+                if (targetKey && stats[targetKey]) {
+                    const plan = pIdol.plan; // "sense", "logic", "anomaly"
+                    if (stats[targetKey][plan] !== undefined) {
+                        stats[targetKey][plan] += count;
+                        stats[targetKey].total += count;
+                    }
+                }
+            }
+
+            // Output Markdown Table
+            console.log("# メモリー統計情報");
+            console.log("| アイドル | センス | ロジック | アノマリー | 計 |");
+            console.log("| :-- | --: | --: | --: | --: |");
+
+            // Calculate Totals First
+            let totalSense = 0;
+            let totalLogic = 0;
+            let totalAnomaly = 0;
+            let grandTotal = 0;
+
+            for (const key of IDOL_ORDER) {
+                const row = stats[key];
+                totalSense += row.sense;
+                totalLogic += row.logic;
+                totalAnomaly += row.anomaly;
+                grandTotal += row.total;
+            }
+
+            // Helper to format cell with percentage
+            const fmt = (val, total) => {
+                if (total === 0) return "0<br>0.0%";
+                const pct = ((val / total) * 100).toFixed(1);
+                return `${val}<br>${pct}%`;
+            };
+
+            // Output Rows
+            for (const key of IDOL_ORDER) {
+                const row = stats[key];
+                const idolId = NAME_TO_ID[key];
+                const idolInfo = Idols.getById(idolId);
+                const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+
+                const senseCell = fmt(row.sense, grandTotal);
+                const logicCell = fmt(row.logic, grandTotal);
+                const anomalyCell = fmt(row.anomaly, grandTotal);
+                const totalCell = fmt(row.total, grandTotal);
+
+                console.log(`| ${idolNameJp} | ${senseCell} | ${logicCell} | ${anomalyCell} | ${totalCell} |`);
+            }
+
+            const totalSenseCell = fmt(totalSense, grandTotal);
+            const totalLogicCell = fmt(totalLogic, grandTotal);
+            const totalAnomalyCell = fmt(totalAnomaly, grandTotal);
+            const grandTotalCell = fmt(grandTotal, grandTotal);
+
+            console.log(`| 計 | ${totalSenseCell} | ${totalLogicCell} | ${totalAnomalyCell} | ${grandTotalCell} |`);
         }
-
-        const totalSenseCell = fmt(totalSense, grandTotal);
-        const totalLogicCell = fmt(totalLogic, grandTotal);
-        const totalAnomalyCell = fmt(totalAnomaly, grandTotal);
-        const grandTotalCell = fmt(grandTotal, grandTotal);
-
-        console.log(`| 計 | ${totalSenseCell} | ${totalLogicCell} | ${totalAnomalyCell} | ${grandTotalCell} |`);
 
     } catch (e) {
         console.error("エラー:", e);

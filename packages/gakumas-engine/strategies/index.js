@@ -1,5 +1,5 @@
-import HeuristicStrategy from "./HeuristicStrategy";
-import ManualStrategy from "./ManualStrategy";
+import HeuristicStrategy from "./HeuristicStrategy.js";
+import ManualStrategy from "./ManualStrategy.js";
 
 const STRATEGIES = {
   HeuristicStrategy,
