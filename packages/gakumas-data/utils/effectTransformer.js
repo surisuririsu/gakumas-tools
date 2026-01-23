@@ -46,11 +46,63 @@ export function transformEffects(ast) {
     throw new Error("Expected sequence at top level");
   }
 
+  // At the top level, we need to:
+  // 1. Transform phase/condition/target blocks normally
+  // 2. Merge consecutive actions and modifiers together
+  // 3. Apply trailing modifiers to the preceding effect
   const results = [];
+  let pendingActions = [];
+  let pendingModifiers = {};
 
-  for (const effect of ast.effects) {
-    const transformed = transformNode(effect, {});
-    results.push(...transformed);
+  for (const node of ast.effects) {
+    if (
+      node.type === "limit" ||
+      node.type === "ttl" ||
+      node.type === "delay" ||
+      node.type === "group" ||
+      node.type === "line" ||
+      node.type === "level"
+    ) {
+      // Accumulate modifiers
+      pendingModifiers[node.type] = node.value;
+    } else if (node.type === "action") {
+      // If we have pending modifiers but no pending actions, apply to last result
+      if (Object.keys(pendingModifiers).length > 0 && pendingActions.length === 0 && results.length > 0) {
+        Object.assign(results[results.length - 1], pendingModifiers);
+        pendingModifiers = {};
+      }
+      // Accumulate actions
+      pendingActions.push(node.expr);
+    } else {
+      // Flush pending actions/modifiers before processing blocks
+      if (pendingActions.length > 0) {
+        const effect = {};
+        effect.actions = pendingActions;
+        Object.assign(effect, pendingModifiers);
+        results.push(effect);
+        pendingActions = [];
+        pendingModifiers = {};
+      } else if (Object.keys(pendingModifiers).length > 0 && results.length > 0) {
+        // Apply orphan modifiers to last result
+        Object.assign(results[results.length - 1], pendingModifiers);
+        pendingModifiers = {};
+      }
+
+      // Transform the block normally
+      const transformed = transformNode(node, {});
+      results.push(...transformed);
+    }
+  }
+
+  // Flush any remaining actions/modifiers
+  if (pendingActions.length > 0) {
+    const effect = {};
+    effect.actions = pendingActions;
+    Object.assign(effect, pendingModifiers);
+    results.push(effect);
+  } else if (Object.keys(pendingModifiers).length > 0 && results.length > 0) {
+    // Apply trailing modifiers to last result
+    Object.assign(results[results.length - 1], pendingModifiers);
   }
 
   return results;
@@ -220,18 +272,16 @@ function transformBody(body, context) {
       pendingNestedPhases = [];
     }
     results.push(effect);
-  } else if (
-    (Object.keys(pendingModifiers).length > 0 ||
-      pendingNestedPhases.length > 0) &&
-    results.length === 0
-  ) {
-    // Orphan modifiers/nested phases with no actions
+  } else if (results.length === 0) {
+    // Empty body - still create effect if we have context (phase, conditions, targets)
+    // or orphan modifiers/nested phases
     const effect = createEffect(context);
     Object.assign(effect, pendingModifiers);
     if (pendingNestedPhases.length > 0) {
       effect.effects = [...pendingNestedPhases];
     }
-    if (effect.phase || effect.effects) {
+    // Push if we have any meaningful content
+    if (effect.phase || effect.effects || effect.conditions || effect.targets) {
       results.push(effect);
     }
   } else if (results.length > 0) {
