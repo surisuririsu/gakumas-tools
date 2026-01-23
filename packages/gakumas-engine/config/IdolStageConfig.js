@@ -50,8 +50,10 @@ export default class IdolStageConfig {
         param = Math.min(param, 2160);
       } else if (season < 25) {
         param = Math.min(param, 2400);
-      } else {
+      } else if (season < 37) {
         param = Math.min(param, 2760);
+      } else {
+        param = Math.min(param, 3360);
       }
       const criterion = criteria[key];
 
