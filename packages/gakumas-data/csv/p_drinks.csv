@@ -11,7 +11,7 @@ id,name,rarity,plan,unlockPlv,effects
 10,リカバリドリンク,SR,free,15,do:fixedStamina+=6
 11,フレッシュビネガー,SR,free,1,do:upgradeHand; do:fixedStamina+=3
 12,ブーストエキス,SR,free,55,"do:setScoreBuff(0.3,3); do:halfCostTurns+=3; do:fixedStamina-=2"
-13,パワフル漢方ドリンク,SR,free,60,do:movePIdolCardToHand; do:halfCostTurns+=3
+13,パワフル漢方ドリンク,SR,free,60,do:moveToHand(pIdol & (deck | discarded)); do:halfCostTurns+=3
 14,センブリソーダ,SR,free,61,"do:setScoreBuff(0.1,5); do:drawCard; do:drawCard; do:fixedStamina-=2; at:afterStartOfTurn { do:drawCard; limit:5 }"
 15,スタミナ爆発ドリンク,SR,sense,21,do:perfectConditionTurns+=1; do:genki+=9
 16,おしゃれハーブティー,SR,logic,21,do:score+=goodImpressionTurns; do:genki+=3

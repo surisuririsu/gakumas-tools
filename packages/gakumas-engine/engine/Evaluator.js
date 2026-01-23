@@ -115,9 +115,8 @@ export default class Evaluator extends EngineComponent {
       return name;
     }
 
-    // Return the identifier name as-is for target rules (e.g., "removed\604", "hand\R")
-    // This allows functions like countCards() to receive the target rule string
-    return name;
+    console.warn(`Unknown identifier: ${name}`);
+    return undefined;
   }
 
   /**

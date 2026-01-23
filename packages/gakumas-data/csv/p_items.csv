@@ -232,8 +232,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 231,春のおとずれ,SSR,FALSE,logic,stage,pIdol,81,FALSE,at:buffCostConsumed { if:goodImpressionTurns>=3 { do:goodImpressionTurns+=2; do:motivation+=1; do:fixedStamina-=1 }; limit:4 }
 232,春のおとずれ+,SSR,TRUE,logic,stage,pIdol,81,FALSE,at:buffCostConsumed { if:goodImpressionTurns>=3 { do:goodImpressionTurns+=2; do:motivation+=1 }; limit:4 }
 233,ゆうじょーのきろく,SSR,FALSE,logic,produce,support,,FALSE,
-234,まあるい春色,SSR,FALSE,anomaly,stage,pIdol,82,FALSE,at:stanceChanged { if:isFullPower & strengthTimes>=1 { target:effect(fullPowerCharge)*active { do:g.score+=11 } }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { do:fixedStamina-=2 }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { at:turn { do:setStance(preservation2); limit:1 } }; limit:2 }
-235,まあるい春色+,SSR,TRUE,anomaly,stage,pIdol,82,FALSE,at:stanceChanged { if:isFullPower & strengthTimes>=1 { target:effect(fullPowerCharge)*active { do:g.score+=11 } }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { at:turn { do:setStance(preservation2); limit:1 } }; limit:2 }
+234,まあるい春色,SSR,FALSE,anomaly,stage,pIdol,82,FALSE,at:stanceChanged { if:isFullPower & strengthTimes>=1 { target:effect(fullPowerCharge) & active { do:g.score+=11 } }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { do:fixedStamina-=2 }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { at:turn { do:setStance(preservation2); limit:1 } }; limit:2 }
+235,まあるい春色+,SSR,TRUE,anomaly,stage,pIdol,82,FALSE,at:stanceChanged { if:isFullPower & strengthTimes>=1 { target:effect(fullPowerCharge) & active { do:g.score+=11 } }; limit:2 }; at:stanceChanged { if:isFullPower & strengthTimes>=1 { at:turn { do:setStance(preservation2); limit:1 } }; limit:2 }
 236,体力自慢の本気,SSR,FALSE,anomaly,produce,support,,FALSE,
 237,小さな銀河,SSR,FALSE,anomaly,stage,pIdol,83,FALSE,at:mentalCardUsed { if:stance==strength2 { target:mental { do:g.genki+=4 } }; limit:3 }; at:mentalCardUsed { if:stance==strength2 { do:fixedStamina-=2 }; limit:3 }
 238,小さな銀河+,SSR,TRUE,anomaly,stage,pIdol,83,FALSE,at:mentalCardUsed { if:stance==strength2 { target:mental { do:g.genki+=4 } }; limit:3 }; at:mentalCardUsed { if:stance==strength2 { do:fixedStamina-=1 }; limit:3 }
@@ -327,13 +327,13 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 326,落ち葉つかみの型,SR,FALSE,logic,produce,support,,FALSE,
 327,シェアハピ缶バッジ,SSR,FALSE,logic,stage,pIdol,108,FALSE,at:everyTurn { if:turnsElapsed%2==1 { do:fixedStamina+=3; do:goodImpressionTurns+=1 }; limit:2 }
 328,シェアハピ缶バッジ+,SSR,TRUE,logic,stage,pIdol,108,FALSE,at:everyTurn { if:turnsElapsed%2==1 { do:fixedStamina+=3; do:goodImpressionTurns+=2 }; limit:2 }
-329,たこやきテクノドッグ,SSR,FALSE,anomaly,stage,pIdol,109,FALSE,at:stanceChanged { if:prevStance==fullPower & countCards(removed\604)>=1 { target:604 { do:g.fullPowerCharge+=2; do:g.score+=5; do:g.typedCost-=2 } }; limit:3 }; at:stanceChanged { if:prevStance==fullPower & countCards(removed\604)>=1 { do:holdCard(604) }; limit:3 }
-330,たこやきテクノドッグ+,SSR,TRUE,anomaly,stage,pIdol,109,FALSE,at:stanceChanged { if:prevStance==fullPower & countCards(removed\604)>=1 { target:604 { do:g.fullPowerCharge+=2; do:g.score+=12; do:g.typedCost-=2 } }; limit:3 }; at:stanceChanged { if:prevStance==fullPower & countCards(removed\604)>=1 { do:holdCard(604) }; limit:3 }
+329,たこやきテクノドッグ,SSR,FALSE,anomaly,stage,pIdol,109,FALSE,at:stanceChanged { if:prevStance==fullPower & countCards(removed & 604)>=1 { target:604 { do:g.fullPowerCharge+=2; do:g.score+=5; do:g.typedCost-=2 } }; limit:3 }; at:stanceChanged { if:prevStance==fullPower & countCards(removed & 604)>=1 { do:holdCard(604) }; limit:3 }
+330,たこやきテクノドッグ+,SSR,TRUE,anomaly,stage,pIdol,109,FALSE,at:stanceChanged { if:prevStance==fullPower & countCards(removed & 604)>=1 { target:604 { do:g.fullPowerCharge+=2; do:g.score+=12; do:g.typedCost-=2 } }; limit:3 }; at:stanceChanged { if:prevStance==fullPower & countCards(removed & 604)>=1 { do:holdCard(604) }; limit:3 }
 331,しぼまない思い出,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfTurn { if:isVocalTurn & stanceChangedTimes>=4 { do:setScoreBuff(0.25,1); do:genki+=8 }; limit:2 }"
 332,かごいっぱいの成果,SR,FALSE,anomaly,produce,support,,FALSE,
 333,アイドルになりたい,SSR,FALSE,logic,stage,pIdol,110,FALSE,at:goodImpressionTurnsIncreased { if:goodImpressionTurnsDelta>=7 & genki>=30 { do:score+=goodImpressionTurns*2.5; do:fixedStamina+=3 }; limit:2 }
 334,アイドルになりたい+,SSR,TRUE,logic,stage,pIdol,110,FALSE,at:goodImpressionTurnsIncreased { if:goodImpressionTurnsDelta>=7 & genki>=30 { do:score+=goodImpressionTurns*2.5; do:fixedStamina+=3 }; limit:3 }
-335,月刊アニメトーク♪,SSR,FALSE,logic,stage,support,,FALSE,at:afterStartOfTurn { if:isVisualTurn { do:goodImpressionTurns+=3; do:moveSSRToHand(1) }; limit:1 }
+335,月刊アニメトーク♪,SSR,FALSE,logic,stage,support,,FALSE,"at:afterStartOfTurn { if:isVisualTurn { do:goodImpressionTurns+=3; do:moveToHand(SSR & (deck | discarded), 1) }; limit:1 }"
 336,メリハリストレッチ,SR,FALSE,logic,produce,support,,FALSE,
 337,フレフレあたし！,SSR,FALSE,sense,stage,pIdol,111,FALSE,at:afterActiveCardUsed { if:perfectConditionTurns>=1 { do:cardUsesRemaining+=1; do:drawCard; do:fixedStamina-=1 }; limit:2 }
 338,フレフレあたし！+,SSR,TRUE,sense,stage,pIdol,111,FALSE,at:afterActiveCardUsed { if:perfectConditionTurns>=1 { do:cardUsesRemaining+=1; do:drawCard; do:drawCard }; limit:2 }
@@ -344,8 +344,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 343,高くジャンプ！,SSR,FALSE,logic,stage,pIdol,113,FALSE,"at:cardUsed { if:turnCardsUsed%2==1 { do:genki+=5; do:setGoodImpressionTurnsBuff(0.5,1); do:fixedStamina-=1 }; limit:2 }"
 344,高くジャンプ！+,SSR,TRUE,logic,stage,pIdol,113,FALSE,"at:cardUsed { if:turnCardsUsed%2==1 { do:genki+=7; do:setGoodImpressionTurnsBuff(0.5,1) }; limit:2 }"
 345,激痛のちぽかぽか,SR,FALSE,logic,produce,support,,FALSE,
-346,届けたい想い,SSR,FALSE,sense,stage,pIdol,114,FALSE,at:afterStartOfTurn { if:turnsRemaining<=3 { do:moveSSRToHand(1); do:concentration+=goodConditionTurns*0.2; do:fixedStamina-=1 }; limit:3 }
-347,届けたい想い+,SSR,TRUE,sense,stage,pIdol,114,FALSE,at:afterStartOfTurn { if:turnsRemaining<=3 { do:moveSSRToHand(1); do:concentration+=goodConditionTurns*0.3; do:fixedStamina-=1 }; limit:3 }
+346,届けたい想い,SSR,FALSE,sense,stage,pIdol,114,FALSE,"at:afterStartOfTurn { if:turnsRemaining<=3 { do:moveToHand(SSR & (deck | discarded), 1); do:concentration+=goodConditionTurns*0.2; do:fixedStamina-=1 }; limit:3 }"
+347,届けたい想い+,SSR,TRUE,sense,stage,pIdol,114,FALSE,"at:afterStartOfTurn { if:turnsRemaining<=3 { do:moveToHand(SSR & (deck | discarded), 1); do:concentration+=goodConditionTurns*0.3; do:fixedStamina-=1 }; limit:3 }"
 348,ごきげんようレッスン,SR,FALSE,sense,produce,support,,FALSE,
 349,水も滴る王子様,SSR,FALSE,sense,stage,pIdol,115,FALSE,at:afterActiveCardUsed { do:goodConditionTurns+=concentration*0.5; do:concentration+=1; limit:1 }
 350,水も滴る王子様+,SSR,TRUE,sense,stage,pIdol,115,FALSE,at:afterActiveCardUsed { do:goodConditionTurns+=concentration*0.5; do:concentration+=3; limit:1 }
@@ -358,10 +358,10 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 357,ふさわしい、私+,SSR,TRUE,logic,stage,pIdol,118,FALSE,at:motivationIncreased { if:genki>=7 { do:motivation+=6; do:genki+=1; do:fixedStamina-=2 }; limit:2 }
 358,寝心地は良好,SSR,FALSE,logic,stage,support,,FALSE,"at:motivationIncreased { if:isDanceTurn { do:setGoodImpressionTurnsBuff(0.5,2); do:setMotivationBuff(0.5,2) }; limit:1 }"
 359,お直し刺繍セット,SR,FALSE,logic,produce,support,,FALSE,
-360,地球とランデブー！,SSR,FALSE,anomaly,stage,pIdol,119,FALSE,at:afterStartOfTurn { if:stanceChangedTimes>=4 { do:movePreservationCardToHand }; limit:2 }; at:afterStartOfTurn { if:stanceChangedTimes>=4 { target:634 { do:g.scoreTimes+=1; do:g.score+=10; do:g.cost-=4 } }; limit:2 }
-361,地球とランデブー！+,SSR,TRUE,anomaly,stage,pIdol,119,FALSE,at:afterStartOfTurn { if:stanceChangedTimes>=4 { do:movePreservationCardToHand }; limit:2 }; at:afterStartOfTurn { if:stanceChangedTimes>=4 { target:634 { do:g.scoreTimes+=1; do:g.score+=15; do:g.cost-=3 } }; limit:2 }
+360,地球とランデブー！,SSR,FALSE,anomaly,stage,pIdol,119,FALSE,at:afterStartOfTurn { if:stanceChangedTimes>=4 { do:moveToHand(effect(preservation) & (deck | discarded)) }; limit:2 }; at:afterStartOfTurn { if:stanceChangedTimes>=4 { target:634 { do:g.scoreTimes+=1; do:g.score+=10; do:g.cost-=4 } }; limit:2 }
+361,地球とランデブー！+,SSR,TRUE,anomaly,stage,pIdol,119,FALSE,at:afterStartOfTurn { if:stanceChangedTimes>=4 { do:moveToHand(effect(preservation) & (deck | discarded)) }; limit:2 }; at:afterStartOfTurn { if:stanceChangedTimes>=4 { target:634 { do:g.scoreTimes+=1; do:g.score+=15; do:g.cost-=3 } }; limit:2 }
 362,たたいてかぶって,SR,FALSE,anomaly,stage,support,,FALSE,at:afterStartOfTurn { if:isDanceTurn & isStrength { target:hand { do:g.cost+=3 } }; limit:1 }
-363,めちゃかわプリ,SSR,FALSE,free,stage,support,,FALSE,at:afterStartOfTurn { if:lastUsedCardType==active { do:movePIdolCardToHand; do:upgradeRandomCardInHand }; limit:1 }
+363,めちゃかわプリ,SSR,FALSE,free,stage,support,,FALSE,at:afterStartOfTurn { if:lastUsedCardType==active { do:moveToHand(pIdol & (deck | discarded)); do:upgradeRandomCardInHand }; limit:1 }
 364,交わした約束,SSR,FALSE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn { if:fullPowerCharge>=10 { do:holdCard(638); do:genki+=5 }; limit:2 }; at:endOfTurn { if:fullPowerCharge>=10 { at:turn { do:setFullPowerChargeBuff(0.5,1); limit:1 } }; limit:2 }"
 365,交わした約束+,SSR,TRUE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn { if:fullPowerCharge>=10 { do:holdCard(638); do:genki+=5 }; limit:3 }; at:endOfTurn { if:fullPowerCharge>=10 { at:turn { do:setFullPowerChargeBuff(0.5,1); limit:1 } }; limit:3 }"
 366,完全制覇でポン,SSR,FALSE,anomaly,produce,support,,FALSE,
@@ -369,13 +369,13 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveCardToHandFromRemoved(640); do:goodConditionTurns+=7; do:fixedStamina-=3 }; limit:1 }
 369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveCardToHandFromRemoved(640); do:goodConditionTurns+=9 }; limit:1 }
 370,無我の境地,SSR,FALSE,sense,produce,support,,FALSE,
-371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:fixedStamina+=7; do:removeBasicCard } }
-372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:goodConditionTurns+=5; do:removeBasicCard } }
-373,ガラスはつみ (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:concentration+=5; do:removeBasicCard } }
-374,はつぼしメダル (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:goodImpressionTurns+=5; do:removeBasicCard } }
-375,ガラスはつみ (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:motivation+=5; do:removeBasicCard } }
-376,はつぼしメダル (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { target:effect(strength) { do:g.score+=10 } } }; at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:removeBasicCard } }
-377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { target:effect(fullPowerCharge) { do:g.score+=10 } } }; at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:removeBasicCard } }
+371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:fixedStamina+=7; do:removeCard(basic & (deck | discarded | hand)) } }
+372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:goodConditionTurns+=5; do:removeCard(basic & (deck | discarded | hand)) } }
+373,ガラスはつみ (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:concentration+=5; do:removeCard(basic & (deck | discarded | hand)) } }
+374,はつぼしメダル (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:goodImpressionTurns+=5; do:removeCard(basic & (deck | discarded | hand)) } }
+375,ガラスはつみ (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:motivation+=5; do:removeCard(basic & (deck | discarded | hand)) } }
+376,はつぼしメダル (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { target:effect(strength) { do:g.score+=10 } } }; at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:removeCard(basic & (deck | discarded | hand)) } }
+377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { target:effect(fullPowerCharge) { do:g.score+=10 } } }; at:startOfStage { if:countCards(all)-countCards(N)-countCards(T)>=21 { do:removeCard(basic & (deck | discarded | hand)) } }
 378,だから、おいで,SSR,FALSE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { do:goodImpressionTurns+=10; do:setScoreDebuff(0.6,2) }; limit:1 }; at:startOfTurn { if:goodImpressionTurns>=6 { at:mentalCardUsed { do:motivation+=1; limit:5 } }; limit:1 }"
 379,だから、おいで+,SSR,TRUE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { do:goodImpressionTurns+=13; do:setScoreDebuff(0.6,2) }; limit:1 }; at:startOfTurn { if:goodImpressionTurns>=6 { at:mentalCardUsed { do:motivation+=1; limit:5 } }; limit:1 }"
 380,ぴったりコレクション,SSR,FALSE,sense,stage,support,,TRUE,at:activeCardUsed { if:isVisualTurn & goodConditionTurns>=3 { do:concentration+=2; do:score+=4 }; limit:1 }

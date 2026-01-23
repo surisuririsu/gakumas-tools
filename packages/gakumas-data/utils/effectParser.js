@@ -7,8 +7,8 @@
  * effect = phaseBlock | conditionBlock | targetBlock | action | modifier
  * phaseBlock = "at:" phase "{" effectBody "}"
  * effectBody = (conditionBlock | targetBlock | phaseBlock | action | modifier)*
- * conditionBlock = "if:" condition "{" effectBody "}"
- * targetBlock = "target:" targetExpr "{" effectBody "}"
+ * conditionBlock = "if:" condition ("{" effectBody "}")?
+ * targetBlock = "target:" condition ("{" effectBody "}")?
  * action = "do:" assignmentExpr
  * modifier = "limit:" number | "ttl:" number | "delay:" number | "group:" number | "line:" number | "level:" number
  *
@@ -26,7 +26,11 @@
  * mulExpr = unaryMath (("*" | "/" | "%") unaryMath)*
  * unaryMath = "-" unaryMath | primaryExpr
  * primaryExpr = "(" expression ")" | functionCall | number | identifier
- * functionCall = identifier "(" (expression ("," expression)*)? ")"
+ * functionCall = identifier "(" (condition ("," condition)*)? ")"
+ *
+ * Note: The same condition grammar is used for both if: conditions and target: expressions.
+ * The interpretation differs based on context - in if: it's evaluated as boolean,
+ * in target: or function args like moveToHand() it's evaluated as a card filter.
  */
 
 // Token types
@@ -490,78 +494,17 @@ class Parser {
     this.expect(TokenType.TARGET, "Expected 'target'");
     this.expect(TokenType.COLON, "Expected ':' after 'target'");
 
-    const target = this.parseTargetExpr();
+    // Use parseCondition - same grammar as if: conditions, interpreted differently
+    const target = this.parseCondition();
 
-    this.expect(TokenType.LBRACE, "Expected '{' after target");
-
-    const body = this.parseEffectBody();
-
-    this.expect(TokenType.RBRACE, "Expected '}' to close target block");
+    // Body is optional - allows `target:X` to apply to subsequent actions
+    let body = [];
+    if (this.match(TokenType.LBRACE)) {
+      body = this.parseEffectBody();
+      this.expect(TokenType.RBRACE, "Expected '}' to close target block");
+    }
 
     return { type: "target", target, body };
-  }
-
-  // Parse target expression (identifier, number, function call, or complex expression)
-  // Examples: mental, hand, 382, effect(fullPowerCharge)*active
-  parseTargetExpr() {
-    // Build target expression as a string, handling complex patterns
-    let expr = "";
-
-    // Accept identifier or number as the start
-    if (this.check(TokenType.IDENTIFIER)) {
-      const idToken = this.advance();
-      expr = idToken.value;
-
-      // Check for function call
-      if (this.match(TokenType.LPAREN)) {
-        expr += "(";
-        if (!this.check(TokenType.RPAREN)) {
-          do {
-            if (this.check(TokenType.IDENTIFIER)) {
-              expr += this.advance().value;
-            } else if (this.check(TokenType.NUMBER)) {
-              expr += this.advance().value;
-            }
-          } while (this.match(TokenType.COMMA) && (expr += ","));
-        }
-        this.expect(TokenType.RPAREN, "Expected ')' after target arguments");
-        expr += ")";
-      }
-    } else if (this.check(TokenType.NUMBER)) {
-      expr = String(this.advance().value);
-    } else {
-      throw new Error(
-        `Expected target name at line ${this.current().line}, col ${this.current().col}. Got ${this.current().type}`
-      );
-    }
-
-    // Handle complex expressions like active*effect(fullPowerCharge)
-    while (this.check(TokenType.MUL)) {
-      this.advance();
-      expr += "*";
-
-      if (this.check(TokenType.IDENTIFIER)) {
-        const nextId = this.advance().value;
-        expr += nextId;
-
-        if (this.match(TokenType.LPAREN)) {
-          expr += "(";
-          if (!this.check(TokenType.RPAREN)) {
-            do {
-              if (this.check(TokenType.IDENTIFIER)) {
-                expr += this.advance().value;
-              } else if (this.check(TokenType.NUMBER)) {
-                expr += this.advance().value;
-              }
-            } while (this.match(TokenType.COMMA) && (expr += ","));
-          }
-          this.expect(TokenType.RPAREN, "Expected ')' after target arguments");
-          expr += ")";
-        }
-      }
-    }
-
-    return expr;
   }
 
   // Parse action: do:assignment
@@ -695,9 +638,6 @@ class Parser {
 
   // Parse assignment expression
   parseAssignmentExpr() {
-    // Check for special actions (single identifiers or function calls)
-    const lookahead = this.peek(1);
-
     // Function call or assignment
     if (this.check(TokenType.IDENTIFIER)) {
       const idToken = this.advance();
@@ -707,7 +647,8 @@ class Parser {
         const args = [];
         if (!this.check(TokenType.RPAREN)) {
           do {
-            args.push(this.parseExpression());
+            // Use parseCondition to allow &, |, ! in function args
+            args.push(this.parseCondition());
           } while (this.match(TokenType.COMMA));
         }
         this.expect(TokenType.RPAREN, "Expected ')' after arguments");
@@ -827,7 +768,8 @@ class Parser {
         const args = [];
         if (!this.check(TokenType.RPAREN)) {
           do {
-            args.push(this.parseExpression());
+            // Use parseCondition to allow &, |, ! in function args
+            args.push(this.parseCondition());
           } while (this.match(TokenType.COMMA));
         }
         this.expect(TokenType.RPAREN, "Expected ')' after arguments");

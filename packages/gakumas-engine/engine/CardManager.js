@@ -30,8 +30,7 @@ export default class CardManager extends EngineComponent {
       numRemovedCards: (state) => state[S.removedCards].length,
       unremovedTroubleCards: (state) => this.countUnremovedTroubleCards(state),
       countCards: (state, targetRule) =>
-        this.getTargetRuleCards(state, targetRule.replaceAll("\\", "*"), null)
-          .size,
+        this.getTargetRuleCards(state, targetRule, null).size,
     };
 
     this.specialActions = {
@@ -53,11 +52,6 @@ export default class CardManager extends EngineComponent {
         this.moveCardToHandFromRemoved(state, cardBaseId),
       moveSelectedFromDeckOrDiscardsToHand: (state, num = 1) =>
         this.moveSelectedCardToHand(state, ["deck", "discards"], num),
-      moveSSRToTopOfDeck: (state, num) => this.moveSSRToTopOfDeck(state, num),
-      moveSSRToHand: (state, num) => this.moveSSRToHand(state, num),
-      movePreservationCardToHand: (state) =>
-        this.movePreservationCardToHand(state),
-      movePIdolCardToHand: (state) => this.movePIdolCardToHand(state),
       holdCard: (state, cardBaseId) =>
         this.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => this.holdThisCard(state),
@@ -68,13 +62,15 @@ export default class CardManager extends EngineComponent {
       holdSelectedFromDeckOrDiscards: (state, num = 1) =>
         this.holdSelectedFrom(state, ["deck", "discards"], num),
       addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
-      removeTroubleFromDeckOrDiscards: (state) =>
-        this.removeTroubleFromDeckOrDiscards(state),
-      moveActiveCardsToDeckFromRemoved: (state) =>
-        this.moveActiveCardsToDeckFromRemoved(state),
       useRandomCardFree: (state, targetRule) =>
         this.useRandomCardFree(state, targetRule),
-      removeBasicCard: (state) => this.removeBasicCard(state),
+      // Generic card manipulation actions
+      removeCard: (state, targetRule) => this.removeCardByTarget(state, targetRule),
+      moveToHand: (state, targetRule, num = 1) =>
+        this.moveToHandByTarget(state, targetRule, num),
+      moveToTopOfDeck: (state, targetRule, num = 1) =>
+        this.moveToTopOfDeckByTarget(state, targetRule, num),
+      moveToDeck: (state, targetRule) => this.moveToDeckByTarget(state, targetRule),
     };
   }
 
@@ -625,173 +621,6 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  moveSSRToTopOfDeck(state, num) {
-    let ssrCards = [];
-    for (let pile of [S.deckCards, S.discardedCards]) {
-      for (let i = 0; i < state[pile].length; i++) {
-        const cardIdx = state[pile][i];
-        const card = state[S.cardMap][cardIdx];
-        const skillCard = SkillCards.getById(card.id);
-        if (skillCard.rarity === "SSR") {
-          ssrCards.push({ pile, index: i, cardIdx });
-        }
-      }
-    }
-    if (!ssrCards.length) return;
-    for (let i = 0; i < num && ssrCards.length; i++) {
-      const pick = ssrCards.splice(
-        Math.floor(getRand() * ssrCards.length),
-        1
-      )[0];
-
-      // Sort remaining cards by index descending to avoid index shifting issues
-      const remainingFromSamePile = ssrCards.filter(
-        (card) => card.pile === pick.pile
-      );
-      remainingFromSamePile.sort((a, b) => b.index - a.index);
-
-      // Update indexes for cards after the removed one
-      for (let card of remainingFromSamePile) {
-        if (card.index > pick.index) {
-          card.index--;
-        }
-      }
-
-      state[pick.pile].splice(pick.index, 1);
-      state[S.deckCards].push(pick.cardIdx);
-      this.logger.log(state, "moveCardToTopOfDeck", {
-        type: "skillCard",
-        id: state[S.cardMap][pick.cardIdx].id,
-      });
-    }
-  }
-
-  moveSSRToHand(state, num) {
-    let ssrCards = [];
-    for (let pile of [S.deckCards, S.discardedCards]) {
-      for (let i = 0; i < state[pile].length; i++) {
-        const cardIdx = state[pile][i];
-        const card = state[S.cardMap][cardIdx];
-        const skillCard = SkillCards.getById(card.id);
-        if (skillCard.rarity === "SSR") {
-          ssrCards.push({ pile, index: i, cardIdx });
-        }
-      }
-    }
-    if (!ssrCards.length) return;
-    for (let i = 0; i < num && ssrCards.length; i++) {
-      const pick = ssrCards.splice(
-        Math.floor(getRand() * ssrCards.length),
-        1
-      )[0];
-
-      // Sort remaining cards by index descending to avoid index shifting issues
-      const remainingFromSamePile = ssrCards.filter(
-        (card) => card.pile === pick.pile
-      );
-      remainingFromSamePile.sort((a, b) => b.index - a.index);
-
-      // Update indexes for cards after the removed one
-      for (let card of remainingFromSamePile) {
-        if (card.index > pick.index) {
-          card.index--;
-        }
-      }
-
-      state[pick.pile].splice(pick.index, 1);
-      state[S.handCards].push(pick.cardIdx);
-
-      state[S.movedCard] = pick.cardIdx;
-      this.engine.effectManager.triggerEffectsForPhase(
-        state,
-        "cardMovedToHand"
-      );
-
-      this.logger.log(state, "moveCardToHand", {
-        type: "skillCard",
-        id: state[S.cardMap][pick.cardIdx].id,
-      });
-    }
-  }
-
-  movePreservationCardToHand(state) {
-    let preservationCards = [];
-    for (let pile of [S.deckCards, S.discardedCards]) {
-      for (let i = 0; i < state[pile].length; i++) {
-        const cardIdx = state[pile][i];
-        if (this.getCardEffects(state, cardIdx).has("preservation")) {
-          preservationCards.push({ pile, index: i, cardIdx });
-        }
-      }
-    }
-    if (!preservationCards.length) return;
-
-    const pick =
-      preservationCards[Math.floor(getRand() * preservationCards.length)];
-    state[pick.pile].splice(pick.index, 1);
-    state[S.handCards].push(pick.cardIdx);
-
-    state[S.movedCard] = pick.cardIdx;
-    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
-
-    this.logger.log(state, "moveCardToHand", {
-      type: "skillCard",
-      id: state[S.cardMap][pick.cardIdx].id,
-    });
-  }
-
-  movePIdolCardToHand(state) {
-    let pIdolCards = [];
-    for (let pile of [S.deckCards, S.discardedCards]) {
-      for (let i = 0; i < state[pile].length; i++) {
-        const cardIdx = state[pile][i];
-        if (this.getCardSourceType(state, cardIdx) === "pIdol") {
-          pIdolCards.push({ pile, index: i, cardIdx });
-        }
-      }
-    }
-    if (!pIdolCards.length) return;
-
-    const pick = pIdolCards[Math.floor(getRand() * pIdolCards.length)];
-    state[pick.pile].splice(pick.index, 1);
-    state[S.handCards].push(pick.cardIdx);
-
-    state[S.movedCard] = pick.cardIdx;
-    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
-
-    this.logger.log(state, "moveCardToHand", {
-      type: "skillCard",
-      id: state[S.cardMap][pick.cardIdx].id,
-    });
-  }
-
-  moveActiveCardsToDeckFromRemoved(state) {
-    let cards = state[S.cardMap]
-      .map((c, i) =>
-        state[S.removedCards].includes(i) &&
-        SkillCards.getById(c.id).type == "active"
-          ? i
-          : -1
-      )
-      .filter((i) => i != -1);
-
-    if (!cards.length) return;
-
-    cards.forEach((card) => {
-      const index = state[S.removedCards].indexOf(card);
-      if (index != -1) {
-        state[S.removedCards].splice(index, 1);
-        const insertIndex = Math.floor(getRand() * state[S.deckCards].length);
-        state[S.deckCards].splice(insertIndex, 0, card);
-
-        this.logger.log(state, "moveCardToDeckAtRandom", {
-          type: "skillCard",
-          id: state[S.cardMap][card].id,
-        });
-      }
-    });
-  }
-
   hold(state, card) {
     // Hold the card
     if (card != null) {
@@ -930,44 +759,84 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  removeTroubleFromDeckOrDiscards(state) {
-    const troubleCards = state[S.cardMap].filter((c) => c.type == "trouble");
-    if (!troubleCards.length) return;
+  getTargetRuleCards(state, targetRule, source) {
+    // Handle AST nodes
+    if (targetRule && typeof targetRule === "object") {
+      return this.evaluateTargetAST(state, targetRule, source);
+    }
 
-    const card = troubleCards[Math.floor(Math.random() * troubleCards.length)];
-    let index = state[S.deckCards].indexOf(card);
-    let pile = S.deckCards;
-    if (index == -1) {
-      index = state[S.discardedCards].indexOf(card);
-      pile = S.discardedCards;
+    // Handle simple string identifier (fallback for direct calls)
+    if (typeof targetRule === "string") {
+      return this.getTargetCards(state, targetRule, source);
     }
-    if (index != -1) {
-      state[pile].splice(index, 1);
-      this.logger.log(state, "removeCard", {
-        type: "skillCard",
-        id: state[S.cardMap][card].id,
-      });
-    }
+
+    return new Set();
   }
 
-  getTargetRuleCards(state, targetRule, source) {
-    let targetRuleCards = null;
-
-    const targets = targetRule.split("*");
-    for (let i = 0; i < targets.length; i++) {
-      const targetCards = this.getTargetCards(state, targets[i], source);
-      if (targetRuleCards) {
-        for (let card of targetRuleCards.values()) {
-          if (!targetCards.has(card)) {
-            targetRuleCards.delete(card);
+  evaluateTargetAST(state, node, source) {
+    switch (node.type) {
+      case "binary": {
+        const left = this.evaluateTargetAST(state, node.left, source);
+        const right = this.evaluateTargetAST(state, node.right, source);
+        if (node.op === "&") {
+          // Intersection
+          const result = new Set();
+          for (let card of left) {
+            if (right.has(card)) result.add(card);
           }
+          return result;
+        } else if (node.op === "|") {
+          // Union
+          const result = new Set(left);
+          for (let card of right) result.add(card);
+          return result;
         }
-      } else {
-        targetRuleCards = targetCards;
+        return new Set();
       }
-    }
 
-    return targetRuleCards;
+      case "unary": {
+        if (node.op === "!") {
+          // Complement (relative to all cards)
+          const operand = this.evaluateTargetAST(state, node.operand, source);
+          const result = new Set();
+          for (let k = 0; k < state[S.cardMap].length; k++) {
+            if (!operand.has(k)) result.add(k);
+          }
+          return result;
+        }
+        return new Set();
+      }
+
+      case "call": {
+        const name = node.name;
+        const args = node.args;
+        if (name === "effect" && args.length > 0) {
+          const effectName =
+            args[0].type === "identifier"
+              ? args[0].name
+              : String(args[0].value);
+          const result = new Set();
+          for (let k = 0; k < state[S.cardMap].length; k++) {
+            if (this.getCardEffects(state, k).has(effectName)) {
+              result.add(k);
+            }
+          }
+          return result;
+        }
+        console.warn(`Unknown target function: ${name}`);
+        return new Set();
+      }
+
+      case "identifier":
+        return this.getTargetCards(state, node.name, source);
+
+      case "number":
+        return this.getTargetCards(state, String(node.value), source);
+
+      default:
+        console.warn("Unknown target AST node type:", node.type);
+        return new Set();
+    }
   }
 
   getTargetCards(state, target, source) {
@@ -1003,23 +872,21 @@ export default class CardManager extends EngineComponent {
       for (let k = 0; k < state[S.cardMap].length; k++) {
         targetCards.add(k);
       }
-    } else if (["active", "mental"].includes(target)) {
+    } else if (["active", "mental", "trouble"].includes(target)) {
       for (let k = 0; k < state[S.cardMap].length; k++) {
         if (SkillCards.getById(state[S.cardMap][k].id).type == target) {
           targetCards.add(k);
         }
       }
-    } else if (/^sourceType\(.+\)$/.test(target)) {
-      const sourceType = target.match(/^sourceType\((.+)\)/)[1];
+    } else if (target == "basic") {
       for (let k = 0; k < state[S.cardMap].length; k++) {
-        if (this.getCardSourceType(state, k) == sourceType) {
+        if (SkillCards.getById(state[S.cardMap][k].id).name.includes("基本")) {
           targetCards.add(k);
         }
       }
-    } else if (/^effect\(.+\)$/.test(target)) {
-      const effect = target.match(/^effect\((.+)\)/)[1];
+    } else if (target == "pIdol") {
       for (let k = 0; k < state[S.cardMap].length; k++) {
-        if (this.getCardEffects(state, k).has(effect)) {
+        if (SkillCards.getById(state[S.cardMap][k].id).sourceType == "pIdol") {
           targetCards.add(k);
         }
       }
@@ -1067,24 +934,131 @@ export default class CardManager extends EngineComponent {
     this.useCard(state, card);
   }
 
-  removeBasicCard(state) {
-    let basicCards = [];
-    for (let pile of [S.deckCards, S.discardedCards, S.handCards]) {
+  // Generic card manipulation methods using target expressions
+
+  removeCardByTarget(state, targetRule) {
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+    const piles = [S.deckCards, S.discardedCards, S.handCards];
+
+    // Find cards that match target AND are in a pile
+    let candidates = [];
+    for (let pile of piles) {
       for (let i = 0; i < state[pile].length; i++) {
         const cardIdx = state[pile][i];
-        const card = state[S.cardMap][cardIdx];
-        const skillCard = SkillCards.getById(card.id);
-        if (skillCard.name.includes("基本")) {
-          basicCards.push({ pile, index: i, cardIdx });
+        if (targetCards.has(cardIdx)) {
+          candidates.push({ pile, index: i, cardIdx });
         }
       }
     }
-    if (!basicCards.length) return;
-    const pick = basicCards[Math.floor(getRand() * basicCards.length)];
+
+    if (!candidates.length) return;
+    const pick = candidates[Math.floor(getRand() * candidates.length)];
     state[pick.pile].splice(pick.index, 1);
     this.logger.log(state, "removeCard", {
       type: "skillCard",
       id: state[S.cardMap][pick.cardIdx].id,
     });
+  }
+
+  moveToHandByTarget(state, targetRule, num = 1) {
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+    const piles = [S.deckCards, S.discardedCards];
+
+    // Find cards that match target AND are in deck or discards
+    let candidates = [];
+    for (let pile of piles) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (targetCards.has(cardIdx)) {
+          candidates.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+
+    for (let j = 0; j < num && candidates.length; j++) {
+      const pickIndex = Math.floor(getRand() * candidates.length);
+      const pick = candidates.splice(pickIndex, 1)[0];
+
+      // Update indexes for remaining candidates in the same pile
+      for (let c of candidates) {
+        if (c.pile === pick.pile && c.index > pick.index) {
+          c.index--;
+        }
+      }
+
+      state[pick.pile].splice(pick.index, 1);
+      state[S.handCards].push(pick.cardIdx);
+
+      state[S.movedCard] = pick.cardIdx;
+      this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
+
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id,
+      });
+    }
+  }
+
+  moveToTopOfDeckByTarget(state, targetRule, num = 1) {
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+    const piles = [S.deckCards, S.discardedCards];
+
+    // Find cards that match target AND are in deck or discards
+    let candidates = [];
+    for (let pile of piles) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (targetCards.has(cardIdx)) {
+          candidates.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+
+    for (let j = 0; j < num && candidates.length; j++) {
+      const pickIndex = Math.floor(getRand() * candidates.length);
+      const pick = candidates.splice(pickIndex, 1)[0];
+
+      // Update indexes for remaining candidates in the same pile
+      for (let c of candidates) {
+        if (c.pile === pick.pile && c.index > pick.index) {
+          c.index--;
+        }
+      }
+
+      state[pick.pile].splice(pick.index, 1);
+      state[S.deckCards].push(pick.cardIdx);
+
+      this.logger.log(state, "moveCardToTopOfDeck", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id,
+      });
+    }
+  }
+
+  moveToDeckByTarget(state, targetRule) {
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+
+    // Find cards that match target AND are in removed pile
+    let candidates = [];
+    for (let i = 0; i < state[S.removedCards].length; i++) {
+      const cardIdx = state[S.removedCards][i];
+      if (targetCards.has(cardIdx)) {
+        candidates.push({ index: i, cardIdx });
+      }
+    }
+
+    // Move all matching cards to random positions in deck
+    // Process in reverse order to avoid index shifting issues
+    candidates.sort((a, b) => b.index - a.index);
+    for (let pick of candidates) {
+      state[S.removedCards].splice(pick.index, 1);
+      const insertIndex = Math.floor(getRand() * (state[S.deckCards].length + 1));
+      state[S.deckCards].splice(insertIndex, 0, pick.cardIdx);
+
+      this.logger.log(state, "moveCardToDeckAtRandom", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id,
+      });
+    }
   }
 }
