@@ -100,6 +100,12 @@ async function run() {
         console.error(`ステージ情報からプランを自動設定しました: ${options.plan}`);
     }
 
+    // Safety Check: Require idolName for MongoDB sources
+    if (source.startsWith("mongodb://") && !options.idolName) {
+        console.error("エラー: MongoDBモードではアイドル名の指定が必須です。(全アイドル対象の場合は 'all' を指定してください)");
+        process.exit(1);
+    }
+
     // Determine execution plan
     let idolNames = [null];
     if (options.idolName) {
@@ -330,16 +336,52 @@ async function run() {
                 console.error(`Base Main: ${mainMem.data.name || "Unknown"} (Score: ${Math.round(best.score)})`);
 
                 try {
-                    // Reuse numRuns or use default/specified value? 
-                    // Usually we want robust runs for this. Let's use the same numRuns as the main loop.
-                    const synthResults = await recommendSynthesis(mainMem.data, subMem.data, contestStage.id, numRuns);
+                    // Check for "🛠️" (Hammer) to detect synthesized memories
+                    const mainName = mainMem.data.name || "";
+                    const subName = subMem.data.name || "";
+                    const mainHasHammer = mainName.includes("🛠️");
+                    const subHasHammer = subName.includes("🛠️");
+
+                    let targetMain = mainMem.data;
+                    let targetSub = subMem.data;
+                    let swapped = false;
+
+                    if (mainHasHammer && subHasHammer) {
+                        console.log(`Skipping: Both memories are synthesized (🛠️).`);
+                        console.log("");
+                        // Continue to next idol or finish
+                        // Since this is inside `if (options.synth)`, preventing synth here is enough.
+                        // We are inside a `for` loop? No, this code is executed ONCE per idol (for best result).
+                        // Wait, `for (const currentIdolName of idolNames) { ... logic ... }`
+                        // So `continue` checks next idol.
+                        continue;
+                    }
+
+                    if (mainHasHammer) {
+                        console.log(`Main memory has 🛠️. Swapping target to Sub memory.`);
+                        targetMain = subMem.data;
+                        targetSub = mainMem.data;
+                        swapped = true;
+                    }
+
+                    const synthResults = await recommendSynthesis(targetMain, targetSub, contestStage.id, numRuns);
 
                     if (synthResults.length > 0) {
-                        console.log(`\n### 推奨合成結果 (TOP 10)`);
+                        console.log(`\n### 推奨合成結果 (TOP 10) ${swapped ? "(Swapped)" : ""}`);
                         console.log("| スコア | Slot | 変更内容 |");
                         console.log("| --: | :-- | :-- |");
 
                         synthResults.slice(0, 10).forEach(res => {
+                            // Calculate diff against the current BEST score (which is `best.score`).
+                            // However, if we swapped, `best.score` (from simulation) corresponds to Main+Sub combination.
+                            // The synth result is a modification of `targetMain` (which was Sub).
+                            // Is `res.score` directly comparable to `best.score`?
+                            // `best.score` is the score of (Main + Sub).
+                            // `synthResults` are scores of (ModifiedTargetMain + TargetSub).
+                            // If we swapped, ModifiedTargetMain is (ModifiedSub), TargetSub is (Main).
+                            // So it is (ModifiedSub + Main).
+                            // Yes, comparable.
+
                             const diff = Math.round(res.score - best.score);
                             const diffStr = diff > 0 ? `(+${diff})` : `(${diff})`;
                             console.log(`| ${Math.round(res.score)} ${diffStr} | ${res.meta.slot} | ${res.meta.originalName} -> ${res.meta.newName} |`);
