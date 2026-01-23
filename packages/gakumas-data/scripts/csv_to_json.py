@@ -18,6 +18,8 @@ for data_type in data_types:
         csv_reader = csv.DictReader(f)
         for row in csv_reader:
             for k, v in row.items():
+                if not isinstance(v, str):
+                    continue
                 if v in ("TRUE", "FALSE"):
                     row[k] = v == "TRUE"
                 elif v.isnumeric():

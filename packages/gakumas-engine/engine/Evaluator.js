@@ -150,6 +150,13 @@ export default class Evaluator extends EngineComponent {
 
     if (op === "&") {
       const leftVal = this.evaluateAST(state, left);
+      // If left is a Set, treat & as set membership (backward compat with old format)
+      if (leftVal && leftVal.has) {
+        // Right side should be an identifier name for set membership
+        const element = right.type === "identifier" ? right.name : this.evaluateAST(state, right);
+        return leftVal.has(element);
+      }
+      // Otherwise treat as boolean AND
       if (!leftVal) return false;
       return !!this.evaluateAST(state, right);
     }
