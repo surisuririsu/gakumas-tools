@@ -474,11 +474,13 @@ class Parser {
 
     const condition = this.parseCondition();
 
-    this.expect(TokenType.LBRACE, "Expected '{' after condition");
-
-    const body = this.parseEffectBody();
-
-    this.expect(TokenType.RBRACE, "Expected '}' to close condition block");
+    // Body is optional - allows `if:condition` without `{ ... }`
+    // This is useful for skill card conditions that just check a condition
+    let body = [];
+    if (this.match(TokenType.LBRACE)) {
+      body = this.parseEffectBody();
+      this.expect(TokenType.RBRACE, "Expected '}' to close condition block");
+    }
 
     return { type: "condition", expr: condition, body };
   }
