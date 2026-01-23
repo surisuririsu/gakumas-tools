@@ -10,6 +10,7 @@ parentPort.on('message', async (task) => {
     // task: { id, combinations: [{ main: { data, filename }, sub: { data, filename } }, ...] }
     const { id, combinations } = task;
     const results = [];
+    let pendingCount = 0;
 
     // Process chunk
     for (const comb of combinations) {
@@ -95,9 +96,16 @@ parentPort.on('message', async (task) => {
             meta: main.meta // Pass through metadata
         });
 
-        // Notify progress one by one or in batch? 
-        // To reduce IPC overhead, maybe not every single one if count is huge, but here it's fine.
-        parentPort.postMessage({ type: 'progress', count: 1 });
+        // Notify progress (batched)
+        pendingCount++;
+        if (pendingCount >= 10) {
+            parentPort.postMessage({ type: 'progress', count: pendingCount });
+            pendingCount = 0;
+        }
+    }
+
+    if (pendingCount > 0) {
+        parentPort.postMessage({ type: 'progress', count: pendingCount });
     }
 
     // Send back results
