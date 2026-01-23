@@ -1,78 +1,111 @@
-export function serializeEffect(effect) {
-  const exp = [];
-  if (effect.phase) exp.push(`at:${effect.phase}`);
-  if (effect.conditions) {
-    effect.conditions.forEach((condition) => {
-      exp.push(`if:${condition.join("")}`);
-    });
-  }
-  if (effect.actions) {
-    effect.actions.forEach((action) => {
-      exp.push(`do:${action.join("")}`);
-    });
-  }
-  if (effect.group) {
-    exp.push(`group:${effect.group}`);
-  }
-  if (effect.limit) {
-    exp.push(`limit:${effect.limit}`);
-  }
-  if (effect.ttl) {
-    exp.push(`ttl:${effect.ttl}`);
-  }
-  if (effect.targets) {
-    effect.targets.forEach((target) => {
-      exp.push(`target:${target}`);
-    });
-  }
-  if (effect.delay) {
-    exp.push(`delay:${effect.delay}`);
-  }
-  return exp.join(",");
-}
+import { parseEffects } from "./effectParser";
+import { transformEffects, serializeExpr } from "./effectTransformer";
 
-const TOKEN_REGEX = /([=!]?=|[<>]=?|[+\-*/%]=?|&)/;
+/**
+ * Serialize an effect to the new string format
+ */
+export function serializeEffect(effect, indent = 0) {
+  const pad = "  ".repeat(indent);
+  const parts = [];
 
-export function deserializeEffect(effectString) {
-  if (!effectString.length) return {};
-  return effectString.split(/,(?![^()]*\))/).reduce((acc, cur) => {
-    const [expKey, expValue] = cur.split(":");
-    if (expKey == "at") {
-      acc.phase = expValue;
-    } else if (expKey == "if") {
-      if (!acc.conditions) acc.conditions = [];
-      acc.conditions.push(expValue.split(TOKEN_REGEX));
-    } else if (expKey == "do") {
-      if (!acc.actions) acc.actions = [];
-      acc.actions.push(expValue.split(TOKEN_REGEX));
-    } else if (expKey == "group") {
-      acc.group = parseInt(expValue, 10);
-    } else if (expKey == "limit") {
-      acc.limit = parseInt(expValue, 10);
-    } else if (expKey == "ttl") {
-      acc.ttl = parseInt(expValue, 10);
-    } else if (expKey == "target") {
-      if (!acc.targets) acc.targets = [];
-      acc.targets.push(expValue);
-    } else if (expKey == "level") {
-      acc.level = parseInt(expValue, 10);
-    } else if (expKey == "line") {
-      acc.line = parseInt(expValue, 10);
-    } else if (expKey == "delay") {
-      acc.delay = parseInt(expValue, 10);
-    } else {
-      console.warn("Unrecognized effect segment", effectString);
+  if (effect.phase) {
+    parts.push(`at:${effect.phase} {`);
+  }
+
+  const innerPad = effect.phase ? pad + "  " : pad;
+  const innerParts = [];
+
+  // Conditions
+  if (effect.conditions && effect.conditions.length > 0) {
+    const condStrs = effect.conditions.map((c) => serializeExpr(c));
+    innerParts.push(`if:${condStrs.join(" & ")} {`);
+  }
+
+  const actionPad = effect.conditions?.length ? innerPad + "  " : innerPad;
+
+  // Targets
+  if (effect.targets && effect.targets.length > 0) {
+    for (const target of effect.targets) {
+      const targetStr =
+        typeof target === "string"
+          ? target
+          : `${target.name}(${target.args.join(",")})`;
+      innerParts.push(`${actionPad}target:${targetStr} {`);
     }
-    return acc;
-  }, {});
+  }
+
+  const finalPad = effect.targets?.length
+    ? actionPad + "  ".repeat(effect.targets.length)
+    : actionPad;
+
+  // Actions
+  if (effect.actions) {
+    for (const action of effect.actions) {
+      innerParts.push(`${finalPad}do:${serializeExpr(action)}`);
+    }
+  }
+
+  // Nested effects
+  if (effect.effects) {
+    for (const nested of effect.effects) {
+      innerParts.push(serializeEffect(nested, indent + 1));
+    }
+  }
+
+  // Close targets
+  if (effect.targets?.length) {
+    for (let i = effect.targets.length - 1; i >= 0; i--) {
+      innerParts.push(`${actionPad + "  ".repeat(i)}}`);
+    }
+  }
+
+  // Modifiers
+  if (effect.limit != null) innerParts.push(`${actionPad}limit:${effect.limit}`);
+  if (effect.ttl != null) innerParts.push(`${actionPad}ttl:${effect.ttl}`);
+  if (effect.delay != null) innerParts.push(`${actionPad}delay:${effect.delay}`);
+  if (effect.group != null) innerParts.push(`${actionPad}group:${effect.group}`);
+  if (effect.line != null) innerParts.push(`${actionPad}line:${effect.line}`);
+  if (effect.level != null) innerParts.push(`${actionPad}level:${effect.level}`);
+
+  // Close condition
+  if (effect.conditions?.length) {
+    innerParts.push(`${innerPad}}`);
+  }
+
+  if (innerParts.length) {
+    parts.push(...innerParts.map((p) => (effect.phase ? innerPad + p : p)));
+  }
+
+  // Close phase
+  if (effect.phase) {
+    parts.push(`${pad}}`);
+  }
+
+  return parts.join("\n");
 }
 
+/**
+ * Serialize an effect sequence to string
+ */
 export function serializeEffectSequence(effectSequence) {
-  return effectSequence.map(serializeEffect).join(";");
+  return effectSequence.map((e) => serializeEffect(e)).join(";\n");
 }
 
+/**
+ * Deserialize an effect string to the engine format
+ */
 export function deserializeEffectSequence(effectSequenceString) {
-  return effectSequenceString?.length
-    ? effectSequenceString.split(";").map(deserializeEffect)
-    : [];
+  if (!effectSequenceString?.length) {
+    return [];
+  }
+
+  try {
+    const ast = parseEffects(effectSequenceString);
+    return transformEffects(ast);
+  } catch (error) {
+    console.error("Failed to parse effect:", effectSequenceString);
+    console.error(error);
+    return [];
+  }
 }
+

@@ -2,7 +2,6 @@ import { Customizations, SkillCards } from "gakumas-data";
 import {
   CARD_PILES,
   COST_FIELDS,
-  FUNCTION_CALL_REGEX,
   HOLD_SOURCES_BY_ALIAS,
   S,
 } from "../constants";
@@ -200,14 +199,31 @@ export default class CardManager extends EngineComponent {
       const effect = effects[i];
       if (!effect.actions) continue;
       for (let j = 0; j < effect.actions.length; j++) {
-        const tokens = effect.actions[j];
-        if (!tokens?.[0]?.length) continue;
-        let cardEffect = tokens[0];
-        if (cardEffect.startsWith("setStance")) {
-          cardEffect = cardEffect.match(FUNCTION_CALL_REGEX)[2];
-          cardEffect = cardEffect.replace(/\d/g, "");
+        const action = effect.actions[j];
+        if (!action) continue;
+
+        // Handle AST nodes
+        let cardEffect = null;
+        if (action.type === "assignment") {
+          cardEffect = action.lhs;
+        } else if (action.type === "call") {
+          // For function calls like setStance(strength), extract the argument
+          if (action.name === "setStance" && action.args.length > 0) {
+            const arg = action.args[0];
+            cardEffect =
+              arg.type === "identifier"
+                ? arg.name.replace(/\d/g, "")
+                : String(arg.value).replace(/\d/g, "");
+          } else {
+            cardEffect = action.name;
+          }
+        } else if (action.type === "identifier") {
+          cardEffect = action.name;
         }
-        cardEffects.add(cardEffect);
+
+        if (cardEffect) {
+          cardEffects.add(cardEffect);
+        }
       }
     }
     return cardEffects;

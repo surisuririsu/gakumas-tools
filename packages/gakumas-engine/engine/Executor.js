@@ -1,6 +1,5 @@
 import {
   ALL_FIELDS,
-  ASSIGNMENT_OPERATORS,
   BUFF_FIELDS,
   CHANGE_TRIGGER_PHASES,
   DEBUFF_FIELDS,
@@ -8,7 +7,6 @@ import {
   DECREASE_TRIGGER_FIELDS,
   EOT_DECREMENT_FIELDS,
   FIELDS_TO_DIFF,
-  FUNCTION_CALL_REGEX,
   G,
   GROWABLE_FIELDS,
   INCREASE_TRIGGER_FIELDS,
@@ -54,34 +52,32 @@ export default class Executor extends EngineComponent {
   }
 
   executeGrowthAction(growth, action) {
-    const tokens = action;
+    // Handle AST nodes
+    if (action.type === "assignment") {
+      const { lhs, op, rhs } = action;
 
-    // Assignments
-    if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
-      const lhs = tokens[0];
-      const op = tokens[1];
-      const rhsTokens = tokens.slice(2);
-      if (rhsTokens.length != 1) {
-        throw new Error(`Invalid growth action RHS: ${action}`);
+      // For growth actions, RHS should be a simple number
+      if (rhs.type !== "number") {
+        throw new Error(`Invalid growth action RHS: expected number`);
       }
-      const rhs = parseFloat(rhsTokens[0]);
+      const rhsValue = rhs.value;
 
       let intermediate = growth[G[lhs]] || 0;
 
       // Execute operation
-      if (op == "=") {
-        intermediate = rhs;
-      } else if (op == "+=") {
-        intermediate += rhs;
-      } else if (op == "-=") {
-        intermediate -= rhs;
+      if (op === "=") {
+        intermediate = rhsValue;
+      } else if (op === "+=") {
+        intermediate += rhsValue;
+      } else if (op === "-=") {
+        intermediate -= rhsValue;
       }
 
       growth[G[lhs]] = intermediate;
-
       return;
     }
-    console.warn(`Invalid growth action: ${action}`);
+
+    console.warn(`Invalid growth action:`, action);
   }
 
   executeActions(state, actions, card) {
@@ -106,8 +102,9 @@ export default class Executor extends EngineComponent {
       this.executeAction(state, actions[i], card);
 
       if (scoreTimes) {
-        const tokens = actions[i];
-        if (tokens?.[0] == "score") {
+        const action = actions[i];
+        // Check if this is a score action (AST node)
+        if (action.type === "assignment" && action.lhs === "score") {
           for (let j = 0; j < scoreTimes; j++) {
             this.executeAction(state, actions[i], card);
           }
@@ -215,17 +212,22 @@ export default class Executor extends EngineComponent {
     if (card != null) {
       growth = state[S.cardMap][card].growth;
     }
-    const tokens = action;
 
-    // Special actions
-    if (tokens.length == 1) {
-      this.executeSpecialAction(state, tokens[0], growth);
+    // Handle AST nodes
+    if (action.type === "identifier") {
+      // Special action (single identifier)
+      this.executeSpecialAction(state, action.name, growth);
       return;
     }
 
-    // Assignments
-    if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
-      const lhs = tokens[0];
+    if (action.type === "call") {
+      // Function call action
+      this.executeCallAction(state, action, growth);
+      return;
+    }
+
+    if (action.type === "assignment") {
+      const { lhs, op, rhs } = action;
 
       // Nullify debuffs
       if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(S[lhs])) {
@@ -233,9 +235,7 @@ export default class Executor extends EngineComponent {
         return;
       }
 
-      const op = tokens[1];
-      const rhsTokens = tokens.slice(2);
-      let rhs = this.engine.evaluator.evaluateExpression(state, rhsTokens);
+      let rhsValue = this.engine.evaluator.evaluateExpression(state, rhs);
 
       let intermediate = state[S[lhs]] || 0;
 
@@ -243,56 +243,55 @@ export default class Executor extends EngineComponent {
       let intermediateField = null;
       if (
         ["cost", "fixedGenki", "fixedStamina"].includes(lhs) ||
-        (lhs == "score" && op == "+=") ||
-        (lhs == "goodImpressionTurns" && op == "+=") ||
-        (lhs == "motivation" && op == "+=") ||
-        (lhs == "goodConditionTurns" && op == "+=") ||
-        (lhs == "concentration" && op == "+=") ||
-        (lhs == "enthusiasm" && op == "+=") ||
-        (lhs == "fullPowerCharge" && op == "+=") ||
-        (lhs == "genki" && op == "+=") ||
-        (lhs == "stamina" && op == "-=")
+        (lhs === "score" && op === "+=") ||
+        (lhs === "goodImpressionTurns" && op === "+=") ||
+        (lhs === "motivation" && op === "+=") ||
+        (lhs === "goodConditionTurns" && op === "+=") ||
+        (lhs === "concentration" && op === "+=") ||
+        (lhs === "enthusiasm" && op === "+=") ||
+        (lhs === "fullPowerCharge" && op === "+=") ||
+        (lhs === "genki" && op === "+=") ||
+        (lhs === "stamina" && op === "-=")
       ) {
         intermediate = 0;
         intermediateField = lhs;
       }
 
       // Execute operation
-      if (op == "=") {
-        intermediate = rhs;
-      } else if (op == "+=") {
-        intermediate += rhs;
+      if (op === "=") {
+        intermediate = rhsValue;
+      } else if (op === "+=") {
+        intermediate += rhsValue;
         if (growth?.[G[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
           intermediate += growth[G[`g.${lhs}`]];
         }
-      } else if (op == "-=") {
+      } else if (op === "-=") {
         if (
           growth?.[G["g.typedCost"]] &&
-          (state[S.phase] == "processCost" || state[S.phase] == "checkCost")
+          (state[S.phase] === "processCost" || state[S.phase] === "checkCost")
         ) {
-          rhs -= growth[G["g.typedCost"]];
-          if (rhs < 0) rhs = 0;
+          rhsValue -= growth[G["g.typedCost"]];
+          if (rhsValue < 0) rhsValue = 0;
         }
-        intermediate -= rhs;
-      } else if (op == "*=") {
-        intermediate *= rhs;
-      } else if (op == "/=") {
-        intermediate /= rhs;
-      } else if (op == "%=") {
-        intermediate %= rhs;
+        intermediate -= rhsValue;
+      } else if (op === "*=") {
+        intermediate *= rhsValue;
+      } else if (op === "/=") {
+        intermediate /= rhsValue;
+      } else if (op === "%=") {
+        intermediate %= rhsValue;
       } else {
         console.warn(`Unrecognized assignment operator: ${op}`);
       }
 
       if (intermediateField) {
         // Resolve intermediate
-
         if (intermediateField in this.intermediateResolvers) {
           this.intermediateResolvers[intermediateField](
             state,
             intermediate,
             growth || {},
-            rhsTokens
+            rhs // Pass the RHS AST node
           );
         } else {
           console.warn(`Unresolved intermediate: ${intermediateField}`);
@@ -311,38 +310,53 @@ export default class Executor extends EngineComponent {
       return;
     }
 
-    console.warn(`Invalid action: ${action}`);
+    console.warn(`Invalid action:`, action);
   }
 
-  executeSpecialAction(state, action, growth) {
-    if (action in this.specialActions) {
-      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(action)) {
-        state[S.nullifyDebuff]--;
-        return;
-      }
-      this.specialActions[action](state);
-      return;
-    }
+  executeCallAction(state, action, growth) {
+    const { name, args } = action;
 
-    const match = action.match(FUNCTION_CALL_REGEX);
-    if (match[1] in this.specialActions) {
-      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(match[1])) {
+    if (name in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(name)) {
         state[S.nullifyDebuff]--;
         return;
       }
-      const args = match[2].split(",");
-      if (growth && growth[G["g.stanceLevel"]] && match[1] == "setStance") {
-        if (args[0].startsWith("str")) {
-          args[0] = "strength2";
-        } else if (args[0].startsWith("pre")) {
-          args[0] = "preservation2";
+
+      // Evaluate arguments
+      const evaluatedArgs = args.map((arg) => {
+        if (arg.type === "identifier") {
+          return arg.name;
+        }
+        return this.engine.evaluator.evaluateAST(state, arg);
+      });
+
+      // Handle stance growth modifier
+      if (growth && growth[G["g.stanceLevel"]] && name === "setStance") {
+        if (evaluatedArgs[0].startsWith("str")) {
+          evaluatedArgs[0] = "strength2";
+        } else if (evaluatedArgs[0].startsWith("pre")) {
+          evaluatedArgs[0] = "preservation2";
         }
       }
-      this.specialActions[match[1]](state, ...args);
+
+      this.specialActions[name](state, ...evaluatedArgs);
       return;
     }
 
-    console.warn(`Unrecognized special action: ${action}`);
+    console.warn(`Unrecognized function call: ${name}`);
+  }
+
+  executeSpecialAction(state, actionName, growth) {
+    if (actionName in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(actionName)) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
+      this.specialActions[actionName](state);
+      return;
+    }
+
+    console.warn(`Unrecognized special action: ${actionName}`);
   }
 
   resolveCost(state, cost, growth) {
@@ -401,21 +415,24 @@ export default class Executor extends EngineComponent {
     }
   }
 
-  resolveScore(state, score, growth, rhsTokens) {
+  resolveScore(state, score, growth, rhsNode) {
     // Apply growth
     if (
       growth[G["g.scoreByGoodImpressionTurns"]] &&
-      rhsTokens.includes("goodImpressionTurns")
+      this.astContainsIdentifier(rhsNode, "goodImpressionTurns")
     ) {
       score +=
         state[S.goodImpressionTurns] *
         growth[G["g.scoreByGoodImpressionTurns"]];
     } else if (
       growth[G["g.scoreByMotivation"]] &&
-      rhsTokens.includes("motivation")
+      this.astContainsIdentifier(rhsNode, "motivation")
     ) {
       score += state[S.motivation] * growth[G["g.scoreByMotivation"]];
-    } else if (growth[G["g.scoreByGenki"]] && rhsTokens.includes("genki")) {
+    } else if (
+      growth[G["g.scoreByGenki"]] &&
+      this.astContainsIdentifier(rhsNode, "genki")
+    ) {
       score += state[S.genki] * growth[G["g.scoreByGenki"]];
     } else if (growth[G["g.score"]]) {
       score += growth[G["g.score"]];
@@ -605,5 +622,37 @@ export default class Executor extends EngineComponent {
       state[S.cumulativeFullPowerCharge] += fullPowerCharge;
     }
     state[S.fullPowerCharge] += fullPowerCharge;
+  }
+
+  /**
+   * Check if an AST node contains a specific identifier
+   */
+  astContainsIdentifier(node, identifierName) {
+    if (!node) return false;
+
+    switch (node.type) {
+      case "identifier":
+        return node.name === identifierName;
+      case "number":
+        return false;
+      case "binary":
+        return (
+          this.astContainsIdentifier(node.left, identifierName) ||
+          this.astContainsIdentifier(node.right, identifierName)
+        );
+      case "unary":
+        return this.astContainsIdentifier(node.operand, identifierName);
+      case "comparison":
+        return (
+          this.astContainsIdentifier(node.left, identifierName) ||
+          this.astContainsIdentifier(node.right, identifierName)
+        );
+      case "call":
+        return node.args.some((arg) =>
+          this.astContainsIdentifier(arg, identifierName)
+        );
+      default:
+        return false;
+    }
   }
 }

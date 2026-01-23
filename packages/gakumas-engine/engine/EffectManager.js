@@ -62,9 +62,7 @@ export default class EffectManager extends EngineComponent {
       if (source) {
         effect.source = source;
       }
-      if (!effect.actions && i < effects.length - 1) {
-        effect.effects = [effects[++i]];
-      }
+      // Nested effects are now explicit in the AST - no more fallthrough
       state[S.effects].push(effect);
     }
   }
@@ -121,23 +119,15 @@ export default class EffectManager extends EngineComponent {
     const conditionState = cndState || shallowCopy(state);
 
     let triggeredEffects = [];
-    let skipNextEffect = false;
 
     this.logger.debug(effects);
 
     for (let i = 0; i < effects.length; i++) {
-      // Skip effect if condition not satisfied
-      if (skipNextEffect) {
-        this.logger.debug("Skipping effect", effects[i]);
-        skipNextEffect = false;
-        continue;
-      }
-
       const effect = effects[i];
 
-      // Delayed effects
+      // Delayed effects (nested phase blocks)
       if (effect.phase) {
-        this.logger.debug("Setting effects", effect.effects);
+        this.logger.debug("Setting delayed effect", effect);
         this.setEffects(
           state,
           [effect],
@@ -171,7 +161,7 @@ export default class EffectManager extends EngineComponent {
         continue;
       }
 
-      // Check conditions
+      // Check conditions (now AST nodes with proper AND support)
       if (!skipConditions && effect.conditions) {
         let satisfied = true;
         for (let j = 0; j < effect.conditions.length; j++) {
@@ -184,9 +174,6 @@ export default class EffectManager extends EngineComponent {
           }
         }
         if (!satisfied) {
-          if (!effect.actions && !effect.effects) {
-            skipNextEffect = true;
-          }
           continue;
         }
       }
