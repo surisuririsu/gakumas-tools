@@ -73,6 +73,10 @@ export async function recommendSynthesis(mainMemory, subMemory, stageId, runs) {
         const db = client.db(MONGODB_DB || "gakumas-tools");
         const collection = db.collection("memories");
 
+        if (!mainMemory.pIdolId) {
+            throw new Error("メインメモリーに pIdolId が設定されていません。合成候補を検索できません。");
+        }
+
         // Filter: Same Idol/Song (Approximated by pIdolId)
         let query = { pIdolId: mainMemory.pIdolId };
 
@@ -80,7 +84,10 @@ export async function recommendSynthesis(mainMemory, subMemory, stageId, runs) {
             query._id = { $ne: mainMemory._id };
         }
 
+        console.error(`合成候補検索: pIdolId=${mainMemory.pIdolId} (Exclude: ${mainMemory._id || 'None'})`);
         const candidates = await collection.find(query).toArray();
+        console.error(`合成候補数: ${candidates.length}件`);
+
         if (candidates.length === 0) {
             return [];
         }
@@ -98,6 +105,8 @@ export async function recommendSynthesis(mainMemory, subMemory, stageId, runs) {
 
             for (const candidate of candidates) {
                 if (mainMemory._id && candidate._id && mainMemory._id.toString() === candidate._id.toString()) continue;
+                // Safety check: ensure pIdolId matches (in case of query issues)
+                if (candidate.pIdolId !== mainMemory.pIdolId) continue;
 
                 for (let candSlotIndex = 0; candSlotIndex < candidate.skillCardIds.length; candSlotIndex++) {
                     const newCardId = candidate.skillCardIds[candSlotIndex];
