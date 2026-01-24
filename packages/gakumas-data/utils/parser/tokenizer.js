@@ -71,8 +71,7 @@ export class Tokenizer {
 
     while (this.pos < this.input.length) {
       const char = this.peek();
-      // Include backslash for patterns like hand\R, removed\604
-      if (/[a-zA-Z0-9_.\\]/.test(char)) {
+      if (/[a-zA-Z0-9_.]/.test(char)) {
         id += this.advance();
       } else {
         break;

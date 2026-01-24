@@ -97,11 +97,7 @@ export function serializeEffect(effect, indent = 0) {
 
     if (effect.targets && effect.targets.length > 0) {
       for (const target of effect.targets) {
-        const targetStr =
-          typeof target === "string"
-            ? target
-            : `${target.name}(${target.args.join(",")})`;
-        result += `${pad}  target:${targetStr} {\n`;
+        result += `${pad}  target:${serializeExpr(target)} {\n`;
       }
       indent += effect.targets.length;
     }
@@ -133,6 +129,8 @@ export function serializeEffect(effect, indent = 0) {
     if (effect.ttl != null) result += `${innerPad}ttl:${effect.ttl}\n`;
     if (effect.delay != null) result += `${innerPad}delay:${effect.delay}\n`;
     if (effect.group != null) result += `${innerPad}group:${effect.group}\n`;
+    if (effect.line != null) result += `${innerPad}line:${effect.line}\n`;
+    if (effect.level != null) result += `${innerPad}level:${effect.level}\n`;
 
     // Close condition
     if (effect.conditions && effect.conditions.length > 0) {
