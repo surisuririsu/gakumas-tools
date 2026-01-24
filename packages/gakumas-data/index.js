@@ -7,7 +7,6 @@ export { default as SkillCards } from "./data/skillCards";
 export { default as Stages } from "./data/stages";
 export {
   serializeEffect,
-  deserializeEffect,
   serializeEffectSequence,
   deserializeEffectSequence,
 } from "./utils/effects";

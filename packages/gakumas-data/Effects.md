@@ -4,14 +4,13 @@ Effects of p-items, skill cards, and stages in gakumas-data are represented in a
 
 ## Format
 
-A list of effects separated by `;` where each effect can specify a phase, conditions, and actions, separated by `,`.
-Effects can have multiple conditions and actions.
+Effects use a block-based syntax with curly braces `{}` for grouping. Multiple effects are separated by `;`.
 
 ```
-phase,condition,action;phase,condition,condition,action,action,action
+at:phase { if:condition { do:action; do:action } limit:N }; at:phase { do:action }
 ```
 
-If an effect has no actions, its phase and conditions are applied to the next effect.
+If an effect has no phase, it executes immediately (used for skill card effects).
 
 ### Examples
 
@@ -19,34 +18,34 @@ If an effect has no actions, its phase and conditions are applied to the next ef
 アクティブスキルカード使用時、好印象の 100%スコア上昇
 
 ```
-at:startOfTurn,if:goodConditionTurns>=4,do:concentration+=4,do:goodConditionTurns+=4,limit:1;
-at:activeCardUsed,do:score+=goodImpressionTurns
+at:startOfTurn { if:goodConditionTurns>=4 { do:concentration+=4; do:goodConditionTurns+=4 } limit:1 };
+at:activeCardUsed { do:score+=goodImpressionTurns }
 ```
 
 スキルカード使用時、好印象が3以上の場合、次のターンスキルカードを引く (ステージ内 1 回)
 ```
-at:cardUsed,if:goodImpressionTurns>=3,limit:1;at:startOfTurn,do:drawCard,limit:1
+at:cardUsed { if:goodImpressionTurns>=3 { at:startOfTurn { do:drawCard; limit:1 } } limit:1 }
 ```
 
 ## Phase
 
-The phase of an effect indicates when it will be activated, marked with `at:`
+The phase indicates when an effect activates, marked with `at:` and enclosed in `{}`.
 
 ### Example
 
 ターン開始時
 
 ```
-at:startOfTurn
+at:startOfTurn { ... }
 ```
 
 | Phase                        | Representation                 |
 | ---------------------------- | ------------------------------ |
 | ステージ開始時               | `startOfStage`                 |
-| ステージ開始後               | `afterStartOfStage`                 |
+| ステージ開始後               | `afterStartOfStage`            |
 | ターン開始時                 | `startOfTurn`                  |
-| ターン開始後                 | `afterStartOfTurn`                  |
-| 次のターン/〇ターン後                 | `turn`                  |
+| ターン開始後                 | `afterStartOfTurn`             |
+| 次のターン/〇ターン後        | `turn`                         |
 | 〇ターンごとに               | `everyTurn`                    |
 | スキルカード使用時           | `cardUsed`                     |
 | アクティブスキルカード使用時 | `activeCardUsed`               |
@@ -61,19 +60,44 @@ at:startOfTurn
 | 集中が増加後                 | `concentrationIncreased`       |
 | 体力が減少後                 | `staminaDecreased`             |
 | スキルカードコストで強化状態を消費した時 | `buffCostConsumed` |
-| 指針が変更した時 | `stanceChanged` |
+| 指針が変更した時             | `stanceChanged`                |
 
 
 ## Condition
 
-Conditions that must be met for the effect to activate, marked with `if:`
+Conditions must be met for the effect to activate, marked with `if:` and enclosed in `{}`.
+
+### Boolean Operators
+
+Conditions support boolean operators:
+- `&` - AND (both conditions must be true)
+- `|` - OR (either condition can be true)
+- `!` - NOT (negates the condition)
 
 ### Examples
 
 好印象が 4 以上の場合
 
 ```
-if:goodImpressionTurns>=4
+at:startOfTurn { if:goodImpressionTurns>=4 { do:score+=10 } }
+```
+
+好調が 4 以上かつ集中が 5 以上の場合
+
+```
+at:startOfTurn { if:goodConditionTurns>=4 & concentration>=5 { do:score+=10 } }
+```
+
+ボーカルターンまたはダンスターンの場合
+
+```
+at:startOfTurn { if:isVocalTurn | isDanceTurn { do:score+=10 } }
+```
+
+全力でない場合
+
+```
+at:cardUsed { if:!isFullPower { do:fullPowerCharge+=2 } }
 ```
 
 使用スキルカードのレアリティが SSR の場合
@@ -108,7 +132,7 @@ if:parentPhase==processCard
 
 ## Action
 
-State changes to execute, marked with `do:`
+State changes to execute, marked with `do:`.
 
 ### Example
 
@@ -120,7 +144,7 @@ do:score+=goodImpressionTurns*2
 
 ## Limit
 
-Maximum number of times to activate an effect, marked by `limit:`
+Maximum number of times to activate an effect, marked by `limit:`.
 
 ### Example
 
@@ -132,21 +156,110 @@ limit:2
 
 ## Growth target
 
-Indicates which skill cards to grow in a growth effect, marked by `target:`
+Indicates which skill cards to grow in a growth effect, marked by `target:` and enclosed in `{}`.
 
 ### Example
 
 手札
 
 ```
-target:hand
+target:hand { do:g.score+=5 }
 ```
 
 山札のパラメータ増加値+5
 
 ```
-target:deck,do:g.score+=5
+target:deck { do:g.score+=5 }
 ```
+
+## Targeting Expressions
+
+Some actions accept a targeting expression to specify which cards to operate on. Targeting expressions use bracket notation `[...]` and support boolean operators.
+
+### Operators
+
+- `&` - intersection (cards matching both conditions)
+- `|` - union (cards matching either condition)
+- `!` - complement (cards NOT matching the condition)
+
+Parentheses `()` can be used to control precedence. `&` binds tighter than `|`.
+
+### Examples
+
+手札のカード数
+
+```
+countCards[hand]
+```
+
+山札か捨て札を選択し、保留に移動
+
+```
+do:holdSelected[deck | discards]
+```
+
+山札か捨て札にあるプロデュースアイドルのスキルカードを手札に移動
+
+```
+do:moveToHand[pIdol & (deck | discarded)]
+```
+
+NでもTでもないカードの数
+
+```
+countCards[!(N | T)]
+```
+
+山札か捨て札にあるSSRカードを2枚、山札の先頭に移動
+
+```
+do:moveToTopOfDeck[SSR & (deck | discarded)](3)
+```
+
+除外にある特定のスキルカード(ID 490)を手札に移動
+
+```
+do:moveToHand[removed & 490]
+```
+
+### Target Identifiers
+
+| Identifier | Description |
+| ---------- | ----------- |
+| `hand` | 手札 |
+| `deck` | 山札 |
+| `discards` / `discarded` | 捨て札 |
+| `removed` | 除外 |
+| `held` | 保留 |
+| `all` | 全てのカード |
+| `this` | このカード |
+| `pIdol` | プロデュースアイドルのカード |
+| `N` / `R` / `SR` / `SSR` | レアリティ |
+| `active` | アクティブカード |
+| `mental` | メンタルカード |
+| `trouble` | トラブルカード |
+| `basic` | 基本カード |
+| `effect(X)` | 効果Xを持つカード (e.g., `effect(strength)`) |
+| `123` | カードID 123 |
+
+## Nested Effects
+
+Effects can be nested inside conditions to create delayed effects:
+
+```
+at:startOfTurn {
+  if:turnsRemaining<=2 {
+    at:activeCardUsed {
+      do:doubleCardEffectCards+=1
+      limit:1
+      ttl:1
+    }
+  }
+  limit:2
+}
+```
+
+This replaces the old "fallthrough" pattern where an effect without actions would apply to the next effect.
 
 ## State variables
 
@@ -243,16 +356,25 @@ target:deck,do:g.score+=5
 | 手札をすべて入れ替える                       | `exchangeHand`                |
 | ランダムな強化済みスキルカードを、手札に生成 | `addRandomUpgradedCardToHand` |
 | ランダムな手札 1 枚をレッスン中強化          | `upgradeRandomCardInHand`     |
-| 山札か捨て札にある特定のスキルカードを手札に移動 | `moveCardToHand(cardId, exact)` |
-| 除外にある特定のスキルカードを手札に移動 | `moveCardToHandFromRemoved(cardBaseId)` |
 | 特定のスキルカードを保留に移動 | `holdCard(cardBaseId)` |
 | このスキルカードを保留に移動 | `holdThisCard` |
-| 手札を選択し、保留に移動 | `holdSelectedFromHand` |
-| 山札を選択し、保留に移動 | `holdSelectedFromDeck` |
-| 山札か捨て札を選択し、保留に移動 | `holdSelectedFromDeckOrDiscards` |
-| スコア上昇量増加                             | `setScoreBuff(amount,turns)`  |
-| 好印象増加量増加 | `setGoodImpressionTurnsBuff(amount,turns)` |
+| スコア上昇量増加                             | `setScoreBuff(amount, turns)`  |
+| 好印象増加量増加 | `setGoodImpressionTurnsBuff(amount, turns)` |
 | 指針を変更 | `setStance(stance)` |
+
+### Actions with targeting expressions
+
+These actions use bracket notation for targeting:
+
+| Action                                       | Representation                |
+| -------------------------------------------- | ----------------------------- |
+| カードを手札に移動 | `moveToHand[target]` |
+| カードを選択して手札に移動 | `moveSelectedToHand[target]` |
+| カードを選択して保留に移動 | `holdSelected[target]` or `holdSelected[target](n)` |
+| カードを除外 | `removeCard[target]` |
+| カードを山札に移動 | `moveToDeck[target]` |
+| カードを山札の先頭に移動 | `moveToTopOfDeck[target](n)` |
+| カードの数を取得 | `countCards[target]` |
 
 ### Example
 
@@ -266,7 +388,7 @@ do:setScoreBuff(0.15)
 
 ## TTL
 
-Time-to-live of an effect, in turns, marked by `ttl:`
+Time-to-live of an effect, in turns, marked by `ttl:`.
 
 ### Example
 
@@ -278,7 +400,7 @@ ttl:1
 
 ## Delay
 
-Turns to delay an effect, marked by `delay:`
+Turns to delay an effect, marked by `delay:`.
 
 ### Example
 

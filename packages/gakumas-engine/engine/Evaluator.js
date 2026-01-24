@@ -1,16 +1,10 @@
 import {
-  ADDITIVE_OPERATORS,
-  BOOLEAN_OPERATORS,
-  MULTIPLICATIVE_OPERATORS,
-  NUMBER_REGEX,
   PHASES,
-  SET_OPERATOR,
   SKILL_CARD_TYPES,
   STANCES,
   S,
   SOURCE_TYPES,
   RARITIES,
-  FUNCTION_CALL_REGEX,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -27,134 +21,224 @@ export default class Evaluator extends EngineComponent {
     };
   }
 
+  /**
+   * Evaluate a condition (AST node)
+   */
   evaluateCondition(state, condition) {
-    const tokens = condition;
-    const result = this.evaluateExpression(state, tokens);
+    const result = this.evaluateAST(state, condition);
     this.logger.debug("Condition", condition, result);
     return result;
   }
 
-  evaluateExpression(state, tokens) {
-    const evaluate = (tokens) => {
-      // Single tokens
-      if (tokens.length == 1) {
-        // State variables
-        if (tokens[0] in S && S[tokens[0]] in state) {
-          return state[S[tokens[0]]];
-        }
+  /**
+   * Evaluate an expression (AST node)
+   */
+  evaluateExpression(state, expr) {
+    return this.evaluateAST(state, expr);
+  }
 
-        // Function calls
-        const match = tokens[0].match(FUNCTION_CALL_REGEX);
-        if (match[1] in this.variableResolvers && match[2]) {
-          const args = match[2].split(",");
-          return this.variableResolvers[match[1]](state, ...args);
-        }
+  /**
+   * Evaluate an AST node
+   */
+  evaluateAST(state, node) {
+    if (!node) {
+      console.warn("Null AST node");
+      return undefined;
+    }
 
-        // Variable resolvers
-        if (tokens[0] in this.variableResolvers) {
-          return this.variableResolvers[tokens[0]](state);
-        }
+    switch (node.type) {
+      case "number":
+        return node.value;
 
-        // Stances
-        if (STANCES.includes(tokens[0])) {
-          return tokens[0];
-        }
+      case "identifier":
+        return this.resolveIdentifier(state, node.name);
 
-        // Phases
-        if (PHASES.includes(tokens[0])) {
-          return tokens[0];
-        }
+      case "call":
+        return this.evaluateCall(state, node);
 
-        // Source types
-        if (SOURCE_TYPES.includes(tokens[0])) {
-          return tokens[0];
-        }
+      case "binary":
+        return this.evaluateBinary(state, node);
 
-        // Rarities
-        if (RARITIES.includes(tokens[0])) {
-          return tokens[0];
-        }
+      case "unary":
+        return this.evaluateUnary(state, node);
 
-        // Skill card types
-        if (SKILL_CARD_TYPES.includes(tokens[0])) {
-          return tokens[0];
-        }
+      case "comparison":
+        return this.evaluateComparison(state, node);
 
-        // Numeric constants
-        if (NUMBER_REGEX.test(tokens[0])) {
-          return parseFloat(tokens[0]);
-        }
+      case "assignment":
+        // Assignments are handled by Executor, not Evaluator
+        // But we may need to evaluate the RHS
+        return this.evaluateAST(state, node.rhs);
 
-        console.warn(`Invalid token: ${tokens[0]}`);
+      default:
+        console.warn(`Unknown AST node type: ${node.type}`);
+        return undefined;
+    }
+  }
+
+  /**
+   * Resolve an identifier to its value
+   */
+  resolveIdentifier(state, name) {
+    // State variables
+    if (name in S && S[name] in state) {
+      return state[S[name]];
+    }
+
+    // Variable resolvers
+    if (name in this.variableResolvers) {
+      return this.variableResolvers[name](state);
+    }
+
+    // Stances
+    if (STANCES.includes(name)) {
+      return name;
+    }
+
+    // Phases
+    if (PHASES.includes(name)) {
+      return name;
+    }
+
+    // Source types
+    if (SOURCE_TYPES.includes(name)) {
+      return name;
+    }
+
+    // Rarities
+    if (RARITIES.includes(name)) {
+      return name;
+    }
+
+    // Skill card types
+    if (SKILL_CARD_TYPES.includes(name)) {
+      return name;
+    }
+
+    console.warn(`Unknown identifier: ${name}`);
+    return undefined;
+  }
+
+  /**
+   * Evaluate a function call
+   */
+  evaluateCall(state, node) {
+    const { name, target, args } = node;
+
+    if (name in this.variableResolvers) {
+      // Build argument list: target (if present) followed by evaluated args
+      const evaluatedArgs = [];
+
+      // Target expression is passed as AST node
+      if (target) {
+        evaluatedArgs.push(target);
       }
 
-      // Set contains
-      if (tokens[1] == SET_OPERATOR) {
-        if (tokens.length != 3) {
-          console.warn("Invalid set contains");
+      // Evaluate remaining arguments
+      for (const arg of args) {
+        if (arg.type === "identifier") {
+          evaluatedArgs.push(arg.name);
+        } else {
+          evaluatedArgs.push(this.evaluateAST(state, arg));
         }
-        const lhs = evaluate([tokens[0]]);
-        return lhs.has(tokens[2]);
       }
 
-      // Comparators (boolean operators)
-      const cmpIndex = tokens.findIndex((t) => BOOLEAN_OPERATORS.includes(t));
-      if (cmpIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, cmpIndex));
-        const cmp = tokens[cmpIndex];
-        const rhs = evaluate(tokens.slice(cmpIndex + 1));
+      return this.variableResolvers[name](state, ...evaluatedArgs);
+    }
 
-        if (cmp == ">=") {
-          return lhs >= rhs;
-        } else if (cmp == "==") {
-          return lhs == rhs;
-        } else if (cmp == "<=") {
-          return lhs <= rhs;
-        } else if (cmp == "!=") {
-          return lhs != rhs;
-        } else if (cmp == ">") {
-          return lhs > rhs;
-        } else if (cmp == "<") {
-          return lhs < rhs;
-        }
-        console.warn(`Unrecognized comparator: ${cmp}`);
+    console.warn(`Unknown function: ${name}`);
+    return undefined;
+  }
+
+  /**
+   * Evaluate a binary operation
+   */
+  evaluateBinary(state, node) {
+    const { op, left, right } = node;
+
+    // Short-circuit evaluation for logical operators
+    if (op === "|") {
+      const leftVal = this.evaluateAST(state, left);
+      if (leftVal) return true;
+      return !!this.evaluateAST(state, right);
+    }
+
+    if (op === "&") {
+      const leftVal = this.evaluateAST(state, left);
+      // If left is a Set, treat & as set membership (backward compat with old format)
+      if (leftVal && leftVal.has) {
+        // Right side should be an identifier name for set membership
+        const element = right.type === "identifier" ? right.name : this.evaluateAST(state, right);
+        return leftVal.has(element);
       }
+      // Otherwise treat as boolean AND
+      if (!leftVal) return false;
+      return !!this.evaluateAST(state, right);
+    }
 
-      // Addition, subtraction
-      const asIndex = tokens.findIndex((t) => ADDITIVE_OPERATORS.includes(t));
-      if (asIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, asIndex));
-        const op = tokens[asIndex];
-        const rhs = evaluate(tokens.slice(asIndex + 1));
+    // Evaluate both sides for arithmetic operators
+    const leftVal = this.evaluateAST(state, left);
+    const rightVal = this.evaluateAST(state, right);
 
-        if (op == "+") {
-          return lhs + rhs;
-        } else if (op == "-") {
-          return lhs - rhs;
-        }
-        console.warn(`Unrecognized operator: ${op}`);
-      }
+    switch (op) {
+      case "+":
+        return leftVal + rightVal;
+      case "-":
+        return leftVal - rightVal;
+      case "*":
+        return leftVal * rightVal;
+      case "/":
+        return leftVal / rightVal;
+      case "%":
+        return leftVal % rightVal;
+      default:
+        console.warn(`Unknown binary operator: ${op}`);
+        return undefined;
+    }
+  }
 
-      // Multiplication, division, modulo
-      const mdIndex = tokens.findIndex((t) =>
-        MULTIPLICATIVE_OPERATORS.includes(t)
-      );
-      if (mdIndex != -1) {
-        const lhs = evaluate(tokens.slice(0, mdIndex));
-        const op = tokens[mdIndex];
-        const rhs = evaluate(tokens.slice(mdIndex + 1));
+  /**
+   * Evaluate a unary operation
+   */
+  evaluateUnary(state, node) {
+    const { op, operand } = node;
+    const val = this.evaluateAST(state, operand);
 
-        if (op == "*") {
-          return lhs * rhs;
-        } else if (op == "/") {
-          return lhs / rhs;
-        } else if (op == "%") {
-          return lhs % rhs;
-        }
-        console.warn(`Unrecognized operator: ${op}`);
-      }
-    };
+    switch (op) {
+      case "!":
+        return !val;
+      case "-":
+        return -val;
+      default:
+        console.warn(`Unknown unary operator: ${op}`);
+        return undefined;
+    }
+  }
 
-    return evaluate(tokens);
+  /**
+   * Evaluate a comparison
+   */
+  evaluateComparison(state, node) {
+    const { op, left, right } = node;
+    const leftVal = this.evaluateAST(state, left);
+    const rightVal = this.evaluateAST(state, right);
+
+    switch (op) {
+      case "==":
+        return leftVal == rightVal;
+      case "!=":
+        return leftVal != rightVal;
+      case "<":
+        return leftVal < rightVal;
+      case ">":
+        return leftVal > rightVal;
+      case "<=":
+        return leftVal <= rightVal;
+      case ">=":
+        return leftVal >= rightVal;
+      default:
+        console.warn(`Unknown comparison operator: ${op}`);
+        return undefined;
+    }
   }
 }
