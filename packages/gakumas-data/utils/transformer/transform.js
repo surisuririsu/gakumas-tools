@@ -1,7 +1,7 @@
 /**
- * Effect Transformer
+ * AST to Engine Format Transformer
  *
- * Transforms the AST from effectParser.js into the flattened effect structure
+ * Transforms the AST from the parser into the flattened effect structure
  * that the engine expects.
  *
  * Input (AST):
@@ -36,6 +36,12 @@
  * ]
  */
 
+const MODIFIER_TYPES = ["limit", "ttl", "delay", "group", "line", "level"];
+
+function isModifier(node) {
+  return MODIFIER_TYPES.includes(node.type);
+}
+
 /**
  * Transform an AST into the engine's effect format
  * @param {Object} ast - The parsed AST
@@ -46,44 +52,33 @@ export function transformEffects(ast) {
     throw new Error("Expected sequence at top level");
   }
 
-  // At the top level, we need to:
-  // 1. Transform phase/condition/target blocks normally
-  // 2. Merge consecutive actions and modifiers together
-  // 3. Apply trailing modifiers to the preceding effect
   const results = [];
   let pendingActions = [];
   let pendingModifiers = {};
 
   for (const node of ast.effects) {
-    if (
-      node.type === "limit" ||
-      node.type === "ttl" ||
-      node.type === "delay" ||
-      node.type === "group" ||
-      node.type === "line" ||
-      node.type === "level"
-    ) {
-      // Accumulate modifiers
+    if (isModifier(node)) {
       pendingModifiers[node.type] = node.value;
     } else if (node.type === "action") {
       // If we have pending modifiers but no pending actions, apply to last result
-      if (Object.keys(pendingModifiers).length > 0 && pendingActions.length === 0 && results.length > 0) {
+      if (
+        Object.keys(pendingModifiers).length > 0 &&
+        pendingActions.length === 0 &&
+        results.length > 0
+      ) {
         Object.assign(results[results.length - 1], pendingModifiers);
         pendingModifiers = {};
       }
-      // Accumulate actions
       pendingActions.push(node.expr);
     } else {
       // Flush pending actions/modifiers before processing blocks
       if (pendingActions.length > 0) {
-        const effect = {};
-        effect.actions = pendingActions;
+        const effect = { actions: pendingActions };
         Object.assign(effect, pendingModifiers);
         results.push(effect);
         pendingActions = [];
         pendingModifiers = {};
       } else if (Object.keys(pendingModifiers).length > 0 && results.length > 0) {
-        // Apply orphan modifiers to last result
         Object.assign(results[results.length - 1], pendingModifiers);
         pendingModifiers = {};
       }
@@ -96,12 +91,10 @@ export function transformEffects(ast) {
 
   // Flush any remaining actions/modifiers
   if (pendingActions.length > 0) {
-    const effect = {};
-    effect.actions = pendingActions;
+    const effect = { actions: pendingActions };
     Object.assign(effect, pendingModifiers);
     results.push(effect);
   } else if (Object.keys(pendingModifiers).length > 0 && results.length > 0) {
-    // Apply trailing modifiers to last result
     Object.assign(results[results.length - 1], pendingModifiers);
   }
 
@@ -110,9 +103,6 @@ export function transformEffects(ast) {
 
 /**
  * Transform a single AST node, inheriting context from parents
- * @param {Object} node - AST node
- * @param {Object} context - Inherited context (phase, conditions, etc.)
- * @returns {Array} Array of effect objects
  */
 function transformNode(node, context) {
   switch (node.type) {
@@ -124,78 +114,34 @@ function transformNode(node, context) {
       return transformTargetBlock(node, context);
     case "action":
       return transformAction(node, context);
-    case "limit":
-    case "ttl":
-    case "delay":
-    case "group":
-    case "line":
-    case "level":
-      return transformModifier(node);
     default:
+      if (isModifier(node)) {
+        return [{ _pending: { [node.type]: node.value } }];
+      }
       throw new Error(`Unknown node type: ${node.type}`);
   }
 }
 
-/**
- * Transform phase block: at:phase { body }
- */
 function transformPhaseBlock(node, context) {
-  const newContext = {
-    ...context,
-    phase: node.phase,
-  };
-
-  return transformBody(node.body, newContext);
+  return transformBody(node.body, { ...context, phase: node.phase });
 }
 
-/**
- * Transform condition block: if:condition { body }
- */
 function transformConditionBlock(node, context) {
   const conditions = context.conditions ? [...context.conditions] : [];
   conditions.push(node.expr);
-
-  const newContext = {
-    ...context,
-    conditions,
-  };
-
-  return transformBody(node.body, newContext);
+  return transformBody(node.body, { ...context, conditions });
 }
 
-/**
- * Transform target block: target:target { body }
- */
 function transformTargetBlock(node, context) {
   const targets = context.targets ? [...context.targets] : [];
   targets.push(node.target);
-
-  const newContext = {
-    ...context,
-    targets,
-  };
-
-  return transformBody(node.body, newContext);
+  return transformBody(node.body, { ...context, targets });
 }
 
-/**
- * Transform action: do:expr
- */
 function transformAction(node, context) {
   const effect = createEffect(context);
-  if (!effect.actions) effect.actions = [];
-  effect.actions.push(node.expr);
+  effect.actions = [node.expr];
   return [effect];
-}
-
-/**
- * Transform modifier (limit, ttl, delay, group)
- * Modifiers without actions are stored as pending modifiers in context
- */
-function transformModifier(node) {
-  // This creates an effect with just the modifier
-  // It will be merged with subsequent actions in the same body
-  return [{ _pending: { [node.type]: node.value } }];
 }
 
 /**
@@ -209,22 +155,13 @@ function transformBody(body, context) {
   let pendingNestedPhases = [];
 
   for (const node of body) {
-    if (
-      node.type === "limit" ||
-      node.type === "ttl" ||
-      node.type === "delay" ||
-      node.type === "group" ||
-      node.type === "line" ||
-      node.type === "level"
-    ) {
-      // Accumulate modifiers
+    if (isModifier(node)) {
       pendingModifiers[node.type] = node.value;
     } else if (node.type === "phase") {
       // Nested phase blocks become nested effects
       const nestedEffects = transformPhaseBlock(node, {});
       pendingNestedPhases.push(...nestedEffects);
     } else if (node.type === "action") {
-      // Collect actions
       pendingActions.push(node.expr);
     } else if (node.type === "condition" || node.type === "target") {
       // Flush any pending actions before processing nested blocks
@@ -269,18 +206,15 @@ function transformBody(body, context) {
     Object.assign(effect, pendingModifiers);
     if (pendingNestedPhases.length > 0) {
       effect.effects = [...pendingNestedPhases];
-      pendingNestedPhases = [];
     }
     results.push(effect);
   } else if (results.length === 0) {
-    // Empty body - still create effect if we have context (phase, conditions, targets)
-    // or orphan modifiers/nested phases
+    // Empty body - still create effect if we have meaningful context
     const effect = createEffect(context);
     Object.assign(effect, pendingModifiers);
     if (pendingNestedPhases.length > 0) {
       effect.effects = [...pendingNestedPhases];
     }
-    // Push if we have any meaningful content
     if (effect.phase || effect.effects || effect.conditions || effect.targets) {
       results.push(effect);
     }
@@ -321,147 +255,4 @@ function createEffect(context) {
   }
 
   return effect;
-}
-
-/**
- * Serialize an effect back to the new string format (for debugging/display)
- */
-export function serializeEffect(effect, indent = 0) {
-  const pad = "  ".repeat(indent);
-  let result = "";
-
-  if (effect.phase) {
-    result += `${pad}at:${effect.phase} {\n`;
-
-    if (effect.conditions && effect.conditions.length > 0) {
-      const condStr = effect.conditions.map(serializeExpr).join(" & ");
-      result += `${pad}  if:${condStr} {\n`;
-      indent += 2;
-    }
-
-    if (effect.targets && effect.targets.length > 0) {
-      for (const target of effect.targets) {
-        const targetStr =
-          typeof target === "string"
-            ? target
-            : `${target.name}(${target.args.join(",")})`;
-        result += `${pad}  target:${targetStr} {\n`;
-      }
-      indent += effect.targets.length;
-    }
-
-    const innerPad = "  ".repeat(indent + 1);
-
-    if (effect.actions) {
-      for (const action of effect.actions) {
-        result += `${innerPad}do:${serializeExpr(action)}\n`;
-      }
-    }
-
-    if (effect.effects) {
-      for (const nested of effect.effects) {
-        result += serializeEffect(nested, indent + 1);
-      }
-    }
-
-    // Close targets
-    if (effect.targets) {
-      for (let i = effect.targets.length - 1; i >= 0; i--) {
-        result += `${"  ".repeat(indent)}}\n`;
-        indent--;
-      }
-    }
-
-    // Add modifiers
-    if (effect.limit != null) result += `${innerPad}limit:${effect.limit}\n`;
-    if (effect.ttl != null) result += `${innerPad}ttl:${effect.ttl}\n`;
-    if (effect.delay != null) result += `${innerPad}delay:${effect.delay}\n`;
-    if (effect.group != null) result += `${innerPad}group:${effect.group}\n`;
-
-    // Close condition
-    if (effect.conditions && effect.conditions.length > 0) {
-      result += `${pad}  }\n`;
-    }
-
-    result += `${pad}}\n`;
-  }
-
-  return result;
-}
-
-/**
- * Get operator precedence (higher = binds tighter)
- */
-function getOpPrecedence(op) {
-  switch (op) {
-    case "|":
-      return 1;
-    case "&":
-      return 2;
-    case "+":
-    case "-":
-      return 3;
-    case "*":
-    case "/":
-    case "%":
-      return 4;
-    default:
-      return 0;
-  }
-}
-
-/**
- * Serialize an expression AST node back to string
- * @param {Object} node - AST node
- * @param {number} parentPrecedence - Precedence of parent operator (for adding parens)
- */
-export function serializeExpr(node, parentPrecedence = 0) {
-  if (!node) return "";
-
-  switch (node.type) {
-    case "number":
-      return String(node.value);
-
-    case "identifier":
-      return node.name;
-
-    case "call": {
-      let result = node.name;
-      // Add target expression in brackets if present
-      if (node.target) {
-        result += `[${serializeExpr(node.target, 0)}]`;
-      }
-      // Add arguments in parentheses if present
-      if (node.args && node.args.length > 0) {
-        const args = node.args.map((a) => serializeExpr(a, 0)).join(", ");
-        result += `(${args})`;
-      }
-      return result;
-    }
-
-    case "binary": {
-      const myPrecedence = getOpPrecedence(node.op);
-      const left = serializeExpr(node.left, myPrecedence);
-      const right = serializeExpr(node.right, myPrecedence + 0.5); // Right-associative needs slightly higher
-      const result = `${left} ${node.op} ${right}`;
-      // Add parens if parent has higher precedence
-      if (parentPrecedence > myPrecedence) {
-        return `(${result})`;
-      }
-      return result;
-    }
-
-    case "unary":
-      return `${node.op}${serializeExpr(node.operand, 10)}`; // High precedence for unary
-
-    case "comparison":
-      return `${serializeExpr(node.left, 0)}${node.op}${serializeExpr(node.right, 0)}`;
-
-    case "assignment":
-      return `${node.lhs}${node.op}${serializeExpr(node.rhs, 0)}`;
-
-    default:
-      console.warn("Unknown node type in serialization:", node.type);
-      return String(node);
-  }
 }

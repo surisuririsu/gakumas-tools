@@ -1,5 +1,5 @@
-import { parseEffects } from "./effectParser";
-import { transformEffects, serializeExpr } from "./effectTransformer";
+import { parseEffects } from "./parser";
+import { transformEffects, serializeExpr } from "./transformer";
 
 /**
  * Serialize an effect to the new string format
