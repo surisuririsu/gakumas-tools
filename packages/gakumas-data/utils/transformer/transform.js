@@ -219,9 +219,11 @@ function transformBody(body, context) {
       results.push(effect);
     }
   } else if (results.length > 0) {
-    // Apply orphan modifiers to last result
+    // Apply orphan modifiers to ALL results (e.g., limit:3 at phase level applies to all effects)
     if (Object.keys(pendingModifiers).length > 0) {
-      Object.assign(results[results.length - 1], pendingModifiers);
+      for (const effect of results) {
+        Object.assign(effect, pendingModifiers);
+      }
     }
     // Apply orphan nested phases to last result
     if (pendingNestedPhases.length > 0) {
