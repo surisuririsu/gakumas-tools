@@ -126,12 +126,47 @@ export default class Evaluator extends EngineComponent {
     const { name, args } = node;
 
     if (name in this.variableResolvers) {
-      const evaluatedArgs = args.map((arg) => this.evaluateAST(state, arg));
+      const evaluatedArgs = args.map((arg) => {
+        // Pass target expressions as AST nodes (don't evaluate)
+        if (this.isTargetExpression(arg)) {
+          return arg;
+        }
+        if (arg.type === "identifier") {
+          return arg.name;
+        }
+        return this.evaluateAST(state, arg);
+      });
       return this.variableResolvers[name](state, ...evaluatedArgs);
     }
 
     console.warn(`Unknown function: ${name}`);
     return undefined;
+  }
+
+  // Check if an AST node is a target expression (uses &, |, ! operators)
+  isTargetExpression(node) {
+    if (!node || typeof node !== "object") return false;
+
+    if (node.type === "binary" && ["&", "|"].includes(node.op)) {
+      return true;
+    }
+    if (node.type === "unary" && node.op === "!") {
+      return true;
+    }
+    if (node.type === "call") {
+      // Function calls in target context (like effect(preservation))
+      return true;
+    }
+
+    // Check children recursively
+    if (node.type === "binary") {
+      return this.isTargetExpression(node.left) || this.isTargetExpression(node.right);
+    }
+    if (node.type === "unary") {
+      return this.isTargetExpression(node.operand);
+    }
+
+    return false;
   }
 
   /**

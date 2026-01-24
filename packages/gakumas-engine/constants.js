@@ -403,9 +403,3 @@ export const FIELDS_TO_DIFF = [
     )
   ),
 ];
-
-export const HOLD_SOURCES_BY_ALIAS = {
-  hand: S.handCards,
-  deck: S.deckCards,
-  discards: S.discardedCards,
-};

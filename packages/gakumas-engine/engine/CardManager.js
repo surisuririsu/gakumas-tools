@@ -2,7 +2,6 @@ import { Customizations, SkillCards } from "gakumas-data";
 import {
   CARD_PILES,
   COST_FIELDS,
-  HOLD_SOURCES_BY_ALIAS,
   S,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
@@ -50,17 +49,13 @@ export default class CardManager extends EngineComponent {
         this.moveCardToHand(state, cardId, parseInt(exact, 10)),
       moveCardToHandFromRemoved: (state, cardBaseId) =>
         this.moveCardToHandFromRemoved(state, cardBaseId),
-      moveSelectedFromDeckOrDiscardsToHand: (state, num = 1) =>
-        this.moveSelectedCardToHand(state, ["deck", "discards"], num),
+      moveSelectedToHand: (state, targetRule, num = 1) =>
+        this.moveSelectedToHandByTarget(state, targetRule, num),
       holdCard: (state, cardBaseId) =>
         this.holdCard(state, parseInt(cardBaseId, 10)),
       holdThisCard: (state) => this.holdThisCard(state),
-      holdSelectedFromHand: (state, num = 1) =>
-        this.holdSelectedFrom(state, ["hand"], num),
-      holdSelectedFromDeck: (state, num = 1) =>
-        this.holdSelectedFrom(state, ["deck"], num),
-      holdSelectedFromDeckOrDiscards: (state, num = 1) =>
-        this.holdSelectedFrom(state, ["deck", "discards"], num),
+      holdSelected: (state, targetRule, num = 1) =>
+        this.holdSelectedByTarget(state, targetRule, num),
       addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
       useRandomCardFree: (state, targetRule) =>
         this.useRandomCardFree(state, targetRule),
@@ -644,13 +639,12 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  moveSelectedCardToHand(state, sources, num = 1) {
+  moveSelectedToHandByTarget(state, targetRule, num = 1) {
     if (state[S.nullifySelect]) return;
 
-    // Collect cards from specified sources
-    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
-    const sourceCards = sourceKeys.map((k) => state[k]);
-    const cards = [].concat(...sourceCards);
+    // Get cards matching the target rule
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+    const cards = Array.from(targetCards);
     if (!cards.length) return;
 
     // Pick card to move based on strategy (may throw exception if async)
@@ -659,61 +653,59 @@ export default class CardManager extends EngineComponent {
       cards,
       num
     );
-    indicesToMove.sort((a, b) => b - a);
     if (indicesToMove.length === 0) return;
+
     // Find cards and move to hand
     for (let j = 0; j < indicesToMove.length; j++) {
-      let indexToMove = indicesToMove[j];
-      for (let i = 0; i < sources.length; i++) {
-        if (indexToMove < sourceCards[i].length) {
-          const card = state[sourceKeys[i]].splice(indexToMove, 1)[0];
-          state[S.handCards].push(card);
-          state[S.movedCard] = card;
+      const cardIdx = cards[indicesToMove[j]];
+      // Find which pile the card is in and remove it
+      for (let i = 0; i < CARD_PILES.length; i++) {
+        const pileIndex = state[CARD_PILES[i]].indexOf(cardIdx);
+        if (pileIndex !== -1) {
+          state[CARD_PILES[i]].splice(pileIndex, 1);
+          state[S.handCards].push(cardIdx);
+          state[S.movedCard] = cardIdx;
           this.engine.effectManager.triggerEffectsForPhase(
             state,
             "cardMovedToHand"
           );
           this.logger.log(state, "moveCardToHand", {
             type: "skillCard",
-            id: state[S.cardMap][card].id,
+            id: state[S.cardMap][cardIdx].id,
           });
           break;
-        } else {
-          indexToMove -= sourceCards[i].length;
         }
       }
     }
   }
 
-  holdSelectedFrom(state, sources, num = 1) {
+  holdSelectedByTarget(state, targetRule, num = 1) {
     if (state[S.nullifySelect]) return;
 
-    // Collect cards from specified sources
-    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
-    const sourceCards = sourceKeys.map((k) => state[k]);
-    const cards = [].concat(...sourceCards);
+    // Get cards matching the target rule
+    const targetCards = this.getTargetRuleCards(state, targetRule, null);
+    const cards = Array.from(targetCards);
     if (!cards.length) return;
 
-    // Pick card to hold based on strategy (may throw exception if async)
+    // Pick cards to hold based on strategy (may throw exception if async)
     const indicesToHold = this.engine.strategy.pickCardsToHold(
       state,
       cards,
       num
     );
 
-    indicesToHold.sort((a, b) => b - a);
     if (indicesToHold.length === 0) return;
 
     // Find cards and move to hold
     for (let j = 0; j < indicesToHold.length; j++) {
-      let indexToHold = indicesToHold[j];
-      for (let i = 0; i < sources.length; i++) {
-        if (indexToHold < sourceCards[i].length) {
-          const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
-          this.hold(state, card);
+      const cardIdx = cards[indicesToHold[j]];
+      // Find which pile the card is in and remove it
+      for (let i = 0; i < CARD_PILES.length; i++) {
+        const pileIndex = state[CARD_PILES[i]].indexOf(cardIdx);
+        if (pileIndex !== -1) {
+          state[CARD_PILES[i]].splice(pileIndex, 1);
+          this.hold(state, cardIdx);
           break;
-        } else {
-          indexToHold -= sourceCards[i].length;
         }
       }
     }
