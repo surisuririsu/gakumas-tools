@@ -172,6 +172,76 @@ target:hand { do:g.score+=5 }
 target:deck { do:g.score+=5 }
 ```
 
+## Targeting Expressions
+
+Some actions accept a targeting expression to specify which cards to operate on. Targeting expressions use bracket notation `[...]` and support boolean operators.
+
+### Operators
+
+- `&` - intersection (cards matching both conditions)
+- `|` - union (cards matching either condition)
+- `!` - complement (cards NOT matching the condition)
+
+Parentheses `()` can be used to control precedence. `&` binds tighter than `|`.
+
+### Examples
+
+手札のカード数
+
+```
+countCards[hand]
+```
+
+山札か捨て札を選択し、保留に移動
+
+```
+do:holdSelected[deck | discards]
+```
+
+山札か捨て札にあるプロデュースアイドルのスキルカードを手札に移動
+
+```
+do:moveToHand[pIdol & (deck | discarded)]
+```
+
+NでもTでもないカードの数
+
+```
+countCards[!(N | T)]
+```
+
+山札か捨て札にあるSSRカードを2枚、山札の先頭に移動
+
+```
+do:moveToTopOfDeck[SSR & (deck | discarded)](3)
+```
+
+除外にある特定のスキルカード(ID 490)を手札に移動
+
+```
+do:moveToHand[removed & 490]
+```
+
+### Target Identifiers
+
+| Identifier | Description |
+| ---------- | ----------- |
+| `hand` | 手札 |
+| `deck` | 山札 |
+| `discards` / `discarded` | 捨て札 |
+| `removed` | 除外 |
+| `held` | 保留 |
+| `all` | 全てのカード |
+| `this` | このカード |
+| `pIdol` | プロデュースアイドルのカード |
+| `N` / `R` / `SR` / `SSR` | レアリティ |
+| `active` | アクティブカード |
+| `mental` | メンタルカード |
+| `trouble` | トラブルカード |
+| `basic` | 基本カード |
+| `effect(X)` | 効果Xを持つカード (e.g., `effect(strength)`) |
+| `123` | カードID 123 |
+
 ## Nested Effects
 
 Effects can be nested inside conditions to create delayed effects:
@@ -286,16 +356,25 @@ This replaces the old "fallthrough" pattern where an effect without actions woul
 | 手札をすべて入れ替える                       | `exchangeHand`                |
 | ランダムな強化済みスキルカードを、手札に生成 | `addRandomUpgradedCardToHand` |
 | ランダムな手札 1 枚をレッスン中強化          | `upgradeRandomCardInHand`     |
-| 山札か捨て札にある特定のスキルカードを手札に移動 | `moveCardToHand(cardId, exact)` |
-| 除外にある特定のスキルカードを手札に移動 | `moveCardToHandFromRemoved(cardBaseId)` |
 | 特定のスキルカードを保留に移動 | `holdCard(cardBaseId)` |
 | このスキルカードを保留に移動 | `holdThisCard` |
-| 手札を選択し、保留に移動 | `holdSelectedFromHand` |
-| 山札を選択し、保留に移動 | `holdSelectedFromDeck` |
-| 山札か捨て札を選択し、保留に移動 | `holdSelectedFromDeckOrDiscards` |
-| スコア上昇量増加                             | `setScoreBuff(amount,turns)`  |
-| 好印象増加量増加 | `setGoodImpressionTurnsBuff(amount,turns)` |
+| スコア上昇量増加                             | `setScoreBuff(amount, turns)`  |
+| 好印象増加量増加 | `setGoodImpressionTurnsBuff(amount, turns)` |
 | 指針を変更 | `setStance(stance)` |
+
+### Actions with targeting expressions
+
+These actions use bracket notation for targeting:
+
+| Action                                       | Representation                |
+| -------------------------------------------- | ----------------------------- |
+| カードを手札に移動 | `moveToHand[target]` |
+| カードを選択して手札に移動 | `moveSelectedToHand[target]` |
+| カードを選択して保留に移動 | `holdSelected[target]` or `holdSelected[target](n)` |
+| カードを除外 | `removeCard[target]` |
+| カードを山札に移動 | `moveToDeck[target]` |
+| カードを山札の先頭に移動 | `moveToTopOfDeck[target](n)` |
+| カードの数を取得 | `countCards[target]` |
 
 ### Example
 

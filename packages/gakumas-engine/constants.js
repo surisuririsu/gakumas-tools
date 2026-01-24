@@ -69,7 +69,7 @@ export const STANCE_CHANGED_EFFECTS = [
     { type: "default", id: "のんびり" }
   ),
   ...parseEffect(
-    "if:stance==fullPower { do:cardUsesRemaining+=1; do:addHeldCardsToHand }",
+    "if:stance==fullPower { do:cardUsesRemaining+=1; do:moveHeldCardsToHand }",
     { type: "default", id: "全力" }
   ),
 ];

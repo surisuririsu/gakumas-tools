@@ -47,8 +47,6 @@ export default class CardManager extends EngineComponent {
       addCardToHand: (state, cardId) => this.addCardToHand(state, cardId),
       moveCardToHand: (state, cardId, exact) =>
         this.moveCardToHand(state, cardId, parseInt(exact, 10)),
-      moveCardToHandFromRemoved: (state, cardBaseId) =>
-        this.moveCardToHandFromRemoved(state, cardBaseId),
       moveSelectedToHand: (state, targetRule, num = 1) =>
         this.moveSelectedToHandByTarget(state, targetRule, num),
       holdCard: (state, cardBaseId) =>
@@ -56,7 +54,7 @@ export default class CardManager extends EngineComponent {
       holdThisCard: (state) => this.holdThisCard(state),
       holdSelected: (state, targetRule, num = 1) =>
         this.holdSelectedByTarget(state, targetRule, num),
-      addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
+      moveHeldCardsToHand: (state) => this.moveHeldCardsToHand(state),
       useRandomCardFree: (state, targetRule) =>
         this.useRandomCardFree(state, targetRule),
       // Generic card manipulation actions
@@ -589,33 +587,6 @@ export default class CardManager extends EngineComponent {
     });
   }
 
-  moveCardToHandFromRemoved(state, cardBaseId) {
-    let cards = state[S.cardMap]
-      .map((c, i) => (c.baseId == cardBaseId ? i : -1))
-      .filter((i) => i != -1);
-
-    if (!cards.length) return;
-
-    const card = cards[Math.floor(getRand() * cards.length)];
-
-    const index = state[S.removedCards].indexOf(card);
-    if (index != -1) {
-      state[S.removedCards].splice(index, 1);
-      state[S.handCards].push(card);
-
-      state[S.movedCard] = card;
-      this.engine.effectManager.triggerEffectsForPhase(
-        state,
-        "cardMovedToHand"
-      );
-
-      this.logger.log(state, "moveCardToHand", {
-        type: "skillCard",
-        id: state[S.cardMap][card].id,
-      });
-    }
-  }
-
   hold(state, card) {
     // Hold the card
     if (card != null) {
@@ -733,7 +704,7 @@ export default class CardManager extends EngineComponent {
     state[S.thisCardHeld] = true;
   }
 
-  addHeldCardsToHand(state) {
+  moveHeldCardsToHand(state) {
     while (state[S.heldCards].length) {
       const card = state[S.heldCards].pop();
       state[S.handCards].push(card);
@@ -954,9 +925,9 @@ export default class CardManager extends EngineComponent {
 
   moveToHandByTarget(state, targetRule, num = 1) {
     const targetCards = this.getTargetRuleCards(state, targetRule, null);
-    const piles = [S.deckCards, S.discardedCards];
+    const piles = [S.deckCards, S.discardedCards, S.removedCards];
 
-    // Find cards that match target AND are in deck or discards
+    // Find cards that match target AND are in searchable piles
     let candidates = [];
     for (let pile of piles) {
       for (let i = 0; i < state[pile].length; i++) {

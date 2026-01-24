@@ -215,8 +215,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 214,ぜったいいっぱい！,SSR,FALSE,anomaly,produce,support,,FALSE,
 215,いつか見た夢,SSR,FALSE,sense,stage,pIdol,75,FALSE,at:afterCardUsed { if:usedCardBaseId==28 { do:concentration+=1; do:fixedStamina-=3; at:startOfTurn { do:concentration+=3 limit:3 } } limit:2 }
 216,いつか見た夢+,SSR,TRUE,sense,stage,pIdol,75,FALSE,at:afterCardUsed { if:usedCardBaseId==28 { do:concentration+=1; do:fixedStamina-=1; at:startOfTurn { do:concentration+=3 limit:3 } } limit:2 }
-217,翼,SSR,FALSE,logic,stage,pIdol,76,FALSE,at:afterCardUsed { if:usedCardBaseId==58 & genki>=7 { do:goodImpressionTurns*=1.5; at:turn { do:moveCardToHandFromRemoved(490); do:fixedStamina-=2 limit:1 } } limit:2 }
-218,翼+,SSR,TRUE,logic,stage,pIdol,76,FALSE,at:afterCardUsed { if:usedCardBaseId==58 & genki>=7 { do:goodImpressionTurns*=1.5; at:turn { do:moveCardToHandFromRemoved(490) limit:1 } } limit:2 }
+217,翼,SSR,FALSE,logic,stage,pIdol,76,FALSE,at:afterCardUsed { if:usedCardBaseId==58 & genki>=7 { do:goodImpressionTurns*=1.5; at:turn { do:moveToHand[removed & 490]; do:fixedStamina-=2 limit:1 } } limit:2 }
+218,翼+,SSR,TRUE,logic,stage,pIdol,76,FALSE,at:afterCardUsed { if:usedCardBaseId==58 & genki>=7 { do:goodImpressionTurns*=1.5; at:turn { do:moveToHand[removed & 490] limit:1 } } limit:2 }
 219,体ほぐしローラー,SR,FALSE,free,produce,support,,FALSE,
 220,うるおいのどケア,SR,FALSE,free,produce,support,,FALSE,
 221,トレーナーの優しさ,SR,FALSE,free,produce,support,,FALSE,
@@ -366,8 +366,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 365,交わした約束+,SSR,TRUE,anomaly,stage,pIdol,120,FALSE,"at:endOfTurn { if:fullPowerCharge>=10 { do:holdCard(638); do:genki+=5; at:turn { do:setFullPowerChargeBuff(0.5, 1) limit:1 } } limit:3 }"
 366,完全制覇でポン,SSR,FALSE,anomaly,produce,support,,FALSE,
 367,ゲレンデを翔ける赤,SR,FALSE,anomaly,produce,support,,FALSE,
-368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveCardToHandFromRemoved(640); do:goodConditionTurns+=7; do:fixedStamina-=3 }; limit:1 }
-369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveCardToHandFromRemoved(640); do:goodConditionTurns+=9 }; limit:1 }
+368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveToHand[removed & 640]; do:goodConditionTurns+=7; do:fixedStamina-=3 }; limit:1 }
+369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { do:cardUsesRemaining+=1; do:moveToHand[removed & 640]; do:goodConditionTurns+=9 }; limit:1 }
 370,無我の境地,SSR,FALSE,sense,produce,support,,FALSE,
 371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { do:fixedStamina+=7; do:removeCard[basic & (deck | discarded | hand)] } }
 372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { do:goodConditionTurns+=5; do:removeCard[basic & (deck | discarded | hand)] } }
