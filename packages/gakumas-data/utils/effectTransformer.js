@@ -130,7 +130,7 @@ function transformNode(node, context) {
     case "group":
     case "line":
     case "level":
-      return transformModifier(node, context);
+      return transformModifier(node);
     default:
       throw new Error(`Unknown node type: ${node.type}`);
   }
@@ -192,7 +192,7 @@ function transformAction(node, context) {
  * Transform modifier (limit, ttl, delay, group)
  * Modifiers without actions are stored as pending modifiers in context
  */
-function transformModifier(node, context) {
+function transformModifier(node) {
   // This creates an effect with just the modifier
   // It will be merged with subsequent actions in the same body
   return [{ _pending: { [node.type]: node.value } }];
@@ -390,9 +390,32 @@ export function serializeEffect(effect, indent = 0) {
 }
 
 /**
- * Serialize an expression AST node back to string
+ * Get operator precedence (higher = binds tighter)
  */
-export function serializeExpr(node) {
+function getOpPrecedence(op) {
+  switch (op) {
+    case "|":
+      return 1;
+    case "&":
+      return 2;
+    case "+":
+    case "-":
+      return 3;
+    case "*":
+    case "/":
+    case "%":
+      return 4;
+    default:
+      return 0;
+  }
+}
+
+/**
+ * Serialize an expression AST node back to string
+ * @param {Object} node - AST node
+ * @param {number} parentPrecedence - Precedence of parent operator (for adding parens)
+ */
+export function serializeExpr(node, parentPrecedence = 0) {
   if (!node) return "";
 
   switch (node.type) {
@@ -406,27 +429,36 @@ export function serializeExpr(node) {
       let result = node.name;
       // Add target expression in brackets if present
       if (node.target) {
-        result += `[${serializeExpr(node.target)}]`;
+        result += `[${serializeExpr(node.target, 0)}]`;
       }
       // Add arguments in parentheses if present
       if (node.args && node.args.length > 0) {
-        const args = node.args.map(serializeExpr).join(",");
+        const args = node.args.map((a) => serializeExpr(a, 0)).join(", ");
         result += `(${args})`;
       }
       return result;
     }
 
-    case "binary":
-      return `${serializeExpr(node.left)}${node.op}${serializeExpr(node.right)}`;
+    case "binary": {
+      const myPrecedence = getOpPrecedence(node.op);
+      const left = serializeExpr(node.left, myPrecedence);
+      const right = serializeExpr(node.right, myPrecedence + 0.5); // Right-associative needs slightly higher
+      const result = `${left} ${node.op} ${right}`;
+      // Add parens if parent has higher precedence
+      if (parentPrecedence > myPrecedence) {
+        return `(${result})`;
+      }
+      return result;
+    }
 
     case "unary":
-      return `${node.op}${serializeExpr(node.operand)}`;
+      return `${node.op}${serializeExpr(node.operand, 10)}`; // High precedence for unary
 
     case "comparison":
-      return `${serializeExpr(node.left)}${node.op}${serializeExpr(node.right)}`;
+      return `${serializeExpr(node.left, 0)}${node.op}${serializeExpr(node.right, 0)}`;
 
     case "assignment":
-      return `${node.lhs}${node.op}${serializeExpr(node.rhs)}`;
+      return `${node.lhs}${node.op}${serializeExpr(node.rhs, 0)}`;
 
     default:
       console.warn("Unknown node type in serialization:", node.type);
