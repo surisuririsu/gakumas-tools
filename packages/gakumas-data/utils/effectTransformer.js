@@ -402,9 +402,19 @@ export function serializeExpr(node) {
     case "identifier":
       return node.name;
 
-    case "call":
-      const args = node.args.map(serializeExpr).join(",");
-      return `${node.name}(${args})`;
+    case "call": {
+      let result = node.name;
+      // Add target expression in brackets if present
+      if (node.target) {
+        result += `[${serializeExpr(node.target)}]`;
+      }
+      // Add arguments in parentheses if present
+      if (node.args && node.args.length > 0) {
+        const args = node.args.map(serializeExpr).join(",");
+        result += `(${args})`;
+      }
+      return result;
+    }
 
     case "binary":
       return `${serializeExpr(node.left)}${node.op}${serializeExpr(node.right)}`;

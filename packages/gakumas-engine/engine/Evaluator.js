@@ -123,50 +123,31 @@ export default class Evaluator extends EngineComponent {
    * Evaluate a function call
    */
   evaluateCall(state, node) {
-    const { name, args } = node;
+    const { name, target, args } = node;
 
     if (name in this.variableResolvers) {
-      const evaluatedArgs = args.map((arg) => {
-        // Pass target expressions as AST nodes (don't evaluate)
-        if (this.isTargetExpression(arg)) {
-          return arg;
-        }
+      // Build argument list: target (if present) followed by evaluated args
+      const evaluatedArgs = [];
+
+      // Target expression is passed as AST node
+      if (target) {
+        evaluatedArgs.push(target);
+      }
+
+      // Evaluate remaining arguments
+      for (const arg of args) {
         if (arg.type === "identifier") {
-          return arg.name;
+          evaluatedArgs.push(arg.name);
+        } else {
+          evaluatedArgs.push(this.evaluateAST(state, arg));
         }
-        return this.evaluateAST(state, arg);
-      });
+      }
+
       return this.variableResolvers[name](state, ...evaluatedArgs);
     }
 
     console.warn(`Unknown function: ${name}`);
     return undefined;
-  }
-
-  // Check if an AST node is a target expression (uses &, |, ! operators)
-  isTargetExpression(node) {
-    if (!node || typeof node !== "object") return false;
-
-    if (node.type === "binary" && ["&", "|"].includes(node.op)) {
-      return true;
-    }
-    if (node.type === "unary" && node.op === "!") {
-      return true;
-    }
-    if (node.type === "call") {
-      // Function calls in target context (like effect(preservation))
-      return true;
-    }
-
-    // Check children recursively
-    if (node.type === "binary") {
-      return this.isTargetExpression(node.left) || this.isTargetExpression(node.right);
-    }
-    if (node.type === "unary") {
-      return this.isTargetExpression(node.operand);
-    }
-
-    return false;
   }
 
   /**

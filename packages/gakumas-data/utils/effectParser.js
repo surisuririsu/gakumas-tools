@@ -18,7 +18,7 @@
  * unaryExpr = "!" unaryExpr | comparisonExpr
  * comparisonExpr = addExpr (("==" | "!=" | "<" | ">" | "<=" | ">=") addExpr)?
  *
- * assignmentExpr = identifier assignmentOp expression | specialAction
+ * assignmentExpr = identifier assignmentOp expression | functionCall
  * assignmentOp = "=" | "+=" | "-=" | "*=" | "/=" | "%="
  *
  * expression = addExpr
@@ -26,11 +26,12 @@
  * mulExpr = unaryMath (("*" | "/" | "%") unaryMath)*
  * unaryMath = "-" unaryMath | primaryExpr
  * primaryExpr = "(" expression ")" | functionCall | number | identifier
- * functionCall = identifier "(" (condition ("," condition)*)? ")"
+ * functionCall = identifier ("[" condition "]")? ("(" (expression ("," expression)*)? ")")?
  *
- * Note: The same condition grammar is used for both if: conditions and target: expressions.
- * The interpretation differs based on context - in if: it's evaluated as boolean,
- * in target: or function args like moveToHand() it's evaluated as a card filter.
+ * Note: Functions can have an optional target expression in brackets, e.g.:
+ *   holdSelected[deck | discards](2) - hold 2 cards from deck or discards
+ *   countCards[!(N | T)] - count cards that are not N or T rarity
+ *   moveToHand[SSR & deck] - move 1 SSR card from deck to hand
  */
 
 // Token types
@@ -52,6 +53,8 @@ const TokenType = {
   RBRACE: "RBRACE",
   LPAREN: "LPAREN",
   RPAREN: "RPAREN",
+  LBRACKET: "LBRACKET",
+  RBRACKET: "RBRACKET",
   SEMICOLON: "SEMICOLON",
   COLON: "COLON",
   COMMA: "COMMA",
@@ -217,6 +220,12 @@ class Tokenizer {
       case ")":
         this.advance();
         return { type: TokenType.RPAREN, line: this.line, col: startCol };
+      case "[":
+        this.advance();
+        return { type: TokenType.LBRACKET, line: this.line, col: startCol };
+      case "]":
+        this.advance();
+        return { type: TokenType.RBRACKET, line: this.line, col: startCol };
       case ";":
         this.advance();
         return { type: TokenType.SEMICOLON, line: this.line, col: startCol };
@@ -642,17 +651,28 @@ class Parser {
     if (this.check(TokenType.IDENTIFIER)) {
       const idToken = this.advance();
 
-      // Function call: identifier(args)
+      // Check for target expression in brackets: func[target]
+      let target = null;
+      if (this.match(TokenType.LBRACKET)) {
+        target = this.parseCondition();
+        this.expect(TokenType.RBRACKET, "Expected ']' after target expression");
+      }
+
+      // Function call: identifier(args) or identifier[target](args)
       if (this.match(TokenType.LPAREN)) {
         const args = [];
         if (!this.check(TokenType.RPAREN)) {
           do {
-            // Use parseCondition to allow &, |, ! in function args
-            args.push(this.parseCondition());
+            args.push(this.parseExpression());
           } while (this.match(TokenType.COMMA));
         }
         this.expect(TokenType.RPAREN, "Expected ')' after arguments");
-        return { type: "call", name: idToken.value, args };
+        return { type: "call", name: idToken.value, target, args };
+      }
+
+      // If we have a target but no parens, it's still a call (e.g., countCards[hand])
+      if (target) {
+        return { type: "call", name: idToken.value, target, args: [] };
       }
 
       // Assignment: identifier op= expression
@@ -763,17 +783,28 @@ class Parser {
     if (this.check(TokenType.IDENTIFIER)) {
       const idToken = this.advance();
 
-      // Function call
+      // Check for target expression in brackets: func[target]
+      let target = null;
+      if (this.match(TokenType.LBRACKET)) {
+        target = this.parseCondition();
+        this.expect(TokenType.RBRACKET, "Expected ']' after target expression");
+      }
+
+      // Check for arguments in parentheses: func(args) or func[target](args)
       if (this.match(TokenType.LPAREN)) {
         const args = [];
         if (!this.check(TokenType.RPAREN)) {
           do {
-            // Use parseCondition to allow &, |, ! in function args
-            args.push(this.parseCondition());
+            args.push(this.parseExpression());
           } while (this.match(TokenType.COMMA));
         }
         this.expect(TokenType.RPAREN, "Expected ')' after arguments");
-        return { type: "call", name: idToken.value, args };
+        return { type: "call", name: idToken.value, target, args };
+      }
+
+      // If we have a target but no parens, it's still a call (e.g., countCards[hand])
+      if (target) {
+        return { type: "call", name: idToken.value, target, args: [] };
       }
 
       return { type: "identifier", name: idToken.value };

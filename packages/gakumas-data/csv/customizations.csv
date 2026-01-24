@@ -37,7 +37,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 38,cardUsesRemaining1,スキルカード使用数+,effect,100,1,,,,do:cardUsesRemaining+=1,,
 39,upgradeHand1,スキルカード強化追加,effect,70,1,,,,do:upgradeHand,,
 37,removeLimit1,レッスン中1回の制限削除,effect,40,1,,,,,0,
-43,holdSelected(deck)Add1,保留追加,effect,70,1,,,,do:holdSelected(deck),,
+43,holdSelected[deck]Add1,保留追加,effect,70,1,,,,do:holdSelected[deck],,
 92,kyorikanEffect1,効果変更,effect,100,1,,,,at:startOfTurn { if:stamina>=maxStamina*0.5 { do:concentration+=2 }; line:1 },,
 91,seisouEffect1,効果変更,effect,100,1,,,,do:goodConditionTurnsMultiplier=2; do:score+=18; line:1; if:goodConditionTurns>=1 { do:concentrationMultiplier=3; do:score+=20 }; line:2,,
 96,goodImpressionTurnsEffectBuffAdd1_50_5,効果追加,effect,100,1,,,,"do:setGoodImpressionTurnsEffectBuff(0.5,5)",,

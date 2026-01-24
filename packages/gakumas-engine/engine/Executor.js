@@ -314,7 +314,7 @@ export default class Executor extends EngineComponent {
   }
 
   executeCallAction(state, action, growth) {
-    const { name, args } = action;
+    const { name, target, args } = action;
 
     if (name in this.specialActions) {
       if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(name)) {
@@ -322,18 +322,22 @@ export default class Executor extends EngineComponent {
         return;
       }
 
-      // Evaluate arguments
-      const evaluatedArgs = args.map((arg) => {
-        // Pass target expressions as AST nodes (don't evaluate)
-        // Target expressions use &, |, ! operators
-        if (this.isTargetExpression(arg)) {
-          return arg;
-        }
+      // Build argument list: target (if present) followed by evaluated args
+      const evaluatedArgs = [];
+
+      // Target expression is passed as AST node
+      if (target) {
+        evaluatedArgs.push(target);
+      }
+
+      // Evaluate remaining arguments
+      for (const arg of args) {
         if (arg.type === "identifier") {
-          return arg.name;
+          evaluatedArgs.push(arg.name);
+        } else {
+          evaluatedArgs.push(this.engine.evaluator.evaluateAST(state, arg));
         }
-        return this.engine.evaluator.evaluateAST(state, arg);
-      });
+      }
 
       // Handle stance growth modifier
       if (growth && growth[G["g.stanceLevel"]] && name === "setStance") {
@@ -349,32 +353,6 @@ export default class Executor extends EngineComponent {
     }
 
     console.warn(`Unrecognized function call: ${name}`);
-  }
-
-  // Check if an AST node is a target expression (uses &, |, ! operators)
-  isTargetExpression(node) {
-    if (!node || typeof node !== "object") return false;
-
-    if (node.type === "binary" && ["&", "|"].includes(node.op)) {
-      return true;
-    }
-    if (node.type === "unary" && node.op === "!") {
-      return true;
-    }
-    if (node.type === "call") {
-      // Function calls in target context (like effect(preservation))
-      return true;
-    }
-
-    // Check children recursively
-    if (node.type === "binary") {
-      return this.isTargetExpression(node.left) || this.isTargetExpression(node.right);
-    }
-    if (node.type === "unary") {
-      return this.isTargetExpression(node.operand);
-    }
-
-    return false;
   }
 
   executeSpecialAction(state, actionName) {
