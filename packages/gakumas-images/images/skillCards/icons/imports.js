@@ -611,9 +611,12 @@ import image_737 from "./737.png";
 import image_738 from "./738.png";
 import image_73_8 from "./73_8.png";
 import image_73_9 from "./73_9.png";
+import image_740 from "./740.png";
 import image_74_1 from "./74_1.png";
 import image_74_2 from "./74_2.png";
+import image_742 from "./742.png";
 import image_74_3 from "./74_3.png";
+import image_743 from "./743.png";
 import image_74_4 from "./74_4.png";
 import image_74_5 from "./74_5.png";
 import image_74_6 from "./74_6.png";
@@ -3715,9 +3718,12 @@ const IMAGES = {
   '738': image_738,
   '73_8': image_73_8,
   '73_9': image_73_9,
+  '740': image_740,
   '74_1': image_74_1,
   '74_2': image_74_2,
+  '742': image_742,
   '74_3': image_74_3,
+  '743': image_743,
   '74_4': image_74_4,
   '74_5': image_74_5,
   '74_6': image_74_6,
