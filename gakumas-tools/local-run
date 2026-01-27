@@ -19,6 +19,7 @@ function show_help {
     echo "  diet                            Remove duplicate memories"
     echo "  check-names                     Check idol names"
     echo "  migrate-icons                   Migrate icons"
+    echo "  clear-cache <season-stage>      Clear simulation cache for a specific stage"
     echo "  help                            Show this help message"
     echo ""
 }
@@ -194,6 +195,26 @@ case $COMMAND in
         # Accesses .env.local variables via sourcing in this script
         # No bootloader needed as it doesn't use gakumas-data
         yarn node "./$REL_SCRIPT_DIR/migrate-icons.mjs" "$@"
+        ;;
+    clear-cache)
+        if [ $# -eq 0 ]; then
+            echo "Usage: ./local-run clear-cache <season-stage>"
+            exit 1
+        fi
+        
+        # Check for dependencies (mongodb uri)
+        if [ -z "$MONGODB_URI" ]; then
+            echo "Error: MONGODB_URI not found in .env.local or environment."
+            exit 1
+        fi
+        
+        ROOT_DIR="$(dirname $(pwd))"
+        REL_SCRIPT_DIR="gakumas-tools/$SCRIPT_DIR"
+        
+        cd "$ROOT_DIR"
+        # Accesses .env.local variables via boot.mjs check? No, this is simple script.
+        # But we need gakumas-data to get proper stage ID from season string.
+        yarn node "./$REL_SCRIPT_DIR/boot-clear-cache.mjs" "$@"
         ;;
     help)
         show_help

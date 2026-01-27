@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { Worker } from 'worker_threads';
 import os from 'os';
 import { MongoClient } from "mongodb";
+import crypto from "crypto";
 import { recommendSynthesis } from "./optimize-synthesis.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,17 @@ const ALL_IDOL_NAMES = [
     "saki", "temari", "kotone", "tsubame", "mao", "lilja", "china",
     "sumika", "hiro", "sena", "misuzu", "ume", "rinami"
 ];
+
+function calculateMemoryHash(memoryData) {
+    const parts = [
+        memoryData.pIdolId,
+        JSON.stringify(memoryData.params),
+        JSON.stringify(memoryData.pItemIds),
+        JSON.stringify(memoryData.skillCardIds),
+        JSON.stringify(memoryData.customizations || [{}, {}, {}, {}, {}, {}])
+    ];
+    return crypto.createHash('sha256').update(parts.join('|')).digest('hex');
+}
 
 async function run() {
     const rawArgs = process.argv.slice(2);
@@ -139,27 +151,82 @@ async function run() {
             }));
         }
 
+        // Calculate Hashes
+        memories.forEach(m => {
+            m.hash = calculateMemoryHash(m.data);
+        });
+
         if (memories.length === 0) {
             console.error("対象のメモリーが見つかりませんでした。スキップします。");
             continue;
         }
 
+        // Connect to DB for Caching (Scope: Current Idol Loop)
+        let mongoClient;
+        let simulationResultsCollection;
+        const existingResultsSet = new Set();
+        const useCache = !!process.env.MONGODB_URI;
+
+        if (useCache) {
+            try {
+                mongoClient = new MongoClient(process.env.MONGODB_URI);
+                await mongoClient.connect();
+                const db = mongoClient.db(process.env.MONGODB_DB || "gakumas-tools");
+                simulationResultsCollection = db.collection("simulation_results");
+
+                // Pre-fetch existing results for this stage/runs to filter
+                // Optimization: Maybe only fetch hashes?
+                const query = {
+                    stageId: contestStage.id,
+                    runs: numRuns,
+                    season: season
+                };
+                // If we could restrict by idol, that would be better, but we are cross-combining?
+                // Actually combinations are strictly within `memories` list which is filtered by Idol.
+                // So all combinations involve this idol (as Main).
+                // Wait, combinations are `memories` x `memories`.
+                // And `memories` contains only `currentIdolName`'s memories (if options.idolName is set).
+                // Yes.
+
+                const cached = await simulationResultsCollection.find(query).project({ mainHash: 1, subHash: 1 }).toArray();
+                cached.forEach(c => existingResultsSet.add(`${c.mainHash}_${c.subHash}`));
+
+                console.error(`キャッシュ済み結果: ${cached.length} 件`);
+
+            } catch (e) {
+                console.error("Cache DB Connection Error:", e);
+            }
+        }
+
         // Generate All Combinations
         console.error("組み合わせ生成中...");
         const combinations = [];
+        let skippedCount = 0;
+
         for (const mainMem of memories) {
             for (const subMem of memories) {
                 // For DB sourced items, filename might be the ID string, ensure uniqueness check works
                 if (mainMem.filename === subMem.filename) continue;
+
+                // Check Cache
+                if (existingResultsSet.has(`${mainMem.hash}_${subMem.hash}`)) {
+                    skippedCount++;
+                    continue;
+                }
+
                 combinations.push({ main: mainMem, sub: subMem });
             }
         }
         const totalCombs = combinations.length;
-        console.error(`総組み合わせ数: ${totalCombs} 通り`);
+        console.error(`総組み合わせ数: ${totalCombs} 通り (キャッシュ済み: ${skippedCount} 件スキップ)`);
 
         if (totalCombs === 0) {
-            console.error("組み合わせが生成できませんでした。スキップします。");
-            continue;
+            console.error("新規計算対象の組み合わせがありません。");
+            // Still need to show results?
+            // If we skipped everything, we should probably fetch the results from DB to show "Best".
+            // For now, let's proceed to "Show Results" phase by fetching from DB if needed.
+            // But strict requirement: "Run simulations only for new combinations" -> Done.
+            // "Merge cached and newly computed results for the final output" -> Need to handle below.
         }
 
         // Determine Worker Count
@@ -228,15 +295,147 @@ async function run() {
         });
 
         try {
-            await Promise.all(promises);
+            if (totalCombs > 0) {
+                await Promise.all(promises);
+            }
         } catch (err) {
             console.error("\nWorker Error:", err);
             // Continue to next idol
+            if (mongoClient) await mongoClient.close();
             continue;
         } finally {
             for (const worker of workers) {
                 worker.terminate();
             }
+        }
+
+        // Save Results to DB
+        if (useCache && simulationResultsCollection && allResults.length > 0) {
+            console.error(`新規結果 ${allResults.length} 件をDBに保存中...`);
+            const bulkOps = allResults.map(res => ({
+                updateOne: {
+                    filter: {
+                        mainHash: res.mainHash,
+                        subHash: res.subHash,
+                        stageId: contestStage.id,
+                        runs: numRuns,
+                        season: season
+                    },
+                    update: {
+                        $set: {
+                            mainHash: res.mainHash,
+                            subHash: res.subHash,
+                            stageId: contestStage.id,
+                            runs: numRuns,
+                            season: season,
+                            score: res.score,
+                            min: res.min,
+                            max: res.max,
+                            median: res.median,
+                            mainName: res.mainName,
+                            subName: res.subName,
+                            mainFilename: res.mainFilename,
+                            subFilename: res.subFilename,
+                            createdAt: new Date()
+                        }
+                    },
+                    upsert: true
+                }
+            }));
+
+            try {
+                if (bulkOps.length > 0) {
+                    await simulationResultsCollection.bulkWrite(bulkOps);
+                }
+            } catch (e) {
+                console.error("DB Save Error:", e);
+            }
+        }
+
+        // Merge with Cached Results for Display
+        if (useCache && simulationResultsCollection) {
+            // Fetch ALL results for this set (cache + new)
+            // Re-query simply or assume we have everything?
+            // We only skipped ones that match (mainHash, subHash) from `memories`.
+            // So we should construct the list of relevant hashes to fetch?
+            // Or just fetch all for this stage/runs again? (Might be large if many idols)
+            // Better: We know which ones we skipped.
+
+            // To be safe and simple: Fetch all results where `mainHash` IN (memories.hashes) AND `subHash` IN (memories.hashes)
+            const memHashes = memories.map(m => m.hash);
+            const finalQuery = {
+                stageId: contestStage.id,
+                runs: numRuns,
+                season: season,
+                mainHash: { $in: memHashes },
+                subHash: { $in: memHashes }
+            };
+
+            // If totalCombs was 0, allResults is empty.
+            // If totalCombs > 0, allResults has NEW results. 
+            // We want (New + Cached).
+
+            try {
+                const cachedResults = await simulationResultsCollection.find(finalQuery).toArray();
+
+                // Merge strategies:
+                // `allResults` currently contains valid result objects.
+                // `cachedResults` are from DB. Map them to same structure.
+
+                const cachedMapped = cachedResults.map(r => ({
+                    mainFilename: r.mainFilename,
+                    mainName: r.mainName,
+                    subFilename: r.subFilename,
+                    subName: r.subName,
+                    score: r.score,
+                    min: r.min,
+                    max: r.max,
+                    median: r.median,
+                    mainHash: r.mainHash,
+                    subHash: r.subHash
+                }));
+
+                // Deduplicate?
+                // `allResults` are definitely new and unique.
+                // `cachedResults` might include everything if we queried broad?
+                // Actually `allResults` are NOT in DB yet when we query? 
+                // Wait, I saved them just above.
+                // So `cachedResults` SHOULD contain `allResults` too now.
+
+                // So replacing `allResults` with `cachedResults` is the correct approach.
+                // But `cachedResults` might miss "meta" or other runtime fields?
+                // `meta` is used for synthesized name display?
+                // The worker returns `meta`. `simulation_results` schema doesn't seem to store `meta`.
+                // `meta` is passed from `main.meta`.
+
+                // Re-attaching meta:
+                // We can recover meta from `memories` by matching filename/hash.
+
+                // Let's use `cachedMapped` as the source of truth for scores.
+                allResults.length = 0; // Clear
+                allResults.push(...cachedMapped);
+
+                // Rehydrate meta for all results
+                for (const res of allResults) {
+                    const mem = memories.find(m => m.hash === res.mainHash); // hash check is safer than filename if we want robust
+                    // Or filename? Filename should be unique per run.
+                    if (mem) {
+                        res.meta = mem.data.meta || {};
+                        // Actually `main.meta` in worker was `main.meta`. 
+                        // `memories` items are `{ filename, data, hash }`.
+                        // `data` has `meta`? No, `data` is the JSON content.
+                        // `loadMemoriesFromDB` returns `data: m`. `m` might have meta?
+                        // `memories` from file: `data: JSON.parse(...)`.
+                        // Currently meta is not strictly used in existing code EXCEPT `synth` option logic.
+                        // `synth` logic checks `options.synth` and uses `memories` array to find `mainMem` and `subMem`.
+                    }
+                }
+
+            } catch (e) {
+                console.error("Error fetching combined results:", e);
+            }
+
+            if (mongoClient) await mongoClient.close();
         }
 
         const duration = (Date.now() - startTime) / 1000;

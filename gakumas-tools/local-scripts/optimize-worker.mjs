@@ -87,8 +87,10 @@ parentPort.on('message', async (task) => {
         results.push({
             mainFilename: main.filename,
             mainName: main.data.name,
+            mainHash: main.hash,
             subFilename: sub.filename,
             subName: sub.data.name,
+            subHash: sub.hash,
             score: avgScore,
             min: minScore,
             max: maxScore,
