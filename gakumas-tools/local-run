@@ -11,7 +11,7 @@ function show_help {
     echo "  sim <season-stage> [options]    Run simulation (wrapper for my-simulator.mjs)"
     echo "  dump <pIdolId> <output_dir>     Dump memories from MongoDB"
     echo "  opt <source> <stage> <runs>     Optimize memories (files or mongodb)"
-    echo "  opt-remote <stage> <runs> ...   Optimize memories using DB config from .env.local"
+    echo "  opt-remote <stage> <runs> ...   Optimize memories using DB config from .env.local (supports --force)"
     echo "  synthesis <main> <sub> <stage> ... Simulate synthesis options for a deck"
     echo "  csv                             Generate p_idols.csv"
     echo "  power <memory_file>             Calculate stage power for a memory"

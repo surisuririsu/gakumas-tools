@@ -53,7 +53,7 @@ async function run() {
     if (args.length < 3) {
         console.error("使用法: yarn node local-scripts/optimize-memories-parallel.mjs <source> <season-stage> <num_runs> [options]");
         console.error("  <source>: ディレクトリパス または MongoDB URI (mongodb://...)");
-        console.error("  <options>: --idolName <name>, --plan <sense|logic|anomaly> (DBモード時のみ有効), --showWorst (低スコアワースト10を表示)");
+        console.error("  <options>: --idolName <name>, --plan <sense|logic|anomaly> (DBモード時のみ有効), --showWorst (低スコアワースト10を表示), --force (キャッシュを無視して再計算)");
         process.exit(1);
     }
 
@@ -209,7 +209,7 @@ async function run() {
                 if (mainMem.filename === subMem.filename) continue;
 
                 // Check Cache
-                if (existingResultsSet.has(`${mainMem.hash}_${subMem.hash}`)) {
+                if (!options.force && existingResultsSet.has(`${mainMem.hash}_${subMem.hash}`)) {
                     skippedCount++;
                     continue;
                 }
