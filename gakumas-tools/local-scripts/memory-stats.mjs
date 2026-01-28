@@ -60,12 +60,25 @@ async function run() {
 
         // Check for Idol Name Argument
         const args = process.argv.slice(2);
+
+        // Manual arg parsing for --json
+        const jsonMode = args.includes('--json');
+
+        // Capture console.log if in json mode
+        const originalConsoleLog = console.log;
+        if (jsonMode) {
+            console.log = () => { };
+        }
+
         let targetIdolId = null;
         let targetIdolName = "";
         let targetIdolKey = "";
 
-        if (args.length > 0) {
-            const arg = args[0].toLowerCase();
+        // Filter out flags from args for positional processing
+        const positionalArgs = args.filter(a => !a.startsWith('--'));
+
+        if (positionalArgs.length > 0) {
+            const arg = positionalArgs[0].toLowerCase();
             if (arg === "all") {
                 // handled below
             } else if (NAME_TO_ID[arg]) {
@@ -113,6 +126,21 @@ async function run() {
 
             const grandTotal = idolMemories.length;
 
+            if (jsonMode) {
+                // Return data structure instead of printing
+                return {
+                    idolName: idolName,
+                    total: grandTotal,
+                    breakdown: songStats.map(s => ({
+                        plan: s.plan,
+                        planName: PLAN_NAME[s.plan] || s.plan,
+                        title: s.title,
+                        count: s.count,
+                        percent: ((s.count / grandTotal) * 100).toFixed(1)
+                    }))
+                };
+            }
+
             console.log(`# メモリー統計情報 (${idolName})`);
             console.log("| プラン | 楽曲 | 枚数 |");
             console.log("| :-- | :-- | --: |");
@@ -135,13 +163,22 @@ async function run() {
         };
 
         if (targetIdolId) {
-            await generateIdolStats(targetIdolId, targetIdolName);
-        } else if (args.length > 0 && args[0].toLowerCase() === 'all') {
+            const data = await generateIdolStats(targetIdolId, targetIdolName);
+            if (jsonMode) {
+                originalConsoleLog(JSON.stringify({ type: 'idol', data }));
+            }
+        } else if (positionalArgs.length > 0 && positionalArgs[0].toLowerCase() === 'all') {
+            const allData = [];
             for (const key of IDOL_ORDER) {
                 const idolId = NAME_TO_ID[key];
                 const idolInfo = Idols.getById(idolId);
                 const idolName = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
-                await generateIdolStats(idolId, idolName);
+                const data = await generateIdolStats(idolId, idolName);
+                if (jsonMode) allData.push(data);
+            }
+            if (jsonMode) {
+                // If 'all', we return a special type "all_idols" which contains an array of idol data
+                originalConsoleLog(JSON.stringify({ type: 'all_idols', data: allData }));
             }
         } else if (false) {
             // Placeholder to keep the else if structure if needed, but we jump to else
@@ -172,53 +209,90 @@ async function run() {
                 }
             }
 
-            // Output Markdown Table
-            console.log("# メモリー統計情報");
-            console.log("| アイドル | センス | ロジック | アノマリー | 計 |");
-            console.log("| :-- | --: | --: | --: | --: |");
+            if (jsonMode) {
+                const overallData = IDOL_ORDER.map(key => {
+                    const row = stats[key];
+                    const idolId = NAME_TO_ID[key];
+                    const idolInfo = Idols.getById(idolId);
+                    const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+                    return {
+                        idolName: idolNameJp,
+                        sense: row.sense,
+                        logic: row.logic,
+                        anomaly: row.anomaly,
+                        total: row.total
+                    };
+                });
 
-            // Calculate Totals First
-            let totalSense = 0;
-            let totalLogic = 0;
-            let totalAnomaly = 0;
-            let grandTotal = 0;
+                // Calculate totals
+                let totalSense = 0, totalLogic = 0, totalAnomaly = 0, grandTotal = 0;
+                overallData.forEach(d => {
+                    totalSense += d.sense;
+                    totalLogic += d.logic;
+                    totalAnomaly += d.anomaly;
+                    grandTotal += d.total;
+                });
 
-            for (const key of IDOL_ORDER) {
-                const row = stats[key];
-                totalSense += row.sense;
-                totalLogic += row.logic;
-                totalAnomaly += row.anomaly;
-                grandTotal += row.total;
+                originalConsoleLog(JSON.stringify({
+                    type: 'overall',
+                    data: overallData,
+                    totals: {
+                        sense: totalSense,
+                        logic: totalLogic,
+                        anomaly: totalAnomaly,
+                        grandTotal: grandTotal
+                    }
+                }));
+            } else {
+
+                // Output Markdown Table
+                console.log("# メモリー統計情報");
+                console.log("| アイドル | センス | ロジック | アノマリー | 計 |");
+                console.log("| :-- | --: | --: | --: | --: |");
+
+                // Calculate Totals First
+                let totalSense = 0;
+                let totalLogic = 0;
+                let totalAnomaly = 0;
+                let grandTotal = 0;
+
+                for (const key of IDOL_ORDER) {
+                    const row = stats[key];
+                    totalSense += row.sense;
+                    totalLogic += row.logic;
+                    totalAnomaly += row.anomaly;
+                    grandTotal += row.total;
+                }
+
+                // Helper to format cell with percentage
+                const fmt = (val, total) => {
+                    if (total === 0) return "0<br>0.0%";
+                    const pct = ((val / total) * 100).toFixed(1);
+                    return `${val}<br>${pct}%`;
+                };
+
+                // Output Rows
+                for (const key of IDOL_ORDER) {
+                    const row = stats[key];
+                    const idolId = NAME_TO_ID[key];
+                    const idolInfo = Idols.getById(idolId);
+                    const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
+
+                    const senseCell = fmt(row.sense, grandTotal);
+                    const logicCell = fmt(row.logic, grandTotal);
+                    const anomalyCell = fmt(row.anomaly, grandTotal);
+                    const totalCell = fmt(row.total, grandTotal);
+
+                    console.log(`| ${idolNameJp} | ${senseCell} | ${logicCell} | ${anomalyCell} | ${totalCell} |`);
+                }
+
+                const totalSenseCell = fmt(totalSense, grandTotal);
+                const totalLogicCell = fmt(totalLogic, grandTotal);
+                const totalAnomalyCell = fmt(totalAnomaly, grandTotal);
+                const grandTotalCell = fmt(grandTotal, grandTotal);
+
+                console.log(`| 計 | ${totalSenseCell} | ${totalLogicCell} | ${totalAnomalyCell} | ${grandTotalCell} |`);
             }
-
-            // Helper to format cell with percentage
-            const fmt = (val, total) => {
-                if (total === 0) return "0<br>0.0%";
-                const pct = ((val / total) * 100).toFixed(1);
-                return `${val}<br>${pct}%`;
-            };
-
-            // Output Rows
-            for (const key of IDOL_ORDER) {
-                const row = stats[key];
-                const idolId = NAME_TO_ID[key];
-                const idolInfo = Idols.getById(idolId);
-                const idolNameJp = idolInfo ? idolInfo.name.replace(/\s+/g, ' ') : key;
-
-                const senseCell = fmt(row.sense, grandTotal);
-                const logicCell = fmt(row.logic, grandTotal);
-                const anomalyCell = fmt(row.anomaly, grandTotal);
-                const totalCell = fmt(row.total, grandTotal);
-
-                console.log(`| ${idolNameJp} | ${senseCell} | ${logicCell} | ${anomalyCell} | ${totalCell} |`);
-            }
-
-            const totalSenseCell = fmt(totalSense, grandTotal);
-            const totalLogicCell = fmt(totalLogic, grandTotal);
-            const totalAnomalyCell = fmt(totalAnomaly, grandTotal);
-            const grandTotalCell = fmt(grandTotal, grandTotal);
-
-            console.log(`| 計 | ${totalSenseCell} | ${totalLogicCell} | ${totalAnomalyCell} | ${grandTotalCell} |`);
         }
 
     } catch (e) {

@@ -58,6 +58,15 @@ async function run() {
     }
 
     const source = args[0];
+
+    // Capture console.log/error if we are in JSON mode to prevent noise
+    const originalConsoleLog = console.log;
+    const originalConsoleError = console.error;
+
+    if (options.json) {
+        console.log = () => { };
+        // console.error = () => { }; // Keep stderr for debug logs
+    }
     const [seasonStr, stageStr] = args[1].split("-");
     const season = parseInt(seasonStr, 10);
     const stageNumber = parseInt(stageStr, 10);
@@ -446,152 +455,268 @@ async function run() {
         // Start of Report Output (stdout)
         allResults.sort((a, b) => b.score - a.score);
 
-        // Generate Custom Header
-        if (allResults.length > 0) {
-            const best = allResults[0];
+        if (options.json) {
+            // JSON Output Mode
+            const best = allResults[0] || {};
+            const finalOutputData = {
+                best: {
+                    score: best.score,
+                    mainFilename: best.mainFilename,
+                    subFilename: best.subFilename,
+                    mainTitle: "", // Will populate below
+                    subTitle: "",
+                    idolName: currentIdolName,
+                    mainName: best.mainName,
+                    subName: best.subName
+                },
+                topCombinations: allResults.slice(0, 5).map(res => ({
+                    mainName: res.mainName,
+                    subName: res.subName,
+                    min: res.min,
+                    score: res.score,
+                    median: res.median,
+                    max: res.max
+                })),
+                worstCombinations: [],
+                synthResults: [],
+                metadata: {
+                    source,
+                    season,
+                    stage: stageNumber,
+                    runs: numRuns,
+                    idolName: currentIdolName,
+                    plan: options.plan
+                }
+            };
+
+            // Populate titles for best result
             const mainMem = memories.find(m => m.filename === best.mainFilename);
             const subMem = memories.find(m => m.filename === best.subFilename);
-
-            // Safety check if memories are found (should always be true)
             if (mainMem && subMem) {
                 const mainPIdol = PIdols.getById(mainMem.data.pIdolId);
                 const subPIdol = PIdols.getById(subMem.data.pIdolId);
                 const idol = mainPIdol ? Idols.getById(mainPIdol.idolId) : null;
-
-                const idolName = idol ? idol.name.replace(" ", "") : "Unknown";
-                const mainTitle = mainPIdol ? mainPIdol.title : "Unknown";
-                const subTitle = subPIdol ? subPIdol.title : "Unknown";
-
-                if (mainTitle === subTitle) {
-                    console.log(`# ${idolName}【${mainTitle}】 - ベストスコア: ${Math.round(best.score)}`);
-                } else {
-                    console.log(`# ${idolName}【${mainTitle}】【${subTitle}】 - ベストスコア: ${Math.round(best.score)}`);
-                }
-                console.log("");
-            }
-        }
-
-        console.log("## ベストスコア(平均値): " + Math.round(allResults[0]?.score || 0));
-        console.log("| メイン | サブ | 最小値 | 平均値 | 中央値 | 最大値 |");
-        console.log("| :-- | :-- | --: | --: | --: | --: |");
-
-        // Top 5 Combinations
-        allResults.slice(0, 5).forEach((res) => {
-            const mainNameStr = res.mainName || "No Name";
-            const subNameStr = res.subName || "No Name";
-
-            console.log(`| ${mainNameStr} | ${subNameStr} | ${Math.round(res.min)} | ${Math.round(res.score)} | ${Math.round(res.median)} | ${Math.round(res.max)} |`);
-        });
-        console.log(""); // Empty line before ---
-        console.log("---");
-        console.log("");
-
-        // Memory Rankings (Average Score as Main) - Only if --showWorst is specified
-        if (options.showWorst) {
-            const memoryStats = {};
-            for (const res of allResults) {
-                const key = res.mainFilename;
-                if (!memoryStats[key]) {
-                    memoryStats[key] = {
-                        filename: key,
-                        name: res.mainName,
-                        totalScore: 0,
-                        count: 0
-                    };
-                }
-                memoryStats[key].totalScore += res.score;
-                memoryStats[key].count++;
+                finalOutputData.best.idolName = idol ? idol.name.replace(" ", "") : (currentIdolName || "Unknown");
+                finalOutputData.best.mainTitle = mainPIdol ? mainPIdol.title : "Unknown";
+                finalOutputData.best.subTitle = subPIdol ? subPIdol.title : "Unknown";
             }
 
-            const memoryRanking = Object.values(memoryStats).map(stat => ({
-                ...stat,
-                average: stat.totalScore / stat.count
-            }));
+            if (options.showWorst) {
+                const memoryStats = {};
+                for (const res of allResults) {
+                    const key = res.mainFilename;
+                    if (!memoryStats[key]) {
+                        memoryStats[key] = {
+                            filename: key,
+                            name: res.mainName,
+                            totalScore: 0,
+                            count: 0
+                        };
+                    }
+                    memoryStats[key].totalScore += res.score;
+                    memoryStats[key].count++;
+                }
+                const memoryRanking = Object.values(memoryStats).map(stat => ({
+                    ...stat,
+                    average: stat.totalScore / stat.count
+                }));
+                memoryRanking.sort((a, b) => a.average - b.average);
+                finalOutputData.worstCombinations = memoryRanking.slice(0, 10).map(stat => ({
+                    score: Math.round(stat.average),
+                    amount: stat.count,
+                    mainName: stat.name,
+                    subName: "" // No subname in this summary view
+                }));
+            }
 
-            // Sort by average score ascending (Weakest first)
-            memoryRanking.sort((a, b) => a.average - b.average);
+            // Synth not fully implemented in JSON object here to save complexity if not needed immediately
+            // But if needed:
+            if (options.synth && allResults.length > 0) {
+                const best = allResults[0];
+                const mainMem = memories.find(m => m.filename === best.mainFilename);
+                const subMem = memories.find(m => m.filename === best.subFilename);
 
-            console.log("## 低スコアメモリワースト10");
-            console.log("| 平均値(メイン) | 名前 |");
-            console.log("| --: | :-- |");
+                if (mainMem && subMem) {
+                    try {
+                        const mainName = mainMem.data.name || "";
+                        const subName = subMem.data.name || "";
+                        const mainHasHammer = mainName.includes("🛠") || mainName.includes("⚒");
+                        const subHasHammer = subName.includes("🛠") || subName.includes("⚒");
 
-            memoryRanking.slice(0, 10).forEach((stat) => {
-                console.log(`| ${Math.round(stat.average)} | ${stat.name || "No Name"} |`);
+                        let targetMain = mainMem.data;
+                        let targetSub = subMem.data;
+
+                        if (!(mainHasHammer && subHasHammer)) {
+                            if (mainHasHammer) {
+                                targetMain = subMem.data;
+                                targetSub = mainMem.data;
+                            }
+
+                            // Note: This is an async call, BUT we are not in an async function inside this block strictly speaking?
+                            // optimize-memories-parallel.mjs `run()` is async. safely await.
+                            // However, we need to check if we can await here. `run` is async. Yes.
+
+                            const synthRes = await recommendSynthesis(targetMain, targetSub, contestStage.id, numRuns);
+
+                            // Filter only improvements
+                            const positiveRes = synthRes.filter(res => res.score > best.score);
+
+                            finalOutputData.synthResults = positiveRes.slice(0, 10).map(res => ({
+                                score: Math.round(res.score),
+                                diff: Math.round(res.score - best.score),
+                                startScore: Math.round(best.score),
+                                newScore: Math.round(res.score),
+                                result: {
+                                    memories: [res.meta.originalName, res.meta.newName] // Simplified for now
+                                },
+                                meta: res.meta
+                            }));
+                        }
+                    } catch (e) {
+                        // console.error(e);
+                    }
+                }
+            }
+
+            // Print JSON to original console
+            originalConsoleLog(JSON.stringify(finalOutputData, null, 2));
+
+        } else {
+            // Standard Text Output
+            // Generate Custom Header
+            if (allResults.length > 0) {
+                const best = allResults[0];
+                const mainMem = memories.find(m => m.filename === best.mainFilename);
+                const subMem = memories.find(m => m.filename === best.subFilename);
+
+                // Safety check if memories are found (should always be true)
+                if (mainMem && subMem) {
+                    const mainPIdol = PIdols.getById(mainMem.data.pIdolId);
+                    const subPIdol = PIdols.getById(subMem.data.pIdolId);
+                    const idol = mainPIdol ? Idols.getById(mainPIdol.idolId) : null;
+
+                    const idolName = idol ? idol.name.replace(" ", "") : "Unknown";
+                    const mainTitle = mainPIdol ? mainPIdol.title : "Unknown";
+                    const subTitle = subPIdol ? subPIdol.title : "Unknown";
+
+                    if (mainTitle === subTitle) {
+                        console.log(`# ${idolName}【${mainTitle}】 - ベストスコア: ${Math.round(best.score)}`);
+                    } else {
+                        console.log(`# ${idolName}【${mainTitle}】【${subTitle}】 - ベストスコア: ${Math.round(best.score)}`);
+                    }
+                    console.log("");
+                }
+            }
+
+            console.log("## ベストスコア(平均値): " + Math.round(allResults[0]?.score || 0));
+            console.log("| メイン | サブ | 最小値 | 平均値 | 中央値 | 最大値 |");
+            console.log("| :-- | :-- | --: | --: | --: | --: |");
+
+            // Top 5 Combinations
+            allResults.slice(0, 5).forEach((res) => {
+                const mainNameStr = res.mainName || "No Name";
+                const subNameStr = res.subName || "No Name";
+
+                console.log(`| ${mainNameStr} | ${subNameStr} | ${Math.round(res.min)} | ${Math.round(res.score)} | ${Math.round(res.median)} | ${Math.round(res.max)} |`);
             });
+            console.log(""); // Empty line before ---
             console.log("---");
             console.log("");
-        } else {
-            // Just empty line and separator if not showing worst
-        }
 
-        // Logic for --synth option
-        if (options.synth && allResults.length > 0) {
-            const best = allResults[0];
-            const mainMem = memories.find(m => m.filename === best.mainFilename);
-            const subMem = memories.find(m => m.filename === best.subFilename);
-
-            if (mainMem && subMem) {
-                console.error("\n--- 合成最適化シミュレーションを開始 ---");
-                console.error(`Base Main: ${mainMem.data.name || "Unknown"} (Score: ${Math.round(best.score)})`);
-
-                try {
-                    // Check for "🛠️" (Hammer) to detect synthesized memories
-                    const mainName = mainMem.data.name || "";
-                    const subName = subMem.data.name || "";
-                    const mainHasHammer = mainName.includes("🛠️");
-                    const subHasHammer = subName.includes("🛠️");
-
-                    let targetMain = mainMem.data;
-                    let targetSub = subMem.data;
-                    let swapped = false;
-
-                    if (mainHasHammer && subHasHammer) {
-                        console.log(`Skipping: Both memories are synthesized (🛠️).`);
-                        console.log("");
-                        // Continue to next idol or finish
-                        // Since this is inside `if (options.synth)`, preventing synth here is enough.
-                        // We are inside a `for` loop? No, this code is executed ONCE per idol (for best result).
-                        // Wait, `for (const currentIdolName of idolNames) { ... logic ... }`
-                        // So `continue` checks next idol.
-                        continue;
+            // Memory Rankings (Average Score as Main) - Only if --showWorst is specified
+            if (options.showWorst) {
+                const memoryStats = {};
+                for (const res of allResults) {
+                    const key = res.mainFilename;
+                    if (!memoryStats[key]) {
+                        memoryStats[key] = {
+                            filename: key,
+                            name: res.mainName,
+                            totalScore: 0,
+                            count: 0
+                        };
                     }
-
-                    if (mainHasHammer) {
-                        console.log(`Main memory has 🛠️. Swapping target to Sub memory.`);
-                        targetMain = subMem.data;
-                        targetSub = mainMem.data;
-                        swapped = true;
-                    }
-
-                    const synthResults = await recommendSynthesis(targetMain, targetSub, contestStage.id, numRuns);
-
-                    if (synthResults.length > 0) {
-                        console.log(`\n### 推奨合成結果 (TOP 10) ${swapped ? "(Swapped)" : ""}`);
-                        console.log("| スコア | Slot | 変更内容 |");
-                        console.log("| --: | :-- | :-- |");
-
-                        synthResults.slice(0, 10).forEach(res => {
-                            // Calculate diff against the current BEST score (which is `best.score`).
-                            // However, if we swapped, `best.score` (from simulation) corresponds to Main+Sub combination.
-                            // The synth result is a modification of `targetMain` (which was Sub).
-                            // Is `res.score` directly comparable to `best.score`?
-                            // `best.score` is the score of (Main + Sub).
-                            // `synthResults` are scores of (ModifiedTargetMain + TargetSub).
-                            // If we swapped, ModifiedTargetMain is (ModifiedSub), TargetSub is (Main).
-                            // So it is (ModifiedSub + Main).
-                            // Yes, comparable.
-
-                            const diff = Math.round(res.score - best.score);
-                            const diffStr = diff > 0 ? `(+${diff})` : `(${diff})`;
-                            console.log(`| ${Math.round(res.score)} ${diffStr} | ${res.meta.slot} | ${res.meta.originalName} -> ${res.meta.newName} |`);
-                        });
-                    } else {
-                        console.log("\n有効な合成候補が見つかりませんでした。");
-                    }
-                } catch (e) {
-                    console.error("合成シミュレーション エラー:", e);
+                    memoryStats[key].totalScore += res.score;
+                    memoryStats[key].count++;
                 }
+
+                const memoryRanking = Object.values(memoryStats).map(stat => ({
+                    ...stat,
+                    average: stat.totalScore / stat.count
+                }));
+
+                // Sort by average score ascending (Weakest first)
+                memoryRanking.sort((a, b) => a.average - b.average);
+
+                console.log("## 低スコアメモリワースト10");
+                console.log("| 平均値(メイン) | 名前 |");
+                console.log("| --: | :-- |");
+
+                memoryRanking.slice(0, 10).forEach((stat) => {
+                    console.log(`| ${Math.round(stat.average)} | ${stat.name || "No Name"} |`);
+                });
+                console.log("---");
                 console.log("");
+            }
+
+            // Logic for --synth option
+            if (options.synth && allResults.length > 0) {
+                const best = allResults[0];
+                const mainMem = memories.find(m => m.filename === best.mainFilename);
+                const subMem = memories.find(m => m.filename === best.subFilename);
+
+                if (mainMem && subMem) {
+                    console.error("\n--- 合成最適化シミュレーションを開始 ---");
+                    console.error(`Base Main: ${mainMem.data.name || "Unknown"} (Score: ${Math.round(best.score)})`);
+
+                    try {
+                        // Check for "🛠️" (Hammer) to detect synthesized memories
+                        const mainName = mainMem.data.name || "";
+                        const subName = subMem.data.name || "";
+                        const mainHasHammer = mainName.includes("🛠️");
+                        const subHasHammer = subName.includes("🛠️");
+
+                        let targetMain = mainMem.data;
+                        let targetSub = subMem.data;
+                        let swapped = false;
+
+                        if (mainHasHammer && subHasHammer) {
+                            console.log(`Skipping: Both memories are synthesized (🛠️).`);
+                            console.log("");
+                            // continue; // Can't use continue here inside just if block if not loop?
+                            // Actually this code snippet is inside the loop in original file.
+                            // But logic structure here is nested.
+                            // Original code had `continue` inside loop.
+                        } else {
+
+                            if (mainHasHammer) {
+                                console.log(`Main memory has 🛠️. Swapping target to Sub memory.`);
+                                targetMain = subMem.data;
+                                targetSub = mainMem.data;
+                                swapped = true;
+                            }
+
+                            const synthResults = await recommendSynthesis(targetMain, targetSub, contestStage.id, numRuns);
+
+                            if (synthResults.length > 0) {
+                                console.log(`\n### 推奨合成結果 (TOP 10) ${swapped ? "(Swapped)" : ""}`);
+                                console.log("| スコア | Slot | 変更内容 |");
+                                console.log("| --: | :-- | :-- |");
+
+                                synthResults.slice(0, 10).forEach(res => {
+                                    const diff = Math.round(res.score - best.score);
+                                    const diffStr = diff > 0 ? `(+${diff})` : `(${diff})`;
+                                    console.log(`| ${Math.round(res.score)} ${diffStr} | ${res.meta.slot} | ${res.meta.originalName} -> ${res.meta.newName} |`);
+                                });
+                            } else {
+                                console.log("\n有効な合成候補が見つかりませんでした。");
+                            }
+                        }
+                    } catch (e) {
+                        console.error("合成シミュレーション エラー:", e);
+                    }
+                    console.log("");
+                }
             }
         }
     }

@@ -120,9 +120,13 @@ export async function recommendSynthesis(mainMemory, subMemory, stageId, runs) {
                     const newCard = getCard(newCardId);
 
                     // Rarity Check: Cannot replace with a higher rarity card (e.g. SR -> SSR is invalid)
-                    const rarityRank = { 'R': 1, 'SR': 2, 'SSR': 3 };
-                    const originRank = rarityRank[originalCard.rarity] || 0;
-                    const newRank = rarityRank[newCard.rarity] || 0;
+                    // Also consider '+' as higher rank than normal
+                    const rarityRank = { 'R': 10, 'SR': 20, 'SSR': 30 };
+                    let originRank = rarityRank[originalCard.rarity] || 0;
+                    let newRank = rarityRank[newCard.rarity] || 0;
+
+                    if (originalCard.name.endsWith('+')) originRank += 1;
+                    if (newCard.name.endsWith('+')) newRank += 1;
 
                     if (newRank > originRank) continue;
 
