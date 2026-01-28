@@ -23,6 +23,16 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+
+## 2026-01-27
+
+- Add new skill cards and p-items
+
+## 2026-01-26
+
+- Add preview of Michinaru Hirogaru China and Hiro
+
 ## 2026-01-19
 
 - Add preview of season 38

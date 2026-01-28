@@ -610,20 +610,36 @@ import image_73_7 from "./73_7.png";
 import image_737 from "./737.png";
 import image_738 from "./738.png";
 import image_73_8 from "./73_8.png";
+import image_739 from "./739.png";
 import image_73_9 from "./73_9.png";
+import image_740 from "./740.png";
 import image_74_1 from "./74_1.png";
+import image_741 from "./741.png";
 import image_74_2 from "./74_2.png";
+import image_742 from "./742.png";
 import image_74_3 from "./74_3.png";
+import image_743 from "./743.png";
 import image_74_4 from "./74_4.png";
+import image_744 from "./744.png";
 import image_74_5 from "./74_5.png";
+import image_745 from "./745.png";
 import image_74_6 from "./74_6.png";
+import image_746 from "./746.png";
 import image_74_7 from "./74_7.png";
+import image_747 from "./747.png";
+import image_748 from "./748.png";
 import image_74_8 from "./74_8.png";
+import image_749 from "./749.png";
 import image_74_9 from "./74_9.png";
+import image_750 from "./750.png";
 import image_75_1 from "./75_1.png";
+import image_751 from "./751.png";
 import image_75_2 from "./75_2.png";
+import image_752 from "./752.png";
 import image_75_3 from "./75_3.png";
+import image_753 from "./753.png";
 import image_75_4 from "./75_4.png";
+import image_754 from "./754.png";
 import image_75_5 from "./75_5.png";
 import image_75_6 from "./75_6.png";
 import image_75_7 from "./75_7.png";
@@ -3714,20 +3730,36 @@ const IMAGES = {
   '737': image_737,
   '738': image_738,
   '73_8': image_73_8,
+  '739': image_739,
   '73_9': image_73_9,
+  '740': image_740,
   '74_1': image_74_1,
+  '741': image_741,
   '74_2': image_74_2,
+  '742': image_742,
   '74_3': image_74_3,
+  '743': image_743,
   '74_4': image_74_4,
+  '744': image_744,
   '74_5': image_74_5,
+  '745': image_745,
   '74_6': image_74_6,
+  '746': image_746,
   '74_7': image_74_7,
+  '747': image_747,
+  '748': image_748,
   '74_8': image_74_8,
+  '749': image_749,
   '74_9': image_74_9,
+  '750': image_750,
   '75_1': image_75_1,
+  '751': image_751,
   '75_2': image_75_2,
+  '752': image_752,
   '75_3': image_75_3,
+  '753': image_753,
   '75_4': image_75_4,
+  '754': image_754,
   '75_5': image_75_5,
   '75_6': image_75_6,
   '75_7': image_75_7,

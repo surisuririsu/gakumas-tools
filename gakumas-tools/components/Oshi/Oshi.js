@@ -6,9 +6,9 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: <div><IdolIcon idolId={6} />伊藤舞音のおいでよまおーこくだい10かい</div>,
+  text: <div>「MISHIMALIVE READING PROJECT Vol.1」配信チケット発売中！伊藤舞音さんは1月29日の公演③と④に出演します！<IdolIcon idolId={6} /></div>,
   initiallyExpanded: true,
-  url: "https://www.youtube.com/watch?v=136W_0OjNm0",
+  url: "https://www.confetti-web.com/events/13430",
 }
 
 export default function Oshi({

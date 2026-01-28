@@ -382,3 +382,9 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 381,憧れのはじまり,SSR,FALSE,anomaly,stage,pIdol,123,FALSE,"at:stanceChanged,if:isFullPower,do:nullifyCostActiveCards+=1,limit:3;at:stanceChanged,if:isFullPower,target:mental,do:g.genki+=4,limit:2"
 382,憧れのはじまり+,SSR,TRUE,anomaly,stage,pIdol,123,FALSE,"at:stanceChanged,if:isFullPower,do:nullifyCostActiveCards+=1,limit:3;at:stanceChanged,if:isFullPower,target:mental,do:g.genki+=5,limit:3"
 383,そっくりワンマン,SR,FALSE,anomaly,produce,support,,FALSE,
+384,ひろがる未来へ,SSR,FALSE,sense,stage,pIdol,124,FALSE,"at:buffCostConsumed,if:goodConditionTurns>=3,do:concentration+=2,do:goodConditionTurns-=1;at:buffCostConsumed,if:goodConditionTurns>=3;at:turn,do:drawCard,limit:1;"
+385,ひろがる未来へ+,SSR,TRUE,sense,stage,pIdol,124,FALSE,"at:buffCostConsumed,if:goodConditionTurns>=3,do:concentration+=2,do:goodConditionTurns-=1;at:buffCostConsumed,if:goodConditionTurns>=3;at:turn,do:drawCard,do:drawCard,limit:1;"
+386,みちなるシグナル,SSR,FALSE,logic,stage,pIdol,125,FALSE,"at:startOfStage,do:genki+=7,do:motivation+=4,do:fixedStamina-=maxStamina*0.8,limit:1;at:buffCostConsumed,do:fixedStamina+=maxStamina*0.2,do:setGoodImpressionTurnsEffectBuff(0.1)"
+387,みちなるシグナル+,SSR,TRUE,logic,stage,pIdol,125,FALSE,"at:startOfStage,do:genki+=8,do:motivation+=5,do:fixedStamina-=maxStamina*0.8,limit:1;at:buffCostConsumed,do:fixedStamina+=maxStamina*0.2,do:setGoodImpressionTurnsEffectBuff(0.1)"
+388,はじめてのけんか?,SSR,FALSE,sense,produce,support,,FALSE,
+389,迷子のゆくえ,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfTurn,if:isVocalTurn,if:stamina<=maxStamina*0.5,do:motivation+=2,do:halfCostTurns+=2,limit:1"
