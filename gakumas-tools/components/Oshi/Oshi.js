@@ -6,9 +6,9 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: <div>「MISHIMALIVE READING PROJECT Vol.1」配信チケット発売中！伊藤舞音さんは1月29日の公演③と④に出演します！<IdolIcon idolId={6} /></div>,
+  text: <div>『メダリスト』第2期score15「私のカード」に伊藤舞音さんが申川りんな役として出演しています！<IdolIcon idolId={6} /></div>,
   initiallyExpanded: true,
-  url: "https://www.confetti-web.com/events/13430",
+  url: "https://youtu.be/-0EsoLexKUU",
 }
 
 export default function Oshi({
