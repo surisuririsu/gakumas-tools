@@ -428,6 +428,9 @@ export default class Executor extends EngineComponent {
       // Apply enthusiasm
       score += state[S.enthusiasm];
 
+      // Round
+      score = Math.ceil(score);
+
       // Apply good and perfect condition
       if (state[S.goodConditionTurns]) {
         score *=
@@ -453,9 +456,6 @@ export default class Executor extends EngineComponent {
       } else if (state[S.stance] == "leisure") {
         score *= 0;
       }
-
-      // Round
-      score = Math.ceil(score);
 
       // Score buff effects
       let scoreBuff = state[S.scoreBuffs].reduce(
