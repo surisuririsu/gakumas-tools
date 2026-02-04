@@ -6,9 +6,9 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: <div>『メダリスト』第2期score15「私のカード」に伊藤舞音さんが申川りんな役として出演しています！<IdolIcon idolId={6} /></div>,
+  text: <div><IdolIcon idolId={6} />「伊藤舞音 浅見香月のおかづラジオ FIRST-BITE 2026」通常チケット 一般販売受付中です！</div>,
   initiallyExpanded: true,
-  url: "https://youtu.be/-0EsoLexKUU",
+  url: "https://nicochannel.jp/okazuradio/articles/news/arZQmcTWYyxkv5NRhrhLCUMB",
 }
 
 export default function Oshi({
