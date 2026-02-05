@@ -25,6 +25,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-02-05
+
+- Add S39 preview
+
 ## 2026-01-27
 
 - Add new skill cards and p-items
