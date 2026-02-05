@@ -21,11 +21,11 @@ for image_type, size in IMAGE_SIZES.items():
     directory = f"packages/gakumas-images/images/{image_type}"
     for filename in os.listdir(directory):
         # Skip if the file already exists
-        output_filename = (
-            f"gk-img/docs/{snake_slug}/{filename}"
-            if image_type == "idols"
-            else f"gk-img/docs/{snake_slug}/{re.sub(r'\.(png|jpg)', '.webp', filename)}"
-        )
+        if image_type == "idols":
+            output_filename = f"gk-img/docs/{snake_slug}/{filename}"
+        else:
+            webp_filename = re.sub(r'\.(png|jpg)', '.webp', filename)
+            output_filename = f"gk-img/docs/{snake_slug}/{webp_filename}"
         if os.path.isfile(output_filename):
             continue
 
