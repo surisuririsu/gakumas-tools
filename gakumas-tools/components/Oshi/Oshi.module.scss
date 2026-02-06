@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     border-radius: 0 0 16px 16px;
-    background: colors.$mishima;
+    background: colors.$pxw-mao;
     padding: 4px 8px;
     color: colors.$white;
     text-align: center;
@@ -17,7 +17,7 @@
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: color.adjust(colors.$mishima, $lightness: -10%);
+      background-color: color.adjust(colors.$pxw-mao, $lightness: -10%);
     }
   }
 }

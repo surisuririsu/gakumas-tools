@@ -6,9 +6,9 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: <div>「MISHIMALIVE READING PROJECT Vol.1」配信チケット発売中！伊藤舞音さんは1月29日の公演③と④に出演します！<IdolIcon idolId={6} /></div>,
+  text: <div><IdolIcon idolId={6} />「伊藤舞音 浅見香月のおかづラジオ FIRST-BITE 2026」通常チケット 一般販売受付中です！</div>,
   initiallyExpanded: true,
-  url: "https://www.confetti-web.com/events/13430",
+  url: "https://nicochannel.jp/okazuradio/articles/news/arZQmcTWYyxkv5NRhrhLCUMB",
 }
 
 export default function Oshi({
