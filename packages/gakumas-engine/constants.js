@@ -222,6 +222,7 @@ export const ALL_FIELDS = [
   "natsuyaCardsUsed",
   "holidayCardsUsed",
   "onigiriCardsUsed",
+  "koeteCardsUsed",
   "nullifySelect",
 
   // Delta
