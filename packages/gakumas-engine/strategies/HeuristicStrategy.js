@@ -155,6 +155,9 @@ export default class HeuristicStrategy extends BaseStrategy {
     // Cards in hand
     score += state[S.handCards].length * 3;
 
+    // Cards used
+    score += state[S.cardsUsed] * 8;
+
     // Stamina
     score += state[S.stamina] * state[S.turnsRemaining] * 0.05;
 

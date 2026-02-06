@@ -388,3 +388,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 387,みちなるシグナル+,SSR,TRUE,logic,stage,pIdol,125,FALSE,"at:startOfStage,do:genki+=8,do:motivation+=5,do:fixedStamina-=maxStamina*0.8,limit:1;at:buffCostConsumed,do:fixedStamina+=maxStamina*0.2,do:setGoodImpressionTurnsEffectBuff(0.1)"
 388,はじめてのけんか?,SSR,FALSE,sense,produce,support,,FALSE,
 389,迷子のゆくえ,SSR,FALSE,logic,stage,support,,FALSE,"at:startOfTurn,if:isVocalTurn,if:stamina<=maxStamina*0.5,do:motivation+=2,do:halfCostTurns+=2,limit:1"
+390,最初の鳥,SSR,FALSE,logic,stage,pIdol,126,FALSE,"at:turn,if:turnsElapsed%2==1,if:genki>=30,do:fixedStamina+=2,do:score+=genki*0.25*countCards(removed\757)"
+391,最初の鳥+,SSR,TRUE,logic,stage,pIdol,126,FALSE,"at:turn,if:turnsElapsed%2==1,if:genki>=30,do:fixedStamina+=2,do:score+=genki*0.25*countCards(removed\757)"
