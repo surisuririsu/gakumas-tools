@@ -756,3 +756,4 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 755,私を超えて,,SSR,mental,logic,1,FALSE,TRUE,pIdol,126,TRUE,,do:cost-=3,"do:cardUsesRemaining+=1;at:cardUsed,if:cardEffects&genki,do:koeteCardsUsed+=1;at:cardUsed,if:cardEffects&genki,if:koeteCardsUsed%2==1,do:addCardToTopOfDeck(757)",1,
 756,私を超えて+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,126,TRUE,,do:cost-=3,"do:cardUsesRemaining+=1;at:cardUsed,if:cardEffects&genki,do:koeteCardsUsed+=1;at:cardUsed,if:cardEffects&genki,if:koeteCardsUsed%2==1,do:addCardToTopOfDeck(757)",1,
 757,私を超えて(翔),,SSR,active,logic,1,FALSE,TRUE,pIdol,126,FALSE,if:genki>=15,do:stamina-=1,"do:score+=genki*0.8,do:cardUsesRemaining+=1,do:drawCard",1,
+758,お姉ちゃん、参戦！,,SSR,active,logic,1,FALSE,TRUE,support,,FALSE,if:motivation>=6,do:stamina-=3,"do:genki+=3,do:score+=genki;at:turn,do:drawCard,do:drawCard,limit:1",1,
