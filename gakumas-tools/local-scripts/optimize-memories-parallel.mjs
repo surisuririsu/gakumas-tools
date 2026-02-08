@@ -183,24 +183,35 @@ async function run() {
                 const db = mongoClient.db(process.env.MONGODB_DB || "gakumas-tools");
                 simulationResultsCollection = db.collection("simulation_results");
 
-                // Pre-fetch existing results for this stage/runs to filter
-                // Optimization: Maybe only fetch hashes?
-                const query = {
-                    stageId: contestStage.id,
-                    runs: numRuns,
-                    season: season
-                };
-                // If we could restrict by idol, that would be better, but we are cross-combining?
-                // Actually combinations are strictly within `memories` list which is filtered by Idol.
-                // So all combinations involve this idol (as Main).
-                // Wait, combinations are `memories` x `memories`.
-                // And `memories` contains only `currentIdolName`'s memories (if options.idolName is set).
-                // Yes.
+                if (options.force) {
+                    const deleteQuery = {
+                        stageId: contestStage.id,
+                        runs: numRuns,
+                        season: season
+                    };
+                    console.error(`--force 指定: キャッシュを削除します... (Stage ID: ${contestStage.id}, Runs: ${numRuns}, Season: ${season})`);
+                    const delRes = await simulationResultsCollection.deleteMany(deleteQuery);
+                    console.error(`削除完了: ${delRes.deletedCount} 件のキャッシュを削除しました。`);
+                } else {
+                    // Pre-fetch existing results for this stage/runs to filter
+                    // Optimization: Maybe only fetch hashes?
+                    const query = {
+                        stageId: contestStage.id,
+                        runs: numRuns,
+                        season: season
+                    };
+                    // If we could restrict by idol, that would be better, but we are cross-combining?
+                    // Actually combinations are strictly within `memories` list which is filtered by Idol.
+                    // So all combinations involve this idol (as Main).
+                    // Wait, combinations are `memories` x `memories`.
+                    // And `memories` contains only `currentIdolName`'s memories (if options.idolName is set).
+                    // Yes.
 
-                const cached = await simulationResultsCollection.find(query).project({ mainHash: 1, subHash: 1 }).toArray();
-                cached.forEach(c => existingResultsSet.add(`${c.mainHash}_${c.subHash}`));
+                    const cached = await simulationResultsCollection.find(query).project({ mainHash: 1, subHash: 1 }).toArray();
+                    cached.forEach(c => existingResultsSet.add(`${c.mainHash}_${c.subHash}`));
 
-                console.error(`キャッシュ済み結果: ${cached.length} 件`);
+                    console.error(`キャッシュ済み結果: ${cached.length} 件`);
+                }
 
             } catch (e) {
                 console.error("Cache DB Connection Error:", e);
@@ -212,10 +223,19 @@ async function run() {
         const combinations = [];
         let skippedCount = 0;
 
+        const comparePattern = options.compare ? new RegExp(options.compare.replace(/\*/g, '.*')) : null;
+
         for (const mainMem of memories) {
             for (const subMem of memories) {
                 // For DB sourced items, filename might be the ID string, ensure uniqueness check works
                 if (mainMem.filename === subMem.filename) continue;
+
+                // If compare mode is active, at least one memory must match the pattern
+                if (comparePattern) {
+                    const mainMatch = mainMem.data.name && comparePattern.test(mainMem.data.name);
+                    const subMatch = subMem.data.name && comparePattern.test(subMem.data.name);
+                    if (!mainMatch && !subMatch) continue;
+                }
 
                 // Check Cache
                 if (!options.force && existingResultsSet.has(`${mainMem.hash}_${subMem.hash}`)) {
@@ -501,7 +521,7 @@ async function run() {
                 finalOutputData.best.subTitle = subPIdol ? subPIdol.title : "Unknown";
             }
 
-            if (options.showWorst) {
+            if (options.showWorst || options.compare) {
                 const memoryStats = {};
                 for (const res of allResults) {
                     const key = res.mainFilename;
@@ -520,8 +540,10 @@ async function run() {
                     ...stat,
                     average: stat.totalScore / stat.count
                 }));
+                // If compare mode, we might want all of them, or at least the ones matching pattern
+                // For now, let's keep the name worstCombinations but include the matching ones
                 memoryRanking.sort((a, b) => a.average - b.average);
-                finalOutputData.worstCombinations = memoryRanking.slice(0, 10).map(stat => ({
+                finalOutputData.worstCombinations = (options.compare ? memoryRanking : memoryRanking.slice(0, 10)).map(stat => ({
                     score: Math.round(stat.average),
                     amount: stat.count,
                     mainName: stat.name,
