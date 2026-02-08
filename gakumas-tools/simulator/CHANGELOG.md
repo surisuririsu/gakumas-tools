@@ -4,26 +4,13 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+## 2026-02-06
 
+- Add preview of Sekirara Sena
 
+## 2026-02-05
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- Add S39 preview
 
 ## 2026-01-27
 

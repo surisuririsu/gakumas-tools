@@ -120,6 +120,7 @@ export default class CardManager extends EngineComponent {
     state[S.natsuyaCardsUsed] = 0;
     state[S.holidayCardsUsed] = 0;
     state[S.onigiriCardsUsed] = 0;
+    state[S.koeteCardsUsed] = 0;
   }
 
   changeIdol(state) {
@@ -439,7 +440,8 @@ export default class CardManager extends EngineComponent {
     return (
       !skillCard.upgraded &&
       skillCard.type != "trouble" &&
-      skillCard.rarity != "L"
+      skillCard.rarity != "L" &&
+      skillCard.id != 757
     );
   }
 
