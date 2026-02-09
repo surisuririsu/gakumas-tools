@@ -387,7 +387,9 @@ import image_386 from "./386.png";
 import image_387 from "./387.png";
 import image_388 from "./388.png";
 import image_389 from "./389.png";
+import image_390 from "./390.png";
 import image_391 from "./391.png";
+import image_392 from "./392.png";
 
 const IMAGES = {
   '1': image_1,
@@ -779,7 +781,9 @@ const IMAGES = {
   '387': image_387,
   '388': image_388,
   '389': image_389,
+  '390': image_390,
   '391': image_391,
+  '392': image_392,
 };
 
 export default IMAGES;
