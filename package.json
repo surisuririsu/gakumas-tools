@@ -5,10 +5,11 @@
     "dev": "yarn workspace gakumas-tools dev",
     "build": "yarn workspace gakumas-tools build",
     "process": "python -m scripts.process_screenshots",
-    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
+    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python3 -m scripts.generate",
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "changelog": "node ./scripts/changelog.js",
-    "backup-db": "yarn workspace gakumas-tools backup-db"
+    "backup-db": "yarn workspace gakumas-tools backup-db",
+    "cli": "yarn workspace gakumas-tools-cli-utility start"
   },
   "workspaces": [
     "gakumas-tools",

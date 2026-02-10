@@ -80,8 +80,8 @@ export default class IdolConfig {
 
   inferPlan(pItemIds, skillCardIds) {
     for (let id of skillCardIds) {
-      const { plan } = SkillCards.getById(id);
-      if (plan != "free") return plan;
+      const card = SkillCards.getById(id);
+      if (card && card.plan != "free") return card.plan;
     }
     for (let id of pItemIds) {
       const { plan } = PItems.getById(id);
@@ -111,6 +111,11 @@ export default class IdolConfig {
 
     for (let i = 0; i < sortedCards.length; i++) {
       const skillCard = SkillCards.getById(sortedCards[i].id);
+      if (!skillCard) {
+        console.warn(`[WARNING] SkillCard with ID ${sortedCards[i].id} not found in database. Skipping duplicate check for this card.`);
+        dedupedCards.push(sortedCards[i]);
+        continue;
+      }
       if (skillCard.unique && !["L", "T"].includes(skillCard.rarity)) {
         const baseId = getBaseId(skillCard);
         if (dedupedCards.some((d) => [baseId, baseId + 1].includes(d.id))) {
