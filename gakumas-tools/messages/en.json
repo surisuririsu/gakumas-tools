@@ -362,5 +362,8 @@
     "accuracyNotGuaranteed": "Accuracy is not guaranteed. It is recommended to manually verify the results by comparing with your screenshots.",
     "stage": "Stage {n}",
     "score": "Score"
+  },
+  "KofiAd": {
+    "prompt": "Support this project"
   }
 }
