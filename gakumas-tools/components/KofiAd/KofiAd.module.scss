@@ -1,16 +1,23 @@
 @use "../../styles/colors";
 
 .kofiAd {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-top: 12px;
   color: colors.$black;
-  font-size: 18px;
-  font-weight: 600;
-  border: 1px solid colors.$black;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  svg {
+    font-size: 14px;
+    color: #ff5e5b;
+  }
 }
