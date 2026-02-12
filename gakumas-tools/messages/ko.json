@@ -364,7 +364,6 @@
     "score": "스코어"
   },
   "KofiAd": {
-    "prompt": "GAKUMAS TOOLS가 도움이 되셨나요?",
-    "imageAlt": "Ko-Fi에서 후원하기"
+    "prompt": "이 프로젝트 후원하기"
   }
 }
