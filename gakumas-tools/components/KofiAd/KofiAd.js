@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import Image from "@/components/Image";
+import { SiKofi } from "react-icons/si";
 import styles from "./KofiAd.module.scss";
 
 export default function KofiAd() {
@@ -10,15 +10,8 @@ export default function KofiAd() {
       href="https://ko-fi.com/surisuririsu"
       target="_blank"
     >
-      <div className={styles.text}>
-        <div>{t("prompt")}</div>
-      </div>
-      <Image
-        src="/support_me_on_kofi_blue.webp"
-        alt={t("imageAlt")}
-        width={213}
-        height={43}
-      />
+      <SiKofi />
+      <span>{t("prompt")}</span>
     </a>
   );
 }
