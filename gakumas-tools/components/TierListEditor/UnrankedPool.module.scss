@@ -1,0 +1,93 @@
+@use "../../styles/colors";
+
+.unrankedPool {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.poolHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.searchWrapper {
+  flex: 1;
+  max-width: 300px;
+}
+
+.entityCount {
+  font-size: 0.9rem;
+  color: colors.$gray-dark;
+  white-space: nowrap;
+}
+
+.entityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: colors.$gray-extra-light;
+}
+
+.unrankedEntity {
+  cursor: grab;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 1;
+  }
+
+  &.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg) scale(0.9);
+    cursor: grabbing;
+  }
+}
+
+.emptyPool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  text-align: center;
+  color: colors.$gray;
+  font-style: italic;
+  border: 2px dashed colors.$gray-light;
+  border-radius: 8px;
+  background-color: colors.$gray-extra-light;
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .poolHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchWrapper {
+    max-width: none;
+  }
+
+  .entityCount {
+    text-align: center;
+  }
+
+  .entityGrid {
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 8px;
+    padding: 12px;
+    max-height: 300px;
+  }
+}

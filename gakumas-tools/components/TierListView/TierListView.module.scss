@@ -1,0 +1,214 @@
+@use "../../styles/colors";
+
+.tierListView {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  h1 {
+    color: colors.$gk-orange;
+    font-size: 2rem;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.entityType {
+  background-color: colors.$gray-light;
+  color: colors.$gray-dark;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    align-self: stretch;
+    justify-content: stretch;
+    
+    > * {
+      flex: 1;
+    }
+  }
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: colors.$gray-dark;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.date {
+  color: colors.$gray;
+}
+
+.updated {
+  font-style: italic;
+}
+
+.visibility {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  background-color: colors.$green-extra-light;
+  color: colors.$green-dark;
+}
+
+.description {
+  background-color: colors.$gray-extra-light;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+
+  p {
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tierRow {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.tierLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-width: 80px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+
+  .count {
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin-top: 4px;
+  }
+}
+
+.tierEntities {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 12px;
+  gap: 8px;
+  min-height: 80px;
+}
+
+.entityWrapper {
+  flex-shrink: 0;
+}
+
+.emptyTier {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: colors.$gray;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
+  font-size: 1.2rem;
+  color: colors.$gray-dark;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px;
+  text-align: center;
+  
+  h1 {
+    color: colors.$red-dark;
+    margin: 0 0 16px 0;
+  }
+  
+  p {
+    color: colors.$gray-dark;
+    margin: 0 0 24px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .tierListView {
+    padding: 16px;
+  }
+
+  .tierRow {
+    flex-direction: column;
+  }
+
+  .tierLabel {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 16px;
+    min-width: auto;
+    
+    .count {
+      margin-top: 0;
+    }
+  }
+
+  .tierEntities {
+    padding: 16px;
+    min-height: 60px;
+  }
+}

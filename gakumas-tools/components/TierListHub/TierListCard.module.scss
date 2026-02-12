@@ -1,0 +1,128 @@
+@use "../../styles/colors";
+
+.tierListCard {
+  background: white;
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 20px;
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: colors.$gk-orange;
+  flex: 1;
+  word-break: break-word;
+}
+
+.entityType {
+  background-color: colors.$gray-light;
+  color: colors.$gray-dark;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.description {
+  margin: 0 0 16px 0;
+  color: colors.$gray-dark;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: colors.$gray-dark;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.date {
+  color: colors.$gray;
+}
+
+.tierSummary {
+  font-family: monospace;
+  background-color: colors.$gray-extra-light;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.totalEntities {
+  font-weight: 500;
+  color: colors.$gk-orange;
+}
+
+.visibility {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  align-self: flex-start;
+  
+  &:has-text("Public") {
+    background-color: colors.$green-extra-light;
+    color: colors.$green-dark;
+  }
+  
+  &:has-text("Private") {
+    background-color: colors.$red-extra-light;
+    color: colors.$red-dark;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+@media (max-width: 480px) {
+  .tierListCard {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .entityType {
+    align-self: flex-start;
+  }
+
+  .actions {
+    justify-content: stretch;
+    
+    > * {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}

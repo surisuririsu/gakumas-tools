@@ -39,6 +39,10 @@
     "rehearsal": {
       "title": "リハーサル読み取り",
       "description": "リハーサル画面のスクショからスコアを読み取る"
+    },
+    "tierLists": {
+      "title": "ティアリスト",
+      "description": "Pアイドル、スキルカード、Pアイテムのコミュニティティアリストを作成、共有する"
     }
   },
   "NavbarMenu": {
@@ -362,6 +366,55 @@
     "accuracyNotGuaranteed": "精度は保証できません。スクリーンショットと比較して、結果を確認することをお勧めします。",
     "stage": "ステージ{n}",
     "score": "スコア"
+  },
+  "TierList": {
+    "title": "ティアリスト",
+    "createNew": "ティアリスト作成",
+    "myTierLists": "マイティアリスト",
+    "community": "コミュニティ",
+    "browse": "閲覧",
+    "entityType": "カテゴリー",
+    "pIdol": "Pアイドル",
+    "skillCard": "スキルカード",
+    "pItem": "Pアイテム",
+    "tierLabels": { "S": "S", "A": "A", "B": "B", "C": "C", "D": "D", "F": "F" },
+    "unranked": "未ランク",
+    "save": "保存",
+    "publish": "公開",
+    "edit": "編集",
+    "delete": "削除",
+    "share": "共有",
+    "copied": "リンクをコピーしました！",
+    "noTierLists": "ティアリストがありません",
+    "loginToCreate": "Discordでログインしてティアリストを作成",
+    "votes": "{count}票",
+    "avgTier": "平均: {tier}",
+    "filters": "フィルター",
+    "titlePlaceholder": "ティアリストのタイトル...",
+    "descriptionPlaceholder": "説明（任意）...",
+    "createdBy": "{author}が作成",
+    "createdAt": "{date}に作成",
+    "updatedAt": "{date}に更新",
+    "totalEntities": "{count}個のエンティティ",
+    "viewTierList": "表示",
+    "editTierList": "編集",
+    "deleteTierList": "削除",
+    "shareTierList": "共有",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "tryAgain": "再試行",
+    "confirmDelete": "このティアリストを削除してもよろしいですか？",
+    "dragHint": "下のプールからエンティティをドラッグしてティアにランク付けしてください",
+    "searchEntities": "エンティティを検索...",
+    "allPlans": "すべてのプラン",
+    "allRarities": "すべてのレア度",
+    "allSourceTypes": "すべてのソースタイプ",
+    "allModes": "すべてのモード",
+    "upgraded": "強化済み",
+    "notUpgraded": "未強化",
+    "both": "両方",
+    "publicTierList": "公開",
+    "privateTierList": "非公開"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

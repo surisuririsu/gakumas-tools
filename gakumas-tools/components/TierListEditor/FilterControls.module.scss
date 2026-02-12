@@ -1,0 +1,63 @@
+@use "../../styles/colors";
+
+.filterControls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filtersTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: colors.$gray-dark;
+  border-bottom: 1px solid colors.$gray-light;
+  padding-bottom: 8px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterLabel {
+  font-weight: 500;
+  color: colors.$gray-dark;
+  font-size: 0.9rem;
+}
+
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.radioOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: colors.$gray-dark;
+    cursor: pointer;
+    
+    input[type="radio"] {
+      accent-color: colors.$gk-orange;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filterOptions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .radioOptions {
+    gap: 6px;
+  }
+}
