@@ -362,5 +362,9 @@
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
     "stage": "舞台 {n}",
     "score": "分数"
+  },
+  "KofiAd": {
+    "prompt": "觉得GAKUMAS TOOLS好用吗？",
+    "imageAlt": "在Ko-Fi上支持我"
   }
 }
