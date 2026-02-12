@@ -311,6 +311,7 @@ export default function Simulator() {
         )}
         <SimulatorButtons />
         <div className={styles.subLinks}>
+            <KofiAd />
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
@@ -318,11 +319,6 @@ export default function Simulator() {
             {t("lastUpdated")}: 2026-02-09
           </a>
         </div>
-        {!simulatorData && (
-          <div className={styles.ad}>
-            <KofiAd />
-          </div>
-        )}
       </div>
 
       {strategy === "ManualStrategy" && simulatorData && (
