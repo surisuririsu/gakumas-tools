@@ -1,0 +1,174 @@
+@use "../../styles/colors";
+
+.tierListEditor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+  
+  h1 {
+    color: colors.$gk-orange;
+    font-size: 2rem;
+    margin: 0;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.basicInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: white;
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.entityTypeSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  label {
+    font-weight: 500;
+    color: colors.$gray-dark;
+  }
+}
+
+.entityTypeButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.entityTypeButton {
+  padding: 10px 20px;
+  border: 1px solid colors.$gray-light;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: colors.$gray-extra-light;
+  }
+
+  &.active {
+    background-color: colors.$gk-orange;
+    color: white;
+    border-color: colors.$gk-orange;
+  }
+}
+
+.visibilityControls {
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: colors.$gray-dark;
+    cursor: pointer;
+    
+    input[type="checkbox"] {
+      accent-color: colors.$gk-orange;
+    }
+  }
+}
+
+.tierEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  
+  h2 {
+    color: colors.$gray-dark;
+    font-size: 1.2rem;
+    margin: 0;
+    text-align: center;
+    padding: 16px;
+    background-color: colors.$gray-extra-light;
+    border-radius: 8px;
+  }
+}
+
+.tiers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.unrankedSection {
+  background: white;
+  border: 1px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 24px;
+  
+  h3 {
+    margin: 0 0 16px 0;
+    color: colors.$gray-dark;
+    font-size: 1.1rem;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
+  font-size: 1.2rem;
+  color: colors.$gray-dark;
+}
+
+.loginPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px;
+  text-align: center;
+  
+  h1 {
+    color: colors.$gray-dark;
+    margin: 0 0 24px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .tierListEditor {
+    padding: 16px;
+  }
+
+  .basicInfo {
+    padding: 16px;
+  }
+
+  .entityTypeButtons {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+    
+    > * {
+      flex: 1;
+    }
+  }
+
+  .unrankedSection {
+    padding: 16px;
+  }
+}

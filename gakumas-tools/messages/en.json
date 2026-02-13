@@ -39,6 +39,10 @@
     "rehearsal": {
       "title": "Rehearsal Parser",
       "description": "Parse scores from rehearsal screenshots"
+    },
+    "tierLists": {
+      "title": "Tier Lists",
+      "description": "Create and share community tier lists for P-Idols, Skill Cards, and P-Items"
     }
   },
   "NavbarMenu": {
@@ -362,6 +366,55 @@
     "accuracyNotGuaranteed": "Accuracy is not guaranteed. It is recommended to manually verify the results by comparing with your screenshots.",
     "stage": "Stage {n}",
     "score": "Score"
+  },
+  "TierList": {
+    "title": "Tier Lists",
+    "createNew": "Create Tier List",
+    "myTierLists": "My Tier Lists",
+    "community": "Community",
+    "browse": "Browse",
+    "entityType": "Category",
+    "pIdol": "P-Idol",
+    "skillCard": "Skill Card",
+    "pItem": "P-Item",
+    "tierLabels": { "S": "S", "A": "A", "B": "B", "C": "C", "D": "D", "F": "F" },
+    "unranked": "Unranked",
+    "save": "Save",
+    "publish": "Publish",
+    "edit": "Edit",
+    "delete": "Delete",
+    "share": "Share",
+    "copied": "Link copied!",
+    "noTierLists": "No tier lists yet",
+    "loginToCreate": "Log in with Discord to create tier lists",
+    "votes": "{count} votes",
+    "avgTier": "Average: {tier}",
+    "filters": "Filters",
+    "titlePlaceholder": "My tier list title...",
+    "descriptionPlaceholder": "Optional description...",
+    "createdBy": "Created by {author}",
+    "createdAt": "Created {date}",
+    "updatedAt": "Updated {date}",
+    "totalEntities": "{count} entities",
+    "viewTierList": "View",
+    "editTierList": "Edit",
+    "deleteTierList": "Delete",
+    "shareTierList": "Share",
+    "loading": "Loading...",
+    "error": "Error",
+    "tryAgain": "Try again",
+    "confirmDelete": "Are you sure you want to delete this tier list?",
+    "dragHint": "Drag entities from the pool below to rank them in tiers",
+    "searchEntities": "Search entities...",
+    "allPlans": "All Plans",
+    "allRarities": "All Rarities",
+    "allSourceTypes": "All Source Types",
+    "allModes": "All Modes",
+    "upgraded": "Upgraded",
+    "notUpgraded": "Not Upgraded",
+    "both": "Both",
+    "publicTierList": "Public",
+    "privateTierList": "Private"
   },
   "KofiAd": {
     "prompt": "Support this project"

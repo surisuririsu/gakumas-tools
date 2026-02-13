@@ -1,0 +1,151 @@
+@use "../../styles/colors";
+
+.tierListHub {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    color: colors.$gk-orange;
+    font-size: 2rem;
+    margin: 0;
+  }
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 2px solid colors.$gray-light;
+}
+
+.tab {
+  padding: 12px 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: colors.$gray-dark;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: colors.$gray-extra-light;
+  }
+
+  &.active {
+    color: colors.$gk-orange;
+    border-bottom-color: colors.$gk-orange;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  padding: 8px 16px;
+  border: 1px solid colors.$gray-light;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: colors.$gray-extra-light;
+  }
+
+  &.active {
+    background-color: colors.$gk-orange;
+    color: white;
+    border-color: colors.$gk-orange;
+  }
+}
+
+.content {
+  min-height: 400px;
+}
+
+.tierListGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  text-align: center;
+  color: colors.$gray-dark;
+
+  p {
+    font-size: 1.1rem;
+    margin: 0 0 16px 0;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  font-size: 1.1rem;
+  color: colors.$gray-dark;
+}
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.loginPrompt {
+  text-align: center;
+  margin-top: 32px;
+  padding: 24px;
+  background-color: colors.$gray-extra-light;
+  border-radius: 8px;
+  color: colors.$gray-dark;
+}
+
+@container (max-width: 768px) {
+  .tierListHub {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .tierListGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    justify-content: center;
+  }
+
+  .filters {
+    justify-content: center;
+  }
+}
