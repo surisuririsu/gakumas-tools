@@ -137,7 +137,7 @@ export default class Executor extends EngineComponent {
 
       // Fire increase/decrease triggers after each action
       if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
-        this._triggerChangeEffects(state, actionPrev);
+        this.triggerChangeEffects(state, actionPrev);
       }
     }
 
@@ -168,7 +168,7 @@ export default class Executor extends EngineComponent {
     }
   }
 
-  _triggerChangeEffects(state, actionPrev) {
+  triggerChangeEffects(state, actionPrev) {
     // Calculate diff for this action
     let increasedFields = new Set();
     let decreasedFields = new Set();
