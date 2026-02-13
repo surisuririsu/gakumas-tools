@@ -21,8 +21,9 @@ function EntityIcon({
   onSwap,
   showTier,
 }) {
-  const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
-  const { icon } = gkImg(entity, idolId);
+  const dataSource = ENTITY_DATA_BY_TYPE[type];
+  const entity = dataSource?.getById?.(id);
+  const { icon } = entity ? gkImg(entity, idolId) : {};
 
   const [{ isDragging }, dragRef] = useDrag({
     type: "ENTITY_ICON",
