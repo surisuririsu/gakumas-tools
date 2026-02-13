@@ -1,5 +1,5 @@
 "use client";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import Checkbox from "@/components/Checkbox";
 import styles from "./FilterControls.module.scss";
@@ -137,15 +137,28 @@ function FilterControls({ entityType, filters, onFiltersChange }) {
     </div>
   );
 
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <div className={styles.filterControls}>
-      <h3 className={styles.filtersTitle}>{t("filters")}</h3>
+      <button 
+        className={styles.filtersToggle}
+        onClick={() => setExpanded(!expanded)}
+        type="button"
+      >
+        <h3 className={styles.filtersTitle}>{t("filters")}</h3>
+        <span className={styles.toggleIcon}>{expanded ? "▲" : "▼"}</span>
+      </button>
       
-      {renderPlanFilters()}
-      {renderRarityFilters()}
-      
-      {entityType === "skillCard" && renderSkillCardFilters()}
-      {entityType === "pItem" && renderPItemFilters()}
+      {expanded && (
+        <div className={styles.filterBody}>
+          {renderPlanFilters()}
+          {renderRarityFilters()}
+          
+          {entityType === "skillCard" && renderSkillCardFilters()}
+          {entityType === "pItem" && renderPItemFilters()}
+        </div>
+      )}
     </div>
   );
 }

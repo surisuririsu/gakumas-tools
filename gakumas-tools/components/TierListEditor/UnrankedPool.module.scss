@@ -25,20 +25,34 @@
 }
 
 .entityGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   max-height: 400px;
   overflow-y: auto;
   border: 1px solid colors.$gray-light;
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
   background-color: colors.$gray-extra-light;
 }
 
 .unrankedEntity {
+  width: 56px;
+  height: 56px;
+}
+
+.unrankedEntity {
+  width: 56px;
+  height: 56px;
   cursor: grab;
   transition: all 0.2s ease;
+
+  // Override EntityIcon percentage-based sizing
+  :global(.entityIcon),
+  > div {
+    width: 100% !important;
+    height: 100%;
+  }
 
   &:hover {
     transform: scale(1.1);

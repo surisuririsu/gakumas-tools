@@ -7,7 +7,7 @@
   border: 2px solid colors.$gray-light;
   border-radius: 8px;
   overflow: hidden;
-  min-height: 100px;
+  min-height: 64px;
   transition: all 0.2s ease;
 
   &.dragOver {
@@ -59,18 +59,28 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 60px;
+  min-height: 40px;
   color: colors.$gray;
+  font-size: 0.8rem;
   font-style: italic;
   border: 2px dashed colors.$gray-light;
   border-radius: 6px;
-  background-color: colors.$gray-extra-light;
 }
 
 .tierEntity {
   position: relative;
+  width: 52px;
+  height: 52px;
   cursor: pointer;
   transition: transform 0.2s ease;
+
+  // Override EntityIcon percentage-based sizing
+  :global(.entityIcon),
+  > div,
+  > div > div {
+    width: 100% !important;
+    height: 100%;
+  }
 
   &:hover {
     transform: scale(1.05);

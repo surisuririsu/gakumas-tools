@@ -6,12 +6,33 @@
   gap: 20px;
 }
 
+.filtersToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid colors.$gray-light;
+  padding: 0 0 8px 0;
+  cursor: pointer;
+}
+
 .filtersTitle {
   margin: 0;
   font-size: 1.1rem;
   color: colors.$gray-dark;
-  border-bottom: 1px solid colors.$gray-light;
-  padding-bottom: 8px;
+}
+
+.toggleIcon {
+  color: colors.$gray;
+  font-size: 0.8rem;
+}
+
+.filterBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .filterGroup {
