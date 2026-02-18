@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-02-18
+
+- Fix S39 score multipliers and skill card effects for saikyou performer and misekata no kihon
+
 ## 2026-02-09
 
 - Update Sekirara Sena
