@@ -6,6 +6,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-02-19
+
+- Update seishintouitsu, add kyakkou
+
 ## 2026-02-18
 
 - Fix S39 score multipliers and skill card effects for saikyou performer and misekata no kihon
