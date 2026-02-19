@@ -39,6 +39,10 @@
     "rehearsal": {
       "title": "리허설 스코어 불러오기",
       "description": "리허설 스크린샷으로부터 스코어 불러오기"
+    },
+    "tierLists": {
+      "title": "티어 리스트",
+      "description": "P아이돌, 스킬 카드, P아이템의 커뮤니티 티어 리스트 생성 및 공유"
     }
   },
   "NavbarMenu": {
@@ -363,6 +367,55 @@
     "accuracyNotGuaranteed": "정확도는 보장되지 않습니다. 스크린샷과 비교하여 결과를 확인하는 것을 권장합니다.",
     "stage": "스테이지 {n}",
     "score": "스코어"
+  },
+  "TierList": {
+    "title": "티어 리스트",
+    "createNew": "티어 리스트 생성",
+    "myTierLists": "내 티어 리스트",
+    "community": "커뮤니티",
+    "browse": "탐색",
+    "entityType": "카테고리",
+    "pIdol": "P아이돌",
+    "skillCard": "스킬 카드",
+    "pItem": "P아이템",
+    "tierLabels": { "S": "S", "A": "A", "B": "B", "C": "C", "D": "D", "F": "F" },
+    "unranked": "미랭크",
+    "save": "저장",
+    "publish": "공개",
+    "edit": "편집",
+    "delete": "삭제",
+    "share": "공유",
+    "copied": "링크가 복사되었습니다!",
+    "noTierLists": "티어 리스트가 없습니다",
+    "loginToCreate": "Discord로 로그인하여 티어 리스트를 생성하세요",
+    "votes": "{count}표",
+    "avgTier": "평균: {tier}",
+    "filters": "필터",
+    "titlePlaceholder": "티어 리스트 제목...",
+    "descriptionPlaceholder": "설명 (선택사항)...",
+    "createdBy": "{author}님이 생성",
+    "createdAt": "{date}에 생성",
+    "updatedAt": "{date}에 업데이트",
+    "totalEntities": "{count}개 엔티티",
+    "viewTierList": "보기",
+    "editTierList": "편집",
+    "deleteTierList": "삭제",
+    "shareTierList": "공유",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "tryAgain": "다시 시도",
+    "confirmDelete": "이 티어 리스트를 삭제하시겠습니까?",
+    "dragHint": "아래 풀에서 엔티티를 끌어다가 티어에 순위를 매기세요",
+    "searchEntities": "엔티티 검색...",
+    "allPlans": "모든 플랜",
+    "allRarities": "모든 희귀도",
+    "allSourceTypes": "모든 소스 타입",
+    "allModes": "모든 모드",
+    "upgraded": "강화됨",
+    "notUpgraded": "강화 안됨",
+    "both": "둘 다",
+    "publicTierList": "공개",
+    "privateTierList": "비공개"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"

@@ -39,6 +39,10 @@
     "rehearsal": {
       "title": "排练解析器",
       "description": "从排练截图中解析分数"
+    },
+    "tierLists": {
+      "title": "层级表",
+      "description": "创建和分享P偶像、技能卡、P道具的社区层级表"
     }
   },
   "NavbarMenu": {
@@ -363,6 +367,55 @@
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
     "stage": "舞台 {n}",
     "score": "分数"
+  },
+  "TierList": {
+    "title": "层级表",
+    "createNew": "创建层级表",
+    "myTierLists": "我的层级表",
+    "community": "社区",
+    "browse": "浏览",
+    "entityType": "类别",
+    "pIdol": "P偶像",
+    "skillCard": "技能卡",
+    "pItem": "P道具",
+    "tierLabels": { "S": "S", "A": "A", "B": "B", "C": "C", "D": "D", "F": "F" },
+    "unranked": "未分级",
+    "save": "保存",
+    "publish": "发布",
+    "edit": "编辑",
+    "delete": "删除",
+    "share": "分享",
+    "copied": "链接已复制！",
+    "noTierLists": "暂无层级表",
+    "loginToCreate": "使用Discord登录以创建层级表",
+    "votes": "{count}票",
+    "avgTier": "平均: {tier}",
+    "filters": "筛选器",
+    "titlePlaceholder": "层级表标题...",
+    "descriptionPlaceholder": "可选描述...",
+    "createdBy": "由{author}创建",
+    "createdAt": "创建于{date}",
+    "updatedAt": "更新于{date}",
+    "totalEntities": "{count}个实体",
+    "viewTierList": "查看",
+    "editTierList": "编辑",
+    "deleteTierList": "删除",
+    "shareTierList": "分享",
+    "loading": "加载中...",
+    "error": "错误",
+    "tryAgain": "重试",
+    "confirmDelete": "确定要删除这个层级表吗？",
+    "dragHint": "从下方池子拖拽实体到对应层级进行排序",
+    "searchEntities": "搜索实体...",
+    "allPlans": "所有计划",
+    "allRarities": "所有稀有度",
+    "allSourceTypes": "所有来源类型",
+    "allModes": "所有模式",
+    "upgraded": "已强化",
+    "notUpgraded": "未强化",
+    "both": "两者",
+    "publicTierList": "公开",
+    "privateTierList": "私有"
   },
   "KofiAd": {
     "prompt": "支持这个项目"
