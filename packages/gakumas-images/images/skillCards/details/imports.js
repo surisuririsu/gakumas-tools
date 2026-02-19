@@ -757,6 +757,8 @@ import image_756 from "./756.png";
 import image_757 from "./757.png";
 import image_759 from "./759.png";
 import image_760 from "./760.png";
+import image_761 from "./761.png";
+import image_762 from "./762.png";
 
 const IMAGES = {
   '1': image_1,
@@ -1518,6 +1520,8 @@ const IMAGES = {
   '757': image_757,
   '759': image_759,
   '760': image_760,
+  '761': image_761,
+  '762': image_762,
 };
 
 export default IMAGES;

@@ -18,6 +18,7 @@ const BUFF_LOG_TYPES = {
   setMotivationBuff: "motivationBuff",
   setGoodConditionTurnsBuff: "goodConditionTurnsBuff",
   setConcentrationBuff: "concentrationBuff",
+  setConcentrationEffectBuff: "concentrationEffectBuff",
   setEnthusiasmBuff: "enthusiasmBuff",
   setFullPowerChargeBuff: "fullPowerChargeBuff",
 };

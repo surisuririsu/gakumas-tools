@@ -169,6 +169,7 @@ export const ALL_FIELDS = [
   "goodImpressionTurnsBuffs",
   "goodImpressionTurnsEffectBuffs",
   "concentrationBuffs",
+  "concentrationEffectBuffs",
   "goodConditionTurns",
   "goodConditionTurnsMultiplier",
   "goodConditionTurnsBuffs",
@@ -223,6 +224,7 @@ export const ALL_FIELDS = [
   "holidayCardsUsed",
   "onigiriCardsUsed",
   "koeteCardsUsed",
+  "kyakkouCardsUsed",
   "nullifySelect",
 
   // Delta
