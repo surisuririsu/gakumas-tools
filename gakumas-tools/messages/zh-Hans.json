@@ -316,6 +316,7 @@
     "motivationBuff": "干劲上升量增加",
     "goodConditionTurnsBuff": "好调上升量增加",
     "concentrationBuff": "集中上升量增加",
+    "concentrationEffectBuff": "集中强化",
     "enthusiasmBuff": "热意增加",
     "fullPowerChargeBuff": "全力值上升量增加",
     "turn": "回合",
@@ -362,5 +363,8 @@
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
     "stage": "舞台 {n}",
     "score": "分数"
+  },
+  "KofiAd": {
+    "prompt": "支持这个项目"
   }
 }

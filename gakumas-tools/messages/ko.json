@@ -316,6 +316,7 @@
     "motivationBuff": "의욕 증가량 증가",
     "goodConditionTurnsBuff": "호조 증가량 증가",
     "concentrationBuff": "집중 증가량 증가",
+    "concentrationEffectBuff": "집중 강화",
     "enthusiasmBuff": "열의 증가",
     "fullPowerChargeBuff": "전력치 증가량 증가",
     "turn": "턴",
@@ -362,5 +363,8 @@
     "accuracyNotGuaranteed": "정확도는 보장되지 않습니다. 스크린샷과 비교하여 결과를 확인하는 것을 권장합니다.",
     "stage": "스테이지 {n}",
     "score": "스코어"
+  },
+  "KofiAd": {
+    "prompt": "이 프로젝트 후원하기"
   }
 }

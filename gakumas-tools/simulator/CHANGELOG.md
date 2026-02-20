@@ -4,6 +4,21 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+
+
+## 2026-02-19
+
+- Update seishintouitsu, add kyakkou
+
+## 2026-02-18
+
+- Fix S39 score multipliers and skill card effects for saikyou performer and misekata no kihon
+
+## 2026-02-09
+
+- Update Sekirara Sena
+
 ## 2026-02-06
 
 - Add preview of Sekirara Sena

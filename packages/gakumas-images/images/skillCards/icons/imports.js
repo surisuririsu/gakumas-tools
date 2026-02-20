@@ -641,13 +641,19 @@ import image_75_3 from "./75_3.png";
 import image_754 from "./754.png";
 import image_75_4 from "./75_4.png";
 import image_75_5 from "./75_5.png";
+import image_755 from "./755.png";
 import image_75_6 from "./75_6.png";
 import image_756 from "./756.png";
 import image_75_7 from "./75_7.png";
 import image_757 from "./757.png";
+import image_758 from "./758.png";
 import image_75_8 from "./75_8.png";
+import image_759 from "./759.png";
 import image_75_9 from "./75_9.png";
+import image_760 from "./760.png";
+import image_761 from "./761.png";
 import image_76_1 from "./76_1.png";
+import image_762 from "./762.png";
 import image_76_2 from "./76_2.png";
 import image_76_3 from "./76_3.png";
 import image_76_4 from "./76_4.png";
@@ -3763,13 +3769,19 @@ const IMAGES = {
   '754': image_754,
   '75_4': image_75_4,
   '75_5': image_75_5,
+  '755': image_755,
   '75_6': image_75_6,
   '756': image_756,
   '75_7': image_75_7,
   '757': image_757,
+  '758': image_758,
   '75_8': image_75_8,
+  '759': image_759,
   '75_9': image_75_9,
+  '760': image_760,
+  '761': image_761,
   '76_1': image_76_1,
+  '762': image_762,
   '76_2': image_76_2,
   '76_3': image_76_3,
   '76_4': image_76_4,

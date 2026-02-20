@@ -71,6 +71,12 @@ export default class BuffManager extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setConcentrationEffectBuff: (state, amount, turns) =>
+        this.setConcentrationEffectBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       setEnthusiasmBuff: (state, amount, turns) =>
         this.setEnthusiasmBuff(
           state,
@@ -120,6 +126,7 @@ export default class BuffManager extends EngineComponent {
     state[S.motivationBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
+    state[S.concentrationEffectBuffs] = [];
     state[S.enthusiasmBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
 
@@ -226,6 +233,16 @@ export default class BuffManager extends EngineComponent {
       amount,
       turns,
       "setConcentrationBuff"
+    );
+  }
+
+  setConcentrationEffectBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.concentrationEffectBuffs,
+      amount,
+      turns,
+      "setConcentrationEffectBuff"
     );
   }
 

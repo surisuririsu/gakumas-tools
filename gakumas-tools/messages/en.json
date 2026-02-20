@@ -316,6 +316,7 @@
     "motivationBuff": "Motivation buff",
     "goodConditionTurnsBuff": "Good condition turns buff",
     "concentrationBuff": "Concentration buff",
+    "concentrationEffectBuff": "Concentration effect buff",
     "enthusiasmBuff": "Enthusiasm buff",
     "fullPowerChargeBuff": "Full power charge buff",
     "turn": "Turn",
@@ -362,5 +363,8 @@
     "accuracyNotGuaranteed": "Accuracy is not guaranteed. It is recommended to manually verify the results by comparing with your screenshots.",
     "stage": "Stage {n}",
     "score": "Score"
+  },
+  "KofiAd": {
+    "prompt": "Support this project"
   }
 }

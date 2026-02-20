@@ -6,9 +6,9 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
 export const OSHI_PROPS = {
-  text: <div><IdolIcon idolId={6} />「伊藤舞音 浅見香月のおかづラジオ FIRST-BITE 2026」通常チケット 一般販売受付中です！</div>,
+  text: <div><IdolIcon idolId={6} /> 伊藤舞音のおいでよまおーこく だい11かい「まおーvsのん ですまっちさんぼんしょーぶ」</div>,
   initiallyExpanded: true,
-  url: "https://nicochannel.jp/okazuradio/articles/news/arZQmcTWYyxkv5NRhrhLCUMB",
+  url: "https://www.youtube.com/watch?v=PuB_ELHFyM8",
 }
 
 export default function Oshi({

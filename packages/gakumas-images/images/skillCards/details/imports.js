@@ -752,8 +752,13 @@ import image_751 from "./751.png";
 import image_752 from "./752.png";
 import image_753 from "./753.png";
 import image_754 from "./754.png";
+import image_755 from "./755.png";
 import image_756 from "./756.png";
 import image_757 from "./757.png";
+import image_759 from "./759.png";
+import image_760 from "./760.png";
+import image_761 from "./761.png";
+import image_762 from "./762.png";
 
 const IMAGES = {
   '1': image_1,
@@ -1510,8 +1515,13 @@ const IMAGES = {
   '752': image_752,
   '753': image_753,
   '754': image_754,
+  '755': image_755,
   '756': image_756,
   '757': image_757,
+  '759': image_759,
+  '760': image_760,
+  '761': image_761,
+  '762': image_762,
 };
 
 export default IMAGES;

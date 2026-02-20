@@ -316,6 +316,7 @@
     "motivationBuff": "やる気増加量増加",
     "goodConditionTurnsBuff": "好調増加量増加",
     "concentrationBuff": "集中増加量増加",
+    "concentrationEffectBuff": "集中強化",
     "enthusiasmBuff": "熱意増加",
     "fullPowerChargeBuff": "全力値増加量増加",
     "turn": "ターン",
@@ -362,5 +363,8 @@
     "accuracyNotGuaranteed": "精度は保証できません。スクリーンショットと比較して、結果を確認することをお勧めします。",
     "stage": "ステージ{n}",
     "score": "スコア"
+  },
+  "KofiAd": {
+    "prompt": "このプロジェクトを支援する"
   }
 }

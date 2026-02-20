@@ -100,9 +100,18 @@ export default class Executor extends EngineComponent {
     state[S.concentrationMultiplier] = 1;
     state[S.motivationMultiplier] = 1;
 
-    // Execute actions
+    // Execute actions, triggering increase/decrease effects per-action
+    // (matching actual game behavior where p-items trigger between actions)
     let scoreTimes = state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
+      // Snapshot state before this action for per-action triggers
+      let actionPrev = {};
+      if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+        for (let k = 0; k < FIELDS_TO_DIFF.length; k++) {
+          actionPrev[FIELDS_TO_DIFF[k]] = state[FIELDS_TO_DIFF[k]];
+        }
+      }
+
       this.executeAction(state, actions[i], card);
 
       if (scoreTimes) {
@@ -120,10 +129,15 @@ export default class Executor extends EngineComponent {
       if (state[S.stamina] > config.idol.params.stamina) {
         state[S.stamina] = config.idol.params.stamina;
       }
-      for (let i = 0; i < NON_NEGATIVE_FIELDS.length; i++) {
-        if (state[NON_NEGATIVE_FIELDS[i]] < 0) {
-          state[NON_NEGATIVE_FIELDS[i]] = 0;
+      for (let k = 0; k < NON_NEGATIVE_FIELDS.length; k++) {
+        if (state[NON_NEGATIVE_FIELDS[k]] < 0) {
+          state[NON_NEGATIVE_FIELDS[k]] = 0;
         }
+      }
+
+      // Fire increase/decrease triggers after each action
+      if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+        this.triggerChangeEffects(state, actionPrev);
       }
     }
 
@@ -132,7 +146,7 @@ export default class Executor extends EngineComponent {
     state[S.concentrationMultiplier] = prevConcentrationMultiplier;
     state[S.motivationMultiplier] = prevMotivationMultiplier;
 
-    // Log changed fields
+    // Log changed fields (uses overall batch prev for logging)
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {
       const field = LOGGED_FIELDS[i];
       if (state[field] == prev[field]) continue;
@@ -143,7 +157,7 @@ export default class Executor extends EngineComponent {
       });
     }
 
-    // Protect fresh stats from decrement
+    // Protect fresh stats from decrement (uses overall batch prev)
     if (!UNFRESH_PHASES.includes(state[S.phase])) {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
@@ -152,60 +166,61 @@ export default class Executor extends EngineComponent {
         }
       }
     }
+  }
 
-    if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
-      // Calculate diff
-      let increasedFields = new Set();
-      let decreasedFields = new Set();
-      for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
-        let diff = state[FIELDS_TO_DIFF[i]] - prev[FIELDS_TO_DIFF[i]];
-        if (diff > 0) {
-          increasedFields.add(FIELDS_TO_DIFF[i]);
-        } else if (diff < 0) {
-          decreasedFields.add(FIELDS_TO_DIFF[i]);
-        }
+  triggerChangeEffects(state, actionPrev) {
+    // Calculate diff for this action
+    let increasedFields = new Set();
+    let decreasedFields = new Set();
+    for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
+      let diff = state[FIELDS_TO_DIFF[i]] - actionPrev[FIELDS_TO_DIFF[i]];
+      if (diff > 0) {
+        increasedFields.add(FIELDS_TO_DIFF[i]);
+      } else if (diff < 0) {
+        decreasedFields.add(FIELDS_TO_DIFF[i]);
       }
+    }
 
-      // Cost consumed effects
-      if (state[S.phase] == "processCost") {
-        // Trigger buff cost consumed effects
-        for (let i = 0; i < BUFF_FIELDS.length; i++) {
-          if (decreasedFields.has(BUFF_FIELDS[i])) {
-            this.engine.effectManager.triggerEffectsForPhase(
-              state,
-              "buffCostConsumed"
-            );
-            break;
-          }
-        }
-      }
+    if (increasedFields.size === 0 && decreasedFields.size === 0) return;
 
-      // Trigger increase effects
-      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-        const field = INCREASE_TRIGGER_FIELDS[i];
-        if (increasedFields.has(field)) {
-          const fieldName = ALL_FIELDS[field];
-          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
+    // Cost consumed effects
+    if (state[S.phase] == "processCost") {
+      for (let i = 0; i < BUFF_FIELDS.length; i++) {
+        if (decreasedFields.has(BUFF_FIELDS[i])) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
-            `${fieldName}Increased`
+            "buffCostConsumed"
           );
-          state[S[`${fieldName}Delta`]] = 0;
+          break;
         }
       }
+    }
 
-      // Trigger decrease effects
-      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-        const field = DECREASE_TRIGGER_FIELDS[i];
-        if (decreasedFields.has(field)) {
-          const fieldName = ALL_FIELDS[field];
-          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
-          this.engine.effectManager.triggerEffectsForPhase(
-            state,
-            `${fieldName}Decreased`
-          );
-          state[S[`${fieldName}Delta`]] = 0;
-        }
+    // Trigger increase effects
+    for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+      const field = INCREASE_TRIGGER_FIELDS[i];
+      if (increasedFields.has(field)) {
+        const fieldName = ALL_FIELDS[field];
+        state[S[`${fieldName}Delta`]] = state[field] - actionPrev[field];
+        this.engine.effectManager.triggerEffectsForPhase(
+          state,
+          `${fieldName}Increased`
+        );
+        state[S[`${fieldName}Delta`]] = 0;
+      }
+    }
+
+    // Trigger decrease effects
+    for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+      const field = DECREASE_TRIGGER_FIELDS[i];
+      if (decreasedFields.has(field)) {
+        const fieldName = ALL_FIELDS[field];
+        state[S[`${fieldName}Delta`]] = state[field] - actionPrev[field];
+        this.engine.effectManager.triggerEffectsForPhase(
+          state,
+          `${fieldName}Decreased`
+        );
+        state[S[`${fieldName}Delta`]] = 0;
       }
     }
   }
@@ -423,7 +438,11 @@ export default class Executor extends EngineComponent {
 
     if (score > 0) {
       // Apply concentration
-      score += state[S.concentration] * state[S.concentrationMultiplier];
+      const concentrationEffectBuff = state[S.concentrationEffectBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        state[S.concentrationMultiplier]
+      );
+      score += state[S.concentration] * concentrationEffectBuff;
 
       // Apply enthusiasm
       score += state[S.enthusiasm];
