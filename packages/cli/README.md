@@ -46,10 +46,8 @@ gakumas contest <stage> [runs] [idolName] [plan] [options]
 *   **引数**:
     *   `stage`: ステージ番号 (例: `37-3`)
     *   `runs`: 1組み合わせあたりの試行回数 (デフォルト: 1000)
-    *   `idolName`: 特定のアイドルのみ計算する場合
-       *  例: `saki`, `temari`, `kotone`, `tsubame`, `mao`, `lilja`, `china`, `sumika`, `hiro`, `sena`, `misuzu`, `ume`, `rinami`, `all`
-    *   `plan`: 特定のプランのみ計算する場合
-       *  例: `sense`, `logic`, `anomaly`
+    *   `idolName`: 特定のアイドルのみ計算する場合 (例 : `saki`, `temari`, `kotone`, `tsubame`, `mao`, `lilja`, `china`, `sumika`, `hiro`, `sena`, `misuzu`, `ume`, `rinami`, `all` )
+    *   `plan`: 特定のプランのみ計算する場合 (例 :  `sense`, `logic`, `anomaly` )
 *   **オプション**:
     *   `--synth`: 合成シミュレーションを実行し、スキルカード交換の提案を行います。
     *   `--force`: キャッシュを無視して強制的に再計算を行います。
