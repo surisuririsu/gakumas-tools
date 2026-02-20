@@ -1,0 +1,8 @@
+{
+  "name": "gakumas-data",
+  "version": "11.10.0",
+  "type": "module",
+  "scripts": {
+    "generate": "python -m scripts.csv_to_json"
+  }
+}

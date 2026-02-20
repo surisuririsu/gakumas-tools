@@ -3076,6 +3076,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gakumas-cli@workspace:packages/cli":
+  version: 0.0.0-use.local
+  resolution: "gakumas-cli@workspace:packages/cli"
+  dependencies:
+    "@types/mongodb": "npm:^4.0.6"
+    "@types/node": "npm:^25.0.10"
+    cac: "npm:^6.7.14"
+    esbuild: "npm:^0.27.2"
+    gakumas-data: "workspace:*"
+    gakumas-engine: "workspace:*"
+    googleapis: "npm:^171.0.0"
+    handlebars: "npm:^4.7.8"
+    mongodb: "npm:^7.0.0"
+    ts-node: "npm:^10.9.2"
+    tsconfig-paths: "npm:^4.2.0"
+    typescript: "npm:^5.9.3"
+  languageName: unknown
+  linkType: soft
+
 "gakumas-data@workspace:*, gakumas-data@workspace:packages/gakumas-data":
   version: 0.0.0-use.local
   resolution: "gakumas-data@workspace:packages/gakumas-data"
