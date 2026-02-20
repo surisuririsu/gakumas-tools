@@ -17,8 +17,8 @@ export function registerStatsCommand(cli: any) {
             args.push('--json');
 
             try {
-                // We call memory-stats.mjs directly to use our updated JSON logic
-                const output = await runScript('memory-stats.mjs', args, { captureOutput: true }) as string;
+                // stats uses boot-stats.mjs
+                const output = await runScript('boot-stats.mjs', args, { captureOutput: true }) as string;
 
                 let data;
                 try {

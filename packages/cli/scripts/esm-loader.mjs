@@ -12,14 +12,14 @@ export async function resolve(specifier, context, nextResolve) {
 
     // Proactively check for missing extensions for relative imports
     // This avoids Yarn PnP throwing hard errors for missing files before we can catch them
-    if (parentURL && parentURL.startsWith('file://') && (specifier.startsWith('.') || specifier.startsWith('/'))) {
+    if (parentURL && (specifier.startsWith('.') || specifier.startsWith('/'))) {
         try {
-            const parentPath = fileURLToPath(parentURL);
+            // Convert to path if it's a file URL, otherwise keep as is (handles virtual: URLs)
+            const parentPath = parentURL.startsWith('file://') ? fileURLToPath(parentURL) : parentURL;
             const parentDir = path.dirname(parentPath);
             const absolutePath = path.resolve(parentDir, specifier);
 
             // Check if exact path exists (if not, try extensions)
-            // Note: We use try-catch around existsSync just in case
             let existsOriginal = false;
             let isDirectory = false;
             try {
@@ -33,8 +33,7 @@ export async function resolve(specifier, context, nextResolve) {
                 // Check for index.js
                 const indexPath = path.join(absolutePath, 'index.js');
                 if (fs.existsSync(indexPath)) {
-                    // We must return the new specifier
-                    return nextResolve(specifier + '/index.js', context);
+                    return nextResolve(specifier + (specifier.endsWith('/') ? '' : '/') + 'index.js', context);
                 }
             }
 
@@ -48,7 +47,7 @@ export async function resolve(specifier, context, nextResolve) {
                 // Try /index.js
                 const indexPath = path.join(absolutePath, 'index.js');
                 if (fs.existsSync(indexPath)) {
-                    return nextResolve(specifier + '/index.js', context);
+                    return nextResolve(specifier + (specifier.endsWith('/') ? '' : '/') + 'index.js', context);
                 }
             }
         } catch (err) {

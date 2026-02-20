@@ -54,7 +54,7 @@ export function registerContestCommand(cli: any) {
             args.push('--json');
 
             try {
-                const output = await runScript('optimize-memories-parallel.mjs', args, { captureOutput: true }) as string;
+                const output = await runScript('boot-contest.mjs', args, { captureOutput: true }) as string;
 
                 // Parse JSON
                 let dataItems: any[] = parseJsonStream(output);
