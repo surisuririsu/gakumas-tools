@@ -5,9 +5,9 @@ import {
   FUNCTION_CALL_REGEX,
   HOLD_SOURCES_BY_ALIAS,
   S,
-} from "../constants";
-import EngineComponent from "./EngineComponent";
-import { getBaseId, getRand, shallowCopy, shuffle } from "../utils";
+} from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
+import { getBaseId, getRand, shallowCopy, shuffle } from "../utils.js";
 
 export default class CardManager extends EngineComponent {
   constructor(engine) {
@@ -755,7 +755,7 @@ export default class CardManager extends EngineComponent {
     let cards = state[S.cardMap]
       .map((c, i) =>
         state[S.removedCards].includes(i) &&
-        SkillCards.getById(c.id).type == "active"
+          SkillCards.getById(c.id).type == "active"
           ? i
           : -1
       )

@@ -26,6 +26,7 @@ for image_type, size in IMAGE_SIZES.items():
         else:
             webp_filename = re.sub(r'\.(png|jpg)', '.webp', filename)
             output_filename = f"gk-img/docs/{snake_slug}/{webp_filename}"
+
         if os.path.isfile(output_filename):
             continue
 

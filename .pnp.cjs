@@ -23,6 +23,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/cli"\
     },\
     {\
+      "name": "gakumas-tools-cli-utility",\
+      "reference": "workspace:packages/cli-utility"\
+    },\
+    {\
       "name": "gakumas-data",\
       "reference": "workspace:packages/gakumas-data"\
     },\
@@ -44,6 +48,7 @@ const RAW_RUNTIME_STATE =
     ["gakumas-engine", ["workspace:packages/gakumas-engine"]],\
     ["gakumas-images", ["virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#workspace:packages/gakumas-images", "workspace:packages/gakumas-images"]],\
     ["gakumas-tools", ["workspace:gakumas-tools"]],\
+    ["gakumas-tools-cli-utility", ["workspace:packages/cli-utility"]],\
     ["gakumas-tools-monorepo", ["workspace:."]]\
   ],\
   "fallbackPool": [\
@@ -4195,6 +4200,27 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
+    ["gakumas-tools-cli-utility", [\
+      ["workspace:packages/cli-utility", {\
+        "packageLocation": "./packages/cli-utility/",\
+        "packageDependencies": [\
+          ["@types/mongodb", "npm:4.0.6"],\
+          ["@types/node", "npm:25.3.0"],\
+          ["cac", "npm:6.7.14"],\
+          ["esbuild", "npm:0.27.3"],\
+          ["gakumas-data", "workspace:packages/gakumas-data"],\
+          ["gakumas-engine", "workspace:packages/gakumas-engine"],\
+          ["gakumas-tools-cli-utility", "workspace:packages/cli-utility"],\
+          ["googleapis", "npm:171.4.0"],\
+          ["handlebars", "npm:4.7.8"],\
+          ["mongodb", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:7.1.0"],\
+          ["ts-node", "virtual:13cdc8ff193386b4bb695397e8f3765ca349abf88c10d4f174ce9f21cdbdaa07c24da7883f78e7471ab3622569efe33099043e472d94f3fc9c2877977f01c082#npm:10.9.2"],\
+          ["tsconfig-paths", "npm:4.2.0"],\
+          ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["gakumas-tools-monorepo", [\
       ["workspace:.", {\
         "packageLocation": "./",\
@@ -5407,13 +5433,6 @@ const RAW_RUNTIME_STATE =
           ["minipass", "npm:7.1.2"]\
         ],\
         "linkType": "HARD"\
-      }],\
-      ["npm:7.1.3", {\
-        "packageLocation": "../../.yarn/berry/cache/minipass-npm-7.1.3-b73a16498d-10c0.zip/node_modules/minipass/",\
-        "packageDependencies": [\
-          ["minipass", "npm:7.1.3"]\
-        ],\
-        "linkType": "HARD"\
       }]\
     ]],\
     ["minipass-collect", [\
@@ -6107,7 +6126,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/path-scurry-npm-1.11.1-aaf8c339af-10c0.zip/node_modules/path-scurry/",\
         "packageDependencies": [\
           ["lru-cache", "npm:10.4.3"],\
-          ["minipass", "npm:7.1.3"],\
+          ["minipass", "npm:7.1.2"],\
           ["path-scurry", "npm:1.11.1"]\
         ],\
         "linkType": "HARD"\

@@ -1,7 +1,7 @@
 import { PItems, SkillCards } from "gakumas-data";
-import { DEFAULT_EFFECTS, S } from "../constants";
-import EngineComponent from "./EngineComponent";
-import { shallowCopy } from "../utils";
+import { DEFAULT_EFFECTS, S } from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
+import { shallowCopy } from "../utils.js";
 
 export default class EffectManager extends EngineComponent {
   initializeState(state) {
@@ -143,10 +143,10 @@ export default class EffectManager extends EngineComponent {
           [effect],
           card != null
             ? {
-                type: "skillCardEffect",
-                id: state[S.cardMap][card].id,
-                idx: card,
-              }
+              type: "skillCardEffect",
+              id: state[S.cardMap][card].id,
+              idx: card,
+            }
             : null
         );
         this.logger.log(state, "setEffect");

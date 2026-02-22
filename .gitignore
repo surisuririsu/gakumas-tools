@@ -54,6 +54,16 @@ __pycache__/
 
 # Custom
 .env
+.env.local
+.env*.local
 screenshots/
 
+# Google API / GDrive Credentials
+credentials.json
+client_secret*.json
 gakumas-tools-*.json
+tokens.json
+*.apps.googleusercontent.com.json
+
+# Other Local Secret/Data Files
+appliance_id.json

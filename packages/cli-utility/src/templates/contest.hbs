@@ -1,0 +1,45 @@
+## {{best.score}} - {{best.idolName}} 【{{best.mainTitle}}】【{{best.subTitle}}】
+
+### メモリー
+- メイン: {{best.mainTitle}} ({{best.mainName}})
+- サブ： {{best.subTitle}} ({{best.subName}})
+
+### 組合せベスト
+| メイン | サブ | 最小 | 平均 | 最大 |
+| :--- | :--- | ---: | ---: | ---: |
+{{#each topCombinations}}
+| {{mainName}} | {{subName}} | {{min}} | {{score}} | {{max}} |
+{{/each}}
+
+{{#if synthResults}}
+### 改善案
+| | 改善前 | 改善後 | 差分 |
+| ---: | :--- | :--- | ---: |
+{{#each synthResults}}
+| **スコア** | {{startScore}} | {{newScore}} | +{{diff}} |
+| **メモリー** |{{#each result.memories}} {{this}} | {{/each}}
+{{/each}}
+{{/if}}
+
+{{#if isCompare}}
+### メモリー比較分析 (パターン: `{{comparePattern}}`)
+| 平均スコア | メモリー名 | 試行数 |
+| ---: | :--- | ---: |
+{{#each compareResults}}
+| **{{score}}** | {{mainName}} | {{amount}} |
+{{/each}}
+---
+{{/if}}
+
+{{#if worstCombinations}}
+{{#if isCompare}}
+### その他ワースト（参考）
+{{else}}
+### 組合せワースト
+{{/if}}
+| 平均 | メイン | サブ |
+| ---: | :--- | :--- |
+{{#each worstCombinations}}
+| {{score}} | {{mainName}} | {{subName}} |
+{{/each}}
+{{/if}}

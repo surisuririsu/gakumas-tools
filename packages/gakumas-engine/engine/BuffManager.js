@@ -4,8 +4,8 @@ import {
   S,
   STANCE_CHANGED_EFFECTS,
   UNFRESH_PHASES,
-} from "../constants";
-import EngineComponent from "./EngineComponent";
+} from "../constants.js";
+import EngineComponent from "./EngineComponent.js";
 
 export default class BuffManager extends EngineComponent {
   constructor(engine) {

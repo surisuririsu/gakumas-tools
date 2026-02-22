@@ -1,0 +1,8 @@
+# Memory Statistics: {{data.idolName}}
+
+| プラン | 曲名 | 数 | 割合 |
+| :--- | :--- | ---: | ---: |
+{{#each data.breakdown}}
+| {{planName}} | {{title}} | {{count}} | {{percent}}% |
+{{/each}}
+| **Total** | | **{{data.total}}** | **100.0%** |
