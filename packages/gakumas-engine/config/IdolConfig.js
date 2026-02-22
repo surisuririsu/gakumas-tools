@@ -111,9 +111,6 @@ export default class IdolConfig {
 
     for (let i = 0; i < sortedCards.length; i++) {
       const skillCard = SkillCards.getById(sortedCards[i].id);
-      if (!skillCard) {
-        throw new Error(`Skill card not found in database: ID ${sortedCards[i].id}`);
-      }
       if (skillCard.unique && !["L", "T"].includes(skillCard.rarity)) {
         const baseId = getBaseId(skillCard);
         if (dedupedCards.some((d) => [baseId, baseId + 1].includes(d.id))) {

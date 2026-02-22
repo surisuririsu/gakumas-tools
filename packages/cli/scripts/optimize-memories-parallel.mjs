@@ -51,7 +51,7 @@ async function run() {
     }
 
     if (args.length < 3) {
-        console.error("使用法: yarn node optimize-memories-parallel.mjs <source> <season-stage> <num_runs> [options]");
+        console.error("使用法: yarn node local-scripts/optimize-memories-parallel.mjs <source> <season-stage> <num_runs> [options]");
         console.error("  <source>: ディレクトリパス または MongoDB URI (mongodb://...)");
         console.error("  <options>: --idolName <name>, --plan <sense|logic|anomaly> (DBモード時のみ有効), --showWorst (低スコアワースト10を表示), --force (キャッシュを無視して再計算)");
         process.exit(1);
@@ -444,19 +444,19 @@ async function run() {
                 allResults.length = 0; // Clear
                 allResults.push(...cachedMapped);
 
-                // Rehydrate meta and names for all results
+                // Rehydrate meta for all results
                 for (const res of allResults) {
-                    const mainMem = memories.find(m => m.hash === res.mainHash);
-                    const subMem = memories.find(m => m.hash === res.subHash);
-
-                    if (mainMem) {
-                        res.mainName = mainMem.data.name;
-                        res.mainFilename = mainMem.filename;
-                        res.meta = mainMem.data.meta || {};
-                    }
-                    if (subMem) {
-                        res.subName = subMem.data.name;
-                        res.subFilename = subMem.filename;
+                    const mem = memories.find(m => m.hash === res.mainHash); // hash check is safer than filename if we want robust
+                    // Or filename? Filename should be unique per run.
+                    if (mem) {
+                        res.meta = mem.data.meta || {};
+                        // Actually `main.meta` in worker was `main.meta`. 
+                        // `memories` items are `{ filename, data, hash }`.
+                        // `data` has `meta`? No, `data` is the JSON content.
+                        // `loadMemoriesFromDB` returns `data: m`. `m` might have meta?
+                        // `memories` from file: `data: JSON.parse(...)`.
+                        // Currently meta is not strictly used in existing code EXCEPT `synth` option logic.
+                        // `synth` logic checks `options.synth` and uses `memories` array to find `mainMem` and `subMem`.
                     }
                 }
 
