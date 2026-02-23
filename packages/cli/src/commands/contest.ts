@@ -1,4 +1,5 @@
-import { runScript } from '../utils/runner';
+import { spawn } from 'child_process';
+import { LOCAL_SCRIPTS_DIR, GAKUMAS_TOOLS_ROOT } from '../utils/runner';
 import * as fs from 'fs';
 import * as path from 'path';
 import importHandlebars from 'handlebars';
@@ -54,60 +55,77 @@ export function registerContestCommand(cli: any) {
             args.push('--json');
 
             try {
-                const output = await runScript('boot-contest.mjs', args, { captureOutput: true }) as string;
+                // Determine template if not raw JSON
+                let template: any;
+                if (!options.json) {
+                    const templatePath = path.join(__dirname, '../templates/contest.hbs');
+                    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+                    template = Handlebars.compile(templateContent);
+                }
 
-                // Parse JSON
-                let dataItems: any[] = parseJsonStream(output);
+                const scriptPath = path.join(LOCAL_SCRIPTS_DIR, 'boot-contest.mjs');
+                const child = spawn('yarn', ['node', scriptPath, ...args], {
+                    cwd: GAKUMAS_TOOLS_ROOT,
+                    stdio: ['inherit', 'pipe', 'inherit'],
+                    env: { ...process.env }
+                });
 
-                if (dataItems.length === 0) {
-                    // Fallback attempt for single potentially malformed or just plain single JSON
-                    try {
-                        dataItems.push(JSON.parse(output));
-                    } catch (e) {
-                        // ignore
+                let outputBuffer = '';
+                let parsedCount = 0;
+
+                child.stdout.on('data', (data) => {
+                    outputBuffer += data.toString();
+
+                    if (options.json) {
+                        return; // Handle at the end
                     }
-                }
 
-                if (dataItems.length === 0) {
-                    console.error("No valid JSON output found from script.");
-                    // Consider logging output for debug if needed
-                    // console.error(output);
-                    process.exit(1);
-                }
+                    // On-the-fly rendering using parseJsonStream
+                    let dataItems = parseJsonStream(outputBuffer);
+
+                    while (parsedCount < dataItems.length) {
+                        if (parsedCount > 0) console.log('\n\n');
+
+                        const itemData = dataItems[parsedCount];
+                        if (options.compare) {
+                            (itemData as any).isCompare = true;
+                            (itemData as any).comparePattern = options.compare;
+                            const pattern = new RegExp(options.compare.replace(/\*/g, '.*'));
+                            (itemData as any).compareResults = (itemData as any).worstCombinations.filter((c: any) =>
+                                c.mainName && pattern.test(c.mainName)
+                            );
+                            (itemData as any).compareResults.sort((a: any, b: any) => b.score - a.score);
+                        }
+
+                        console.log(template(itemData));
+                        parsedCount++;
+                    }
+                });
+
+                await new Promise<void>((resolve, reject) => {
+                    child.on('close', (code) => {
+                        if (code === 0) resolve();
+                        else reject(new Error(`Script exited with code ${code}`));
+                    });
+                    child.on('error', reject);
+                });
 
                 if (options.json) {
-                    // If user explicitly asked for JSON, output raw JSON
-                    // If multiple items, output as array
+                    let dataItems = parseJsonStream(outputBuffer);
+                    if (dataItems.length === 0) {
+                        try {
+                            dataItems.push(JSON.parse(outputBuffer));
+                        } catch (e) { }
+                    }
+                    if (dataItems.length === 0) {
+                        console.error("No valid JSON output found from script.");
+                        process.exit(1);
+                    }
                     if (dataItems.length === 1) {
                         console.log(JSON.stringify(dataItems[0], null, 2));
                     } else {
                         console.log(JSON.stringify(dataItems, null, 2));
                     }
-                } else {
-                    // Render Template
-                    const templatePath = path.join(__dirname, '../templates/contest.hbs');
-                    const templateContent = fs.readFileSync(templatePath, 'utf-8');
-                    const template = Handlebars.compile(templateContent);
-
-                    dataItems.forEach((data, index) => {
-                        if (index > 0) console.log('\n\n'); // Separator
-
-                        if (options.compare) {
-                            // If compare mode, we can add a flag to data to change headings or display
-                            (data as any).isCompare = true;
-                            (data as any).comparePattern = options.compare;
-
-                            // Re-filter worstCombinations to strictly match the pattern if it was broad
-                            const pattern = new RegExp(options.compare.replace(/\*/g, '.*'));
-                            (data as any).compareResults = (data as any).worstCombinations.filter((c: any) =>
-                                c.mainName && pattern.test(c.mainName)
-                            );
-                            // Sort by score descending (Strongest first for comparison)
-                            (data as any).compareResults.sort((a: any, b: any) => b.score - a.score);
-                        }
-
-                        console.log(template(data));
-                    });
                 }
 
             } catch (error) {
