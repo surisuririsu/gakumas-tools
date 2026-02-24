@@ -7,6 +7,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-02-24
+
+- Preview S40
+
 ## 2026-02-19
 
 - Update seishintouitsu, add kyakkou

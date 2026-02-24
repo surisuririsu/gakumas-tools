@@ -139,4 +139,4 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 138,シーズン39 ステージ3,contest,FALSE,39,3,,logic,"0.35,0.25,0.4","4,3,5","0.1,0,0.9","at:cardUsed,if:cardSourceType==pIdol,if:genki>=30,do:motivation+=10,do:genki+=2,limit:4",
 139,シーズン40 ステージ1,contest,TRUE,40,1,,sense,"0.35,0.4,0.25","4,5,3","0.1,0.9,0","at:cardUsed,if:cardSourceType==pIdol,do:setConcentrationBuff(0.5,3),limit:4",
 140,シーズン40 ステージ2,contest,TRUE,40,2,,logic,"0.35,0.4,0.25","4,5,3","0.1,0.9,0","at:cardUsed,if:cardSourceType==pIdol,if:genki>=30,do:motivation+=10,do:genki+=2,limit:4",
-141,シーズン40 ステージ3,contest,TRUE,40,3,,anomaly,"0.35,0.4,0.25","4,5,3","0.1,0.9,0","at:stanceChanged,if:parentPhase==processCard,if:stanceChangedTimes%2==0,target:sourceType(pIdol),do:g.score+=25,limit:4",
+141,シーズン40 ステージ3,contest,TRUE,40,3,,anomaly,"0.35,0.4,0.25","4,5,3","0.1,0.9,0","at:stanceChanged,if:parentPhase==processCard,if:stanceChangedByCardTimes%2==1,target:sourceType(pIdol),do:g.score+=25,limit:4",
