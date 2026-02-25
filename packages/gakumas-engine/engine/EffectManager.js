@@ -1,5 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data";
-import { DEFAULT_EFFECTS, S } from "../constants";
+import { DEFAULT_EFFECTS, EFFECT_COUNTER_FIELDS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
 
@@ -8,6 +8,7 @@ export default class EffectManager extends EngineComponent {
     const config = this.getConfig(state);
 
     state[S.effects] = [];
+    state[S.effectCounters] = {};
 
     // Set default effects
     this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
@@ -56,7 +57,35 @@ export default class EffectManager extends EngineComponent {
     }
   }
 
-  setEffects(state, effects, source) {
+  setEffects(state, effects, source, counterGroupId) {
+    // Detect counter variables used in this batch and create a counter group
+    // entry in state[S.effectCounters].  A counterGroupId string is attached to
+    // every effect in the batch so they all reference the same counter values
+    // even after the state has been deep-copied.
+    if (!counterGroupId) {
+      let counterVars = null;
+      for (const effect of effects) {
+        const allTokens = [
+          ...(effect.actions || []).flat(),
+          ...(effect.conditions || []).flat(),
+        ];
+        for (const token of allTokens) {
+          if (token in EFFECT_COUNTER_FIELDS) {
+            if (!counterVars) counterVars = {};
+            if (!(token in counterVars)) {
+              counterVars[token] = EFFECT_COUNTER_FIELDS[token];
+            }
+          }
+        }
+      }
+      if (counterVars) {
+        counterGroupId = String(
+          Object.keys(state[S.effectCounters]).length
+        );
+        state[S.effectCounters][counterGroupId] = counterVars;
+      }
+    }
+
     for (let i = 0; i < effects.length; i++) {
       const effect = { ...effects[i] };
       if (source) {
@@ -64,6 +93,9 @@ export default class EffectManager extends EngineComponent {
       }
       if (!effect.actions && i < effects.length - 1) {
         effect.effects = [effects[++i]];
+      }
+      if (counterGroupId) {
+        effect.counterGroupId = counterGroupId;
       }
       state[S.effects].push(effect);
     }
@@ -125,6 +157,24 @@ export default class EffectManager extends EngineComponent {
 
     this.logger.debug(effects);
 
+    // Snapshot each referenced counter group at the start of this call so
+    // that conditions are evaluated against values from before any actions in
+    // this call have run (mirroring the conditionState snapshot behaviour).
+    const counterSnapshots = {};
+    for (let i = 0; i < effects.length; i++) {
+      const cgId = effects[i].counterGroupId;
+      if (cgId != null && !(cgId in counterSnapshots)) {
+        counterSnapshots[cgId] = { ...state[S.effectCounters][cgId] };
+      }
+    }
+
+    // Counter group ID shared by all delayed effects set during this
+    // card-play call.  All delayed effects from the same play share one
+    // group so their counters stay in sync with each other, while two
+    // separate plays (e.g. from a double-effect p-item) each get their
+    // own group and therefore their own independent counter.
+    let playCounterGroupId = null;
+
     for (let i = 0; i < effects.length; i++) {
       // Skip effect if condition not satisfied
       if (skipNextEffect) {
@@ -138,6 +188,30 @@ export default class EffectManager extends EngineComponent {
       // Delayed effects
       if (effect.phase) {
         this.logger.debug("Setting effects", effect.effects);
+
+        // Detect counter variables used by this delayed effect so we can
+        // attach the shared playCounterGroupId.
+        const allTokens = [
+          ...(effect.actions || []).flat(),
+          ...(effect.conditions || []).flat(),
+        ];
+        let hasCounters = false;
+        for (const token of allTokens) {
+          if (token in EFFECT_COUNTER_FIELDS) {
+            hasCounters = true;
+            if (playCounterGroupId === null) {
+              playCounterGroupId = String(
+                Object.keys(state[S.effectCounters]).length
+              );
+              state[S.effectCounters][playCounterGroupId] = {};
+            }
+            if (!(token in state[S.effectCounters][playCounterGroupId])) {
+              state[S.effectCounters][playCounterGroupId][token] =
+                EFFECT_COUNTER_FIELDS[token];
+            }
+          }
+        }
+
         this.setEffects(
           state,
           [effect],
@@ -147,7 +221,8 @@ export default class EffectManager extends EngineComponent {
                 id: state[S.cardMap][card].id,
                 idx: card,
               }
-            : null
+            : null,
+          hasCounters ? playCounterGroupId : undefined
         );
         this.logger.log(state, "setEffect");
         continue;
@@ -171,24 +246,54 @@ export default class EffectManager extends EngineComponent {
         continue;
       }
 
+      // Patch conditionState with the snapshot counter values (so conditions
+      // see the values from before this call's actions ran) and patch state
+      // with the current counter values (so actions update the right counter).
+      let savedCounterVals = null;
+      const cgId = effect.counterGroupId;
+      if (cgId != null) {
+        savedCounterVals = {};
+        const snapshot = counterSnapshots[cgId] || {
+          ...state[S.effectCounters][cgId],
+        };
+        const currentCounters = state[S.effectCounters][cgId];
+        for (const key in currentCounters) {
+          savedCounterVals[key] = {
+            s: state[S[key]],
+            cs: conditionState[S[key]],
+          };
+          conditionState[S[key]] = snapshot[key];
+          state[S[key]] = currentCounters[key];
+        }
+      }
+
       // Check conditions
+      let conditionsMet = true;
       if (!skipConditions && effect.conditions) {
-        let satisfied = true;
         for (let j = 0; j < effect.conditions.length; j++) {
           const condition = effect.conditions[j];
           if (
             !this.engine.evaluator.evaluateCondition(conditionState, condition)
           ) {
-            satisfied = false;
+            conditionsMet = false;
             break;
           }
         }
-        if (!satisfied) {
-          if (!effect.actions && !effect.effects) {
-            skipNextEffect = true;
+      }
+
+      if (!conditionsMet) {
+        // Restore patched values before skipping
+        if (savedCounterVals) {
+          const currentCounters = state[S.effectCounters][cgId];
+          for (const key in currentCounters) {
+            state[S[key]] = savedCounterVals[key].s;
+            conditionState[S[key]] = savedCounterVals[key].cs;
           }
-          continue;
         }
+        if (!effect.actions && !effect.effects) {
+          skipNextEffect = true;
+        }
+        continue;
       }
 
       // Log source
@@ -232,6 +337,17 @@ export default class EffectManager extends EngineComponent {
       // Log source end
       if (effect.source) {
         this.logger.log(state, "entityEnd", effect.source);
+      }
+
+      // Save updated counter values back into state[S.effectCounters] and
+      // restore the temporarily patched state / conditionState fields.
+      if (savedCounterVals) {
+        const currentCounters = state[S.effectCounters][cgId];
+        for (const key in currentCounters) {
+          currentCounters[key] = state[S[key]];
+          state[S[key]] = savedCounterVals[key].s;
+          conditionState[S[key]] = savedCounterVals[key].cs;
+        }
       }
 
       // Track triggered effects

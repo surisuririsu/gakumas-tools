@@ -235,12 +235,24 @@ export const ALL_FIELDS = [
   "goodConditionTurnsDelta",
   "concentrationDelta",
   "staminaDelta",
+
+  // Effect counters (per-effect-instantiation counters)
+  "effectCounters",
 ];
 
 export const S = ALL_FIELDS.reduce((acc, cur, i) => {
   acc[cur] = i;
   return acc;
 }, {});
+
+export const EFFECT_COUNTER_FIELDS = {
+  pcchiCardsUsed: 0,
+  natsuyaCardsUsed: 0,
+  holidayCardsUsed: 0,
+  onigiriCardsUsed: 0,
+  koeteCardsUsed: 0,
+  kyakkouCardsUsed: -1,
+};
 
 export const GROWTH_FIELDS = [
   "g.score",

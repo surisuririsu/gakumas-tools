@@ -53,6 +53,7 @@ export default class StageEngine {
     // Effects
     if (skipEffects) {
       state[S.effects] = [];
+      state[S.effectCounters] = {};
     } else {
       this.effectManager.initializeState(state);
     }
