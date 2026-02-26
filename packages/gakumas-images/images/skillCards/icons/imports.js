@@ -6252,6 +6252,8 @@ const IMAGES = {
   '728_11': image_728_11,
   '728_12': image_728_12,
   '728_13': image_728_13,
+  '763': image_1,
+  '764': image_1,
 };
 
 export default IMAGES;

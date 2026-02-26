@@ -1522,6 +1522,8 @@ const IMAGES = {
   '760': image_760,
   '761': image_761,
   '762': image_762,
+  '763': image_1,
+  '764': image_1,
 };
 
 export default IMAGES;
