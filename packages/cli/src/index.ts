@@ -6,6 +6,7 @@ import { registerStatsCommand } from './commands/stats';
 // @ts-ignore
 import { registerListCommand } from './commands/list';
 import { registerRmCommand } from './commands/rm';
+import { registerRehearsalCommand } from './commands/rehearsal';
 // @ts-ignore
 import * as fs from 'fs';
 // @ts-ignore
@@ -80,6 +81,7 @@ registerContestCommand(cli);
 registerStatsCommand(cli);
 registerListCommand(cli);
 registerRmCommand(cli);
+registerRehearsalCommand(cli);
 
 cli.help();
 cli.version('0.1.0');
