@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { Worker } from 'worker_threads';
 import os from 'os';
 import { MongoClient } from "mongodb";
-import { Stages, PIdols, Idols } from "./lib/gakumas-data/index.js";
+import { Stages, PIdols, Idols } from "gakumas-data";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -248,7 +248,7 @@ async function findBestMemoryCombination(options) {
 
         // Resolve idol ID
         const idolId = IDOL_NAME_TO_ID[idolName]; // Assuming single idol
-        const { PIdols } = await import("./lib/gakumas-data/index.js");
+        const { PIdols } = await import("gakumas-data");
 
         // Find pIdolIds matching plan AND idol
         const targetPIdols = PIdols.getAll().filter(p => p.idolId === idolId && p.plan === plan);

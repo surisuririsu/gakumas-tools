@@ -1,6 +1,6 @@
 
 import { parentPort, workerData } from 'worker_threads';
-import { IdolConfig, StageConfig, IdolStageConfig, StageEngine, StagePlayer, STRATEGIES } from "./lib/gakumas-engine/index.js";
+import { IdolConfig, StageConfig, IdolStageConfig, StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
 
 
 // Receive static data (stage info) from workerData

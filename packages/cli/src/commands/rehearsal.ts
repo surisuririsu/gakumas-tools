@@ -7,8 +7,8 @@ import importHandlebars from 'handlebars';
 const Handlebars = importHandlebars;
 
 export function registerRehearsalCommand(cli: any) {
-    cli.command('rehearsal <stage> <runs> [...decks]', 'Rehearsal mode to predict total score for 3 decks')
-        .action(async (stage: string, runs: string, decks: string[], options?: any) => {
+    cli.command('rehearsal <runs> [...decks]', 'Rehearsal mode to predict total score for 3 decks')
+        .action(async (runs: string, decks: string[], options?: any) => {
             if (!process.env.MONGODB_URI) {
                 console.error('Error: MONGODB_URI is not set in environment (check .env.local)');
                 process.exit(1);
@@ -19,7 +19,7 @@ export function registerRehearsalCommand(cli: any) {
                 process.exit(1);
             }
 
-            const args = [process.env.MONGODB_URI!, stage, runs, ...decks];
+            const args = [process.env.MONGODB_URI!, runs, ...decks];
 
             try {
                 const templatePath = path.join(__dirname, '../templates/rehearsal.hbs');

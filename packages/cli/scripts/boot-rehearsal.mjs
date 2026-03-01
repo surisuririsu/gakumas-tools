@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import { Stages, PIdols, SkillCards, Idols } from "gakumas-data";
+import { Stages, PIdols, SkillCards, Idols, PItems } from "gakumas-data";
 import { Worker } from "worker_threads";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -8,34 +8,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const MONGODB_URI = process.argv[2];
-const stageIdArg = process.argv[3];
-const runsArg = parseInt(process.argv[4], 10) || 100;
-const deckNames = process.argv.slice(5).filter(n => n && !n.startsWith('--'));
+const runsArg = parseInt(process.argv[3], 10) || 100;
+const deckNames = process.argv.slice(4).filter(n => n && !n.startsWith('--'));
 
 if (!MONGODB_URI) {
     console.error("MongoDB URI is missing.");
     process.exit(1);
 }
 
-if (!stageIdArg || isNaN(parseInt(stageIdArg.split("-")[0], 10))) {
-    console.error("Invalid stage argument.");
-    process.exit(1);
-}
-
-const [seasonStr, stageStr] = stageIdArg.split("-");
-const season = parseInt(seasonStr, 10);
-const stageNumber = isNaN(parseInt(stageStr, 10)) ? stageStr : parseInt(stageStr, 10);
-
-const stages = Stages.getAll();
-const contestStage = stages.find((s) => (s.type === "contest" || s.type === "event" || s.type === "linkContest") && s.season === season && s.stage === stageNumber);
-
-if (!contestStage) {
-    console.error(`Stage not found: Season ${season} Stage ${stageNumber}`);
-    process.exit(1);
-}
-
 const client = new MongoClient(MONGODB_URI);
 let loadouts = [];
+let targetStageId = null;
 
 async function run() {
     try {
@@ -47,6 +30,34 @@ async function run() {
             if (!loadout) {
                 console.error(`Deck "${name}" not found.`);
                 process.exit(1);
+            }
+
+            // Check missing datamined items (PItems and SkillCards) to prompt user to pull latest source
+            for (const pItemId of (loadout.pItemIds || [])) {
+                if (pItemId > 0 && !PItems.getById(pItemId)) {
+                    console.error(`\n[エラー] デッキ「${name}」内に未知のPアイテムID(${pItemId})が含まれています。GitHubの最新データをPull（更新）してください。`);
+                    process.exit(1);
+                }
+            }
+            if (loadout.skillCardIdGroups) {
+                for (const group of loadout.skillCardIdGroups) {
+                    for (const cardId of (group || [])) {
+                        if (cardId > 0 && !SkillCards.getById(cardId)) {
+                            console.error(`\n[エラー] デッキ「${name}」内に未知のスキルカードID(${cardId})が含まれています。GitHubの最新データをPull（更新）してください。`);
+                            process.exit(1);
+                        }
+                    }
+                }
+            }
+
+            // Verify Stage Match
+            if (loadout.stageId) {
+                if (targetStageId === null) {
+                    targetStageId = loadout.stageId;
+                } else if (targetStageId !== loadout.stageId) {
+                    console.error(`\n[エラー] 指定されたデッキ間でステージ(シーズン)情報が一致しませんでした。同一シーズンのデッキ群を指定してください。`);
+                    process.exit(1);
+                }
             }
 
             // Resolve Idol Name
@@ -83,6 +94,20 @@ async function run() {
         console.error("No valid decks provided.");
         process.exit(1);
     }
+
+    if (targetStageId === null) {
+        console.error(`\n[エラー] デッキ内にステージID情報が保存されていませんでした。`);
+        process.exit(1);
+    }
+
+    const stages = Stages.getAll();
+    const contestStage = stages.find((s) => s.id === targetStageId);
+    if (!contestStage) {
+        console.error(`\n[エラー] ステージID (${targetStageId}) に該当するステージが見つかりません。最新データを更新してください。`);
+        process.exit(1);
+    }
+    const seasonStr = contestStage.season.toString();
+    const stageStr = contestStage.stage.toString();
 
     // Run simulation
     const worker = new Worker(path.join(__dirname, 'simulate-loadout-worker.mjs'), {
