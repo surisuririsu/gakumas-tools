@@ -115,26 +115,27 @@ export class GoogleDriveClient {
             });
 
             const existingFiles = listRes.data.files;
+            const isDebug = process.argv.includes('--debug');
 
             if (existingFiles && existingFiles.length > 0) {
                 // Update existing file
                 const fileId = existingFiles[0].id!;
-                console.log(`Updating existing file ${fileName} (ID: ${fileId})...`);
+                if (isDebug) console.log(`Updating existing file ${fileName} (ID: ${fileId})...`);
                 const file = await drive.files.update({
                     fileId: fileId,
                     media: media,
                     fields: 'id',
                 });
-                console.log('File Updated. Id:', file.data.id);
+                if (isDebug) console.log('File Updated. Id:', file.data.id);
             } else {
                 // Create new file
-                console.log(`Uploading new file ${fileName} to Google Drive (Folder ID: ${folderId})...`);
+                if (isDebug) console.log(`Uploading new file ${fileName} to Google Drive (Folder ID: ${folderId})...`);
                 const file = await drive.files.create({
                     requestBody: fileMetadata,
                     media: media,
                     fields: 'id',
                 });
-                console.log('File Created. Id:', file.data.id);
+                if (isDebug) console.log('File Created. Id:', file.data.id);
             }
 
         } catch (err: any) {

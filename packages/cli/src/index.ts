@@ -56,7 +56,9 @@ const filteredArgsForCac = process.argv[0].includes('node')
 // Helper to check and enable capture
 const parsed = cli.parse(filteredArgsForCac, { run: false });
 if (parsed.options.gdrive) {
-    console.error(`[DEBUG] Google Drive upload enabled. Filename: ${parsed.options.gdrive}`);
+    if (parsed.options.debug) {
+        console.error(`[DEBUG] Google Drive upload enabled. Filename: ${parsed.options.gdrive}`);
+    }
     GlobalCapture.enable();
 
     // Register exit handler
