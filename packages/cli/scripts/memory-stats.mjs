@@ -179,15 +179,23 @@ async function run() {
             if (jsonMode) {
                 // If 'all', we return a special type "all_idols" which contains an array of idol data
                 originalConsoleLog(JSON.stringify({ type: 'all_idols', data: allData }));
+            } else {
+                for (const d of allData) {
+                    // Manual formatting if not JSON
+                    console.log(`# メモリー統計情報 (${d.idolName})`);
+                    console.log("| プラン | 楽曲 | 枚数 |");
+                    console.log("| :-- | :-- | --: |");
+                    for (const s of d.breakdown) {
+                        console.log(`| ${s.planName} | ${s.title} | ${s.count}<br>${s.percent}% |`);
+                    }
+                    console.log(`| 計 | | ${d.total}<br>100.0% |`);
+                    console.log("");
+                }
             }
-        } else if (false) {
-            // Placeholder to keep the else if structure if needed, but we jump to else
         } else {
             // --- Overall Stats (Original Logic) ---
 
-            const results = await collection.aggregate(pipeline).toArray();
-
-            // Processing Results
+            // Processing Results using the previously fetched `results` array
             for (const res of results) {
                 const pIdolId = res._id;
                 const count = res.count;

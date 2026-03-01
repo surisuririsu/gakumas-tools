@@ -42,7 +42,7 @@ for (const p of possiblePaths) {
 import { GlobalCapture } from './utils/capture';
 import { GoogleDriveClient } from './utils/gdrive';
 
-const cli = cac('gakumas-tools');
+const cli = cac('yarn cli');
 
 // Global option
 cli.option('--gdrive <filename>', 'Upload standard output to Google Drive');
@@ -84,4 +84,8 @@ registerRmCommand(cli);
 cli.help();
 cli.version('0.1.0');
 
-cli.parse(filteredArgsForCac);
+const parsedFinal = cli.parse(filteredArgsForCac);
+
+if (!cli.matchedCommand && !parsedFinal.options.help && !parsedFinal.options.version) {
+    cli.outputHelp();
+}

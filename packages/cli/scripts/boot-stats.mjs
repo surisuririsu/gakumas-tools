@@ -14,12 +14,4 @@ register(loaderUrl);
 
 // Check if arguments are provided (e.g., idol name)
 // argv[0] is node, argv[1] is script path
-const args = process.argv.slice(2);
-
-if (args.length > 0) {
-    // If arguments exist, run the detailed analysis
-    await import('./analyze-memories.mjs');
-} else {
-    // Otherwise run the summary stats
-    await import('./memory-stats.mjs');
-}
+await import('./memory-stats.mjs');
