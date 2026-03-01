@@ -42,6 +42,7 @@ parentPort.on('message', async (task) => {
                 const result = await player.play();
                 runScores.push(result.score);
             } catch (e) {
+                console.error("Simulation error:", e);
                 // runScores.push(0); 
             }
         }
