@@ -1,4 +1,4 @@
-## {{best.score}} - {{best.idolName}} 【{{best.mainTitle}}】【{{best.subTitle}}】
+## {{round best.score}} - {{best.idolName}} 【{{best.mainTitle}}】【{{best.subTitle}}】
 
 ### メモリー
 - メイン: {{best.mainTitle}} ({{best.mainName}})
@@ -8,7 +8,7 @@
 | メイン | サブ | 最小 | 平均 | 最大 |
 | :--- | :--- | ---: | ---: | ---: |
 {{#each topCombinations}}
-| {{mainName}} | {{subName}} | {{min}} | {{score}} | {{max}} |
+| {{mainName}} | {{subName}} | {{min}} | {{round score}} | {{max}} |
 {{/each}}
 
 {{#if synthResults}}
@@ -16,7 +16,7 @@
 | | 改善前 | 改善後 | 差分 |
 | ---: | :--- | :--- | ---: |
 {{#each synthResults}}
-| **スコア** | {{startScore}} | {{newScore}} | +{{diff}} |
+| **スコア** | {{round startScore}} | {{round newScore}} | +{{round diff}} |
 | **メモリー** |{{#each result.memories}} {{this}} | {{/each}}
 {{/each}}
 {{/if}}
@@ -26,7 +26,7 @@
 | 平均スコア | メモリー名 | 試行数 |
 | ---: | :--- | ---: |
 {{#each compareResults}}
-| **{{score}}** | {{mainName}} | {{amount}} |
+| **{{round score}}** | {{mainName}} | {{amount}} |
 {{/each}}
 ---
 {{/if}}
@@ -40,6 +40,6 @@
 | 平均 | メイン | サブ |
 | ---: | :--- | :--- |
 {{#each worstCombinations}}
-| {{score}} | {{mainName}} | {{subName}} |
+| {{round score}} | {{mainName}} | {{subName}} |
 {{/each}}
 {{/if}}

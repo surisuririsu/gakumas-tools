@@ -58,6 +58,9 @@ export function registerContestCommand(cli: any) {
                 // Determine template if not raw JSON
                 let template: any;
                 if (!options.json) {
+                    Handlebars.registerHelper('round', function (value: any) {
+                        return isNaN(value) ? value : Math.round(value);
+                    });
                     const templatePath = path.join(__dirname, '../templates/contest.hbs');
                     const templateContent = fs.readFileSync(templatePath, 'utf-8');
                     template = Handlebars.compile(templateContent);
