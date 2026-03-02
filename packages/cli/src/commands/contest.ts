@@ -52,7 +52,18 @@ export function registerContestCommand(cli: any) {
             if (options.force) args.push('--force');
             if (options.save) args.push('--save');
             if (options.name) args.push('--name', options.name);
-            if (options.userId) args.push('--userId', options.userId);
+            // Preserve string precision for userId
+            let userIdStr = undefined;
+            const argIdx = process.argv.indexOf('--userId');
+            if (argIdx !== -1 && process.argv.length > argIdx + 1) {
+                userIdStr = process.argv[argIdx + 1];
+            } else {
+                const eqArg = process.argv.find(a => a.startsWith('--userId='));
+                if (eqArg) userIdStr = eqArg.split('=')[1];
+            }
+            if (userIdStr) args.push('--userId', userIdStr);
+            else if (options.userId) args.push('--userId', String(options.userId));
+
             if (options.supportBonus) args.push('--supportBonus', options.supportBonus);
 
             // Always use JSON if we want to template it.
