@@ -14,6 +14,10 @@ export function registerContestCommand(cli: any) {
         .option('--json', 'Output results as JSON')
         .option('--compare <pattern>', 'Compare memories matching pattern (e.g. "再生成*")')
         .option('--force', 'Force re-calculate and overwrite cache')
+        .option('--save', 'Save the best combination to loadouts')
+        .option('--name <name>', 'Name for the saved loadout')
+        .option('--userId <id>', 'User ID to save the loadout for')
+        .option('--supportBonus <value>', 'Support bonus value (default: 0.04)')
         .action(async (stage: string, runs?: string, idolName?: string, plan?: string, options?: any) => {
             // Check if runs is actually idolName (if user skipped runs e.g. "contest 37-3 hiro")
             if (runs && isNaN(Number(runs))) {
@@ -46,6 +50,10 @@ export function registerContestCommand(cli: any) {
             if (options.showWorst) args.push('--showWorst');
             if (options.compare) args.push('--compare', options.compare);
             if (options.force) args.push('--force');
+            if (options.save) args.push('--save');
+            if (options.name) args.push('--name', options.name);
+            if (options.userId) args.push('--userId', options.userId);
+            if (options.supportBonus) args.push('--supportBonus', options.supportBonus);
 
             // Always use JSON if we want to template it.
             // But we only want to suppress console output if we are templating.
