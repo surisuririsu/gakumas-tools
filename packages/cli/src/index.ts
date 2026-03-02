@@ -13,16 +13,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const possiblePaths = [
-    path.resolve(process.cwd(), '.env.local'),
-    path.resolve(process.cwd(), '../../.env.local'), // Monorepo root
-    path.resolve(process.cwd(), '../../gakumas-tools/.env.local'), // Monorepo subdir
-    path.resolve(process.cwd(), '../gakumas-tools/gakumas-tools/.env.local') // Submodule old fallback
+    path.resolve(process.cwd(), '.env.local'), // Priority 1: Current working directory
+    path.resolve(__dirname, '../../.env.local'), // Priority 2: Monorepo root (relative to dist/ or src/)
+    path.resolve(__dirname, '../../../.env.local'), // Monorepo root (if __dirname is dist/[folder])
+    path.resolve(__dirname, '../../../gakumas-tools/.env.local'), // Submodule fallback
+    path.resolve(process.cwd(), 'gakumas-tools/.env.local') // Project root fallback
 ];
 
 // console.log("Searching for .env.local in:", possiblePaths);
 
 for (const p of possiblePaths) {
     if (fs.existsSync(p)) {
+        // console.log("Found .env.local at:", p);
         const content = fs.readFileSync(p, 'utf-8');
         // ... (rest same)
         content.split('\n').forEach(line => {
