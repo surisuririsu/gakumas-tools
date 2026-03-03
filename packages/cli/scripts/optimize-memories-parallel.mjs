@@ -602,50 +602,61 @@ async function run() {
 
             // Save to MongoDB if --save is specified
             if (options.save && allResults.length > 0) {
-                const best = allResults[0];
-                const mainMem = memories.find(m => m.filename === best.mainFilename);
-                const subMem = memories.find(m => m.filename === best.subFilename);
+                const saveCountRaw = options.save === true ? 1 : parseInt(options.save, 10) || 1;
+                const saveCount = Math.min(Math.max(saveCountRaw, 1), 5); // min 1, max 5
 
-                if (mainMem && subMem && (options.userId || process.env.CLI_USER_ID)) {
+                const mongoUri = source.startsWith("mongodb://") ? source : process.env.MONGODB_URI;
+                if (!mongoUri) {
+                    console.error("Error: MONGODB_URI is not set and source is not a MongoDB URI.");
+                } else if (!options.userId && !process.env.CLI_USER_ID) {
+                    console.error("Error: --save requires --userId or CLI_USER_ID environment variable.");
+                } else {
                     const userId = options.userId || process.env.CLI_USER_ID;
                     const supportBonus = parseFloat(options.supportBonus || "0.04");
                     const multiplier = 0.2;
 
-                    const mainPIdol = PIdols.getById(mainMem.data.pIdolId);
-                    const idolId = mainPIdol ? mainPIdol.idolId : null;
-
-                    const loadout = {
-                        name: options.name || `Best for ${contestStage.id} (${finalOutputData.best.idolName})`,
-                        stageId: contestStage.id,
-                        idolId,
-                        supportBonus,
-                        params: mainMem.data.params.map((p, i) => (p || 0) + Math.floor((subMem.data.params[i] || 0) * multiplier)),
-                        pItemIds: mainMem.data.pItemIds,
-                        skillCardIdGroups: [mainMem.data.skillCardIds, subMem.data.skillCardIds],
-                        customizationGroups: [
-                            mainMem.data.customizations || [{}, {}, {}, {}, {}, {}],
-                            subMem.data.customizations || [{}, {}, {}, {}, {}, {}]
-                        ],
-                        userId,
-                        createdAt: new Date(),
-                    };
-
                     try {
-                        const mongoUri = source.startsWith("mongodb://") ? source : process.env.MONGODB_URI;
-                        if (!mongoUri) {
-                            throw new Error("MONGODB_URI is not set and source is not a MongoDB URI.");
-                        }
                         const client = new MongoClient(mongoUri);
                         await client.connect();
                         const db = client.db(process.env.MONGODB_DB || "gakumas-tools");
-                        const result = await db.collection("loadouts").insertOne(loadout);
-                        console.error(`Loadout saved successfully with ID: ${result.insertedId}`);
+                        const collection = db.collection("loadouts");
+
+                        for (let rank = 0; rank < Math.min(saveCount, allResults.length); rank++) {
+                            const best = allResults[rank];
+                            const mainMem = memories.find(m => m.filename === best.mainFilename);
+                            const subMem = memories.find(m => m.filename === best.subFilename);
+
+                            if (!mainMem || !subMem) continue;
+
+                            const mainPIdol = PIdols.getById(mainMem.data.pIdolId);
+                            const idolId = mainPIdol ? mainPIdol.idolId : null;
+
+                            const baseName = options.name || `Best for ${contestStage.id} (${finalOutputData.best.idolName})`;
+                            const saveName = saveCount > 1 ? `${baseName}_${rank + 1}` : baseName;
+
+                            const loadout = {
+                                name: saveName,
+                                stageId: contestStage.id,
+                                idolId,
+                                supportBonus,
+                                params: mainMem.data.params.map((p, i) => (p || 0) + Math.floor((subMem.data.params[i] || 0) * multiplier)),
+                                pItemIds: mainMem.data.pItemIds,
+                                skillCardIdGroups: [mainMem.data.skillCardIds, subMem.data.skillCardIds],
+                                customizationGroups: [
+                                    mainMem.data.customizations || [{}, {}, {}, {}, {}, {}],
+                                    subMem.data.customizations || [{}, {}, {}, {}, {}, {}]
+                                ],
+                                userId,
+                                createdAt: new Date(),
+                            };
+
+                            const result = await collection.insertOne(loadout);
+                            console.error(`Loadout #${rank + 1} (${saveName}) saved successfully with ID: ${result.insertedId}`);
+                        }
                         await client.close();
                     } catch (e) {
                         console.error("Failed to save loadout to MongoDB:", e);
                     }
-                } else if (options.save) {
-                    console.error("Error: --save requires --userId or CLI_USER_ID environment variable.");
                 }
             }
 

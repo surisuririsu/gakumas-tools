@@ -14,7 +14,7 @@ export function registerContestCommand(cli: any) {
         .option('--json', 'Output results as JSON')
         .option('--compare <pattern>', 'Compare memories matching pattern (e.g. "再生成*")')
         .option('--force', 'Force re-calculate and overwrite cache')
-        .option('--save', 'Save the best combination to loadouts')
+        .option('--save [count]', 'Save the top N combinations to loadouts (default: 1, max: 5)')
         .option('--name <name>', 'Name for the saved loadout')
         .option('--userId <id>', 'User ID to save the loadout for')
         .option('--supportBonus <value>', 'Support bonus value (default: 0.04)')
@@ -50,7 +50,12 @@ export function registerContestCommand(cli: any) {
             if (options.showWorst) args.push('--showWorst');
             if (options.compare) args.push('--compare', options.compare);
             if (options.force) args.push('--force');
-            if (options.save) args.push('--save');
+            if (options.save) {
+                args.push('--save');
+                if (typeof options.save === 'number' || typeof options.save === 'string') {
+                    args.push(String(options.save));
+                }
+            }
             if (options.name) args.push('--name', options.name);
             // Preserve string precision for userId
             let userIdStr = undefined;
