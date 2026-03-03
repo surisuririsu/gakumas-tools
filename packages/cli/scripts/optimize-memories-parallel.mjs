@@ -183,6 +183,12 @@ async function run() {
                 const db = mongoClient.db(process.env.MONGODB_DB || "gakumas-tools");
                 simulationResultsCollection = db.collection("simulation_results");
 
+                // Ensure compound index exists for ultra-fast bulk upserts (background prevents blocking)
+                await simulationResultsCollection.createIndex(
+                    { mainHash: 1, subHash: 1, stageId: 1, runs: 1, season: 1 },
+                    { background: true, name: "cache_upsert_index" }
+                );
+
                 if (options.force) {
                     const deleteQuery = {
                         stageId: contestStage.id,
@@ -340,7 +346,8 @@ async function run() {
 
         // Save Results to DB
         if (useCache && simulationResultsCollection && allResults.length > 0) {
-            console.error(`新規結果 ${allResults.length} 件をDBに保存中...`);
+            console.error(`\n新規結果 ${allResults.length} 件をDBに保存中... (BulkWrite開始)`);
+            const _dbSaveStart = Date.now();
             const bulkOps = allResults.map(res => ({
                 updateOne: {
                     filter: {
@@ -372,9 +379,16 @@ async function run() {
                 }
             }));
 
+            const _dbWriteStart = Date.now();
             try {
                 if (bulkOps.length > 0) {
-                    await simulationResultsCollection.bulkWrite(bulkOps);
+                    const chunkSize = 200;
+                    for (let i = 0; i < bulkOps.length; i += chunkSize) {
+                        const chunk = bulkOps.slice(i, i + chunkSize);
+                        await simulationResultsCollection.bulkWrite(chunk, { ordered: false });
+                    }
+                    const _dbBulkOpEnd = Date.now();
+                    console.error(`...DB保存完了: ${(_dbBulkOpEnd - _dbWriteStart) / 1000}秒`);
                 }
             } catch (e) {
                 console.error("DB Save Error:", e);
