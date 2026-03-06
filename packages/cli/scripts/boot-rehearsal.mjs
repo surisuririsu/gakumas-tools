@@ -1,5 +1,5 @@
 import { MongoClient } from "mongodb";
-import { Stages, PIdols, SkillCards, Idols, PItems } from "gakumas-data";
+import { Stages, PIdols, SkillCards, Idols, PItems, Customizations } from "gakumas-data";
 import { Worker } from "worker_threads";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -80,10 +80,59 @@ async function run() {
                 }
             }
 
+            const pItemsList = (loadout.pItemIds || []).filter(id => id > 0).map(id => {
+                const item = PItems.getById(id);
+                return item ? item.name : `Unknown(${id})`;
+            });
+            const getCardGroup = (index) => {
+                const cardIds = loadout.skillCardIdGroups?.[index] || [];
+                const custs = loadout.customizationGroups?.[index] || [];
+                return cardIds.filter(id => id > 0).map((id, i) => {
+                    const card = SkillCards.getById(id);
+                    const name = card ? card.name : `Unknown(${id})`;
+                    const customObj = custs?.[i];
+                    if (customObj && Object.keys(customObj).length > 0) {
+                        const customNames = Object.keys(customObj).map(cId => {
+                            const custom = Customizations.getById(cId);
+                            return custom ? custom.name : `C(${cId})`;
+                        }).join(", ");
+                        return `${name} (${customNames})`;
+                    }
+                    return name;
+                });
+            };
+
+            let mainTitle = "Unknown";
+            let subTitle = "Unknown";
+            if (loadout.skillCardIdGroups) {
+                if (loadout.skillCardIdGroups[0]?.[0] > 0) {
+                    const card = SkillCards.getById(loadout.skillCardIdGroups[0][0]);
+                    if (card && card.pIdolId) {
+                        const pIdol = PIdols.getById(card.pIdolId);
+                        if (pIdol) mainTitle = pIdol.title;
+                    }
+                }
+                if (loadout.skillCardIdGroups[1]?.[0] > 0) {
+                    const card = SkillCards.getById(loadout.skillCardIdGroups[1][0]);
+                    if (card && card.pIdolId) {
+                        const pIdol = PIdols.getById(card.pIdolId);
+                        if (pIdol) subTitle = pIdol.title;
+                    }
+                }
+            }
+
             loadouts.push({
                 ...loadout,
                 id: name,
-                idolName: idolName
+                idolName: idolName,
+                deckDetails: {
+                    mainTitle,
+                    subTitle,
+                    params: loadout.params || [0, 0, 0, 0],
+                    pItems: pItemsList,
+                    memory1: getCardGroup(0),
+                    memory2: getCardGroup(1)
+                }
             });
         }
     } finally {
@@ -137,6 +186,7 @@ async function run() {
                     min: r.min,
                     score: Math.floor(r.score),
                     max: r.max,
+                    deckDetails: correspondingLoadout.deckDetails
                 };
             });
 
@@ -153,9 +203,13 @@ async function run() {
                 return Math.floor(total);
             };
 
+            const planMap = { "sense": "センス", "logic": "ロジック", "anomaly": "アノマリー" };
+            const planName = planMap[contestStage.plan] || contestStage.plan;
+
             const finalData = {
                 season: seasonStr,
                 stage: stageStr,
+                plan: planName,
                 runs: runsArg,
                 idols: finalIdols,
                 totalScore: calcTotal('score'),
