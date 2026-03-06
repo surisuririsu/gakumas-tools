@@ -3,7 +3,7 @@ import { parentPort, workerData } from 'worker_threads';
 import { IdolConfig, StageConfig, IdolStageConfig, StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
 
 // Receive static data (stage info) from workerData
-const { contestStage, numRuns } = workerData;
+const { contestStage, numRuns, supportBonus } = workerData;
 const stageConfig = new StageConfig(contestStage);
 
 parentPort.on('message', async (task) => {
@@ -18,7 +18,7 @@ parentPort.on('message', async (task) => {
 
         const loadout = {
             stageId: contestStage.id,
-            supportBonus: 0.04,
+            supportBonus: supportBonus !== undefined ? supportBonus : 0.04,
             params: [0, 0, 0, 0],
             pItemIds: [0, 0, 0, 0],
             skillCardIdGroups: [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]],

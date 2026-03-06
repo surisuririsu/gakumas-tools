@@ -137,8 +137,12 @@ async function run() {
         }
     }
 
+    let supportBonusRaw = parseFloat(options.supportBonus || "0.04");
+    let supportBonus = supportBonusRaw >= 1.0 ? supportBonusRaw / 100 : supportBonusRaw;
+
     for (const currentIdolName of idolNames) {
-        if (currentIdolName) console.error(`\n========== アイドル: ${currentIdolName} の処理開始 ==========\n`);
+        if (currentIdolName) console.error(`\n========== アイドル: ${currentIdolName} の処理開始 ==========`);
+        console.error(`Support Bonus: ${(supportBonus * 100).toFixed(2)}%`);
 
         // Load Memories
         let memories = [];
@@ -193,9 +197,10 @@ async function run() {
                     const deleteQuery = {
                         stageId: contestStage.id,
                         runs: numRuns,
-                        season: season
+                        season: season,
+                        supportBonus: supportBonus
                     };
-                    console.error(`--force 指定: キャッシュを削除します... (Stage ID: ${contestStage.id}, Runs: ${numRuns}, Season: ${season})`);
+                    console.error(`--force 指定: キャッシュを削除します... (Stage ID: ${contestStage.id}, Runs: ${numRuns}, Season: ${season}, Bonus: ${supportBonus})`);
                     const delRes = await simulationResultsCollection.deleteMany(deleteQuery);
                     console.error(`削除完了: ${delRes.deletedCount} 件のキャッシュを削除しました。`);
                 } else {
@@ -204,7 +209,8 @@ async function run() {
                     const query = {
                         stageId: contestStage.id,
                         runs: numRuns,
-                        season: season
+                        season: season,
+                        supportBonus: supportBonus
                     };
                     // If we could restrict by idol, that would be better, but we are cross-combining?
                     // Actually combinations are strictly within `memories` list which is filtered by Idol.
@@ -301,7 +307,8 @@ async function run() {
                 const worker = new Worker(path.join(__dirname, 'worker-boot.mjs'), {
                     workerData: {
                         contestStage,
-                        numRuns
+                        numRuns,
+                        supportBonus
                     },
                     // We don't need to inject execArgv anymore as boot script handles registration
                 });
@@ -355,7 +362,8 @@ async function run() {
                         subHash: res.subHash,
                         stageId: contestStage.id,
                         runs: numRuns,
-                        season: season
+                        season: season,
+                        supportBonus: supportBonus
                     },
                     update: {
                         $set: {
@@ -364,6 +372,7 @@ async function run() {
                             stageId: contestStage.id,
                             runs: numRuns,
                             season: season,
+                            supportBonus: supportBonus,
                             score: res.score,
                             min: res.min,
                             max: res.max,
@@ -410,6 +419,7 @@ async function run() {
                 stageId: contestStage.id,
                 runs: numRuns,
                 season: season,
+                supportBonus: supportBonus,
                 mainHash: { $in: memHashes },
                 subHash: { $in: memHashes }
             };
@@ -626,7 +636,6 @@ async function run() {
                     console.error("Error: --save requires --userId or CLI_USER_ID environment variable.");
                 } else {
                     const userId = options.userId || process.env.CLI_USER_ID;
-                    const supportBonus = parseFloat(options.supportBonus || "0.04");
                     const multiplier = 0.2;
 
                     try {

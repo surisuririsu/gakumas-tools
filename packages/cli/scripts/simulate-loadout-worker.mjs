@@ -26,6 +26,10 @@ parentPort.on('message', async (task) => {
         };
 
         // Setup Engine
+        if (loadout.supportBonus >= 1.0) {
+            loadout.supportBonus = loadout.supportBonus / 100;
+        }
+
         const idolConfig = new IdolConfig(loadout);
         const config = new IdolStageConfig(idolConfig, stageConfig);
 
