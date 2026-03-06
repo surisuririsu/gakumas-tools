@@ -5,10 +5,10 @@
 - サブ： {{best.subTitle}} ({{best.subName}})
 
 ### 組合せベスト
-| メイン | サブ | 最小 | 平均 | 最大 |
-| :--- | :--- | ---: | ---: | ---: |
+| # | メイン | サブ | 最小 | 平均 | 最大 |
+| --: | :--- | :--- | ---: | ---: | ---: |
 {{#each topCombinations}}
-| {{mainName}} | {{subName}} | {{min}} | {{round score}} | {{max}} |
+| {{inc @index}} | {{mainName}} | {{subName}} | {{min}} | {{round score}} | {{max}} |
 {{/each}}
 
 {{#if synthResults}}

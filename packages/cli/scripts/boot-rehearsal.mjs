@@ -117,8 +117,15 @@ async function run() {
         }
     });
 
+    let currentDeckIndex = 0;
+
     worker.on('message', (msg) => {
-        if (msg.type === 'done') {
+        if (msg.type === 'progress') {
+            const { loadoutId, currentRun, totalRuns } = msg;
+            // Clear current line and show progress
+            process.stderr.write(`\r- 予測シミュレーション実行中 (${loadoutId}): ${currentRun}/${totalRuns} (${Math.round((currentRun / totalRuns) * 100)}%)    `);
+        } else if (msg.type === 'done') {
+            process.stderr.write(`\r- 予測シミュレーション完了!                                  \n`);
             const results = msg.results;
 
             // Assign idol name back to result based on loadout.id

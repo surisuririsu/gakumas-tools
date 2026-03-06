@@ -85,6 +85,9 @@ export function registerContestCommand(cli: any) {
                     Handlebars.registerHelper('round', function (value: any) {
                         return isNaN(value) ? value : Math.round(value);
                     });
+                    Handlebars.registerHelper('inc', function (value: any) {
+                        return parseInt(value) + 1;
+                    });
                     const templatePath = path.join(__dirname, '../templates/contest.hbs');
                     const templateContent = fs.readFileSync(templatePath, 'utf-8');
                     template = Handlebars.compile(templateContent);
@@ -114,6 +117,12 @@ export function registerContestCommand(cli: any) {
                         if (parsedCount > 0) console.log('\n\n');
 
                         const itemData = dataItems[parsedCount];
+                        // If there are no results (e.g. no valid memories found), skip printing the template
+                        if (!itemData.best || itemData.best.score === undefined || itemData.best.score === null) {
+                            parsedCount++;
+                            continue;
+                        }
+
                         if (options.compare) {
                             (itemData as any).isCompare = true;
                             (itemData as any).comparePattern = options.compare;

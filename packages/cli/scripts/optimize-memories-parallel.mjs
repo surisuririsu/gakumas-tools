@@ -645,7 +645,14 @@ async function run() {
                             const mainPIdol = PIdols.getById(mainMem.data.pIdolId);
                             const idolId = mainPIdol ? mainPIdol.idolId : null;
 
-                            const baseName = options.name || `Best for ${contestStage.id} (${finalOutputData.best.idolName})`;
+                            let baseName = options.name;
+                            if (!baseName) {
+                                const now = new Date();
+                                const yy = String(now.getFullYear()).slice(2);
+                                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                                const dd = String(now.getDate()).padStart(2, '0');
+                                baseName = `${yy}-${mm}-${dd}_${contestStage.season}-${contestStage.stage}_${currentIdolName}`;
+                            }
                             const saveName = saveCount > 1 ? `${baseName}_${rank + 1}` : baseName;
 
                             const loadout = {

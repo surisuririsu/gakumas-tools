@@ -41,6 +41,9 @@ parentPort.on('message', async (task) => {
             try {
                 const result = await player.play();
                 runScores.push(result.score);
+                if ((i + 1) % 10 === 0 || i + 1 === numRuns) {
+                    parentPort.postMessage({ type: 'progress', loadoutId: loadoutData.id, currentRun: i + 1, totalRuns: numRuns });
+                }
             } catch (e) {
                 console.error("Simulation error:", e);
                 // runScores.push(0); 
