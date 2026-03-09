@@ -102,3 +102,6 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 101,ukenagashiEffect1_2,条件変更(好調),effect,70,1,,,,"line:4,if:goodConditionTurns>=8",,
 102,onigiriEffect1,効果変更,effect,100,1,,,,"line:1,at:activeCardUsed,do:onigiriCardsUsed+=1;at:activeCardUsed,if:onigiriCardsUsed%3==2,do:genki+=12*cardsUsed+2,limit:2",,
 103,fullPowerCharge1,全力値+,buff,70,1,,,,,,"at:prestage,target:this,do:g.fullPowerCharge+=2"
+104,bishittoCond1,条件変更,effect,70,1,,"line:1,if:goodImpressionTurns>=6",,,,
+105,bishittoEffect1,持続効果+,effect,70,1,,,,"line:2,at:goodImpressionTurnsIncreased,if:parentPhase==processCard,do:score+=goodImpressionTurns*1.3,limit:4",,
+106,scoreAdd1_24,パラメータ+,score,70,1,,,,do:score+=24,,
