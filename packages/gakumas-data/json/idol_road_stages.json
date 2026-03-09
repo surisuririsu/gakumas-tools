@@ -1,0 +1,40 @@
+[
+    {
+        "id": "idol_road_kotone_21",
+        "name": "アイドルへの道 ことね ステージ21",
+        "idolId": "kotone",
+        "stageId": "21",
+        "plan": "sense",
+        "maxTurns": 18,
+        "fixedDeck": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+        ],
+        "fixedDraws": {
+            "1": [
+                1,
+                2,
+                3
+            ],
+            "2": [
+                4,
+                5,
+                6
+            ],
+            "3": [
+                7,
+                8,
+                9
+            ]
+        },
+        "effects": "at:cardPlayed,if:cardRarity==SSR,do:ssrCount+=1;at:ssrCountReached3,do:recoverAllExhausted(SR),do:ssrCount=0"
+    }
+]

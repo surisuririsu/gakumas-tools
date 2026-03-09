@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "generate": "python -m scripts.generate_image_imports"
+    "generate": "python3 -m scripts.generate_image_imports"
   },
   "peerDependencies": {
     "gakumas-data": "workspace:*"

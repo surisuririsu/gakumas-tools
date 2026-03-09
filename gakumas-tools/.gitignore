@@ -29,3 +29,6 @@ next-env.d.ts
 
 # db dumps
 /dump
+*-dump/
+test-dump/
+candidates.json

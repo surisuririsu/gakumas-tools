@@ -1,0 +1,3601 @@
+import { createRequire } from 'module'; const require = createRequire(import.meta.url);
+
+// local-scripts/optimize-worker.mjs
+import { parentPort, workerData } from "worker_threads";
+
+// ../packages/gakumas-data/json/customizations.json
+var customizations_default = [{ id: 21, alias: "motivation1", name: "\u3084\u308B\u6C17+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.motivation+=3" }, { id: 56, alias: "motivation2", name: "\u3084\u308B\u6C17+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.motivation+=1;level:2,at:prestage,target:this,do:g.motivation+=4" }, { id: 72, alias: "motivation3", name: "\u3084\u308B\u6C17+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.motivation+=1;level:2,at:prestage,target:this,do:g.motivation+=2;level:3,at:prestage,target:this,do:g.motivation+=5" }, { id: 22, alias: "motivationAdd1", name: "\u3084\u308B\u6C17\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:motivation+=2", limit: "", growth: "" }, { id: 57, alias: "fullPowerCharge2", name: "\u5168\u529B\u5024+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.fullPowerCharge+=1;level:2,at:prestage,target:this,do:g.fullPowerCharge+=3" }, { id: 73, alias: "fullPowerCharge3", name: "\u5168\u529B\u5024+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.fullPowerCharge+=1;level:2,at:prestage,target:this,do:g.fullPowerCharge+=2;level:3,at:prestage,target:this,do:g.fullPowerCharge+=4" }, { id: 23, alias: "fullPowerChargeAdd1", name: "\u5168\u529B\u5024\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:fullPowerCharge+=2", limit: "", growth: "" }, { id: 80, alias: "goodImpressionTurns1_2", name: "\u597D\u5370\u8C61+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.goodImpressionTurns+=2" }, { id: 19, alias: "goodImpressionTurns1_3", name: "\u597D\u5370\u8C61+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.goodImpressionTurns+=3" }, { id: 55, alias: "goodImpressionTurns2", name: "\u597D\u5370\u8C61+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.goodImpressionTurns+=1;level:2,at:prestage,target:this,do:g.goodImpressionTurns+=4" }, { id: 71, alias: "goodImpressionTurns3", name: "\u597D\u5370\u8C61+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.goodImpressionTurns+=1;level:2,at:prestage,target:this,do:g.goodImpressionTurns+=2;level:3,at:prestage,target:this,do:g.goodImpressionTurns+=5" }, { id: 20, alias: "goodImpressionTurnsAdd1", name: "\u597D\u5370\u8C61\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:goodImpressionTurns+=2", limit: "", growth: "" }, { id: 13, alias: "goodConditionTurns1", name: "\u597D\u8ABF+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.goodConditionTurns+=2" }, { id: 52, alias: "goodConditionTurns2", name: "\u597D\u8ABF+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.goodConditionTurns+=1;level:2,at:prestage,target:this,do:g.goodConditionTurns+=3" }, { id: 68, alias: "goodConditionTurns3", name: "\u597D\u8ABF+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.goodConditionTurns+=1;level:2,at:prestage,target:this,do:g.goodConditionTurns+=2;level:3,at:prestage,target:this,do:g.goodConditionTurns+=4" }, { id: 14, alias: "goodConditionTurnsAdd1", name: "\u597D\u8ABF\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:goodConditionTurns+=2", limit: "", growth: "" }, { id: 83, alias: "halfCostTurnsAdd1", name: "\u6D88\u8CBB\u4F53\u529B\u6E1B\u5C11\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:halfCostTurns+=2", limit: "", growth: "" }, { id: 24, alias: "halfCostTurns1", name: "\u6D88\u8CBB\u8EFD\u6E1B+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.halfCostTurns+=2" }, { id: 58, alias: "halfCostTurns2", name: "\u6D88\u8CBB\u8EFD\u6E1B+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.halfCostTurns+=1;level:2,at:prestage,target:this,do:g.halfCostTurns+=3" }, { id: 74, alias: "halfCostTurns3", name: "\u6D88\u8CBB\u8EFD\u6E1B+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.halfCostTurns+=1;level:2,at:prestage,target:this,do:g.halfCostTurns+=2;level:3,at:prestage,target:this,do:g.halfCostTurns+=4" }, { id: 15, alias: "perfectConditionTurns1", name: "\u7D76\u597D\u8ABF+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.perfectConditionTurns+=2" }, { id: 53, alias: "perfectConditionTurns2", name: "\u7D76\u597D\u8ABF+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.perfectConditionTurns+=1;level:2,at:prestage,target:this,do:g.perfectConditionTurns+=3" }, { id: 69, alias: "perfectConditionTurns3", name: "\u7D76\u597D\u8ABF+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.perfectConditionTurns+=1;level:2,at:prestage,target:this,do:g.perfectConditionTurns+=2;level:3,at:prestage,target:this,do:g.perfectConditionTurns+=4" }, { id: 16, alias: "perfectConditionTurnsAdd1", name: "\u7D76\u597D\u8ABF\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:perfectConditionTurns+=2", limit: "", growth: "" }, { id: 17, alias: "concentration1", name: "\u96C6\u4E2D+", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.concentration+=2" }, { id: 54, alias: "concentration2", name: "\u96C6\u4E2D+", type: "buff", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.concentration+=1;level:2,at:prestage,target:this,do:g.concentration+=3" }, { id: 70, alias: "concentration3", name: "\u96C6\u4E2D+", type: "buff", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.concentration+=1;level:2,at:prestage,target:this,do:g.concentration+=2;level:3,at:prestage,target:this,do:g.concentration+=4" }, { id: 18, alias: "concentrationAdd1", name: "\u96C6\u4E2D\u8FFD\u52A0", type: "buff", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:concentration+=2", limit: "", growth: "" }, { id: 29, alias: "cost1", name: "\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 20, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.cost+=2" }, { id: 34, alias: "motivationCost1", name: "\u3084\u308B\u6C17\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 30, alias: "staminaCost1", name: "\u4F53\u529B\u6D88\u8CBB\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 20, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 35, alias: "fullPowerChargeCost1", name: "\u5168\u529B\u5024\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 33, alias: "goodImpressionTurnsCost1", name: "\u597D\u5370\u8C61\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 31, alias: "goodConditionTurnsCost1", name: "\u597D\u8ABF\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 32, alias: "concentrationCost1", name: "\u96C6\u4E2D\u30B3\u30B9\u30C8\u5024-", type: "cost", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.typedCost+=1" }, { id: 38, alias: "cardUsesRemaining1", name: "\u30B9\u30AD\u30EB\u30AB\u30FC\u30C9\u4F7F\u7528\u6570+", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 39, alias: "upgradeHand1", name: "\u30B9\u30AD\u30EB\u30AB\u30FC\u30C9\u5F37\u5316\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:upgradeHand", limit: "", growth: "" }, { id: 37, alias: "removeLimit1", name: "\u30EC\u30C3\u30B9\u30F3\u4E2D1\u56DE\u306E\u5236\u9650\u524A\u9664", type: "effect", price: 40, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: 0, growth: "" }, { id: 43, alias: "holdSelectedFromDeckAdd1", name: "\u4FDD\u7559\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:holdSelectedFromDeck", limit: "", growth: "" }, { id: 92, alias: "kyorikanEffect1", name: "\u52B9\u679C\u5909\u66F4", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:1,at:startOfTurn,if:stamina>=maxStamina*0.5,do:concentration+=2", limit: "", growth: "" }, { id: 91, alias: "seisouEffect1", name: "\u52B9\u679C\u5909\u66F4", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:1,do:goodConditionTurnsMultiplier=2,do:score+=18;line:2,if:goodConditionTurns>=1,do:concentrationMultiplier=3,do:score+=20", limit: "", growth: "" }, { id: 96, alias: "goodImpressionTurnsEffectBuffAdd1_50_5", name: "\u52B9\u679C\u8FFD\u52A0", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:setGoodImpressionTurnsEffectBuff(0.5,5)", limit: "", growth: "" }, { id: 95, alias: "lsmEffectAdd1", name: "\u52B9\u679C\u8FFD\u52A0", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "at:endOfTurn,do:score+=5,do:fixedStamina-=1,limit:4", limit: "", growth: "" }, { id: 94, alias: "turnAdd1", name: "\u52B9\u679C\u8FFD\u52A0", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:turnsRemaining+=1", limit: "", growth: "" }, { id: 40, alias: "strength1", name: "\u5F37\u6C17+", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.stanceLevel+=1" }, { id: 93, alias: "strengthAdd1", name: "\u5F37\u6C17\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:setStance(strength)", limit: "", growth: "" }, { id: 82, alias: "growAllScoreAdd1", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "target:all,do:g.score+=3", limit: "", growth: "" }, { id: 62, alias: "growAllScoreAdd2", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:all,do:g.score+=1;level:2,target:all,do:g.score+=4", limit: "", growth: "" }, { id: 78, alias: "growAllScoreAdd3", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:all,do:g.score+=1;level:2,target:all,do:g.score+=2;level:3,target:all,do:g.score+=5", limit: "", growth: "" }, { id: 45, alias: "growHandScoreAdd1", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "target:hand,do:g.score+=5", limit: "", growth: "" }, { id: 60, alias: "growHandScoreAdd2", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:hand,do:g.score+=3;level:2,target:hand,do:g.score+=8", limit: "", growth: "" }, { id: 76, alias: "growHandScoreAdd3", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:hand,do:g.score+=3;level:2,target:hand,do:g.score+=6;level:3,target:hand,do:g.score+=11", limit: "", growth: "" }, { id: 44, alias: "growHeldScoreAdd1", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "target:held,do:g.score+=5", limit: "", growth: "" }, { id: 61, alias: "growHeldScoreAdd2", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=8", limit: "", growth: "" }, { id: 77, alias: "growHeldScoreAdd3", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=6;level:3,target:held,do:g.score+=11", limit: "", growth: "" }, { id: 81, alias: "onFullPowerGrowThisAdd1", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=3" }, { id: 63, alias: "onStrengthGrowThisAdd2", name: "\u6210\u9577\u8FFD\u52A0", type: "effect", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:stanceChanged,if:isStrength,target:this,do:g.score+=2;level:2,at:stanceChanged,if:isStrength,target:this,do:g.score+=5" }, { id: 86, alias: "daydreamingEffect3", name: "\u6301\u7D9A\u52B9\u679C+", type: "effect", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "line:2,level:1,at:startOfTurn,do:score+=genki*0.7,limit:4;line:2,level:2,at:startOfTurn,do:score+=genki*0.8,limit:4;line:2,level:3,at:startOfTurn,do:score+=genki*0.95,limit:4", limit: "", growth: "" }, { id: 46, alias: "kagakimi1", name: "\u6301\u7D9A\u52B9\u679C+", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:2,at:cardUsed,do:score+=goodImpressionTurns*0.5,do:goodImpressionTurns+=1", limit: "", growth: "" }, { id: 85, alias: "daydreamingCondition1", name: "\u6761\u4EF6\u5909\u66F4", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "line:1,if:genki>=15", cost: "", effects: "", limit: "", growth: "" }, { id: 97, alias: "hachikuCondition1", name: "\u6761\u4EF6\u5909\u66F4", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "line:1,if:goodConditionTurns>=4", cost: "", effects: "", limit: "", growth: "" }, { id: 87, alias: "toughnessCondition1", name: "\u6761\u4EF6\u5909\u66F4", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "line:1,if:preservationTimes>=1", cost: "", effects: "", limit: "", growth: "" }, { id: 88, alias: "yumelipEffect1", name: "\u6761\u4EF6\u5909\u66F4", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:2,if:goodImpressionTurns>=10", limit: "", growth: "" }, { id: 41, alias: "preservation1", name: "\u6E29\u5B58+", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.stanceLevel+=1" }, { id: 89, alias: "preservationAdd1", name: "\u6E29\u5B58\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:setStance(preservation)", limit: "", growth: "" }, { id: 42, alias: "preservationNextTurnAdd1", name: "\u6E29\u5B58\u8FFD\u52A0", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "at:turn,do:setStance(preservation),limit:1", limit: "", growth: "" }, { id: 36, alias: "forceInitialHand1", name: "\u958B\u59CB\u6642\u624B\u672D\u306B\u5165\u308B", type: "effect", price: 70, max: 1, forceInitialHand: true, conditions: "", cost: "", effects: "", limit: "", growth: "" }, { id: 25, alias: "genki1_4", name: "\u5143\u6C17+", type: "genki", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.genki+=4" }, { id: 26, alias: "genki1_9", name: "\u5143\u6C17+", type: "genki", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.genki+=9" }, { id: 59, alias: "genki2", name: "\u5143\u6C17+", type: "genki", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.genki+=4;level:2,at:prestage,target:this,do:g.genki+=13" }, { id: 75, alias: "genki3", name: "\u5143\u6C17+", type: "genki", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.genki+=4;level:2,at:prestage,target:this,do:g.genki+=8;level:3,at:prestage,target:this,do:g.genki+=17" }, { id: 90, alias: "genkiAdd1_3_mm_1.5", name: "\u5143\u6C17\u8FFD\u52A0", type: "genki", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:motivationMultiplier=1.5,do:genki+=3", limit: "", growth: "" }, { id: 27, alias: "genkiAdd1_4", name: "\u5143\u6C17\u8FFD\u52A0", type: "genki", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:genki+=4", limit: "", growth: "" }, { id: 28, alias: "genkiAdd1_9", name: "\u5143\u6C17\u8FFD\u52A0", type: "genki", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:genki+=9", limit: "", growth: "" }, { id: 2, alias: "score1_12", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.score+=12" }, { id: 1, alias: "score1_6", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.score+=6" }, { id: 47, alias: "score2_3", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.score+=3;level:2,at:prestage,target:this,do:g.score+=11" }, { id: 48, alias: "score2_6", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.score+=6;level:2,at:prestage,target:this,do:g.score+=22" }, { id: 64, alias: "score3_3", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.score+=3;level:2,at:prestage,target:this,do:g.score+=6;level:3,at:prestage,target:this,do:g.score+=15" }, { id: 65, alias: "score3_6", name: "\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.score+=6;level:2,at:prestage,target:this,do:g.score+=12;level:3,at:prestage,target:this,do:g.score+=30" }, { id: 4, alias: "scoreTimes1", name: "\u30D1\u30E9\u30E1\u30FC\u30BF\u4E0A\u6607\u56DE\u6570+", type: "score", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreTimes+=1" }, { id: 99, alias: "oneMoreStepEffect1", name: "\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "at:turn,do:score+=5,limit:2", limit: "", growth: "" }, { id: 79, alias: "scoreAdd1_12", name: "\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:score+=12", limit: "", growth: "" }, { id: 3, alias: "scoreAdd1_6", name: "\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:score+=6", limit: "", growth: "" }, { id: 8, alias: "scoreByMotivation1", name: "\u3084\u308B\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByMotivation+=1.4" }, { id: 84, alias: "scoreByMotivation2", name: "\u3084\u308B\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByMotivation+=0.7;level:2,at:prestage,target:this,do:g.scoreByMotivation+=2.1" }, { id: 9, alias: "scoreByMotivationAdd1", name: "\u3084\u308B\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:score+=motivation*1.1", limit: "", growth: "" }, { id: 11, alias: "scoreByGenki1_100", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByGenki+=1" }, { id: 10, alias: "scoreByGenki1_40", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByGenki+=0.4" }, { id: 98, alias: "scoreByGenki1_60", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByGenki+=0.6" }, { id: 50, alias: "scoreByGenki2_20", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByGenki+=0.2;level:2,at:prestage,target:this,do:g.scoreByGenki+=0.6" }, { id: 51, alias: "scoreByGenki2_30", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByGenki+=0.3;level:2,at:prestage,target:this,do:g.scoreByGenki+=0.9" }, { id: 67, alias: "scoreByGenki3", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByGenki+=0.2;level:2,at:prestage,target:this,do:g.scoreByGenki+=0.4;level:3,at:prestage,target:this,do:g.scoreByGenki+=0.8" }, { id: 12, alias: "scoreByGenkiAdd1", name: "\u5143\u6C17\u5206\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:score+=genki*0.3", limit: "", growth: "" }, { id: 6, alias: "scoreByGoodImpressionTurns1_160", name: "\u597D\u5370\u8C61\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=1.6" }, { id: 5, alias: "scoreByGoodImpressionTurns1_80", name: "\u597D\u5370\u8C61\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.8" }, { id: 49, alias: "scoreByGoodImpressionTurns2", name: "\u597D\u5370\u8C61\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,70", max: 2, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.35;level:2,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=1.15" }, { id: 66, alias: "scoreByGoodImpressionTurns3", name: "\u597D\u5370\u8C61\u5206\u30D1\u30E9\u30E1\u30FC\u30BF+", type: "score", price: "40,40,70", max: 3, forceInitialHand: "", conditions: "", cost: "", effects: "", limit: "", growth: "level:1,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.35;level:2,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=0.7;level:3,at:prestage,target:this,do:g.scoreByGoodImpressionTurns+=1.5" }, { id: 7, alias: "scoreByGoodImpressionTurnsAdd1", name: "\u597D\u5370\u8C61\u5206\u30D1\u30E9\u30E1\u30FC\u30BF\u8FFD\u52A0", type: "score", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "do:score+=goodImpressionTurns*0.6", limit: "", growth: "" }, { id: 100, alias: "ukenagashiEffect1_1", name: "\u6761\u4EF6\u5909\u66F4(\u96C6\u4E2D)", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:2,if:concentration>=10", limit: "", growth: "" }, { id: 101, alias: "ukenagashiEffect1_2", name: "\u6761\u4EF6\u5909\u66F4(\u597D\u8ABF)", type: "effect", price: 70, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:4,if:goodConditionTurns>=8", limit: "", growth: "" }, { id: 102, alias: "onigiriEffect1", name: "\u52B9\u679C\u5909\u66F4", type: "effect", price: 100, max: 1, forceInitialHand: "", conditions: "", cost: "", effects: "line:1,at:activeCardUsed,do:onigiriCardsUsed+=1;at:activeCardUsed,if:onigiriCardsUsed%3==2,do:genki+=12*cardsUsed+2,limit:2", limit: "", growth: "" }];
+
+// ../packages/gakumas-data/utils/effects.js
+var TOKEN_REGEX = /([=!]?=|[<>]=?|[+\-*/%]=?|&)/;
+function deserializeEffect(effectString) {
+  if (!effectString.length) return {};
+  return effectString.split(/,(?![^()]*\))/).reduce((acc, cur) => {
+    const [expKey, expValue] = cur.split(":");
+    if (expKey == "at") {
+      acc.phase = expValue;
+    } else if (expKey == "if") {
+      if (!acc.conditions) acc.conditions = [];
+      acc.conditions.push(expValue.split(TOKEN_REGEX));
+    } else if (expKey == "do") {
+      if (!acc.actions) acc.actions = [];
+      acc.actions.push(expValue.split(TOKEN_REGEX));
+    } else if (expKey == "group") {
+      acc.group = parseInt(expValue, 10);
+    } else if (expKey == "limit") {
+      acc.limit = parseInt(expValue, 10);
+    } else if (expKey == "ttl") {
+      acc.ttl = parseInt(expValue, 10);
+    } else if (expKey == "target") {
+      if (!acc.targets) acc.targets = [];
+      acc.targets.push(expValue);
+    } else if (expKey == "level") {
+      acc.level = parseInt(expValue, 10);
+    } else if (expKey == "line") {
+      acc.line = parseInt(expValue, 10);
+    } else if (expKey == "delay") {
+      acc.delay = parseInt(expValue, 10);
+    } else {
+      console.warn("Unrecognized effect segment", effectString);
+    }
+    return acc;
+  }, {});
+}
+function deserializeEffectSequence(effectSequenceString) {
+  return effectSequenceString?.length ? effectSequenceString.split(";").map(deserializeEffect) : [];
+}
+
+// ../packages/gakumas-data/data/customizations.js
+customizations_default.forEach((customization) => {
+  customization.conditions = deserializeEffectSequence(
+    customization.conditions
+  );
+  customization.cost = deserializeEffectSequence(customization.cost);
+  customization.effects = deserializeEffectSequence(customization.effects);
+  customization.growth = deserializeEffectSequence(customization.growth);
+});
+var CUSTOMIZATIONS_BY_ID = customizations_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+var Customizations = class {
+  static getAll() {
+    return customizations_default;
+  }
+  static getById(id) {
+    return CUSTOMIZATIONS_BY_ID[id];
+  }
+};
+var customizations_default2 = Customizations;
+
+// ../packages/gakumas-data/json/idols.json
+var idols_default = [{ id: 1, name: "\u82B1\u6D77 \u54B2\u5B63" }, { id: 2, name: "\u6708\u6751 \u624B\u6BEC" }, { id: 3, name: "\u85E4\u7530 \u3053\u3068\u306D" }, { id: 4, name: "\u6709\u6751 \u9EBB\u592E" }, { id: 5, name: "\u845B\u57CE \u30EA\u30FC\u30EA\u30E4" }, { id: 6, name: "\u5009\u672C \u5343\u5948" }, { id: 7, name: "\u7D2B\u96F2 \u6E05\u590F" }, { id: 8, name: "\u7BE0\u6FA4 \u5E83" }, { id: 9, name: "\u59EB\u5D0E \u8389\u6CE2" }, { id: 10, name: "\u82B1\u6D77 \u4F51\u82BD" }, { id: 11, name: "\u5341\u738B \u661F\u5357" }, { id: 12, name: "\u79E6\u8C37 \u7F8E\u9234" }, { id: 13, name: "\u96E8\u591C \u71D5" }];
+
+// ../packages/gakumas-data/data/idols.js
+idols_default.forEach((idol) => {
+  idol._type = "idol";
+});
+var IDOLS_BY_ID = idols_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+
+// ../packages/gakumas-data/json/p_drinks.json
+var p_drinks_default = [{ id: 1, name: "\u521D\u661F\u6C34", rarity: "R", plan: "free", unlockPlv: 1, effects: "do:score+=10" }, { id: 2, name: "\u70CF\u9F8D\u8336", rarity: "R", plan: "free", unlockPlv: 1, effects: "do:genki+=7" }, { id: 3, name: "\u30D3\u30BF\u30DF\u30F3\u30C9\u30EA\u30F3\u30AF", rarity: "R", plan: "sense", unlockPlv: 1, effects: "do:goodConditionTurns+=3" }, { id: 4, name: "\u30A2\u30A4\u30B9\u30B3\u30FC\u30D2\u30FC", rarity: "R", plan: "sense", unlockPlv: 1, effects: "do:concentration+=3" }, { id: 5, name: "\u30EB\u30A4\u30DC\u30B9\u30C6\u30A3\u30FC", rarity: "R", plan: "logic", unlockPlv: 1, effects: "do:goodImpressionTurns+=3" }, { id: 6, name: "\u30DB\u30C3\u30C8\u30B3\u30FC\u30D2\u30FC", rarity: "R", plan: "logic", unlockPlv: 1, effects: "do:motivation+=3" }, { id: 7, name: "\u30B8\u30F3\u30B8\u30E3\u30FC\u30A8\u30FC\u30EB", rarity: "R", plan: "anomaly", unlockPlv: 1, effects: "do:setStance(strength),do:fullPowerCharge+=1" }, { id: 8, name: "\u307B\u3046\u3058\u8336", rarity: "R", plan: "anomaly", unlockPlv: 1, effects: "do:setStance(preservation),do:fullPowerCharge+=2" }, { id: 9, name: "\u30DF\u30C3\u30AF\u30B9\u30B9\u30E0\u30FC\u30B8\u30FC", rarity: "SR", plan: "free", unlockPlv: 8, effects: "do:exchangeHand,do:fixedStamina+=2" }, { id: 10, name: "\u30EA\u30AB\u30D0\u30EA\u30C9\u30EA\u30F3\u30AF", rarity: "SR", plan: "free", unlockPlv: 15, effects: "do:fixedStamina+=6" }, { id: 11, name: "\u30D5\u30EC\u30C3\u30B7\u30E5\u30D3\u30CD\u30AC\u30FC", rarity: "SR", plan: "free", unlockPlv: 1, effects: "do:upgradeHand,do:fixedStamina+=3" }, { id: 12, name: "\u30D6\u30FC\u30B9\u30C8\u30A8\u30AD\u30B9", rarity: "SR", plan: "free", unlockPlv: 55, effects: "do:setScoreBuff(0.3,3),do:halfCostTurns+=3,do:fixedStamina-=2" }, { id: 13, name: "\u30D1\u30EF\u30D5\u30EB\u6F22\u65B9\u30C9\u30EA\u30F3\u30AF", rarity: "SR", plan: "free", unlockPlv: 60, effects: "do:movePIdolCardToHand,do:halfCostTurns+=3" }, { id: 14, name: "\u30BB\u30F3\u30D6\u30EA\u30BD\u30FC\u30C0", rarity: "SR", plan: "free", unlockPlv: 61, effects: "do:setScoreBuff(0.1,5),do:drawCard,do:drawCard,do:fixedStamina-=2;at:afterStartOfTurn,do:drawCard,limit:5" }, { id: 15, name: "\u30B9\u30BF\u30DF\u30CA\u7206\u767A\u30C9\u30EA\u30F3\u30AF", rarity: "SR", plan: "sense", unlockPlv: 21, effects: "do:perfectConditionTurns+=1,do:genki+=9" }, { id: 16, name: "\u304A\u3057\u3083\u308C\u30CF\u30FC\u30D6\u30C6\u30A3\u30FC", rarity: "SR", plan: "logic", unlockPlv: 21, effects: "do:score+=goodImpressionTurns,do:genki+=3" }, { id: 17, name: "\u307B\u3063\u3068\u7DD1\u8336", rarity: "SR", plan: "anomaly", unlockPlv: 21, effects: "do:holdSelectedFromDeckOrDiscards,do:setStance(preservation2)" }, { id: 18, name: "\u521D\u661F\u30DB\u30A8\u30A4\u30D7\u30ED\u30C6\u30A4\u30F3", rarity: "SSR", plan: "free", unlockPlv: 1, effects: "do:cardUsesRemaining+=1" }, { id: 19, name: "\u521D\u661F\u30B9\u30DA\u30B7\u30E3\u30EB\u9752\u6C41", rarity: "SSR", plan: "free", unlockPlv: 15, effects: "do:addRandomUpgradedSSRCardToHand" }, { id: 20, name: "\u53B3\u9078\u521D\u661F\u30DE\u30AD\u30A2\u30FC\u30C8", rarity: "SSR", plan: "sense", unlockPlv: 27, effects: "at:endOfTurn,do:concentration+=1" }, { id: 21, name: "\u521D\u661F\u30D6\u30FC\u30B9\u30C8\u30A8\u30CA\u30B8\u30FC", rarity: "SSR", plan: "sense", unlockPlv: 26, effects: "do:perfectConditionTurns+=2,do:upgradeHand" }, { id: 22, name: "\u521D\u661F\u9ED2\u9162", rarity: "SSR", plan: "sense", unlockPlv: 61, effects: "do:moveSelectedFromDeckOrDiscardsToHand,do:nullifyCostCards+=2,do:fixedStamina-=2,do:doubleCostTurns+=1" }, { id: 23, name: "\u53B3\u9078\u521D\u661F\u30C6\u30A3\u30FC", rarity: "SSR", plan: "logic", unlockPlv: 27, effects: "at:endOfTurn,do:goodImpressionTurns+=1" }, { id: 24, name: "\u53B3\u9078\u521D\u661F\u30D6\u30EC\u30F3\u30C9", rarity: "SSR", plan: "logic", unlockPlv: 26, effects: "at:endOfTurn,do:motivation+=1" }, { id: 25, name: "\u7279\u88FD\u30CF\u30C4\u30DC\u30B7\u30A8\u30AD\u30B9", rarity: "SSR", plan: "logic", unlockPlv: 55, effects: "at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;do:fixedStamina-=2,do:doubleCostTurns+=1" }, { id: 26, name: "\u521D\u661F\u30B9\u30FC\u30D1\u30FC\u30BD\u30FC\u30C0", rarity: "SSR", plan: "anomaly", unlockPlv: 26, effects: "do:setStance(strength2),do:halfCostTurns+=1" }, { id: 27, name: "\u53B3\u9078\u521D\u661F\u30C1\u30E3\u30A4", rarity: "SSR", plan: "anomaly", unlockPlv: 27, effects: "at:startOfTurn,do:fullPowerCharge+=1" }, { id: 28, name: "\u521D\u661F\u6E6F", rarity: "SSR", plan: "anomaly", unlockPlv: 60, effects: "do:turnsRemaining+=1,do:fixedStamina-=2,do:doubleCostTurns+=1" }];
+
+// ../packages/gakumas-data/data/pDrinks.js
+p_drinks_default.forEach((pDrink) => {
+  pDrink._type = "pDrink";
+  pDrink.effects = deserializeEffectSequence(pDrink.effects);
+});
+var P_DRINKS_BY_ID = p_drinks_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+
+// ../packages/gakumas-data/json/p_idols.json
+var p_idols_default = [{ id: 1, idolId: 1, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 2, idolId: 2, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "sense", recommendedEffect: "concentration" }, { id: 3, idolId: 3, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 4, idolId: 4, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 5, idolId: 5, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 6, idolId: 6, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 7, idolId: 7, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "sense", recommendedEffect: "concentration" }, { id: 8, idolId: 8, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 9, idolId: 9, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "sense", recommendedEffect: "concentration" }, { id: 10, idolId: 1, title: "\u308F\u305F\u3057\u304C\u4E00\u756A\uFF01", rarity: "SR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 11, idolId: 2, title: "\u4E00\u5339\u72FC", rarity: "SR", plan: "sense", recommendedEffect: "concentration" }, { id: 12, idolId: 3, title: "\u30AB\u30EF\u30A4\u30A4\u2661\u306F\u3058\u3081\u307E\u3057\u305F", rarity: "SR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 13, idolId: 4, title: "\u306F\u3058\u307E\u308A\u306F\u30AB\u30C3\u30B3\u3088\u304F", rarity: "SR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 14, idolId: 5, title: "\u4E00\u3064\u8E0F\u307F\u51FA\u3057\u305F\u5148\u306B", rarity: "SR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 15, idolId: 6, title: "\u80F8\u3092\u5F35\u3063\u3066\u4E00\u6B69\u305A\u3064", rarity: "SR", plan: "logic", recommendedEffect: "motivation" }, { id: 16, idolId: 7, title: "\u5922\u3078\u306E\u30EA\u30B9\u30BF\u30FC\u30C8", rarity: "SR", plan: "sense", recommendedEffect: "concentration" }, { id: 17, idolId: 8, title: "\u4E00\u756A\u5411\u3044\u3066\u306A\u3044\u3053\u3068", rarity: "SR", plan: "logic", recommendedEffect: "motivation" }, { id: 18, idolId: 9, title: "\u300E\u79C1\u3089\u3057\u3055\u300F\u306E\u306F\u3058\u307E\u308A", rarity: "SR", plan: "sense", recommendedEffect: "concentration" }, { id: 19, idolId: 1, title: "Fighting My Way", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 20, idolId: 2, title: "Luna say maybe", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 21, idolId: 3, title: "\u4E16\u754C\u4E00\u53EF\u611B\u3044\u79C1", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 22, idolId: 4, title: "Fluorite", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 23, idolId: 5, title: "\u767D\u7DDA", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 24, idolId: 6, title: "Wonder Scale", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 25, idolId: 7, title: "Tame-Lie-One-Step", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 26, idolId: 8, title: "\u5149\u666F", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 27, idolId: 9, title: "clumsy trick", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 28, idolId: 2, title: "\u30A2\u30A4\u30F4\u30A4", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 29, idolId: 10, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 30, idolId: 10, title: "\u30A2\u30A4\u30C9\u30EB\u3001\u306F\u3058\u3081\u3063\uFF01", rarity: "SR", plan: "logic", recommendedEffect: "motivation" }, { id: 31, idolId: 10, title: "The Rolling Riceball", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 32, idolId: 3, title: "Yellow Big Bang\uFF01", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 33, idolId: 1, title: "Boom Boom Pow", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 34, idolId: 4, title: "\u30AD\u30DF\u3068\u30BB\u30DF\u30D6\u30EB\u30FC", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 35, idolId: 7, title: "\u30AD\u30DF\u3068\u30BB\u30DF\u30D6\u30EB\u30FC", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 36, idolId: 9, title: "\u30AD\u30DF\u3068\u30BB\u30DF\u30D6\u30EB\u30FC", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 37, idolId: 8, title: "\u30B3\u30F3\u30C8\u30E9\u30B9\u30C8", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 38, idolId: 1, title: "\u51A0\u83CA", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 39, idolId: 5, title: "\u51A0\u83CA", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 40, idolId: 3, title: "\u51A0\u83CA", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 41, idolId: 1, title: "\u521D\u58F0", rarity: "R", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 42, idolId: 2, title: "\u521D\u58F0", rarity: "R", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 43, idolId: 3, title: "\u521D\u58F0", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 44, idolId: 6, title: "\u65E5\u3005\u3001\u767A\u898B\u7684\u30B9\u30C6\u30C3\u30D7\uFF01", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 45, idolId: 5, title: "\u521D\u5FC3", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 46, idolId: 6, title: "\u521D\u5FC3", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 47, idolId: 9, title: "\u521D\u5FC3", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 48, idolId: 9, title: "\u3088\u3046\u3053\u305D\u521D\u661F\u6E29\u6CC9", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 49, idolId: 6, title: "\u3088\u3046\u3053\u305D\u521D\u661F\u6E29\u6CC9", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 50, idolId: 4, title: "Feel Jewel Dream", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 51, idolId: 6, title: "\u4EEE\u88C5\u72C2\u9A12\u66F2", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 52, idolId: 2, title: "\u4EEE\u88C5\u72C2\u9A12\u66F2", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 53, idolId: 8, title: "\u4EEE\u88C5\u72C2\u9A12\u66F2", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 54, idolId: 4, title: "\u521D\u604B", rarity: "R", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 55, idolId: 7, title: "\u521D\u604B", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 56, idolId: 8, title: "\u521D\u604B", rarity: "R", plan: "sense", recommendedEffect: "concentration" }, { id: 57, idolId: 9, title: "L.U.V", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 58, idolId: 1, title: "\u53E4\u4ECA\u6771\u897F\u3061\u3087\u3061\u3087\u3044\u306E\u3061\u3087\u3044", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 59, idolId: 11, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "anomaly", recommendedEffect: "strength" }, { id: 60, idolId: 11, title: "\u4E00\u756A\u661F", rarity: "SR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 61, idolId: 11, title: "\u5C0F\u3055\u306A\u91CE\u671B", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 62, idolId: 3, title: "White Night! White Wish!", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 63, idolId: 10, title: "White Night! White Wish!", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 64, idolId: 5, title: "White Night! White Wish!", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 65, idolId: 7, title: "\u30AB\u30AF\u30B7\u30BF\u30EF\u30BF\u30B7", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 66, idolId: 1, title: "Campus mode!!", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 67, idolId: 2, title: "Campus mode!!", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 68, idolId: 3, title: "Campus mode!!", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 69, idolId: 4, title: "Campus mode!!", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 70, idolId: 11, title: "Campus mode!!", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 71, idolId: 9, title: "Campus mode!!", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 72, idolId: 6, title: "Campus mode!!", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 73, idolId: 8, title: "Campus mode!!", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 74, idolId: 10, title: "Campus mode!!", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 75, idolId: 5, title: "Campus mode!!", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 76, idolId: 7, title: "Campus mode!!", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 77, idolId: 8, title: "\u30CF\u30C3\u30D4\u30FC\u30DF\u30EB\u30D5\u30A3\u30FC\u30E6", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 78, idolId: 9, title: "\u30CF\u30C3\u30D4\u30FC\u30DF\u30EB\u30D5\u30A3\u30FC\u30E6", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 79, idolId: 11, title: "\u30CF\u30C3\u30D4\u30FC\u30DF\u30EB\u30D5\u30A3\u30FC\u30E6", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 80, idolId: 2, title: "\u96EA\u89E3\u3051\u306B", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 81, idolId: 6, title: "\u96EA\u89E3\u3051\u306B", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 82, idolId: 4, title: "\u96EA\u89E3\u3051\u306B", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 83, idolId: 5, title: "\u6975\u5149", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 84, idolId: 5, title: "\u685C\u30D5\u30A9\u30C8\u30B0\u30E9\u30D5", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 85, idolId: 7, title: "\u685C\u30D5\u30A9\u30C8\u30B0\u30E9\u30D5", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 86, idolId: 1, title: "\u685C\u30D5\u30A9\u30C8\u30B0\u30E9\u30D5", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 87, idolId: 11, title: "Our Chant", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 88, idolId: 1, title: "\u96E8\u4E0A\u304C\u308A\u306E\u30A2\u30A4\u30EA\u30B9", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 89, idolId: 2, title: "\u96E8\u4E0A\u304C\u308A\u306E\u30A2\u30A4\u30EA\u30B9", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 90, idolId: 3, title: "\u96E8\u4E0A\u304C\u308A\u306E\u30A2\u30A4\u30EA\u30B9", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 91, idolId: 12, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "anomaly", recommendedEffect: "preservation" }, { id: 92, idolId: 12, title: "\u3086\u3063\u304F\u308A\u3001\u4E00\u6B69\u305A\u3064", rarity: "SR", plan: "anomaly", recommendedEffect: "preservation" }, { id: 93, idolId: 12, title: "\u30C4\u30AD\u30CE\u30AB\u30E1", rarity: "SSR", plan: "anomaly", recommendedEffect: "preservation" }, { id: 94, idolId: 6, title: "Howling over the World", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 95, idolId: 9, title: "Howling over the World", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 96, idolId: 5, title: "Howling over the World", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 97, idolId: 7, title: "Love & Joy", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 98, idolId: 12, title: "Campus mode!!", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 99, idolId: 11, title: "\u521D\u9663", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 100, idolId: 12, title: "\u521D\u9663", rarity: "R", plan: "logic", recommendedEffect: "motivation" }, { id: 101, idolId: 10, title: "\u521D\u9663", rarity: "R", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 102, idolId: 8, title: "\u30B5\u30F3\u30D5\u30A7\u30FC\u30C7\u30C3\u30C9", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 103, idolId: 10, title: "Star-mine", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 104, idolId: 12, title: "Star-mine", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 105, idolId: 11, title: "Star-mine", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 106, idolId: 3, title: "\u81EA\u5DF1\u80AF\u5B9A\u611F\u7206\u4E0A\u3052\u2191\u2191\u3057\u3085\u304D\u3057\u3085\u304D\u30BD\u30F3\u30B0", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 107, idolId: 4, title: "\u30DF\u30E9\u30AF\u30EB\u30CA\u30CA\u30A6(\uFF9F\u2200\uFF9F)\uFF01", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 108, idolId: 7, title: "\u30DF\u30E9\u30AF\u30EB\u30CA\u30CA\u30A6(\uFF9F\u2200\uFF9F)\uFF01", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 109, idolId: 8, title: "\u30DF\u30E9\u30AF\u30EB\u30CA\u30CA\u30A6(\uFF9F\u2200\uFF9F)\uFF01", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 110, idolId: 9, title: "36\u2103 U\u30FBB\u30FBU", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 111, idolId: 3, title: "\u304C\u3080\u3057\u3083\u3089\u306B\u884C\u3053\u3046\uFF01", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 112, idolId: 1, title: "\u304C\u3080\u3057\u3083\u3089\u306B\u884C\u3053\u3046\uFF01", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 113, idolId: 2, title: "\u304C\u3080\u3057\u3083\u3089\u306B\u884C\u3053\u3046\uFF01", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }, { id: 114, idolId: 6, title: "\u7A7A\u3068\u7D04\u675F", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 115, idolId: 4, title: "\u898B\u3066", rarity: "SSR", plan: "sense", recommendedEffect: "concentration" }, { id: 116, idolId: 13, title: "\u5B66\u5712\u751F\u6D3B", rarity: "R", plan: "anomaly", recommendedEffect: "strength" }, { id: 117, idolId: 13, title: "\u521D\u5FD7\u8CAB\u5FB9", rarity: "SR", plan: "logic", recommendedEffect: "motivation" }, { id: 118, idolId: 13, title: "\u7406\u8AD6\u6B66\u88C5\u3057\u3066", rarity: "SSR", plan: "logic", recommendedEffect: "motivation" }, { id: 119, idolId: 10, title: "\u30B0\u30FC\u30B9\u30FC\u30D4\u30FC", rarity: "SSR", plan: "anomaly", recommendedEffect: "strength" }, { id: 120, idolId: 5, title: "Atmosphere", rarity: "SSR", plan: "anomaly", recommendedEffect: "fullPower" }, { id: 121, idolId: 13, title: "Campus mode!!", rarity: "SSR", plan: "sense", recommendedEffect: "goodConditionTurns" }, { id: 122, idolId: 12, title: "Superlative", rarity: "SSR", plan: "logic", recommendedEffect: "goodImpressionTurns" }];
+
+// ../packages/gakumas-data/data/pIdols.js
+p_idols_default.forEach((pIdol) => {
+  pIdol._type = "pIdol";
+});
+var P_IDOLS_BY_ID = p_idols_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+var PIdols = class {
+  static getAll() {
+    return p_idols_default;
+  }
+  static getById(id) {
+    return P_IDOLS_BY_ID[id];
+  }
+  static getFiltered({ idolIds, rarities, plans, recommendedEffects }) {
+    return p_idols_default.filter((pIdol) => {
+      if (idolIds && !idolIds.includes(pIdol.idolId)) return false;
+      if (rarities && !rarities.includes(pIdol.rarity)) return false;
+      if (plans && !plans.includes(pIdol.plan)) return false;
+      if (recommendedEffects && !recommendedEffects.includes(pIdol.recommendedEffect))
+        return false;
+      return true;
+    });
+  }
+};
+var pIdols_default = PIdols;
+
+// ../packages/gakumas-data/json/p_items.json
+var p_items_default = [{ id: 1, name: "\u306F\u3064\u307C\u3057\u30D6\u30ED\u30FC\u30C1", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:afterLesson,do:rewardCardOptions+=1" }, { id: 2, name: "\u306F\u3064\u307C\u3057\u30D6\u30EC\u30B9\u30EC\u30C3\u30C8", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:afterSPLesson,do:fixedStamina-=3,do:upgradeSelectedCard" }, { id: 3, name: "\u306F\u3064\u307C\u3057\u624B\u5E33", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:concentration>=5,do:cardUsesRemaining+=1,do:concentration+=2,limit:1" }, { id: 4, name: "\u306F\u3064\u307C\u3057T\u30B7\u30E3\u30C4", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:goodConditionTurns>=1,do:cardUsesRemaining+=1,do:goodConditionTurns+=2,limit:1" }, { id: 5, name: "\u306F\u3064\u307C\u3057\u30AD\u30FC\u30DB\u30EB\u30C0\u30FC", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:goodImpressionTurns>=3,do:cardUsesRemaining+=1,do:goodImpressionTurns+=3,limit:1" }, { id: 6, name: "\u30DE\u30B9\u30B3\u30C3\u30C8\uFF08\u975E\u516C\u8A8D\uFF09", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:motivation>=5,do:cardUsesRemaining+=1,do:motivation+=3,limit:1" }, { id: 7, name: "\u3070\u304F\u304A\u3093\u30E9\u30A4\u30AA\u30F3", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 1, welfare: false, effects: "at:startOfTurn,if:goodConditionTurns>=1,do:score+=6,limit:1" }, { id: 8, name: "\u3070\u304F\u304A\u3093\u30E9\u30A4\u30AA\u30F3+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 1, welfare: false, effects: "at:startOfTurn,if:goodConditionTurns>=1,do:score+=11,limit:1" }, { id: 9, name: "\u5FC5\u643A\u30B9\u30C6\u30F3\u30EC\u30B9\u30DC\u30C8\u30EB", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 2, welfare: false, effects: "at:startOfTurn,if:concentration>=3,do:concentration+=4,limit:1" }, { id: 10, name: "\u5FC5\u643A\u30B9\u30C6\u30F3\u30EC\u30B9\u30DC\u30C8\u30EB+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 2, welfare: false, effects: "at:startOfTurn,if:concentration>=3,do:concentration+=6,limit:1" }, { id: 11, name: "\u3061\u3073\u3069\u3082\u624B\u4F5C\u308A\u30E1\u30C0\u30EB", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 3, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,limit:2" }, { id: 12, name: "\u3061\u3073\u3069\u3082\u624B\u4F5C\u308A\u30E1\u30C0\u30EB+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 3, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,limit:3" }, { id: 13, name: "\u7D33\u58EB\u98A8\u30CF\u30F3\u30AB\u30C1\u30FC\u30D5", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 4, welfare: false, effects: "at:afterStartOfTurn,if:goodConditionTurns>=1,do:concentration+=1,limit:2" }, { id: 14, name: "\u7D33\u58EB\u98A8\u30CF\u30F3\u30AB\u30C1\u30FC\u30D5+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 4, welfare: false, effects: "at:afterStartOfTurn,if:goodConditionTurns>=1,do:concentration+=2,limit:2" }, { id: 15, name: "\u7DD1\u306E\u304A\u63C3\u3044\u30D6\u30EC\u30B9", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 5, welfare: false, effects: "at:goodImpressionTurnsIncreased,do:goodImpressionTurns+=3,limit:1" }, { id: 16, name: "\u7DD1\u306E\u304A\u63C3\u3044\u30D6\u30EC\u30B9+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 5, welfare: false, effects: "at:goodImpressionTurnsIncreased,do:goodImpressionTurns+=5,limit:1" }, { id: 17, name: "\u9858\u3044\u3092\u53F6\u3048\u308B\u304A\u5B88\u308A", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 6, welfare: false, effects: "at:motivationIncreased,do:motivation+=2,limit:1" }, { id: 18, name: "\u9858\u3044\u3092\u53F6\u3048\u308B\u304A\u5B88\u308A+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 6, welfare: false, effects: "at:motivationIncreased,do:motivation+=3,limit:1" }, { id: 19, name: "\u30D4\u30F3\u30AF\u306E\u304A\u63C3\u3044\u30D6\u30EC\u30B9", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 7, welfare: false, effects: "at:startOfTurn,do:concentration+=1,limit:2" }, { id: 20, name: "\u30D4\u30F3\u30AF\u306E\u304A\u63C3\u3044\u30D6\u30EC\u30B9+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 7, welfare: false, effects: "at:startOfTurn,do:concentration+=1,limit:3" }, { id: 21, name: "\u8D85\u7D76\u3042\u3093\u307F\u3093\u30DE\u30B9\u30AF", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 8, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=genki*0.5,do:fixedStamina-=1" }, { id: 22, name: "\u8D85\u7D76\u3042\u3093\u307F\u3093\u30DE\u30B9\u30AF+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 8, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=genki*0.7,do:fixedStamina-=1" }, { id: 23, name: "\u3044\u3064\u3082\u306E\u30E1\u30A4\u30AF\u30DD\u30FC\u30C1", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 9, welfare: false, effects: "at:activeCardUsed,if:stamina>=maxStamina*0.5,do:concentration+=2,limit:1" }, { id: 24, name: "\u3044\u3064\u3082\u306E\u30E1\u30A4\u30AF\u30DD\u30FC\u30C1+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 9, welfare: false, effects: "at:activeCardUsed,if:stamina>=maxStamina*0.5,do:concentration+=3,limit:1" }, { id: 25, name: "\u54B2\u5B63\u306E\u5B8C\u5168\u98DF\u30EC\u30B7\u30D4", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 10, welfare: false, effects: "at:startOfTurn,if:goodConditionTurns>=1,do:genki+=9,limit:1" }, { id: 26, name: "\u54B2\u5B63\u306E\u5B8C\u5168\u98DF\u30EC\u30B7\u30D4+", rarity: "SR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 10, welfare: false, effects: "at:startOfTurn,if:goodConditionTurns>=1,do:genki+=12,limit:1" }, { id: 27, name: "\u79C1\u306E\u300C\u521D\u300D\u306E\u697D\u8B5C", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 11, welfare: false, effects: "at:startOfTurn,if:genki==0,do:cost-=1,do:concentration+=3,limit:2" }, { id: 28, name: "\u79C1\u306E\u300C\u521D\u300D\u306E\u697D\u8B5C+", rarity: "SR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 11, welfare: false, effects: "at:startOfTurn,if:genki==0,do:cost-=1,do:concentration+=4,limit:2" }, { id: 29, name: "\u304A\u6C17\u306B\u306E\u30B9\u30CB\u30FC\u30AB\u30FC", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 12, welfare: false, effects: "at:endOfTurn,if:genki>=7,do:goodImpressionTurns+=4,limit:1" }, { id: 30, name: "\u304A\u6C17\u306B\u306E\u30B9\u30CB\u30FC\u30AB\u30FC+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 12, welfare: false, effects: "at:endOfTurn,if:genki>=7,do:goodImpressionTurns+=5,limit:1" }, { id: 31, name: "Dear\u30EA\u30C8\u30EB\u30D7\u30EA\u30F3\u30B9", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 13, welfare: false, effects: "at:goodConditionTurnsIncreased,do:goodConditionTurns+=3,limit:1" }, { id: 32, name: "Dear\u30EA\u30C8\u30EB\u30D7\u30EA\u30F3\u30B9+", rarity: "SR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 13, welfare: false, effects: "at:goodConditionTurnsIncreased,do:goodConditionTurns+=4,limit:1" }, { id: 33, name: "\u601D\u3044\u51FA\u30ED\u30DC", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 14, welfare: false, effects: "at:endOfTurn,if:stamina>=maxStamina*0.5,do:goodImpressionTurns+=3,limit:1" }, { id: 34, name: "\u601D\u3044\u51FA\u30ED\u30DC+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 14, welfare: false, effects: "at:endOfTurn,if:stamina>=maxStamina*0.5,do:goodImpressionTurns+=4,limit:1" }, { id: 35, name: "\u3057\u3087\u3052\u306A\u3044\u30CF\u30F3\u30AB\u30C1", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 15, welfare: false, effects: "at:afterActiveCardUsed,do:score+=genki*0.6,do:fixedStamina-=2,limit:2" }, { id: 36, name: "\u3057\u3087\u3052\u306A\u3044\u30CF\u30F3\u30AB\u30C1+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 15, welfare: false, effects: "at:afterActiveCardUsed,do:score+=genki*0.7,do:fixedStamina-=2,limit:2" }, { id: 37, name: "\u653E\u8AB2\u5F8C\u306E\u3089\u304F\u304C\u304D", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 16, welfare: false, effects: "at:concentrationIncreased,if:stamina>=maxStamina*0.5,do:concentration+=2,limit:2" }, { id: 38, name: "\u653E\u8AB2\u5F8C\u306E\u3089\u304F\u304C\u304D+", rarity: "SR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 16, welfare: false, effects: "at:concentrationIncreased,do:concentration+=2,limit:2" }, { id: 39, name: "\u3060\u308C\u3067\u3082\u308F\u304B\u308B\u5165\u9580\u66F8", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 17, welfare: false, effects: "at:startOfTurn,if:genki>=7,do:motivation+=5,limit:1" }, { id: 40, name: "\u3060\u308C\u3067\u3082\u308F\u304B\u308B\u5165\u9580\u66F8+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 17, welfare: false, effects: "at:startOfTurn,if:genki>=7,do:motivation+=6,limit:1" }, { id: 41, name: "\u304D\u307F\u3078\u306E\u5DEE\u3057\u5165\u308C", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 18, welfare: false, effects: "at:startOfTurn,if:concentration>=5,do:fixedStamina+=2,limit:3" }, { id: 42, name: "\u304D\u307F\u3078\u306E\u5DEE\u3057\u5165\u308C+", rarity: "SR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 18, welfare: false, effects: "at:startOfTurn,if:concentration>=5,do:fixedStamina+=2,limit:4" }, { id: 43, name: "\u5171\u306B\u6226\u3046\u30BF\u30AA\u30EB", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 19, welfare: false, effects: "at:afterActiveCardUsed,do:goodConditionTurns+=1,do:cardUsesRemaining+=1,limit:1" }, { id: 44, name: "\u5171\u306B\u6226\u3046\u30BF\u30AA\u30EB+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 19, welfare: false, effects: "at:afterActiveCardUsed,do:goodConditionTurns+=1,do:cardUsesRemaining+=1,do:genki+=5,limit:1" }, { id: 45, name: "\u81EA\u5206\u3092\u5B88\u308B\u30A4\u30E4\u30DB\u30F3", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 20, welfare: false, effects: "at:cardUsed,if:concentration>=5,do:cardUsesRemaining+=1,do:concentration+=1,limit:1" }, { id: 46, name: "\u81EA\u5206\u3092\u5B88\u308B\u30A4\u30E4\u30DB\u30F3+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 20, welfare: false, effects: "at:cardUsed,if:concentration>=5,do:cardUsesRemaining+=1,do:concentration+=3,limit:1" }, { id: 47, name: "\u30D4\u30C3\u30B0\u30C9\u30EA\u30FC\u30E0\u8CAF\u91D1\u7BB1", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 21, welfare: false, effects: "at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=3,do:cardUsesRemaining+=1,limit:1" }, { id: 48, name: "\u30D4\u30C3\u30B0\u30C9\u30EA\u30FC\u30E0\u8CAF\u91D1\u7BB1+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 21, welfare: false, effects: "at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=5,do:cardUsesRemaining+=1,limit:1" }, { id: 49, name: "\u5185\u306A\u308B\u5149\u306E\u8033\u98FE\u308A", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 22, welfare: false, effects: "at:afterStartOfTurn,if:goodConditionTurns>=1,do:concentration+=2,do:genki+=1,limit:2" }, { id: 50, name: "\u5185\u306A\u308B\u5149\u306E\u8033\u98FE\u308A+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 22, welfare: false, effects: "at:afterStartOfTurn,if:goodConditionTurns>=1,do:concentration+=3,do:genki+=1,limit:2" }, { id: 51, name: "\u5922\u3078\u306E\u30E9\u30A4\u30D5\u30ED\u30B0", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 23, welfare: false, effects: "at:endOfTurn,if:genki>=7,do:goodImpressionTurns*=1.5,do:score+=goodImpressionTurns*0.3,limit:1" }, { id: 52, name: "\u5922\u3078\u306E\u30E9\u30A4\u30D5\u30ED\u30B0+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 23, welfare: false, effects: "at:endOfTurn,if:genki>=7,do:goodImpressionTurns*=1.5,do:score+=goodImpressionTurns,limit:1" }, { id: 53, name: "\u3072\u307F\u3064\u7279\u8A13\u30AB\u30FC\u30C7", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 24, welfare: false, effects: "at:motivationIncreased,do:motivation+=3,limit:2" }, { id: 54, name: "\u3072\u307F\u3064\u7279\u8A13\u30AB\u30FC\u30C7+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 24, welfare: false, effects: "at:motivationIncreased,do:motivation+=3,limit:3" }, { id: 55, name: "\u30B2\u30FC\u30BB\u30F3\u306E\u6226\u5229\u54C1", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 25, welfare: false, effects: "at:startOfStage,do:concentration+=3,limit:1" }, { id: 56, name: "\u30B2\u30FC\u30BB\u30F3\u306E\u6226\u5229\u54C1+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 25, welfare: false, effects: "at:startOfStage,do:concentration+=4,limit:1" }, { id: 57, name: "\u307F\u3061\u304F\u3055\u7814\u7A76\u30CE\u30FC\u30C8", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 26, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=genki*0.5,do:fixedStamina-=1" }, { id: 58, name: "\u307F\u3061\u304F\u3055\u7814\u7A76\u30CE\u30FC\u30C8+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 26, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=genki*0.65,do:fixedStamina-=1" }, { id: 59, name: "\u7B49\u8EAB\u5927\u306E\u30EC\u30C7\u30A3\u30EA\u30C3\u30D7", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 27, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=5,limit:2" }, { id: 60, name: "\u7B49\u8EAB\u5927\u306E\u30EC\u30C7\u30A3\u30EA\u30C3\u30D7+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 27, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=3,do:score+=5,limit:3" }, { id: 61, name: "\u7F8E\u9234\u304B\u3089\u306E\u8D08\u308A\u7269", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterVocalSpLesson,if:vocal>=400,do:upgradeRandomCard" }, { id: 62, name: "\u6253\u5012\uFF01\u58BE\u7530\u6C38\u5E74\u79C1\u8CA1\u6CD5", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterOikomiLesson,if:vocal>=400,do:vocal+=26" }, { id: 63, name: "\u624B\u4F5C\u308A\u306E\u3054\u8912\u7F8E", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterOikomiLesson,if:visual>=400,do:visual+=26" }, { id: 64, name: "\u3075\u308F\u3075\u308F\u3067\u3082\u3053\u3082\u3053", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterDanceSPLesson,do:getRandomPDrinks=2" }, { id: 65, name: "\u304A\u59C9\u3055\u307E\u5927\u767E\u79D1", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterOikomiLesson,if:dance>=400,do:dance+=26" }, { id: 66, name: "\u4F8B\u306ESSD\u306E\u79D8\u5BC6", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterDanceLesson,if:stamina>=maxStamina*0.5,do:dance+=13" }, { id: 67, name: "\u4E00\u7DD2\u306B\u304A\u663C\u5BDD\u30DD\u30D7\u30EA", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterVocalLesson,if:stamina>=maxStamina*0.5,do:vocal+=13" }, { id: 68, name: "\u79C1\u304C\u898B\u3064\u3051\u305F\u9038\u6750\u30E1\u30E2", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterVisualLesson,if:stamina>=maxStamina*0.5,do:visual+=13" }, { id: 69, name: "\u671D\u4E00\u306E\u52A9\u3051\u821F", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardUpgraded,if:vocal>=400,do:pPoints+=15" }, { id: 70, name: "\u8A93\u3044\u306E\u82B1\u3073\u3089", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterVisualSPLesson,if:visual>=400,do:upgradeRandomCard" }, { id: 71, name: "\u5F97\u4F53\u306E\u3057\u308C\u306A\u3044\u30E2\u30CE", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVisualTurn,do:setScoreBuff(0.5,1),limit:3" }, { id: 72, name: "\u661F\u306E\u30EA\u30C8\u30EB\u30D7\u30EA\u30F3\u30B9", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVisualTurn,do:fixedGenki+=2" }, { id: 73, name: "\u6094\u3057\u3055\u306E\u8C61\u5FB4", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,do:setScoreBuff(0.5,1),limit:3" }, { id: 74, name: "\u66C7\u308A\u3092\u306C\u3050\u3063\u305F\u30BF\u30AA\u30EB", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:activeCardUsed,if:isVocalTurn,do:fixedStamina+=2,limit:3" }, { id: 75, name: "\u30B9\u30AB\u30A6\u30C8\u906E\u308A\u5E3D", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfTurn,if:isVocalTurn,do:drawCard,do:fixedGenki+=2,limit:3" }, { id: 76, name: "\u4FE1\u983C\u306E\u8A3C", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterDate,do:fixedStamina+=9" }, { id: 77, name: "\u6E80\u958B\u30DA\u30A2\u30D8\u30A2\u30D4\u30F3", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:activeCardUsed,if:isVisualTurn,do:fixedStamina+=2,limit:3" }, { id: 78, name: "\u4EF2\u76F4\u308A\u306E\u304D\u3063\u304B\u3051", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVisualTurn,do:cardUsesRemaining+=1,limit:1" }, { id: 79, name: "\u5922\u306B\u3042\u3075\u308C\u305F\u5927\u8377\u7269", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,do:cardUsesRemaining+=1,limit:1" }, { id: 80, name: "\u3053\u308C\u304C\u3001\u79C1", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 28, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=10,do:score+=goodImpressionTurns,do:genki+=3,limit:2" }, { id: 81, name: "\u3053\u308C\u304C\u3001\u79C1+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 28, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=10,do:score+=goodImpressionTurns,do:genki+=3,limit:3" }, { id: 82, name: "\u5929\u5DDD\u30E9\u30FC\u30E1\u30F3\u5DE1\u308A", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVocalTurn,do:cardUsesRemaining+=1,limit:1" }, { id: 83, name: "\u30C6\u30AF\u30CE\u30C9\u30C3\u30B0", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 29, welfare: false, effects: "at:afterCardUsed,if:motivation>=3,do:motivation+=2,limit:1" }, { id: 84, name: "\u30C6\u30AF\u30CE\u30C9\u30C3\u30B0+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 29, welfare: false, effects: "at:afterCardUsed,if:motivation>=3,do:motivation+=3,limit:1" }, { id: 85, name: "\u67F4\u72AC\u30DD\u30B7\u30A7\u30C3\u30C8", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 30, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,do:genki+=5,limit:2" }, { id: 86, name: "\u67F4\u72AC\u30DD\u30B7\u30A7\u30C3\u30C8+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 30, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,do:genki+=5,limit:3" }, { id: 87, name: "\u8EE2\u304C\u308A\u7D9A\u3051\u308B\u5143\u6C17\u306E\u6E90", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 31, welfare: false, effects: "at:afterMentalCardUsed,if:motivation>=5,do:motivation+=3,do:cardUsesRemaining+=1,limit:1" }, { id: 88, name: "\u8EE2\u304C\u308A\u7D9A\u3051\u308B\u5143\u6C17\u306E\u6E90+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 31, welfare: false, effects: "at:afterMentalCardUsed,if:motivation>=5,do:motivation+=5,do:cardUsesRemaining+=1,limit:1" }, { id: 89, name: "\u6700\u9AD8\u306B\u30CF\u30C3\u30D4\u30FC\u306E\u6E90", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 32, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==278,do:goodConditionTurns+=3,do:fixedGenki+=5,limit:1" }, { id: 90, name: "\u6700\u9AD8\u306B\u30CF\u30C3\u30D4\u30FC\u306E\u6E90+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 32, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==278,do:goodConditionTurns+=3,do:fixedGenki+=11,limit:1" }, { id: 91, name: "\u30C0\u30D6\u30EB\u30DC\u30C8\u30EB", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&goodConditionTurns,do:dance+=6" }, { id: 92, name: "\u8679\u304B\u3051\u308B\u30AF\u30ED\u30B9", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:activeCardUsed,if:isDanceTurn,do:fixedStamina+=2,limit:3" }, { id: 93, name: "\u52DD\u3061\u3078\u306E\u3053\u3060\u308F\u308A", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 33, welfare: false, effects: "at:staminaDecreased,do:goodImpressionTurns+=2,limit:4" }, { id: 94, name: "\u52DD\u3061\u3078\u306E\u3053\u3060\u308F\u308A+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 33, welfare: false, effects: "at:staminaDecreased,do:goodImpressionTurns+=2" }, { id: 95, name: "\u54B2\u5B63\u30AA\u30B9\u30B9\u30E1\u30DE\u30C3\u30C8", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&goodImpressionTurns,do:visual+=6" }, { id: 96, name: "\u6700\u5F8C\u306E\u590F\u306E\u601D\u3044\u51FA", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 34, welfare: false, effects: "at:startOfTurn,if:concentration>=3,do:genki+=10,limit:1" }, { id: 97, name: "\u6700\u5F8C\u306E\u590F\u306E\u601D\u3044\u51FA+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 34, welfare: false, effects: "at:startOfTurn,if:concentration>=3,do:genki+=14,limit:1" }, { id: 98, name: "\u30AB\u30A8\u30EB\u5370\u306E\u6247\u98A8\u6A5F", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 35, welfare: false, effects: "at:afterActiveCardUsed,if:motivation>=12,do:score+=motivation*2.7,do:fixedStamina-=2,limit:4" }, { id: 99, name: "\u30AB\u30A8\u30EB\u5370\u306E\u6247\u98A8\u6A5F+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 35, welfare: false, effects: "at:afterActiveCardUsed,if:motivation>=12,do:score+=motivation*3.4,do:fixedStamina-=2,limit:4" }, { id: 100, name: "\u8CA0\u3051\u305A\u5ACC\u3044\u306E\u52F2\u7AE0", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,do:score+=motivation*0.5" }, { id: 101, name: "\u304D\u307F\u3068\u5206\u3051\u5408\u3046\u590F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 36, welfare: false, effects: "at:afterStartOfTurn,if:halfCostTurns>=1,do:perfectConditionTurns+=1,do:drawCard,limit:2" }, { id: 102, name: "\u304D\u307F\u3068\u5206\u3051\u5408\u3046\u590F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 36, welfare: false, effects: "at:afterStartOfTurn,if:halfCostTurns>=1,do:perfectConditionTurns+=1,do:drawCard,limit:3" }, { id: 103, name: "\u53EF\u611B\u3044\u96A0\u3057\u30D0\u30B9\u30BF\u30AA\u30EB", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&motivation,do:vocal+=6" }, { id: 104, name: "\u307E\u3060\u898B\u306C\u4E16\u754C\u3078", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 37, welfare: false, effects: "at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=5,do:costReduction+=2,do:upgradeHand,limit:1" }, { id: 105, name: "\u307E\u3060\u898B\u306C\u4E16\u754C\u3078+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 37, welfare: false, effects: "at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=7,do:costReduction+=3,do:upgradeHand,limit:1" }, { id: 106, name: "\u30AA\u30FC\u30D0\u30FC\u30D1\u30EF\u30FC\u30DC\u30FC\u30EB", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVocalTurn,do:concentration+=4,do:fixedStamina-=2,limit:1" }, { id: 107, name: "\u30A6\u30C1\u30E5\u30A6\u30B8\u30F3\u30C7\u30A2\u30EB", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&concentration,do:vocal+=6" }, { id: 108, name: "\u6557\u308C\u77E5\u3089\u305A\u306E\u30DD\u30A4", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 38, welfare: false, effects: "at:startOfTurn,if:goodImpressionTurns>=6,do:fixedStamina+=4,limit:2" }, { id: 109, name: "\u6557\u308C\u77E5\u3089\u305A\u306E\u30DD\u30A4+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 38, welfare: false, effects: "at:startOfTurn,if:goodImpressionTurns>=6,do:fixedStamina+=5,limit:2" }, { id: 110, name: "\u74F6\u306E\u4E2D\u306E\u304D\u3089\u3081\u304D", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 39, welfare: false, effects: "at:endOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=2,limit:3" }, { id: 111, name: "\u74F6\u306E\u4E2D\u306E\u304D\u3089\u3081\u304D+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 39, welfare: false, effects: "at:endOfTurn,if:goodConditionTurns>=3,do:goodConditionTurns+=2,limit:4" }, { id: 112, name: "\u3071\u3061\u3071\u3061\u7DDA\u9999\u82B1\u706B", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 40, welfare: false, effects: "at:everyTurn,if:turnsElapsed%3==2,if:goodImpressionTurns>=6,do:genki+=goodImpressionTurns,do:motivation+=2,do:fixedStamina-=1,limit:4" }, { id: 113, name: "\u3071\u3061\u3071\u3061\u7DDA\u9999\u82B1\u706B+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 40, welfare: false, effects: "at:everyTurn,if:turnsElapsed%3==2,if:goodImpressionTurns>=6,do:genki+=goodImpressionTurns,do:motivation+=3,do:fixedStamina-=1" }, { id: 114, name: "873\u30B7\u30E5\u30FC\u30BF\u30FC", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,do:goodImpressionTurns+=2,do:fixedStamina+=1,limit:2" }, { id: 115, name: "\u30CF\u30F3\u30BF\u30FC\u306E\u6226\u5229\u54C1", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterDanceSPLesson,if:dance>=400,do:pPoints+=60,limit:2" }, { id: 116, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u54B2\u5B63", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 41, welfare: false, effects: "at:staminaDecreased,do:goodImpressionTurns+=2,limit:2" }, { id: 117, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u54B2\u5B63+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 41, welfare: false, effects: "at:staminaDecreased,do:goodImpressionTurns+=2,limit:3" }, { id: 118, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u624B\u6BEC", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 42, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=6,do:score+=goodImpressionTurns,limit:2" }, { id: 119, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u624B\u6BEC+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 42, welfare: false, effects: "at:endOfTurn,if:goodImpressionTurns>=6,do:score+=goodImpressionTurns,limit:3" }, { id: 120, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u3053\u3068\u306D", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 43, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==326,do:goodConditionTurns+=2,limit:1" }, { id: 121, name: "\u521D\u58F0\u306E\u8A3C\u30FB\u3053\u3068\u306D+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 43, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==326,do:goodConditionTurns+=2,do:fixedGenki+=5,limit:1" }, { id: 122, name: "\u3068\u304D\u3081\u304D\u306E\u3044\u3063\u3071\u3044", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 44, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=3+3*cardsUsed,do:fixedStamina-=2,limit:1" }, { id: 123, name: "\u3068\u304D\u3081\u304D\u306E\u3044\u3063\u3071\u3044+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 44, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=5+3*cardsUsed,limit:1" }, { id: 124, name: "\u307B\u3063\u3053\u308A\u307E\u3093\u3077\u304F", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&goodConditionTurns,if:dance>=200,do:minimumRarity=2,do:getRandomPDrinks=1,limit:4" }, { id: 125, name: "\u304D\u3063\u304B\u3051\u306E\u5E2F", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&goodConditionTurns,if:dance>=700,do:removeSelectedCard,do:pPoints+=40,limit:1" }, { id: 126, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u30EA\u30FC\u30EA\u30E4", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 45, welfare: false, effects: "at:endOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=2,do:fixedStamina-=1,limit:2" }, { id: 127, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u30EA\u30FC\u30EA\u30E4+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 45, welfare: false, effects: "at:endOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=2,limit:2" }, { id: 128, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u5343\u5948", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 46, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=2+cardsUsed,do:fixedStamina-=1,limit:1" }, { id: 129, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u5343\u5948+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 46, welfare: false, effects: "at:startOfTurn,if:turnsRemaining==1,do:score+=6+cardsUsed,do:fixedStamina-=1,limit:1" }, { id: 130, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u8389\u6CE2", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 47, welfare: false, effects: "at:cardUsed,if:cardsUsed%3==2,do:motivation+=2,limit:2" }, { id: 131, name: "\u521D\u5FC3\u306E\u8A3C\u30FB\u8389\u6CE2+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 47, welfare: false, effects: "at:cardUsed,if:cardsUsed%3==2,do:motivation+=3,limit:2" }, { id: 132, name: "\u3071\u305F\u3071\u305F\u3046\u3061\u308F", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 48, welfare: false, effects: "at:cardUsed,if:cardsUsed%3==2,do:genki+=1,do:motivation+=3,limit:2" }, { id: 133, name: "\u3071\u305F\u3071\u305F\u3046\u3061\u308F+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 48, welfare: false, effects: "at:cardUsed,if:cardsUsed%3==2,do:genki+=2,do:motivation+=4,limit:2" }, { id: 134, name: "\u5927\u304D\u304F\u3066\u3064\u3084\u3064\u3084", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&motivation,if:visual>=400,do:upgradeSelectedCard,do:stamina+=2,limit:1" }, { id: 135, name: "\u6E29\u6CC9\u306E\u5F8C\u306E\u304A\u697D\u3057\u307F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 49, welfare: false, effects: "at:cardUsed,if:cardsUsed%4==3,do:concentration*=1.3,do:fixedGenki+=2,limit:2" }, { id: 136, name: "\u6E29\u6CC9\u306E\u5F8C\u306E\u304A\u697D\u3057\u307F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 49, welfare: false, effects: "at:cardUsed,if:cardsUsed%4==3,do:concentration*=1.3,do:fixedGenki+=7,limit:2" }, { id: 137, name: "\u3068\u3046\u3061\u3087\u30FC\u306E\u304D\u308D\u304F", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterClass,do:visual+=15,do:stamina+=2" }, { id: 138, name: "\u307F\u3093\u306A\u306E\u6559\u79D1\u66F8", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: true, effects: "at:startOfTurn,if:isVocalTurn,if:stamina<=maxStamina*0.5,do:fixedStamina+=4,limit:1" }, { id: 139, name: "\u30B9\u30BF\u30A4\u30EA\u30C3\u30B7\u30E5\u30E2\u30FC\u30C9", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 50, welfare: false, effects: "at:startOfTurn,if:motivation>=3,do:goodImpressionTurns+=3,do:motivation-=1,limit:3" }, { id: 140, name: "\u30B9\u30BF\u30A4\u30EA\u30C3\u30B7\u30E5\u30E2\u30FC\u30C9+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 50, welfare: false, effects: "at:startOfTurn,if:motivation>=3,do:goodImpressionTurns+=3,do:motivation-=1,limit:4" }, { id: 141, name: "\u3068\u308D\u3051\u305F\u6642\u9593", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVocalTurn,do:setScoreBuff(0.5,1),limit:3" }, { id: 142, name: "\u512A\u3057\u3055\u30DF\u30EB\u30AF\u30B7\u30E5\u30AC\u30FC", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardRecevied,if:cardEffects&goodImpressionTurns,if:vocal>=700,do:copySelectedSkillCard,do:pPoints+=40,limit:1" }, { id: 143, name: "\u3046\uFF5E\u3089\uFF5E\u3081\uFF5E\u3057\uFF5E\u3084\uFF5E", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 51, welfare: false, effects: "at:activeCardUsed,do:fixedGenki+=5,limit:2" }, { id: 144, name: "\u3046\uFF5E\u3089\uFF5E\u3081\uFF5E\u3057\uFF5E\u3084\uFF5E+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 51, welfare: false, effects: "at:activeCardUsed,do:fixedGenki+=7,limit:2" }, { id: 145, name: "\u3076\u304D\u3063\u3061\u3087\u30B3\u30A6\u30E2\u30EA", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 52, welfare: false, effects: "at:everyTurn,if:turnsElapsed%3==2,if:goodImpressionTurns>=3,do:score+=genki*0.9,do:score+=motivation*1.6,do:goodImpressionTurns-=2,limit:3" }, { id: 146, name: "\u3076\u304D\u3063\u3061\u3087\u30B3\u30A6\u30E2\u30EA+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 52, welfare: false, effects: "at:everyTurn,if:turnsElapsed%3==2,if:goodImpressionTurns>=3,do:score+=genki,do:score+=motivation*2.3,do:goodImpressionTurns-=2,limit:3" }, { id: 147, name: "\u3044\u3058\u3063\u3071\u308A\u30D0\u30EB\u30FC\u30F3", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:goodImpressionTurns>=3,do:motivation+=3,limit:2" }, { id: 148, name: "\u304A\u5B22\u69D8\u306E\u6069\u8FD4\u3057", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:goodImpressionTurns>=6,do:score+=goodImpressionTurns*0.8,limit:2" }, { id: 149, name: "\u3044\u305F\u305A\u3089\u30D1\u30DA\u30C3\u30C8", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 53, welfare: false, effects: "at:activeCardUsed,if:stamina<=maxStamina*0.5,do:score+=consumedStamina*1.8,do:fixedStamina+=5,do:nullifyGenkiTurns+=2,limit:2" }, { id: 150, name: "\u3044\u305F\u305A\u3089\u30D1\u30DA\u30C3\u30C8+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 53, welfare: false, effects: "at:activeCardUsed,if:stamina<=maxStamina*0.5,do:score+=consumedStamina*2.2,do:fixedStamina+=6,do:nullifyGenkiTurns+=2,limit:2" }, { id: 151, name: "\u3064\u3084\u3064\u3084\u3067\u3075\u3055\u3075\u3055", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:shikyuuSelected,if:vocal>=700,do:upgradeSelectedCard,do:upgradeSelectedCard,limit:1" }, { id: 152, name: "\u521D\u604B\u306E\u8A3C\u30FB\u9EBB\u592E", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 54, welfare: false, effects: "at:startOfTurn,if:motivation>=3,do:goodImpressionTurns+=3,do:motivation-=1,limit:1" }, { id: 153, name: "\u521D\u604B\u306E\u8A3C\u30FB\u9EBB\u592E+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 54, welfare: false, effects: "at:startOfTurn,if:motivation>=3,do:goodImpressionTurns+=3,do:motivation-=1,limit:2" }, { id: 154, name: "\u521D\u604B\u306E\u8A3C\u30FB\u6E05\u590F", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 55, welfare: false, effects: "at:afterCardUsed,if:motivation>=8,do:score+=motivation*1.5,do:fixedStamina-=1,limit:2" }, { id: 155, name: "\u521D\u604B\u306E\u8A3C\u30FB\u6E05\u590F+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 55, welfare: false, effects: "at:afterCardUsed,if:motivation>=8,do:score+=motivation*2.1,do:fixedStamina-=1,limit:2" }, { id: 156, name: "\u521D\u604B\u306E\u8A3C\u30FB\u5E83", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 56, welfare: false, effects: "at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=2,do:costReduction+=1,do:upgradeRandomCardInHand,limit:1,group:1" }, { id: 157, name: "\u521D\u604B\u306E\u8A3C\u30FB\u5E83+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 56, welfare: false, effects: "at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=4,do:costReduction+=2,do:upgradeRandomCardInHand,limit:1,group:1" }, { id: 158, name: "\u3053\u308C\u3067\u3070\u3063\u3061\u308A", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 57, welfare: false, effects: "at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.5,do:genki=0,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1" }, { id: 159, name: "\u3053\u308C\u3067\u3070\u3063\u3061\u308A+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 57, welfare: false, effects: "at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.7,do:genki=0,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1" }, { id: 160, name: "\u4F1A\u9577\u306E\u5B8C\u74A7\u306A\u8A08\u753B", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&genki,if:visual>=200,do:minimumRarity=2,do:getRandomPDrinks=1,limit:4" }, { id: 161, name: "\u305C\u3063\u305F\u3044\u30DE\u30EB\u79D8\u30EC\u30B7\u30D4", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&goodImpressionTurns,if:visual>=700,do:removeSelectedCard,do:pPoints+=40,limit:1" }, { id: 162, name: "\u30A2\u30CB\u30E1\u30A4\u30C8\u88C5\u5099", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 58, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,if:goodConditionTurns>=1,do:concentration+=goodConditionTurns*0.4,do:concentration+=1,limit:2" }, { id: 163, name: "\u30A2\u30CB\u30E1\u30A4\u30C8\u88C5\u5099+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 58, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,if:goodConditionTurns>=1,do:concentration+=goodConditionTurns*0.5,do:concentration+=1,do:genki+=3,limit:2" }, { id: 164, name: "\u3054\u3061\u305D\u3046\u3055\u307E\u3067\u3057\u305F", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:soudanSelected,do:soudanDiscount=0.2" }, { id: 165, name: "\u5C0F\u3055\u3044\u79CB\u898B\u3064\u3051\u305F", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:concentration>=5,do:score+=10,limit:2" }, { id: 166, name: "\u306F\u3064\u307C\u3057\u6642\u8A08", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:fullPowerCharge>=3,do:cardUsesRemaining+=1,do:fullPowerCharge+=3,limit:1" }, { id: 167, name: "\u306F\u3064\u307C\u3057\u30D5\u30A3\u30AE\u30E5\u30A2", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isStrength,do:setStance(preservation2),do:cardUsesRemaining+=1,limit:1" }, { id: 168, name: "\u30C6\u30A3\u30FC\u30AD\u30E3\u30C7\u30A3\u30FC", rarity: "R", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 59, welfare: false, effects: "at:afterActiveCardUsed,if:isStrength,do:score+=5,do:fixedStamina+=1,limit:1" }, { id: 169, name: "\u30C6\u30A3\u30FC\u30AD\u30E3\u30C7\u30A3\u30FC+", rarity: "R", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 59, welfare: false, effects: "at:afterActiveCardUsed,if:isStrength,do:score+=7,do:fixedStamina+=3,limit:1" }, { id: 170, name: "\u307F\u3093\u306A\u306E\u61A7\u308C", rarity: "SR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 60, welfare: false, effects: "at:cardUsed,if:isFullPower,do:score+=9,do:genki+=9,limit:1" }, { id: 171, name: "\u307F\u3093\u306A\u306E\u61A7\u308C+", rarity: "SR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 60, welfare: false, effects: "at:cardUsed,if:isFullPower,do:score+=18,do:genki+=9,limit:1" }, { id: 172, name: "\u65B0\u3057\u3044\u3001\u79C1", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 61, welfare: false, effects: "at:afterActiveCardUsed,if:isStrength,do:score+=8,do:fixedStamina+=4,limit:1" }, { id: 173, name: "\u65B0\u3057\u3044\u3001\u79C1+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 61, welfare: false, effects: "at:afterActiveCardUsed,if:isStrength,do:score+=12,do:fixedStamina+=6,limit:1" }, { id: 174, name: "\u30A2\u30A4\u30C9\u30EB\u30D1\u30EF\u30FC\u6E2C\u5B9A\u5668", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: true, effects: "at:startOfTurn,if:isDanceTurn,if:isPreservation,do:fixedStamina+=5,limit:1" }, { id: 175, name: "\u8CBB\u75280\u5186\u611B\u60C5MAX", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 62, welfare: false, effects: "at:startOfTurn,if:motivation>=5,do:genki+=4,limit:2" }, { id: 176, name: "\u8CBB\u75280\u5186\u611B\u60C5MAX+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 62, welfare: false, effects: "at:startOfTurn,if:motivation>=5,do:genki+=6,limit:2" }, { id: 177, name: "\u3081\u308A\u304F\u308A\u30E9\u30A4\u30AA\u30F3", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 63, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.7,do:fixedStamina-=1,limit:2" }, { id: 178, name: "\u3081\u308A\u304F\u308A\u30E9\u30A4\u30AA\u30F3+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 63, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.7,limit:2" }, { id: 179, name: "\u30A4\u30B1\u3066\u308B\u30BB\u30FC\u30BF\u30FC", rarity: "SR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:concentration>=1,do:goodConditionTurns+=3,do:concentration-=1,limit:1" }, { id: 180, name: "\u6D77\u306E\u5411\u3053\u3046\u307E\u3067", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 64, welfare: false, effects: "at:afterStartOfTurn,if:motivation>=5,do:motivation*=1.3,do:drawCard,do:fixedStamina-=1,limit:3,group:1" }, { id: 181, name: "\u6D77\u306E\u5411\u3053\u3046\u307E\u3067+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 64, welfare: false, effects: "at:afterStartOfTurn,if:motivation>=5,do:motivation*=1.3,do:drawCard,limit:3,group:1" }, { id: 182, name: "\u306C\u304F\u3082\u308A\u3075\u305F\u308A\u3076\u3093", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardUsed,if:isVisualTurn,if:motivation>=5,do:genki+=2,limit:2" }, { id: 183, name: "\u30AB\u30EF\u30A4\u30A4\u306E\u3064\u304F\u308A\u65B9", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:cardReceived,if:cardEffects&motivation,do:dance+=6" }, { id: 184, name: "\u3042\u306E\u65E5\u306E\u30D3\u30CB\u30FC\u30EB\u5098", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 65, welfare: false, effects: "at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:fullPowerCharge+=5,do:holdCard(466),limit:1" }, { id: 185, name: "\u3042\u306E\u65E5\u306E\u30D3\u30CB\u30FC\u30EB\u5098+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 65, welfare: false, effects: "at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:fullPowerCharge+=8,do:holdCard(466),limit:1" }, { id: 186, name: "\u306F\u3044\u307C\u304F\u305B\u3093\u3052\u3093", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:isFullPower,do:score+=13,limit:2" }, { id: 187, name: "\u307B\u3063\u3053\u308A\u306F\u3093\u3076\u3093\u3053", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "at:soudanSelected,if:dance>=700,do:upgradeRandomCard,do:pPoints+=50,limit:1" }, { id: 188, name: "\u5411\u304D\u5408\u3046\u899A\u609F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 66, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==24,do:goodConditionTurns+=1,do:cardUsesRemaining+=1,do:fixedStamina-=1,limit:3" }, { id: 189, name: "\u5411\u304D\u5408\u3046\u899A\u609F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 66, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==24,do:goodConditionTurns+=2,do:cardUsesRemaining+=1,do:fixedStamina-=1,limit:3" }, { id: 190, name: "\u592A\u967D\u307E\u3067\u5C4A\u3051\u308B\u6B4C\u58F0", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 67, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==32,do:concentration+=1,do:cardUsesRemaining+=1,do:fixedStamina-=1,limit:3" }, { id: 191, name: "\u592A\u967D\u307E\u3067\u5C4A\u3051\u308B\u6B4C\u58F0+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 67, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==32,do:concentration+=2,do:cardUsesRemaining+=1,do:fixedStamina-=1,limit:3" }, { id: 192, name: "\u3042\u305F\u3057\u3060\u3051\u306E\u4E00\u756A\u661F", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 68, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==64,do:goodImpressionTurns+=2,do:cardUsesRemaining+=1,do:fixedStamina-=2,limit:3" }, { id: 193, name: "\u3042\u305F\u3057\u3060\u3051\u306E\u4E00\u756A\u661F", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 68, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==64,do:goodImpressionTurns+=3,do:cardUsesRemaining+=1,do:fixedStamina-=1,limit:3" }, { id: 194, name: "N.I.A\u30EF\u30C3\u30DA\u30F3", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 195, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u7D2B\uFF09", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 196, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u7D2B\uFF09", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 197, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u767D\uFF09", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 198, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u767D\uFF09", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 199, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u9ED2\uFF09", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 200, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u9ED2\uFF09", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 201, name: "\u3059\u3054\u3059\u304E\u308B\u30D0\u30C8\u30F3", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 202, name: "\u30DC\u30AF\u306E\u4E00\u90E8", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 69, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==382,if:isPreservation,do:drawCard,do:halfCostTurns+=1,do:fixedStamina-=1,limit:3;at:cardUsed,if:usedCardBaseId==382,if:isPreservation,target:382,do:g.score+=10,limit:3" }, { id: 203, name: "\u30DC\u30AF\u306E\u4E00\u90E8+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 69, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==382,if:isPreservation,do:drawCard,do:drawCard,do:halfCostTurns+=1,do:fixedStamina-=1,limit:3;at:cardUsed,if:usedCardBaseId==382,if:isPreservation,target:382,do:g.score+=10,limit:3" }, { id: 204, name: "\u3044\u3064\u304B\u306E\u5C0F\u3055\u306A\u661F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 70, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==30,do:turnsRemaining+=1,do:perfectConditionTurns+=2,do:fixedStamina-=3,limit:2" }, { id: 205, name: "\u3044\u3064\u304B\u306E\u5C0F\u3055\u306A\u661F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 70, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==30,do:turnsRemaining+=1,do:perfectConditionTurns+=3,do:fixedStamina-=2,limit:2" }, { id: 206, name: "\u304D\u307F\u304C\u898B\u3064\u3051\u305F\u79C1", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 71, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==394,do:setScoreBuff(0.6,2),do:fullPowerCharge+=10,do:fixedStamina-=1,limit:1" }, { id: 207, name: "\u304D\u307F\u304C\u898B\u3064\u3051\u305F\u79C1+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 71, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==394,do:setScoreBuff(0.6,2),do:fullPowerCharge+=15,do:fixedStamina-=1,limit:1" }, { id: 208, name: "\u63CF\u3044\u305F\u5922\u3078\u306E\u3042\u3086\u307F", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 72, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==40,do:turnsRemaining+=1,do:genki*=1.5,do:fixedStamina-=2,limit:1" }, { id: 209, name: "\u63CF\u3044\u305F\u5922\u3078\u306E\u3042\u3086\u307F+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 72, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==40,do:turnsRemaining+=1,do:genki*=1.6,limit:1" }, { id: 210, name: "\u9078\u3073\u3068\u3063\u305F\u71B1", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 73, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==60,if:stamina>=maxStamina*0.5,do:motivation+=2,do:cardUsesRemaining+=1,do:fixedStamina-=maxStamina*0.15,limit:5" }, { id: 211, name: "\u9078\u3073\u3068\u3063\u305F\u71B1+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 73, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==60,if:stamina>=maxStamina*0.5,do:motivation+=3,do:cardUsesRemaining+=1,do:fixedStamina-=maxStamina*0.15,limit:5" }, { id: 212, name: "\u53F6\u3048\u308B\u899A\u609F", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 74, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==380,if:numHeldCards>=1,do:setStance(preservation),do:fullPowerCharge+=2,limit:1;at:afterCardUsed,if:usedCardBaseId==380,if:numHeldCards>=1,target:held,do:g.scoreTimes+=1,do:g.cost-=2,limit:1" }, { id: 213, name: "\u53F6\u3048\u308B\u899A\u609F+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 74, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==380,if:numHeldCards>=1,do:setStance(preservation2),do:fullPowerCharge+=4,limit:1;at:afterCardUsed,if:usedCardBaseId==380,if:numHeldCards>=1,target:held,do:g.scoreTimes+=1,do:g.cost-=1,limit:1" }, { id: 214, name: "\u305C\u3063\u305F\u3044\u3044\u3063\u3071\u3044\uFF01", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 215, name: "\u3044\u3064\u304B\u898B\u305F\u5922", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 75, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==28,do:concentration+=1,do:fixedStamina-=3,limit:2;at:afterCardUsed,if:usedCardBaseId==28,limit:2;at:startOfTurn,do:concentration+=3,limit:3" }, { id: 216, name: "\u3044\u3064\u304B\u898B\u305F\u5922+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 75, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==28,do:concentration+=1,do:fixedStamina-=1,limit:2;at:afterCardUsed,if:usedCardBaseId==28,limit:2;at:startOfTurn,do:concentration+=3,limit:3" }, { id: 217, name: "\u7FFC", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 76, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,do:goodImpressionTurns*=1.5,limit:2;at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,limit:2;at:turn,do:moveCardToHandFromRemoved(490),do:fixedStamina-=2,limit:1" }, { id: 218, name: "\u7FFC+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 76, welfare: false, effects: "at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,do:goodImpressionTurns*=1.5,limit:2;at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,limit:2;at:turn,do:moveCardToHandFromRemoved(490),limit:1" }, { id: 219, name: "\u4F53\u307B\u3050\u3057\u30ED\u30FC\u30E9\u30FC", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 220, name: "\u3046\u308B\u304A\u3044\u306E\u3069\u30B1\u30A2", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 221, name: "\u30C8\u30EC\u30FC\u30CA\u30FC\u306E\u512A\u3057\u3055", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 222, name: "\u308C\u3093\u3057\u3085\u30FC\u306E\u3057\u308B\u3057", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 77, welfare: false, effects: "at:cardUsed,if:cardEffects&fullPowerCharge,do:genki+=10,limit:1" }, { id: 223, name: "\u308C\u3093\u3057\u3085\u30FC\u306E\u3057\u308B\u3057+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 77, welfare: false, effects: "at:cardUsed,if:cardEffects&fullPowerCharge,do:genki+=13,limit:1" }, { id: 224, name: "\u3042\u307E\u3044\u304F\u3061\u3069\u3051", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 78, welfare: false, effects: "at:endOfTurn,if:isStrength,do:setStance(preservation),do:genki+=2,limit:2" }, { id: 225, name: "\u3042\u307E\u3044\u304F\u3061\u3069\u3051+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 78, welfare: false, effects: "at:endOfTurn,if:isStrength,do:setStance(preservation),do:genki+=5,limit:2" }, { id: 226, name: "\u76F8\u624B\u3078\u306E\u6DF1\u3044\u611B", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 79, welfare: false, effects: "at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,do:fixedStamina-=2,limit:2" }, { id: 227, name: "\u76F8\u624B\u3078\u306E\u6DF1\u3044\u611B+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 79, welfare: false, effects: "at:activeCardUsed,if:motivation>=8,do:motivationMultiplier=2.2,do:genki+=2,limit:2" }, { id: 228, name: "\u304A\u59C9\u3055\u307E\u30D3\u30C3\u30B0\u30E9\u30D6", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:activeCardUsed,if:isVocalTurn,do:setScoreBuff(0.5,1),do:motivationMultiplier=1.3,do:genki+=2,limit:1" }, { id: 229, name: "\u52DD\u5229\u306E1\u679A", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 80, welfare: false, effects: "at:afterStartOfTurn,if:isStrength,do:genki+=6,limit:2" }, { id: 230, name: "\u52DD\u5229\u306E1\u679A+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 80, welfare: false, effects: "at:afterStartOfTurn,if:isStrength,do:genki+=8,limit:2" }, { id: 231, name: "\u6625\u306E\u304A\u3068\u305A\u308C", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 81, welfare: false, effects: "at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,do:fixedStamina-=1,limit:4" }, { id: 232, name: "\u6625\u306E\u304A\u3068\u305A\u308C+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 81, welfare: false, effects: "at:buffCostConsumed,if:goodImpressionTurns>=3,do:goodImpressionTurns+=2,do:motivation+=1,limit:4" }, { id: 233, name: "\u3086\u3046\u3058\u3087\u30FC\u306E\u304D\u308D\u304F", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 234, name: "\u307E\u3042\u308B\u3044\u6625\u8272", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 82, welfare: false, effects: "at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,do:fixedStamina-=2,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:turn,do:setStance(preservation2),limit:1" }, { id: 235, name: "\u307E\u3042\u308B\u3044\u6625\u8272+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 82, welfare: false, effects: "at:stanceChanged,if:isFullPower,if:strengthTimes>=1,target:effect(fullPowerCharge)*active,do:g.score+=11,limit:2;at:stanceChanged,if:isFullPower,if:strengthTimes>=1,limit:2;at:turn,do:setStance(preservation2),limit:1" }, { id: 236, name: "\u4F53\u529B\u81EA\u6162\u306E\u672C\u6C17", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 237, name: "\u5C0F\u3055\u306A\u9280\u6CB3", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 83, welfare: false, effects: "at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=2,limit:3" }, { id: 238, name: "\u5C0F\u3055\u306A\u9280\u6CB3+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 83, welfare: false, effects: "at:mentalCardUsed,if:stance==strength2,target:mental,do:g.genki+=4,limit:3;at:mentalCardUsed,if:stance==strength2,do:fixedStamina-=1,limit:3" }, { id: 239, name: "\u3072\u3068\u308A\u3060\u3061\u30B7\u30E5\u30FC\u30BA", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedStamina+=maxStamina*0.15,limit:2" }, { id: 240, name: "\u7A4D\u307F\u91CD\u306D\u305F\u52AA\u529B", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 84, welfare: false, effects: "at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=6,limit:2" }, { id: 241, name: "\u7A4D\u307F\u91CD\u306D\u305F\u52AA\u529B+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 84, welfare: false, effects: "at:startOfTurn,if:cumulativeFullPowerCharge>=5,do:genki+=8,limit:2" }, { id: 242, name: "P\u3063\u3061", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 85, welfare: false, effects: "at:cardUsed,if:concentration>=8,do:pcchiCardsUsed+=1;at:cardUsed,if:concentration>=8,if:pcchiCardsUsed%2==1,do:goodConditionTurns+=3,do:concentration-=1" }, { id: 243, name: "P\u3063\u3061+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 85, welfare: false, effects: "at:cardUsed,if:concentration>=3,do:pcchiCardsUsed+=1;at:cardUsed,if:concentration>=3,if:pcchiCardsUsed%2==1,do:goodConditionTurns+=3,do:concentration-=1" }, { id: 244, name: "\u5922\u3078\u306E\u30B9\u30BF\u30FC\u30C8\u30E9\u30A4\u30F3", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:goodConditionTurns>=3,do:goodConditionTurns+=3,do:fixedStamina-=1,limit:2" }, { id: 245, name: "\u30AE\u30E3\u30EB\u3081\u3044\u304D\u3093\u3050\uFF01", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 246, name: "\u904B\u547D\u306E\u51FA\u9022\u3044", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 86, welfare: false, effects: "at:afterStartOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,do:fixedStamina-=3,limit:1;at:afterStartOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:afterStartOfTurn,if:isFullPower,limit:1;at:turn,do:setStance(preservation),limit:1" }, { id: 247, name: "\u904B\u547D\u306E\u51FA\u9022\u3044+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 86, welfare: false, effects: "at:afterStartOfTurn,if:isFullPower,do:genki+=10,do:fullPowerCharge+=3,limit:1;at:afterStartOfTurn,if:isFullPower,target:hand,do:g.score+=10,limit:1;at:afterStartOfTurn,if:isFullPower,limit:1;at:turn,do:setStance(preservation),limit:1" }, { id: 248, name: "\u7D46\u306E\u306A\u308F\u3068\u3073", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 249, name: "\u4E00\u756A\u661F\u306E\u6311\u6226\u72B6", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 87, welfare: false, effects: "at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,do:fixedStamina-=1,limit:3" }, { id: 250, name: "\u4E00\u756A\u661F\u306E\u6311\u6226\u72B6+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 87, welfare: false, effects: "at:afterCardUsed,if:goodImpressionTurns>=6,do:goodImpressionTurns+=2,do:motivation+=2,limit:3" }, { id: 251, name: "\u5E7C\u99B4\u67D3\u306E\u610F\u5730", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 252, name: "\u5699\u307F\u7DE0\u3081\u305F\u30BF\u30AA\u30EB", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 253, name: "\u96E8\u4E0A\u304C\u308A\u306E\u82B1", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 88, welfare: false, effects: "at:startOfTurn,do:motivation+=9,do:fixedStamina-=4,limit:1;at:startOfTurn,limit:1;at:turn,delay:2,do:uneaseTurns+=5,limit:1" }, { id: 254, name: "\u96E8\u4E0A\u304C\u308A\u306E\u82B1+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 88, welfare: false, effects: "at:startOfTurn,do:motivation+=10,do:fixedStamina-=3,limit:1;at:startOfTurn,limit:1;at:turn,delay:2,do:uneaseTurns+=5,limit:1" }, { id: 255, name: "\u96E8\u4E0A\u304C\u308A\u306E\u5973\u795E", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 89, welfare: false, effects: "at:afterStartOfTurn,do:cardUsesRemaining+=1,do:genki+=5,do:addCardToTopOfDeck(23),limit:5" }, { id: 256, name: "\u96E8\u4E0A\u304C\u308A\u306E\u5973\u795E+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 89, welfare: false, effects: "at:afterStartOfTurn,do:cardUsesRemaining+=1,do:genki+=6,do:addCardToTopOfDeck(23),limit:5" }, { id: 257, name: "\u96E8\u4E0A\u304C\u308A\u306E\u8679", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 90, welfare: false, effects: "at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,do:fixedStamina-=1,limit:4" }, { id: 258, name: "\u96E8\u4E0A\u304C\u308A\u306E\u8679+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 90, welfare: false, effects: "at:afterMentalCardUsed,if:stance==preservation2,do:enthusiasmBonus+=4,limit:4" }, { id: 259, name: "\u30D1\u30EF\u30FC\u3092\u304F\u308C\u308B\u30E2\u30CE", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 260, name: "\u304A\u6B8B\u3057\u306B\u3093\u3058\u3093", rarity: "SR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 261, name: "\u4F11\u61A9\u4E2D\u306E\u304A\u3084\u3064", rarity: "R", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 91, welfare: false, effects: "at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*0.6,limit:3" }, { id: 262, name: "\u4F11\u61A9\u4E2D\u306E\u304A\u3084\u3064+", rarity: "R", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 91, welfare: false, effects: "at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*0.6" }, { id: 263, name: "\u305D\u3088\u98A8\u306B\u63FA\u308C\u308B\u9AEA\u98FE\u308A", rarity: "SR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 92, welfare: false, effects: "at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:2;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:2" }, { id: 264, name: "\u305D\u3088\u98A8\u306B\u63FA\u308C\u308B\u9AEA\u98FE\u308A+", rarity: "SR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 92, welfare: false, effects: "at:afterActiveCardUsed,do:setStance(preservation),do:fixedStamina-=2,limit:3;at:afterActiveCardUsed,target:effect(strength),do:g.score+=3,limit:3" }, { id: 265, name: "\u3044\u3064\u3082\u306E\u6301\u3061\u7269", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 93, welfare: false, effects: "at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4,do:fixedStamina-=1" }, { id: 266, name: "\u3044\u3064\u3082\u306E\u6301\u3061\u7269+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 93, welfare: false, effects: "at:afterCardUsed,if:cardEffects&preservation,if:isFullPower,do:score+=cumulativeFullPowerCharge*1.4" }, { id: 267, name: "\u601D\u3044\u51FA\u30AB\u30BF\u30E1\u30B3\u30A4\u30E1", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 268, name: "\u304A\u3082\u3066\u306A\u3057\u306E\u6C17\u6301\u3061", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 269, name: "\u52DD\u5229\u3088\u308A\u5927\u5207\u306A\u3082\u306E", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: true, effects: "at:startOfTurn,if:isVisualTurn,if:stamina<=maxStamina*0.5,do:fixedGenki+=10,limit:1" }, { id: 270, name: "N.I.A\u30AD\u30FC\u30DB\u30EB\u30C0\u30FC", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 271, name: "N.I.A\u30B9\u30DE\u30DB\u30EA\u30F3\u30B0", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 272, name: "N.I.A\u30C8\u30FC\u30C8\u30D0\u30C3\u30B0", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 273, name: "N.I.A\u30D1\u30B9\u30B1\u30FC\u30B9", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 274, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u91D1\u7D2B\uFF09", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 275, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u91D1\u7D2B\uFF09", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 276, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u91D1\u767D\uFF09", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 277, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u91D1\u767D\uFF09", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 278, name: "N.I.A\u30D0\u30F3\u30C9\uFF08\u91D1\u9ED2\uFF09", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 279, name: "N.I.A\u30E9\u30A4\u30C8\uFF08\u91D1\u9ED2\uFF09", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "" }, { id: 280, name: "\u4F1D\u8AAC\u306Eidol\u88C5\u5099", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 94, welfare: false, effects: "at:stanceChanged,if:isStrength,if:genki>=50,do:score+=genki*4.4,do:genki=0,do:fixedStamina-=2,limit:2" }, { id: 281, name: "\u4F1D\u8AAC\u306Eidol\u88C5\u5099+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 94, welfare: false, effects: "at:stanceChanged,if:isStrength,if:genki>=50,do:score+=genki*5,do:genki=0,limit:2" }, { id: 282, name: "\u5C45\u6B8B\u308A\u306E\u751F\u5F92\u4F1A\u5BA4", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,if:strengthTimes>=3,do:enthusiasmBonus+=10,limit:1" }, { id: 283, name: "\u306E\u3073\u306E\u3073\u30D0\u30F3\u30C9", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 284, name: "\u4E16\u754C\u3092\u6551\u3063\u305F\u30DE\u30A4\u30AF", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 95, welfare: false, effects: "at:cardUsed,if:cardEffects&concentration,do:halfCostTurns+=2,limit:2" }, { id: 285, name: "\u4E16\u754C\u3092\u6551\u3063\u305F\u30DE\u30A4\u30AF+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 95, welfare: false, effects: "at:cardUsed,if:cardEffects&concentration,do:halfCostTurns+=2,limit:3" }, { id: 286, name: "\u52DD\u5229\u3092\u305D\u306E\u624B\u306B", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfStage,do:addCardToHand(111),limit:1" }, { id: 287, name: "\u8FF7\u5B50\u306E\u304A\u547C\u3073\u51FA\u3057", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfStage,do:addCardToHand(131),limit:1" }, { id: 288, name: "\u9EBB\u592E\u306B\u3074\u3063\u305F\u3057", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfStage,do:addCardToHand(421),limit:1" }, { id: 289, name: " \u30B7\u30EB\u30F4\u30A7\u30B9\u30BF\u51FA\u6483\uFF01", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 96, welfare: false, effects: "at:endOfTurn,if:turnsElapsed%2==1,if:numRemovedCards<=8,do:setGoodImpressionTurnsEffectBuff(0.7,3),do:fixedStamina-=1" }, { id: 290, name: " \u30B7\u30EB\u30F4\u30A7\u30B9\u30BF\u51FA\u6483\uFF01+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 96, welfare: false, effects: "at:endOfTurn,if:turnsElapsed%2==1,if:numRemovedCards<=8,do:setGoodImpressionTurnsEffectBuff(0.7,3)" }, { id: 291, name: "\u304A\u3068\u3082\u306E\u30DF\u30DF\u30BA\u30AF", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 292, name: "\u3078\u3068\u3078\u3068\u3067\u304D\u3085\u30FC", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 293, name: "\u3042\u306E\u65E5\u306E\u7D04\u675F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 97, welfare: false, effects: "at:activeCardUsed,if:activeCardsUsed%2==1,do:setConcentrationBuff(0.25,5),limit:2" }, { id: 294, name: "\u3042\u306E\u65E5\u306E\u7D04\u675F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 97, welfare: false, effects: "at:activeCardUsed,if:activeCardsUsed%2==1,do:setConcentrationBuff(0.25,5),limit:3" }, { id: 295, name: "\u5305\u307E\u308C\u308B\u3084\u3055\u3057\u3055", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVisualTurn,if:goodConditionTurns>=10,do:perfectConditionTurns+=4,do:genki+=10,limit:1" }, { id: 296, name: "\u304A\u4F3C\u5408\u3044\u30CD\u30AF\u30BF\u30A4", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 297, name: "\u592A\u967D\u3092\u8FFD\u3044\u8D8A\u3059\u6B4C\u58F0", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 98, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==132,do:motivation+=15,do:halfCostTurns+=5,do:setScoreDebuff(0.75,2),limit:1;at:cardUsed,if:usedCardBaseId==132,limit:1;at:turn,do:setScoreBuff(0.5,4),delay:2,limit:1" }, { id: 298, name: "\u592A\u967D\u3092\u8FFD\u3044\u8D8A\u3059\u6B4C\u58F0+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 98, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==132,do:motivation+=15,do:halfCostTurns+=5,do:setScoreDebuff(0.5,2),limit:1;at:cardUsed,if:usedCardBaseId==132,limit:1;at:turn,do:setScoreBuff(0.5,5),delay:2,limit:1" }, { id: 299, name: "\u624B\u4F5C\u308A\u30B5\u30D6\u30B9\u30AF\u5F01\u5F53", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVocalTurn,if:genki>=30,do:goodImpressionTurns+=4,do:motivation+=4,do:genki+=2,limit:1" }, { id: 300, name: "\u521D\u9663\u306E\u8A3C\u30FB\u661F\u5357", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 99, welfare: false, effects: "at:activeCardUsed,if:motivation>=5,do:motivationMultiplier=1.4,do:genki+=1,do:fixedStamina-=1,limit:2" }, { id: 301, name: "\u521D\u9663\u306E\u8A3C\u30FB\u661F\u5357+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 99, welfare: false, effects: "at:activeCardUsed,if:motivation>=5,do:motivationMultiplier=1.4,do:genki+=1,limit:2" }, { id: 302, name: "\u521D\u9663\u306E\u8A3C\u30FB\u7F8E\u9234", rarity: "R", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 100, welfare: false, effects: "at:startOfTurn,do:nullifyGenkiTurns+=2,limit:1;at:turn,delay:2,do:motivation+=8,limit:1" }, { id: 303, name: "\u521D\u9663\u306E\u8A3C\u30FB\u7F8E\u9234+", rarity: "R", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 100, welfare: false, effects: "at:startOfTurn,do:nullifyGenkiTurns+=2,limit:1;at:turn,delay:2,do:motivation+=10,limit:1" }, { id: 304, name: "\u521D\u9663\u306E\u8A3C\u30FB\u4F51\u82BD", rarity: "R", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 101, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:2" }, { id: 305, name: "\u521D\u9663\u306E\u8A3C\u30FB\u4F51\u82BD+", rarity: "R", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 101, welfare: false, effects: "at:startOfTurn,if:turnsRemaining<=2,do:score+=goodConditionTurns*0.3,limit:2" }, { id: 306, name: "\u597D\u304D\u5ACC\u3044\u7981\u6B62\uFF01", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: true, effects: "at:startOfTurn,if:isDanceTurn,if:stamina<=maxStamina*0.5,do:fixedGenki+=10,limit:1" }, { id: 307, name: "\u539F\u70B9\u3078\u306E\u30C1\u30B1\u30C3\u30C8", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 102, welfare: false, effects: "at:staminaDecreased,do:setEnthusiasmBuff(0.4),limit:3" }, { id: 308, name: "\u539F\u70B9\u3078\u306E\u30C1\u30B1\u30C3\u30C8+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 102, welfare: false, effects: "at:staminaDecreased,do:setEnthusiasmBuff(0.6),limit:3" }, { id: 309, name: "\u9762\u767D\u304F\u3066\u5FC3\u914D\u306A\u5B50", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 310, name: "\u30D3\u30B7\u30C3\u30D3\u30B7\u30C3\u7AF9\u5200", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 311, name: "\u54B2\u304D\u8A87\u308B\u661F", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 103, welfare: false, effects: "at:afterMentalCardUsed,if:genki>=30,do:goodImpressionTurns+=genki*0.5,do:goodImpressionTurns+=2,limit:1" }, { id: 312, name: "\u54B2\u304D\u8A87\u308B\u661F+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 103, welfare: false, effects: "at:afterMentalCardUsed,if:genki>=30,do:goodImpressionTurns+=genki*0.5,do:goodImpressionTurns+=5,limit:1" }, { id: 313, name: "\u591C\u95C7\u306E\u661F", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 104, welfare: false, effects: "at:startOfTurn,if:turnsElapsed==3,do:setGoodConditionTurnsBuff(0.5,4),limit:1" }, { id: 314, name: "\u591C\u95C7\u306E\u661F+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 104, welfare: false, effects: "at:startOfTurn,if:turnsElapsed==3,do:setGoodConditionTurnsBuff(0.5,5),limit:1" }, { id: 315, name: "\u5922\u898B\u308B\u661F", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 105, welfare: false, effects: "at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,do:setFullPowerChargeBuff(0.5,1),do:fixedStamina-=1,group:1;at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,group:11;at:turn,do:setStance(preservation2),limit:1,group:11" }, { id: 316, name: "\u5922\u898B\u308B\u661F+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 105, welfare: false, effects: "at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,do:setFullPowerChargeBuff(0.5,1),group:1;at:cardUsed,if:isFullPower,if:turnCardsUsed%3==2,group:11;at:turn,do:setStance(preservation2),limit:1,group:11" }, { id: 317, name: "\u304A\u3055\u307C\u308A\u30BF\u30AA\u30EB", rarity: "SR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isDanceTurn,do:fixedGenki+=4,limit:1;at:startOfTurn,if:isDanceTurn,limit:1;at:turn,do:nullifyDebuff+=1,limit:1" }, { id: 318, name: "\u308F\u3044\u308F\u3044\u30BF\u30F3\u30D0\u30EA\u30F3", rarity: "SSR", upgraded: false, plan: "free", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 319, name: "\u3057\u3085\u304D\u3057\u3085\u304D\u306F\u30FC\u3068", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 106, welfare: false, effects: "at:afterMentalCardUsed,if:concentration>=13,do:genki+=2,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1" }, { id: 320, name: "\u3057\u3085\u304D\u3057\u3085\u304D\u306F\u30FC\u3068+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 106, welfare: false, effects: "at:afterMentalCardUsed,if:concentration>=13,do:genki+=10,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1" }, { id: 321, name: "\u30D4\u30FC\u30AF\u30BF\u30A4\u30E0\u30D5\u30E9\u30C3\u30B0", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 322, name: "\u3075\u3063\u304B\u3064\u306E\u30A2\u30A4\u30B9", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 323, name: "\u30DF\u30E9\u30AF\u30EB\u30D8\u30C3\u30C9", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 107, welfare: false, effects: "at:startOfTurn,do:setMotivationBuff(0.5,3),do:fixedStamina-=2,limit:1;at:startOfTurn,if:turnsElapsed==1,do:genki+=2,limit:1" }, { id: 324, name: "\u30DF\u30E9\u30AF\u30EB\u30D8\u30C3\u30C9+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 107, welfare: false, effects: "at:startOfTurn,do:setMotivationBuff(0.5,3),limit:1;at:startOfTurn,if:turnsElapsed==1,do:genki+=2,limit:1" }, { id: 325, name: "\u4F53\u529B\u4F5C\u308A\u306E\u6559\u6750\uFF1F", rarity: "SSR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 326, name: "\u843D\u3061\u8449\u3064\u304B\u307F\u306E\u578B", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 327, name: "\u30B7\u30A7\u30A2\u30CF\u30D4\u7F36\u30D0\u30C3\u30B8", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 108, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,do:fixedStamina+=3,do:goodImpressionTurns+=1,limit:2" }, { id: 328, name: "\u30B7\u30A7\u30A2\u30CF\u30D4\u7F36\u30D0\u30C3\u30B8+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 108, welfare: false, effects: "at:everyTurn,if:turnsElapsed%2==1,do:fixedStamina+=3,do:goodImpressionTurns+=2,limit:2" }, { id: 329, name: "\u305F\u3053\u3084\u304D\u30C6\u30AF\u30CE\u30C9\u30C3\u30B0", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 109, welfare: false, effects: "at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=5,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\\604)>=1,do:holdCard(604),limit:3" }, { id: 330, name: "\u305F\u3053\u3084\u304D\u30C6\u30AF\u30CE\u30C9\u30C3\u30B0+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 109, welfare: false, effects: "at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\\604)>=1,target:604,do:g.fullPowerCharge+=2,do:g.score+=12,do:g.typedCost-=2,limit:3;at:stanceChanged,if:prevStance==fullPower,if:countCards(removed\\604)>=1,do:holdCard(604),limit:3" }, { id: 331, name: "\u3057\u307C\u307E\u306A\u3044\u601D\u3044\u51FA", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:startOfTurn,if:isVocalTurn,if:stanceChangedTimes>=4,do:setScoreBuff(0.25,1),do:genki+=8,limit:2" }, { id: 332, name: "\u304B\u3054\u3044\u3063\u3071\u3044\u306E\u6210\u679C", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 333, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u306A\u308A\u305F\u3044", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 110, welfare: false, effects: "at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:2" }, { id: 334, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u306A\u308A\u305F\u3044+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 110, welfare: false, effects: "at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=7,if:genki>=30,do:score+=goodImpressionTurns*2.5,do:fixedStamina+=3,limit:3" }, { id: 335, name: "\u6708\u520A\u30A2\u30CB\u30E1\u30C8\u30FC\u30AF\u266A", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfTurn,if:isVisualTurn,do:goodImpressionTurns+=3,do:moveSSRToHand(1),limit:1" }, { id: 336, name: "\u30E1\u30EA\u30CF\u30EA\u30B9\u30C8\u30EC\u30C3\u30C1", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 337, name: "\u30D5\u30EC\u30D5\u30EC\u3042\u305F\u3057\uFF01", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 111, welfare: false, effects: "at:afterActiveCardUsed,if:perfectConditionTurns>=1,do:cardUsesRemaining+=1,do:drawCard,do:fixedStamina-=1,limit:2" }, { id: 338, name: "\u30D5\u30EC\u30D5\u30EC\u3042\u305F\u3057\uFF01+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 111, welfare: false, effects: "at:afterActiveCardUsed,if:perfectConditionTurns>=1,do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:2" }, { id: 339, name: "\u304A\u793C\u306E\u30C6\u30A3\u30FC\u30BB\u30C3\u30C8", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 340, name: "\u3073\u3063\u304F\u308A\u4EEE\u88C5\u30B0\u30C3\u30BA", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 341, name: "\u3054\u3061\u3083\u307E\u305C\u30D1\u30C3\u30B7\u30E7\u30F3", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 112, welfare: false, effects: "at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=6,limit:1" }, { id: 342, name: "\u3054\u3061\u3083\u307E\u305C\u30D1\u30C3\u30B7\u30E7\u30F3+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 112, welfare: false, effects: "at:startOfTurn,if:isStrength,do:setStance(preservation),do:genki+=10,limit:1" }, { id: 343, name: "\u9AD8\u304F\u30B8\u30E3\u30F3\u30D7\uFF01", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 113, welfare: false, effects: "at:cardUsed,if:turnCardsUsed%2==1,do:genki+=5,do:setGoodImpressionTurnsBuff(0.5,1),do:fixedStamina-=1,limit:2" }, { id: 344, name: "\u9AD8\u304F\u30B8\u30E3\u30F3\u30D7\uFF01+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 113, welfare: false, effects: "at:cardUsed,if:turnCardsUsed%2==1,do:genki+=7,do:setGoodImpressionTurnsBuff(0.5,1),limit:2" }, { id: 345, name: "\u6FC0\u75DB\u306E\u3061\u307D\u304B\u307D\u304B", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 346, name: "\u5C4A\u3051\u305F\u3044\u60F3\u3044", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 114, welfare: false, effects: "at:afterStartOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.2,do:fixedStamina-=1,limit:3" }, { id: 347, name: "\u5C4A\u3051\u305F\u3044\u60F3\u3044+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 114, welfare: false, effects: "at:afterStartOfTurn,if:turnsRemaining<=3,do:moveSSRToHand(1),do:concentration+=goodConditionTurns*0.3,do:fixedStamina-=1,limit:3" }, { id: 348, name: "\u3054\u304D\u3052\u3093\u3088\u3046\u30EC\u30C3\u30B9\u30F3", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 349, name: "\u6C34\u3082\u6EF4\u308B\u738B\u5B50\u69D8", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 115, welfare: false, effects: "at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=1,limit:1" }, { id: 350, name: "\u6C34\u3082\u6EF4\u308B\u738B\u5B50\u69D8+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 115, welfare: false, effects: "at:afterActiveCardUsed,do:goodConditionTurns+=concentration*0.5,do:concentration+=3,limit:1" }, { id: 351, name: "\u304A\u3072\u308B\u306D\u30D6\u30E9\u30F3\u30B1\u30C3\u30C8", rarity: "SR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 352, name: "\u306F\u3070\u305F\u304F\u30D6\u30ED\u30FC\u30C1", rarity: "R", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 116, welfare: false, effects: "at:stanceChanged,if:parentPhase==processCard,do:enthusiasmBonus+=3,limit:1" }, { id: 353, name: "\u306F\u3070\u305F\u304F\u30D6\u30ED\u30FC\u30C1+", rarity: "R", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 116, welfare: false, effects: "at:stanceChanged,if:parentPhase==processCard,do:enthusiasmBonus+=5,limit:1" }, { id: 354, name: "\u4E00\u7B46\u5165\u9B42", rarity: "SR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 117, welfare: false, effects: "at:motivationIncreased,if:goodImpressionTurns>=6,do:prideTurns+=2,do:motivation+=4,limit:1" }, { id: 355, name: "\u4E00\u7B46\u5165\u9B42+", rarity: "SR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 117, welfare: false, effects: "at:motivationIncreased,if:goodImpressionTurns>=6,do:prideTurns+=3,do:motivation+=5,limit:1" }, { id: 356, name: "\u3075\u3055\u308F\u3057\u3044\u3001\u79C1", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 118, welfare: false, effects: "at:motivationIncreased,if:genki>=7,do:motivation+=4,do:genki+=1,do:fixedStamina-=2,limit:2" }, { id: 357, name: "\u3075\u3055\u308F\u3057\u3044\u3001\u79C1+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 118, welfare: false, effects: "at:motivationIncreased,if:genki>=7,do:motivation+=6,do:genki+=1,do:fixedStamina-=2,limit:2" }, { id: 358, name: "\u5BDD\u5FC3\u5730\u306F\u826F\u597D", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:motivationIncreased,if:isDanceTurn,do:setGoodImpressionTurnsBuff(0.5,2),do:setMotivationBuff(0.5,2),limit:1" }, { id: 359, name: "\u304A\u76F4\u3057\u523A\u7E4D\u30BB\u30C3\u30C8", rarity: "SR", upgraded: false, plan: "logic", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 360, name: "\u5730\u7403\u3068\u30E9\u30F3\u30C7\u30D6\u30FC\uFF01", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 119, welfare: false, effects: "at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=10,do:g.cost-=4,limit:2" }, { id: 361, name: "\u5730\u7403\u3068\u30E9\u30F3\u30C7\u30D6\u30FC\uFF01+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 119, welfare: false, effects: "at:afterStartOfTurn,if:stanceChangedTimes>=4,do:movePreservationCardToHand,limit:2;at:afterStartOfTurn,if:stanceChangedTimes>=4,target:634,do:g.scoreTimes+=1,do:g.score+=15,do:g.cost-=3,limit:2" }, { id: 362, name: "\u305F\u305F\u3044\u3066\u304B\u3076\u3063\u3066", rarity: "SR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfTurn,if:isDanceTurn,if:isStrength,target:hand,do:g.cost+=3,limit:1" }, { id: 363, name: "\u3081\u3061\u3083\u304B\u308F\u30D7\u30EA", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "support", pIdolId: "", welfare: false, effects: "at:afterStartOfTurn,if:lastUsedCardType==active,do:movePIdolCardToHand,do:upgradeRandomCardInHand,limit:1" }, { id: 364, name: "\u4EA4\u308F\u3057\u305F\u7D04\u675F", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 120, welfare: false, effects: "at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:2;at:endOfTurn,if:fullPowerCharge>=10,limit:2;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1" }, { id: 365, name: "\u4EA4\u308F\u3057\u305F\u7D04\u675F+", rarity: "SSR", upgraded: true, plan: "anomaly", mode: "stage", sourceType: "pIdol", pIdolId: 120, welfare: false, effects: "at:endOfTurn,if:fullPowerCharge>=10,do:holdCard(638),do:genki+=5,limit:3;at:endOfTurn,if:fullPowerCharge>=10,limit:3;at:turn,do:setFullPowerChargeBuff(0.5,1),limit:1" }, { id: 366, name: "\u5B8C\u5168\u5236\u8987\u3067\u30DD\u30F3", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 367, name: "\u30B2\u30EC\u30F3\u30C7\u3092\u7FD4\u3051\u308B\u8D64", rarity: "SR", upgraded: false, plan: "anomaly", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 368, name: "\u3042\u306E\u9803\u61A7\u308C\u305F\u30D2\u30FC\u30ED\u30FC", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 121, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=7,do:fixedStamina-=3,limit:1" }, { id: 369, name: "\u3042\u306E\u9803\u61A7\u308C\u305F\u30D2\u30FC\u30ED\u30FC+", rarity: "SSR", upgraded: true, plan: "sense", mode: "stage", sourceType: "pIdol", pIdolId: 121, welfare: false, effects: "at:cardUsed,if:usedCardBaseId==106,do:cardUsesRemaining+=1,do:moveCardToHandFromRemoved(640),do:goodConditionTurns+=9,limit:1" }, { id: 370, name: "\u7121\u6211\u306E\u5883\u5730", rarity: "SSR", upgraded: false, plan: "sense", mode: "produce", sourceType: "support", pIdolId: "", welfare: false, effects: "" }, { id: 371, name: "\u306F\u3064\u307C\u3057\u8A18\u7AE0", rarity: "SSR", upgraded: false, plan: "free", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:fixedStamina+=7,do:removeBasicCard" }, { id: 372, name: "\u306F\u3064\u307C\u3057\u30E1\u30C0\u30EB (\u6A59)", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:goodConditionTurns+=5,do:removeBasicCard" }, { id: 373, name: "\u30AC\u30E9\u30B9\u306F\u3064\u307F (\u6A59)", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:concentration+=5,do:removeBasicCard" }, { id: 374, name: "\u306F\u3064\u307C\u3057\u30E1\u30C0\u30EB (\u767D)", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:goodImpressionTurns+=5,do:removeBasicCard" }, { id: 375, name: "\u30AC\u30E9\u30B9\u306F\u3064\u307F (\u767D)", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:motivation+=5,do:removeBasicCard" }, { id: 376, name: "\u306F\u3064\u307C\u3057\u30E1\u30C0\u30EB (\u9ED2)", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,target:effect(strength),do:g.score+=10;at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:removeBasicCard" }, { id: 377, name: "\u30AC\u30E9\u30B9\u306F\u3064\u307F (\u9ED2)", rarity: "SSR", upgraded: false, plan: "anomaly", mode: "stage", sourceType: "produce", pIdolId: "", welfare: false, effects: "at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,target:effect(fullPowerCharge),do:g.score+=10;at:startOfStage,if:countCards(all)-countCards(N)-countCards(T)>=21,do:removeBasicCard" }, { id: 378, name: "\u3060\u304B\u3089\u3001\u304A\u3044\u3067", rarity: "SSR", upgraded: false, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 122, welfare: false, effects: "at:startOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=10,do:setScoreDebuff(0.6,2),limit:1;at:startOfTurn,if:goodImpressionTurns>=6,limit:1;at:mentalCardUsed,do:motivation+=1,limit:5" }, { id: 379, name: "\u3060\u304B\u3089\u3001\u304A\u3044\u3067+", rarity: "SSR", upgraded: true, plan: "logic", mode: "stage", sourceType: "pIdol", pIdolId: 122, welfare: false, effects: "at:startOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=13,do:setScoreDebuff(0.6,2),limit:1;at:startOfTurn,if:goodImpressionTurns>=6,limit:1;at:mentalCardUsed,do:motivation+=1,limit:5" }, { id: 380, name: "\u3074\u3063\u305F\u308A\u30B3\u30EC\u30AF\u30B7\u30E7\u30F3", rarity: "SSR", upgraded: false, plan: "sense", mode: "stage", sourceType: "support", pIdolId: "", welfare: true, effects: "at:activeCardUsed,if:isVisualTurn,if:goodConditionTurns>=3,do:concentration+=2,do:score+=4,limit:1" }];
+
+// ../packages/gakumas-data/utils/contestPower.js
+function getPItemContestPower(pItem) {
+  if (pItem.sourceType == "pIdol") {
+    if (pItem.rarity == "R") {
+      return pItem.upgraded ? 240 : 150;
+    }
+    if (pItem.rarity == "SR") {
+      return pItem.upgraded ? 300 : 225;
+    }
+    if (pItem.rarity == "SSR") {
+      return pItem.upgraded ? 420 : 300;
+    }
+  } else if (pItem.sourceType == "support") {
+    if (pItem.rarity == "SR") {
+      return 135;
+    } else if (pItem.rarity == "SSR") {
+      if (pItem.welfare) {
+        return 159;
+      } else {
+        return 180;
+      }
+    }
+  }
+  return 0;
+}
+function getSkillCardContestPower(skillCard) {
+  if (skillCard.sourceType == "pIdol") {
+    return skillCard.upgraded ? 15 : 3;
+  } else if (skillCard.sourceType == "support") {
+    return skillCard.upgraded ? 126 : 96;
+  } else if (skillCard.sourceType == "produce") {
+    if (skillCard.rarity == "R") {
+      if (skillCard.unlockPlv <= 2) {
+        return skillCard.upgraded ? 39 : 30;
+      } else {
+        return skillCard.upgraded ? 60 : 45;
+      }
+    }
+    if (skillCard.rarity == "SR") {
+      if (skillCard.unlockPlv <= 2) {
+        return skillCard.upgraded ? 102 : 75;
+      } else {
+        return skillCard.upgraded ? 141 : 105;
+      }
+    }
+    if (skillCard.rarity == "SSR") {
+      return skillCard.upgraded ? 204 : 150;
+    }
+  }
+  return 0;
+}
+
+// ../packages/gakumas-data/data/pItems.js
+p_items_default.forEach((pItem) => {
+  pItem._type = "pItem";
+  pItem.effects = deserializeEffectSequence(pItem.effects);
+  pItem.pIdolId = pItem.pIdolId || null;
+  pItem.contestPower = getPItemContestPower(pItem);
+});
+var P_ITEMS_BY_ID = p_items_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+var PItems = class {
+  static getAll() {
+    return p_items_default;
+  }
+  static getById(id) {
+    return P_ITEMS_BY_ID[id];
+  }
+  static getFiltered({ rarities, plans, modes, sourceTypes, pIdolIds }) {
+    return p_items_default.filter((pItem) => {
+      if (rarities && !rarities.includes(pItem.rarity)) return false;
+      if (plans && !plans.includes(pItem.plan)) return false;
+      if (modes && !modes.includes(pItem.mode)) return false;
+      if (sourceTypes && !sourceTypes.includes(pItem.sourceType)) return false;
+      if (pIdolIds && !pIdolIds.includes(pItem.pIdolId)) return false;
+      return true;
+    });
+  }
+};
+var pItems_default = PItems;
+
+// ../packages/gakumas-data/json/skill_cards.json
+var skill_cards_default = [{ id: 1, name: "\u30A2\u30D4\u30FC\u30EB\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9", limit: "", growth: "" }, { id: 2, name: "\u30A2\u30D4\u30FC\u30EB\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=14", limit: "", growth: "" }, { id: 3, name: "\u30DD\u30FC\u30BA\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=2,do:genki+=2", limit: "", growth: "" }, { id: 4, name: "\u30DD\u30FC\u30BA\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=6,do:genki+=4", limit: "", growth: "" }, { id: 5, name: "\u6311\u6226", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=7", effects: "do:score+=25", limit: 1, growth: "" }, { id: 6, name: "\u6311\u6226+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=7", effects: "do:score+=37", limit: 1, growth: "" }, { id: 7, name: "\u8A66\u884C\u932F\u8AA4", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:score+=8,do:score+=8", limit: 1, growth: "" }, { id: 8, name: "\u8A66\u884C\u932F\u8AA4+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=10,do:score+=10", limit: 1, growth: "" }, { id: 9, name: "\u53EF\u611B\u3044\u4ED5\u8349", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=2,do:score+=goodImpressionTurns", limit: 1, growth: "" }, { id: 10, name: "\u53EF\u611B\u3044\u4ED5\u8349+", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*1.2", limit: 1, growth: "" }, { id: 11, name: "\u6C17\u5206\u8EE2\u63DB", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:score+=genki", limit: 1, growth: "" }, { id: 12, name: "\u6C17\u5206\u8EE2\u63DB+", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=genki*1.1", limit: 1, growth: "" }, { id: 13, name: "\u8868\u73FE\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=4", limit: 1, growth: "" }, { id: 14, name: "\u8868\u73FE\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=7", limit: 1, growth: "" }, { id: 15, name: "\u632F\u308B\u821E\u3044\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=1,do:goodConditionTurns+=2", limit: "", growth: "" }, { id: 16, name: "\u632F\u308B\u821E\u3044\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=1,do:goodConditionTurns+=3", limit: "", growth: "" }, { id: 17, name: "\u8868\u60C5\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=1,do:concentration+=2", limit: "", growth: "" }, { id: 18, name: "\u8868\u60C5\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=1,do:concentration+=3", limit: "", growth: "" }, { id: 19, name: "\u76EE\u7DDA\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=1,do:goodImpressionTurns+=2", limit: "", growth: "" }, { id: 20, name: "\u76EE\u7DDA\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:goodImpressionTurns+=3", limit: "", growth: "" }, { id: 21, name: "\u610F\u8B58\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=1,do:motivation+=2", limit: "", growth: "" }, { id: 22, name: "\u610F\u8B58\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:motivation+=3", limit: "", growth: "" }, { id: 23, name: "\u7720\u6C17", availableCustomizations: "", rarity: "T", type: "trouble", plan: "free", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "", limit: 1, growth: "" }, { id: 24, name: "\u8EFD\u3044\u8DB3\u53D6\u308A", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:goodConditionTurns+=2", limit: "", growth: "" }, { id: 25, name: "\u8EFD\u3044\u8DB3\u53D6\u308A+", availableCustomizations: "65,68,18", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9,do:goodConditionTurns+=3", limit: "", growth: "" }, { id: 26, name: "\u611B\u5B0C", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=13", limit: "", growth: "" }, { id: 27, name: "\u611B\u5B0C+", availableCustomizations: "14,18,65", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=21", limit: "", growth: "" }, { id: 28, name: "\u6E96\u5099\u904B\u52D5", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:concentration+=2", limit: "", growth: "" }, { id: 29, name: "\u6E96\u5099\u904B\u52D5+", availableCustomizations: "70,4,64", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9,do:concentration+=3", limit: "", growth: "" }, { id: 30, name: "\u30D5\u30A1\u30F3\u30B5", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 2, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=10", limit: "", growth: "" }, { id: 31, name: "\u30D5\u30A1\u30F3\u30B5+", availableCustomizations: "14,16,65", rarity: "R", type: "active", plan: "sense", unlockPlv: 2, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=16", limit: "", growth: "" }, { id: 32, name: "\u52E2\u3044\u4EFB\u305B", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 9, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6;if:goodConditionTurns>=1,do:concentration+=3", limit: "", growth: "" }, { id: 33, name: "\u52E2\u3044\u4EFB\u305B+", availableCustomizations: "70,4,64", rarity: "R", type: "active", plan: "sense", unlockPlv: 9, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9;if:goodConditionTurns>=1,do:concentration+=4", limit: "", growth: "" }, { id: 34, name: "\u30CF\u30A4\u30BF\u30C3\u30C1", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 13, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentrationMultiplier=1.5,do:score+=17", limit: 1, growth: "" }, { id: 35, name: "\u30CF\u30A4\u30BF\u30C3\u30C1+", availableCustomizations: "65,29,27", rarity: "R", type: "active", plan: "sense", unlockPlv: 13, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentrationMultiplier=2,do:score+=23", limit: 1, growth: "" }, { id: 36, name: "\u30C8\u30FC\u30AF\u30BF\u30A4\u30E0", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 14, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=6", effects: "do:score+=27", limit: 1, growth: "" }, { id: 37, name: "\u30C8\u30FC\u30AF\u30BF\u30A4\u30E0+", availableCustomizations: "65,29,18", rarity: "R", type: "active", plan: "sense", unlockPlv: 14, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=6", effects: "do:score+=38", limit: 1, growth: "" }, { id: 38, name: "\u4ECA\u65E5\u3082\u304A\u306F\u3088\u3046", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=7,do:goodImpressionTurns+=3", limit: "", growth: "" }, { id: 39, name: "\u4ECA\u65E5\u3082\u304A\u306F\u3088\u3046+", availableCustomizations: "71,7,65", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9,do:goodImpressionTurns+=4", limit: "", growth: "" }, { id: 40, name: "\u3086\u308B\u3075\u308F\u304A\u3057\u3083\u3079\u308A", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivation+=3,do:score+=genki*0.6", limit: 1, growth: "" }, { id: 41, name: "\u3086\u308B\u3075\u308F\u304A\u3057\u3083\u3079\u308A+", availableCustomizations: "27,72,67", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivation+=4,do:score+=genki*0.8", limit: 1, growth: "" }, { id: 42, name: "\u3082\u3046\u5C11\u3057\u3060\u3051", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=10,do:motivation+=3", limit: "", growth: "" }, { id: 43, name: "\u3082\u3046\u5C11\u3057\u3060\u3051+", availableCustomizations: "72,65,27", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=15,do:motivation+=4", limit: "", growth: "" }, { id: 44, name: "\u624B\u62CD\u5B50", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 13, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=goodImpressionTurns*1.5", limit: 1, growth: "" }, { id: 45, name: "\u624B\u62CD\u5B50+", availableCustomizations: "66,29,20", rarity: "R", type: "active", plan: "logic", unlockPlv: 13, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=goodImpressionTurns*2", limit: 1, growth: "" }, { id: 46, name: "\u5143\u6C17\u306A\u6328\u62F6", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 14, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:score+=genki*1.1", limit: 1, growth: "" }, { id: 47, name: "\u5143\u6C17\u306A\u6328\u62F6+", availableCustomizations: "67,9,29", rarity: "R", type: "active", plan: "logic", unlockPlv: 14, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=genki*1.2", limit: 1, growth: "" }, { id: 48, name: "\u6C17\u5408\u5341\u5206\uFF01", availableCustomizations: "", rarity: "R", type: "mental", plan: "free", unlockPlv: 16, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=2,do:halfCostTurns+=2", limit: "", growth: "" }, { id: 49, name: "\u6C17\u5408\u5341\u5206\uFF01+", availableCustomizations: "75,74,36", rarity: "R", type: "mental", plan: "free", unlockPlv: 16, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=2,do:halfCostTurns+=3", limit: "", growth: "" }, { id: 50, name: "\u30D5\u30A1\u30FC\u30B9\u30C8\u30B9\u30C6\u30C3\u30D7", availableCustomizations: "", rarity: "R", type: "mental", plan: "free", unlockPlv: 16, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=3;if:stamina>=maxStamina*0.5,do:costReduction+=1", limit: 1, growth: "" }, { id: 51, name: "\u30D5\u30A1\u30FC\u30B9\u30C8\u30B9\u30C6\u30C3\u30D7+", availableCustomizations: "75,36,3", rarity: "R", type: "mental", plan: "free", unlockPlv: 16, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=6;if:stamina>=maxStamina*0.5,do:costReduction+=1", limit: 1, growth: "" }, { id: 52, name: "\u30D0\u30E9\u30F3\u30B9\u611F\u899A", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:concentration+=3", limit: "", growth: "" }, { id: 53, name: "\u30D0\u30E9\u30F3\u30B9\u611F\u899A+", availableCustomizations: "70,75,14", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=1,do:concentration+=4", limit: "", growth: "" }, { id: 54, name: "\u697D\u89B3\u7684", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 4, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodConditionTurns+=3;if:goodConditionTurns,do:concentration+=1", limit: "", growth: "" }, { id: 55, name: "\u697D\u89B3\u7684+", availableCustomizations: "70,68,3", rarity: "R", type: "mental", plan: "sense", unlockPlv: 4, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodConditionTurns+=4;if:goodConditionTurns,do:concentration+=1", limit: "", growth: "" }, { id: 56, name: "\u6DF1\u547C\u5438", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 19, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentration+=2;if:concentration>=3,do:goodConditionTurns+=3", limit: "", growth: "" }, { id: 57, name: "\u6DF1\u547C\u5438+", availableCustomizations: "3,70,68", rarity: "R", type: "mental", plan: "sense", unlockPlv: 19, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentration+=3;if:concentration>=3,do:goodConditionTurns+=3", limit: "", growth: "" }, { id: 58, name: "\u30EA\u30B9\u30BF\u30FC\u30C8", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=2,do:goodImpressionTurns+=3", limit: "", growth: "" }, { id: 59, name: "\u30EA\u30B9\u30BF\u30FC\u30C8+", availableCustomizations: "75,71,7", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=2,do:goodImpressionTurns+=4", limit: "", growth: "" }, { id: 60, name: "\u3048\u3044\u3048\u3044\u304A\u30FC", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=1,do:motivation+=3", limit: "", growth: "" }, { id: 61, name: "\u3048\u3044\u3048\u3044\u304A\u30FC+", availableCustomizations: "75,72,9", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:motivation+=4", limit: "", growth: "" }, { id: 62, name: "\u30EA\u30BA\u30DF\u30AB\u30EB", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 2, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=6", limit: 1, growth: "" }, { id: 63, name: "\u30EA\u30BA\u30DF\u30AB\u30EB+", availableCustomizations: "22,20,75", rarity: "R", type: "mental", plan: "logic", unlockPlv: 2, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=8", limit: 1, growth: "" }, { id: 64, name: "\u601D\u3044\u51FA\u3057\u7B11\u3044", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 4, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=3;if:goodImpressionTurns>=3,do:motivation+=2", limit: "", growth: "" }, { id: 65, name: "\u601D\u3044\u51FA\u3057\u7B11\u3044+", availableCustomizations: "71,72,7", rarity: "R", type: "mental", plan: "logic", unlockPlv: 4, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=4;if:goodImpressionTurns>=3,do:motivation+=3", limit: "", growth: "" }, { id: 66, name: "\u30D1\u30B9\u30C6\u30EB\u6C17\u5206", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 9, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=5;if:motivation>=3,do:goodImpressionTurns+=3", limit: "", growth: "" }, { id: 67, name: "\u30D1\u30B9\u30C6\u30EB\u6C17\u5206+", availableCustomizations: "75,71,12", rarity: "R", type: "mental", plan: "logic", unlockPlv: 9, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=7;if:motivation>=3,do:goodImpressionTurns+=4", limit: "", growth: "" }, { id: 68, name: "\u52B1\u307E\u3057", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 19, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:motivation+=3;if:motivation>=6,do:goodImpressionTurns+=4", limit: "", growth: "" }, { id: 69, name: "\u52B1\u307E\u3057+", availableCustomizations: "72,27,71", rarity: "R", type: "mental", plan: "logic", unlockPlv: 19, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:motivation+=4;if:motivation>=6,do:goodImpressionTurns+=5", limit: "", growth: "" }, { id: 70, name: "\u524D\u9014\u6D0B\u3005", availableCustomizations: "", rarity: "SR", type: "active", plan: "free", unlockPlv: 3, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=8,do:genki+=7", limit: "", growth: "" }, { id: 71, name: "\u524D\u9014\u6D0B\u3005+", availableCustomizations: "59,4,47", rarity: "SR", type: "active", plan: "free", unlockPlv: 3, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=12,do:genki+=10", limit: "", growth: "" }, { id: 72, name: "\u6C7A\u3081\u30DD\u30FC\u30BA", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=18", limit: 1, growth: "" }, { id: 73, name: "\u6C7A\u3081\u30DD\u30FC\u30BA+", availableCustomizations: "48,14,29", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=27", limit: 1, growth: "" }, { id: 74, name: "\u30A2\u30C9\u30EA\u30D6", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=5,do:goodConditionTurns+=3", limit: "", growth: "" }, { id: 75, name: "\u30A2\u30C9\u30EA\u30D6+", availableCustomizations: "48,52,18", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=9,do:goodConditionTurns+=4", limit: "", growth: "" }, { id: 76, name: "\u60C5\u71B1\u30BF\u30FC\u30F3", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=11,do:concentration+=3", limit: "", growth: "" }, { id: 77, name: "\u60C5\u71B1\u30BF\u30FC\u30F3+", availableCustomizations: "4,54,29", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=18,do:concentration+=4", limit: "", growth: "" }, { id: 78, name: "\u98DB\u8E8D", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 6, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=13;if:concentration>=6,do:score+=15", limit: 1, growth: "" }, { id: 79, name: "\u98DB\u8E8D+", availableCustomizations: "47,14,37", rarity: "SR", type: "active", plan: "sense", unlockPlv: 6, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=13;if:concentration>=6,do:score+=15", limit: 1, growth: "" }, { id: 80, name: "\u795D\u798F", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 7, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:score+=26,do:goodConditionTurns+=1", limit: 1, growth: "" }, { id: 81, name: "\u795D\u798F+", availableCustomizations: "48,52,16", rarity: "SR", type: "active", plan: "sense", unlockPlv: 7, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:score+=40,do:goodConditionTurns+=1", limit: 1, growth: "" }, { id: 82, name: "\u30B9\u30BF\u30FC\u30C8\u30C0\u30C3\u30B7\u30E5", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 22, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=30,do:genki+=10,do:doubleCostTurns+=2", limit: "", growth: "" }, { id: 83, name: "\u30B9\u30BF\u30FC\u30C8\u30C0\u30C3\u30B7\u30E5+", availableCustomizations: "48,29,14", rarity: "SR", type: "active", plan: "sense", unlockPlv: 22, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=40,do:genki+=10,do:doubleCostTurns+=2", limit: "", growth: "" }, { id: 84, name: "\u30B9\u30BF\u30F3\u30C9\u30D7\u30EC\u30FC", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 24, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=12,do:genki+=7,do:concentration+=5,do:doubleCostTurns+=2", limit: "", growth: "" }, { id: 85, name: "\u30B9\u30BF\u30F3\u30C9\u30D7\u30EC\u30FC+", availableCustomizations: "59,29,54", rarity: "SR", type: "active", plan: "sense", unlockPlv: 24, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=12,do:genki+=7,do:concentration+=7,do:doubleCostTurns+=2", limit: "", growth: "" }, { id: 86, name: "\u30B7\u30E5\u30D7\u30EC\u30D2\u30B3\u30FC\u30EB", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 33, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "do:score+=6,do:goodConditionTurns+=2,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 87, name: "\u30B7\u30E5\u30D7\u30EC\u30D2\u30B3\u30FC\u30EB+", availableCustomizations: "32,39", rarity: "SR", type: "active", plan: "sense", unlockPlv: 33, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=2", effects: "do:score+=6,do:goodConditionTurns+=3,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 88, name: "\u30E9\u30D6\u30EA\u30FC\u30A6\u30A4\u30F3\u30AF", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=4,do:score+=goodImpressionTurns*0.6", limit: "", growth: "" }, { id: 89, name: "\u30E9\u30D6\u30EA\u30FC\u30A6\u30A4\u30F3\u30AF+", availableCustomizations: "55,49,29", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=5,do:score+=goodImpressionTurns*0.8", limit: "", growth: "" }, { id: 90, name: "\u3042\u308A\u304C\u3068\u3046\u306E\u8A00\u8449", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=9,do:score+=genki*0.4", limit: 1, growth: "" }, { id: 91, name: "\u3042\u308A\u304C\u3068\u3046\u306E\u8A00\u8449+", availableCustomizations: "59,50,9", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=11,do:score+=genki*0.7", limit: 1, growth: "" }, { id: 92, name: "\u30CF\u30FC\u30C8\u306E\u5408\u56F3", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 6, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=genki*1.3,do:genki=genki/2", limit: 1, growth: "" }, { id: 93, name: "\u30CF\u30FC\u30C8\u306E\u5408\u56F3+", availableCustomizations: "51,30,9", rarity: "SR", type: "active", plan: "logic", unlockPlv: 6, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=genki*1.8,do:genki=genki/2", limit: 1, growth: "" }, { id: 94, name: "\u30AD\u30E9\u30E1\u30AD", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 24, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=5,do:score+=goodImpressionTurns*2,do:doubleCostTurns+=2", limit: 1, growth: "" }, { id: 95, name: "\u30AD\u30E9\u30E1\u30AD+", availableCustomizations: "59,20,49", rarity: "SR", type: "active", plan: "logic", unlockPlv: 24, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=5,do:score+=goodImpressionTurns*2.5,do:doubleCostTurns+=2", limit: 1, growth: "" }, { id: 96, name: "\u307F\u3093\u306A\u5927\u597D\u304D", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 34, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:score+=goodImpressionTurns*0.9,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 97, name: "\u307F\u3093\u306A\u5927\u597D\u304D+", availableCustomizations: "5,34", rarity: "SR", type: "active", plan: "logic", unlockPlv: 34, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=2", effects: "do:score+=goodImpressionTurns*1.2,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 98, name: "\u30A2\u30A4\u30C9\u30EB\u5BA3\u8A00", availableCustomizations: "", rarity: "SR", type: "mental", plan: "free", unlockPlv: 23, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:cardUsesRemaining+=1,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 99, name: "\u30A2\u30A4\u30C9\u30EB\u5BA3\u8A00+", availableCustomizations: "24,27", rarity: "SR", type: "mental", plan: "free", unlockPlv: 23, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:halfCostTurns+=1", limit: 1, growth: "" }, { id: 100, name: "\u30CF\u30A4\u30C6\u30F3\u30B7\u30E7\u30F3", availableCustomizations: "", rarity: "SR", type: "mental", plan: "free", unlockPlv: 23, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=11,do:nullifyGenkiTurns+=2,do:halfCostTurns+=3", limit: 1, growth: "" }, { id: 101, name: "\u30CF\u30A4\u30C6\u30F3\u30B7\u30E7\u30F3+", availableCustomizations: "3,59,58", rarity: "SR", type: "mental", plan: "free", unlockPlv: 23, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=13,do:nullifyGenkiTurns+=2,do:halfCostTurns+=4", limit: 1, growth: "" }, { id: 102, name: "\u773C\u529B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=6,do:concentration+=3", limit: 1, growth: "" }, { id: 103, name: "\u773C\u529B+", availableCustomizations: "3,59,54", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=8,do:concentration+=4", limit: 1, growth: "" }, { id: 104, name: "\u5927\u58F0\u63F4", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=6,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 105, name: "\u5927\u58F0\u63F4+", availableCustomizations: "3,52,59", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=8,do:goodConditionTurns+=4", limit: 1, growth: "" }, { id: 106, name: "\u6F14\u51FA\u8A08\u753B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 17, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:perfectConditionTurns+=3;at:activeCardUsed,do:fixedGenki+=2", limit: 1, growth: "" }, { id: 107, name: "\u6F14\u51FA\u8A08\u753B+", availableCustomizations: "3,53,28", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 17, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:perfectConditionTurns+=4;at:activeCardUsed,do:fixedGenki+=2", limit: 1, growth: "" }, { id: 108, name: "\u9858\u3044\u306E\u529B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 18, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=2;at:activeCardUsed,do:concentration+=1", limit: 1, growth: "" }, { id: 109, name: "\u9858\u3044\u306E\u529B+", availableCustomizations: "3,54,29", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 18, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentration+=3;at:activeCardUsed,do:concentration+=1", limit: 1, growth: "" }, { id: 110, name: "\u9759\u304B\u306A\u610F\u5FD7", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 20, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=3,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 111, name: "\u9759\u304B\u306A\u610F\u5FD7+", availableCustomizations: "28,52,54", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 20, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=4,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 112, name: "\u59CB\u307E\u308A\u306E\u5408\u56F3", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 28, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=5", limit: 1, growth: "" }, { id: 113, name: "\u59CB\u307E\u308A\u306E\u5408\u56F3+", availableCustomizations: "52,3,29", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 28, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=7", limit: 1, growth: "" }, { id: 114, name: "\u610F\u5730", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 29, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=3,do:concentration+=4", limit: 1, growth: "" }, { id: 115, name: "\u610F\u5730+", availableCustomizations: "3,54,59", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 29, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:concentration+=5", limit: 1, growth: "" }, { id: 116, name: "\u5B58\u5728\u611F", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 31, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=2", effects: "do:concentration+=4,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 117, name: "\u5B58\u5728\u611F+", availableCustomizations: "31,39", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 31, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:concentration+=5,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 118, name: "\u6210\u529F\u3078\u306E\u9053\u7B4B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 36, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:genki+=5,do:concentration+=7", limit: 1, growth: "" }, { id: 119, name: "\u6210\u529F\u3078\u306E\u9053\u7B4B+", availableCustomizations: "54,79,31", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 36, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:genki+=5,do:concentration+=9", limit: 1, growth: "" }, { id: 120, name: "\u3042\u3075\u308C\u308B\u601D\u3044\u51FA", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=2,do:motivation+=4", limit: "", growth: "" }, { id: 121, name: "\u3042\u3075\u308C\u308B\u601D\u3044\u51FA+", availableCustomizations: "59,56,9", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=4,do:motivation+=5", limit: "", growth: "" }, { id: 122, name: "\u3075\u308C\u3042\u3044", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=3,do:goodImpressionTurns+=4", limit: "", growth: "" }, { id: 123, name: "\u3075\u308C\u3042\u3044+", availableCustomizations: "55,7,59", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=6,do:goodImpressionTurns+=5", limit: "", growth: "" }, { id: 124, name: "\u5E78\u305B\u306A\u6642\u9593", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 7, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=6", limit: "", growth: "" }, { id: 125, name: "\u5E78\u305B\u306A\u6642\u9593+", availableCustomizations: "55,7,29", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 7, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=8", limit: "", growth: "" }, { id: 126, name: "\u30D5\u30A1\u30F3\u30B7\u30FC\u30C1\u30E3\u30FC\u30E0", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 17, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=3;at:mentalCardUsed,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 127, name: "\u30D5\u30A1\u30F3\u30B7\u30FC\u30C1\u30E3\u30FC\u30E0+", availableCustomizations: "36,29,55", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 17, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=5;at:mentalCardUsed,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 128, name: "\u30EF\u30AF\u30EF\u30AF\u304C\u6B62\u307E\u3089\u306A\u3044", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 18, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:motivation+=3;at:mentalCardUsed,do:motivation+=1", limit: 1, growth: "" }, { id: 129, name: "\u30EF\u30AF\u30EF\u30AF\u304C\u6B62\u307E\u3089\u306A\u3044+", availableCustomizations: "36,29,56", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 18, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:motivation+=5;at:mentalCardUsed,do:motivation+=1", limit: 1, growth: "" }, { id: 130, name: "\u672C\u756A\u524D\u591C", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 20, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=4,do:motivation+=3", limit: 1, growth: "" }, { id: 131, name: "\u672C\u756A\u524D\u591C+", availableCustomizations: "29,56,55", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 20, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:goodImpressionTurns+=5,do:motivation+=4", limit: 1, growth: "" }, { id: 132, name: "\u3072\u306A\u305F\u307C\u3063\u3053", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 22, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=11,do:motivation+=5,do:doubleCostTurns+=2", limit: 1, growth: "" }, { id: 133, name: "\u3072\u306A\u305F\u307C\u3063\u3053+", availableCustomizations: "59,56,12", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 22, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=11,do:motivation+=7,do:doubleCostTurns+=2", limit: 1, growth: "" }, { id: 134, name: "\u30A4\u30E1\u30C8\u30EC", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 28, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=7,do:motivation+=4", limit: 1, growth: "" }, { id: 135, name: "\u30A4\u30E1\u30C8\u30EC+", availableCustomizations: "59,56,12", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 28, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=11,do:motivation+=5", limit: 1, growth: "" }, { id: 136, name: "\u3084\u308B\u6C17\u306F\u6E80\u70B9", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 29, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=1,do:goodImpressionTurns+=4", limit: 1, growth: "" }, { id: 137, name: "\u3084\u308B\u6C17\u306F\u6E80\u70B9+", availableCustomizations: "59,55,22", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 29, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=2,do:goodImpressionTurns+=5", limit: 1, growth: "" }, { id: 138, name: "\u3086\u3081\u307F\u3054\u3053\u3061", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 32, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=2", effects: "do:motivation+=4,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 139, name: "\u3086\u3081\u307F\u3054\u3053\u3061+", availableCustomizations: "33,12", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 32, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=1", effects: "do:motivation+=5,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 140, name: "\u30B3\u30FC\u30EB&\u30EC\u30B9\u30DD\u30F3\u30B9", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 11, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=15;if:concentration>=3,do:score+=15", limit: 1, growth: "" }, { id: 141, name: "\u30B3\u30FC\u30EB&\u30EC\u30B9\u30DD\u30F3\u30B9+", availableCustomizations: "1,14", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 11, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=15;if:concentration>=3,do:concentrationMultiplier=1.5,do:score+=34", limit: 1, growth: "" }, { id: 142, name: "\u30D0\u30BA\u30EF\u30FC\u30C9", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 12, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=7", effects: "do:score+=38", limit: "", growth: "" }, { id: 143, name: "\u30D0\u30BA\u30EF\u30FC\u30C9+", availableCustomizations: "2,18", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 12, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=7", effects: "do:score+=54", limit: "", growth: "" }, { id: 144, name: "\u6210\u5C31", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 41, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=10", effects: "do:goodConditionTurns+=4;at:turn,do:score+=32,limit:1", limit: 1, growth: "" }, { id: 145, name: "\u6210\u5C31+", availableCustomizations: "13,29", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 41, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=10", effects: "do:goodConditionTurns+=7;at:turn,do:score+=40,limit:1", limit: 1, growth: "" }, { id: 146, name: "\u9B45\u60D1\u306E\u30D1\u30D5\u30A9\u30FC\u30DE\u30F3\u30B9", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 43, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=8", effects: "do:perfectConditionTurns+=3;at:turn,do:score+=38,limit:1;at:turn,delay:1,do:goodConditionTurnsMultiplier=2,do:score+=21,limit:1", limit: 1, growth: "" }, { id: 147, name: "\u9B45\u60D1\u306E\u30D1\u30D5\u30A9\u30FC\u30DE\u30F3\u30B9+", availableCustomizations: "15,29", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 43, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=7", effects: "do:perfectConditionTurns+=4;at:turn,do:score+=47,limit:1;at:turn,delay:1,do:goodConditionTurnsMultiplier=2,do:score+=21,limit:1", limit: 1, growth: "" }, { id: 148, name: "200%\u30B9\u30DE\u30A4\u30EB", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 11, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=5,do:score+=goodImpressionTurns", limit: 1, growth: "" }, { id: 149, name: "200%\u30B9\u30DE\u30A4\u30EB+", availableCustomizations: "19,6", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 11, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=6,do:score+=goodImpressionTurns*1.7", limit: 1, growth: "" }, { id: 150, name: "\u958B\u82B1", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 12, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:motivation+=6,do:score+=motivation*2", limit: 1, growth: "" }, { id: 151, name: "\u958B\u82B1+", availableCustomizations: "27,8", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 12, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:motivation+=8,do:score+=motivation*3", limit: 1, growth: "" }, { id: 152, name: "\u5C4A\u3044\u3066\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 44, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:score+=genki*1.6,do:genki=0", limit: 1, growth: "" }, { id: 153, name: "\u5C4A\u3044\u3066\uFF01+", availableCustomizations: "11,30", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 44, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:score+=genki*2.2,do:genki=0", limit: 1, growth: "" }, { id: 154, name: "\u30C6\u30EC\u30D3\u51FA\u6F14", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 5, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=3,do:halfCostTurns+=4", limit: 1, growth: "" }, { id: 155, name: "\u30C6\u30EC\u30D3\u51FA\u6F14+", availableCustomizations: "38,3", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 5, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=5,do:halfCostTurns+=5", limit: 1, growth: "" }, { id: 156, name: "\u53F6\u3048\u305F\u3044\u5922", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 10, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:genki+=8,do:costReduction+=1", limit: 1, growth: "" }, { id: 157, name: "\u53F6\u3048\u305F\u3044\u5922+", availableCustomizations: "27,25", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 10, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:genki+=9,do:costReduction+=2", limit: 1, growth: "" }, { id: 158, name: "\u30A2\u30A4\u30C9\u30EB\u9B42", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 35, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:nullifyDebuff+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 159, name: "\u30A2\u30A4\u30C9\u30EB\u9B42+", availableCustomizations: "26,29", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 35, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:nullifyDebuff+=1,do:cardUsesRemaining+=1;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 160, name: "\u4ED5\u5207\u308A\u76F4\u3057", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 40, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:exchangeHand,do:halfCostTurns+=4,do:cardUsesRemaining+=1,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 161, name: "\u4ED5\u5207\u308A\u76F4\u3057+", availableCustomizations: "29,24", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 40, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:exchangeHand,do:halfCostTurns+=4,do:cardUsesRemaining+=1,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 162, name: "\u56FD\u6C11\u7684\u30A2\u30A4\u30C9\u30EB", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 25, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:doubleCardEffectCards+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 163, name: "\u56FD\u6C11\u7684\u30A2\u30A4\u30C9\u30EB+", availableCustomizations: "26,3", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 25, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:genki+=8,do:doubleCardEffectCards+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 164, name: "\u9B45\u60D1\u306E\u8996\u7DDA", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 30, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "do:perfectConditionTurns+=4,do:halfCostTurns+=2,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 165, name: "\u9B45\u60D1\u306E\u8996\u7DDA+", availableCustomizations: "32,28", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 30, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "do:perfectConditionTurns+=5,do:halfCostTurns+=5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 166, name: "\u9CF4\u308A\u6B62\u307E\u306A\u3044\u62CD\u624B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 38, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=4,do:goodConditionTurns+=2,do:halfCostTurns+=2", limit: 1, growth: "" }, { id: 167, name: "\u9CF4\u308A\u6B62\u307E\u306A\u3044\u62CD\u624B+", availableCustomizations: "17,13", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 38, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=5,do:goodConditionTurns+=3,do:halfCostTurns+=3", limit: 1, growth: "" }, { id: 168, name: "\u5929\u771F\u721B\u6F2B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 45, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:concentration+=1;at:endOfTurn,if:concentration>=3,do:concentration+=2", limit: 1, growth: "" }, { id: 169, name: "\u5929\u771F\u721B\u6F2B+", availableCustomizations: "29,17", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 45, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentration+=1;at:endOfTurn,if:concentration>=3,do:concentration+=2", limit: 1, growth: "" }, { id: 170, name: "\u79C1\u304C\u30B9\u30BF\u30FC", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 25, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=2", effects: "do:turnsRemaining+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 171, name: "\u79C1\u304C\u30B9\u30BF\u30FC+", availableCustomizations: "33,39", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 25, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=1", effects: "do:turnsRemaining+=1,do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 172, name: "\u661F\u5C51\u30BB\u30F3\u30BB\u30FC\u30B7\u30E7\u30F3", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 30, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:goodImpressionTurns+=5,do:cardUsesRemaining+=1;if:goodImpressionTurns>=10,do:setGoodImpressionTurnsBuff(0.5,5)", limit: 1, growth: "" }, { id: 173, name: "\u661F\u5C51\u30BB\u30F3\u30BB\u30FC\u30B7\u30E7\u30F3+", availableCustomizations: "7,19", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 30, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:goodImpressionTurns+=7,do:cardUsesRemaining+=1,do:drawCard;if:goodImpressionTurns>=10,do:setGoodImpressionTurnsBuff(0.5,5)", limit: 1, growth: "" }, { id: 174, name: "\u30CE\u30FC\u30C8\u306E\u7AEF\u306E\u6C7A\u610F", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 37, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=3,do:motivation+=3,do:halfCostTurns+=3", limit: 1, growth: "" }, { id: 175, name: "\u30CE\u30FC\u30C8\u306E\u7AEF\u306E\u6C7A\u610F+", availableCustomizations: "27,7", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 37, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=5,do:motivation+=3,do:halfCostTurns+=3", limit: 1, growth: "" }, { id: 176, name: "\u624B\u66F8\u304D\u306E\u30E1\u30C3\u30BB\u30FC\u30B8", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 39, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=2", effects: "do:genki+=9,do:genki+=9", limit: 1, growth: "" }, { id: 177, name: "\u624B\u66F8\u304D\u306E\u30E1\u30C3\u30BB\u30FC\u30B8+", availableCustomizations: "25,33", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 39, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=1", effects: "do:genki+=10,do:genki+=10", limit: 1, growth: "" }, { id: 178, name: "\u30C8\u30AD\u30E1\u30AD", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 42, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=10", effects: "do:goodImpressionTurns+=8,do:motivation+=5", limit: 1, growth: "" }, { id: 179, name: "\u30C8\u30AD\u30E1\u30AD+", availableCustomizations: "21,19", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 42, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=9", effects: "do:goodImpressionTurns+=10,do:motivation+=6", limit: 1, growth: "" }, { id: 180, name: "\u8679\u8272\u30C9\u30EA\u30FC\u30DE\u30FC", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 45, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=9", effects: "do:goodImpressionTurns+=1;at:endOfTurn,if:goodImpressionTurns>=3,do:goodImpressionTurns+=3", limit: 1, growth: "" }, { id: 181, name: "\u8679\u8272\u30C9\u30EA\u30FC\u30DE\u30FC+", availableCustomizations: "29,19", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 45, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=9", effects: "do:goodImpressionTurns+=4;at:endOfTurn,if:goodImpressionTurns>=3,do:goodImpressionTurns+=3", limit: 1, growth: "" }, { id: 182, name: "\u65B0\u9032\u6C17\u92ED", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 1, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=17", limit: 1, growth: "" }, { id: 183, name: "\u65B0\u9032\u6C17\u92ED+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 1, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=25", limit: 1, growth: "" }, { id: 184, name: "\u610F\u5730\u3063\u5F35\u308A", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 2, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=7,do:concentration+=3", limit: 1, growth: "" }, { id: 185, name: "\u610F\u5730\u3063\u5F35\u308A+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 2, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=7,do:concentration+=5", limit: 1, growth: "" }, { id: 186, name: "\u30A2\u30EB\u30D0\u30A4\u30BF\u30FC", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 3, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=2,do:goodImpressionTurns+=5", limit: 1, growth: "" }, { id: 187, name: "\u30A2\u30EB\u30D0\u30A4\u30BF\u30FC+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 3, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=6,do:goodImpressionTurns+=6", limit: 1, growth: "" }, { id: 188, name: "\u30EA\u30C8\u30EB\u30FB\u30D7\u30EA\u30F3\u30B9", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 4, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=8;if:goodConditionTurns>=1,do:score+=3", limit: 1, growth: "" }, { id: 189, name: "\u30EA\u30C8\u30EB\u30FB\u30D7\u30EA\u30F3\u30B9+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 4, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=13;if:goodConditionTurns>=1,do:score+=5", limit: 1, growth: "" }, { id: 190, name: "\u5185\u6C17\u7CFB\u5C11\u5973", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 5, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=1;at:endOfTurn,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 191, name: "\u5185\u6C17\u7CFB\u5C11\u5973+", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 5, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=2;at:endOfTurn,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 192, name: "\u5143\u6C17\u3044\u3063\u3071\u3044", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 6, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=2,do:score+=genki*0.5,do:motivation+=2", limit: 1, growth: "" }, { id: 193, name: "\u5143\u6C17\u3044\u3063\u3071\u3044+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 6, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=2,do:score+=genki*0.7,do:motivation+=3", limit: 1, growth: "" }, { id: 194, name: "\u30D5\u30EC\u30F3\u30C9\u30EA\u30FC", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 7, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=10;if:concentration>=6,do:score+=10", limit: 1, growth: "" }, { id: 195, name: "\u30D5\u30EC\u30F3\u30C9\u30EA\u30FC+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 7, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=12,do:score+=12", limit: 1, growth: "" }, { id: 196, name: "\u8D85\u9AD8\u5B66\u6B74\u30A2\u30A4\u30C9\u30EB", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 8, forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=2;if:motivation>=6,do:genki+=3", limit: 1, growth: "" }, { id: 197, name: "\u8D85\u9AD8\u5B66\u6B74\u30A2\u30A4\u30C9\u30EB+", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 8, forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=4;if:motivation>=6,do:genki+=5", limit: 1, growth: "" }, { id: 198, name: "\u5305\u5BB9\u529B", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 9, forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=2,do:genki+=1,do:cost+=2", limit: 1, growth: "" }, { id: 199, name: "\u5305\u5BB9\u529B+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 9, forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=3,do:genki+=4,do:cost+=2", limit: 1, growth: "" }, { id: 200, name: "\u4E00\u756A\u306F\u8B72\u3089\u306A\u3044", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 10, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=18,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 201, name: "\u4E00\u756A\u306F\u8B72\u3089\u306A\u3044+", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 10, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=26,do:goodConditionTurns+=4", limit: 1, growth: "" }, { id: 202, name: "\u30ED\u30FC\u30F3\u30FB\u30A6\u30EB\u30D5", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 11, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=12;if:concentration>=3,do:score+=12", limit: 1, growth: "" }, { id: 203, name: "\u30ED\u30FC\u30F3\u30FB\u30A6\u30EB\u30D5+", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 11, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=12;if:concentration>=3,do:score+=12", limit: 1, growth: "" }, { id: 204, name: "Colorful Cute!", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 12, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=6", limit: 1, growth: "" }, { id: 205, name: "Colorful Cute!+", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 12, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=8", limit: 1, growth: "" }, { id: 206, name: "\u3089\u3057\u3055", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 13, forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=4;if:goodConditionTurns>=1,do:concentration+=3", limit: 1, growth: "" }, { id: 207, name: "\u3089\u3057\u3055+", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 13, forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=6;if:goodConditionTurns>=1,do:concentration+=4", limit: 1, growth: "" }, { id: 208, name: "\u7D14\u767D\u306E\u5996\u7CBE", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 14, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=2,do:score+=goodImpressionTurns*1.2", limit: 1, growth: "" }, { id: 209, name: "\u7D14\u767D\u306E\u5996\u7CBE+", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 14, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=2,do:score+=goodImpressionTurns*1.6", limit: 1, growth: "" }, { id: 210, name: "\u3044\u3063\u3057\u3087\u3051\u3093\u3081\u3044", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 15, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=1,do:motivation+=5", limit: 1, growth: "" }, { id: 211, name: "\u3044\u3063\u3057\u3087\u3051\u3093\u3081\u3044+", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 15, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=4,do:motivation+=6", limit: 1, growth: "" }, { id: 212, name: "\u52C7\u6C17\u306E\u4E00\u6B69", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 16, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentrationMultiplier=2,do:score+=17", limit: 1, growth: "" }, { id: 213, name: "\u52C7\u6C17\u306E\u4E00\u6B69+", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 16, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentrationMultiplier=2.5,do:score+=24", limit: 1, growth: "" }, { id: 214, name: "\u82E6\u3057\u3044\u306E\u304C\u597D\u304D", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 17, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=6,do:score+=motivation*2.5", limit: 1, growth: "" }, { id: 215, name: "\u82E6\u3057\u3044\u306E\u304C\u597D\u304D+", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 17, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=7,do:score+=motivation*3.5", limit: 1, growth: "" }, { id: 216, name: "\u5BC4\u308A\u6DFB\u3046\u6C17\u6301\u3061", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 18, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:genki+=10,do:concentration+=4", limit: 1, growth: "" }, { id: 217, name: "\u5BC4\u308A\u6DFB\u3046\u6C17\u6301\u3061+", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 18, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=12,do:concentration+=5", limit: 1, growth: "" }, { id: 218, name: "\u7D76\u5BFE\u306B\u8CA0\u3051\u306A\u3044", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 19, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=34", limit: 1, growth: "" }, { id: 219, name: "\u7D76\u5BFE\u306B\u8CA0\u3051\u306A\u3044+", availableCustomizations: "94,38", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 19, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:score+=48", limit: 1, growth: "" }, { id: 220, name: "\u305D\u308C\u305E\u308C\u306E\u9053", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 20, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:score+=14,do:concentration+=5", limit: 1, growth: "" }, { id: 221, name: "\u305D\u308C\u305E\u308C\u306E\u9053+", availableCustomizations: "95,38", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 20, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=15,do:concentration+=5", limit: 1, growth: "" }, { id: 222, name: "\u3088\u305D\u898B\u306F\u30C0\u30E1\u266A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 21, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:genki+=2,do:goodImpressionTurns+=7", limit: 1, growth: "" }, { id: 223, name: "\u3088\u305D\u898B\u306F\u30C0\u30E1\u266A+", availableCustomizations: "96,38", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 21, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:genki+=4,do:goodImpressionTurns+=9", limit: 1, growth: "" }, { id: 224, name: "\u76DB\u88C5\u306E\u83EF\u5F62", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 22, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=12;if:goodConditionTurns>=1,do:score+=14", limit: 1, growth: "" }, { id: 225, name: "\u76DB\u88C5\u306E\u83EF\u5F62+", availableCustomizations: "91,38", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 22, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=18;if:goodConditionTurns>=1,do:score+=20", limit: 1, growth: "" }, { id: 226, name: "\u3082\u3046\u6016\u304F\u306A\u3044\u304B\u3089", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 23, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=3;at:endOfTurn,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 227, name: "\u3082\u3046\u6016\u304F\u306A\u3044\u304B\u3089+", availableCustomizations: "36,38", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 23, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=4;at:endOfTurn,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 228, name: "\u304A\u5B22\u69D8\u306E\u6674\u308C\u821E\u53F0", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 24, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=2,do:score+=genki,do:motivation+=2", limit: 1, growth: "" }, { id: 229, name: "\u304A\u5B22\u69D8\u306E\u6674\u308C\u821E\u53F0+", availableCustomizations: "98,38", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 24, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=5,do:score+=genki*1.2,do:motivation+=3", limit: 1, growth: "" }, { id: 230, name: "\u30EF\u30F3\u30E2\u30A2\u30B9\u30C6\u30C3\u30D7", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 25, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=7,do:score+=7;if:concentration>=6,do:score+=7", limit: 1, growth: "" }, { id: 231, name: "\u30EF\u30F3\u30E2\u30A2\u30B9\u30C6\u30C3\u30D7+", availableCustomizations: "99,38", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 25, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=9,do:score+=9;if:concentration>=6,do:score+=9", limit: 1, growth: "" }, { id: 232, name: "\u672C\u6C17\u306E\u8DA3\u5473", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 26, forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=5;if:motivation>=3,do:genki+=4", limit: 1, growth: "" }, { id: 233, name: "\u672C\u6C17\u306E\u8DA3\u5473+", availableCustomizations: "90,37", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 26, forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=7;if:motivation>=3,do:genki+=7", limit: 1, growth: "" }, { id: 234, name: "\u8DDD\u96E2\u611F", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 27, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=4,do:fixedStamina+=4", limit: 1, growth: "" }, { id: 235, name: "\u8DDD\u96E2\u611F+", availableCustomizations: "92,38", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 27, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentration+=5,do:fixedStamina+=5", limit: 1, growth: "" }, { id: 236, name: "\u304A\u59C9\u3061\u3083\u3093\u3060\u3082\u306E\uFF01", availableCustomizations: "", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:score<=1000", cost: "do:cost-=3", effects: "do:score+=6,do:genki+=6;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 237, name: "\u304A\u59C9\u3061\u3083\u3093\u3060\u3082\u306E\uFF01+", availableCustomizations: "59,4,47", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:score<=1000", cost: "do:cost-=3", effects: "do:score+=10,do:genki+=9;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 238, name: "\u304A\u30A2\u30C4\u30A4\u8996\u7DDA", availableCustomizations: "", rarity: "SR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:genki==0", cost: "", effects: "do:genki+=5,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 239, name: "\u304A\u30A2\u30C4\u30A4\u8996\u7DDA+", availableCustomizations: "59,58,3", rarity: "SR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:genki==0", cost: "", effects: "do:genki+=6,do:halfCostTurns+=3;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 240, name: "\u3054\u6307\u5C0E\u3054\u97AD\u64BB", availableCustomizations: "", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:stamina>=maxStamina*0.5", cost: "do:cost-=5", effects: "do:score+=4,do:genki+=5;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 241, name: "\u3054\u6307\u5C0E\u3054\u97AD\u64BB+", availableCustomizations: "48,59,27", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:stamina>=maxStamina*0.5", cost: "do:cost-=2", effects: "do:score+=4,do:genki+=5;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 242, name: "\u30B9\u30C8\u30EC\u30C3\u30C1\u8AC7\u7FA9", availableCustomizations: "", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:turnsElapsed>=2", cost: "do:cost-=3", effects: "do:score+=3,do:halfCostTurns+=2;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 243, name: "\u30B9\u30C8\u30EC\u30C3\u30C1\u8AC7\u7FA9+", availableCustomizations: "48,58,27", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:turnsElapsed>=2", cost: "", effects: "do:score+=3,do:halfCostTurns+=2;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 244, name: "\u5168\u529B\u30B5\u30DD\u30FC\u30C8", availableCustomizations: "", rarity: "SR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 245, name: "\u5168\u529B\u30B5\u30DD\u30FC\u30C8+", availableCustomizations: "3,27", rarity: "SR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:cardUsesRemaining+=1;at:turn,do:drawCard,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 246, name: "\u82B1\u840C\u3086\u5B63\u7BC0", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:addRandomUpgradedCardToHand,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 247, name: "\u82B1\u840C\u3086\u5B63\u7BC0+", availableCustomizations: "27,3", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:addRandomUpgradedCardToHand,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 248, name: "\u967D\u3060\u307E\u308A\u306E\u751F\u5F92\u4F1A\u5BA4", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fixedStamina+=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 249, name: "\u967D\u3060\u307E\u308A\u306E\u751F\u5F92\u4F1A\u5BA4+", availableCustomizations: "3,27", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:fixedStamina+=5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 250, name: "\u5FC3\u306E\u30A2\u30EB\u30D0\u30E0", availableCustomizations: "", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=3,do:genki+=3;at:turn,do:drawCard,limit:2", limit: 1, growth: "" }, { id: 251, name: "\u5FC3\u306E\u30A2\u30EB\u30D0\u30E0+", availableCustomizations: "2,38", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:score+=6,do:genki+=5;at:turn,do:drawCard,limit:2", limit: 1, growth: "" }, { id: 252, name: "\u30C6\u30A3\u30FC\u30D1\u30FC\u30C6\u30A3", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:cardUsesRemaining+=1,do:upgradeHand", limit: 1, growth: "" }, { id: 253, name: "\u30C6\u30A3\u30FC\u30D1\u30FC\u30C6\u30A3+", availableCustomizations: "36,27", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:cardUsesRemaining+=1,do:drawCard,do:upgradeHand", limit: 1, growth: "" }, { id: 254, name: "\u5149\u306E\u30B9\u30C6\u30FC\u30B8", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:costReduction+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 255, name: "\u5149\u306E\u30B9\u30C6\u30FC\u30B8+", availableCustomizations: "36,27", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:costReduction+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 256, name: "\u55A7\u5629\u3059\u308B\u307B\u3069\u4EF2\u304C\u3044\u3044", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:concentration+=3,do:goodConditionTurns+=2;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 257, name: "\u55A7\u5629\u3059\u308B\u307B\u3069\u4EF2\u304C\u3044\u3044+", availableCustomizations: "13,17", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:concentration+=4,do:goodConditionTurns+=4;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 258, name: "\u30C0\u30E1\u30C0\u30E1\u30AF\u30C3\u30AD\u30F3\u30B0", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:goodImpressionTurns+=4,do:motivation+=3;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 259, name: "\u30C0\u30E1\u30C0\u30E1\u30AF\u30C3\u30AD\u30F3\u30B0+", availableCustomizations: "19,21", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=5,do:motivation+=4;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 260, name: "\u65B0\u751F\u5F92\u4F1A\u7206\u8A95\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:halfCostTurns+=2,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 261, name: "\u65B0\u751F\u5F92\u4F1A\u7206\u8A95\uFF01+", availableCustomizations: "27,24", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=4", effects: "do:halfCostTurns+=4,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 262, name: "\u8584\u308C\u3086\u304F\u58C1", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=3;at:turn,do:upgradeHand,limit:2", limit: 1, growth: "" }, { id: 263, name: "\u8584\u308C\u3086\u304F\u58C1+", availableCustomizations: "26,3", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=3;at:turn,do:upgradeHand,limit:2", limit: 1, growth: "" }, { id: 264, name: "\u7D61\u307E\u308B\u60F3\u3044", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 28, forceInitialHand: true, conditions: "", cost: "do:cost-=8", effects: "do:goodImpressionTurns+=8", limit: 1, growth: "" }, { id: 265, name: "\u7D61\u307E\u308B\u60F3\u3044+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 28, forceInitialHand: true, conditions: "", cost: "do:cost-=8", effects: "do:goodImpressionTurns+=10", limit: 1, growth: "" }, { id: 266, name: "\u306A\u306B\u8074\u3044\u3066\u308B\u306E\uFF1F", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=2,do:fixedStamina+=3", limit: 1, growth: "" }, { id: 267, name: "\u306A\u306B\u8074\u3044\u3066\u308B\u306E\uFF1F+", availableCustomizations: "59,37,12", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "", effects: "do:genki+=2,do:fixedStamina+=5", limit: 1, growth: "" }, { id: 268, name: "\u672A\u5B8C\u306E\u5927\u5668", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 29, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=cardsUsed*3+2", limit: 1, growth: "" }, { id: 269, name: "\u672A\u5B8C\u306E\u5927\u5668+", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 29, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=cardsUsed*4+4", limit: 1, growth: "" }, { id: 270, name: "\u6253\u5012\u304A\u59C9\u3061\u3083\u3093", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 30, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=3,do:score+=genki", limit: 1, growth: "" }, { id: 271, name: "\u6253\u5012\u304A\u59C9\u3061\u3083\u3093+", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 30, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=3,do:score+=genki*1.4", limit: 1, growth: "" }, { id: 272, name: "\u304A\u3063\u304D\u306A\u304A\u306B\u304E\u308A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 31, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=5*cardsUsed+2", limit: 1, growth: "" }, { id: 273, name: "\u304A\u3063\u304D\u306A\u304A\u306B\u304E\u308A+", availableCustomizations: "102,38", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 31, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=8*cardsUsed+2", limit: 1, growth: "" }, { id: 274, name: "\u30AD\u30E1\u9854\u3067\u81EA\u64AE\u308A", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=3,do:concentration+=2;if:stamina>=maxStamina*0.5;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 275, name: "\u30AD\u30E1\u9854\u3067\u81EA\u64AE\u308A+", availableCustomizations: "52,54,3", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=4,do:concentration+=3;if:stamina>=maxStamina*0.5;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 276, name: "\u307F\u305A\u305F\u307E\u308A\u30B9\u30AD\u30C3\u30D7", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:genki+=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 277, name: "\u307F\u305A\u305F\u307E\u308A\u30B9\u30AD\u30C3\u30D7+", availableCustomizations: "26,3", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:genki+=8,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 278, name: "\u30A2\u30C9\u30EC\u30CA\u30EA\u30F3\u5168\u958B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 32, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=3,do:perfectConditionTurns+=4", limit: 1, growth: "" }, { id: 279, name: "\u30A2\u30C9\u30EC\u30CA\u30EA\u30F3\u5168\u958B+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 32, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=4,do:perfectConditionTurns+=5", limit: 1, growth: "" }, { id: 280, name: "POW\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 33, forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:score+=goodImpressionTurns*2.5", limit: 1, growth: "" }, { id: 281, name: "POW\uFF01+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 33, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=goodImpressionTurns*2.6", limit: 1, growth: "" }, { id: 282, name: "\u304A\u6CCA\u308A\u731B\u52C9\u5F37", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:goodImpressionTurns+=5", limit: 1, growth: "" }, { id: 283, name: "\u304A\u6CCA\u308A\u731B\u52C9\u5F37+", availableCustomizations: "38,19", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:goodImpressionTurns+=6;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 284, name: "\u3072\u3093\u3084\u308A\u4E00\u4F11\u307F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 34, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:score+=9,do:score+=9,do:score+=9", limit: 1, growth: "" }, { id: 285, name: "\u3072\u3093\u3084\u308A\u4E00\u4F11\u307F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 34, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:score+=14,do:score+=14,do:score+=14", limit: 1, growth: "" }, { id: 286, name: "\u663C\u4E0B\u304C\u308A\u306E\u305D\u3088\u98A8", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 35, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:motivation+=7;if:motivation>=6,do:motivation+=3", limit: 1, growth: "" }, { id: 287, name: "\u663C\u4E0B\u304C\u308A\u306E\u305D\u3088\u98A8+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 35, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:motivation+=8;if:motivation>=3,do:motivation+=5", limit: 1, growth: "" }, { id: 288, name: "\u3072\u3068\u547C\u5438", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 47, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:goodConditionTurns+=3,do:concentration+=4", limit: 1, growth: "" }, { id: 289, name: "\u3072\u3068\u547C\u5438+", availableCustomizations: "29,28,70", rarity: "R", type: "mental", plan: "sense", unlockPlv: 47, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:goodConditionTurns+=4,do:concentration+=5", limit: 1, growth: "" }, { id: 290, name: "\u5E78\u305B\u306E\u304A\u307E\u3058\u306A\u3044", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 46, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:goodImpressionTurns+=7", limit: 1, growth: "" }, { id: 291, name: "\u5E78\u305B\u306E\u304A\u307E\u3058\u306A\u3044+", availableCustomizations: "71,7,29", rarity: "R", type: "mental", plan: "logic", unlockPlv: 46, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:goodImpressionTurns+=9", limit: 1, growth: "" }, { id: 292, name: "\u7ACB\u3061\u4F4D\u7F6E\u30C1\u30A7\u30C3\u30AF", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 51, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "do:genki+=15,do:goodConditionTurnsMultiplier=2,do:score+=30,do:nullifyGenkiTurns+=2", limit: 1, growth: "" }, { id: 293, name: "\u7ACB\u3061\u4F4D\u7F6E\u30C1\u30A7\u30C3\u30AF+", availableCustomizations: "47,4,59", rarity: "SR", type: "active", plan: "sense", unlockPlv: 51, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "do:genki+=15,do:goodConditionTurnsMultiplier=2,do:score+=40,do:nullifyGenkiTurns+=2", limit: 1, growth: "" }, { id: 294, name: "\u30B9\u30DD\u30C3\u30C8\u30E9\u30A4\u30C8", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 49, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=7,do:goodConditionTurns+=5;at:turn,do:drawCard,do:drawCard,limit:1;at:turn,delay:1,do:drawCard,limit:1", limit: "", growth: "" }, { id: 295, name: "\u30B9\u30DD\u30C3\u30C8\u30E9\u30A4\u30C8+", availableCustomizations: "3,52,59", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 49, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=9,do:goodConditionTurns+=6;at:turn,do:drawCard,do:drawCard,limit:1;at:turn,delay:1,do:drawCard,limit:1", limit: "", growth: "" }, { id: 296, name: "\u6B62\u3081\u3089\u308C\u306A\u3044\u60F3\u3044", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 48, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivation+=3,do:goodImpressionTurns+=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 297, name: "\u6B62\u3081\u3089\u308C\u306A\u3044\u60F3\u3044+", availableCustomizations: "19,21", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 48, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivation+=4,do:goodImpressionTurns+=5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 298, name: "\u30AA\u30C8\u30E1\u30B4\u30B3\u30ED", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 52, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:goodImpressionTurns+=4,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 299, name: "\u30AA\u30C8\u30E1\u30B4\u30B3\u30ED+", availableCustomizations: "34,80", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 52, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:goodImpressionTurns+=5,do:cardUsesRemaining+=1;if:goodImpressionTurns>=10,do:goodImpressionTurns+=2", limit: "", growth: "" }, { id: 300, name: "\u81F3\u9AD8\u306E\u30A8\u30F3\u30BF\u30E1", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 50, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=3", effects: "at:activeCardUsed,do:score+=4", limit: 1, growth: "" }, { id: 301, name: "\u81F3\u9AD8\u306E\u30A8\u30F3\u30BF\u30E1+", availableCustomizations: "32,28", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 50, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:concentration-=2", effects: "at:turn,do:drawCard,limit:1;at:activeCardUsed,do:score+=5", limit: 1, growth: "" }, { id: 302, name: "\u899A\u9192", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 53, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:score+=3,do:score+=3,do:concentration+=4", limit: "", growth: "" }, { id: 303, name: "\u899A\u9192+", availableCustomizations: "1,28", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 53, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=1", effects: "do:score+=4,do:score+=4,do:concentration+=6", limit: "", growth: "" }, { id: 304, name: "\u8F1D\u304F\u30AD\u30DF\u3078", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 50, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=4", effects: "do:cardUsesRemaining+=1;at:cardUsed,do:score+=goodImpressionTurns*0.3", limit: 1, growth: "" }, { id: 305, name: "\u8F1D\u304F\u30AD\u30DF\u3078+", availableCustomizations: "34,46", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 50, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=4", effects: "do:cardUsesRemaining+=1;at:cardUsed,do:score+=goodImpressionTurns*0.5", limit: 1, growth: "" }, { id: 306, name: "\u3042\u306E\u3068\u304D\u306E\u7D04\u675F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 54, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=4", effects: "do:genki+=9,do:score+=genki,do:score+=motivation*1.5", limit: 1, growth: "" }, { id: 307, name: "\u3042\u306E\u3068\u304D\u306E\u7D04\u675F+", availableCustomizations: "8,33", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 54, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodImpressionTurns-=4", effects: "do:genki+=14,do:score+=genki*1.3,do:score+=motivation*2", limit: 1, growth: "" }, { id: 308, name: "\u5165\u9053\u96F2\u3068\u3001\u304D\u307F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 36, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;do:goodConditionTurns+=3,do:halfCostTurns+=2", limit: 1, growth: "" }, { id: 309, name: "\u5165\u9053\u96F2\u3068\u3001\u304D\u307F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 36, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;do:goodConditionTurns+=5,do:halfCostTurns+=2", limit: 1, growth: "" }, { id: 310, name: "\u306F\u3058\u3051\u308B\u6C34\u3057\u3076\u304D", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=6", effects: "do:score+=33;if:goodConditionTurns>=4;at:turn,delay:1,do:fixedStamina+=4,limit:1", limit: 1, growth: "" }, { id: 311, name: "\u306F\u3058\u3051\u308B\u6C34\u3057\u3076\u304D+", availableCustomizations: "2,14", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=6", effects: "do:score+=45;if:goodConditionTurns>=4;at:turn,delay:1,do:fixedStamina+=6,limit:1", limit: 1, growth: "" }, { id: 312, name: "\u30D0\u30B9\u306B\u63FA\u3089\u308C\u3066", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 37, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:concentrationMultiplier=2.3,do:score+=5;if:stamina<=maxStamina*0.5,do:genki+=6", limit: 1, growth: "" }, { id: 313, name: "\u30D0\u30B9\u306B\u63FA\u3089\u308C\u3066+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 37, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:concentrationMultiplier=2.6,do:score+=8;if:stamina<=maxStamina*0.5,do:genki+=12", limit: 1, growth: "" }, { id: 314, name: "\u91D1\u9B5A\u3059\u304F\u3044\u3067\u52DD\u8CA0", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 38, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:goodImpressionTurns+=3,do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 315, name: "\u91D1\u9B5A\u3059\u304F\u3044\u3067\u52DD\u8CA0+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 38, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:cardUsesRemaining+=1,do:goodImpressionTurns+=5,do:drawCard", limit: 1, growth: "" }, { id: 316, name: "\u306F\u3058\u3081\u3066\u306E\u30E9\u30E0\u30CD", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 39, forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=9,do:score+=goodConditionTurns*2", limit: 1, growth: "" }, { id: 317, name: "\u306F\u3058\u3081\u3066\u306E\u30E9\u30E0\u30CD+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 39, forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=12,do:score+=goodConditionTurns*3", limit: 1, growth: "" }, { id: 318, name: "\u4EA4\u308F\u308B\u611F\u60C5", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentrationMultiplier=1.5,do:score+=7,do:concentration+=4", limit: 1, growth: "" }, { id: 319, name: "\u4EA4\u308F\u308B\u611F\u60C5+", availableCustomizations: "17,14", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentrationMultiplier=1.5,do:score+=13,do:concentration+=5", limit: 1, growth: "" }, { id: 320, name: "\u590F\u306E\u5BB5\u306E\u7DDA\u9999\u82B1\u706B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 40, forceInitialHand: true, conditions: "", cost: "do:stamina-=4", effects: "do:goodImpressionTurns+=3,do:motivation+=2;at:afterCardUsed,if:cardEffects&genki,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 321, name: "\u590F\u306E\u5BB5\u306E\u7DDA\u9999\u82B1\u706B+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 40, forceInitialHand: true, conditions: "", cost: "do:stamina-=4", effects: "do:goodImpressionTurns+=4,do:motivation+=3;at:afterCardUsed,if:cardEffects&genki,do:goodImpressionTurns+=1", limit: 1, growth: "" }, { id: 322, name: "\u521D\u3081\u3066\u306E\u672A\u6765", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 41, forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:score+=goodImpressionTurns*1.9", limit: 1, growth: "" }, { id: 323, name: "\u521D\u3081\u3066\u306E\u672A\u6765+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 41, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:score+=goodImpressionTurns*2", limit: 1, growth: "" }, { id: 324, name: "\u521D\u3081\u3066\u306E\u5834\u6240", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 42, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=6", limit: 1, growth: "" }, { id: 325, name: "\u521D\u3081\u3066\u306E\u5834\u6240", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 42, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=8", limit: 1, growth: "" }, { id: 326, name: "\u521D\u3081\u3066\u306E\u3054\u8912\u7F8E", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 43, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=3,do:perfectConditionTurns+=2", limit: 1, growth: "" }, { id: 327, name: "\u521D\u3081\u3066\u306E\u3054\u8912\u7F8E", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 43, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=4,do:perfectConditionTurns+=3", limit: 1, growth: "" }, { id: 328, name: "\u304A\u8336\u4F1A\u3078\u3088\u3046\u3053\u305D\u266A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 44, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=3,do:perfectConditionTurns+=2,do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 329, name: "\u304A\u8336\u4F1A\u3078\u3088\u3046\u3053\u305D\u266A+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 44, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=5,do:perfectConditionTurns+=3,do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 330, name: "\u521D\u3081\u3066\u306E\u5730\u5E73", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 45, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=goodConditionTurns*2", limit: 1, growth: "" }, { id: 331, name: "\u521D\u3081\u3066\u306E\u5730\u5E73+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 45, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=goodConditionTurns*2.5", limit: 1, growth: "" }, { id: 332, name: "\u521D\u3081\u3066\u306E\u8272", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 46, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:perfectConditionTurns+=2", limit: 1, growth: "" }, { id: 333, name: "\u521D\u3081\u3066\u306E\u8272+", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 46, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:perfectConditionTurns+=3", limit: 1, growth: "" }, { id: 334, name: "\u521D\u3081\u3066\u306E\u304A\u76F8\u624B", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 47, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivationMultiplier=1.5,do:genki+=2,do:score+=genki*0.4,do:costReduction+=1", limit: 1, growth: "" }, { id: 335, name: "\u521D\u3081\u3066\u306E\u304A\u76F8\u624B+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 47, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:motivationMultiplier=1.5,do:genki+=2,do:score+=genki*0.5,do:costReduction+=1", limit: 1, growth: "" }, { id: 336, name: "\u3055\u3063\u3071\u308A\u3072\u3068\u3044\u304D", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 48, forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:motivationMultiplier=2.3,do:genki+=2,do:score+=genki*0.5,do:costReduction+=1", limit: 1, growth: "" }, { id: 337, name: "\u3055\u3063\u3071\u308A\u3072\u3068\u3044\u304D+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 48, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:motivationMultiplier=2.3,do:genki+=2,do:score+=genki*0.9,do:costReduction+=1", limit: 1, growth: "" }, { id: 338, name: "\u305D\u306E\u672C\u3001\u304A\u3082\u3057\u308D\u3044\uFF1F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "if:goodImpressionTurns>=3,do:score+=goodImpressionTurns*1.2;if:motivation>=3,do:score+=genki*0.5;do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 339, name: "\u305D\u306E\u672C\u3001\u304A\u3082\u3057\u308D\u3044\uFF1F+", availableCustomizations: "5,10", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "if:goodImpressionTurns>=3,do:score+=goodImpressionTurns*1.5;if:motivation>=3,do:score+=genki*0.7;do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 340, name: "\u5207\u308C\u305F\u9F3B\u7DD2\u304C\u7D50\u3093\u3060\u7D46", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=4;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 341, name: "\u5207\u308C\u305F\u9F3B\u7DD2\u304C\u7D50\u3093\u3060\u7D46+", availableCustomizations: "52,29,3", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=5;at:turn,do:drawCard,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 342, name: "\u3053\u304F\u308A\u3068\u3072\u3068\u304F\u3061", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 49, forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 343, name: "\u3053\u304F\u308A\u3068\u3072\u3068\u304F\u3061+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 49, forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=4,do:halfCostTurns+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 344, name: "\u6708\u591C\u306E\u30E9\u30F3\u30A6\u30A7\u30A4", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 50, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:motivation+=3;at:afterCardUsed,if:cardEffects&goodImpressionTurns,do:score+=goodImpressionTurns*0.3", limit: 1, growth: "" }, { id: 345, name: "\u6708\u591C\u306E\u30E9\u30F3\u30A6\u30A7\u30A4+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 50, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:motivation+=3;at:afterCardUsed,if:cardEffects&goodImpressionTurns,do:score+=goodImpressionTurns*0.5", limit: 1, growth: "" }, { id: 346, name: "\u60AA\u622F\u3057\u3061\u3083\u3044\u307E\u3059\u308F\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 51, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=8,do:score+=8;if:concentration>=3,do:concentration+=2", limit: 1, growth: "" }, { id: 347, name: "\u60AA\u622F\u3057\u3061\u3083\u3044\u307E\u3059\u308F\uFF01+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 51, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=10,do:score+=10;if:concentration>=3,do:concentration+=4", limit: 1, growth: "" }, { id: 348, name: "\u60AA\u6226\u82E6\u95D8\u30CF\u30F3\u30C9\u30E1\u30A4\u30C9", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 52, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:goodImpressionTurns+=4,do:motivation+=4;if:goodImpressionTurns>=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 349, name: "\u60AA\u6226\u82E6\u95D8\u30CF\u30F3\u30C9\u30E1\u30A4\u30C9+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 52, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:goodImpressionTurns+=6,do:motivation+=5;if:goodImpressionTurns>=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 350, name: "\u6B63\u78BA\u7121\u6BD4\u306A\u770B\u677F\u3065\u304F\u308A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 53, forceInitialHand: true, conditions: "", cost: "do:cost-=6", effects: "do:goodConditionTurns+=3,do:nullifyDebuff+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 351, name: "\u6B63\u78BA\u7121\u6BD4\u306A\u770B\u677F\u3065\u304F\u308A+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 53, forceInitialHand: true, conditions: "", cost: "do:cost-=6", effects: "do:goodConditionTurns+=5,do:nullifyDebuff+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 352, name: "\u6C17\u306B\u306A\u308B\u2026\u2026", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=4;if:concentration>=3;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 353, name: "\u6C17\u306B\u306A\u308B\u2026\u2026+", availableCustomizations: "29,3,54", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=5;if:concentration>=3;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 354, name: "\u521D\u3081\u3066\u306E\u7D50\u6676", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 54, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=goodImpressionTurns*0.8,do:motivation+=3", limit: 1, growth: "" }, { id: 355, name: "\u521D\u3081\u3066\u306E\u7D50\u6676+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 54, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=goodImpressionTurns*1.2,do:motivation+=3", limit: 1, growth: "" }, { id: 356, name: "\u521D\u3081\u3066\u306E\u60F3\u3044", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 55, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:motivation+=4;if:motivation>=6,do:motivation+=3", limit: 1, growth: "" }, { id: 357, name: "\u521D\u3081\u3066\u306E\u60F3\u3044+", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 55, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:motivation+=6;if:motivation>=6,do:motivation+=3", limit: 1, growth: "" }, { id: 358, name: "\u521D\u3081\u3066\u306E\u305F\u306E\u3057\u307F", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 56, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentrationMultiplier=1.5,do:score+=6;if:stamina<=maxStamina*0.5,do:genki+=4", limit: 1, growth: "" }, { id: 359, name: "\u521D\u3081\u3066\u306E\u305F\u306E\u3057\u307F+", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 56, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:concentrationMultiplier=2,do:score+=8;if:stamina<=maxStamina*0.5,do:genki+=7", limit: 1, growth: "" }, { id: 360, name: "\u307E\u305F\u3001\u660E\u65E5", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 57, forceInitialHand: false, conditions: "if:goodImpressionTurns>=1", cost: "do:cost-=6", effects: "do:fixedStamina+=maxStamina*0.1,do:goodImpressionTurns+=3,do:genki+=5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 361, name: "\u307E\u305F\u3001\u660E\u65E5+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 57, forceInitialHand: false, conditions: "if:goodImpressionTurns>=1", cost: "do:cost-=6", effects: "do:fixedStamina+=maxStamina*0.1,do:goodImpressionTurns+=5,do:genki+=10,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 362, name: "\u3061\u3087\u3061\u3087\u3044\u306E\u3061\u3087\u3044", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 58, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=2;at:endOfTurn,do:score+=4,limit:4", limit: 1, growth: "" }, { id: 363, name: "\u3061\u3087\u3061\u3087\u3044\u306E\u3061\u3087\u3044+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 58, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=2;at:endOfTurn,do:score+=4,limit:6", limit: 1, growth: "" }, { id: 364, name: "\u307B\u304B\u307B\u304B\u713C\u304D\u828B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=4,do:motivation+=4;if:genki>=30,do:goodImpressionTurns+=3", limit: 1, growth: "" }, { id: 365, name: "\u307B\u304B\u307B\u304B\u713C\u304D\u828B+", availableCustomizations: "21,19", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=7,do:motivation+=5;if:genki>=30,do:goodImpressionTurns+=4", limit: 1, growth: "" }, { id: 366, name: "\u3053\u3046\u304B\u3044\u2026\u2026?", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*0.9", limit: 1, growth: "" }, { id: 367, name: "\u3053\u3046\u304B\u3044\u2026\u2026?+", availableCustomizations: "27,55,49", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodImpressionTurns+=4,do:score+=goodImpressionTurns", limit: 1, growth: "" }, { id: 368, name: "\u6328\u62F6\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:setStance(strength)", limit: "", growth: "" }, { id: 369, name: "\u6328\u62F6\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:setStance(strength),do:genki+=4", limit: "", growth: "" }, { id: 370, name: "\u306F\u3052\u3057\u304F", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:setStance(strength),do:score+=15", limit: 1, growth: "" }, { id: 371, name: "\u306F\u3052\u3057\u304F+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:setStance(strength),do:score+=25", limit: 1, growth: "" }, { id: 372, name: "\u30B9\u30D1\u30FC\u30C8", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=1;if:isPreservation,do:holdThisCard;if:isFullPower,do:score+=25", limit: "", growth: "" }, { id: 373, name: "\u30B9\u30D1\u30FC\u30C8+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:fullPowerCharge+=1;if:isPreservation,do:holdThisCard;if:isFullPower,do:score+=25", limit: "", growth: "" }, { id: 374, name: "\u30E1\u30F3\u30C8\u30EC\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=2,do:fullPowerCharge+=2", limit: "", growth: "" }, { id: 375, name: "\u30E1\u30F3\u30C8\u30EC\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=3,do:fullPowerCharge+=3", limit: "", growth: "" }, { id: 376, name: "\u30A4\u30E1\u30FC\u30B8\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=2", limit: "", growth: "" }, { id: 377, name: "\u30A4\u30E1\u30FC\u30B8\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=6", limit: "", growth: "" }, { id: 378, name: "\u30A8\u30AD\u30B5\u30A4\u30C8", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 56, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:perfectConditionTurns+=3", limit: 1, growth: "" }, { id: 379, name: "\u30A8\u30AD\u30B5\u30A4\u30C8+", availableCustomizations: "69,65,14", rarity: "R", type: "active", plan: "sense", unlockPlv: 56, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=10,do:perfectConditionTurns+=4", limit: 1, growth: "" }, { id: 380, name: "\u30B8\u30E3\u30B9\u30C8\u30A2\u30D4\u30FC\u30EB", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:score+=15,do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 381, name: "\u30B8\u30E3\u30B9\u30C8\u30A2\u30D4\u30FC\u30EB+", availableCustomizations: "65,73,77", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=15,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 382, name: "\u30B9\u30BF\u30FC\u30E9\u30A4\u30C8", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=9", limit: "", growth: "" }, { id: 383, name: "\u30B9\u30BF\u30FC\u30E9\u30A4\u30C8+", availableCustomizations: "29,65,78", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=18", limit: "", growth: "" }, { id: 384, name: "\u4E00\u6B69", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 2, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=15", limit: 1, growth: "" }, { id: 385, name: "\u4E00\u6B69+", availableCustomizations: "23,78,65", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 2, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=23", limit: 1, growth: "" }, { id: 386, name: "\u30E9\u30C3\u30AD\u30FC\u266A", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 9, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=8;if:isStrength,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 387, name: "\u30E9\u30C3\u30AD\u30FC\u266A+", availableCustomizations: "65,77,73", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 9, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=10;if:isStrength,do:fullPowerCharge+=4", limit: 1, growth: "" }, { id: 388, name: "\u7A4D\u307F\u91CD\u306D", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 13, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=2;if:isPreservation,do:holdThisCard;if:isFullPower,do:score+=20", limit: "", growth: "" }, { id: 389, name: "\u7A4D\u307F\u91CD\u306D+", availableCustomizations: "4,76,29", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 13, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:fullPowerCharge+=2;if:isPreservation,do:holdThisCard;if:isFullPower,do:score+=35", limit: "", growth: "" }, { id: 390, name: "\u7CBE\u4E00\u676F", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 14, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=6,do:score+=6", limit: 1, growth: "" }, { id: 391, name: "\u7CBE\u4E00\u676F+", availableCustomizations: "64,23,29", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 14, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=7,do:score+=7", limit: 1, growth: "" }, { id: 392, name: "\u30CF\u30C3\u30D4\u30FC\u266A", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation),do:genki+=7", limit: 1, growth: "" }, { id: 393, name: "\u30CF\u30C3\u30D4\u30FC\u266A+", availableCustomizations: "29,75,77", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=10", limit: 1, growth: "" }, { id: 394, name: "\u5B09\u3057\u3044\u8AA4\u7B97", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 4, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=5,do:fullPowerCharge+=2;if:fullPowerCharge>=1,do:setStance(preservation)", limit: 1, growth: "" }, { id: 395, name: "\u5B09\u3057\u3044\u8AA4\u7B97+", availableCustomizations: "75,73,43", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 4, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=6,do:fullPowerCharge+=3;if:fullPowerCharge>=1,do:setStance(preservation)", limit: 1, growth: "" }, { id: 396, name: "\u6D99\u306E\u601D\u3044\u51FA", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 19, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=2;if:isStrength,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 397, name: "\u6D99\u306E\u601D\u3044\u51FA+", availableCustomizations: "73,77,75", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 19, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=4;if:isStrength,do:fullPowerCharge+=4", limit: 1, growth: "" }, { id: 398, name: "\u304D\u3089\u304D\u3089\u7D19\u5439\u96EA", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 57, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:score+=genki*1.1;at:turn,do:drawCard,limit:1", limit: "", growth: "" }, { id: 399, name: "\u304D\u3089\u304D\u3089\u7D19\u5439\u96EA+", availableCustomizations: "34,50,20", rarity: "SR", type: "active", plan: "logic", unlockPlv: 57, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=2", effects: "do:score+=genki*1.1;at:turn,do:drawCard,do:drawCard,limit:1", limit: "", growth: "" }, { id: 400, name: "\u305B\u30FC\u306E\u3063\uFF01", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:score+=12", limit: "", growth: "" }, { id: 401, name: "\u305B\u30FC\u306E\u3063\uFF01+", availableCustomizations: "40,48,62", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:score+=22", limit: "", growth: "" }, { id: 402, name: "\u30A2\u30C3\u30C1\u30A7\u30EC\u30E9\u30F3\u30C9", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=10,do:fullPowerCharge+=3", limit: "", growth: "" }, { id: 403, name: "\u30A2\u30C3\u30C1\u30A7\u30EC\u30E9\u30F3\u30C9+", availableCustomizations: "61,29,48", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=12,do:fullPowerCharge+=4", limit: "", growth: "" }, { id: 404, name: "\u306F\u3058\u3051\u308B\u30D1\u30C3\u30B7\u30E7\u30F3", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 6, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stance!=none", cost: "do:cost-=2", effects: "do:score+=8,do:score+=8", limit: 1, growth: "" }, { id: 405, name: "\u306F\u3058\u3051\u308B\u30D1\u30C3\u30B7\u30E7\u30F3+", availableCustomizations: "42,47,62", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 6, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stance!=none", cost: "do:cost-=1", effects: "do:score+=10,do:score+=10", limit: 1, growth: "" }, { id: 406, name: "\u6C57\u3068\u6210\u9577", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 7, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:isFullPower", cost: "do:cost-=1", effects: "do:score+=37", limit: 1, growth: "" }, { id: 407, name: "\u6C57\u3068\u6210\u9577+", availableCustomizations: "42,48,60", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 7, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:isFullPower", cost: "do:cost-=1", effects: "do:score+=47", limit: 1, growth: "" }, { id: 408, name: "\u30AA\u30FC\u30D7\u30CB\u30F3\u30B0\u30A2\u30AF\u30C8", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 29, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:score+=10,do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 409, name: "\u30AA\u30FC\u30D7\u30CB\u30F3\u30B0\u30A2\u30AF\u30C8+", availableCustomizations: "40,48,63", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 29, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=14,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 410, name: "\u59CB\u307E\u308A\u306E\u7B11\u9854", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 34, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=2", effects: "do:setStance(strength),do:score+=6,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1", limit: "", growth: "" }, { id: 411, name: "\u59CB\u307E\u308A\u306E\u7B11\u9854+", availableCustomizations: "48,58,40", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 34, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=1", effects: "do:setStance(strength),do:score+=8,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1", limit: "", growth: "" }, { id: 412, name: "\u7406\u60F3\u306E\u30C6\u30F3\u30DD", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 52, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=6,do:score+=6", limit: 1, growth: "at:stanceChanged,target:this,do:g.score+=2" }, { id: 413, name: "\u7406\u60F3\u306E\u30C6\u30F3\u30DD+", availableCustomizations: "29,47,28", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 52, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=6,do:score+=6", limit: 1, growth: "at:stanceChanged,target:this,do:g.score+=4" }, { id: 414, name: "\u30C8\u30EC\u30FC\u30CB\u30F3\u30B0\u306E\u6210\u679C", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 58, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=3,do:score+=9;at:turn,do:setStance(preservation),limit:1", limit: 1, growth: "" }, { id: 415, name: "\u30C8\u30EC\u30FC\u30CB\u30F3\u30B0\u306E\u6210\u679C+", availableCustomizations: "48,60,29", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 58, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=4,do:score+=10;at:turn,do:setStance(preservation2),limit:1", limit: 1, growth: "" }, { id: 416, name: "\u6F5C\u5728\u80FD\u529B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:genki+=10,do:fullPowerCharge+=3,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 417, name: "\u6F5C\u5728\u80FD\u529B+", availableCustomizations: "59,37,61", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:genki+=15,do:fullPowerCharge+=4,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 418, name: "\u30AB\u30A6\u30F3\u30C8\u30C0\u30A6\u30F3", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=8", limit: 1, growth: "" }, { id: 419, name: "\u30AB\u30A6\u30F3\u30C8\u30C0\u30A6\u30F3+", availableCustomizations: "59,61,41", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=13", limit: 1, growth: "" }, { id: 420, name: "\u30D7\u30E9\u30A4\u30C9", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 20, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=4", effects: "do:setStance(preservation),do:genki+=5,do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 421, name: "\u30D7\u30E9\u30A4\u30C9+", availableCustomizations: "29,62,57", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 20, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=4", effects: "do:setStance(preservation),do:genki+=8,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 422, name: "\u5FCD\u8010\u529B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 28, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=5,do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 423, name: "\u5FCD\u8010\u529B+", availableCustomizations: "61,59,29", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 28, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation2),do:genki+=5,do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 424, name: "\u5207\u78CB\u7422\u78E8", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 32, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:fullPowerCharge+=2,do:holdSelectedFromDeckOrDiscards,do:cardUsesRemaining+=1,do:lockStanceTurns+=1", limit: "", growth: "" }, { id: 425, name: "\u5207\u78CB\u7422\u78E8+", availableCustomizations: "44,45", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 32, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:fullPowerCharge+=3,do:holdSelectedFromDeckOrDiscards,do:cardUsesRemaining+=1,do:lockStanceTurns+=1", limit: "", growth: "" }, { id: 426, name: "\u30AD\u30BB\u30AD\u306E\u9B54\u6CD5", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 59, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:score+=goodImpressionTurns*2.5", limit: 1, growth: "" }, { id: 427, name: "\u30AD\u30BB\u30AD\u306E\u9B54\u6CD5+", availableCustomizations: "6,30", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 59, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:score+=goodImpressionTurns*3.4", limit: 1, growth: "" }, { id: 428, name: "\u7FD4\u3073\u7ACB\u3066\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 11, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:fullPowerCharge+=3,do:score+=10+cumulativeFullPowerCharge", limit: 1, growth: "at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=20,limit:1" }, { id: 429, name: "\u7FD4\u3073\u7ACB\u3066\uFF01+", availableCustomizations: "42,4", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 11, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=4,do:score+=10+cumulativeFullPowerCharge*1.5", limit: 1, growth: "at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=30,limit:1" }, { id: 430, name: "\u7DCF\u5408\u82B8\u8853", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 12, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stance!=none", cost: "do:cost-=7", effects: "do:setStance(strength),do:score+=7", limit: "", growth: "at:stanceChanged,target:this,do:g.score+=15,limit:4" }, { id: 431, name: "\u7DCF\u5408\u82B8\u8853+", availableCustomizations: "29,2", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 12, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stance!=none", cost: "do:cost-=7", effects: "do:setStance(strength),do:score+=10", limit: "", growth: "at:stanceChanged,target:this,do:g.score+=20,limit:4" }, { id: 432, name: "\u5FC3\u30FB\u6280\u30FB\u4F53", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 30, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:setStance(strength2),do:score+=7,do:fullPowerCharge+=3,do:halfCostTurns+=2", limit: 1, growth: "" }, { id: 433, name: "\u5FC3\u30FB\u6280\u30FB\u4F53+", availableCustomizations: "2,29", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 30, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:setStance(strength2),do:score+=16,do:fullPowerCharge+=4,do:halfCostTurns+=4", limit: 1, growth: "" }, { id: 434, name: "\u8F1D\u3051\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 41, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:fullPowerCharge+=3;at:turn,do:setStance(preservation),limit:1;if:isFullPower,do:score+=20,do:score+=20", limit: 1, growth: "" }, { id: 435, name: "\u8F1D\u3051\uFF01+", availableCustomizations: "81,37", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 41, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:fullPowerCharge+=4;at:turn,do:setStance(preservation2),limit:1;if:isFullPower,do:score+=25,do:score+=25", limit: 1, growth: "" }, { id: 436, name: "\u30AF\u30E9\u30A4\u30DE\u30C3\u30AF\u30B9", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 43, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=10", effects: "do:setStance(strength),do:score+=14,do:score+=14;at:turn,do:setStance(preservation),limit:1", limit: 1, growth: "" }, { id: 437, name: "\u30AF\u30E9\u30A4\u30DE\u30C3\u30AF\u30B9+", availableCustomizations: "1,29", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 43, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=10", effects: "do:setStance(strength2),do:score+=19,do:score+=19;at:turn,do:setStance(preservation2),limit:1", limit: 1, growth: "" }, { id: 438, name: "\u5168\u8EAB\u5168\u970A", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 50, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:setStance(strength),do:nullifyCostCards+=2,do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 439, name: "\u5168\u8EAB\u5168\u970A+", availableCustomizations: "29,28", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 50, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:setStance(strength),do:nullifyCostCards+=2,do:cardUsesRemaining+=2,do:drawCard,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 440, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u306A\u308A\u307E\u3059", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 25, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=3", effects: "do:cardUsesRemaining+=1;target:hand,do:g.scoreTimes+=1", limit: 1, growth: "" }, { id: 441, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u306A\u308A\u307E\u3059+", availableCustomizations: "35,26", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 25, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=3", effects: "do:genki+=4,do:setStance(preservation),do:cardUsesRemaining+=1;target:hand,do:g.scoreTimes+=1", limit: 1, growth: "" }, { id: 442, name: "\u9802\u70B9\u3078", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 45, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=9", effects: "at:startOfTurn,if:stance!=none,target:all,do:g.score+=4", limit: 1, growth: "" }, { id: 443, name: "\u9802\u70B9\u3078+", availableCustomizations: "29,3", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 45, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=9", effects: "target:all,do:g.score+=6;at:startOfTurn,if:stance!=none,target:all,do:g.score+=4", limit: 1, growth: "" }, { id: 444, name: "\u899A\u609F", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 54, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:genki+=8,do:fullPowerCharge+=5,do:holdSelectedFromDeckOrDiscards", limit: 1, growth: "" }, { id: 445, name: "\u899A\u609F+", availableCustomizations: "44,30", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 54, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=8,do:fullPowerCharge+=7,do:holdSelectedFromDeckOrDiscards", limit: 1, growth: "" }, { id: 446, name: "\u5B66\u5712\u4E00\u306E\u30A2\u30A4\u30C9\u30EB", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 59, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=2,do:score+=2", limit: 1, growth: "" }, { id: 447, name: "\u5B66\u5712\u4E00\u306E\u30A2\u30A4\u30C9\u30EB+", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 59, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(strength),do:score+=4,do:score+=4", limit: 1, growth: "" }, { id: 448, name: "\u738B\u8005\u306E\u5FA1\u51FA\u307E\u3057", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 60, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=4,do:halfCostTurns+=2", limit: 1, growth: "" }, { id: 449, name: "\u738B\u8005\u306E\u5FA1\u51FA\u307E\u3057+", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 60, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=5,do:halfCostTurns+=3", limit: 1, growth: "" }, { id: 450, name: "\u4E00\u756A\u9AD8\u3044\u661F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 61, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=3,do:score+=3", limit: 1, growth: "at:afterCardUsed,if:cardEffects&strength,target:this,do:g.score+=10,do:g.cost-=1,limit:2" }, { id: 451, name: "\u4E00\u756A\u9AD8\u3044\u661F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 61, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=6,do:score+=6", limit: 1, growth: "at:afterCardUsed,if:cardEffects&strength,target:this,do:g.score+=15,do:g.cost-=1,limit:2" }, { id: 452, name: "\u7D05\u8449\u30E9\u30F3\u30CB\u30F3\u30B0", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:nullifyDebuff+=1,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 453, name: "\u7D05\u8449\u30E9\u30F3\u30CB\u30F3\u30B0+", availableCustomizations: "3,27", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:nullifyDebuff+=1,do:drawCard,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 454, name: "\u96E8\u5BBF\u308A\u306E\u30D0\u30B9\u505C", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(preservation),do:fullPowerCharge+=3;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 455, name: "\u96E8\u5BBF\u308A\u306E\u30D0\u30B9\u505C+", availableCustomizations: "3,82", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(preservation2),do:fullPowerCharge+=4;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 456, name: "\u65EC\u306E\u5473\u308F\u3044", availableCustomizations: "", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:score+=4,do:score+=4;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 457, name: "\u65EC\u306E\u5473\u308F\u3044+", availableCustomizations: "47,29,27", rarity: "SR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:score+=6;at:turn,do:upgradeHand,limit:1", limit: 1, growth: "" }, { id: 458, name: "\u30E1\u30EA\u30AF\u30EA\u3067\uFF5E\u3059\u266A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 62, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=3;at:mentalCardUsed,do:motivation+=1", limit: 1, growth: "" }, { id: 459, name: "\u30E1\u30EA\u30AF\u30EA\u3067\uFF5E\u3059\u266A+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 62, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=5;at:mentalCardUsed,do:motivation+=1", limit: 1, growth: "" }, { id: 460, name: "\u304A\u3059\u305D\u308F\u3051\u3067\u3059\u3063\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 63, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:concentration+=1;at:startOfTurn,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 461, name: "\u304A\u3059\u305D\u308F\u3051\u3067\u3059\u3063\uFF01+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 63, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:concentration+=3;at:startOfTurn,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 462, name: "\u5149\u306E\u591C", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:perfectConditionTurns+=2,do:fixedStamina+=2", limit: 1, growth: "" }, { id: 463, name: "\u5149\u306E\u591C+", availableCustomizations: "15,14", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:perfectConditionTurns+=3,do:fixedStamina+=4", limit: 1, growth: "" }, { id: 464, name: "\u611B\u3092\u3053\u3081\u3066", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 64, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:motivationMultiplier=1.8,do:genki+=4,do:score+=motivation*3", limit: 1, growth: "" }, { id: 465, name: "\u611B\u3092\u3053\u3081\u3066+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 64, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:motivationMultiplier=2,do:genki+=6,do:score+=motivation*4", limit: 1, growth: "" }, { id: 466, name: "\u8E0F\u5207\u306E\u5148\u306B", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 65, forceInitialHand: false, conditions: "if:isFullPower", cost: "do:cost-=3", effects: "do:score+=10,do:score+=10,do:score+=10;at:turn,do:setStance(preservation2),limit:1", limit: 1, growth: "" }, { id: 467, name: "\u8E0F\u5207\u306E\u5148\u306B+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 65, forceInitialHand: false, conditions: "if:isFullPower", cost: "do:cost-=3", effects: "do:score+=16,do:score+=16,do:score+=16;at:turn,do:setStance(preservation2),limit:1", limit: 1, growth: "" }, { id: 468, name: "\u3053\u308C\u307E\u3067\u3082\u3053\u308C\u304B\u3089\u3082", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 66, forceInitialHand: false, conditions: "if:goodConditionTurns>=4", cost: "do:cost-=6", effects: "do:goodConditionTurnsMultiplier=2.5,do:score+=40", limit: 1, growth: "" }, { id: 469, name: "\u3053\u308C\u307E\u3067\u3082\u3053\u308C\u304B\u3089\u3082+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 66, forceInitialHand: false, conditions: "if:goodConditionTurns>=4", cost: "do:cost-=6", effects: "do:goodConditionTurnsMultiplier=3,do:score+=55", limit: 1, growth: "" }, { id: 470, name: "\u5ACC\u3044\u306A\u81EA\u5206\u306B\u30D0\u30A4\u30D0\u30A4", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 67, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=5;at:endOfTurn,if:turnsRemaining==1,do:concentrationMultiplier=2.5,do:score+=15", limit: 1, growth: "" }, { id: 471, name: "\u5ACC\u3044\u306A\u81EA\u5206\u306B\u30D0\u30A4\u30D0\u30A4+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 67, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=7;at:endOfTurn,if:turnsRemaining==1,do:concentrationMultiplier=2.5,do:score+=15", limit: 1, growth: "" }, { id: 472, name: "\u81EA\u6162\u306E\u304A\u59C9\u3061\u3083\u3093\u3060\u305E", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 68, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "at:endOfTurn,if:turnsRemaining<=3,do:score+=goodImpressionTurns*1.4", limit: 1, growth: "" }, { id: 473, name: "\u81EA\u6162\u306E\u304A\u59C9\u3061\u3083\u3093\u3060\u305E+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 68, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "at:endOfTurn,if:turnsRemaining<=3,do:score+=goodImpressionTurns*1.8", limit: 1, growth: "" }, { id: 474, name: "\u7DF4\u7FD2\u518D\u958B\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=1,do:exchangeHand,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 475, name: "\u7DF4\u7FD2\u518D\u958B\uFF01+", availableCustomizations: "29,13", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=3,do:exchangeHand,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 476, name: "\u624B\u306B\u3057\u305F\u7B54\u3048", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 69, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "target:382,do:g.scoreTimes+=1;do:moveCardToHand(383,1),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 477, name: "\u624B\u306B\u3057\u305F\u7B54\u3048+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 69, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(preservation2);target:382,do:g.scoreTimes+=1;do:moveCardToHand(383,1),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 478, name: "\u5922\u306F\u307E\u3060\u7D9A\u304F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 70, forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=goodConditionTurns,do:goodConditionTurns+=1,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 479, name: "\u5922\u306F\u307E\u3060\u7D9A\u304F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 70, forceInitialHand: false, conditions: "if:goodConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=goodConditionTurns*1.5,do:goodConditionTurns+=3,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 480, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u3057\u3066\u304F\u308C\u305F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 71, forceInitialHand: false, conditions: "if:fullPowerTimes>=1", cost: "do:cost-=3", effects: "do:score+=20", limit: 1, growth: "at:stanceChanged,if:isFullPower,target:this,do:g.scoreTimes+=1,limit:4" }, { id: 481, name: "\u30A2\u30A4\u30C9\u30EB\u306B\u3057\u3066\u304F\u308C\u305F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 71, forceInitialHand: false, conditions: "if:fullPowerTimes>=1", cost: "do:cost-=2", effects: "do:score+=25", limit: 1, growth: "at:stanceChanged,if:isFullPower,target:this,do:g.scoreTimes+=1,limit:4" }, { id: 482, name: "\u5E83\u304C\u308A\u7D9A\u3051\u308B\u4E16\u754C", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 72, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:motivation+=4;at:turn,do:genki+=5,limit:1;at:endOfTurn,if:turnsRemaining<=1,do:score+=genki*1.3", limit: 1, growth: "" }, { id: 483, name: "\u5E83\u304C\u308A\u7D9A\u3051\u308B\u4E16\u754C+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 72, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:motivation+=6;at:turn,do:genki+=8,limit:1;at:endOfTurn,if:turnsRemaining<=1,do:score+=genki*1.3", limit: 1, growth: "" }, { id: 484, name: "\u30A8\u30A6\u30EC\u30AB\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 73, forceInitialHand: false, conditions: "", cost: "do:cost-=12", effects: "do:cardUsesRemaining+=1;at:startOfTurn,if:stamina<=maxStamina*0.5,do:score+=genki*0.3,do:fixedStamina+=maxStamina*0.05", limit: 1, growth: "" }, { id: 485, name: "\u30A8\u30A6\u30EC\u30AB\uFF01+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 73, forceInitialHand: false, conditions: "", cost: "do:cost-=12", effects: "do:cardUsesRemaining+=1;at:startOfTurn,if:stamina<=maxStamina*0.5,do:score+=genki*0.4,do:fixedStamina+=maxStamina*0.1", limit: 1, growth: "" }, { id: 486, name: "\u65B0\u305F\u306A\u30B9\u30C6\u30FC\u30B8", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 74, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:holdSelectedFromDeckOrDiscards,do:fullPowerCharge+=1,do:cardUsesRemaining+=1", limit: "", growth: "" }, { id: 487, name: "\u65B0\u305F\u306A\u30B9\u30C6\u30FC\u30B8+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 74, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:holdSelectedFromDeckOrDiscards,do:fullPowerCharge+=2,do:cardUsesRemaining+=1;target:held,do:g.score+=5", limit: "", growth: "" }, { id: 488, name: "\u3044\u3064\u304B\u898B\u305F\u666F\u8272", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 75, forceInitialHand: false, conditions: "if:concentration>=6", cost: "do:cost-=6", effects: "do:concentration*=1.3;at:turn,do:concentrationMultiplier=1.5,do:score+=9,do:score+=9,do:score+=9,limit:1", limit: 1, growth: "" }, { id: 489, name: "\u3044\u3064\u304B\u898B\u305F\u666F\u8272+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 75, forceInitialHand: false, conditions: "if:concentration>=6", cost: "do:cost-=5", effects: "do:concentration*=1.5;at:turn,do:concentrationMultiplier=1.5,do:score+=9,do:score+=9,do:score+=9,limit:1", limit: 1, growth: "" }, { id: 490, name: "\u307E\u305F\u3001\u98DB\u3079\u308B", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 76, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=1,do:goodImpressionTurns+=3,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 491, name: "\u307E\u305F\u3001\u98DB\u3079\u308B+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 76, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=2,do:goodImpressionTurns+=5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 492, name: "\u304C\u3093\u3070\u3063\u305F\u3001\u3088", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 77, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=4,do:holdSelectedFromDeckOrDiscards;at:startOfTurn,if:isFullPower,target:all,do:g.score+=2", limit: 1, growth: "" }, { id: 493, name: "\u304C\u3093\u3070\u3063\u305F\u3001\u3088+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 77, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=5,do:holdSelectedFromDeckOrDiscards;at:startOfTurn,if:isFullPower,target:all,do:g.score+=2", limit: 1, growth: "" }, { id: 494, name: "\u53D7\u3051\u53D6\u3063\u3066\u304F\u308C\u308B?", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 78, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation);at:afterCardUsed,if:cardEffects&strength,target:effect(strength),do:g.score+=2", limit: 1, growth: "" }, { id: 495, name: "\u53D7\u3051\u53D6\u3063\u3066\u304F\u308C\u308B?+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 78, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation);at:afterCardUsed,if:cardEffects&strength,target:effect(strength),do:g.score+=3", limit: 1, growth: "" }, { id: 496, name: "\u30D0\u30EC\u30F3\u30BF\u30A4\u30F3\u5927\u4F5C\u6226\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=4,do:setStance(preservation);at:startOfTurn,do:setStance(preservation),limit:2", limit: 1, growth: "" }, { id: 497, name: "\u30D0\u30EC\u30F3\u30BF\u30A4\u30F3\u5927\u4F5C\u6226\uFF01+", availableCustomizations: "30,26", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:genki+=8,do:setStance(preservation);at:startOfTurn,do:setStance(preservation),limit:2", limit: 1, growth: "" }, { id: 498, name: "\u611B\u60C5\u30EC\u30A4\u30F3\u30DC\u30FC", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=0", effects: "do:fullPowerCharge+=2,do:fixedStamina+=2,do:holdSelectedFromDeck", limit: 1, growth: "" }, { id: 499, name: "\u611B\u60C5\u30EC\u30A4\u30F3\u30DC\u30FC+", availableCustomizations: "57,42,83", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=0", effects: "do:fullPowerCharge+=3,do:fixedStamina+=3,do:holdSelectedFromDeck", limit: 1, growth: "" }, { id: 500, name: "\u3042\u306A\u305F\u306B\u3042\u3052\u308B", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 79, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "at:endOfTurn,do:score+=genki*0.6,limit:4", limit: 1, growth: "" }, { id: 501, name: "\u3042\u306A\u305F\u306B\u3042\u3052\u308B+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 79, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "at:endOfTurn,do:score+=genki*0.8,limit:4", limit: 1, growth: "" }, { id: 502, name: "\u30C7\u30A3\u30C6\u30FC\u30EB\u304C\u809D\u5FC3", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=4,do:score+=motivation*2.7", limit: 1, growth: "" }, { id: 503, name: "\u30C7\u30A3\u30C6\u30FC\u30EB\u304C\u809D\u5FC3+", availableCustomizations: "30,59,84", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "do:genki+=7,do:score+=motivation*3.4", limit: 1, growth: "" }, { id: 504, name: "\u304A\u3066\u3064\u304D\u6CE8\u610F!", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 80, forceInitialHand: true, conditions: "", cost: "do:cost-=8", effects: "at:startOfTurn,if:isNotStrength,do:setStance(strength),ttl:5", limit: 1, growth: "" }, { id: 505, name: "\u304A\u3066\u3064\u304D\u6CE8\u610F!+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 80, forceInitialHand: true, conditions: "", cost: "do:cost-=8", effects: "at:startOfTurn,if:isNotStrength,do:setStance(strength),ttl:5;do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 506, name: "\u3061\u3044\u3055\u306A\u304A\u3072\u3055\u307E", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 81, forceInitialHand: false, conditions: "", cost: "do:motivation-=1", effects: "do:goodImpressionTurns+=3;at:turn,do:drawCard,limit:1;if:goodImpressionTurns>=10,do:score+=goodImpressionTurns*1.4", limit: "", growth: "" }, { id: 507, name: "\u3061\u3044\u3055\u306A\u304A\u3072\u3055\u307E+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 81, forceInitialHand: false, conditions: "", cost: "do:motivation-=1", effects: "do:goodImpressionTurns+=3;at:turn,do:drawCard,limit:1;if:goodImpressionTurns>=10,do:score+=goodImpressionTurns*2.2", limit: "", growth: "" }, { id: 508, name: "\u8349\u7B1B\u30CF\u30FC\u30E2\u30CB\u30FC", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:goodImpressionTurns+=2,do:fixedStamina+=1;if:goodImpressionTurns>=10,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 509, name: "\u8349\u7B1B\u30CF\u30FC\u30E2\u30CB\u30FC+", availableCustomizations: "19,7", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:goodImpressionTurns+=2,do:fixedStamina+=3;if:goodImpressionTurns>=10,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 510, name: "\u982C\u5F35\u308B3\u8272", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 82, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:setStance(strength),do:fullPowerCharge+=5;target:effect(fullPowerCharge)*active,do:g.score+=2;at:turn,do:setStance(preservation),limit:1", limit: 1, growth: "" }, { id: 511, name: "\u982C\u5F35\u308B3\u8272+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 82, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:fullPowerCharge+=5;target:effect(fullPowerCharge)*active,do:g.score+=4;at:turn,do:setStance(preservation),limit:1", limit: 1, growth: "" }, { id: 512, name: "\u5C0F\u3055\u306A\u304A\u5BA2\u3055\u3093", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "at:turn,do:setStance(preservation),do:fullPowerCharge+=2,limit:1;if:isFullPower,do:score+=24", limit: 1, growth: "" }, { id: 513, name: "\u5C0F\u3055\u306A\u304A\u5BA2\u3055\u3093+", availableCustomizations: "29,48,83", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "at:turn,do:setStance(preservation),do:fullPowerCharge+=3,limit:1;if:isFullPower,do:score+=24", limit: 1, growth: "" }, { id: 514, name: "\u304D\u3089\u304D\u3089\u30D7\u30EA\u30BA\u30E0", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 83, forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=6", effects: "do:setStance(strength2);at:mentalCardUsed,if:stance==strength2,target:effect(strength),do:g.score+=7", limit: 1, growth: "" }, { id: 515, name: "\u304D\u3089\u304D\u3089\u30D7\u30EA\u30BA\u30E0+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 83, forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=4", effects: "do:setStance(strength2);at:mentalCardUsed,if:stance==strength2,target:effect(strength),do:g.score+=8", limit: 1, growth: "" }, { id: 516, name: "\u30C7\u30A4\u30C9\u30EA\u30FC\u30DF\u30F3\u30B0", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 62, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:genki>=30", cost: "do:stamina-=3", effects: "do:genki+=3;at:startOfTurn,do:score+=genki*0.6,limit:3", limit: 1, growth: "" }, { id: 517, name: "\u30C7\u30A4\u30C9\u30EA\u30FC\u30DF\u30F3\u30B0+", availableCustomizations: "30,85,86", rarity: "R", type: "active", plan: "logic", unlockPlv: 62, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:genki>=30", cost: "do:stamina-=3", effects: "do:genki+=6;at:startOfTurn,do:score+=genki*0.6,limit:4", limit: 1, growth: "" }, { id: 518, name: "\u30BF\u30D5\u30CD\u30B9", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 63, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:preservationTimes>=2", cost: "do:cost-=5", effects: "do:setStance(preservation),do:cardUsesRemaining+=1;target:active,do:g.score+=14,do:g.cost-=1", limit: 1, growth: "" }, { id: 519, name: "\u30BF\u30D5\u30CD\u30B9+", availableCustomizations: "41,87", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 63, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:preservationTimes>=2", cost: "do:cost-=4", effects: "do:setStance(preservation),do:cardUsesRemaining+=1;target:active,do:g.score+=18,do:g.cost-=1", limit: 1, growth: "" }, { id: 520, name: "\u5922\u8272\u30EA\u30C3\u30D7", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 64, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=2,do:motivation+=4,do:setScoreBuff(0.1);if:goodImpressionTurns>=15;at:startOfTurn,do:goodImpressionTurns*=1.1,limit:3", limit: 1, growth: "" }, { id: 521, name: "\u5922\u8272\u30EA\u30C3\u30D7+", availableCustomizations: "88,27", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 64, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=2,do:motivation+=5,do:setScoreBuff(0.2);if:goodImpressionTurns>=15;at:startOfTurn,do:goodImpressionTurns*=1.1,limit:4", limit: 1, growth: "" }, { id: 522, name: "\u653E\u8AB2\u5F8C\u304A\u3057\u3083\u3079\u308A", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 84, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:fullPowerCharge+=2;at:turn,do:score+=8+cumulativeFullPowerCharge*3,limit:1", limit: 1, growth: "" }, { id: 523, name: "\u653E\u8AB2\u5F8C\u304A\u3057\u3083\u3079\u308A+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 84, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:fullPowerCharge+=5;at:turn,do:score+=8+cumulativeFullPowerCharge*3,limit:1", limit: 1, growth: "" }, { id: 524, name: "\u30D2\u30FC\u30ED\u30FC\u3068\u306E\u51FA\u4F1A\u3044", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 85, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodConditionTurns+=4,do:concentration+=1;if:goodConditionTurns>=4;at:turn,do:cardUsesRemaining+=1,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 525, name: "\u30D2\u30FC\u30ED\u30FC\u3068\u306E\u51FA\u4F1A\u3044+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 85, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=4,do:concentration+=2;if:goodConditionTurns>=4;at:turn,do:cardUsesRemaining+=1,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 526, name: "\u3042\u306E\u65E5\u3001\u3053\u306E\u5834\u6240\u3067", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 86, forceInitialHand: false, conditions: "", cost: "do:stamina-=6", effects: "do:fullPowerCharge+=10,do:holdSelectedFromDeckOrDiscards", limit: 1, growth: "" }, { id: 527, name: "\u3042\u306E\u65E5\u3001\u3053\u306E\u5834\u6240\u3067+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 86, forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:fullPowerCharge+=10,do:holdSelectedFromDeckOrDiscards(2)", limit: 1, growth: "" }, { id: 528, name: "\u5BFE\u6226\u304A\u9858\u3044\u3057\u307E\u3059\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:holdSelectedFromDeckOrDiscards,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 529, name: "\u5BFE\u6226\u304A\u9858\u3044\u3057\u307E\u3059\uFF01+", availableCustomizations: "23,89", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:holdSelectedFromDeckOrDiscards,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 530, name: "\u52DD\u8CA0\u306F\u3053\u308C\u304B\u3089\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=2,do:genki+=2,do:halfCostTurns+=3;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 531, name: "\u52DD\u8CA0\u306F\u3053\u308C\u304B\u3089\uFF01+", availableCustomizations: "2,26", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=5,do:genki+=5,do:halfCostTurns+=3;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 532, name: "\u6E67\u304D\u4E0A\u304C\u308B\u6C17\u6301\u3061", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 87, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setGoodImpressionTurnsBuff(1,3)", limit: 1, growth: "" }, { id: 533, name: "\u6E67\u304D\u4E0A\u304C\u308B\u6C17\u6301\u3061+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 87, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setGoodImpressionTurnsBuff(1,3)", limit: 1, growth: "" }, { id: 534, name: "\u308F\u305F\u3057\u3089\u3057\u3044\u8272", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 88, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:motivation*=1.5,do:removeDebuffs(1);at:turn,do:genki+=4,limit:1", limit: 1, growth: "" }, { id: 535, name: "\u308F\u305F\u3057\u3089\u3057\u3044\u8272+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 88, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:motivation*=1.5,do:removeDebuffs(2);at:turn,do:genki+=8,limit:1", limit: 1, growth: "" }, { id: 536, name: "\u5E0C\u671B\u304C\u5C4A\u304F\u307E\u3067", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 89, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "at:cardRemoved,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 537, name: "\u5E0C\u671B\u304C\u5C4A\u304F\u307E\u3067+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 89, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "at:cardRemoved,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 538, name: "\u3042\u305F\u3089\u3057\u3044\u5149", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 90, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(preservation2),do:enthusiasmBonus+=5", limit: 1, growth: "" }, { id: 539, name: "\u3042\u305F\u3089\u3057\u3044\u5149+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 90, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(preservation2),do:enthusiasmBonus+=8", limit: 1, growth: "" }, { id: 540, name: "\u306E\u3093\u3073\u308A\u5C4B\u3055\u3093", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 91, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=1;at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 541, name: "\u306E\u3093\u3073\u308A\u5C4B\u3055\u3093+", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 91, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:fullPowerCharge+=3;at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 542, name: "\u4F11\u307F\u4F11\u307F\u3001\u524D\u3078", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 92, forceInitialHand: true, conditions: "", cost: "do:cost-=6", effects: "do:setStance(preservation);at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 543, name: "\u4F11\u307F\u4F11\u307F\u3001\u524D\u3078+", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 92, forceInitialHand: true, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation);at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 544, name: "\u5C4B\u4E0A\u304B\u3089\u306E\u666F\u8272", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 93, forceInitialHand: true, conditions: "", cost: "do:cost-=7", effects: "do:fullPowerCharge+=2;target:effect(fullPowerCharge),do:g.score+=4;at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 545, name: "\u5C4B\u4E0A\u304B\u3089\u306E\u666F\u8272+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 93, forceInitialHand: true, conditions: "", cost: "do:cost-=7", effects: "do:fullPowerCharge+=3;target:effect(fullPowerCharge),do:g.score+=9;at:afterStartOfTurn,if:isPreservation,do:setStance(leisure)", limit: 1, growth: "" }, { id: 546, name: "\u30BB\u30C3\u30C6\u30A3\u30F3\u30B0", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 47, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:fullPowerCharge>=5", cost: "do:cost-=3", effects: "do:fullPowerCharge+=5;at:turn,target:hand,do:g.score+=8,limit:1", limit: 1, growth: "" }, { id: 547, name: "\u30BB\u30C3\u30C6\u30A3\u30F3\u30B0+", availableCustomizations: "73,43,28", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 47, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:fullPowerCharge>=5", cost: "do:cost-=0", effects: "do:fullPowerCharge+=5;at:turn,target:hand,do:g.score+=8,limit:1", limit: 1, growth: "" }, { id: 548, name: "\u7B2C\u4E00\u5370\u8C61", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 18, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength);at:cardUsed,if:cardEffects&strength,target:all,do:g.score+=2", limit: 1, growth: "" }, { id: 549, name: "\u7B2C\u4E00\u5370\u8C61+", availableCustomizations: "40,60,36", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 18, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength);at:cardUsed,if:cardEffects&strength,target:all,do:g.score+=3", limit: 1, growth: "" }, { id: 550, name: "\u30C8\u30EC\u30F3\u30C9\u30EA\u30FC\u30C0\u30FC", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 36, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=2", effects: "do:holdThisCard;if:stance!=fullPower,do:cardUsesRemaining+=1;if:isFullPower,do:score+=3+cumulativeFullPowerCharge*0.5,do:score+=3+cumulativeFullPowerCharge*0.5", limit: "", growth: "at:afterCardUsed,if:usedCardBaseId==550,if:isFullPower,target:this,do:g.score+=5,do:g.typedCost-=1,limit:4" }, { id: 551, name: "\u30C8\u30EC\u30F3\u30C9\u30EA\u30FC\u30C0\u30FC+", availableCustomizations: "35,28", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 36, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=2", effects: "do:holdThisCard;if:stance!=fullPower,do:cardUsesRemaining+=1;if:isFullPower,do:score+=10+cumulativeFullPowerCharge,do:score+=10+cumulativeFullPowerCharge", limit: "", growth: "at:afterCardUsed,if:usedCardBaseId==550,if:isFullPower,target:this,do:g.score+=5,do:g.typedCost-=1,limit:4" }, { id: 552, name: "\u30E2\u30C1\u30D9", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 17, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:fullPowerCharge+=2;at:cardUsed,if:cardEffects&fullPowerCharge,do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 553, name: "\u30E2\u30C1\u30D9+", availableCustomizations: "57,43,36", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 17, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:fullPowerCharge+=2;at:cardUsed,if:cardEffects&fullPowerCharge,do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 554, name: "\u76DB\u308A\u4E0A\u3052\u4E0A\u624B", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 22, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "target:active,do:g.score+=13,do:g.cost-=1;at:turn,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 555, name: "\u76DB\u308A\u4E0A\u3052\u4E0A\u624B+", availableCustomizations: "93,42,43", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 22, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "target:active,do:g.score+=16,do:g.cost-=1;at:turn,do:drawCard,do:drawCard,limit:1", limit: 1, growth: "" }, { id: 556, name: "\u30A4\u30F3\u30D5\u30EB\u30A8\u30F3\u30B5\u30FC", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 24, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "target:mental,do:g.genki+=5,do:g.cost-=1;do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 557, name: "\u30A4\u30F3\u30D5\u30EB\u30A8\u30F3\u30B5\u30FC+", availableCustomizations: "93,42", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 24, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "target:mental,do:g.genki+=6,do:g.cost-=1;do:cardUsesRemaining+=1,do:drawCard", limit: 1, growth: "" }, { id: 558, name: "\u4E00\u5FC3\u4E0D\u4E71", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 38, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:isStrength", cost: "do:cost-=3", effects: "do:setStance(preservation);target:effect(strength),do:g.score+=37,do:g.cost-=7", limit: 1, growth: "" }, { id: 559, name: "\u4E00\u5FC3\u4E0D\u4E71+", availableCustomizations: "41,28", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 38, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:isStrength", cost: "do:cost-=3", effects: "do:setStance(preservation);target:effect(strength),do:g.score+=45,do:g.cost-=7", limit: 1, growth: "" }, { id: 560, name: "\u6B21\u3053\u305D\u306F\u3001\u5FC5\u305A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 94, forceInitialHand: true, conditions: "", cost: "do:stamina-=6", effects: "do:setStance(preservation);target:mental,do:g.genki+=8", limit: 1, growth: "" }, { id: 561, name: "\u6B21\u3053\u305D\u306F\u3001\u5FC5\u305A+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 94, forceInitialHand: true, conditions: "", cost: "do:stamina-=6", effects: "do:setStance(preservation);target:mental,do:g.genki+=11", limit: 1, growth: "" }, { id: 562, name: "\u3069\u3093\u306A\u4E16\u754C\u3067\u3082", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 95, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentrationMultiplier=2,do:score+=7,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 563, name: "\u3069\u3093\u306A\u4E16\u754C\u3067\u3082+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 95, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentrationMultiplier=2,do:score+=17,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 564, name: "\u6226\u3046\u7406\u7531", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 96, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=2,do:goodImpressionTurns+=3,do:goodImpressionTurns*=1.1", limit: "", growth: "" }, { id: 565, name: "\u6226\u3046\u7406\u7531+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 96, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1", limit: "", growth: "" }, { id: 566, name: "\u3082\u3046\u305F\u3081\u3089\u308F\u306A\u3044", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 97, forceInitialHand: false, conditions: "", cost: "do:stamina-=6", effects: "at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12", limit: 1, growth: "" }, { id: 567, name: "\u3082\u3046\u305F\u3081\u3089\u308F\u306A\u3044+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 97, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12", limit: 1, growth: "" }, { id: 568, name: "\u61A7\u308C\u306E\u30A2\u30A4\u30C9\u30EB", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 98, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:motivation+=2;at:turn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.2", limit: 1, growth: "" }, { id: 569, name: "\u61A7\u308C\u306E\u30A2\u30A4\u30C9\u30EB+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 98, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:motivation+=3;at:turn,do:genki+=3,limit:1;at:genkiIncreased,if:genkiDelta>=30,do:score+=genki*0.3", limit: 1, growth: "" }, { id: 570, name: "\u521D\u3081\u3066\u306E\u91CE\u671B", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 99, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "at:endOfTurn,do:score+=genki*0.5,limit:2", limit: 1, growth: "" }, { id: 571, name: "\u521D\u3081\u3066\u306E\u91CE\u671B+", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 99, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "at:endOfTurn,do:score+=genki*0.5,limit:3", limit: 1, growth: "" }, { id: 572, name: "\u521D\u3081\u3066\u306E\u606F", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 100, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:motivation+=2", limit: 1, growth: "" }, { id: 573, name: "\u521D\u3081\u3066\u306E\u606F+", availableCustomizations: "", rarity: "R", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 100, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=7,do:motivation+=3", limit: 1, growth: "" }, { id: 574, name: "\u521D\u3081\u3066\u306E\u795E\u964D\u81E8", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 101, forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:concentration+=2,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 575, name: "\u521D\u3081\u3066\u306E\u795E\u964D\u81E8+", availableCustomizations: "", rarity: "R", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 101, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:concentration+=2,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 576, name: "\u65E5\u304C\u5DEE\u3059\u65B9\u3078", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 102, forceInitialHand: false, conditions: "if:isStrength", cost: "do:stamina-=1", effects: "do:setStance(preservation),do:genki+=5,do:enthusiasmBonus+=8;target:mental,do:g.cost-=1", limit: "", growth: "" }, { id: 577, name: "\u65E5\u304C\u5DEE\u3059\u65B9\u3078+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 102, forceInitialHand: false, conditions: "if:isStrength", cost: "do:stamina-=1", effects: "do:setStance(preservation),do:genki+=8,do:enthusiasmBonus+=10;target:mental,do:g.cost-=1", limit: "", growth: "" }, { id: 578, name: "\u3064\u304B\u307F\u53D6\u3063\u305F\u672A\u6765", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 103, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:genki+=2+cardsUsed*5,do:goodImpressionTurns+=2", limit: 1, growth: "" }, { id: 579, name: "\u3064\u304B\u307F\u53D6\u3063\u305F\u672A\u6765+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 103, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:genki+=2+cardsUsed*8,do:goodImpressionTurns+=2", limit: 1, growth: "" }, { id: 580, name: "\u671D\u304C\u6E80\u305F\u3059\u307E\u3067", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 104, forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=2", effects: "do:concentration+=3;at:turn,delay:2,do:goodConditionTurns+=5,limit:1;at:turn,delay:3,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 581, name: "\u671D\u304C\u6E80\u305F\u3059\u307E\u3067+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 104, forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=2", effects: "do:concentration+=5;at:turn,delay:2,do:goodConditionTurns+=7,limit:1;at:turn,delay:3,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 582, name: "\u5F85\u3061\u671B\u3093\u3060\u77AC\u9593", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 105, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(preservation2);at:fullPowerChargeIncreased,if:isPreservation,do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 583, name: "\u5F85\u3061\u671B\u3093\u3060\u77AC\u9593+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 105, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:setStance(preservation2);at:fullPowerChargeIncreased,if:isPreservation,do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 584, name: "\u590F\u591C\u306B\u54B2\u304F\u601D\u3044\u51FA", availableCustomizations: "", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:removeTroubleFromDeckOrDiscards,do:cardUsesRemaining+=1;at:cardUsed,do:natsuyaCardsUsed+=1;at:cardUsed,if:natsuyaCardsUsed%5==4,do:score+=4", limit: 1, growth: "" }, { id: 585, name: "\u590F\u591C\u306B\u54B2\u304F\u601D\u3044\u51FA+", availableCustomizations: "29,83", rarity: "SSR", type: "active", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:removeTroubleFromDeckOrDiscards,do:cardUsesRemaining+=1;at:cardUsed,do:natsuyaCardsUsed+=1;at:cardUsed,if:natsuyaCardsUsed%5==4,do:score+=4", limit: 1, growth: "" }, { id: 586, name: "\u6708\u660E\u308A\u306B\u5305\u307E\u308C\u3066", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=5", effects: "do:costReduction+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 587, name: "\u6708\u660E\u308A\u306B\u5305\u307E\u308C\u3066+", availableCustomizations: "29,27", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=2", effects: "do:costReduction+=1,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 588, name: "\u81EA\u5DF1\u80AF\u5B9A\u611F\u7206\u4E0A\u3052\u2191\u2191", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 106, forceInitialHand: false, conditions: "", cost: "do:stamina-=3", effects: "at:mentalCardUsed,do:concentration+=2", limit: 1, growth: "" }, { id: 589, name: "\u81EA\u5DF1\u80AF\u5B9A\u611F\u7206\u4E0A\u3052\u2191\u2191+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 106, forceInitialHand: false, conditions: "", cost: "do:stamina-=2", effects: "do:concentration+=1;at:mentalCardUsed,do:concentration+=2", limit: 1, growth: "" }, { id: 590, name: "\u5DFB\u304D\u8FD4\u3057", availableCustomizations: "", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 66, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=1", effects: "do:setStance(preservation),do:enthusiasmBonus+=3;target:all,do:g.cost+=1", limit: 1, growth: "" }, { id: 591, name: "\u5DFB\u304D\u8FD4\u3057+", availableCustomizations: "35,37,78", rarity: "R", type: "mental", plan: "anomaly", unlockPlv: 66, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=1", effects: "do:setStance(preservation),do:enthusiasmBonus+=6;target:all,do:g.cost+=1", limit: 1, growth: "" }, { id: 592, name: "\u30DA\u30FC\u30B9\u914D\u5206", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 67, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:perfectConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=3,do:concentration+=3,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 593, name: "\u30DA\u30FC\u30B9\u914D\u5206+", availableCustomizations: "70,68,28", rarity: "R", type: "active", plan: "sense", unlockPlv: 67, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:perfectConditionTurns>=1", cost: "do:cost-=4", effects: "do:score+=5,do:concentration+=4,do:goodConditionTurns+=4", limit: 1, growth: "" }, { id: 594, name: "\u9054\u6210\u611F", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 68, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(preservation),do:cardUsesRemaining+=1;at:beforeStartOfTurn,if:prevStance==fullPower,do:setStance(preservation),limit:3", limit: 1, growth: "" }, { id: 595, name: "\u9054\u6210\u611F+", availableCustomizations: "29,41", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 68, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation),do:cardUsesRemaining+=1;at:beforeStartOfTurn,if:prevStance==fullPower,do:setStance(preservation),limit:3", limit: 1, growth: "" }, { id: 596, name: "\u7834\u7AF9\u306E\u52E2\u3044", availableCustomizations: "", rarity: "SR", type: "active", plan: "sense", unlockPlv: 69, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=8", cost: "do:cost-=2", effects: "do:concentration+=5;at:startOfTurn,do:score+=5,limit:3", limit: 1, growth: "" }, { id: 597, name: "\u7834\u7AF9\u306E\u52E2\u3044+", availableCustomizations: "97,54,14", rarity: "SR", type: "active", plan: "sense", unlockPlv: 69, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=8", cost: "do:cost-=2", effects: "do:concentration+=7;at:startOfTurn,do:score+=5,limit:4", limit: 1, growth: "" }, { id: 598, name: "\u5929\u8CE6\u306E\u624D", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 70, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=5", effects: "do:goodConditionTurns+=3,do:concentration+=2,do:moveSSRToTopOfDeck(3);at:turn,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 599, name: "\u5929\u8CE6\u306E\u624D+", availableCustomizations: "17,13", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 70, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=4", effects: "do:goodConditionTurns+=4,do:concentration+=3,do:moveSSRToTopOfDeck(3);at:turn,do:cardUsesRemaining+=1,limit:1", limit: 1, growth: "" }, { id: 600, name: "\u30C9\u30E9\u30DE\u30C1\u30C3\u30AF\u30DB\u30EA\u30C7\u30FC", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 107, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "at:activeCardUsed,if:motivation>=6,do:holidayCardsUsed+=1;at:activeCardUsed,if:motivation>=6,if:holidayCardsUsed%2==1,do:genki+=7", limit: 1, growth: "" }, { id: 601, name: "\u30C9\u30E9\u30DE\u30C1\u30C3\u30AF\u30DB\u30EA\u30C7\u30FC+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 107, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:motivation+=3;at:activeCardUsed,if:motivation>=6,do:holidayCardsUsed+=1;at:activeCardUsed,if:motivation>=6,if:holidayCardsUsed%2==1,do:genki+=8", limit: 1, growth: "" }, { id: 602, name: "\u7206\u76DB\u308C\u6700\u5F37\u30EB\u30C3\u30AF\u266A", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 108, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=3,do:goodImpressionTurns+=4,do:motivation+=3", limit: 1, growth: "" }, { id: 603, name: "\u7206\u76DB\u308C\u6700\u5F37\u30EB\u30C3\u30AF\u266A+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 108, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=3,do:goodImpressionTurns+=6,do:motivation+=3", limit: 1, growth: "" }, { id: 604, name: "\u3067\u3053\u308C\u30FC\u3068\u307E\u3058\u3063\u304F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 109, forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:fullPowerCharge+=2,do:genki+=6,do:score+=cumulativeFullPowerCharge", limit: 1, growth: "" }, { id: 605, name: "\u3067\u3053\u308C\u30FC\u3068\u307E\u3058\u3063\u304F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 109, forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:fullPowerCharge+=2,do:genki+=9,do:score+=cumulativeFullPowerCharge*1.5", limit: 1, growth: "" }, { id: 606, name: "\u5FAE\u71B1\u30CE\u30B9\u30BF\u30EB\u30B8\u30FC", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 110, forceInitialHand: false, conditions: "if:goodImpressionTurns>=10", cost: "do:stamina-=7", effects: "do:genki+=2,do:motivation+=2,do:goodImpressionTurns+=2*countCards(deck)+2*countCards(discarded),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 607, name: "\u5FAE\u71B1\u30CE\u30B9\u30BF\u30EB\u30B8\u30FC+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 110, forceInitialHand: false, conditions: "if:goodImpressionTurns>=10", cost: "do:stamina-=5", effects: "do:genki+=6,do:motivation+=4,do:goodImpressionTurns+=2*countCards(deck)+2*countCards(discarded),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 608, name: "\u52DD\u5229\u3092\u3064\u304B\u3081\uFF01", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:nullifyCostCards+=1,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 609, name: "\u52DD\u5229\u3092\u3064\u304B\u3081\uFF01+", availableCustomizations: "36,39", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:nullifyCostCards+=1,do:drawCard,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 610, name: "\u304B\u307E\u3057\u3061\u3083\u3048\u266A", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 111, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=2,do:perfectConditionTurns+=1;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5", limit: "", growth: "" }, { id: 611, name: "\u304B\u307E\u3057\u3061\u3083\u3048\u266A+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 111, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=3,do:perfectConditionTurns+=2;if:perfectConditionTurns>=5,do:score+=goodConditionTurns*3.5", limit: "", growth: "" }, { id: 612, name: "\u6CE5\u81ED\u304F\u3042\u308C\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 112, forceInitialHand: false, conditions: "", cost: "do:cost-=8", effects: "do:setStance(strength),do:score+=10,do:genki+=5;at:turn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4", limit: 1, growth: "" }, { id: 613, name: "\u6CE5\u81ED\u304F\u3042\u308C\uFF01+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 112, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(strength),do:score+=10,do:genki+=10;at:turn,do:setStance(preservation),limit:1;at:stanceChanged,if:parentPhase==processCard,target:this,do:g.score+=4,limit:4", limit: 1, growth: "" }, { id: 614, name: "\u7A7A\u307E\u3067\u4E00\u76F4\u7DDA", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 113, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:goodImpressionTurns+=3,do:setGoodImpressionTurnsEffectBuff(0.2),do:cardUsesRemaining+=1,do:doubleCostTurns+=1", limit: "", growth: "" }, { id: 615, name: "\u7A7A\u307E\u3067\u4E00\u76F4\u7DDA+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 113, forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:goodImpressionTurns+=4,do:setGoodImpressionTurnsEffectBuff(0.2),do:cardUsesRemaining+=1,do:doubleCostTurns+=1", limit: "", growth: "" }, { id: 616, name: "\u5BFE\u8C61\u3001\u30ED\u30C3\u30AF\u30AA\u30F3", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:afterStartOfTurn,do:drawCard,limit:3", limit: 1, growth: "" }, { id: 617, name: "\u5BFE\u8C61\u3001\u30ED\u30C3\u30AF\u30AA\u30F3+", availableCustomizations: "29,20", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:setGoodImpressionTurnsEffectBuff(1,3);if:goodImpressionTurns>=10;at:afterStartOfTurn,do:drawCard,limit:3", limit: 1, growth: "" }, { id: 618, name: "\u4E16\u754C\u4E00\u306E\u52C7\u6C17", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 114, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=goodConditionTurns*11,do:goodConditionTurns=0", limit: 1, growth: "" }, { id: 619, name: "\u4E16\u754C\u4E00\u306E\u52C7\u6C17+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 114, forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:score+=goodConditionTurns*11,do:goodConditionTurns=0", limit: 1, growth: "" }, { id: 620, name: "\u307B\u3050\u308C\u308B\u3072\u3068\u3068\u304D", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:turnsElapsed>=2", cost: "do:goodConditionTurns-=1", effects: "do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:turn,do:concentration+=4,limit:1", limit: 1, growth: "" }, { id: 621, name: "\u307B\u3050\u308C\u308B\u3072\u3068\u3068\u304D+", availableCustomizations: "31,14", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "if:turnsElapsed>=2", cost: "do:goodConditionTurns-=1", effects: "do:setConcentrationBuff(0.5,3);if:goodConditionTurns>=1;at:turn,do:concentration+=6,limit:1", limit: 1, growth: "" }, { id: 622, name: "\u898B\u3064\u3051\u305F\u4E16\u754C\u3067", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 115, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=goodConditionTurns", limit: 1, growth: "" }, { id: 623, name: "\u898B\u3064\u3051\u305F\u4E16\u754C\u3067+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 115, forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:concentration+=goodConditionTurns", limit: 1, growth: "" }, { id: 624, name: "\u5965\u7FA9\u3001\u53D7\u3051\u6D41\u3057\uFF01", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:score+=4;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=4,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=4,limit:1", limit: 1, growth: "" }, { id: 625, name: "\u5965\u7FA9\u3001\u53D7\u3051\u6D41\u3057\uFF01+", availableCustomizations: "101,100", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:score+=8;if:concentration>=15;at:turn,do:goodConditionTurnsMultiplier=2,do:score+=8,limit:1;if:goodConditionTurns>=12;at:turn,delay:1,do:concentrationMultiplier=2,do:score+=8,limit:1", limit: 1, growth: "" }, { id: 626, name: "\u57F7\u5FF5\u30AD\u30E3\u30C3\u30C1\u30E3\u30FC", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:fixedGenki+=5;if:stamina>=maxStamina*0.5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 627, name: "\u57F7\u5FF5\u30AD\u30E3\u30C3\u30C1\u30E3\u30FC+", availableCustomizations: "30,83", rarity: "SSR", type: "mental", plan: "free", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:stamina-=1", effects: "do:fixedGenki+=10;if:stamina>=maxStamina*0.5,do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 628, name: "\u30D7\u30E9\u30A4\u30C9\u306E\u584A", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 116, forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=5,do:score+=5", limit: 1, growth: "" }, { id: 629, name: "\u30D7\u30E9\u30A4\u30C9\u306E\u584A+", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 116, forceInitialHand: false, conditions: "if:isPreservation", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=8,do:score+=8", limit: 1, growth: "" }, { id: 630, name: "\u7D2B\u96FB\u4E00\u9583", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 117, forceInitialHand: false, conditions: "", cost: "do:cost-=7", effects: "do:goodImpressionTurns+=2;at:endOfTurn,if:motivation>=6,do:score+=goodImpressionTurns*0.8,limit:4", limit: 1, growth: "" }, { id: 631, name: "\u7D2B\u96FB\u4E00\u9583+", availableCustomizations: "", rarity: "SR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 117, forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodImpressionTurns+=4;at:endOfTurn,if:motivation>=6,do:score+=goodImpressionTurns*0.8,limit:4", limit: 1, growth: "" }, { id: 632, name: "\u79C1\u306F\u3001\u6C7A\u3057\u3066", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 118, forceInitialHand: false, conditions: "if:motivation>=9", cost: "do:cost-=6", effects: "do:prideTurns+=5,do:cardUsesRemaining+=1,do:goodImpressionTurns+=8,do:drawCard", limit: 1, growth: "" }, { id: 633, name: "\u79C1\u306F\u3001\u6C7A\u3057\u3066+", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 118, forceInitialHand: false, conditions: "if:motivation>=9", cost: "do:cost-=4", effects: "do:prideTurns+=5,do:cardUsesRemaining+=1,do:goodImpressionTurns+=9,do:drawCard", limit: 1, growth: "" }, { id: 634, name: "\u30B0\u30FC\u30C1\u30E7\u30AD\u30D1\u30FC\u30C7\u30DD\u30F3", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 119, forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:score+=8", limit: 1, growth: "at:stanceChanged;if:parentPhase==processCard,if:isStrength,target:this,do:g.score+=5" }, { id: 635, name: "\u30B0\u30FC\u30C1\u30E7\u30AD\u30D1\u30FC\u30C7\u30DD\u30F3+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 119, forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(strength),do:score+=10", limit: 1, growth: "at:stanceChanged;if:parentPhase==processCard,if:isStrength,target:this,do:g.score+=5" }, { id: 636, name: "\u3044\u305F\u305A\u3089\u30B5\u30F3\u30BF\u3055\u3093", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:setStance(preservation2),do:setEnthusiasmBuff(0.5,3),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 637, name: "\u3044\u305F\u305A\u3089\u30B5\u30F3\u30BF\u3055\u3093+", availableCustomizations: "29,28", rarity: "SSR", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation2),do:setEnthusiasmBuff(0.5,3),do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 638, name: "\u3042\u3075\u308C\u51FA\u308B\u60F3\u3044", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 120, forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=6", effects: "do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=2,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3", limit: "", growth: "" }, { id: 639, name: "\u3042\u3075\u308C\u51FA\u308B\u60F3\u3044+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 120, forceInitialHand: false, conditions: "", cost: "do:fullPowerCharge-=4", effects: "do:cardUsesRemaining+=1;at:turn,do:fullPowerCharge+=3,limit:1;at:endOfTurn,if:fullPowerCharge<=9,do:score+=2+cumulativeFullPowerCharge,limit:3", limit: "", growth: "" }, { id: 640, name: "\u30C0\u30FC\u30AF\u30D2\u30FC\u30ED\u30FC\u306E\u8A95\u751F", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 121, forceInitialHand: true, conditions: "", cost: "do:cost-=2", effects: "do:setScoreBuff(0.1);at:endOfTurn,if:turnsRemaining==1,do:goodConditionTurnsMultiplier=2,do:score+=30", limit: 1, growth: "" }, { id: 641, name: "\u30C0\u30FC\u30AF\u30D2\u30FC\u30ED\u30FC\u306E\u8A95\u751F+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 121, forceInitialHand: true, conditions: "", cost: "do:cost-=2", effects: "do:setScoreBuff(0.1);at:endOfTurn,if:turnsRemaining==1,do:goodConditionTurnsMultiplier=2,do:score+=50", limit: 1, growth: "" }, { id: 642, name: "\u30B9\u30C6\u30FC\u30B8\u30F3\u30B0\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=2", cost: "do:cost-=2", effects: "do:goodConditionTurnsMultiplier=2,do:score+=10", limit: 1, growth: "" }, { id: 643, name: "\u30B9\u30C6\u30FC\u30B8\u30F3\u30B0\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodConditionTurns>=2", cost: "do:cost-=2", effects: "do:goodConditionTurnsMultiplier=2,do:score+=15", limit: 1, growth: "" }, { id: 644, name: "\u30B9\u30C6\u30C3\u30D7\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=6,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 645, name: "\u30B9\u30C6\u30C3\u30D7\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=8,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 646, name: "\u30D1\u30D5\u30A9\u30FC\u30DE\u30F3\u30B9\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=6,do:concentration+=2", limit: 1, growth: "" }, { id: 647, name: "\u30D1\u30D5\u30A9\u30FC\u30DE\u30F3\u30B9\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=8,do:concentration+=3", limit: 1, growth: "" }, { id: 648, name: "\u30EA\u30A2\u30AF\u30B7\u30E7\u30F3\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:concentration>=3", cost: "do:cost-=2", effects: "do:score+=5,do:score+=5", limit: 1, growth: "" }, { id: 649, name: "\u30EA\u30A2\u30AF\u30B7\u30E7\u30F3\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:concentration>=3", cost: "do:cost-=2", effects: "do:score+=9,do:score+=9", limit: 1, growth: "" }, { id: 650, name: "\u30D5\u30A1\u30F3\u30B5\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=goodImpressionTurns", limit: 1, growth: "" }, { id: 651, name: "\u30D5\u30A1\u30F3\u30B5\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:score+=goodImpressionTurns*1.3", limit: 1, growth: "" }, { id: 652, name: "\u30A2\u30A4\u30B3\u30F3\u30BF\u30AF\u30C8\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:motivation>=3", cost: "do:stamina-=3", effects: "do:score+=genki", limit: 1, growth: "" }, { id: 653, name: "\u30A2\u30A4\u30B3\u30F3\u30BF\u30AF\u30C8\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:motivation>=3", cost: "do:stamina-=2", effects: "do:score+=genki*1.2", limit: 1, growth: "" }, { id: 654, name: "\u4ED5\u8349\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=3,do:score+=motivation*1.2", limit: 1, growth: "" }, { id: 655, name: "\u4ED5\u8349\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:score+=motivation*1.5", limit: 1, growth: "" }, { id: 656, name: "\u30D6\u30E9\u30F3\u30C7\u30A3\u30F3\u30B0\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:stanceChangedTimes>=3", cost: "do:cost-=4", effects: "do:setStance(strength2),do:score+=12", limit: 1, growth: "" }, { id: 657, name: "\u30D6\u30E9\u30F3\u30C7\u30A3\u30F3\u30B0\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:stanceChangedTimes>=3", cost: "do:cost-=3", effects: "do:setStance(strength2),do:score+=21", limit: 1, growth: "" }, { id: 658, name: "\u9B45\u305B\u65B9\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strenght),do:score+=8", limit: 1, growth: "" }, { id: 659, name: "\u9B45\u305B\u65B9\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(strenght),do:score+=12", limit: 1, growth: "" }, { id: 660, name: "\u30A2\u30C9\u30EA\u30D6\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:fullPowerCharge>=3", cost: "do:cost-=2", effects: "do:fullPowerCharge+=3;at:afterStartOfTurn,if:isFullPower,do:score+=15,limit:1", limit: 1, growth: "" }, { id: 661, name: "\u30A2\u30C9\u30EA\u30D6\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:fullPowerCharge>=3", cost: "do:cost-=2", effects: "do:fullPowerCharge+=4;at:afterStartOfTurn,if:isFullPower,do:score+=20,limit:1", limit: 1, growth: "" }, { id: 662, name: "\u30B9\u30D4\u30FC\u30C1\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=5,do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 663, name: "\u30B9\u30D4\u30FC\u30C1\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(strength),do:score+=6,do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 664, name: "\u8996\u7DDA\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:goodConditionTurns+=2", limit: 1, growth: "" }, { id: 665, name: "\u8996\u7DDA\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:goodConditionTurns+=3", limit: 1, growth: "" }, { id: 666, name: "\u601D\u8003\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=2,do:concentration+=2", limit: 1, growth: "" }, { id: 667, name: "\u601D\u8003\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=3,do:concentration+=3", limit: 1, growth: "" }, { id: 668, name: "\u843D\u3061\u7740\u304D\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=5,do:concentration+=2", limit: 1, growth: "" }, { id: 669, name: "\u843D\u3061\u7740\u304D\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:concentration+=3", limit: 1, growth: "" }, { id: 670, name: "\u30BF\u30A4\u30DF\u30F3\u30B0\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:genki+=5,do:perfectConditionTurns+=1", limit: 1, growth: "" }, { id: 671, name: "\u30BF\u30A4\u30DF\u30F3\u30B0\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "sense", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=0", effects: "do:genki+=6,do:perfectConditionTurns+=2", limit: 1, growth: "" }, { id: 672, name: "\u7B11\u9854\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=4,do:goodImpressionTurns+=2", limit: 1, growth: "" }, { id: 673, name: "\u7B11\u9854\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:goodImpressionTurns+=3", limit: 1, growth: "" }, { id: 674, name: "\u76DB\u308A\u4E0A\u3052\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodImpressionTurns>=1", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=4", limit: 1, growth: "" }, { id: 675, name: "\u76DB\u308A\u4E0A\u3052\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "if:goodImpressionTurns>=1", cost: "do:cost-=1", effects: "do:goodImpressionTurns+=5", limit: 1, growth: "" }, { id: 676, name: "\u30BB\u30EA\u30D5\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=2,do:goodImpressionTurns+=2,do:motivation+=2", limit: 1, growth: "" }, { id: 677, name: "\u30BB\u30EA\u30D5\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:goodImpressionTurns+=3,do:motivation+=2", limit: 1, growth: "" }, { id: 678, name: "\u8DDD\u96E2\u611F\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=4,do:motivation+=2", limit: 1, growth: "" }, { id: 679, name: "\u8DDD\u96E2\u611F\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:motivation+=3", limit: 1, growth: "" }, { id: 680, name: "\u30BB\u30EB\u30D5\u30B1\u30A2\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:genki+=2,do:goodImpressionTurns+=2,do:motivation+=2", limit: 1, growth: "" }, { id: 681, name: "\u30BB\u30EB\u30D5\u30B1\u30A2\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:goodImpressionTurns+=2,do:motivation+=3", limit: 1, growth: "" }, { id: 682, name: "\u7ACB\u3061\u56DE\u308A\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:genki+=5", limit: 1, growth: "" }, { id: 683, name: "\u7ACB\u3061\u56DE\u308A\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:setStance(preservation),do:genki+=7", limit: 1, growth: "" }, { id: 684, name: "\u30A6\u30A9\u30FC\u30E0\u30A2\u30C3\u30D7\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation2),do:fullPowerCharge+=1", limit: 1, growth: "" }, { id: 685, name: "\u30A6\u30A9\u30FC\u30E0\u30A2\u30C3\u30D7\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation2),do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 686, name: "\u81EA\u5DF1\u7BA1\u7406\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(preservation),do:fullPowerCharge+=2", limit: 1, growth: "" }, { id: 687, name: "\u81EA\u5DF1\u7BA1\u7406\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:fullPowerCharge+=3", limit: 1, growth: "" }, { id: 688, name: "\u30EC\u30B9\u30DD\u30F3\u30B9\u306E\u57FA\u672C", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=4,do:fullPowerCharge+=2,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 689, name: "\u30EC\u30B9\u30DD\u30F3\u30B9\u306E\u57FA\u672C+", availableCustomizations: "", rarity: "N", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: true, unique: false, sourceType: "default", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=6,do:fullPowerCharge+=3,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 690, name: "\u8ECC\u9053\u4FEE\u6B63", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 51, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:concentration+=2;if:unremovedTroubleCards>=2,do:score+=3", limit: 1, growth: "" }, { id: 691, name: "\u8ECC\u9053\u4FEE\u6B63+", availableCustomizations: "14,70,28", rarity: "R", type: "active", plan: "sense", unlockPlv: 51, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=6,do:concentration+=3;if:unremovedTroubleCards>=2,do:score+=3", limit: 1, growth: "" }, { id: 692, name: "\u30D1\u30F3\u30D7\u30A2\u30C3\u30D7", availableCustomizations: "", rarity: "R", type: "active", plan: "sense", unlockPlv: 52, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:score+=6,do:goodConditionTurns+=2;if:unremovedTroubleCards>=2,do:score+=4", limit: 1, growth: "" }, { id: 693, name: "\u30D1\u30F3\u30D7\u30A2\u30C3\u30D7+", availableCustomizations: "18,68,28", rarity: "R", type: "active", plan: "sense", unlockPlv: 52, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:score+=6,do:goodConditionTurns+=3;if:unremovedTroubleCards>=2,do:score+=4", limit: 1, growth: "" }, { id: 694, name: "\u304A\u307E\u3082\u308A\u30DF\u30E9\u30AF\u30EB", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 51, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=2,do:score+=goodImpressionTurns*0.6;if:unremovedTroubleCards>=2,do:score+=goodImpressionTurns*0.4", limit: 1, growth: "" }, { id: 695, name: "\u304A\u307E\u3082\u308A\u30DF\u30E9\u30AF\u30EB+", availableCustomizations: "22,71,27", rarity: "R", type: "active", plan: "logic", unlockPlv: 51, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*0.8;if:unremovedTroubleCards>=2,do:score+=goodImpressionTurns*0.4", limit: 1, growth: "" }, { id: 696, name: "\u304C\u3080\u3057\u3083\u3089", availableCustomizations: "", rarity: "R", type: "active", plan: "logic", unlockPlv: 52, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:motivation+=2;if:unremovedTroubleCards>=2,do:score+=genki*0.5", limit: 1, growth: "" }, { id: 697, name: "\u304C\u3080\u3057\u3083\u3089+", availableCustomizations: "20,72,75", rarity: "R", type: "active", plan: "logic", unlockPlv: 52, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=2,do:motivation+=3;if:unremovedTroubleCards>=2,do:score+=genki*0.5", limit: 1, growth: "" }, { id: 698, name: "\u5F62\u52E2\u9006\u8EE2", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 51, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=9;if:unremovedTroubleCards>=2,do:drawCard", limit: 1, growth: "" }, { id: 699, name: "\u5F62\u52E2\u9006\u8EE2+", availableCustomizations: "42,65,28", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 51, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:setStance(strength),do:score+=13;if:unremovedTroubleCards>=2,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 700, name: "\u30CE\u30F3\u30B9\u30C8\u30C3\u30D7", availableCustomizations: "", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 52, upgraded: false, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=2;at:startOfTurn,if:isFullPower,do:score+=20,limit:1;if:unremovedTroubleCards>=2,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 701, name: "\u30CE\u30F3\u30B9\u30C8\u30C3\u30D7+", availableCustomizations: "42,73,28", rarity: "R", type: "active", plan: "anomaly", unlockPlv: 52, upgraded: true, unique: false, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:fullPowerCharge+=3;at:startOfTurn,if:isFullPower,do:score+=20,limit:1;if:unremovedTroubleCards>=2,do:holdSelectedFromHand", limit: 1, growth: "" }, { id: 702, name: "\u30AA\u30FC\u30D0\u30FC\u30C9\u30E9\u30A4\u30D6", availableCustomizations: "", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 58, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:setStance(strength),do:score+=4,do:fullPowerCharge+=2,do:cardUsesRemaining+=1,do:addCardToDeck(23);at:turn,do:setStance(preservation),limit:1", limit: "", growth: "" }, { id: 703, name: "\u30AA\u30FC\u30D0\u30FC\u30C9\u30E9\u30A4\u30D6+", availableCustomizations: "29,28", rarity: "SR", type: "active", plan: "anomaly", unlockPlv: 58, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:setStance(strength),do:score+=4,do:score+=4,do:fullPowerCharge+=2,do:cardUsesRemaining+=1,do:addCardToDeck(23);at:turn,do:setStance(preservation),limit:1", limit: "", growth: "" }, { id: 704, name: "\u4E00\u767A\u52DD\u8CA0", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 53, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:concentration+=7,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 705, name: "\u4E00\u767A\u52DD\u8CA0+", availableCustomizations: "17,3", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 53, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:concentration+=8,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 706, name: "\u30B9\u30EA\u30EA\u30F3\u30B0", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 54, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodConditionTurns+=5,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 707, name: "\u30B9\u30EA\u30EA\u30F3\u30B0+", availableCustomizations: "13,3", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 54, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodConditionTurns+=7,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 708, name: "\u5927\u80C6\u4E0D\u6575", availableCustomizations: "", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 56, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:goodConditionTurns+=3,do:concentration+=5,do:cardUsesRemaining+=1,do:addCardToDeck(23)", limit: "", growth: "" }, { id: 709, name: "\u5927\u80C6\u4E0D\u6575+", availableCustomizations: "29,28", rarity: "SR", type: "mental", plan: "sense", unlockPlv: 56, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodConditionTurns+=3,do:concentration+=5,do:cardUsesRemaining+=1,do:addCardToDeck(23)", limit: "", growth: "" }, { id: 710, name: "\u5192\u967A\u5FC3", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 53, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:goodImpressionTurns+=6,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 711, name: "\u5192\u967A\u5FC3+", availableCustomizations: "19,20", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 53, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:goodImpressionTurns+=7,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 712, name: "\u6C17\u307E\u3050\u308C\u30CF\u30FC\u30C8", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 54, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:genki+=3,do:motivation+=5,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 713, name: "\u6C17\u307E\u3050\u308C\u30CF\u30FC\u30C8+", availableCustomizations: "21,27", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 54, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=1", effects: "do:genki+=3,do:motivation+=6,do:cardUsesRemaining+=1,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 714, name: "\u6210\u9577\u75DB", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 57, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=2,do:motivation+=3,do:goodImpressionTurns+=4,do:cardUsesRemaining+=1,do:addCardToDeck(23)", limit: "", growth: "" }, { id: 715, name: "\u6210\u9577\u75DB+", availableCustomizations: "29,26", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 57, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:genki+=3,do:motivation+=4,do:goodImpressionTurns+=5,do:cardUsesRemaining+=1,do:addCardToDeck(23)", limit: "", growth: "" }, { id: 716, name: "\u30D5\u30EB\u30B9\u30ED\u30C3\u30C8\u30EB", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 53, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:setEnthusiasmBuff(1,3),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 717, name: "\u30D5\u30EB\u30B9\u30ED\u30C3\u30C8\u30EB+", availableCustomizations: "42,28", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 53, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=2", effects: "do:setStance(preservation),do:setEnthusiasmBuff(1.5,3),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 718, name: "\u30EA\u30B9\u30AD\u30FC\u30C1\u30E3\u30F3\u30B9", availableCustomizations: "", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 54, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:fullPowerCharge+=3,do:setFullPowerChargeBuff(0.5,3),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 719, name: "\u30EA\u30B9\u30AD\u30FC\u30C1\u30E3\u30F3\u30B9+", availableCustomizations: "43,28", rarity: "SR", type: "mental", plan: "anomaly", unlockPlv: 54, upgraded: true, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:fullPowerCharge+=3,do:setFullPowerChargeBuff(0.5,4),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,do:addCardToDeck(23)", limit: 1, growth: "" }, { id: 720, name: "\u6700\u9AD8\u5091\u4F5C", availableCustomizations: "", rarity: "L", type: "active", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:goodConditionTurns-=5", effects: "do:concentrationMultiplier=3,do:score+=4;if:countCards(deck)+countCards(discarded)>=9;at:startOfTurn,do:goodConditionTurns+=2,do:concentration+=2,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:3", limit: "", growth: "" }, { id: 721, name: "\u30B9\u30FC\u30D1\u30FC\u30CE\u30F4\u30A1", availableCustomizations: "", rarity: "L", type: "active", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stance==strength2", cost: "do:cost-=1", effects: "do:score+=1", limit: 1, growth: "at:startOfTurn,target:this,do:g.score+=20,do:g.scoreTimes+=1,do:g.cost-=1;at:cardMovedToHand,if:movedCardId==721,do:drawCard" }, { id: 722, name: "\u5B8C\u5168\u7121\u6B20", availableCustomizations: "", rarity: "L", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: true, conditions: "", cost: "do:cost-=6", effects: "do:setGoodConditionTurnsBuff(0.25),do:setConcentrationBuff(0.25),do:cardUsesRemaining+=1,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 723, name: "\u738B\u8005\u306E\u98A8\u683C", availableCustomizations: "", rarity: "L", type: "mental", plan: "sense", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:goodConditionTurns+=3,do:concentration+=3,do:cardUsesRemaining+=1;at:turnSkipped,if:perfectConditionTurns>=1;at:turn,do:setScoreBuff(1.1,1),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:1;at:turnSkipped,if:perfectConditionTurns>=1;at:turn,delay:1,do:noCardUseTurns+=1,limit:1", limit: 1, growth: "" }, { id: 724, name: "\u30A8\u30AF\u30BB\u30EC\u30F3\u30C8\u266A", availableCustomizations: "", rarity: "L", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:cardUsesRemaining+=1;at:afterStartOfTurn,if:countCards(hand\\R)>=1,do:useRandomCardFree(hand\\R),do:useRandomCardFree(hand\\R)", limit: 1, growth: "" }, { id: 725, name: "\u7A76\u6975\u30B9\u30DE\u30A4\u30EB", availableCustomizations: "", rarity: "L", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:goodImpressionTurns>=6", cost: "do:cost-=7", effects: "do:setGoodImpressionTurnsEffectBuff(1);target:all,do:g.goodImpressionTurns+=5;do:cardUsesRemaining+=1", limit: 1, growth: "" }, { id: 726, name: "\u6700\u5F37\u30D1\u30D5\u30A9\u30FC\u30DE\u30FC", availableCustomizations: "", rarity: "L", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:motivation>=9", cost: "do:cost-=6", effects: "do:cardUsesRemaining+=1,do:motivation+=5;at:staminaDecreased,do:motivationMultiplier=2,do:genki+=4", limit: "", growth: "" }, { id: 727, name: "\u30A8\u30AD\u30B9\u30D1\u30FC\u30C8", availableCustomizations: "", rarity: "L", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "if:stanceChangedTimes>=4", cost: "do:cost-=2", effects: "do:useRandomCardFree(held),do:cardUsesRemaining+=1;at:turn,do:setStance(preservation),limit:1", limit: "", growth: "at:cardMovedToHand,if:movedCardId==727,do:holdSelectedFromDeckOrDiscards" }, { id: 728, name: "\u30EC\u30B8\u30A7\u30F3\u30C9\u30B9\u30BF\u30FC", availableCustomizations: "", rarity: "L", type: "mental", plan: "anomaly", unlockPlv: 1, upgraded: false, unique: true, sourceType: "produce", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=6", effects: "do:cardUsesRemaining+=1,do:drawCard,do:drawCard;if:preservationTimes>=2,do:turnsRemaining+=1;if:strengthTimes>=2,do:turnsRemaining+=1;if:fullPowerTimes>=2,do:turnsRemaining+=1;at:stanceChanged,if:isFullPower,if:turnsRemaining<=3,do:setScoreBuff(1.2,1),limit:3", limit: 1, growth: "" }, { id: 729, name: "\u5922\u3068\u73FE\u5883\u754C\u7DDA", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "pIdol", pIdolId: 122, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:cardUsesRemaining+=1;if:motivation<=8,do:goodImpressionTurns*=1.1;if:motivation>=9,do:score+=goodImpressionTurns*1.4", limit: "", growth: "" }, { id: 730, name: "\u5922\u3068\u73FE\u5883\u754C\u7DDA+", availableCustomizations: "", rarity: "SSR", type: "active", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "pIdol", pIdolId: 122, forceInitialHand: false, conditions: "", cost: "do:cost-=4", effects: "do:cardUsesRemaining+=1;if:motivation<=8,do:goodImpressionTurns*=1.1;if:motivation>=9,do:score+=goodImpressionTurns*2.5", limit: "", growth: "" }, { id: 731, name: "\u3042\u3053\u304C\u308C\u4E0D\u826F\u30E0\u30FC\u30D6", availableCustomizations: "", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=3", effects: "do:goodImpressionTurns+=3,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1;if:motivation>=6,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 732, name: "\u3042\u3053\u304C\u308C\u4E0D\u826F\u30E0\u30FC\u30D6+", availableCustomizations: "19,34", rarity: "SSR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: true, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:motivation-=2", effects: "do:goodImpressionTurns+=4,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1;if:motivation>=6,do:drawCard,do:drawCard", limit: 1, growth: "" }, { id: 733, name: "\u5473\u898B\u306F\u3044\u304B\u304C", availableCustomizations: "", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=5", effects: "do:removeTroubleFromDeckOrDiscards,do:goodImpressionTurns+=4,do:motivation+=3", limit: 1, growth: "" }, { id: 734, name: "\u5473\u898B\u306F\u3044\u304B\u304C+", availableCustomizations: "55,56,83", rarity: "SR", type: "mental", plan: "logic", unlockPlv: 1, upgraded: false, unique: true, sourceType: "support", pIdolId: "", forceInitialHand: false, conditions: "", cost: "do:cost-=3", effects: "do:removeTroubleFromDeckOrDiscards,do:goodImpressionTurns+=4,do:motivation+=3", limit: 1, growth: "" }];
+
+// ../packages/gakumas-data/data/skillCards.js
+skill_cards_default.forEach((skillCard) => {
+  skillCard._type = "skillCard";
+  skillCard.availableCustomizations = skillCard.availableCustomizations.split(",").filter((c) => c);
+  skillCard.conditions = deserializeEffectSequence(skillCard.conditions);
+  skillCard.cost = deserializeEffectSequence(skillCard.cost);
+  skillCard.effects = deserializeEffectSequence(skillCard.effects);
+  skillCard.limit = skillCard.limit || null;
+  skillCard.growth = deserializeEffectSequence(skillCard.growth);
+  skillCard.pIdolId = skillCard.pIdolId || null;
+  skillCard.contestPower = getSkillCardContestPower(skillCard);
+});
+var SKILL_CARDS_BY_ID = skill_cards_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+var SkillCards = class {
+  static getAll() {
+    return skill_cards_default;
+  }
+  static getById(id) {
+    return SKILL_CARDS_BY_ID[id];
+  }
+  static getFiltered({
+    rarities,
+    types,
+    plans,
+    unlockPlvs,
+    sourceTypes,
+    pIdolIds
+  }) {
+    return skill_cards_default.filter((skillCard) => {
+      if (rarities && !rarities.includes(skillCard.rarity)) return false;
+      if (types && !types.includes(skillCard.type)) return false;
+      if (plans && !plans.includes(skillCard.plan)) return false;
+      if (unlockPlvs && !unlockPlvs.includes(skillCard.unlockPlv)) return false;
+      if (sourceTypes && !sourceTypes.includes(skillCard.sourceType))
+        return false;
+      if (pIdolIds && !pIdolIds.includes(skillCard.pIdolId)) return false;
+      return true;
+    });
+  }
+};
+var skillCards_default = SkillCards;
+
+// ../packages/gakumas-data/json/stages.json
+var stages_default = [{ id: 1, name: "\u30B7\u30FC\u30BA\u30F31 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 1, stage: 1, round: "", plan: "free", criteria: "0.4,0.27,0.33", turnCounts: "5,3,4", firstTurns: "0.5,0,0.5", effects: "at:startOfTurn,if:turnsElapsed==7,do:score+=15,do:genki+=15,limit:1", linkTurnCounts: "" }, { id: 2, name: "\u30B7\u30FC\u30BA\u30F31 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 1, stage: 2, round: "", plan: "sense", criteria: "0.4,0.27,0.33", turnCounts: "4,2,2", firstTurns: "1,0,0", effects: "at:startOfTurn,do:goodConditionTurns+=3,do:setScoreBuff(0.5,4),limit:1", linkTurnCounts: "" }, { id: 3, name: "\u30B7\u30FC\u30BA\u30F31 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 1, stage: 3, round: "", plan: "logic", criteria: "0.4,0.27,0.33", turnCounts: "4,2,2", firstTurns: "1,0,0", effects: "at:goodImpressionTurnsIncreased,if:goodImpressionTurns>=10,do:goodImpression+=4,do:score+=goodImpressionTurns*0.5", linkTurnCounts: "" }, { id: 4, name: "\u30B7\u30FC\u30BA\u30F32 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 2, stage: 1, round: "", plan: "free", criteria: "0.33,0.4,0.27", turnCounts: "4,5,3", firstTurns: "0.5,0.5,0", effects: "at:startOfTurn,if:turnsElapsed==7,do:score+=15,do:genki+=15,limit:1", linkTurnCounts: "" }, { id: 5, name: "\u30B7\u30FC\u30BA\u30F32 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 2, stage: 2, round: "", plan: "sense", criteria: "0.33,0.4,0.27", turnCounts: "4,5,3", firstTurns: "0.5,0.5,0", effects: "at:afterCardUsed,if:cardEffects&perfectConditionTurns,if:goodConditionTurns>=4,do:cardUsesRemaining+=1", linkTurnCounts: "" }, { id: 6, name: "\u30B7\u30FC\u30BA\u30F32 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 2, stage: 3, round: "", plan: "logic", criteria: "0.33,0.4,0.27", turnCounts: "3,4,3", firstTurns: "0,1,0", effects: "at:cardUsed,if:cardsUsed%2==0,do:score+=genki*0.5", linkTurnCounts: "" }, { id: 7, name: "\u30B7\u30FC\u30BA\u30F33 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 3, stage: 1, round: "", plan: "sense", criteria: "0.27,0.33,0.4", turnCounts: "3,3,4", firstTurns: "0,0.5,0.5", effects: "at:startOfTurn,if:turnsElapsed==7,do:concentration*=2,limit:1", linkTurnCounts: "" }, { id: 8, name: "\u30B7\u30FC\u30BA\u30F33 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 3, stage: 2, round: "", plan: "logic", criteria: "0.27,0.33,0.4", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:activeCardUsed,do:score+=goodImpressionTurns*1.7,limit:3", linkTurnCounts: "" }, { id: 9, name: "\u30B7\u30FC\u30BA\u30F33 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 3, stage: 3, round: "", plan: "logic", criteria: "0.27,0.33,0.4", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,do:motivation+=4,limit:2", linkTurnCounts: "" }, { id: 10, name: "\u30B7\u30FC\u30BA\u30F34 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 4, stage: 1, round: "", plan: "sense", criteria: "0.15,0.45,0.4", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:cardUsed,if:cardEffects&halfCostTurns,do:concentration+=3,do:goodConditionTurns+=3,do:fixedStamina-=3,limit:3", linkTurnCounts: "" }, { id: 11, name: "\u30B7\u30FC\u30BA\u30F34 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 4, stage: 2, round: "", plan: "sense", criteria: "0.15,0.45,0.4", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:afterCardUsed,if:cardEffects&perfectConditionTurns,if:goodConditionTurns>=4,do:cardUsesRemaining+=1", linkTurnCounts: "" }, { id: 12, name: "\u30B7\u30FC\u30BA\u30F34 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 4, stage: 3, round: "", plan: "logic", criteria: "0.15,0.45,0.4", turnCounts: "2,4,2", firstTurns: "0,1,0", effects: "at:activeCardUsed,do:motivation+=3,limit:4", linkTurnCounts: "" }, { id: 13, name: "\u30B7\u30FC\u30BA\u30F35 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 5, stage: 1, round: "", plan: "sense", criteria: "0.35,0.3,0.35", turnCounts: "4,3,3", firstTurns: "0.5,0,0.5", effects: "at:cardUsed,if:cardEffects&halfCostTurns,do:concentration+=3,do:goodConditionTurns+=3,do:fixedStamina-=3,limit:3", linkTurnCounts: "" }, { id: 14, name: "\u30B7\u30FC\u30BA\u30F35 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 5, stage: 2, round: "", plan: "sense", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.5,0,0.5", effects: "at:startOfTurn,do:concentration+=5,do:doubleCostTurns+=1,limit:2", linkTurnCounts: "" }, { id: 15, name: "\u30B7\u30FC\u30BA\u30F35 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 5, stage: 3, round: "", plan: "logic", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.5,0,0.5", effects: "at:startOfTurn,do:goodImpressionTurns+=4,do:nullifyGenkiTurns+=1,limit:6", linkTurnCounts: "" }, { id: 16, name: "\u30B7\u30FC\u30BA\u30F36 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 6, stage: 1, round: "", plan: "free", criteria: "0.1,0.45,0.45", turnCounts: "1,4,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:halfCostTurns>=1,do:setScoreBuff(0.15)", linkTurnCounts: "" }, { id: 17, name: "\u30B7\u30FC\u30BA\u30F36 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 6, stage: 2, round: "", plan: "sense", criteria: "0.1,0.45,0.45", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1", linkTurnCounts: "" }, { id: 18, name: "\u30B7\u30FC\u30BA\u30F36 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 6, stage: 3, round: "", plan: "logic", criteria: "0.1,0.45,0.45", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1", linkTurnCounts: "" }, { id: 19, name: "\u30B7\u30FC\u30BA\u30F37 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 7, stage: 1, round: "", plan: "free", criteria: "0.15,0.5,0.35", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,if:turnsRemaining<=4,do:cardUsesRemaining+=1,do:costIncrease+=1,limit:4", linkTurnCounts: "" }, { id: 20, name: "\u30B7\u30FC\u30BA\u30F37 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 7, stage: 2, round: "", plan: "sense", criteria: "0.15,0.5,0.35", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,if:turnsElapsed==10,do:setScoreBuff(0.5,2),do:goodConditionTurns+=2,limit:1", linkTurnCounts: "" }, { id: 21, name: "\u30B7\u30FC\u30BA\u30F37 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 7, stage: 3, round: "", plan: "logic", criteria: "0.15,0.5,0.35", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1", linkTurnCounts: "" }, { id: 22, name: "\u30B7\u30FC\u30BA\u30F38 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 8, stage: 1, round: "", plan: "free", criteria: "0.15,0.4,0.45", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:cardUsed,if:turnCardsUsed%2==1,do:setScoreBuff(0.3,5),limit:3", linkTurnCounts: "" }, { id: 23, name: "\u30B7\u30FC\u30BA\u30F38 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 8, stage: 2, round: "", plan: "sense", criteria: "0.15,0.4,0.45", turnCounts: "2,4,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:concentration+=2,limit:4", linkTurnCounts: "" }, { id: 24, name: "\u30B7\u30FC\u30BA\u30F38 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 8, stage: 3, round: "", plan: "logic", criteria: "0.15,0.4,0.45", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,do:motivation+=6,do:doubleCostTurns+=1,limit:2", linkTurnCounts: "" }, { id: 25, name: "\u30B7\u30FC\u30BA\u30F39 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 9, stage: 1, round: "", plan: "free", criteria: "0.44,0.33,0.33", turnCounts: "5,3,4", firstTurns: "0.85,0.15,0", effects: "at:cardUsed,if:cardEffects&halfCostTurns,do:setScoreBuff(0.3,6),limit:3", linkTurnCounts: "" }, { id: 26, name: "\u30B7\u30FC\u30BA\u30F39 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 9, stage: 2, round: "", plan: "logic", criteria: "0.44,0.33,0.33", turnCounts: "5,3,4", firstTurns: "0.85,0.15,0", effects: "at:startOfTurn,do:goodImpressionTurns+=6,do:genki+=5,limit:1", linkTurnCounts: "" }, { id: 27, name: "\u30B7\u30FC\u30BA\u30F39 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 9, stage: 3, round: "", plan: "logic", criteria: "0.44,0.33,0.33", turnCounts: "3,3,2", firstTurns: "0.82,0.18,0", effects: "at:endOfTurn,if:goodImpressionTurns>=8,do:motivation+=5,limit:3", linkTurnCounts: "" }, { id: 28, name: "\u30B7\u30FC\u30BA\u30F310 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 10, stage: 1, round: "", plan: "free", criteria: "0.5,0.4,0.1", turnCounts: "5,3,2", firstTurns: "1,0,0", effects: "at:everyTurn,if:turnsElapsed%3==2,if:stamina>=maxStamina*0.5,do:setScoreBuff(0.7,4),limit:3", linkTurnCounts: "" }, { id: 29, name: "\u30B7\u30FC\u30BA\u30F310 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 10, stage: 2, round: "", plan: "sense", criteria: "0.5,0.4,0.1", turnCounts: "6,4,2", firstTurns: "1,0,0", effects: "at:mentalCardUsed,do:perfectConditionTurns+=2,do:fixedStamina+=3,do:doubleCostTurns+=1", linkTurnCounts: "" }, { id: 30, name: "\u30B7\u30FC\u30BA\u30F310 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 10, stage: 3, round: "", plan: "logic", criteria: "0.5,0.4,0.1", turnCounts: "4,3,1", firstTurns: "1,0,0", effects: "at:endOfTurn,if:goodImpressionTurns>=8,do:motivation+=5,limit:3", linkTurnCounts: "" }, { id: 31, name: "\u30B7\u30FC\u30BA\u30F311 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 11, stage: 1, round: "", plan: "free", criteria: "0.15,0.35,0.5", turnCounts: "2,3,5", firstTurns: "0,0,1", effects: "at:startOfTurn,if:turnsElapsed==1,do:setScoreBuff(0.7,8),do:poorConditionTurns+=8,limit:1", linkTurnCounts: "" }, { id: 32, name: "\u30B7\u30FC\u30BA\u30F311 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 11, stage: 2, round: "", plan: "sense", criteria: "0.15,0.35,0.5", turnCounts: "2,3,5", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodConditionTurns+=9,limit:1", linkTurnCounts: "" }, { id: 33, name: "\u30B7\u30FC\u30BA\u30F311 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 11, stage: 3, round: "", plan: "logic", criteria: "0.15,0.35,0.5", turnCounts: "2,4,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1", linkTurnCounts: "" }, { id: 34, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "A", round: 1, plan: "sense", criteria: "0.15,0.35,0.5", turnCounts: "2,3,5", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodConditionTurns+=9,limit:1", linkTurnCounts: "" }, { id: 35, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "B", round: 1, plan: "sense", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:concentration+=5,do:doubleCostTurns+=1,limit:2", linkTurnCounts: "" }, { id: 36, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "C", round: 1, plan: "sense", criteria: "0.1,0.45,0.45", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1", linkTurnCounts: "" }, { id: 37, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "D", round: 1, plan: "logic", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:goodImpressionTurns+=4,do:nullifyGenkiTurns+=1,limit:6", linkTurnCounts: "" }, { id: 38, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "E", round: 1, plan: "logic", criteria: "0.1,0.45,0.45", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1", linkTurnCounts: "" }, { id: 39, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "A", round: 2, plan: "sense", criteria: "0.15,0.35,0.5", turnCounts: "2,3,5", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodConditionTurns+=9,limit:1;at:startOfTurn,if:turnsElapsed==4,if:concentration>=5,do:perfectConditionTurns+=6,limit:1", linkTurnCounts: "" }, { id: 40, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "B", round: 2, plan: "sense", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:concentration+=5,do:doubleCostTurns+=1,limit:2;at:startOfTurn,if:turnsElapsed==3,if:goodConditionTurns>=2,do:fixedStamina+=6,limit:1", linkTurnCounts: "" }, { id: 41, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "C", round: 2, plan: "sense", criteria: "0.1,0.45,0.45", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1;at:startOfTurn,if:turnsElapsed==5,if:concentration>=11,do:cardUsesRemaining+=2,limit:1", linkTurnCounts: "" }, { id: 42, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "D", round: 2, plan: "logic", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:goodImpressionTurns+=4,do:nullifyGenkiTurns+=1,limit:6;at:startOfTurn,if:turnsElapsed==1,if:goodImpressionTurns>=7,do:turnsRemaining+=1,limit:1", linkTurnCounts: "" }, { id: 43, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "E", round: 2, plan: "logic", criteria: "0.1,0.45,0.45", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1;at:startOfTurn,if:turnsElapsed==5,if:motivation>=9,do:motivationMultiplier=2,do:genki+=7,limit:1", linkTurnCounts: "" }, { id: 44, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "A", round: 3, plan: "sense", criteria: "0.15,0.35,0.5", turnCounts: "2,3,5", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodConditionTurns+=9,limit:1;at:startOfTurn,if:turnsElapsed==4,if:concentration>=5,do:perfectConditionTurns+=6,limit:1;at:startOfTurn,if:turnsElapsed==9,do:score+=7,do:score+=7,limit:1", linkTurnCounts: "" }, { id: 45, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "B", round: 3, plan: "sense", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:concentration+=5,do:doubleCostTurns+=1,limit:2;at:startOfTurn,if:turnsElapsed==3,if:goodConditionTurns>=2,do:fixedStamina+=6,limit:1;at:startOfTurn,if:turnsElapsed==7,if:halfCostTurns>=1,do:concentration*=1.7,limit:1", linkTurnCounts: "" }, { id: 46, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "C", round: 3, plan: "sense", criteria: "0.1,0.45,0.45", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1;at:startOfTurn,if:turnsElapsed==5,if:concentration>=11,do:cardUsesRemaining+=2,limit:1;at:startOfTurn,if:turnsElapsed==9,if:concentration>=14,do:score+=5+2*cardsUsed,limit:1", linkTurnCounts: "" }, { id: 47, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "D", round: 3, plan: "logic", criteria: "0.35,0.3,0.35", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:goodImpressionTurns+=4,do:nullifyGenkiTurns+=1,limit:6;at:startOfTurn,if:turnsElapsed==1,if:goodImpressionTurns>=7,do:turnsRemaining+=1,limit:1;at:startOfTurn,if:turnsElapsed==9,if:goodImpressionTurns>=34,do:setScoreBuff(0.9,4),limit:1", linkTurnCounts: "" }, { id: 48, name: "#\u30A2\u30CB\u30E1\u30A4\u30C8\u3092\u76DB\u308A\u4E0A\u3052\u968A", type: "event", preview: false, season: 1, stage: "E", round: 3, plan: "logic", criteria: "0.1,0.45,0.45", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,do:motivation+=4,do:goodImpressionTurns+=4,limit:1;at:startOfTurn,if:turnsElapsed==5,if:motivation>=9,do:motivationMultiplier=2,do:genki+=7,limit:1;at:startOfTurn,if:turnsElapsed==9,if:stamina>=maxStamina*0.5,do:score+=genki*1.5,limit:1", linkTurnCounts: "" }, { id: 49, name: "\u30B7\u30FC\u30BA\u30F312 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 12, stage: 1, round: "", plan: "free", criteria: "0.3,0.2,0.5", turnCounts: "2,1,3", firstTurns: "0,0,1", effects: "at:cardUsed,if:turnCardsUsed%2==1,do:score+=2,do:score+=2", linkTurnCounts: "" }, { id: 50, name: "\u30B7\u30FC\u30BA\u30F312 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 12, stage: 2, round: "", plan: "free", criteria: "0.3,0.2,0.5", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,do:setScoreBuff(0.8,3),limit:1", linkTurnCounts: "" }, { id: 51, name: "\u30B7\u30FC\u30BA\u30F312 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 12, stage: 3, round: "", plan: "sense", criteria: "0.3,0.2,0.5", turnCounts: "3,2,5", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodConditionTurns+=9,limit:1", linkTurnCounts: "" }, { id: 52, name: "\u30B7\u30FC\u30BA\u30F313 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 13, stage: 1, round: "", plan: "free", criteria: "0.385,0.385,0.33", turnCounts: "3,2,1", firstTurns: "1,0,0", effects: "at:cardUsed,if:turnCardsUsed%2==1,do:score+=2,do:score+=2", linkTurnCounts: "" }, { id: 53, name: "\u30B7\u30FC\u30BA\u30F313 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 13, stage: 2, round: "", plan: "sense", criteria: "0.385,0.385,0.33", turnCounts: "5,4,3", firstTurns: "0.889,0.111,0", effects: "at:startOfTurn,if:turnsElapsed==9,do:goodConditionTurns+=10,do:perfectConditionTurns+=3,limit:1,group:1", linkTurnCounts: "" }, { id: 54, name: "\u30B7\u30FC\u30BA\u30F313 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 13, stage: 3, round: "", plan: "logic", criteria: "0.385,0.385,0.33", turnCounts: "5,4,3", firstTurns: "0.889,0.111,0", effects: "at:afterCardUsed,if:cardEffects&motivation,do:genki+=1,do:goodImpressionTurns+=3,limit:3", linkTurnCounts: "" }, { id: 55, name: "\u30B7\u30FC\u30BA\u30F314 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 14, stage: 1, round: "", plan: "free", criteria: "0.15,0.45,0.4", turnCounts: "2,4,2", firstTurns: "0,1,0", effects: "at:cardUsed,do:setScoreBuff(0.3,3),limit:5", linkTurnCounts: "" }, { id: 56, name: "\u30B7\u30FC\u30BA\u30F314 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 14, stage: 2, round: "", plan: "sense", criteria: "0.15,0.45,0.4", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,if:turnsElapsed==9,do:goodConditionTurns+=10,do:perfectConditionTurns+=3,limit:1,group:1", linkTurnCounts: "" }, { id: 57, name: "\u30B7\u30FC\u30BA\u30F314 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 14, stage: 3, round: "", plan: "logic", criteria: "0.15,0.45,0.4", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,if:motivation>=12,do:score+=motivation*5,limit:3", linkTurnCounts: "" }, { id: 58, name: "\u30B7\u30FC\u30BA\u30F315 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 15, stage: 1, round: "", plan: "free", criteria: "0.35,0.2,0.45", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:activeCardUsed,do:setScoreBuff(0.1)", linkTurnCounts: "" }, { id: 59, name: "\u30B7\u30FC\u30BA\u30F315 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 15, stage: 2, round: "", plan: "sense", criteria: "0.35,0.2,0.45", turnCounts: "4,2,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:concentration+=5,do:goodConditionTurns+=4,do:costReduction+=1,limit:1", linkTurnCounts: "" }, { id: 60, name: "\u30B7\u30FC\u30BA\u30F315 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 15, stage: 3, round: "", plan: "logic", criteria: "0.35,0.2,0.45", turnCounts: "4,2,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:goodImpressionTurns+=10,limit:1", linkTurnCounts: "" }, { id: 61, name: "\u30B7\u30FC\u30BA\u30F316 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 16, stage: 1, round: "", plan: "free", criteria: "0.25,0.45,0.3", turnCounts: "2,4,2", firstTurns: "0,1,0", effects: "at:startOfTurn,do:setScoreBuff(0.7,4),limit:1", linkTurnCounts: "" }, { id: 62, name: "\u30B7\u30FC\u30BA\u30F316 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 16, stage: 2, round: "", plan: "sense", criteria: "0.25,0.45,0.3", turnCounts: "3,6,3", firstTurns: "0,1,0", effects: "at:endOfTurn,if:turnsRemaining<=2,do:concentrationMultiplier=1.5,do:score+=2,limit:2", linkTurnCounts: "" }, { id: 63, name: "\u30B7\u30FC\u30BA\u30F316 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 16, stage: 3, round: "", plan: "logic", criteria: "0.25,0.45,0.3", turnCounts: "3,6,3", firstTurns: "0,1,0", effects: "at:afterCardUsed,if:cardEffects&genki,do:genki+=1,do:goodImpressionTurns+=3,limit:3", linkTurnCounts: "" }, { id: 64, name: "\u30B7\u30FC\u30BA\u30F317 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 17, stage: 1, round: "", plan: "free", criteria: "0.33,0.33,0.44", turnCounts: "3,4,5", firstTurns: "0.11,0,0.89", effects: "at:startOfTurn,do:setScoreBuff(1.2,5),do:doubleCostTurns+=5,limit:1", linkTurnCounts: "" }, { id: 65, name: "\u30B7\u30FC\u30BA\u30F317 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 17, stage: 2, round: "", plan: "logic", criteria: "0.33,0.33,0.44", turnCounts: "3,4,5", firstTurns: "0.11,0,0.89", effects: "at:endOfTurn,if:stamina>=maxStamina*0.5,do:genki+=7,do:fixedStamina-=2,limit:5", linkTurnCounts: "" }, { id: 66, name: "\u30B7\u30FC\u30BA\u30F317 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 17, stage: 3, round: "", plan: "logic", criteria: "0.33,0.33,0.44", turnCounts: "3,3,4", firstTurns: "0.125,0,0.875", effects: "at:endOfTurn,if:turnsRemaining<=1,do:score+=goodImpressionTurns*5,limit:1;at:startOfTurn,if:turnsElapsed==6,do:goodImpressionTurns*=1.5,limit:1", linkTurnCounts: "" }, { id: 67, name: "\u30B7\u30FC\u30BA\u30F318 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 18, stage: 1, round: "", plan: "free", criteria: "0.33,0.275,0.495", turnCounts: "3,3,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:setScoreBuff(1.2,5),do:doubleCostTurns+=5,limit:1", linkTurnCounts: "" }, { id: 68, name: "\u30B7\u30FC\u30BA\u30F318 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 18, stage: 2, round: "", plan: "sense", criteria: "0.33,0.275,0.495", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,do:concentration+=12,do:goodConditionTurns+=3,do:doubleCostTurns+=4,limit:1", linkTurnCounts: "" }, { id: 69, name: "\u30B7\u30FC\u30BA\u30F318 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 18, stage: 3, round: "", plan: "logic", criteria: "0.33,0.275,0.495", turnCounts: "3,3,6", firstTurns: "0,0,1", effects: "at:startOfTurn,do:motivation+=15,do:noActiveTurns+=4,limit:1", linkTurnCounts: "" }, { id: 70, name: "\u30B7\u30FC\u30BA\u30F319 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 19, stage: 1, round: "", plan: "free", criteria: "0.33,0.385,0.385", turnCounts: "2,3,3", firstTurns: "0,0.82,0.18", effects: "at:startOfTurn,do:setScoreBuff(0.5,3),limit:3", linkTurnCounts: "" }, { id: 71, name: "\u30B7\u30FC\u30BA\u30F319 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 19, stage: 2, round: "", plan: "sense", criteria: "0.33,0.385,0.385", turnCounts: "3,4,3", firstTurns: "0,0.89,0.11", effects: "at:cardUsed,if:cardEffects&halfCostTurns,do:concentration+=3,do:goodConditionTurns+=3,do:fixedStamina-=3,limit:3", linkTurnCounts: "" }, { id: 72, name: "\u30B7\u30FC\u30BA\u30F319 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 19, stage: 3, round: "", plan: "logic", criteria: "0.33,0.385,0.385", turnCounts: "3,5,4", firstTurns: "0,0.89,0.11", effects: "at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1;at:buffCostConsumed,if:goodImpressionTurns>=10,do:goodImpressionTurns+=3,do:score+=goodImpressionTurns*2.5", linkTurnCounts: "" }, { id: 73, name: "\u30B7\u30FC\u30BA\u30F320 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 20, stage: 1, round: "", plan: "sense", criteria: "0.45,0.2,0.35", turnCounts: "6,2,4", firstTurns: "1,0,0", effects: "at:startOfTurn,do:doubleCostTurns+=1,do:concentration+=5,limit:2", linkTurnCounts: "" }, { id: 74, name: "\u30B7\u30FC\u30BA\u30F320 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 20, stage: 2, round: "", plan: "anomaly", criteria: "0.45,0.2,0.35", turnCounts: "5,2,3", firstTurns: "1,0,0", effects: "at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3", linkTurnCounts: "" }, { id: 75, name: "\u30B7\u30FC\u30BA\u30F320 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 20, stage: 3, round: "", plan: "free", criteria: "0.45,0.2,0.35", turnCounts: "4,2,2", firstTurns: "1,0,0", effects: "at:startOfTurn,if:turnsRemaining<=2,limit:2;at:activeCardUsed,do:doubleCardEffectCards+=1,limit:1,ttl:1;at:startOfTurn,if:turnsRemaining<=2,do:drawCard,limit:2", linkTurnCounts: "" }, { id: 76, name: "\u30B7\u30FC\u30BA\u30F321 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 21, stage: 1, round: "", plan: "sense", criteria: "0.2,0.45,0.35", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:startOfTurn,if:turnsElapsed==4,do:concentration+=2,do:goodConditionTurns+=7,limit:1", linkTurnCounts: "" }, { id: 77, name: "\u30B7\u30FC\u30BA\u30F321 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 21, stage: 2, round: "", plan: "logic", criteria: "0.2,0.45,0.35", turnCounts: "2,6,4", firstTurns: "0,1,0", effects: "at:afterCardUsed,if:cardEffects&genki,do:genki+=1,do:goodImpressionTurns+=3,limit:3", linkTurnCounts: "" }, { id: 78, name: "\u30B7\u30FC\u30BA\u30F321 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 21, stage: 3, round: "", plan: "anomaly", criteria: "0.2,0.45,0.35", turnCounts: "2,5,3", firstTurns: "0,1,0", effects: "at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3", linkTurnCounts: "" }, { id: 79, name: "\u30B7\u30FC\u30BA\u30F322 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 22, stage: 1, round: "", plan: "sense", criteria: "0.25,0.25,0.5", turnCounts: "3,2,5", firstTurns: "0,0,1", effects: "at:startOfTurn,if:goodConditionTurns>=6,do:goodConditionTurns+=6,do:concentration+=6,limit:1", linkTurnCounts: "" }, { id: 80, name: "\u30B7\u30FC\u30BA\u30F322 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 22, stage: 2, round: "", plan: "logic", criteria: "0.25,0.25,0.5", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,if:turnsElapsed==6,do:goodImpressionTurns*=1.5,limit:1;at:goodImpressionTurnsIncreased,if:goodImpressionTurnsDelta>=6,do:goodImpressionTurns+=4", linkTurnCounts: "" }, { id: 81, name: "\u30B7\u30FC\u30BA\u30F322 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 22, stage: 3, round: "", plan: "anomaly", criteria: "0.25,0.25,0.5", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,if:isFullPower,do:score+=2+cumulativeFullPowerCharge*4,limit:3", linkTurnCounts: "" }, { id: 82, name: "\u30B7\u30FC\u30BA\u30F323 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 23, stage: 1, round: "", plan: "sense", criteria: "0.33,0.33,0.33", turnCounts: "4,4,4", firstTurns: "0.67,0.33,0", effects: "at:cardUsed,if:turnCardsUsed%2==1,do:concentration+=2,do:goodConditionTurns+=1", linkTurnCounts: "" }, { id: 83, name: "\u30B7\u30FC\u30BA\u30F323 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 23, stage: 2, round: "", plan: "logic", criteria: "0.33,0.33,0.33", turnCounts: "4,3,3", firstTurns: "0.85,0.15,0", effects: "at:startOfTurn,do:motivation+=10,limit:1;at:startOfTurn,if:turnsElapsed==1,do:poorConditionTurns+=99,limit:1", linkTurnCounts: "" }, { id: 84, name: "\u30B7\u30FC\u30BA\u30F323 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 23, stage: 3, round: "", plan: "anomaly", criteria: "0.33,0.33,0.33", turnCounts: "3,3,2", firstTurns: "0.8,0.2,0", effects: "at:afterCardUsed,if:cardEffects&strength,if:stanceChangedTimes>=3,do:score+=4,do:score+=4", linkTurnCounts: "" }, { id: 85, name: "\u30B7\u30FC\u30BA\u30F324 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 24, stage: 1, round: "", plan: "sense", criteria: "0.45,0.25,0.3", turnCounts: "6,3,3", firstTurns: "1,0,0", effects: "at:endOfTurn,if:turnsRemaining<=3,do:score+=4,do:score+=4,limit:3", linkTurnCounts: "" }, { id: 86, name: "\u30B7\u30FC\u30BA\u30F324 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 24, stage: 2, round: "", plan: "logic", criteria: "0.45,0.25,0.3", turnCounts: "6,3,3", firstTurns: "1,0,0", effects: "at:cardUsed,if:cardSourceType==pIdol,do:motivation+=8,limit:2", linkTurnCounts: "" }, { id: 87, name: "\u30B7\u30FC\u30BA\u30F324 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 24, stage: 3, round: "", plan: "anomaly", criteria: "0.45,0.25,0.3", turnCounts: "5,2,3", firstTurns: "1,0,0", effects: "at:endOfTurn,if:stance!=fullPower,do:setStance(preservation),do:fullPowerCharge+=3,limit:3", linkTurnCounts: "" }, { id: 88, name: "\u30B7\u30FC\u30BA\u30F325 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 25, stage: 1, round: "", plan: "sense", criteria: "0.2,0.4,0.4", turnCounts: "3,5,4", firstTurns: "0,0.88,0.12", effects: "at:endOfTurn,if:turnsRemaining<=3,do:score+=4,do:score+=4,limit:3", linkTurnCounts: "" }, { id: 89, name: "\u30B7\u30FC\u30BA\u30F325 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 25, stage: 2, round: "", plan: "logic", criteria: "0.2,0.4,0.4", turnCounts: "3,5,4", firstTurns: "0,0.88,0.12", effects: "at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5;at:cardUsed,if:cardSourceType==pIdol,do:goodImpressionTurns+=8", linkTurnCounts: "" }, { id: 90, name: "\u30B7\u30FC\u30BA\u30F325 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 25, stage: 3, round: "", plan: "anomaly", criteria: "0.2,0.4,0.4", turnCounts: "2,3,3", firstTurns: "0,0.8,0.2", effects: "at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:mental,do:g.genki+=8,limit:2;at:stanceChanged,if:parentPhase==processCard,if:isPreservation,do:fixedStamina-=2,limit:2", linkTurnCounts: "" }, { id: 91, name: "\u30B7\u30FC\u30BA\u30F326 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 26, stage: 1, round: "", plan: "sense", criteria: "0.3,0.4,0.3", turnCounts: "3,5,4", firstTurns: "0.11,0.89,0", effects: "at:cardUsed,if:cardEffects&concentration,if:concentration>=8,do:concentration+=5,do:goodConditionTurns+=1,limit:3", linkTurnCounts: "" }, { id: 92, name: "\u30B7\u30FC\u30BA\u30F326 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 26, stage: 2, round: "", plan: "logic", criteria: "0.3,0.4,0.3", turnCounts: "3,4,3", firstTurns: "0.125,0.875,0", effects: "at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1,group:1", linkTurnCounts: "" }, { id: 93, name: "\u30B7\u30FC\u30BA\u30F326 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 26, stage: 3, round: "", plan: "anomaly", criteria: "0.3,0.4,0.3", turnCounts: "3,4,3", firstTurns: "0.125,0.875,0", effects: "at:endOfTurn,if:stance!=fullPower,do:setStance(preservation),do:fullPowerCharge+=3,limit:3", linkTurnCounts: "" }, { id: 94, name: "\u30B7\u30FC\u30BA\u30F327 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 27, stage: 1, round: "", plan: "sense", criteria: "0.5,0.25,0.25", turnCounts: "4,2,2", firstTurns: "1,0,0", effects: "at:afterCardUsed,if:cardSourceType==pIdol,if:concentration>=5,do:setScoreBuff(0.5,3),limit:2", linkTurnCounts: "" }, { id: 95, name: "\u30B7\u30FC\u30BA\u30F327 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 27, stage: 2, round: "", plan: "logic", criteria: "0.5,0.25,0.25", turnCounts: "5,3,2", firstTurns: "1,0,0", effects: "at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1,group:1", linkTurnCounts: "" }, { id: 96, name: "\u30B7\u30FC\u30BA\u30F327 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 27, stage: 3, round: "", plan: "anomaly", criteria: "0.5,0.25,0.25", turnCounts: "6,3,3", firstTurns: "1,0,0", effects: "at:afterActiveCardUsed,if:stamina<=maxStamina*0.5,do:score+=2,do:score+=2,limit:2", linkTurnCounts: "" }, { id: 97, name: "\u30B7\u30FC\u30BA\u30F328 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 28, stage: 1, round: "", plan: "sense", criteria: "0.45,0.2,0.35", turnCounts: "5,2,3", firstTurns: "1,0,0", effects: "at:startOfTurn,if:turnsRemaining<=2,do:perfectConditionTurns+=1,do:score+=goodConditionTurns*1.8,limit:2", linkTurnCounts: "" }, { id: 98, name: "\u30B7\u30FC\u30BA\u30F328 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 28, stage: 2, round: "", plan: "anomaly", criteria: "0.45,0.2,0.35", turnCounts: "6,2,4", firstTurns: "1,0,0", effects: "at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10", linkTurnCounts: "" }, { id: 99, name: "\u30B7\u30FC\u30BA\u30F328 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 28, stage: 3, round: "", plan: "anomaly", criteria: "0.45,0.2,0.35", turnCounts: "6,2,4", firstTurns: "1,0,0", effects: "at:afterActiveCardUsed,if:stamina<=maxStamina*0.5,do:score+=2,do:score+=2,limit:2", linkTurnCounts: "" }, { id: 100, name: "\u30B7\u30FC\u30BA\u30F329 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 29, stage: 1, round: "", plan: "sense", criteria: "0.2,0.5,0.3", turnCounts: "3,6,3", firstTurns: "0,1,0", effects: "at:startOfTurn,do:setConcentrationBuff(0.25,6),limit:1", linkTurnCounts: "" }, { id: 101, name: "\u30B7\u30FC\u30BA\u30F329 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 29, stage: 2, round: "", plan: "logic", criteria: "0.2,0.5,0.3", turnCounts: "3,6,3", firstTurns: "0,1,0", effects: "at:cardUsed,if:turnCardsUsed%2==1,do:setGoodImpressionTurnsBuff(0.5,1),group:1;at:startOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1,group:1", linkTurnCounts: "" }, { id: 102, name: "\u30B7\u30FC\u30BA\u30F329 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 29, stage: 3, round: "", plan: "anomaly", criteria: "0.2,0.5,0.3", turnCounts: "2,4,2", firstTurns: "0,1,0", effects: "at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:mental,do:g.genki+=8,limit:2;at:stanceChanged,if:parentPhase==processCard,if:isPreservation,do:fixedStamina-=2,limit:2", linkTurnCounts: "" }, { id: 103, name: "\u30B7\u30FC\u30BA\u30F330 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 30, stage: 1, round: "", plan: "sense", criteria: "0.363636,0.272727,0.363636", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:setConcentrationBuff(0.25,6),limit:1", linkTurnCounts: "" }, { id: 104, name: "\u30B7\u30FC\u30BA\u30F330 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 30, stage: 2, round: "", plan: "logic", criteria: "0.363636,0.272727,0.363636", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:startOfTurn,do:motivation+=5,limit:3", linkTurnCounts: "" }, { id: 105, name: "\u30B7\u30FC\u30BA\u30F330 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 30, stage: 3, round: "", plan: "anomaly", criteria: "0.363636,0.272727,0.363636", turnCounts: "5,3,4", firstTurns: "0.9,0,0.1", effects: "at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10", linkTurnCounts: "" }, { id: 106, name: "\u30B7\u30FC\u30BA\u30F331 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 31, stage: 1, round: "", plan: "logic", criteria: "0.45,0.35,0.2", turnCounts: "6,4,2", firstTurns: "1,0,0", effects: "at:startOfTurn,do:motivation+=5,limit:3", linkTurnCounts: "" }, { id: 107, name: "\u30B7\u30FC\u30BA\u30F331 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 31, stage: 2, round: "", plan: "logic", criteria: "0.45,0.35,0.2", turnCounts: "4,2,2", firstTurns: "1,0,0", effects: "at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1,group:1;at:startOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1,group:1", linkTurnCounts: "" }, { id: 108, name: "\u30B7\u30FC\u30BA\u30F331 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 31, stage: 3, round: "", plan: "anomaly", criteria: "0.45,0.35,0.2", turnCounts: "6,4,2", firstTurns: "1,0,0", effects: "at:stanceChanged,if:stance==fullPower,if:turnsRemaining<=3,do:score+=consumedStamina*1.5,limit:3", linkTurnCounts: "" }, { id: 109, name: "\u30E9\u30A4\u30D6\u30C4\u30A2\u30FC\u30A4\u30D9\u30F3\u30C8 \u5927\u962A\u7DE8", type: "event", preview: false, season: 2, stage: "A", round: 1, plan: "sense", criteria: "0.3,0.4,0.3", turnCounts: "3,5,4", firstTurns: "0,1,0", effects: "at:endOfTurn,if:turnsElapsed>=4,if:concentration>=20,do:score+=3,do:score+=3;at:cardUsed,if:cardEffects&concentration,if:concentration>=8,do:concentration+=5,do:goodConditionTurns+=1,limit:3", linkTurnCounts: "" }, { id: 110, name: "\u30E9\u30A4\u30D6\u30C4\u30A2\u30FC\u30A4\u30D9\u30F3\u30C8 \u5927\u962A\u7DE8", type: "event", preview: false, season: 2, stage: "B", round: 1, plan: "logic", criteria: "0.3,0.4,0.3", turnCounts: "3,4,3", firstTurns: "0,1,0", effects: "at:startOfTurn,if:turnsElapsed==7,if:genki>=40,do:moveActiveCardsToDeckFromRemoved;at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1", linkTurnCounts: "" }, { id: 111, name: "\u30E9\u30A4\u30D6\u30C4\u30A2\u30FC\u30A4\u30D9\u30F3\u30C8 \u5927\u962A\u7DE8", type: "event", preview: false, season: 2, stage: "C", round: 1, plan: "anomaly", criteria: "0.25,0.25,0.5", turnCounts: "2,2,4", firstTurns: "0,0,1", effects: "at:startOfTurn,if:turnsElapsed==5,if:cumulativeFullPowerCharge>=8,target:all,do:g.scoreTimes+=1;at:startOfTurn,if:stance==fullPower,do:score+=2+cumulativeFullPowerCharge*4,limit:3", linkTurnCounts: "" }, { id: 112, name: "\u30B7\u30FC\u30BA\u30F332 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 32, stage: 1, round: "", plan: "sense", criteria: "0.2,0.4,0.4", turnCounts: "3,5,4", firstTurns: "0,0.9,0.1", effects: "at:cardUsed,if:cardEffects&perfectConditionTurns,do:goodConditionTurns+=3,limit:5", linkTurnCounts: "" }, { id: 113, name: "\u30B7\u30FC\u30BA\u30F332 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 32, stage: 2, round: "", plan: "logic", criteria: "0.2,0.4,0.4", turnCounts: "2,3,3", firstTurns: "0,0.75,0.25", effects: "at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1;at:beforeStartOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1,group:1", linkTurnCounts: "" }, { id: 114, name: "\u30B7\u30FC\u30BA\u30F332 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 32, stage: 3, round: "", plan: "anomaly", criteria: "0.2,0.4,0.4", turnCounts: "2,4,4", firstTurns: "0,0.9,0.1", effects: "at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3", linkTurnCounts: "" }, { id: 115, name: "\u30B7\u30FC\u30BA\u30F333 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 33, stage: 1, round: "", plan: "sense", criteria: "0.35,0.45,0.2", turnCounts: "2,4,2", firstTurns: "0,1,0", effects: "at:cardUsed,if:turnsRemaining<=3,if:cardRarity==SSR,do:setScoreBuff(0.25,3),limit:3", linkTurnCounts: "" }, { id: 116, name: "\u30B7\u30FC\u30BA\u30F333 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 33, stage: 2, round: "", plan: "logic", criteria: "0.35,0.45,0.2", turnCounts: "4,6,2", firstTurns: "0,1,0", effects: "at:cardUsed,if:cardSourceType==pIdol,if:genki>=15,do:score+=goodImpressionTurns*3,limit:3;at:beforeStartOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1", linkTurnCounts: "" }, { id: 117, name: "\u30B7\u30FC\u30BA\u30F333 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 33, stage: 3, round: "", plan: "anomaly", criteria: "0.35,0.45,0.2", turnCounts: "4,6,2", firstTurns: "0,1,0", effects: "at:afterActiveCardUsed,if:stamina<=maxStamina*0.5,do:score+=2,do:score+=2,limit:2", linkTurnCounts: "" }, { id: 118, name: "\u30B7\u30FC\u30BA\u30F334 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 34, stage: 1, round: "", plan: "sense", criteria: "0.4,0.3,0.3", turnCounts: "3,3,2", firstTurns: "0.8,0.2,0", effects: "at:cardUsed,if:turnsRemaining<=3,if:cardRarity==SSR,do:setScoreBuff(0.25,3),limit:3", linkTurnCounts: "" }, { id: 119, name: "\u30B7\u30FC\u30BA\u30F334 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 34, stage: 2, round: "", plan: "sense", criteria: "0.4,0.3,0.3", turnCounts: "3,3,2", firstTurns: "0.8,0.2,0", effects: "at:mentalCardUsed,do:goodConditionTurns+=3,do:setConcentrationBuff(0.25,2),limit:3", linkTurnCounts: "" }, { id: 120, name: "\u30B7\u30FC\u30BA\u30F334 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 34, stage: 3, round: "", plan: "logic", criteria: "0.4,0.3,0.3", turnCounts: "4,3,3", firstTurns: "0.8,0.2,0", effects: "at:startOfTurn,if:turnsElapsed==2,do:motivation*=2.5,limit:1", linkTurnCounts: "" }, { id: 121, name: "\u30D7\u30EC\u30B7\u30FC\u30BA\u30F3A", type: "linkContest", preview: false, season: 0, stage: "A", round: "", plan: "sense", criteria: "0.4,0.2,0.4", turnCounts: "5,3,4", firstTurns: "0.8,0,0.2", effects: "at:mentalCardUsed,do:goodConditionTurns+=3,do:setConcentrationBuff(0.25,2),limit:3", linkTurnCounts: "4,4,4" }, { id: 122, name: "\u30D7\u30EC\u30B7\u30FC\u30BA\u30F3B", type: "linkContest", preview: false, season: 0, stage: "B", round: "", plan: "logic", criteria: "0.3,0.5,0.2", turnCounts: "3,6,3", firstTurns: "0,1,0", effects: "at:endOfTurn,if:goodImpressionTurns>=15,do:score+=genki*1.3", linkTurnCounts: "4,4,4" }, { id: 123, name: "\u30D7\u30EC\u30B7\u30FC\u30BA\u30F3C", type: "linkContest", preview: false, season: 0, stage: "C", round: "", plan: "anomaly", criteria: "0.45,0.2,0.35", turnCounts: "6,2,4", firstTurns: "1,0,0", effects: "at:endOfTurn,if:stance==preservation2,target:held,do:g.score+=10;at:endOfTurn,if:stance==leisure,target:held,do:g.score+=10", linkTurnCounts: "4,4,4" }, { id: 124, name: "\u30B7\u30FC\u30BA\u30F335 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 35, stage: 1, round: "", plan: "logic", criteria: "0.3,0.4,0.3", turnCounts: "3,5,4", firstTurns: "0.11,0.89,0", effects: "at:endOfTurn,if:goodImpressionTurns>=15,do:score+=genki*1.3", linkTurnCounts: "" }, { id: 125, name: "\u30B7\u30FC\u30BA\u30F335 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 35, stage: 2, round: "", plan: "anomaly", criteria: "0.3,0.4,0.3", turnCounts: "3,3,2", firstTurns: "0.2,0.8,0", effects: "at:stanceChanged,if:parentPhase==processCard,if:isStrength,target:sourceType(pIdol),do:g.score+=10,limit:5", linkTurnCounts: "" }, { id: 126, name: "\u30B7\u30FC\u30BA\u30F335 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 35, stage: 3, round: "", plan: "anomaly", criteria: "0.3,0.4,0.3", turnCounts: "3,5,4", firstTurns: "0.11,0.89,0", effects: "at:afterCardUsed,if:cardSourceType==pIdol,if:fullPowerCharge<=9,do:decreaseFullPowerCharge(3),limit:3;at:afterCardUsed,if:cardSourceType==pIdol,if:fullPowerCharge<=9,limit:3;at:turn,do:fullPowerCharge+=5,do:setFullPowerChargeBuff(0.5,1),limit:1", linkTurnCounts: "" }, { id: 127, name: "\u30B7\u30FC\u30BA\u30F336 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 36, stage: 1, round: "", plan: "sense", criteria: "0.35,0.4,0.25", turnCounts: "3,3,2", firstTurns: "0.2,0.8,0", effects: "at:cardUsed,if:cardSourceType==pIdol,if:perfectConditionTurns>=1,limit:1;at:startOfTurn,do:score+=5", linkTurnCounts: "" }, { id: 128, name: "\u30B7\u30FC\u30BA\u30F336 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 36, stage: 2, round: "", plan: "logic", criteria: "0.35,0.4,0.25", turnCounts: "3,3,2", firstTurns: "0.2,0.8,0", effects: "at:startOfTurn,if:turnsElapsed==3,do:score+=goodImpressionTurns*4,do:genki+=4,limit:1;at:beforeStartOfTurn,if:turnsElapsed==4,do:goodImpressionTurns*=1.5,limit:1", linkTurnCounts: "" }, { id: 129, name: "\u30B7\u30FC\u30BA\u30F336 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 36, stage: 3, round: "", plan: "anomaly", criteria: "0.35,0.4,0.25", turnCounts: "4,5,3", firstTurns: "0.1,0.9,0", effects: "at:afterCardUsed,if:cardSourceType==pIdol,if:fullPowerCharge<=9,do:decreaseFullPowerCharge(3),limit:3;at:afterCardUsed,if:cardSourceType==pIdol,if:fullPowerCharge<=9,limit:3;at:turn,do:fullPowerCharge+=5,do:setFullPowerChargeBuff(0.5,1),limit:1", linkTurnCounts: "" }, { id: 130, name: "\u30B7\u30FC\u30BA\u30F337 \u30B9\u30C6\u30FC\u30B81", type: "contest", preview: false, season: 37, stage: 1, round: "", plan: "sense", criteria: "0.4,0.3,0.3", turnCounts: "3,3,2", firstTurns: "0.8,0.2,0", effects: "at:cardUsed,if:cardSourceType==pIdol,if:perfectConditionTurns>=1,limit:1;at:startOfTurn,do:score+=5", linkTurnCounts: "" }, { id: 131, name: "\u30B7\u30FC\u30BA\u30F337 \u30B9\u30C6\u30FC\u30B82", type: "contest", preview: false, season: 37, stage: 2, round: "", plan: "logic", criteria: "0.4,0.3,0.3", turnCounts: "5,3,4", firstTurns: "0.9,0.1,0", effects: "at:turn,if:turnsElapsed==0,do:nullifyGenkiTurns+=7,limit:1;at:startOfTurn,if:turnsElapsed==6,do:motivation+=4,limit:1;at:startOfTurn,if:turnsElapsed==6,limit:1;at:activeCardUsed,do:score+=goodImpressionTurns,do:drawCard", linkTurnCounts: "" }, { id: 132, name: "\u30B7\u30FC\u30BA\u30F337 \u30B9\u30C6\u30FC\u30B83", type: "contest", preview: false, season: 37, stage: 3, round: "", plan: "anomaly", criteria: "0.4,0.3,0.3", turnCounts: "5,3,4", firstTurns: "0.9,0.1,0", effects: "at:stanceChanged,if:isFullPower,if:genki>=30,do:score+=genki*10,limit:2", linkTurnCounts: "" }];
+
+// ../packages/gakumas-data/data/stages.js
+stages_default.forEach((stage) => {
+  const [vo, da, vi] = stage.criteria.split(",").map((p) => parseFloat(p));
+  stage.criteria = { vocal: vo, dance: da, visual: vi };
+  const [voT, daT, viT] = stage.turnCounts.split(",").map((p) => parseInt(p, 10));
+  stage.turnCounts = { vocal: voT, dance: daT, visual: viT };
+  const [voFt, daFt, viFt] = stage.firstTurns.split(",").map((p) => parseFloat(p));
+  stage.firstTurns = { vocal: voFt, dance: daFt, visual: viFt };
+  stage.effects = deserializeEffectSequence(stage.effects);
+  stage.linkTurnCounts = stage.linkTurnCounts.split(",").map((p) => parseInt(p, 10));
+});
+var STAGES_BY_ID = stages_default.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+
+// ../packages/gakumas-engine/constants.js
+var DEBUG = false;
+var TOKEN_REGEX2 = /([=!]?=|[<>+\-*/%]=?|&)/;
+var NUMBER_REGEX = /^-?\d+(?:\.\d+)?$/;
+var FUNCTION_CALL_REGEX = /([^(]+)(?:\(([^)]+)\))?/;
+var STANCES = [
+  "none",
+  "strength",
+  "strength2",
+  "preservation",
+  "preservation2",
+  "leisure",
+  "fullPower"
+];
+var SKILL_CARD_TYPES = ["active", "mental", "trouble"];
+var SOURCE_TYPES = ["default", "produce", "pIdol", "support"];
+var RARITIES = ["N", "R", "SR", "SSR"];
+var SET_OPERATOR = "&";
+var BOOLEAN_OPERATORS = ["==", "!=", "<", ">", "<=", ">="];
+var ADDITIVE_OPERATORS = ["+", "-"];
+var MULTIPLICATIVE_OPERATORS = ["*", "/", "%"];
+var ASSIGNMENT_OPERATORS = ["=", "+=", "-=", "*=", "/=", "%="];
+function formatEffect(effect) {
+  effect.conditions = effect.conditions.map((x) => x.split(TOKEN_REGEX2));
+  effect.actions = effect.actions.map((x) => x.split(TOKEN_REGEX2));
+  return effect;
+}
+var DEFAULT_EFFECTS = [
+  {
+    phase: "cardUsed",
+    conditions: ["stance==strength2"],
+    actions: ["fixedStamina-=1"],
+    source: { type: "default", id: "\u5F37\u6C172" }
+  }
+].map(formatEffect);
+var FULL_POWER_EFFECTS = [
+  {
+    conditions: ["stance==fullPower"],
+    actions: ["setStance(none)"],
+    source: { type: "default", id: "\u5168\u529B" }
+  },
+  {
+    conditions: ["lockStanceTurns==0", "fullPowerCharge>=10"],
+    actions: ["setStance(fullPower)", "fullPowerCharge-=10"],
+    source: { type: "default", id: "\u5168\u529B" }
+  }
+].map(formatEffect);
+var GOOD_IMPRESSION_EFFECTS = [
+  {
+    conditions: ["goodImpressionTurns>=1"],
+    actions: ["score+=goodImpressionTurns*goodImpressionTurnsEffectBuff"],
+    source: { type: "default", id: "\u597D\u5370\u8C61" }
+  }
+].map(formatEffect);
+var STANCE_CHANGED_EFFECTS = [
+  {
+    conditions: ["prevStance==preservation", "stance!=leisure"],
+    actions: ["enthusiasm+=5", "cardUsesRemaining+=1"],
+    source: { type: "default", id: "\u6E29\u5B58" }
+  },
+  {
+    conditions: ["prevStance==preservation2", "stance!=leisure"],
+    actions: ["enthusiasm+=8", "fixedGenki+=5", "cardUsesRemaining+=1"],
+    source: { type: "default", id: "\u6E29\u5B582" }
+  },
+  {
+    conditions: ["prevStance==leisure"],
+    actions: ["fixedGenki+=5", "cardUsesRemaining+=1"],
+    source: { type: "default", id: "\u306E\u3093\u3073\u308A" }
+  },
+  {
+    conditions: ["prevStance==leisure", "stance==fullPower"],
+    targets: ["all"],
+    actions: ["g.score+=10"],
+    source: { type: "default", id: "\u306E\u3093\u3073\u308A" }
+  },
+  {
+    conditions: ["prevStance==leisure", "stance!=fullPower"],
+    actions: ["enthusiasm+=10"],
+    source: { type: "default", id: "\u306E\u3093\u3073\u308A" }
+  },
+  {
+    conditions: ["stance==fullPower"],
+    actions: ["cardUsesRemaining+=1", "addHeldCardsToHand"],
+    source: { type: "default", id: "\u5168\u529B" }
+  }
+].map(formatEffect);
+var UNFRESH_PHASES = [
+  "beforeStartOfTurn",
+  "startOfTurn",
+  "afterStartOfTurn",
+  "turn",
+  "everyTurn"
+];
+var CHANGE_TRIGGER_PHASES = ["processCard", "processCost"];
+var PHASES = [
+  "activeCardUsed",
+  "afterActiveCardUsed",
+  "afterCardUsed",
+  "afterMentalCardUsed",
+  "afterStartOfStage",
+  "afterStartOfTurn",
+  "beforeStartOfTurn",
+  "buffCostConsumed",
+  "cardUsed",
+  "cardMovedToHand",
+  "cardRemoved",
+  "concentrationIncreased",
+  "endOfTurn",
+  "everyTurn",
+  "genkiIncreased",
+  "goodConditionTurnsIncreased",
+  "goodImpressionTurnsIncreased",
+  "mentalCardUsed",
+  "motivationIncreased",
+  "prestage",
+  "processCard",
+  "processCost",
+  "checkCost",
+  "staminaDecreased",
+  "stanceChanged",
+  "startOfStage",
+  "startOfTurn",
+  "turn",
+  "turnSkipped"
+];
+var ALL_FIELDS = [
+  // Logging
+  "logs",
+  "graphData",
+  // General
+  "cardUsesRemaining",
+  "stamina",
+  "consumedStamina",
+  "genki",
+  "score",
+  // Turns
+  "turnsElapsed",
+  "turnsRemaining",
+  "turnTypes",
+  "linkPhase",
+  // Buffs
+  "halfCostTurns",
+  "doubleCostTurns",
+  "costReduction",
+  "costIncrease",
+  "nullifyCostCards",
+  "nullifyDebuff",
+  "nullifyGenkiTurns",
+  "doubleCardEffectCards",
+  "noActiveTurns",
+  "noMentalTurns",
+  "poorConditionTurns",
+  "uneaseTurns",
+  "scoreBuffs",
+  "scoreDebuffs",
+  "goodImpressionTurnsBuffs",
+  "goodImpressionTurnsEffectBuffs",
+  "concentrationBuffs",
+  "goodConditionTurns",
+  "goodConditionTurnsMultiplier",
+  "goodConditionTurnsBuffs",
+  "perfectConditionTurns",
+  "concentration",
+  "concentrationMultiplier",
+  "goodImpressionTurns",
+  "motivation",
+  "motivationMultiplier",
+  "motivationBuffs",
+  "prideTurns",
+  "stance",
+  "prevStance",
+  "lockStanceTurns",
+  "fullPowerCharge",
+  "fullPowerChargeBuffs",
+  "cumulativeFullPowerCharge",
+  "enthusiasm",
+  "enthusiasmBonus",
+  "enthusiasmBuffs",
+  "strengthTimes",
+  "preservationTimes",
+  "leisureTimes",
+  "fullPowerTimes",
+  "freshBuffs",
+  // Cards
+  "cardMap",
+  "deckCards",
+  "handCards",
+  "discardedCards",
+  "removedCards",
+  "heldCards",
+  "cardsUsed",
+  "activeCardsUsed",
+  "turnCardsUsed",
+  "turnCardsUpgraded",
+  "thisCardHeld",
+  "usedCard",
+  "lastUsedCard",
+  "movedCard",
+  "noCardUseTurns",
+  // Effects
+  "effects",
+  "phase",
+  "parentPhase",
+  // Special
+  "pcchiCardsUsed",
+  "natsuyaCardsUsed",
+  "holidayCardsUsed",
+  "onigiriCardsUsed",
+  "nullifySelect",
+  // Delta
+  "goodImpressionTurnsDelta",
+  "motivationDelta",
+  "genkiDelta",
+  "goodConditionTurnsDelta",
+  "concentrationDelta",
+  "staminaDelta"
+];
+var S = ALL_FIELDS.reduce((acc, cur, i) => {
+  acc[cur] = i;
+  return acc;
+}, {});
+var GROWTH_FIELDS = [
+  "g.score",
+  "g.scoreTimes",
+  "g.cost",
+  "g.typedCost",
+  "g.genki",
+  "g.goodConditionTurns",
+  "g.perfectConditionTurns",
+  "g.concentration",
+  "g.goodImpressionTurns",
+  "g.motivation",
+  "g.fullPowerCharge",
+  "g.halfCostTurns",
+  "g.scoreByGoodImpressionTurns",
+  "g.scoreByMotivation",
+  "g.scoreByGenki",
+  "g.stanceLevel"
+];
+var G = GROWTH_FIELDS.reduce((acc, cur, i) => {
+  acc[cur] = i;
+  return acc;
+}, {});
+var CARD_PILES = [
+  S.deckCards,
+  S.handCards,
+  S.discardedCards,
+  S.removedCards
+];
+var COST_FIELDS = [
+  S.stamina,
+  S.goodConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge
+];
+var EOT_DECREMENT_FIELDS = [
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.goodImpressionTurns,
+  S.prideTurns,
+  S.lockStanceTurns,
+  S.halfCostTurns,
+  S.doubleCostTurns,
+  S.nullifyGenkiTurns,
+  S.poorConditionTurns,
+  S.noActiveTurns,
+  S.noMentalTurns,
+  S.uneaseTurns,
+  S.noCardUseTurns
+];
+var BUFF_FIELDS = [
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge
+];
+var DEBUFF_FIELDS = [
+  S.doubleCostTurns,
+  S.costIncrease,
+  S.nullifyGenkiTurns,
+  S.noActiveTurns,
+  S.noMentalTurns,
+  S.uneaseTurns,
+  S.poorConditionTurns,
+  S.lockStanceTurns,
+  S.noCardUseTurns
+];
+var DEBUFF_SPECIAL_ACTIONS = [
+  "setScoreDebuff",
+  "decreaseFullPowerCharge"
+];
+var INCREASE_TRIGGER_FIELDS = [
+  S.goodImpressionTurns,
+  S.motivation,
+  S.genki,
+  S.goodConditionTurns,
+  S.concentration,
+  S.fullPowerCharge
+];
+var DECREASE_TRIGGER_FIELDS = [S.stamina];
+var GROWABLE_FIELDS = [
+  S.genki,
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge,
+  S.halfCostTurns
+];
+var WHOLE_FIELDS = [
+  S.stamina,
+  S.genki,
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.prideTurns,
+  S.fullPowerCharge,
+  S.cumulativeFullPowerCharge,
+  S.enthusiasm
+];
+var NON_NEGATIVE_FIELDS = [
+  S.stamina,
+  S.genki,
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.fullPowerCharge
+];
+var LOGGED_FIELDS = [
+  S.stamina,
+  S.genki,
+  S.stance,
+  S.score,
+  S.goodConditionTurns,
+  S.perfectConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.prideTurns,
+  S.enthusiasm,
+  S.enthusiasmBonus,
+  S.fullPowerCharge,
+  S.lockStanceTurns,
+  S.halfCostTurns,
+  S.doubleCostTurns,
+  S.costReduction,
+  S.costIncrease,
+  S.doubleCardEffectCards,
+  S.nullifyGenkiTurns,
+  S.nullifyDebuff,
+  S.poorConditionTurns,
+  S.nullifyCostCards,
+  S.turnsRemaining,
+  S.cardUsesRemaining,
+  S.noActiveTurns,
+  S.noMentalTurns,
+  S.noCardUseTurns,
+  S.uneaseTurns
+];
+var GRAPHED_FIELDS = [
+  S.stamina,
+  S.genki,
+  S.score,
+  S.goodConditionTurns,
+  S.concentration,
+  S.goodImpressionTurns,
+  S.motivation,
+  S.prideTurns
+];
+var FIELDS_TO_DIFF = [
+  ...new Set(
+    LOGGED_FIELDS.concat(
+      INCREASE_TRIGGER_FIELDS,
+      DECREASE_TRIGGER_FIELDS,
+      EOT_DECREMENT_FIELDS
+    )
+  )
+];
+var HOLD_SOURCES_BY_ALIAS = {
+  hand: S.handCards,
+  deck: S.deckCards,
+  discards: S.discardedCards
+};
+
+// ../packages/gakumas-engine/utils.js
+var seed = 610397104;
+function mulberry32(a) {
+  return function() {
+    let t = a += 1831565813;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+var getRand = DEBUG ? mulberry32(seed) : Math.random;
+function shuffle(arr) {
+  let currentIndex = arr.length;
+  while (currentIndex != 0) {
+    let randomIndex = Math.floor(getRand() * currentIndex);
+    currentIndex--;
+    [arr[currentIndex], arr[randomIndex]] = [
+      arr[randomIndex],
+      arr[currentIndex]
+    ];
+  }
+  return arr;
+}
+function formatDiffField(value) {
+  if (isNaN(value)) return value;
+  return parseFloat(value.toFixed(2));
+}
+function shallowCopy(state) {
+  return [...state];
+}
+function deepCopy(state) {
+  return JSON.parse(JSON.stringify(state));
+}
+function getBaseId(entity) {
+  if (entity.upgraded) return entity.id - 1;
+  return entity.id;
+}
+
+// ../packages/gakumas-engine/config/IdolConfig.js
+var IdolConfig = class {
+  constructor(loadout) {
+    const {
+      params,
+      supportBonus,
+      pItemIds,
+      skillCardIdGroups,
+      customizationGroups
+    } = loadout;
+    let skillCardIds = [];
+    let cards = [];
+    let k = 0;
+    for (let i = 0; i < skillCardIdGroups.length; i++) {
+      for (let j = 0; j < skillCardIdGroups[i].length; j++) {
+        if (skillCardIdGroups[i][j]) {
+          const customizations = customizationGroups?.[i]?.[j];
+          if (customizations) {
+            Object.keys(customizations).forEach((k2) => {
+              if (!customizations_default2.getById(k2) || !customizations[k2]) {
+                delete customizations[k2];
+              }
+            });
+          }
+          cards.push({
+            id: skillCardIdGroups[i][j],
+            customizations,
+            index: k
+          });
+          skillCardIds.push(skillCardIdGroups[i][j]);
+        }
+        k++;
+      }
+    }
+    this.pItemIds = [...new Set(pItemIds.filter((id) => id))];
+    const { dedupedCards, dupeIndices } = this.getDedupedCards(cards);
+    dedupedCards.forEach((c) => {
+      delete c.index;
+    });
+    this.cards = dedupedCards;
+    this.dupeIndices = dupeIndices;
+    this.pIdolId = this.inferPIdolId(this.pItemIds, skillCardIds);
+    const pIdol = pIdols_default.getById(this.pIdolId);
+    if (pIdol) {
+      this.idolId = pIdol.idolId;
+      this.plan = pIdol.plan;
+      this.recommendedEffect = pIdol.recommendedEffect;
+    }
+    if (!this.plan) {
+      this.plan = this.inferPlan(this.pItemIds, skillCardIds);
+    }
+    const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
+    this.params = { vocal, dance, visual, stamina };
+    this.supportBonus = supportBonus || 0;
+  }
+  inferPIdolId(pItemIds, skillCardIds) {
+    const signatureSkillCardId = skillCardIds.find(
+      (id) => skillCards_default.getById(id)?.sourceType == "pIdol"
+    );
+    if (signatureSkillCardId)
+      return skillCards_default.getById(signatureSkillCardId).pIdolId;
+    const signaturePItemId = pItemIds.find(
+      (id) => pItems_default.getById(id)?.sourceType == "pIdol"
+    );
+    if (signaturePItemId) return pItems_default.getById(signaturePItemId).pIdolId;
+    return null;
+  }
+  inferPlan(pItemIds, skillCardIds) {
+    for (let id of skillCardIds) {
+      const { plan } = skillCards_default.getById(id);
+      if (plan != "free") return plan;
+    }
+    for (let id of pItemIds) {
+      const { plan } = pItems_default.getById(id);
+      if (plan != "free") return plan;
+    }
+    return null;
+  }
+  countCustomizations(customizations) {
+    if (!customizations) return 0;
+    return Object.values(customizations).reduce((acc, cur) => acc + cur, 0);
+  }
+  // If the loadout contains dupes of a unique skill card,
+  // keep only the most upgraded copy
+  getDedupedCards(cards) {
+    const sortedCards = cards.sort(
+      (a, b) => b.id + (b.customizations ? this.countCustomizations(b.customizations) : 0) - a.id - (a.customizations ? this.countCustomizations(a.customizations) : 0)
+    );
+    let dedupedCards = [];
+    let dupeIndices = [];
+    for (let i = 0; i < sortedCards.length; i++) {
+      const skillCard = skillCards_default.getById(sortedCards[i].id);
+      if (skillCard.unique && !["L", "T"].includes(skillCard.rarity)) {
+        const baseId = getBaseId(skillCard);
+        if (dedupedCards.some((d) => [baseId, baseId + 1].includes(d.id))) {
+          dupeIndices.push(sortedCards[i].index);
+          continue;
+        }
+      }
+      dedupedCards.push(sortedCards[i]);
+    }
+    return {
+      dedupedCards,
+      dupeIndices
+    };
+  }
+};
+
+// ../packages/gakumas-engine/config/StageConfig.js
+var StageConfig = class {
+  constructor(stage) {
+    const {
+      type,
+      plan,
+      season,
+      defaultCardSet,
+      turnCounts,
+      firstTurns,
+      criteria,
+      effects,
+      linkTurnCounts
+    } = stage;
+    this.type = type;
+    this.plan = plan;
+    this.defaultCardSet = defaultCardSet;
+    this.season = season;
+    this.turnCounts = turnCounts;
+    this.firstTurns = firstTurns;
+    this.criteria = criteria;
+    this.effects = effects;
+    this.turnCount = turnCounts.vocal + turnCounts.dance + turnCounts.visual;
+    this.linkTurnCounts = linkTurnCounts;
+    this.linkPhaseChangeTurns = this.calculateLinkPhaseChangeTurns();
+  }
+  calculateLinkPhaseChangeTurns() {
+    let cumulativeTurns = 0;
+    return this.linkTurnCounts.map((turnCount) => {
+      cumulativeTurns += turnCount;
+      return cumulativeTurns;
+    });
+  }
+};
+
+// ../packages/gakumas-engine/config/IdolStageConfig.js
+var CONTEST_DEFAULT_CARD_IDS_BY_PLAN = {
+  sense: [5, 7, 1, 1, 15, 15, 17, 17],
+  logic: [9, 11, 19, 19, 21, 21, 13, 13],
+  anomaly: [370, 372, 1, 1, 374, 374, 376, 376]
+};
+var EVENT_DEFAULT_CARD_IDS_BY_RECOMMENDED_EFFECT = {
+  goodConditionTurns: [15, 15, 5, 1, 1, 3, 13, 13],
+  concentration: [17, 17, 7, 1, 1, 3, 13, 13],
+  goodImpressionTurns: [19, 19, 9, 1, 1, 3, 13, 13],
+  motivation: [21, 21, 11, 1, 1, 3, 13, 13],
+  strength: [376, 376, 370, 1, 1, 368, 13, 13],
+  fullPower: [370, 372, 1, 1, 374, 374, 376, 376]
+  // TODO: Fix
+};
+var IdolStageConfig = class {
+  constructor(idolConfig, stageConfig2, enterPercents) {
+    this.idol = idolConfig;
+    this.stage = stageConfig2;
+    this.typeMultipliers = this.calculateTypeMultipliers(
+      idolConfig,
+      stageConfig2,
+      enterPercents
+    );
+    this.defaultCardIds = this.getDefaultCardIds(idolConfig, stageConfig2);
+  }
+  calculateTypeMultipliers(idolConfig, stageConfig2, enterPercents) {
+    const { type, criteria, season } = stageConfig2;
+    const { params, supportBonus } = idolConfig;
+    if (type !== "contest" || enterPercents) {
+      return {
+        vocal: params.vocal / 100,
+        dance: params.dance / 100,
+        visual: params.visual / 100
+      };
+    }
+    const hasFlatBonus = season == 13;
+    const hasFlatterBonus = season == 23;
+    let multipliers = {};
+    for (let key of Object.keys(criteria)) {
+      let param = params[key];
+      if (season < 10) {
+        param = Math.min(param, 1800);
+      } else if (season < 16) {
+        param = Math.min(param, 2160);
+      } else if (season < 25) {
+        param = Math.min(param, 2400);
+      } else {
+        param = Math.min(param, 2760);
+      }
+      const criterion = criteria[key];
+      let multiplier = 0;
+      if (season < 25) {
+        if (param > 1200) {
+          multiplier = param + 300 * 10;
+          if (hasFlatBonus) {
+            multiplier += param - 1200;
+          }
+        } else if (param > 900) {
+          multiplier = param * 2 + 300 * 6;
+        } else if (param > 600) {
+          multiplier = param * 3 + 300 * 3;
+        } else if (param > 300) {
+          multiplier = param * 4 + 300;
+        } else if (param > 0) {
+          multiplier = param * 5;
+        }
+      } else if (season < 37) {
+        if (param > 2500) {
+          multiplier = param + 3e3;
+          multiplier += (param - 2500) * 0.2;
+        } else if (param > 1800) {
+          multiplier = param * 1.5 + 1800;
+        } else if (param > 1200) {
+          multiplier = param * 2 + 900;
+        } else if (param > 600) {
+          multiplier = param * 2.5 + 300;
+        } else if (param > 300) {
+          multiplier = param * 3;
+        } else if (param > 0) {
+          multiplier = param * 4 - 250;
+        }
+      } else {
+        if (param > 2800) {
+          multiplier = param * 0.8525 + 3095;
+        } else if (param > 2100) {
+          multiplier = param * 1.275 + 1915;
+        } else if (param > 1500) {
+          multiplier = param * 1.7 + 1020;
+        } else if (param > 900) {
+          multiplier = param * 2.1225 + 387.5;
+        } else if (param > 0) {
+          multiplier = param * 2.55;
+        }
+      }
+      if (hasFlatterBonus) multiplier += param;
+      multiplier = multiplier * criterion + 100;
+      multiplier = Math.ceil(multiplier) * (1 + supportBonus + (hasFlatterBonus ? 0.01 : 0));
+      multiplier = Math.ceil(Math.floor(multiplier * 10) / 10);
+      multipliers[key] = multiplier / 100;
+    }
+    return multipliers;
+  }
+  getDefaultCardIds(idolConfig, stageConfig2) {
+    if (stageConfig2.type === "linkContest") {
+      return [];
+    }
+    const defaultCardSet = stageConfig2.defaultCardSet || stageConfig2.type;
+    if (defaultCardSet == "event" && idolConfig.recommendedEffect) {
+      return EVENT_DEFAULT_CARD_IDS_BY_RECOMMENDED_EFFECT[idolConfig.recommendedEffect];
+    } else if (idolConfig.plan) {
+      return CONTEST_DEFAULT_CARD_IDS_BY_PLAN[idolConfig.plan];
+    } else if (stageConfig2.plan != "free") {
+      return CONTEST_DEFAULT_CARD_IDS_BY_PLAN[stageConfig2.plan];
+    } else {
+      return CONTEST_DEFAULT_CARD_IDS_BY_PLAN.sense;
+    }
+  }
+};
+
+// ../packages/gakumas-engine/engine/EngineComponent.js
+var EngineComponent = class {
+  constructor(engine) {
+    this.engine = engine;
+    this.logger = engine.logger;
+  }
+  getConfig(state) {
+    return this.engine.getConfig(state);
+  }
+};
+
+// ../packages/gakumas-engine/engine/BuffManager.js
+var BuffManager = class extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+    this.variableResolvers = {
+      isPreservation: (state) => state[S.stance].startsWith("pre"),
+      isStrength: (state) => state[S.stance].startsWith("str"),
+      isNotStrength: (state) => state[S.stance] == "none" || state[S.stance].startsWith("pre"),
+      isFullPower: (state) => state[S.stance] == "fullPower",
+      stanceChangedTimes: (state) => state[S.strengthTimes] + state[S.preservationTimes] + state[S.fullPowerTimes],
+      goodImpressionTurnsEffectBuff: (state) => state[S.goodImpressionTurnsEffectBuffs].reduce(
+        (acc, buff) => acc + buff.amount,
+        1
+      )
+    };
+    this.specialActions = {
+      setScoreBuff: (state, amount, turns) => this.setScoreBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setScoreDebuff: (state, amount, turns) => this.setScoreDebuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setGoodImpressionTurnsBuff: (state, amount, turns) => this.setGoodImpressionTurnsBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setGoodImpressionTurnsEffectBuff: (state, amount, turns) => this.setGoodImpressionTurnsEffectBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setMotivationBuff: (state, amount, turns) => this.setMotivationBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setGoodConditionTurnsBuff: (state, amount, turns) => this.setGoodConditionTurnsBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setConcentrationBuff: (state, amount, turns) => this.setConcentrationBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setEnthusiasmBuff: (state, amount, turns) => this.setEnthusiasmBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      setFullPowerChargeBuff: (state, amount, turns) => this.setFullPowerChargeBuff(
+        state,
+        parseFloat(amount),
+        turns ? parseInt(turns, 10) : null
+      ),
+      removeDebuffs: (state, amount) => this.removeDebuffs(state, parseInt(amount, 10)),
+      setStance: (state, stance) => this.setStance(state, stance),
+      decreaseFullPowerCharge: (state, amount) => {
+        state[S.fullPowerCharge] = Math.max(
+          0,
+          state[S.fullPowerCharge] - parseInt(amount, 10)
+        );
+      }
+    };
+  }
+  initializeState(state) {
+    state[S.halfCostTurns] = 0;
+    state[S.doubleCostTurns] = 0;
+    state[S.costReduction] = 0;
+    state[S.costIncrease] = 0;
+    state[S.nullifyCostCards] = 0;
+    state[S.nullifyDebuff] = 0;
+    state[S.nullifyGenkiTurns] = 0;
+    state[S.doubleCardEffectCards] = 0;
+    state[S.noActiveTurns] = 0;
+    state[S.noMentalTurns] = 0;
+    state[S.noCardUseTurns] = 0;
+    state[S.poorConditionTurns] = 0;
+    state[S.uneaseTurns] = 0;
+    state[S.scoreBuffs] = [];
+    state[S.scoreDebuffs] = [];
+    state[S.goodImpressionTurnsBuffs] = [];
+    state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.motivationBuffs] = [];
+    state[S.goodConditionTurnsBuffs] = [];
+    state[S.concentrationBuffs] = [];
+    state[S.enthusiasmBuffs] = [];
+    state[S.fullPowerChargeBuffs] = [];
+    state[S.goodConditionTurns] = 0;
+    state[S.perfectConditionTurns] = 0;
+    state[S.concentration] = 0;
+    state[S.goodImpressionTurns] = 0;
+    state[S.motivation] = 0;
+    state[S.prideTurns] = 0;
+    state[S.stance] = "none";
+    state[S.lockStanceTurns] = 0;
+    state[S.fullPowerCharge] = 0;
+    state[S.cumulativeFullPowerCharge] = 0;
+    state[S.enthusiasm] = 0;
+    state[S.enthusiasmBonus] = 0;
+    state[S.strengthTimes] = 0;
+    state[S.preservationTimes] = 0;
+    state[S.fullPowerTimes] = 0;
+    state[S.leisureTimes] = 0;
+    state[S.freshBuffs] = {};
+    state[S.goodImpressionTurnsDelta] = 0;
+    state[S.motivationDelta] = 0;
+    state[S.genkiDelta] = 0;
+    state[S.goodConditionTurnsDelta] = 0;
+    state[S.concentrationDelta] = 0;
+    state[S.staminaDelta] = 0;
+    state[S.nullifySelect] = 0;
+  }
+  setBuff(state, field, amount, turns, logLabel) {
+    const buffIndex = state[field].findIndex((b) => b.turns == turns);
+    if (buffIndex != -1) {
+      state[field][buffIndex].amount += amount;
+    } else {
+      state[field].push({
+        amount,
+        turns,
+        fresh: !UNFRESH_PHASES.includes(state[S.phase])
+      });
+    }
+    this.logger.log(state, logLabel, {
+      amount,
+      turns
+    });
+  }
+  setScoreBuff(state, amount, turns) {
+    this.setBuff(state, S.scoreBuffs, amount, turns, "setScoreBuff");
+  }
+  setScoreDebuff(state, amount, turns) {
+    this.setBuff(state, S.scoreDebuffs, amount, turns, "setScoreDebuff");
+  }
+  setGoodImpressionTurnsBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.goodImpressionTurnsBuffs,
+      amount,
+      turns,
+      "setGoodImpressionTurnsBuff"
+    );
+  }
+  setGoodImpressionTurnsEffectBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.goodImpressionTurnsEffectBuffs,
+      amount,
+      turns,
+      "setGoodImpressionTurnsEffectBuff"
+    );
+  }
+  setMotivationBuff(state, amount, turns) {
+    this.setBuff(state, S.motivationBuffs, amount, turns, "setMotivationBuff");
+  }
+  setGoodConditionTurnsBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.goodConditionTurnsBuffs,
+      amount,
+      turns,
+      "setGoodConditionTurnsBuff"
+    );
+  }
+  setConcentrationBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.concentrationBuffs,
+      amount,
+      turns,
+      "setConcentrationBuff"
+    );
+  }
+  setEnthusiasmBuff(state, amount, turns) {
+    this.setBuff(state, S.enthusiasmBuffs, amount, turns, "setEnthusiasmBuff");
+  }
+  setFullPowerChargeBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.fullPowerChargeBuffs,
+      amount,
+      turns,
+      "setFullPowerChargeBuff"
+    );
+  }
+  removeDebuffs(state, amount) {
+    for (let i = 0; i < DEBUFF_FIELDS.length; i++) {
+      const field = DEBUFF_FIELDS[i];
+      if (state[field] > 0) {
+        state[field] = 0;
+        amount--;
+        if (amount <= 0) {
+          break;
+        }
+      }
+    }
+  }
+  decrementBuffTurns(state) {
+    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+      const field = EOT_DECREMENT_FIELDS[i];
+      if (state[S.freshBuffs][field]) {
+        delete state[S.freshBuffs][field];
+      } else if (state[field]) {
+        state[field]--;
+      }
+    }
+    const buffArrayFields = [
+      S.scoreBuffs,
+      S.scoreDebuffs,
+      S.goodImpressionTurnsBuffs,
+      S.goodImpressionTurnsEffectBuffs,
+      S.motivationBuffs,
+      S.goodConditionTurnsBuffs,
+      S.concentrationBuffs,
+      S.enthusiasmBuffs,
+      S.fullPowerChargeBuffs
+    ];
+    for (const field of buffArrayFields) {
+      const buffs = state[field];
+      state[field] = [];
+      for (let i = 0; i < buffs.length; i++) {
+        if (buffs[i].fresh) {
+          buffs[i].fresh = false;
+        } else if (buffs[i].turns) {
+          buffs[i].turns--;
+        }
+        if (buffs[i].turns != 0) {
+          state[field].push(buffs[i]);
+        }
+      }
+    }
+  }
+  setStance(state, stance) {
+    if (state[S.stance] == "fullPower") {
+      if (stance != "none") return;
+    } else if (state[S.lockStanceTurns]) return;
+    if (state[S.stance] == "leisure" && stance.startsWith("preservation"))
+      return;
+    state[S.prevStance] = state[S.stance];
+    if (stance.startsWith("preservation")) {
+      if (state[S.stance].startsWith("preservation")) {
+        state[S.stance] = "preservation2";
+      } else {
+        state[S.stance] = stance;
+      }
+    } else if (stance.startsWith("strength")) {
+      if (state[S.stance].startsWith("strength")) {
+        state[S.stance] = "strength2";
+      } else {
+        state[S.stance] = stance;
+      }
+    } else {
+      state[S.stance] = stance;
+    }
+    if (state[S.stance] != state[S.prevStance] && state[S.stance] != `${state[S.prevStance]}2`) {
+      this.engine.effectManager.triggerEffects(state, STANCE_CHANGED_EFFECTS);
+      this.engine.effectManager.triggerEffectsForPhase(state, "stanceChanged");
+      if (state[S.stance].startsWith("preservation")) {
+        state[S.preservationTimes]++;
+      } else if (state[S.stance].startsWith("strength")) {
+        state[S.strengthTimes]++;
+      } else if (state[S.stance] == "fullPower") {
+        state[S.fullPowerTimes]++;
+      } else if (state[S.stance] == "leisure") {
+        state[S.leisureTimes]++;
+      }
+    }
+  }
+  resetStance(state) {
+    state[S.prevStance] = state[S.stance];
+    state[S.stance] = "none";
+  }
+};
+
+// ../packages/gakumas-engine/engine/CardManager.js
+var CardManager = class extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+    this.variableResolvers = {
+      cardEffects: (state) => this.getCardEffects(state, state[S.usedCard]),
+      cardSourceType: (state) => this.getCardSourceType(state, state[S.usedCard]),
+      cardRarity: (state) => this.getCardRarity(state, state[S.usedCard]),
+      usedCardId: (state) => state[S.usedCard] != null && state[S.cardMap][state[S.usedCard]].id,
+      usedCardBaseId: (state) => state[S.usedCard] != null && state[S.cardMap][state[S.usedCard]].baseId,
+      lastUsedCardType: (state) => state[S.lastUsedCard] != null && skillCards_default.getById(state[S.cardMap][state[S.lastUsedCard]].id).type,
+      movedCardId: (state) => state[S.movedCard] != null && state[S.cardMap][state[S.movedCard]].id,
+      numHeldCards: (state) => state[S.heldCards].length,
+      numRemovedCards: (state) => state[S.removedCards].length,
+      unremovedTroubleCards: (state) => this.countUnremovedTroubleCards(state),
+      countCards: (state, targetRule) => this.getTargetRuleCards(state, targetRule.replaceAll("\\", "*"), null).size
+    };
+    this.specialActions = {
+      drawCard: (state) => this.drawCard(state),
+      upgradeHand: (state) => this.upgradeHand(state),
+      exchangeHand: (state) => this.exchangeHand(state),
+      upgradeRandomCardInHand: (state) => this.upgradeRandomCardInHand(state),
+      addRandomUpgradedCardToHand: (state) => this.addRandomUpgradedCardToHand(state),
+      addRandomUpgradedSSRCardToHand: (state) => this.addRandomUpgradedCardToHand(state, ["SSR"]),
+      addCardToTopOfDeck: (state, cardId) => this.addCardToTopOfDeck(state, cardId),
+      addCardToDeck: (state, cardId) => this.addCardToDeck(state, cardId),
+      addCardToHand: (state, cardId) => this.addCardToHand(state, cardId),
+      moveCardToHand: (state, cardId, exact) => this.moveCardToHand(state, cardId, parseInt(exact, 10)),
+      moveCardToHandFromRemoved: (state, cardBaseId) => this.moveCardToHandFromRemoved(state, cardBaseId),
+      moveSelectedFromDeckOrDiscardsToHand: (state, num = 1) => this.moveSelectedCardToHand(state, ["deck", "discards"], num),
+      moveSSRToTopOfDeck: (state, num) => this.moveSSRToTopOfDeck(state, num),
+      moveSSRToHand: (state, num) => this.moveSSRToHand(state, num),
+      movePreservationCardToHand: (state) => this.movePreservationCardToHand(state),
+      movePIdolCardToHand: (state) => this.movePIdolCardToHand(state),
+      holdCard: (state, cardBaseId) => this.holdCard(state, parseInt(cardBaseId, 10)),
+      holdThisCard: (state) => this.holdThisCard(state),
+      holdSelectedFromHand: (state, num = 1) => this.holdSelectedFrom(state, ["hand"], num),
+      holdSelectedFromDeck: (state, num = 1) => this.holdSelectedFrom(state, ["deck"], num),
+      holdSelectedFromDeckOrDiscards: (state, num = 1) => this.holdSelectedFrom(state, ["deck", "discards"], num),
+      addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
+      removeTroubleFromDeckOrDiscards: (state) => this.removeTroubleFromDeckOrDiscards(state),
+      moveActiveCardsToDeckFromRemoved: (state) => this.moveActiveCardsToDeckFromRemoved(state),
+      useRandomCardFree: (state, targetRule) => this.useRandomCardFree(state, targetRule),
+      removeBasicCard: (state) => this.removeBasicCard(state)
+    };
+  }
+  initializeState(state) {
+    const config = this.getConfig(state);
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+    const cardMaps = [];
+    for (let c = 0; c < configs.length; c++) {
+      const cards = configs[c].idol.cards.concat(
+        configs[c].defaultCardIds.map((id) => ({ id }))
+      );
+      const cardMap = cards.map(({ id, customizations }) => {
+        const card = {
+          id,
+          baseId: getBaseId(skillCards_default.getById(id))
+        };
+        if (customizations && Object.keys(customizations).length) {
+          card.c11n = customizations;
+        }
+        return card;
+      });
+      cardMaps.push(cardMap);
+    }
+    state[S.cardMap] = cardMaps.flat();
+    this.changeIdol(state);
+    state[S.heldCards] = [];
+    state[S.cardsUsed] = 0;
+    state[S.activeCardsUsed] = 0;
+    state[S.usedCard] = null;
+    state[S.lastUsedCard] = null;
+    state[S.movedCard] = null;
+    state[S.pcchiCardsUsed] = 0;
+    state[S.natsuyaCardsUsed] = 0;
+    state[S.holidayCardsUsed] = 0;
+    state[S.onigiriCardsUsed] = 0;
+  }
+  changeIdol(state) {
+    const config = this.getConfig(state);
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+    let index = 0;
+    for (let c = 0; c < state[S.linkPhase]; c++) {
+      index += configs[c].idol.cards.length + configs[c].defaultCardIds.length;
+    }
+    let deckCards = [];
+    const numCards = config.idol.cards.length + config.defaultCardIds.length;
+    for (let i = 0; i < numCards; i++) {
+      deckCards.push(index + i);
+    }
+    state[S.deckCards] = deckCards;
+    shuffle(state[S.deckCards]);
+    state[S.deckCards].sort((a, b) => {
+      if (this.isForceInitialHand(state, a)) return 1;
+      if (this.isForceInitialHand(state, b)) return -1;
+      return 0;
+    });
+    state[S.handCards] = [];
+    state[S.discardedCards] = [];
+    state[S.removedCards] = [];
+    state[S.turnCardsUsed] = 0;
+    state[S.turnCardsUpgraded] = 0;
+  }
+  isForceInitialHand(state, card) {
+    const { id, c11n } = state[S.cardMap][card];
+    if (skillCards_default.getById(id).forceInitialHand) {
+      return true;
+    }
+    if (c11n && Object.keys(c11n).filter((k) => c11n[k]).some((k) => customizations_default2.getById(k).forceInitialHand)) {
+      return true;
+    }
+    return false;
+  }
+  getLines(state, card, attribute) {
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    let attr = skillCard[attribute] || [];
+    const c11n = state[S.cardMap][card].c11n;
+    if (!c11n || !Object.keys(c11n).length) return attr;
+    attr = [...attr];
+    for (let k in c11n) {
+      const c11nAttr = customizations_default2.getById(k)[attribute] || [];
+      for (let i = 0; i < c11nAttr.length; i++) {
+        if ((c11nAttr[i].level || 1) != c11n[k]) continue;
+        if (c11nAttr[i].line) {
+          attr.splice(c11nAttr[i].line - 1, 1, c11nAttr[i]);
+        } else {
+          attr = attr.concat(c11nAttr[i]);
+        }
+      }
+    }
+    return attr;
+  }
+  getCardEffects(state, card) {
+    let cardEffects = /* @__PURE__ */ new Set();
+    if (card == null) return cardEffects;
+    const effects = this.getLines(state, card, "effects");
+    for (let i = 0; i < effects.length; i++) {
+      const effect = effects[i];
+      if (!effect.actions) continue;
+      for (let j = 0; j < effect.actions.length; j++) {
+        const tokens = effect.actions[j];
+        if (!tokens?.[0]?.length) continue;
+        let cardEffect = tokens[0];
+        if (cardEffect.startsWith("setStance")) {
+          cardEffect = cardEffect.match(FUNCTION_CALL_REGEX)[2];
+          cardEffect = cardEffect.replace(/\d/g, "");
+        }
+        cardEffects.add(cardEffect);
+      }
+    }
+    return cardEffects;
+  }
+  getCardSourceType(state, card) {
+    if (card == null) return null;
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    return skillCard.sourceType;
+  }
+  getCardRarity(state, card) {
+    if (card == null) return null;
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    return skillCard.rarity;
+  }
+  grow(state, cards, actions) {
+    for (let i = 0; i < cards.length; i++) {
+      const card = state[S.cardMap][cards[i]];
+      if (!card.growth) card.growth = {};
+      this.engine.executor.executeGrowthActions(card.growth, actions);
+      this.logger.log(state, "growth", { type: "skillCard", id: card.id });
+    }
+  }
+  drawCard(state) {
+    if (state[S.handCards].length >= 5) return;
+    if (!state[S.deckCards].length) {
+      if (!state[S.discardedCards].length) return;
+      this.recycleDiscards(state);
+    }
+    const card = state[S.deckCards].pop();
+    state[S.handCards].push(card);
+    state[S.movedCard] = card;
+    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
+    this.logger.debug(
+      "Drew card",
+      skillCards_default.getById(state[S.cardMap][card].id).name
+    );
+    this.logger.log(state, "drawCard", {
+      type: "skillCard",
+      id: state[S.cardMap][card].id
+    });
+  }
+  recycleDiscards(state) {
+    shuffle(state[S.discardedCards]);
+    state[S.deckCards] = state[S.discardedCards];
+    state[S.discardedCards] = [];
+    this.logger.debug("Recycled discard pile");
+  }
+  peekDeck(state) {
+    return state[S.deckCards][state[S.deckCards].length - 1];
+  }
+  isCardUsable(state, card) {
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    if (state[S.noCardUseTurns]) return false;
+    if (state[S.noActiveTurns] && skillCard.type == "active") return false;
+    if (state[S.noMentalTurns] && skillCard.type == "mental") return false;
+    const conditions = this.getLines(state, card, "conditions").map((c) => c.conditions).flat();
+    for (let i = 0; i < conditions.length; i++) {
+      if (!this.engine.evaluator.evaluateCondition(state, conditions[i])) {
+        return false;
+      }
+    }
+    const cost = this.getLines(state, card, "cost").map((c) => c.actions).flat();
+    const previewState = shallowCopy(state);
+    previewState[S.phase] = "checkCost";
+    for (let i = 0; i < cost.length; i++) {
+      this.engine.executor.executeAction(previewState, cost[i], card);
+    }
+    for (let i = 0; i < COST_FIELDS.length; i++) {
+      if (previewState[COST_FIELDS[i]] < 0) return false;
+    }
+    return true;
+  }
+  useCard(state, card) {
+    const handIndex = state[S.handCards].indexOf(card);
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    const c11n = state[S.cardMap][card].c11n;
+    this.logger.log(state, "entityStart", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+    this.logger.debug("Using card", skillCard.id, skillCard.name);
+    state[S.usedCard] = card;
+    let conditionState = shallowCopy(state);
+    this.logger.debug("Applying cost", skillCard.cost);
+    const cost = this.getLines(state, card, "cost").map((c) => c.actions).flat();
+    state[S.phase] = "processCost";
+    this.engine.executor.executeActions(state, cost, card);
+    delete state[S.phase];
+    if (state[S.nullifyCostCards]) state[S.nullifyCostCards]--;
+    state[S.handCards].splice(handIndex, 1);
+    state[S.cardUsesRemaining]--;
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "cardUsed",
+      conditionState
+    );
+    if (skillCard.type == "active") {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "activeCardUsed",
+        conditionState
+      );
+    } else if (skillCard.type == "mental") {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "mentalCardUsed",
+        conditionState
+      );
+    }
+    const effects = this.getLines(state, card, "effects");
+    state[S.phase] = "processCard";
+    if (state[S.doubleCardEffectCards]) {
+      state[S.doubleCardEffectCards]--;
+      this.engine.effectManager.triggerEffects(state, effects, null, card);
+    }
+    this.engine.effectManager.triggerEffects(state, effects, null, card);
+    delete state[S.phase];
+    state[S.cardsUsed]++;
+    state[S.turnCardsUsed]++;
+    if (skillCard.type == "active") {
+      state[S.activeCardsUsed]++;
+    }
+    conditionState = shallowCopy(state);
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "afterCardUsed",
+      conditionState
+    );
+    if (skillCard.type == "active") {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "afterActiveCardUsed",
+        conditionState
+      );
+    } else if (skillCard.type == "mental") {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "afterMentalCardUsed",
+        conditionState
+      );
+    }
+    state[S.lastUsedCard] = state[S.usedCard];
+    state[S.usedCard] = null;
+    this.logger.log(state, "entityEnd", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+    if (state[S.thisCardHeld]) {
+      state[S.thisCardHeld] = false;
+    } else if (!skillCard.limit) {
+      state[S.discardedCards].push(card);
+    } else if (c11n && Object.keys(c11n).map(customizations_default2.getById).some((c) => c11n[c.id] && c?.limit === 0)) {
+      state[S.discardedCards].push(card);
+    } else {
+      state[S.removedCards].push(card);
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardRemoved",
+        conditionState
+      );
+    }
+    if (state[S.cardUsesRemaining] < 1) {
+      this.engine.turnManager.endTurn(state);
+    }
+  }
+  isUpgradable(state, card) {
+    const skillCard = skillCards_default.getById(state[S.cardMap][card].id);
+    return !skillCard.upgraded && skillCard.type != "trouble" && skillCard.rarity != "L";
+  }
+  upgrade(state, card) {
+    state[S.cardMap][card].id++;
+    state[S.turnCardsUpgraded]++;
+  }
+  discardHand(state) {
+    while (state[S.handCards].length) {
+      state[S.discardedCards].push(state[S.handCards].pop());
+    }
+  }
+  upgradeHand(state) {
+    for (let i = 0; i < state[S.handCards].length; i++) {
+      if (this.isUpgradable(state, state[S.handCards][i])) {
+        this.upgrade(state, state[S.handCards][i]);
+      }
+    }
+    this.logger.log(state, "upgradeHand");
+  }
+  exchangeHand(state) {
+    const numCards = state[S.handCards].length;
+    this.discardHand(state);
+    this.logger.log(state, "exchangeHand");
+    for (let i = 0; i < numCards; i++) {
+      this.drawCard(state);
+    }
+  }
+  upgradeRandomCardInHand(state) {
+    let unupgradedCards = [];
+    for (let i = 0; i < state[S.handCards].length; i++) {
+      if (this.isUpgradable(state, state[S.handCards][i])) {
+        unupgradedCards.push(state[S.handCards][i]);
+      }
+    }
+    if (!unupgradedCards.length) return;
+    const randomCard = unupgradedCards[Math.floor(getRand() * unupgradedCards.length)];
+    this.upgrade(state, randomCard);
+    this.logger.log(state, "upgradeRandomCardInHand", {
+      type: "skillCard",
+      id: state[S.cardMap][randomCard].id
+    });
+  }
+  addRandomUpgradedCardToHand(state, rarities = ["R", "SR", "SSR"]) {
+    const validSkillCards = skillCards_default.getFiltered({
+      rarities,
+      plans: [this.getConfig(state).idol.plan, "free"],
+      sourceTypes: ["produce"]
+    }).filter((card) => card.upgraded);
+    const skillCard = validSkillCards[Math.floor(getRand() * validSkillCards.length)];
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard)
+    });
+    state[S.handCards].push(state[S.cardMap].length - 1);
+    this.logger.log(state, "addCardToHand", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+  }
+  addCardToTopOfDeck(state, cardId) {
+    const skillCard = skillCards_default.getById(cardId);
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard)
+    });
+    state[S.deckCards].push(state[S.cardMap].length - 1);
+    this.logger.log(state, "addCardToTopOfDeck", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+  }
+  addCardToDeck(state, cardId) {
+    const skillCard = skillCards_default.getById(cardId);
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard)
+    });
+    const cardIdx = state[S.cardMap].length - 1;
+    const insertPos = Math.floor(getRand() * (state[S.deckCards].length + 1));
+    state[S.deckCards].splice(insertPos, 0, cardIdx);
+    this.logger.log(state, "addCardToDeckAtRandom", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+  }
+  addCardToHand(state, cardId) {
+    const skillCard = skillCards_default.getById(cardId);
+    state[S.cardMap].push({
+      id: skillCard.id,
+      baseId: getBaseId(skillCard)
+    });
+    state[S.handCards].push(state[S.cardMap].length - 1);
+    this.logger.log(state, "addCardToHand", {
+      type: "skillCard",
+      id: skillCard.id
+    });
+  }
+  // From deck/discards
+  moveCardToHand(state, cardId, exact) {
+    let matchingCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        if (exact && card.id == cardId) {
+          matchingCards.push({ pile, index: i, cardIdx });
+        } else if (!exact && card.baseId == cardId) {
+          matchingCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!matchingCards.length) return;
+    const pick = matchingCards[Math.floor(getRand() * matchingCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+    state[S.movedCard] = pick.cardIdx;
+    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id
+    });
+  }
+  moveCardToHandFromRemoved(state, cardBaseId) {
+    let cards = state[S.cardMap].map((c, i) => c.baseId == cardBaseId ? i : -1).filter((i) => i != -1);
+    if (!cards.length) return;
+    const card = cards[Math.floor(getRand() * cards.length)];
+    const index = state[S.removedCards].indexOf(card);
+    if (index != -1) {
+      state[S.removedCards].splice(index, 1);
+      state[S.handCards].push(card);
+      state[S.movedCard] = card;
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardMovedToHand"
+      );
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: state[S.cardMap][card].id
+      });
+    }
+  }
+  moveSSRToTopOfDeck(state, num) {
+    let ssrCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        const skillCard = skillCards_default.getById(card.id);
+        if (skillCard.rarity === "SSR") {
+          ssrCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!ssrCards.length) return;
+    for (let i = 0; i < num && ssrCards.length; i++) {
+      const pick = ssrCards.splice(
+        Math.floor(getRand() * ssrCards.length),
+        1
+      )[0];
+      const remainingFromSamePile = ssrCards.filter(
+        (card) => card.pile === pick.pile
+      );
+      remainingFromSamePile.sort((a, b) => b.index - a.index);
+      for (let card of remainingFromSamePile) {
+        if (card.index > pick.index) {
+          card.index--;
+        }
+      }
+      state[pick.pile].splice(pick.index, 1);
+      state[S.deckCards].push(pick.cardIdx);
+      this.logger.log(state, "moveCardToTopOfDeck", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id
+      });
+    }
+  }
+  moveSSRToHand(state, num) {
+    let ssrCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        const skillCard = skillCards_default.getById(card.id);
+        if (skillCard.rarity === "SSR") {
+          ssrCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!ssrCards.length) return;
+    for (let i = 0; i < num && ssrCards.length; i++) {
+      const pick = ssrCards.splice(
+        Math.floor(getRand() * ssrCards.length),
+        1
+      )[0];
+      const remainingFromSamePile = ssrCards.filter(
+        (card) => card.pile === pick.pile
+      );
+      remainingFromSamePile.sort((a, b) => b.index - a.index);
+      for (let card of remainingFromSamePile) {
+        if (card.index > pick.index) {
+          card.index--;
+        }
+      }
+      state[pick.pile].splice(pick.index, 1);
+      state[S.handCards].push(pick.cardIdx);
+      state[S.movedCard] = pick.cardIdx;
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardMovedToHand"
+      );
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: state[S.cardMap][pick.cardIdx].id
+      });
+    }
+  }
+  movePreservationCardToHand(state) {
+    let preservationCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (this.getCardEffects(state, cardIdx).has("preservation")) {
+          preservationCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!preservationCards.length) return;
+    const pick = preservationCards[Math.floor(getRand() * preservationCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+    state[S.movedCard] = pick.cardIdx;
+    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id
+    });
+  }
+  movePIdolCardToHand(state) {
+    let pIdolCards = [];
+    for (let pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        if (this.getCardSourceType(state, cardIdx) === "pIdol") {
+          pIdolCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!pIdolCards.length) return;
+    const pick = pIdolCards[Math.floor(getRand() * pIdolCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.handCards].push(pick.cardIdx);
+    state[S.movedCard] = pick.cardIdx;
+    this.engine.effectManager.triggerEffectsForPhase(state, "cardMovedToHand");
+    this.logger.log(state, "moveCardToHand", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id
+    });
+  }
+  moveActiveCardsToDeckFromRemoved(state) {
+    let cards = state[S.cardMap].map(
+      (c, i) => state[S.removedCards].includes(i) && skillCards_default.getById(c.id).type == "active" ? i : -1
+    ).filter((i) => i != -1);
+    if (!cards.length) return;
+    cards.forEach((card) => {
+      const index = state[S.removedCards].indexOf(card);
+      if (index != -1) {
+        state[S.removedCards].splice(index, 1);
+        const insertIndex = Math.floor(getRand() * state[S.deckCards].length);
+        state[S.deckCards].splice(insertIndex, 0, card);
+        this.logger.log(state, "moveCardToDeckAtRandom", {
+          type: "skillCard",
+          id: state[S.cardMap][card].id
+        });
+      }
+    });
+  }
+  hold(state, card) {
+    if (card != null) {
+      state[S.heldCards].push(card);
+      this.logger.log(state, "holdCard", {
+        type: "skillCard",
+        id: state[S.cardMap][card].id
+      });
+    }
+  }
+  enforceHoldLimit(state) {
+    while (state[S.heldCards].length > 2) {
+      const discardedCard = state[S.heldCards].shift();
+      state[S.discardedCards].push(discardedCard);
+      this.logger.log(state, "discardCard", {
+        type: "skillCard",
+        id: state[S.cardMap][discardedCard].id
+      });
+    }
+  }
+  moveSelectedCardToHand(state, sources, num = 1) {
+    if (state[S.nullifySelect]) return;
+    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
+    const sourceCards = sourceKeys.map((k) => state[k]);
+    const cards = [].concat(...sourceCards);
+    if (!cards.length) return;
+    const indicesToMove = this.engine.strategy.pickCardsToMoveToHand(
+      state,
+      cards,
+      num
+    );
+    indicesToMove.sort((a, b) => b - a);
+    if (indicesToMove.length === 0) return;
+    for (let j = 0; j < indicesToMove.length; j++) {
+      let indexToMove = indicesToMove[j];
+      for (let i = 0; i < sources.length; i++) {
+        if (indexToMove < sourceCards[i].length) {
+          const card = state[sourceKeys[i]].splice(indexToMove, 1)[0];
+          state[S.handCards].push(card);
+          state[S.movedCard] = card;
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            "cardMovedToHand"
+          );
+          this.logger.log(state, "moveCardToHand", {
+            type: "skillCard",
+            id: state[S.cardMap][card].id
+          });
+          break;
+        } else {
+          indexToMove -= sourceCards[i].length;
+        }
+      }
+    }
+  }
+  holdSelectedFrom(state, sources, num = 1) {
+    if (state[S.nullifySelect]) return;
+    const sourceKeys = sources.map((s) => HOLD_SOURCES_BY_ALIAS[s]);
+    const sourceCards = sourceKeys.map((k) => state[k]);
+    const cards = [].concat(...sourceCards);
+    if (!cards.length) return;
+    const indicesToHold = this.engine.strategy.pickCardsToHold(
+      state,
+      cards,
+      num
+    );
+    indicesToHold.sort((a, b) => b - a);
+    if (indicesToHold.length === 0) return;
+    for (let j = 0; j < indicesToHold.length; j++) {
+      let indexToHold = indicesToHold[j];
+      for (let i = 0; i < sources.length; i++) {
+        if (indexToHold < sourceCards[i].length) {
+          const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
+          this.hold(state, card);
+          break;
+        } else {
+          indexToHold -= sourceCards[i].length;
+        }
+      }
+    }
+    this.enforceHoldLimit(state);
+  }
+  holdCard(state, cardBaseId) {
+    const card = state[S.cardMap].findIndex((c) => c.baseId == cardBaseId);
+    for (let i = 0; i < CARD_PILES.length; i++) {
+      const index = state[CARD_PILES[i]].indexOf(card);
+      if (index != -1) {
+        state[CARD_PILES[i]].splice(index, 1);
+        this.hold(state, card);
+        break;
+      }
+    }
+    this.enforceHoldLimit(state);
+  }
+  holdThisCard(state) {
+    this.hold(state, state[S.usedCard]);
+    this.enforceHoldLimit(state);
+    state[S.thisCardHeld] = true;
+  }
+  addHeldCardsToHand(state) {
+    while (state[S.heldCards].length) {
+      const card = state[S.heldCards].pop();
+      state[S.handCards].push(card);
+      state[S.movedCard] = card;
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardMovedToHand"
+      );
+      this.logger.log(state, "moveCardToHand", {
+        type: "skillCard",
+        id: state[S.cardMap][card].id
+      });
+    }
+  }
+  removeTroubleFromDeckOrDiscards(state) {
+    const troubleCards = state[S.cardMap].filter((c) => c.type == "trouble");
+    if (!troubleCards.length) return;
+    const card = troubleCards[Math.floor(Math.random() * troubleCards.length)];
+    let index = state[S.deckCards].indexOf(card);
+    let pile = S.deckCards;
+    if (index == -1) {
+      index = state[S.discardedCards].indexOf(card);
+      pile = S.discardedCards;
+    }
+    if (index != -1) {
+      state[pile].splice(index, 1);
+      this.logger.log(state, "removeCard", {
+        type: "skillCard",
+        id: state[S.cardMap][card].id
+      });
+    }
+  }
+  getTargetRuleCards(state, targetRule, source) {
+    let targetRuleCards = null;
+    const targets = targetRule.split("*");
+    for (let i = 0; i < targets.length; i++) {
+      const targetCards = this.getTargetCards(state, targets[i], source);
+      if (targetRuleCards) {
+        for (let card of targetRuleCards.values()) {
+          if (!targetCards.has(card)) {
+            targetRuleCards.delete(card);
+          }
+        }
+      } else {
+        targetRuleCards = targetCards;
+      }
+    }
+    return targetRuleCards;
+  }
+  getTargetCards(state, target, source) {
+    let targetCards = /* @__PURE__ */ new Set();
+    if (target == "this") {
+      if (!source || !("idx" in source)) {
+        console.warn("Growth target not found");
+      } else {
+        targetCards.add(source.idx);
+      }
+    } else if (target == "hand") {
+      for (let k = 0; k < state[S.handCards].length; k++) {
+        targetCards.add(state[S.handCards][k]);
+      }
+    } else if (target == "deck") {
+      for (let k = 0; k < state[S.deckCards].length; k++) {
+        targetCards.add(state[S.deckCards][k]);
+      }
+    } else if (target == "discarded") {
+      for (let k = 0; k < state[S.discardedCards].length; k++) {
+        targetCards.add(state[S.discardedCards][k]);
+      }
+    } else if (target == "held") {
+      for (let k = 0; k < state[S.heldCards].length; k++) {
+        targetCards.add(state[S.heldCards][k]);
+      }
+    } else if (target == "removed") {
+      for (let k = 0; k < state[S.removedCards].length; k++) {
+        targetCards.add(state[S.removedCards][k]);
+      }
+    } else if (target == "all") {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        targetCards.add(k);
+      }
+    } else if (["active", "mental"].includes(target)) {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (skillCards_default.getById(state[S.cardMap][k].id).type == target) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^sourceType\(.+\)$/.test(target)) {
+      const sourceType = target.match(/^sourceType\((.+)\)/)[1];
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (this.getCardSourceType(state, k) == sourceType) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^effect\(.+\)$/.test(target)) {
+      const effect = target.match(/^effect\((.+)\)/)[1];
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (this.getCardEffects(state, k).has(effect)) {
+          targetCards.add(k);
+        }
+      }
+    } else if (["T", "N", "R", "SR", "SSR", "L"].includes(target)) {
+      const rarity = target;
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (this.getCardRarity(state, k) == rarity) {
+          targetCards.add(k);
+        }
+      }
+    } else if (/^\d+$/.test(target)) {
+      for (let k = 0; k < state[S.cardMap].length; k++) {
+        if (state[S.cardMap][k].baseId == target) {
+          targetCards.add(k);
+        }
+      }
+    }
+    return targetCards;
+  }
+  countUnremovedTroubleCards(state) {
+    let count = 0;
+    for (let i = 0; i < state[S.cardMap].length; i++) {
+      const card = state[S.cardMap][i];
+      const skillCard = skillCards_default.getById(card.id);
+      if (skillCard.type == "trouble" && !state[S.removedCards].includes(i)) {
+        count++;
+      }
+    }
+    return count;
+  }
+  useRandomCardFree(state, targetRule) {
+    const targetCards = this.getTargetRuleCards(state, targetRule);
+    const usableCards = [];
+    for (let card2 of targetCards.values()) {
+      if (state[S.handCards].includes(card2) && this.isCardUsable(state, card2)) {
+        usableCards.push(card2);
+      }
+    }
+    if (!usableCards.length) return;
+    const card = usableCards[Math.floor(getRand() * usableCards.length)];
+    state[S.nullifyCostCards] += 1;
+    this.useCard(state, card);
+  }
+  removeBasicCard(state) {
+    let basicCards = [];
+    for (let pile of [S.deckCards, S.discardedCards, S.handCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        const skillCard = skillCards_default.getById(card.id);
+        if (skillCard.name.includes("\u57FA\u672C")) {
+          basicCards.push({ pile, index: i, cardIdx });
+        }
+      }
+    }
+    if (!basicCards.length) return;
+    const pick = basicCards[Math.floor(getRand() * basicCards.length)];
+    state[pick.pile].splice(pick.index, 1);
+    this.logger.log(state, "removeCard", {
+      type: "skillCard",
+      id: state[S.cardMap][pick.cardIdx].id
+    });
+  }
+};
+
+// ../packages/gakumas-engine/engine/EffectManager.js
+var EffectManager = class extends EngineComponent {
+  initializeState(state) {
+    const config = this.getConfig(state);
+    state[S.effects] = [];
+    this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
+    this.setEffects(state, DEFAULT_EFFECTS);
+    this.logger.debug("Setting stage effects", config.stage.effects);
+    this.setEffects(state, config.stage.effects, { type: "stage" });
+    let configs = [config];
+    if (config.stage.type === "linkContest") {
+      configs = this.engine.linkConfigs || [];
+    }
+    for (let c = 0; c < configs.length; c++) {
+      const { pItemIds } = configs[c].idol;
+      for (let i = 0; i < pItemIds.length; i++) {
+        const pItem = pItems_default.getById(pItemIds[i]);
+        this.logger.debug("Setting p-item effects", pItem.name, pItem.effects);
+        this.setEffects(state, pItem.effects, {
+          type: "pItem",
+          id: pItemIds[i]
+        });
+      }
+    }
+    this.initializeGrowthEffects(state);
+  }
+  initializeGrowthEffects(state) {
+    for (let i = 0; i < state[S.cardMap].length; i++) {
+      const skillCardId = state[S.cardMap][i].id;
+      const skillCard = skillCards_default.getById(skillCardId);
+      const growth = this.engine.cardManager.getLines(state, i, "growth");
+      if (growth.length) {
+        this.logger.debug("Setting growth effects", skillCard.name, growth);
+        this.setEffects(state, growth, {
+          type: "skillCard",
+          id: skillCardId,
+          idx: i
+        });
+      }
+    }
+  }
+  setEffects(state, effects, source) {
+    for (let i = 0; i < effects.length; i++) {
+      const effect = { ...effects[i] };
+      if (source) {
+        effect.source = source;
+      }
+      if (!effect.actions && i < effects.length - 1) {
+        effect.effects = [effects[++i]];
+      }
+      state[S.effects].push(effect);
+    }
+  }
+  clearPrestageEffects(state) {
+    state[S.effects] = state[S.effects].filter(
+      (effect) => effect.phase != "prestage"
+    );
+  }
+  clearExpiredEffects(state) {
+    state[S.effects] = state[S.effects].map((effect) => {
+      if (effect.limit != null && effect.limit < 1) return {};
+      if (effect.ttl != null && effect.ttl < 0) return {};
+      return effect;
+    });
+  }
+  triggerEffectsForPhase(state, phase, conditionState) {
+    state[S.parentPhase] = state[S.phase];
+    state[S.phase] = phase;
+    let effectsByGroup = {};
+    for (let i = 0; i < state[S.effects].length; i++) {
+      const effect = state[S.effects][i];
+      if (effect.phase != phase) continue;
+      const group = effect.group || 0;
+      if (!effectsByGroup[group]) effectsByGroup[group] = [];
+      effectsByGroup[group].push({ ...effect, phase: null, index: i });
+    }
+    const groupKeys = Object.keys(effectsByGroup);
+    this.logger.debug(phase, effectsByGroup);
+    for (let i = 0; i < groupKeys.length; i++) {
+      const triggeredEffects = this.triggerEffects(
+        state,
+        effectsByGroup[groupKeys[i]],
+        conditionState
+      );
+      for (let j = 0; j < triggeredEffects.length; j++) {
+        const effectIndex = triggeredEffects[j];
+        if (state[S.effects][effectIndex].limit) {
+          state[S.effects][effectIndex].limit--;
+        }
+      }
+    }
+    state[S.phase] = state[S.parentPhase];
+  }
+  triggerEffects(state, effects, cndState, card, skipConditions) {
+    const conditionState = cndState || shallowCopy(state);
+    let triggeredEffects = [];
+    let skipNextEffect = false;
+    this.logger.debug(effects);
+    for (let i = 0; i < effects.length; i++) {
+      if (skipNextEffect) {
+        this.logger.debug("Skipping effect", effects[i]);
+        skipNextEffect = false;
+        continue;
+      }
+      const effect = effects[i];
+      if (effect.phase) {
+        this.logger.debug("Setting effects", effect.effects);
+        this.setEffects(
+          state,
+          [effect],
+          card != null ? {
+            type: "skillCardEffect",
+            id: state[S.cardMap][card].id,
+            idx: card
+          } : null
+        );
+        this.logger.log(state, "setEffect");
+        continue;
+      }
+      if (effect.limit != null && effect.limit < 1) {
+        this.logger.debug("Effect limit reached", effect.limit);
+        continue;
+      }
+      if (effect.ttl != null && effect.ttl < 0) {
+        this.logger.debug("Effect ttl reached", effect.ttl);
+        continue;
+      }
+      if (effect.delay != null && effect.delay >= 0) {
+        this.logger.debug("Effect delay", effect.delay);
+        continue;
+      }
+      if (!skipConditions && effect.conditions) {
+        let satisfied = true;
+        for (let j = 0; j < effect.conditions.length; j++) {
+          const condition = effect.conditions[j];
+          if (!this.engine.evaluator.evaluateCondition(conditionState, condition)) {
+            satisfied = false;
+            break;
+          }
+        }
+        if (!satisfied) {
+          if (!effect.actions && !effect.effects) {
+            skipNextEffect = true;
+          }
+          continue;
+        }
+      }
+      if (effect.source) {
+        this.logger.log(state, "entityStart", effect.source);
+      }
+      this.logger.debug("Executing actions", effect.actions);
+      if (effect.targets) {
+        let growthCards = /* @__PURE__ */ new Set();
+        for (let j = 0; j < effect.targets.length; j++) {
+          const targetRuleCards = this.engine.cardManager.getTargetRuleCards(
+            state,
+            effect.targets[j],
+            effect.source
+          );
+          for (let card2 of targetRuleCards) {
+            growthCards.add(card2);
+          }
+        }
+        this.engine.cardManager.grow(state, [...growthCards], effect.actions);
+      } else {
+        if (effect.actions) {
+          this.engine.executor.executeActions(state, effect.actions, card);
+        }
+        if (effect.effects) {
+          this.logger.debug("Setting effects", effect.effects);
+          this.setEffects(state, effect.effects, effect.source);
+          this.logger.log(state, "setEffect");
+        }
+      }
+      if (effect.source) {
+        this.logger.log(state, "entityEnd", effect.source);
+      }
+      triggeredEffects.push(effect.index);
+    }
+    return triggeredEffects;
+  }
+  decrementTtl(state) {
+    for (let i = 0; i < state[S.effects].length; i++) {
+      if (state[S.effects][i].ttl == null || state[S.effects][i].ttl == -1)
+        continue;
+      state[S.effects][i].ttl--;
+    }
+  }
+  decrementDelay(state) {
+    for (let i = 0; i < state[S.effects].length; i++) {
+      if (state[S.effects][i].delay == null || state[S.effects][i].delay == -1)
+        continue;
+      state[S.effects][i].delay--;
+    }
+  }
+};
+
+// ../packages/gakumas-engine/engine/Evaluator.js
+var Evaluator = class extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+    this.variableResolvers = {
+      maxStamina: (state) => this.getConfig(state).idol.params.stamina,
+      clearRatio: () => 0,
+      ...this.engine.turnManager.variableResolvers,
+      ...this.engine.cardManager.variableResolvers,
+      ...this.engine.buffManager.variableResolvers
+    };
+  }
+  evaluateCondition(state, condition) {
+    const tokens = condition;
+    const result = this.evaluateExpression(state, tokens);
+    this.logger.debug("Condition", condition, result);
+    return result;
+  }
+  evaluateExpression(state, tokens) {
+    const evaluate = (tokens2) => {
+      if (tokens2.length == 1) {
+        if (tokens2[0] in S && S[tokens2[0]] in state) {
+          return state[S[tokens2[0]]];
+        }
+        const match = tokens2[0].match(FUNCTION_CALL_REGEX);
+        if (match[1] in this.variableResolvers && match[2]) {
+          const args = match[2].split(",");
+          return this.variableResolvers[match[1]](state, ...args);
+        }
+        if (tokens2[0] in this.variableResolvers) {
+          return this.variableResolvers[tokens2[0]](state);
+        }
+        if (STANCES.includes(tokens2[0])) {
+          return tokens2[0];
+        }
+        if (PHASES.includes(tokens2[0])) {
+          return tokens2[0];
+        }
+        if (SOURCE_TYPES.includes(tokens2[0])) {
+          return tokens2[0];
+        }
+        if (RARITIES.includes(tokens2[0])) {
+          return tokens2[0];
+        }
+        if (SKILL_CARD_TYPES.includes(tokens2[0])) {
+          return tokens2[0];
+        }
+        if (NUMBER_REGEX.test(tokens2[0])) {
+          return parseFloat(tokens2[0]);
+        }
+        console.warn(`Invalid token: ${tokens2[0]}`);
+      }
+      if (tokens2[1] == SET_OPERATOR) {
+        if (tokens2.length != 3) {
+          console.warn("Invalid set contains");
+        }
+        const lhs = evaluate([tokens2[0]]);
+        return lhs.has(tokens2[2]);
+      }
+      const cmpIndex = tokens2.findIndex((t) => BOOLEAN_OPERATORS.includes(t));
+      if (cmpIndex != -1) {
+        const lhs = evaluate(tokens2.slice(0, cmpIndex));
+        const cmp = tokens2[cmpIndex];
+        const rhs = evaluate(tokens2.slice(cmpIndex + 1));
+        if (cmp == ">=") {
+          return lhs >= rhs;
+        } else if (cmp == "==") {
+          return lhs == rhs;
+        } else if (cmp == "<=") {
+          return lhs <= rhs;
+        } else if (cmp == "!=") {
+          return lhs != rhs;
+        } else if (cmp == ">") {
+          return lhs > rhs;
+        } else if (cmp == "<") {
+          return lhs < rhs;
+        }
+        console.warn(`Unrecognized comparator: ${cmp}`);
+      }
+      const asIndex = tokens2.findIndex((t) => ADDITIVE_OPERATORS.includes(t));
+      if (asIndex != -1) {
+        const lhs = evaluate(tokens2.slice(0, asIndex));
+        const op = tokens2[asIndex];
+        const rhs = evaluate(tokens2.slice(asIndex + 1));
+        if (op == "+") {
+          return lhs + rhs;
+        } else if (op == "-") {
+          return lhs - rhs;
+        }
+        console.warn(`Unrecognized operator: ${op}`);
+      }
+      const mdIndex = tokens2.findIndex(
+        (t) => MULTIPLICATIVE_OPERATORS.includes(t)
+      );
+      if (mdIndex != -1) {
+        const lhs = evaluate(tokens2.slice(0, mdIndex));
+        const op = tokens2[mdIndex];
+        const rhs = evaluate(tokens2.slice(mdIndex + 1));
+        if (op == "*") {
+          return lhs * rhs;
+        } else if (op == "/") {
+          return lhs / rhs;
+        } else if (op == "%") {
+          return lhs % rhs;
+        }
+        console.warn(`Unrecognized operator: ${op}`);
+      }
+    };
+    return evaluate(tokens);
+  }
+};
+
+// ../packages/gakumas-engine/engine/Executor.js
+var Executor = class extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+    this.specialActions = {
+      ...this.engine.cardManager.specialActions,
+      ...this.engine.buffManager.specialActions
+    };
+    this.intermediateResolvers = {
+      cost: (...args) => this.resolveCost(...args),
+      fixedGenki: (...args) => this.resolveFixedGenki(...args),
+      fixedStamina: (...args) => this.resolveFixedStamina(...args),
+      score: (...args) => this.resolveScore(...args),
+      goodImpressionTurns: (...args) => this.resolveGoodImpressionTurns(...args),
+      motivation: (...args) => this.resolveMotivation(...args),
+      goodConditionTurns: (...args) => this.resolveGoodConditionTurns(...args),
+      concentration: (...args) => this.resolveConcentration(...args),
+      genki: (...args) => this.resolveGenki(...args),
+      stamina: (...args) => this.resolveStamina(...args),
+      enthusiasm: (...args) => this.resolveEnthusiasm(...args),
+      fullPowerCharge: (...args) => this.resolveFullPowerCharge(...args)
+    };
+  }
+  executeGrowthActions(growth, actions) {
+    for (let i = 0; i < actions.length; i++) {
+      this.executeGrowthAction(growth, actions[i]);
+    }
+  }
+  executeGrowthAction(growth, action) {
+    const tokens = action;
+    if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
+      const lhs = tokens[0];
+      const op = tokens[1];
+      const rhsTokens = tokens.slice(2);
+      if (rhsTokens.length != 1) {
+        throw new Error(`Invalid growth action RHS: ${action}`);
+      }
+      const rhs = parseFloat(rhsTokens[0]);
+      let intermediate = growth[G[lhs]] || 0;
+      if (op == "=") {
+        intermediate = rhs;
+      } else if (op == "+=") {
+        intermediate += rhs;
+      } else if (op == "-=") {
+        intermediate -= rhs;
+      }
+      growth[G[lhs]] = intermediate;
+      return;
+    }
+    console.warn(`Invalid growth action: ${action}`);
+  }
+  executeActions(state, actions, card) {
+    let prev = {};
+    for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
+      prev[FIELDS_TO_DIFF[i]] = state[FIELDS_TO_DIFF[i]];
+    }
+    const prevGoodConditionTurnsMultiplier = state[S.goodConditionTurnsMultiplier];
+    const prevConcentrationMultiplier = state[S.concentrationMultiplier];
+    const prevMotivationMultiplier = state[S.motivationMultiplier];
+    state[S.goodConditionTurnsMultiplier] = 1;
+    state[S.concentrationMultiplier] = 1;
+    state[S.motivationMultiplier] = 1;
+    let scoreTimes = state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]];
+    for (let i = 0; i < actions.length; i++) {
+      this.executeAction(state, actions[i], card);
+      if (scoreTimes) {
+        const tokens = actions[i];
+        if (tokens?.[0] == "score") {
+          for (let j = 0; j < scoreTimes; j++) {
+            this.executeAction(state, actions[i], card);
+          }
+          scoreTimes = null;
+        }
+      }
+      const config = this.getConfig(state);
+      if (state[S.stamina] > config.idol.params.stamina) {
+        state[S.stamina] = config.idol.params.stamina;
+      }
+      for (let i2 = 0; i2 < NON_NEGATIVE_FIELDS.length; i2++) {
+        if (state[NON_NEGATIVE_FIELDS[i2]] < 0) {
+          state[NON_NEGATIVE_FIELDS[i2]] = 0;
+        }
+      }
+    }
+    state[S.goodConditionTurnsMultiplier] = prevGoodConditionTurnsMultiplier;
+    state[S.concentrationMultiplier] = prevConcentrationMultiplier;
+    state[S.motivationMultiplier] = prevMotivationMultiplier;
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      const field = LOGGED_FIELDS[i];
+      if (state[field] == prev[field]) continue;
+      this.logger.log(state, "diff", {
+        field,
+        prev: formatDiffField(prev[field]),
+        next: formatDiffField(state[field])
+      });
+    }
+    if (!UNFRESH_PHASES.includes(state[S.phase])) {
+      for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+        const field = EOT_DECREMENT_FIELDS[i];
+        if (state[field] > 0 && prev[field] == 0) {
+          state[S.freshBuffs][field] = true;
+        }
+      }
+    }
+    if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+      let increasedFields = /* @__PURE__ */ new Set();
+      let decreasedFields = /* @__PURE__ */ new Set();
+      for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
+        let diff = state[FIELDS_TO_DIFF[i]] - prev[FIELDS_TO_DIFF[i]];
+        if (diff > 0) {
+          increasedFields.add(FIELDS_TO_DIFF[i]);
+        } else if (diff < 0) {
+          decreasedFields.add(FIELDS_TO_DIFF[i]);
+        }
+      }
+      if (state[S.phase] == "processCost") {
+        for (let i = 0; i < BUFF_FIELDS.length; i++) {
+          if (decreasedFields.has(BUFF_FIELDS[i])) {
+            this.engine.effectManager.triggerEffectsForPhase(
+              state,
+              "buffCostConsumed"
+            );
+            break;
+          }
+        }
+      }
+      for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
+        const field = INCREASE_TRIGGER_FIELDS[i];
+        if (increasedFields.has(field)) {
+          const fieldName = ALL_FIELDS[field];
+          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${fieldName}Increased`
+          );
+          state[S[`${fieldName}Delta`]] = 0;
+        }
+      }
+      for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
+        const field = DECREASE_TRIGGER_FIELDS[i];
+        if (decreasedFields.has(field)) {
+          const fieldName = ALL_FIELDS[field];
+          state[S[`${fieldName}Delta`]] = state[field] - prev[field];
+          this.engine.effectManager.triggerEffectsForPhase(
+            state,
+            `${fieldName}Decreased`
+          );
+          state[S[`${fieldName}Delta`]] = 0;
+        }
+      }
+    }
+  }
+  executeAction(state, action, card) {
+    let growth = null;
+    if (card != null) {
+      growth = state[S.cardMap][card].growth;
+    }
+    const tokens = action;
+    if (tokens.length == 1) {
+      this.executeSpecialAction(state, tokens[0], growth);
+      return;
+    }
+    if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
+      const lhs = tokens[0];
+      if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(S[lhs])) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
+      const op = tokens[1];
+      const rhsTokens = tokens.slice(2);
+      let rhs = this.engine.evaluator.evaluateExpression(state, rhsTokens);
+      let intermediate = state[S[lhs]] || 0;
+      let intermediateField = null;
+      if (["cost", "fixedGenki", "fixedStamina"].includes(lhs) || lhs == "score" && op == "+=" || lhs == "goodImpressionTurns" && op == "+=" || lhs == "motivation" && op == "+=" || lhs == "goodConditionTurns" && op == "+=" || lhs == "concentration" && op == "+=" || lhs == "enthusiasm" && op == "+=" || lhs == "fullPowerCharge" && op == "+=" || lhs == "genki" && op == "+=" || lhs == "stamina" && op == "-=") {
+        intermediate = 0;
+        intermediateField = lhs;
+      }
+      if (op == "=") {
+        intermediate = rhs;
+      } else if (op == "+=") {
+        intermediate += rhs;
+        if (growth?.[G[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
+          intermediate += growth[G[`g.${lhs}`]];
+        }
+      } else if (op == "-=") {
+        if (growth?.[G["g.typedCost"]] && (state[S.phase] == "processCost" || state[S.phase] == "checkCost")) {
+          rhs -= growth[G["g.typedCost"]];
+          if (rhs < 0) rhs = 0;
+        }
+        intermediate -= rhs;
+      } else if (op == "*=") {
+        intermediate *= rhs;
+      } else if (op == "/=") {
+        intermediate /= rhs;
+      } else if (op == "%=") {
+        intermediate %= rhs;
+      } else {
+        console.warn(`Unrecognized assignment operator: ${op}`);
+      }
+      if (intermediateField) {
+        if (intermediateField in this.intermediateResolvers) {
+          this.intermediateResolvers[intermediateField](
+            state,
+            intermediate,
+            growth || {},
+            rhsTokens
+          );
+        } else {
+          console.warn(`Unresolved intermediate: ${intermediateField}`);
+        }
+      } else {
+        state[S[lhs]] = intermediate;
+      }
+      for (let i = 0; i < WHOLE_FIELDS.length; i++) {
+        if (WHOLE_FIELDS[i] in state) {
+          state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]].toFixed(2));
+        }
+      }
+      return;
+    }
+    console.warn(`Invalid action: ${action}`);
+  }
+  executeSpecialAction(state, action, growth) {
+    if (action in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(action)) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
+      this.specialActions[action](state);
+      return;
+    }
+    const match = action.match(FUNCTION_CALL_REGEX);
+    if (match[1] in this.specialActions) {
+      if (state[S.nullifyDebuff] && DEBUFF_SPECIAL_ACTIONS.includes(match[1])) {
+        state[S.nullifyDebuff]--;
+        return;
+      }
+      const args = match[2].split(",");
+      if (growth && growth[G["g.stanceLevel"]] && match[1] == "setStance") {
+        if (args[0].startsWith("str")) {
+          args[0] = "strength2";
+        } else if (args[0].startsWith("pre")) {
+          args[0] = "preservation2";
+        }
+      }
+      this.specialActions[match[1]](state, ...args);
+      return;
+    }
+    console.warn(`Unrecognized special action: ${action}`);
+  }
+  resolveCost(state, cost, growth) {
+    if (state[S.nullifyCostCards]) return;
+    if (growth[G["g.cost"]]) {
+      cost += growth[G["g.cost"]];
+      if (cost > 0) cost = 0;
+    }
+    if (state[S.stance].startsWith("strength")) {
+      cost *= 2;
+    } else if (state[S.stance] == "preservation") {
+      cost *= 0.5;
+    } else if (state[S.stance] == "preservation2") {
+      cost *= 0.25;
+    } else if (state[S.stance] == "leisure") {
+      cost *= 0;
+    }
+    if (state[S.halfCostTurns]) {
+      cost *= 0.5;
+    }
+    if (state[S.doubleCostTurns]) {
+      cost *= 2;
+    }
+    cost = Math.floor(cost);
+    cost += state[S.costReduction];
+    cost -= state[S.costIncrease];
+    cost = Math.min(cost, 0);
+    state[S.genki] += cost;
+    if (state[S.genki] < 0) {
+      state[S.stamina] += state[S.genki];
+      state[S.consumedStamina] -= state[S.genki];
+      state[S.genki] = 0;
+    }
+  }
+  resolveFixedGenki(state, fixedGenki) {
+    state[S.genki] += fixedGenki;
+  }
+  resolveFixedStamina(state, fixedStamina) {
+    state[S.stamina] += fixedStamina;
+    if (fixedStamina < 0) {
+      state[S.consumedStamina] -= fixedStamina;
+    }
+  }
+  resolveScore(state, score, growth, rhsTokens) {
+    if (growth[G["g.scoreByGoodImpressionTurns"]] && rhsTokens.includes("goodImpressionTurns")) {
+      score += state[S.goodImpressionTurns] * growth[G["g.scoreByGoodImpressionTurns"]];
+    } else if (growth[G["g.scoreByMotivation"]] && rhsTokens.includes("motivation")) {
+      score += state[S.motivation] * growth[G["g.scoreByMotivation"]];
+    } else if (growth[G["g.scoreByGenki"]] && rhsTokens.includes("genki")) {
+      score += state[S.genki] * growth[G["g.scoreByGenki"]];
+    } else if (growth[G["g.score"]]) {
+      score += growth[G["g.score"]];
+    }
+    if (score > 0) {
+      score += state[S.concentration] * state[S.concentrationMultiplier];
+      score += state[S.enthusiasm];
+      if (state[S.goodConditionTurns]) {
+        score *= 1 + (0.5 + (state[S.perfectConditionTurns] ? state[S.goodConditionTurns] * 0.1 : 0)) * state[S.goodConditionTurnsMultiplier];
+      }
+      if (state[S.stance] == "strength") {
+        score *= 2;
+      } else if (state[S.stance] == "strength2") {
+        score *= 2.5;
+      } else if (state[S.stance] == "preservation") {
+        score *= 0.5;
+      } else if (state[S.stance] == "preservation2") {
+        score *= 0.25;
+      } else if (state[S.stance] == "fullPower") {
+        score *= 3;
+      } else if (state[S.stance] == "leisure") {
+        score *= 0;
+      }
+      score = Math.ceil(score);
+      let scoreBuff = state[S.scoreBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        0
+      );
+      if (state[S.prideTurns]) {
+        const buffAmount = Math.min(
+          state[S.goodImpressionTurns],
+          state[S.motivation]
+        );
+        scoreBuff += Math.min(buffAmount * 0.02, 0.5);
+      }
+      score *= 1 + scoreBuff;
+      score *= Math.max(
+        state[S.scoreDebuffs].reduce((acc, cur) => acc - cur.amount, 1),
+        0
+      );
+      if (state[S.poorConditionTurns]) {
+        score *= 0.67;
+      }
+      score = Math.ceil(score);
+      score *= this.engine.turnManager.getTurnMultiplier(state);
+      score = Math.ceil(score);
+    }
+    state[S.score] += score;
+  }
+  resolveGoodImpressionTurns(state, goodImpressionTurns) {
+    goodImpressionTurns *= state[S.goodImpressionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.goodImpressionTurns] += goodImpressionTurns;
+  }
+  resolveMotivation(state, motivation) {
+    motivation *= state[S.motivationBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.motivation] += motivation;
+  }
+  resolveGoodConditionTurns(state, goodConditionTurns) {
+    goodConditionTurns *= state[S.goodConditionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.goodConditionTurns] += goodConditionTurns;
+  }
+  resolveConcentration(state, concentration) {
+    concentration *= state[S.concentrationBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.concentration] += concentration;
+  }
+  resolveGenki(state, genki) {
+    if (state[S.nullifyGenkiTurns]) return;
+    genki += state[S.motivation] * state[S.motivationMultiplier];
+    if (state[S.uneaseTurns]) {
+      genki *= 0.67;
+    }
+    state[S.genki] += genki;
+  }
+  resolveStamina(state, stamina) {
+    if (state[S.nullifyCostCards]) return;
+    if (state[S.stance].startsWith("strength")) {
+      stamina *= 2;
+    } else if (state[S.stance] == "preservation") {
+      stamina *= 0.5;
+    } else if (state[S.stance] == "preservation2") {
+      stamina *= 0.25;
+    }
+    if (state[S.halfCostTurns]) {
+      stamina *= 0.5;
+    }
+    if (state[S.doubleCostTurns]) {
+      stamina *= 2;
+    }
+    stamina = Math.floor(stamina);
+    if (stamina <= 0) {
+      stamina += state[S.costReduction];
+      stamina -= state[S.costIncrease];
+      stamina = Math.min(stamina, 0);
+    }
+    state[S.stamina] += stamina;
+    if (stamina < 0) {
+      state[S.consumedStamina] -= stamina;
+    }
+  }
+  resolveEnthusiasm(state, enthusiasm) {
+    enthusiasm += state[S.enthusiasmBonus];
+    enthusiasm *= state[S.enthusiasmBuffs].reduce(
+      (acc, cur) => acc + cur.amount,
+      1
+    );
+    state[S.enthusiasm] += enthusiasm;
+  }
+  resolveFullPowerCharge(state, fullPowerCharge) {
+    if (fullPowerCharge > 0) {
+      fullPowerCharge *= state[S.fullPowerChargeBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        1
+      );
+      state[S.cumulativeFullPowerCharge] += fullPowerCharge;
+    }
+    state[S.fullPowerCharge] += fullPowerCharge;
+  }
+};
+
+// ../packages/gakumas-engine/engine/StageLogger.js
+var LOGGED_BUFFS_FIELDS = [
+  S.scoreBuffs,
+  S.scoreDebuffs,
+  S.goodImpressionTurnsBuffs,
+  S.goodImpressionTurnsEffectBuffs,
+  S.motivationBuffs,
+  S.goodConditionTurnsBuffs,
+  S.concentrationBuffs,
+  S.enthusiasmBuffs,
+  S.fullPowerChargeBuffs
+];
+var StageLogger = class {
+  constructor(engine) {
+    this.engine = engine;
+    this.reset();
+  }
+  initializeState(state) {
+    state[S.logs] = [];
+    state[S.graphData] = {};
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      state[S.graphData][GRAPHED_FIELDS[i]] = [];
+    }
+  }
+  reset() {
+    this.logs = [];
+    this.disabled = false;
+  }
+  disable() {
+    this.disabled = true;
+  }
+  enable() {
+    this.disabled = false;
+  }
+  pickLogs(state) {
+    const logs = state[S.logs].map((logIndex) => this.logs[logIndex]);
+    this.logs = [];
+    return logs;
+  }
+  log(state, logType, data) {
+    if (this.disabled) return;
+    this.logs.push({ logType, data });
+    const idx = this.logs.length - 1;
+    state[S.logs].push(idx);
+    return idx;
+  }
+  debug(...args) {
+    if (!DEBUG || this.disabled) return;
+    console.log(...args);
+  }
+  pushGraphData(state) {
+    if (this.disabled) return;
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      state[S.graphData][GRAPHED_FIELDS[i]].push(state[GRAPHED_FIELDS[i]]);
+    }
+  }
+  getHandStateForLogging(state) {
+    let res = {};
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      if (LOGGED_FIELDS[i] == S.turnsRemaining) continue;
+      if (LOGGED_FIELDS[i] == S.cardUsesRemaining) continue;
+      if (state[LOGGED_FIELDS[i]]) {
+        res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
+      }
+    }
+    for (let field of LOGGED_BUFFS_FIELDS) {
+      if (state[field]?.length) {
+        res[field] = deepCopy(state[field]);
+      }
+    }
+    res.turn = {
+      types: state[S.turnTypes],
+      remaining: state[S.turnsRemaining],
+      multiplier: this.engine.turnManager.getTurnMultiplier(state)
+    };
+    return res;
+  }
+};
+
+// ../packages/gakumas-engine/engine/TurnManager.js
+var TurnManager = class extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+    this.variableResolvers = {
+      isVocalTurn: (state) => this.getTurnType(state) == "vocal",
+      isDanceTurn: (state) => this.getTurnType(state) == "dance",
+      isVisualTurn: (state) => this.getTurnType(state) == "visual"
+    };
+  }
+  initializeState(state) {
+    state[S.turnsElapsed] = 0;
+    state[S.turnsRemaining] = this.getConfig(state).stage.turnCount;
+    state[S.turnTypes] = this.generateTurnTypes();
+    state[S.linkPhase] = 0;
+  }
+  getTurnType(state) {
+    return state[S.turnTypes][Math.min(state[S.turnsElapsed], this.getConfig(state).stage.turnCount - 1)];
+  }
+  getTurnMultiplier(state) {
+    const turnType = this.getTurnType(state);
+    return this.getConfig(state).typeMultipliers[turnType];
+  }
+  generateTurnTypes() {
+    const { turnCounts, firstTurns, criteria } = this.engine.config.stage;
+    const remainingTurns = { ...turnCounts };
+    const rand = getRand();
+    let firstTurn = "vocal";
+    if (rand > firstTurns.vocal) firstTurn = "dance";
+    if (rand > firstTurns.vocal + firstTurns.dance) firstTurn = "visual";
+    remainingTurns[firstTurn]--;
+    const sortedTypes = Object.keys(criteria).sort(
+      (a, b) => criteria[b] - criteria[a]
+    );
+    const lastThreeTurns = sortedTypes.slice().reverse();
+    lastThreeTurns.forEach((t) => remainingTurns[t]--);
+    let randomTurns = [];
+    for (let k in remainingTurns) {
+      for (let i = 0; i < remainingTurns[k]; i++) {
+        randomTurns.push(k);
+      }
+    }
+    shuffle(randomTurns);
+    return [firstTurn, ...randomTurns, ...lastThreeTurns];
+  }
+  startTurn(state, forceInitialHand = false) {
+    this.logger.debug("Starting turn", state[S.turnsElapsed] + 1);
+    this.logger.log(state, "startTurn", {
+      num: state[S.turnsElapsed] + 1,
+      type: this.getTurnType(state),
+      multiplier: this.getTurnMultiplier(state)
+    });
+    state[S.cardUsesRemaining] = 1;
+    state[S.prevStance] = "none";
+    this.engine.effectManager.triggerEffects(state, FULL_POWER_EFFECTS);
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "beforeStartOfTurn"
+    );
+    this.engine.effectManager.triggerEffectsForPhase(state, "startOfTurn");
+    for (let i = 0; i < 3; i++) {
+      this.engine.cardManager.drawCard(state);
+    }
+    if (state[S.turnsElapsed] == 0 || forceInitialHand) {
+      for (let i = 0; i < 2; i++) {
+        const card = this.engine.cardManager.peekDeck(state);
+        if (card != null && this.engine.cardManager.isForceInitialHand(state, card)) {
+          this.engine.cardManager.drawCard(state);
+        }
+      }
+    }
+    this.engine.effectManager.triggerEffectsForPhase(state, "afterStartOfTurn");
+    this.engine.effectManager.triggerEffectsForPhase(state, "turn");
+    this.engine.effectManager.triggerEffectsForPhase(state, "everyTurn");
+  }
+  endTurn(state) {
+    if (state[S.cardUsesRemaining] > 0) {
+      state[S.stamina] = Math.min(
+        state[S.stamina] + 2,
+        this.getConfig(state).idol.params.stamina
+      );
+      this.engine.effectManager.triggerEffectsForPhase(state, "turnSkipped");
+    }
+    this.engine.effectManager.triggerEffectsForPhase(state, "endOfTurn");
+    this.engine.effectManager.triggerEffects(state, GOOD_IMPRESSION_EFFECTS);
+    this.engine.buffManager.decrementBuffTurns(state);
+    state[S.cardUsesRemaining] = 0;
+    state[S.turnCardsUsed] = 0;
+    state[S.turnCardsUpgraded] = 0;
+    state[S.enthusiasm] = 0;
+    this.engine.effectManager.decrementTtl(state);
+    this.engine.effectManager.decrementDelay(state);
+    this.engine.effectManager.clearExpiredEffects(state);
+    this.engine.cardManager.discardHand(state);
+    state[S.turnsElapsed]++;
+    state[S.turnsRemaining]--;
+    this.logger.pushGraphData(state);
+    if (state[S.turnsRemaining] > 0) {
+      let forceInitialHand = false;
+      const stageConfig2 = this.getConfig(state).stage;
+      if (stageConfig2.type === "linkContest") {
+        const { linkPhaseChangeTurns } = stageConfig2;
+        for (let i = 0; i < linkPhaseChangeTurns.length; i++) {
+          if (state[S.turnsElapsed] == linkPhaseChangeTurns[i] && i < this.engine.linkConfigs.length - 1) {
+            this.engine.changeIdol(state);
+            forceInitialHand = true;
+            break;
+          }
+        }
+      }
+      this.startTurn(state, forceInitialHand);
+    }
+  }
+};
+
+// ../packages/gakumas-engine/engine/StageEngine.js
+var StageEngine = class {
+  constructor(config, linkConfigs) {
+    this.config = config;
+    this.linkConfigs = linkConfigs;
+    this.logger = new StageLogger(this);
+    this.cardManager = new CardManager(this);
+    this.effectManager = new EffectManager(this);
+    this.buffManager = new BuffManager(this);
+    this.turnManager = new TurnManager(this);
+    this.evaluator = new Evaluator(this);
+    this.executor = new Executor(this);
+  }
+  getConfig(state) {
+    if (this.config.stage.type === "linkContest") {
+      return this.linkConfigs[state[S.linkPhase] || 0];
+    }
+    return this.config;
+  }
+  getInitialState(skipEffects = false) {
+    const state = [];
+    this.logger.initializeState(state);
+    state[S.cardUsesRemaining] = 0;
+    state[S.stamina] = this.getConfig(state).idol.params.stamina;
+    state[S.consumedStamina] = 0;
+    state[S.genki] = 0;
+    state[S.score] = 0;
+    this.turnManager.initializeState(state);
+    this.buffManager.initializeState(state);
+    this.cardManager.initializeState(state);
+    if (skipEffects) {
+      state[S.effects] = [];
+    } else {
+      this.effectManager.initializeState(state);
+    }
+    return state;
+  }
+  changeIdol(state) {
+    state[S.linkPhase] += 1;
+    state[S.stamina] = this.getConfig(state).idol.params.stamina;
+    this.cardManager.changeIdol(state);
+    this.logger.log(state, "linkPhaseChange", { phase: state[S.linkPhase] });
+  }
+  startStage(state) {
+    this.logger.disable();
+    this.effectManager.triggerEffectsForPhase(state, "prestage");
+    this.effectManager.clearPrestageEffects(state);
+    this.logger.enable();
+    this.effectManager.triggerEffectsForPhase(state, "startOfStage");
+    this.effectManager.triggerEffectsForPhase(state, "afterStartOfStage");
+    this.logger.pushGraphData(state);
+    this.turnManager.startTurn(state);
+    return state;
+  }
+  isCardUsable(state, card) {
+    return this.cardManager.isCardUsable(state, card);
+  }
+  executeDecision(state, decision) {
+    if (decision.state) {
+      return decision.state;
+    } else if (decision.card !== null) {
+      return this.useCard(state, decision.card);
+    } else {
+      return this.endTurn(state);
+    }
+  }
+  useCard(prevState, card) {
+    const state = deepCopy(prevState);
+    this.cardManager.useCard(state, card);
+    return state;
+  }
+  endTurn(prevState) {
+    const state = deepCopy(prevState);
+    this.turnManager.endTurn(state);
+    return state;
+  }
+};
+
+// ../packages/gakumas-engine/engine/StagePlayer.js
+var StagePlayer = class {
+  constructor(engine, strategy) {
+    this.engine = engine;
+    this.strategy = strategy;
+  }
+  async play() {
+    this.engine.logger.reset();
+    let state = this.engine.getInitialState();
+    state = this.engine.startStage(state);
+    while (state[S.turnsRemaining] > 0) {
+      const decision = await this.strategy.evaluate(state);
+      try {
+        state = this.engine.executeDecision(state, decision);
+      } catch (e) {
+        state = await this.strategy.handleException(e, state, decision);
+      }
+    }
+    return {
+      score: state[S.score],
+      logs: this.engine.logger.pickLogs(state),
+      graphData: state[S.graphData]
+    };
+  }
+};
+
+// ../packages/gakumas-engine/strategies/BaseStrategy.js
+var BaseStrategy = class {
+  constructor(engine) {
+    this.engine = engine;
+  }
+  /**
+   * Evaluates the given state, and selects a card to play.
+   * Returns the next state and numeric evaluation of the future state.
+   * Can be async for strategies that need to await user input (ManualStrategy).
+   */
+  evaluate(state) {
+    throw new Error("evaluate is not implemented!");
+  }
+  /**
+   * Given a state and list of cards, selects a card to move to hand.
+   * Returns the indices of the cards to move.
+   * Can be async for strategies that need to await user input (ManualStrategy).
+   */
+  pickCardsToMoveToHand(state, cards, num = 1) {
+    throw new Error("pickCardsToMoveToHand is not implemented!");
+  }
+  /**
+   * Given a state and list of cards, selects a card to hold.
+   * Returns the indices of the cards to hold.
+   * Can be async for strategies that need to await user input (ManualStrategy).
+   */
+  pickCardsToHold(state, cards, num = 1) {
+    throw new Error("pickCardsToHold is not implemented!");
+  }
+  /**
+   * Handles exceptions that occur while executing a decision.
+   * Returns the next state.
+   * Can be async for strategies that need to await user input.
+   */
+  handleException(exception) {
+    throw exception;
+  }
+};
+
+// ../packages/gakumas-engine/strategies/HeuristicStrategy.js
+var MAX_DEPTH = 3;
+var HeuristicStrategy = class extends BaseStrategy {
+  constructor(engine) {
+    super(engine);
+    this.depth = 0;
+    this.rootEffectCount = 0;
+  }
+  evaluate(state) {
+    if (this.depth == 0) {
+      this.rootEffectCount = state[S.effects].length;
+    }
+    const logIndex = this.engine.logger.log(state, "hand", null);
+    const futures = state[S.handCards].map(
+      (card) => this.getFuture(state, card)
+    );
+    let nextState;
+    const scores = futures.map((f) => f ? f.score : -Infinity);
+    let maxScore = Math.max(...scores);
+    let selectedIndex = null;
+    if (maxScore > 0) {
+      selectedIndex = scores.indexOf(maxScore);
+      nextState = futures[selectedIndex].state;
+    } else {
+      nextState = this.engine.endTurn(state);
+      maxScore = this.getStateScore(nextState);
+    }
+    this.engine.logger.logs[logIndex].data = {
+      handCards: state[S.handCards].map((card) => ({
+        id: state[S.cardMap][card].id,
+        c: state[S.cardMap][card].c11n
+      })),
+      scores,
+      selectedIndex,
+      state: this.engine.logger.getHandStateForLogging(state)
+    };
+    return { score: maxScore, state: nextState };
+  }
+  getFuture(state, card) {
+    if (!this.engine.isCardUsable(state, card)) {
+      return null;
+    }
+    const previewState = this.engine.useCard(state, card);
+    this.depth++;
+    if (previewState[S.turnsRemaining] >= state[S.turnsRemaining] && this.depth < MAX_DEPTH) {
+      const future = this.evaluate(previewState);
+      this.depth--;
+      return { score: future.score, state: future.state };
+    }
+    let score = 0;
+    const effectsDiff = previewState[S.effects].length - this.rootEffectCount;
+    for (let i = 0; i < effectsDiff; i++) {
+      const effect = previewState[S.effects][previewState[S.effects].length - i - 1];
+      let limit = previewState[S.turnsRemaining];
+      if (effect.limit != null && effect.limit < previewState[S.turnsRemaining]) {
+        limit = effect.limit + 1;
+      }
+      if (limit == 0) continue;
+      const postEffectState = deepCopy(previewState);
+      this.engine.effectManager.triggerEffects(
+        postEffectState,
+        [
+          {
+            ...effect,
+            phase: null,
+            delay: effect.delay - previewState[S.turnsRemaining]
+          }
+        ],
+        null,
+        null,
+        true
+      );
+      const scoreDelta = this.getStateScore(postEffectState) - this.getStateScore(previewState);
+      score += 3 * scoreDelta * Math.min(limit, 6);
+    }
+    if (this.engine.getConfig(state).idol.plan != "anomaly") {
+      score += (state[S.removedCards].length - previewState[S.removedCards].length) * (previewState[S.score] - state[S.score]) / this.getAverageTypeMultiplier(state) * Math.floor(previewState[S.turnsRemaining] / 13);
+    }
+    score += this.getStateScore(previewState);
+    this.depth--;
+    return { score: Math.round(score), state: previewState };
+  }
+  getAverageTypeMultiplier(state) {
+    const config = this.engine.getConfig(state);
+    return Object.keys(config.typeMultipliers).reduce(
+      (acc, cur) => acc + config.typeMultipliers[cur] * config.stage.turnCounts[cur] / config.stage.turnCount,
+      0
+    );
+  }
+  scaleScore(score, state) {
+    return Math.ceil(score * this.getAverageTypeMultiplier(state));
+  }
+  getStateScore(state) {
+    const config = this.engine.getConfig(state);
+    this.goodConditionTurnsMultiplier = config.idol.recommendedEffect == "goodConditionTurns" ? 1.75 : 1;
+    if (config.idol.pIdolId == 114) {
+      this.goodConditionTurnsMultiplier = 8;
+    }
+    this.concentrationMultiplier = config.idol.recommendedEffect == "concentration" ? 3 : 1;
+    this.goodImpressionTurnsMultiplier = config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
+    this.motivationMultiplier = config.idol.recommendedEffect == "motivation" ? 5.5 : 1;
+    this.fullPowerMultiplier = config.idol.recommendedEffect == "fullPower" ? 5 : 1;
+    let score = 0;
+    score += state[S.handCards].length * 3;
+    score += state[S.stamina] * state[S.turnsRemaining] * 0.05;
+    score += state[S.genki] * Math.tanh(state[S.turnsRemaining] / 3) * 0.7 * this.motivationMultiplier;
+    if (config.idol.pIdolId == 114) {
+      if (state[S.turnsRemaining] > 0) {
+        score += state[S.goodConditionTurns] * 3 * this.goodConditionTurnsMultiplier;
+      }
+    } else {
+      score += Math.min(state[S.goodConditionTurns], state[S.turnsRemaining]) * 1.6 * this.goodConditionTurnsMultiplier;
+    }
+    score += Math.min(state[S.perfectConditionTurns], state[S.turnsRemaining]) * state[S.goodConditionTurns] * this.goodConditionTurnsMultiplier * 1.5;
+    score += state[S.concentration] * state[S.turnsRemaining] * this.concentrationMultiplier;
+    if (config.idol.plan == "anomaly" && (state[S.turnsRemaining] || state[S.cardUsesRemaining])) {
+      score += state[S.strengthTimes] * 40;
+      score += state[S.preservationTimes] * 80;
+      score += state[S.leisureTimes] * 80;
+      score += state[S.fullPowerTimes] * 80 * this.fullPowerMultiplier;
+      score += state[S.enthusiasm] * 5;
+      score += state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
+      score += state[S.enthusiasmBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+        0
+      ) * 5;
+      score += state[S.fullPowerChargeBuffs].reduce(
+        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+        0
+      ) * this.fullPowerMultiplier;
+      score += this.getGrowthScore(state) * 0.2 * state[S.turnsRemaining];
+    }
+    score += state[S.goodImpressionTurns] * state[S.turnsRemaining] * this.goodImpressionTurnsMultiplier;
+    score += state[S.motivation] * state[S.turnsRemaining] * 0.45 * this.motivationMultiplier;
+    score += state[S.prideTurns] * state[S.turnsRemaining] * 0.2;
+    score += state[S.scoreBuffs].reduce(
+      (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+      0
+    ) * 8;
+    score += Math.min(state[S.halfCostTurns], state[S.turnsRemaining]) * 6;
+    score += Math.min(state[S.doubleCostTurns], state[S.turnsRemaining]) * -6;
+    score += state[S.costReduction] * state[S.turnsRemaining] * 0.5;
+    score += state[S.doubleCardEffectCards] * 50;
+    score += state[S.cardUsesRemaining] * 50;
+    score += state[S.goodImpressionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+      0
+    ) * 10 * this.goodImpressionTurnsMultiplier;
+    score += state[S.goodImpressionTurnsEffectBuffs].reduce(
+      (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+      0
+    ) * state[S.goodImpressionTurns] * this.goodImpressionTurnsMultiplier;
+    score += state[S.goodConditionTurnsBuffs].reduce(
+      (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+      0
+    ) * this.goodConditionTurnsMultiplier;
+    score += state[S.concentrationBuffs].reduce(
+      (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
+      0
+    ) * this.concentrationMultiplier;
+    score += state[S.nullifyGenkiTurns] * -9;
+    score += state[S.turnCardsUpgraded] * 20;
+    score = this.scaleScore(score, state);
+    const { recommendedEffect } = config.idol;
+    if (recommendedEffect == "goodConditionTurns") {
+      score += state[S.score] * 0.4;
+    } else if (recommendedEffect == "concentration") {
+      score += state[S.score] * 0.6;
+    } else if (recommendedEffect == "goodImpressionTurns") {
+      score += state[S.score] * 1.1;
+    } else if (recommendedEffect == "motivation") {
+      score += state[S.score] * 0.6;
+    } else if (recommendedEffect == "strength") {
+      score += state[S.score] * 0.65;
+    } else if (recommendedEffect == "preservation") {
+      score += state[S.score] * 0.65;
+    } else if (recommendedEffect == "fullPower") {
+      score += state[S.score] * 0.8;
+    } else {
+      score += state[S.score];
+    }
+    return Math.round(score);
+  }
+  getGrowthScore(state) {
+    let growthScore = 0;
+    const multipliers = {
+      [G["g.score"]]: 2,
+      [G["g.scoreTimes"]]: 20,
+      [G["g.cost"]]: 1,
+      [G["g.typedCost"]]: 1,
+      [G["g.genki"]]: 1,
+      [G["g.goodConditionTurns"]]: 1,
+      [G["g.perfectConditionTurns"]]: 1,
+      [G["g.concentration"]]: 2,
+      [G["g.goodImpressionTurns"]]: 1,
+      [G["g.motivation"]]: 1,
+      [G["g.fullPowerCharge"]]: 1,
+      [G["g.halfCostTurns"]]: 1,
+      [G["g.scoreByGoodImpressionTurns"]]: 20,
+      [G["g.scoreByMotivation"]]: 20,
+      [G["g.scoreByGenki"]]: 20,
+      [G["g.stanceLevel"]]: 2
+    };
+    for (let { growth } of state[S.cardMap]) {
+      if (!growth) continue;
+      for (let key in growth) {
+        growthScore += growth[key] * (multipliers[key] || 1);
+      }
+    }
+    return growthScore;
+  }
+  evaluateForHold(state, card) {
+    let previewState = this.engine.getInitialState(true);
+    previewState[S.cardMap] = deepCopy(state[S.cardMap]);
+    this.engine.buffManager.setStance(previewState, "fullPower");
+    previewState[S.nullifySelect] = 1;
+    previewState = this.engine.useCard(previewState, card);
+    return Math.round(previewState[S.score]);
+  }
+  pickCardsToHold(state, cards, num = 1) {
+    let scores = [];
+    for (let i = 0; i < cards.length; i++) {
+      scores.push(this.evaluateForHold(state, cards[i]));
+    }
+    const sortedIndices = scores.map((score, index) => ({ score, index })).sort((a, b) => b.score - a.score).slice(0, num).map((item) => item.index);
+    return sortedIndices;
+  }
+  pickCardsToMoveToHand(state, cards, num = 1) {
+    return this.pickCardsToHold(state, cards, num);
+  }
+};
+
+// ../packages/gakumas-engine/strategies/ManualStrategy.js
+var HoldSelectionRequest = class extends Error {
+  constructor(state, cards, num) {
+    super("Hold selection required");
+    this.name = "HoldSelectionRequest";
+    this.state = state;
+    this.cards = cards;
+    this.num = num;
+  }
+};
+var MoveToHandSelectionRequest = class extends Error {
+  constructor(state, cards, num) {
+    super("Move to hand selection required");
+    this.name = "MoveToHandSelectionRequest";
+    this.state = state;
+    this.cards = cards;
+    this.num = num;
+  }
+};
+var ManualStrategy = class extends BaseStrategy {
+  constructor(engine, inputCallback) {
+    super(engine);
+    this.inputCallback = inputCallback;
+  }
+  async evaluate(state) {
+    const logIndex = this.engine.logger.log(state, "hand", null);
+    const usableCards = state[S.handCards].filter(
+      (card) => this.engine.isCardUsable(state, card)
+    );
+    this.engine.logger.logs[logIndex].data = {
+      handCards: state[S.handCards].map((card) => ({
+        id: state[S.cardMap][card].id,
+        c: state[S.cardMap][card].c11n
+      })),
+      scores: state[S.handCards].map(
+        (card) => usableCards.includes(card) ? 0 : -Infinity
+      ),
+      selectedIndex: null,
+      state: this.engine.logger.getHandStateForLogging(state)
+    };
+    const selectedCard = await this.inputCallback({
+      type: "CARD_SELECTION",
+      state,
+      handCards: state[S.handCards],
+      usableCards
+    });
+    return { card: selectedCard };
+  }
+  pickCardsToMoveToHand(state, cards, num = 1) {
+    if (!this.pickCardsToMoveToHandIndices) {
+      throw new MoveToHandSelectionRequest(state, cards, num);
+    }
+    const indices = this.pickCardsToMoveToHandIndices;
+    delete this.pickCardsToMoveToHandIndices;
+    return indices;
+  }
+  pickCardsToHold(state, cards, num = 1) {
+    if (!this.pickCardsToHoldIndices) {
+      throw new HoldSelectionRequest(state, cards, num);
+    }
+    const indices = this.pickCardsToHoldIndices;
+    delete this.pickCardsToHoldIndices;
+    return indices;
+  }
+  async handleException(exception, state, decision) {
+    if (exception instanceof HoldSelectionRequest) {
+      const selectedIndices = await this.inputCallback({
+        type: "HOLD_SELECTION",
+        state: exception.state,
+        cards: exception.cards,
+        num: exception.num
+      });
+      this.pickCardsToHoldIndices = selectedIndices;
+    } else if (exception instanceof MoveToHandSelectionRequest) {
+      const selectedIndices = await this.inputCallback({
+        type: "MOVE_TO_HAND_SELECTION",
+        state: exception.state,
+        cards: exception.cards,
+        num: exception.num
+      });
+      this.pickCardsToMoveToHandIndices = selectedIndices;
+    } else {
+      throw exception;
+    }
+    return this.engine.executeDecision(state, decision);
+  }
+};
+
+// ../packages/gakumas-engine/strategies/index.js
+var STRATEGIES = {
+  HeuristicStrategy,
+  ManualStrategy
+};
+var strategies_default = STRATEGIES;
+
+// local-scripts/optimize-worker.mjs
+var { contestStage, numRuns } = workerData;
+var stageConfig = new StageConfig(contestStage);
+parentPort.on("message", async (task) => {
+  const { id, combinations } = task;
+  const results = [];
+  for (const comb of combinations) {
+    const { main, sub } = comb;
+    const loadout = {
+      stageId: contestStage.id,
+      supportBonus: 0.04,
+      params: [0, 0, 0, 0],
+      pItemIds: [0, 0, 0, 0],
+      skillCardIdGroups: [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]],
+      customizationGroups: [[{}, {}, {}, {}, {}, {}], [{}, {}, {}, {}, {}, {}]]
+    };
+    loadout.params = main.data.params;
+    loadout.pItemIds = main.data.pItemIds;
+    loadout.skillCardIdGroups[0] = main.data.skillCardIds;
+    loadout.customizationGroups[0] = main.data.customizations || [{}, {}, {}, {}, {}, {}];
+    const multiplier = 0.2;
+    loadout.params = loadout.params.map((p, i) => p + Math.floor((sub.data.params[i] || 0) * multiplier));
+    loadout.skillCardIdGroups[1] = sub.data.skillCardIds;
+    loadout.customizationGroups[1] = sub.data.customizations || [{}, {}, {}, {}, {}, {}];
+    const idolConfig = new IdolConfig(loadout);
+    const config = new IdolStageConfig(idolConfig, stageConfig);
+    const runScores = [];
+    for (let i = 0; i < numRuns; i++) {
+      const engine = new StageEngine(config);
+      const StrategyClass = strategies_default["HeuristicStrategy"];
+      const strategy = new StrategyClass(engine);
+      engine.strategy = strategy;
+      const player = new StagePlayer(engine, strategy);
+      try {
+        const result = await player.play();
+        runScores.push(result.score);
+      } catch (e) {
+      }
+    }
+    if (runScores.length === 0) {
+      results.push({
+        mainFilename: main.filename,
+        mainName: main.data.name,
+        subFilename: sub.filename,
+        subName: sub.data.name,
+        score: 0,
+        min: 0,
+        max: 0,
+        median: 0
+      });
+      parentPort.postMessage({ type: "progress", count: 1 });
+      continue;
+    }
+    runScores.sort((a, b) => a - b);
+    const totalScore = runScores.reduce((acc, s) => acc + s, 0);
+    const avgScore = totalScore / runScores.length;
+    const minScore = runScores[0];
+    const maxScore = runScores[runScores.length - 1];
+    const mid = Math.floor(runScores.length / 2);
+    const medianScore = runScores.length % 2 !== 0 ? runScores[mid] : (runScores[mid - 1] + runScores[mid]) / 2;
+    results.push({
+      mainFilename: main.filename,
+      mainName: main.data.name,
+      subFilename: sub.filename,
+      subName: sub.data.name,
+      score: avgScore,
+      min: minScore,
+      max: maxScore,
+      median: medianScore
+    });
+    parentPort.postMessage({ type: "progress", count: 1 });
+  }
+  parentPort.postMessage({ type: "done", results });
+});

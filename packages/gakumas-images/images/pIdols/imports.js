@@ -92,6 +92,7 @@ import image_91 from "./91.png";
 import image_92 from "./92.png";
 import image_93 from "./93.png";
 import image_94 from "./94.png";
+import image_96 from "./96.png";
 import image_97 from "./97.png";
 import image_98 from "./98.png";
 import image_99 from "./99.png";
@@ -99,7 +100,16 @@ import image_102 from "./102.png";
 import image_104 from "./104.png";
 import image_105 from "./105.png";
 import image_106 from "./106.png";
+import image_108 from "./108.png";
+import image_111 from "./111.png";
+import image_112 from "./112.png";
 import image_114 from "./114.png";
+import image_118 from "./118.png";
+import image_119 from "./119.png";
+import image_120 from "./120.png";
+import image_121 from "./121.png";
+import image_125 from "./125.png";
+import image_126 from "./126.png";
 
 const IMAGES = {
   '1': image_1,
@@ -196,6 +206,7 @@ const IMAGES = {
   '92': image_92,
   '93': image_93,
   '94': image_94,
+  '96': image_96,
   '97': image_97,
   '98': image_98,
   '99': image_99,
@@ -203,7 +214,16 @@ const IMAGES = {
   '104': image_104,
   '105': image_105,
   '106': image_106,
+  '108': image_108,
+  '111': image_111,
+  '112': image_112,
   '114': image_114,
+  '118': image_118,
+  '119': image_119,
+  '120': image_120,
+  '121': image_121,
+  '125': image_125,
+  '126': image_126,
 };
 
 export default IMAGES;
