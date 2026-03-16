@@ -99,8 +99,14 @@ export async function getMemoryFromFile(
   const flag =
     !powerCandidates.includes(calculatedPower) || itemsPIdolId != cardsPIdolId;
 
+  const date = new Date(file.lastModified || Date.now());
+  const year = date.getFullYear().toString().slice(-2);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const datePrefix = `${year}/${month}/${day}＿`;
+
   return {
-    name: `${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
+    name: `${datePrefix}${Math.max(...powerCandidates, 0)}${flag ? " (FIXME)" : ""}`,
     pIdolId: cardsPIdolId,
     params,
     pItemIds: pItems,
