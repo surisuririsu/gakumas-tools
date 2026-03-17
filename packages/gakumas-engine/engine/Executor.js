@@ -242,6 +242,38 @@ export default class Executor extends EngineComponent {
     if (ASSIGNMENT_OPERATORS.includes(tokens[1])) {
       const lhs = tokens[0];
 
+      // Handle effectCounter(name) assignments - name defaults to "main"
+      const counterMatch = lhs.match(/^effectCounter(?:\((\w+)\))?$/);
+      if (counterMatch && state[S.currentEffectInstanceId] != null) {
+        const id = state[S.currentEffectInstanceId];
+        const name = counterMatch[1] || "main";
+        const op = tokens[1];
+        const rhsTokens = tokens.slice(2);
+        let rhs = this.engine.evaluator.evaluateExpression(state, rhsTokens);
+
+        if (!state[S.effectCounters][id]) {
+          state[S.effectCounters][id] = {};
+        }
+        if (state[S.effectCounters][id][name] === undefined) {
+          state[S.effectCounters][id][name] = 0;
+        }
+
+        if (op === "+=") {
+          state[S.effectCounters][id][name] += rhs;
+        } else if (op === "-=") {
+          state[S.effectCounters][id][name] -= rhs;
+        } else if (op === "=") {
+          state[S.effectCounters][id][name] = rhs;
+        } else if (op === "*=") {
+          state[S.effectCounters][id][name] *= rhs;
+        } else if (op === "/=") {
+          state[S.effectCounters][id][name] /= rhs;
+        } else if (op === "%=") {
+          state[S.effectCounters][id][name] %= rhs;
+        }
+        return;
+      }
+
       // Nullify debuffs
       if (state[S.nullifyDebuff] && DEBUFF_FIELDS.includes(S[lhs])) {
         state[S.nullifyDebuff]--;

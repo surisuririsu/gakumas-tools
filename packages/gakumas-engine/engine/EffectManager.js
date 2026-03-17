@@ -138,9 +138,13 @@ export default class EffectManager extends EngineComponent {
       // Delayed effects
       if (effect.phase) {
         this.logger.debug("Setting effects", effect.effects);
+        const effectCopy = { ...effect };
+        if (state[S.effectInstanceId]) {
+          effectCopy.effectInstanceId = state[S.effectInstanceId];
+        }
         this.setEffects(
           state,
-          [effect],
+          [effectCopy],
           card != null
             ? {
                 type: "skillCardEffect",
@@ -171,6 +175,11 @@ export default class EffectManager extends EngineComponent {
         continue;
       }
 
+      // Set current effect instance ID for counter resolution
+      const prevInstanceId = state[S.currentEffectInstanceId];
+      state[S.currentEffectInstanceId] = effect.effectInstanceId ?? null;
+      conditionState[S.currentEffectInstanceId] = effect.effectInstanceId ?? null;
+
       // Check conditions
       if (!skipConditions && effect.conditions) {
         let satisfied = true;
@@ -184,6 +193,7 @@ export default class EffectManager extends EngineComponent {
           }
         }
         if (!satisfied) {
+          state[S.currentEffectInstanceId] = prevInstanceId;
           if (!effect.actions && !effect.effects) {
             skipNextEffect = true;
           }
@@ -233,6 +243,9 @@ export default class EffectManager extends EngineComponent {
       if (effect.source) {
         this.logger.log(state, "entityEnd", effect.source);
       }
+
+      // Restore previous effect instance ID
+      state[S.currentEffectInstanceId] = prevInstanceId;
 
       // Track triggered effects
       triggeredEffects.push(effect.index);

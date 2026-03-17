@@ -116,12 +116,12 @@ export default class CardManager extends EngineComponent {
     state[S.lastUsedCard] = null;
     state[S.movedCard] = null;
 
+    state[S.effectInstanceId] = 0;
+    state[S.effectCounters] = {};
+    state[S.currentEffectInstanceId] = null;
+
     state[S.pcchiCardsUsed] = 0;
-    state[S.natsuyaCardsUsed] = 0;
-    state[S.holidayCardsUsed] = 0;
     state[S.onigiriCardsUsed] = 0;
-    state[S.koeteCardsUsed] = 0;
-    state[S.kyakkouCardsUsed] = -1;
   }
 
   changeIdol(state) {
@@ -368,8 +368,10 @@ export default class CardManager extends EngineComponent {
     state[S.phase] = "processCard";
     if (state[S.doubleCardEffectCards]) {
       state[S.doubleCardEffectCards]--;
+      state[S.effectInstanceId]++;
       this.engine.effectManager.triggerEffects(state, effects, null, card);
     }
+    state[S.effectInstanceId]++;
     this.engine.effectManager.triggerEffects(state, effects, null, card);
     delete state[S.phase];
 
