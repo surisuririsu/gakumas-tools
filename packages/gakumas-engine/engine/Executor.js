@@ -244,7 +244,7 @@ export default class Executor extends EngineComponent {
 
       // Handle effectCounter(name) assignments - name defaults to "main"
       const counterMatch = lhs.match(/^effectCounter(?:\((\w+)\))?$/);
-      if (counterMatch && state[S.currentEffectInstanceId] != null) {
+      if (counterMatch) {
         const id = state[S.currentEffectInstanceId];
         const name = counterMatch[1] || "main";
         const op = tokens[1];
@@ -260,16 +260,8 @@ export default class Executor extends EngineComponent {
 
         if (op === "+=") {
           state[S.effectCounters][id][name] += rhs;
-        } else if (op === "-=") {
-          state[S.effectCounters][id][name] -= rhs;
-        } else if (op === "=") {
-          state[S.effectCounters][id][name] = rhs;
-        } else if (op === "*=") {
-          state[S.effectCounters][id][name] *= rhs;
-        } else if (op === "/=") {
-          state[S.effectCounters][id][name] /= rhs;
-        } else if (op === "%=") {
-          state[S.effectCounters][id][name] %= rhs;
+        } else {
+          console.warn(`Unsupported counter operation: ${op}`);
         }
         return;
       }

@@ -48,14 +48,16 @@ function Group({ entity, childLogs, idolId, pendingDecision, onDecision }) {
           </>
         )}
       </div>
-      <div className={styles.childLogs}>
-        <Logs
-          logs={childLogs}
-          idolId={idolId}
-          pendingDecision={pendingDecision}
-          onDecision={onDecision}
-        />
-      </div>
+      {!!childLogs.length && (
+        <div className={styles.childLogs}>
+          <Logs
+            logs={childLogs}
+            idolId={idolId}
+            pendingDecision={pendingDecision}
+            onDecision={onDecision}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -23,7 +23,6 @@ export default class Evaluator extends EngineComponent {
       clearRatio: () => 0,
       effectCounter: (state, name = "main") => {
         const id = state[S.currentEffectInstanceId];
-        if (id == null) return 0;
         return state[S.effectCounters]?.[id]?.[name] ?? 0;
       },
       ...this.engine.turnManager.variableResolvers,
