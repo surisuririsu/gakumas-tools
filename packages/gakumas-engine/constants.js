@@ -223,8 +223,6 @@ export const ALL_FIELDS = [
   "currentEffectInstanceId",
 
   // Special
-  "pcchiCardsUsed",
-  "onigiriCardsUsed",
   "nullifySelect",
 
   // Delta

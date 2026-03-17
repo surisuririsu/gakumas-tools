@@ -8,6 +8,9 @@ export default class EffectManager extends EngineComponent {
     const config = this.getConfig(state);
 
     state[S.effects] = [];
+    state[S.effectInstanceId] = 0;
+    state[S.effectCounters] = {};
+    state[S.currentEffectInstanceId] = null;
 
     // Set default effects
     this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
@@ -59,6 +62,7 @@ export default class EffectManager extends EngineComponent {
   setEffects(state, effects, source) {
     for (let i = 0; i < effects.length; i++) {
       const effect = { ...effects[i] };
+      effect.effectInstanceId = state[S.effectInstanceId];
       if (source) {
         effect.source = source;
       }
@@ -120,6 +124,14 @@ export default class EffectManager extends EngineComponent {
   triggerEffects(state, effects, cndState, card, skipConditions) {
     const conditionState = cndState || shallowCopy(state);
 
+    // Deep copy effectCounters so condition checks see pre-modification values
+    if (state[S.effectCounters]) {
+      conditionState[S.effectCounters] = {};
+      for (let id in state[S.effectCounters]) {
+        conditionState[S.effectCounters][id] = { ...state[S.effectCounters][id] };
+      }
+    }
+
     let triggeredEffects = [];
     let skipNextEffect = false;
 
@@ -138,13 +150,9 @@ export default class EffectManager extends EngineComponent {
       // Delayed effects
       if (effect.phase) {
         this.logger.debug("Setting effects", effect.effects);
-        const effectCopy = { ...effect };
-        if (state[S.effectInstanceId]) {
-          effectCopy.effectInstanceId = state[S.effectInstanceId];
-        }
         this.setEffects(
           state,
-          [effectCopy],
+          [effect],
           card != null
             ? {
                 type: "skillCardEffect",
@@ -177,8 +185,8 @@ export default class EffectManager extends EngineComponent {
 
       // Set current effect instance ID for counter resolution
       const prevInstanceId = state[S.currentEffectInstanceId];
-      state[S.currentEffectInstanceId] = effect.effectInstanceId ?? null;
-      conditionState[S.currentEffectInstanceId] = effect.effectInstanceId ?? null;
+      state[S.currentEffectInstanceId] = effect.effectInstanceId;
+      conditionState[S.currentEffectInstanceId] = effect.effectInstanceId;
 
       // Check conditions
       if (!skipConditions && effect.conditions) {

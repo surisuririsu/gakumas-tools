@@ -115,13 +115,6 @@ export default class CardManager extends EngineComponent {
     state[S.usedCard] = null;
     state[S.lastUsedCard] = null;
     state[S.movedCard] = null;
-
-    state[S.effectInstanceId] = 0;
-    state[S.effectCounters] = {};
-    state[S.currentEffectInstanceId] = null;
-
-    state[S.pcchiCardsUsed] = 0;
-    state[S.onigiriCardsUsed] = 0;
   }
 
   changeIdol(state) {
