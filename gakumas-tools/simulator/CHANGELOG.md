@@ -8,6 +8,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-03-18
+
+- Add new stages, cards, p-items. Change handling of card counting effects
+
 ## 2026-02-24
 
 - Preview S40

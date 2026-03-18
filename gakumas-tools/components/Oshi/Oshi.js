@@ -5,11 +5,7 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = {
-  text: <div><IdolIcon idolId={6} /> 伊藤舞音のおいでよまおーこく だい11かい「まおーvsのん ですまっちさんぼんしょーぶ」</div>,
-  initiallyExpanded: true,
-  url: "https://www.youtube.com/watch?v=PuB_ELHFyM8",
-}
+export const OSHI_PROPS = null;
 
 export default function Oshi({
   text,
