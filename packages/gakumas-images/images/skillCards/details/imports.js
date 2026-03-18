@@ -759,6 +759,26 @@ import image_759 from "./759.png";
 import image_760 from "./760.png";
 import image_761 from "./761.png";
 import image_762 from "./762.png";
+import image_763 from "./763.png";
+import image_764 from "./764.png";
+import image_765 from "./765.png";
+import image_766 from "./766.png";
+import image_767 from "./767.png";
+import image_768 from "./768.png";
+import image_769 from "./769.png";
+import image_770 from "./770.png";
+import image_771 from "./771.png";
+import image_772 from "./772.png";
+import image_773 from "./773.png";
+import image_774 from "./774.png";
+import image_775 from "./775.png";
+import image_776 from "./776.png";
+import image_777 from "./777.png";
+import image_778 from "./778.png";
+import image_779 from "./779.png";
+import image_780 from "./780.png";
+import image_781 from "./781.png";
+import image_782 from "./782.png";
 
 const IMAGES = {
   '1': image_1,
@@ -1522,6 +1542,26 @@ const IMAGES = {
   '760': image_760,
   '761': image_761,
   '762': image_762,
+  '763': image_763,
+  '764': image_764,
+  '765': image_765,
+  '766': image_766,
+  '767': image_767,
+  '768': image_768,
+  '769': image_769,
+  '770': image_770,
+  '771': image_771,
+  '772': image_772,
+  '773': image_773,
+  '774': image_774,
+  '775': image_775,
+  '776': image_776,
+  '777': image_777,
+  '778': image_778,
+  '779': image_779,
+  '780': image_780,
+  '781': image_781,
+  '782': image_782,
 };
 
 export default IMAGES;

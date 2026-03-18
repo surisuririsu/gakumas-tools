@@ -590,6 +590,7 @@ import image_72_6 from "./72_6.png";
 import image_726 from "./726.png";
 import image_72_7 from "./72_7.png";
 import image_727 from "./727.png";
+import image_728 from "./728.png";
 import image_72_8 from "./72_8.png";
 import image_729 from "./729.png";
 import image_72_9 from "./72_9.png";
@@ -655,24 +656,44 @@ import image_761 from "./761.png";
 import image_76_1 from "./76_1.png";
 import image_762 from "./762.png";
 import image_76_2 from "./76_2.png";
+import image_763 from "./763.png";
 import image_76_3 from "./76_3.png";
+import image_764 from "./764.png";
 import image_76_4 from "./76_4.png";
+import image_765 from "./765.png";
 import image_76_5 from "./76_5.png";
+import image_766 from "./766.png";
 import image_76_6 from "./76_6.png";
+import image_767 from "./767.png";
 import image_76_7 from "./76_7.png";
 import image_76_8 from "./76_8.png";
+import image_768 from "./768.png";
 import image_76_9 from "./76_9.png";
+import image_769 from "./769.png";
+import image_770 from "./770.png";
 import image_77_1 from "./77_1.png";
+import image_771 from "./771.png";
 import image_77_2 from "./77_2.png";
+import image_772 from "./772.png";
+import image_773 from "./773.png";
 import image_77_3 from "./77_3.png";
 import image_77_4 from "./77_4.png";
+import image_774 from "./774.png";
+import image_775 from "./775.png";
 import image_77_5 from "./77_5.png";
+import image_776 from "./776.png";
 import image_77_6 from "./77_6.png";
 import image_77_7 from "./77_7.png";
+import image_777 from "./777.png";
 import image_77_8 from "./77_8.png";
+import image_778 from "./778.png";
+import image_779 from "./779.png";
 import image_77_9 from "./77_9.png";
+import image_780 from "./780.png";
 import image_78_1 from "./78_1.png";
+import image_781 from "./781.png";
 import image_78_2 from "./78_2.png";
+import image_782 from "./782.png";
 import image_78_3 from "./78_3.png";
 import image_78_4 from "./78_4.png";
 import image_78_5 from "./78_5.png";
@@ -3718,6 +3739,7 @@ const IMAGES = {
   '726': image_726,
   '72_7': image_72_7,
   '727': image_727,
+  '728': image_728,
   '72_8': image_72_8,
   '729': image_729,
   '72_9': image_72_9,
@@ -3783,24 +3805,44 @@ const IMAGES = {
   '76_1': image_76_1,
   '762': image_762,
   '76_2': image_76_2,
+  '763': image_763,
   '76_3': image_76_3,
+  '764': image_764,
   '76_4': image_76_4,
+  '765': image_765,
   '76_5': image_76_5,
+  '766': image_766,
   '76_6': image_76_6,
+  '767': image_767,
   '76_7': image_76_7,
   '76_8': image_76_8,
+  '768': image_768,
   '76_9': image_76_9,
+  '769': image_769,
+  '770': image_770,
   '77_1': image_77_1,
+  '771': image_771,
   '77_2': image_77_2,
+  '772': image_772,
+  '773': image_773,
   '77_3': image_77_3,
   '77_4': image_77_4,
+  '774': image_774,
+  '775': image_775,
   '77_5': image_77_5,
+  '776': image_776,
   '77_6': image_77_6,
   '77_7': image_77_7,
+  '777': image_777,
   '77_8': image_77_8,
+  '778': image_778,
+  '779': image_779,
   '77_9': image_77_9,
+  '780': image_780,
   '78_1': image_78_1,
+  '781': image_781,
   '78_2': image_78_2,
+  '782': image_782,
   '78_3': image_78_3,
   '78_4': image_78_4,
   '78_5': image_78_5,

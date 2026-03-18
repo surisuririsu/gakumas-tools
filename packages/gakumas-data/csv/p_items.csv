@@ -391,3 +391,12 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 390,最初の鳥,SSR,FALSE,logic,stage,pIdol,126,FALSE,"at:turn,if:turnsElapsed%2==1,if:genki>=30,do:fixedStamina+=1,do:score+=genki*0.2*countCards(removed\757)"
 391,最初の鳥+,SSR,TRUE,logic,stage,pIdol,126,FALSE,"at:turn,if:turnsElapsed%2==1,if:genki>=30,do:fixedStamina+=2,do:score+=genki*0.25*countCards(removed\757)"
 392,幸せの詰め合わせ,SR,FALSE,logic,produce,support,,FALSE,
+393,知らない世界へ,SSR,FALSE,sense,stage,pIdol,127,FALSE,"at:cardUsed,if:cardEffects&concentration,do:effectCounter+=1;at:cardUsed,if:cardEffects&concentration,if:effectCounter%3==2,do:concentration+=countCards(removed)*0.5"
+394,知らない世界へ+,SSR,TRUE,sense,stage,pIdol,127,FALSE,"at:cardUsed,if:cardEffects&concentration,do:effectCounter+=1;at:cardUsed,if:cardEffects&concentration,if:effectCounter%3==2,do:concentration+=countCards(removed)*0.5,do:genki+=2"
+395,箱庭のバラ,SSR,FALSE,logic,stage,pIdol,128,FALSE,"at:afterMentalCardUsed,if:goodImpressionTurns>=6,do:genki+=4,do:goodImpressionTurns+=1,limit:2"
+396,箱庭のバラ+,SSR,TRUE,logic,stage,pIdol,128,FALSE,"at:afterMentalCardUsed,if:goodImpressionTurns>=6,do:genki+=4,do:goodImpressionTurns+=2,limit:2"
+397,花海メモリアル,SSR,FALSE,sense,produce,support,,FALSE,
+398,お洗濯の必需品,SR,FALSE,sense,produce,support,,FALSE,
+399,ユートピアへの誘い,SSR,FALSE,anomaly,stage,pIdol,129,FALSE,"at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5,do:genki+=4,do:fullPowerCharge-=2;at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5,target:active,do:g.score+=3;at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5;at:turn,do:drawCard,limit:1"
+400,ユートピアへの誘い+,SSR,TRUE,anomaly,stage,pIdol,129,FALSE,"at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5,do:genki+=6,do:fullPowerCharge-=2;at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5,target:active,do:g.score+=3;at:stanceChanged,if:parentPhase==processCard,if:isStrength,if:fullPowerCharge>=5;at:turn,do:drawCard,limit:1"
+401,ほくほくハンバーガー,SR,FALSE,anomaly,produce,support,,FALSE,

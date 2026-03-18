@@ -390,6 +390,15 @@ import image_389 from "./389.png";
 import image_390 from "./390.png";
 import image_391 from "./391.png";
 import image_392 from "./392.png";
+import image_393 from "./393.png";
+import image_394 from "./394.png";
+import image_395 from "./395.png";
+import image_396 from "./396.png";
+import image_397 from "./397.png";
+import image_398 from "./398.png";
+import image_399 from "./399.png";
+import image_400 from "./400.png";
+import image_401 from "./401.png";
 
 const IMAGES = {
   '1': image_1,
@@ -784,6 +793,15 @@ const IMAGES = {
   '390': image_390,
   '391': image_391,
   '392': image_392,
+  '393': image_393,
+  '394': image_394,
+  '395': image_395,
+  '396': image_396,
+  '397': image_397,
+  '398': image_398,
+  '399': image_399,
+  '400': image_400,
+  '401': image_401,
 };
 
 export default IMAGES;
