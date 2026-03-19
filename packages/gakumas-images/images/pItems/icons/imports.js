@@ -399,6 +399,10 @@ import image_398 from "./398.png";
 import image_399 from "./399.png";
 import image_400 from "./400.png";
 import image_401 from "./401.png";
+import image_402 from "./402.png";
+import image_403 from "./403.png";
+import image_404 from "./404.png";
+import image_405 from "./405.png";
 
 const IMAGES = {
   '1': image_1,
@@ -802,6 +806,10 @@ const IMAGES = {
   '399': image_399,
   '400': image_400,
   '401': image_401,
+  '402': image_402,
+  '403': image_403,
+  '404': image_404,
+  '405': image_405,
 };
 
 export default IMAGES;
