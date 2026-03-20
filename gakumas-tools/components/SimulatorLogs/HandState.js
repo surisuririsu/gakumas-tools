@@ -8,6 +8,7 @@ const BUFFS_MAP = {
   [S.scoreDebuffs]: "scoreDebuff",
   [S.goodImpressionTurnsBuffs]: "goodImpressionTurnsBuff",
   [S.goodImpressionTurnsEffectBuffs]: "goodImpressionTurnsEffectBuff",
+  [S.goodImpressionTurnsTimesBuffs]: "goodImpressionTurnsTimesBuff",
   [S.motivationBuffs]: "motivationBuff",
   [S.goodConditionTurnsBuffs]: "goodConditionTurnsBuff",
   [S.concentrationBuffs]: "concentrationBuff",

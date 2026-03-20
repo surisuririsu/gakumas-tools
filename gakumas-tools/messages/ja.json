@@ -313,6 +313,7 @@
     "scoreDebuff": "スコア上昇量減少",
     "goodImpressionTurnsBuff": "好印象増加量増加",
     "goodImpressionTurnsEffectBuff": "好印象強化",
+    "goodImpressionTurnsTimesBuff": "好印象追加発動",
     "motivationBuff": "やる気増加量増加",
     "goodConditionTurnsBuff": "好調増加量増加",
     "concentrationBuff": "集中増加量増加",

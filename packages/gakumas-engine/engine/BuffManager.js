@@ -53,6 +53,12 @@ export default class BuffManager extends EngineComponent {
           parseFloat(amount),
           turns ? parseInt(turns, 10) : null
         ),
+      setGoodImpressionTurnsTimesBuff: (state, amount, turns) =>
+        this.setGoodImpressionTurnsTimesBuff(
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null
+        ),
       setMotivationBuff: (state, amount, turns) =>
         this.setMotivationBuff(
           state,
@@ -123,6 +129,7 @@ export default class BuffManager extends EngineComponent {
     state[S.scoreDebuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.goodImpressionTurnsTimesBuffs] = [];
     state[S.motivationBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
@@ -213,6 +220,16 @@ export default class BuffManager extends EngineComponent {
     );
   }
 
+  setGoodImpressionTurnsTimesBuff(state, amount, turns) {
+    this.setBuff(
+      state,
+      S.goodImpressionTurnsTimesBuffs,
+      amount,
+      turns,
+      "setGoodImpressionTurnsTimesBuff"
+    );
+  }
+
   setMotivationBuff(state, amount, turns) {
     this.setBuff(state, S.motivationBuffs, amount, turns, "setMotivationBuff");
   }
@@ -290,6 +307,7 @@ export default class BuffManager extends EngineComponent {
       S.scoreDebuffs,
       S.goodImpressionTurnsBuffs,
       S.goodImpressionTurnsEffectBuffs,
+      S.goodImpressionTurnsTimesBuffs,
       S.motivationBuffs,
       S.goodConditionTurnsBuffs,
       S.concentrationBuffs,

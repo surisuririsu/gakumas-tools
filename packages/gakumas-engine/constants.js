@@ -168,6 +168,7 @@ export const ALL_FIELDS = [
   "scoreDebuffs",
   "goodImpressionTurnsBuffs",
   "goodImpressionTurnsEffectBuffs",
+  "goodImpressionTurnsTimesBuffs",
   "concentrationBuffs",
   "concentrationEffectBuffs",
   "goodConditionTurns",
