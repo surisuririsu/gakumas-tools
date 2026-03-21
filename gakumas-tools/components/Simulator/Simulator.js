@@ -205,7 +205,6 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        <div>{t("multiplierNote")}</div>
         {stage.preview && <div>{t("previewNote")}</div>}
         <StageSelect />
         {stage.type !== "contest" ? (
@@ -311,7 +310,7 @@ export default function Simulator() {
         )}
         <SimulatorButtons />
         <div className={styles.subLinks}>
-            <KofiAd />
+          <KofiAd />
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
