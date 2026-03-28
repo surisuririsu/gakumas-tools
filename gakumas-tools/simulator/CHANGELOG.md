@@ -10,6 +10,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-03-28
+
+- 3/31 card effect updates
+
 ## 2026-03-20
 
 - Add support for good impression times effect"
