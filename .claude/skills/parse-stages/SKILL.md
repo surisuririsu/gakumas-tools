@@ -47,7 +47,7 @@ For each stage row, extract:
 Turn counts are roughly proportional to criteria but don't follow a strict algorithm.
 Check `tail -15 packages/gakumas-data/csv/stages.csv` for recent stages with similar criteria distributions.
 
-As a starting point, calculate `criteria[i] * total_turns` and round, but verify against similar past stages.
+**Important**: The turnCounts don't always match simple `criteria[i] * total_turns` rounding. Look for stages with the exact same criteria values in recent history and use those as reference. The distribution may vary slightly between stages even with the same criteria.
 
 ### Step 7: Infer first turn probabilities
 1. If any criterion >= 0.45: that one gets 1.0, others get 0
@@ -121,6 +121,8 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 | 好印象増加量増加+N%（Mターン） | `do:setGoodImpressionTurnsBuff(0.N,M)` |
 | スコア上昇量増加 N%（Mターン） | `do:setScoreBuff(0.N,M)` |
 
+**Note**: "+" may be misread as "×" in screenshots. When you see "×N", double-check - it's likely "+N".
+
 ### Growth Targets (target:)
 | Japanese | DSL |
 |----------|-----|
@@ -142,13 +144,13 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 When effect triggers "〇回...するごとに" (every N times):
 ```
 at:[phase],if:[condition],do:effectCounter+=1;
-at:[phase],if:[condition],if:effectCounter%N==0,do:[effects],limit:M
+at:[phase],if:[condition],if:effectCounter%N==(N-1),do:[effects],limit:M
 ```
-Note: Use `%N==0` to trigger on the Nth, 2Nth, 3Nth... occurrence.
+**Important**: Use `%N==(N-1)` (e.g., `%3==2` for "every 3"). The condition is evaluated before the counter increment applies, so to trigger on the Nth occurrence, check for N-1.
 
-For stance changes, use built-in counter `stanceChangedTimes`:
+For stance changes, use built-in counter `stanceChangedTimes` or `stanceChangedByCardTimes`:
 ```
-at:stanceChanged,if:parentPhase==processCard,if:stanceChangedTimes%2==0,do:[effects],limit:N
+at:stanceChanged,if:parentPhase==processCard,if:stanceChangedByCardTimes%2==1,do:[effects],limit:N
 ```
 
 ### Worked Examples
@@ -178,17 +180,25 @@ at:beforeStartOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1
 at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3
 ```
 
+**ターン終了時、累計全力値が13以上の場合、温存に変更　アイドル固有スキルカードのスコア値増加+30（2回）**
+```
+at:endOfTurn,if:cumulativeFullPowerCharge>=13,do:setStance(preservation),limit:2;at:endOfTurn,if:cumulativeFullPowerCharge>=13,target:sourceType(pIdol),do:g.score+=30,limit:2
+```
+**Important**: `target:` marks the entire effect line as a growth effect. Growth effects (`target:`, `do:g.*`) must be separated from non-growth effects with `;`. Each effect needs its own phase, conditions, and `limit:`.
+
 ## Output Format
 
 Output only the CSV rows, no analysis needed:
 
 ```csv
-[id],シーズンN ステージ1,contest,FALSE,N,1,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
-[id],シーズンN ステージ2,contest,FALSE,N,2,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
-[id],シーズンN ステージ3,contest,FALSE,N,3,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
+[id],シーズンN ステージ1,contest,TRUE,N,1,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
+[id],シーズンN ステージ2,contest,TRUE,N,2,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
+[id],シーズンN ステージ3,contest,TRUE,N,3,,[plan],"[criteria]","[turnCounts]","[firstTurns]","[effects]",
 ```
 
 Use `[next_id]` for id field - caller will assign actual IDs.
+
+**Note**: preview=TRUE for the current/active season being added. Only set to FALSE for historical seasons.
 
 ## Reference
 - Recent stages (for pattern matching): `tail -15 packages/gakumas-data/csv/stages.csv`
