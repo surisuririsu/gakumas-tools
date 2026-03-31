@@ -30,7 +30,7 @@ export default function ManualPlay({
           </a>
         </>
       )}
-      {["HOLD_SELECTION", "MOVE_TO_HAND_SELECTION"].includes(
+      {["HOLD_SELECTION", "MOVE_TO_HAND_SELECTION", "USE_CARD_FREE_SELECTION"].includes(
         pendingDecision?.type
       ) && (
         <HoldModal

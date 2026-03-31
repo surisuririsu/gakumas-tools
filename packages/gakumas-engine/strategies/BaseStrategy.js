@@ -31,6 +31,15 @@ export default class BaseStrategy {
   }
 
   /**
+   * Given a state and list of cards, selects a card to use for free.
+   * Returns the indices of the cards to use.
+   * Can be async for strategies that need to await user input (ManualStrategy).
+   */
+  pickCardsToUseFree(state, cards, num = 1) {
+    throw new Error("pickCardsToUseFree is not implemented!");
+  }
+
+  /**
    * Handles exceptions that occur while executing a decision.
    * Returns the next state.
    * Can be async for strategies that need to await user input.

@@ -14,8 +14,8 @@ import {
 } from "@/utils/entities";
 import styles from "./EntityBank.module.scss";
 
-const HIDDEN_ITEM_IDS = [];
-const HIDDEN_CARD_IDS = [];
+const HIDDEN_ITEM_IDS = [409, 411];
+const HIDDEN_CARD_IDS = [795, 797];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const t = useTranslations("EntityBank");
@@ -25,8 +25,8 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const [enabledCustomFilters, setEnabledCustomFilters] = useState(
     filters.reduce(
       (acc, cur) => ({ ...acc, [cur.label]: !cur.label || cur.default }),
-      {}
-    )
+      {},
+    ),
   );
 
   let entities = [];
@@ -46,7 +46,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
     }
 
     const nonSignatureEntities = Entities.getFiltered({
-      rarities: ["N", "R", "SR", "SSR"],
+      rarities: ["R", "SR", "SSR", "L"],
       plans: [plan, "free"],
       modes: ["stage"],
       sourceTypes: ["default", "produce", "support"],
@@ -76,7 +76,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
 
   const toggleableFilters = useMemo(
     () => filters.filter((f) => f.label),
-    [filters]
+    [filters],
   );
 
   return (
@@ -119,7 +119,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
               key={f.label}
               className={c(
                 styles.toggle,
-                enabledCustomFilters[f.label] && styles.enabled
+                enabledCustomFilters[f.label] && styles.enabled,
               )}
               onClick={() =>
                 setEnabledCustomFilters({

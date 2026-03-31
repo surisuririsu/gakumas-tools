@@ -404,3 +404,12 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 403,すべてを超えた先へ+,SSR,TRUE,logic,stage,pIdol,130,FALSE,"at:startOfStage,do:setScoreDebuff(0.2,4),limit:1;at:turn,if:turnsElapsed==3,do:motivation+=2,do:cardUsesRemaining+=1,limit:1;at:turn,if:turnsElapsed==6,do:goodImpressionTurns+=4,do:cardUsesRemaining+=1,limit:1"
 404,咲季の完全食・改,SSR,FALSE,logic,stage,support,,FALSE,"at:cardUsed,if:turnCardsUsed%2==1,do:goodImpressionTurns+=2,do:setGoodImpressionTurnsEffectBuff(0.25),limit:1"
 405,演技のたしなみ,SR,FALSE,logic,stage,support,,FALSE,"at:staminaDecreased,if:parentPhase==processCost,if:isVisualTurn,do:goodImpressionTurns+=2,do:halfCostTurns+=2,limit:1"
+406,あさり先生のおまもり,SSR,FALSE,sense,stage,pIdol,131,FALSE,"at:turn,if:turnsElapsed%4==3,do:moveCardToTopOfDeck(789)"
+407,あさり先生のおまもり,SSR,FALSE,logic,stage,pIdol,132,FALSE,"at:turn,if:turnsElapsed%4==3,do:moveCardToTopOfDeck(791)"
+408,あさり先生のおまもり,SSR,FALSE,anomaly,stage,pIdol,133,FALSE,"at:turn,if:turnsElapsed%4==3,do:moveCardToTopOfDeck(793)"
+409,わたしたちの約束,SSR,FALSE,sense,stage,pIdol,134,FALSE,"at:goodConditionTurnsIncreased,if:parentPhase==processCard,if:goodConditionTurnsDelta>=7,if:concentration>=13,do:goodConditionTurns+=concentration*0.75,do:concentration/=2,do:perfectConditionTurns+=2,do:genki+=2"
+410,わたしたちの約束+,SSR,TRUE,sense,stage,pIdol,134,FALSE,"at:goodConditionTurnsIncreased,if:parentPhase==processCard,if:goodConditionTurnsDelta>=7,if:concentration>=13,do:goodConditionTurns+=concentration*0.75,do:concentration/=2,do:perfectConditionTurns+=2,do:genki+=2"
+411,あたしたちの約束,SSR,FALSE,anomaly,stage,pIdol,135,FALSE,"at:endOfTurn,if:cumulativeFullPowerCharge>=13,target:797,do:g.scoreTimes+=1,limit:2;at:endOfTurn,if:cumulativeFullPowerCharge>=13,limit:2;at:turn,do:moveCardToHand(797),limit:1"
+412,あたしたちの約束+,SSR,TRUE,anomaly,stage,pIdol,135,FALSE,"at:endOfTurn,if:cumulativeFullPowerCharge>=13,target:797,do:g.scoreTimes+=1,limit:2;at:endOfTurn,if:cumulativeFullPowerCharge>=13,limit:2;at:turn,do:moveCardToHand(797),limit:1"
+413,夢を叶えるために,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:countCards(removed)>=7,do:goodConditionTurns+=1"
+414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,

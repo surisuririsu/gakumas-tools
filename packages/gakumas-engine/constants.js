@@ -225,6 +225,7 @@ export const ALL_FIELDS = [
 
   // Special
   "nullifySelect",
+  "freeCardUses",
 
   // Delta
   "goodImpressionTurnsDelta",

@@ -6,6 +6,7 @@ const RARITY_VALUES = {
   R: 2,
   SR: 3,
   SSR: 4,
+  L: 5,
 };
 
 const SOURCE_TYPE_VALUES = {
