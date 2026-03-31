@@ -756,7 +756,7 @@ export default class CardManager extends EngineComponent {
 
   moveCardToTopOfDeck(state, cardId, exact = false) {
     let matchingCards = [];
-    for (let pile of [S.deckCards, S.discardedCards]) {
+    for (let pile of [S.deckCards, S.discardedCards, S.removedCards]) {
       for (let i = 0; i < state[pile].length; i++) {
         const cardIdx = state[pile][i];
         const card = state[S.cardMap][cardIdx];
@@ -978,7 +978,11 @@ export default class CardManager extends EngineComponent {
       let partResult = null;
 
       for (let i = 0; i < intersectionParts.length; i++) {
-        const targetCards = this.getTargetCards(state, intersectionParts[i], source);
+        const targetCards = this.getTargetCards(
+          state,
+          intersectionParts[i],
+          source,
+        );
         if (partResult) {
           for (let card of partResult.values()) {
             if (!targetCards.has(card)) {

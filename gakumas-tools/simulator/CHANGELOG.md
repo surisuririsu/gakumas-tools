@@ -12,6 +12,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-03-31
+
+- Add new Legend cards, Asari, and Tokimeki Emotion preview
+
 ## 2026-03-29
 
 - Add preview of S42

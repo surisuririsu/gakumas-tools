@@ -270,6 +270,7 @@ export const CARD_PILES = [
   S.handCards,
   S.discardedCards,
   S.removedCards,
+  S.heldCards,
 ];
 
 export const COST_FIELDS = [
