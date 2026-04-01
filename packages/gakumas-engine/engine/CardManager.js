@@ -78,6 +78,8 @@ export default class CardManager extends EngineComponent {
         this.useRandomCardFree(state, targetRule),
       useSelectedCardFree: (state, targetRule) =>
         this.useSelectedCardFree(state, targetRule),
+      useAllCardsFree: (state, targetRule) =>
+        this.useAllCardsFree(state, targetRule),
       removeBasicCard: (state) => this.removeBasicCard(state),
     };
   }
@@ -367,7 +369,7 @@ export default class CardManager extends EngineComponent {
     // Apply card effects
     const effects = this.getLines(state, card, "effects");
     state[S.phase] = "processCard";
-    if (state[S.doubleCardEffectCards]) {
+    if (state[S.doubleCardEffectCards] && skillCard.rarity !== "L") {
       state[S.doubleCardEffectCards]--;
       state[S.effectInstanceId]++;
       this.engine.effectManager.triggerEffects(state, effects, null, card);
@@ -1172,6 +1174,20 @@ export default class CardManager extends EngineComponent {
     // Use the selected cards for free
     for (let j = 0; j < indicesToUse.length; j++) {
       const card = cards[indicesToUse[j]];
+      const pile = this.findCardPile(state, card);
+      if (pile) {
+        state[S.freeCardUses]++;
+        this.useCard(state, card, pile);
+        state[S.freeCardUses]--;
+      }
+    }
+  }
+
+  useAllCardsFree(state, targetRule) {
+    const targetCards = this.getTargetRuleCards(state, targetRule);
+    if (!targetCards.size) return;
+    // Use all matching cards (check pile each time as cards may move)
+    for (const card of targetCards) {
       const pile = this.findCardPile(state, card);
       if (pile) {
         state[S.freeCardUses]++;

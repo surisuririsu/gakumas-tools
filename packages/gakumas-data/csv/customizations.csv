@@ -59,7 +59,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 77,growHeldScoreAdd3,成長追加,effect,"40,40,70",3,,,,"level:1,target:held,do:g.score+=3;level:2,target:held,do:g.score+=6;level:3,target:held,do:g.score+=11",,
 81,onFullPowerGrowThisAdd1,成長追加,effect,70,1,,,,,,"at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=3"
 63,onStrengthGrowThisAdd2,成長追加,effect,"40,70",2,,,,,,"level:1,at:stanceChanged,if:isStrength,target:this,do:g.score+=2;level:2,at:stanceChanged,if:isStrength,target:this,do:g.score+=5"
-106,bishittoEffect1,持続効果+,effect,70,1,,,,"line:2,at:goodImpressionTurnsIncreased,if:parentPhase==processCard,do:score+=goodImpressionTurns*1.3,ttl:4",,
+106,bishittoEffect1,持続効果+,effect,70,1,,,,"line:2,at:goodImpressionTurnsIncreased,if:isDirectEffect,do:score+=goodImpressionTurns*1.3,ttl:4",,
 86,daydreamingEffect3,持続効果+,effect,"40,40,70",3,,,,"line:2,level:1,at:startOfTurn,do:score+=genki*0.7,limit:4;line:2,level:2,at:startOfTurn,do:score+=genki*0.8,limit:4;line:2,level:3,at:startOfTurn,do:score+=genki*0.95,limit:4",,
 46,kagakimi1,持続効果+,effect,100,1,,,,"line:2,at:cardUsed,do:score+=goodImpressionTurns*0.5,do:goodImpressionTurns+=1",,
 105,bishittoCondition1,条件変更,effect,70,1,,"line:1,if:goodImpressionTurns>=6",,,,
