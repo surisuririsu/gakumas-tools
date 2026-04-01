@@ -3,15 +3,9 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2026-04-01
 
-
-
-
-
-
-
-
-
+- Fix removing trouble cards
 
 ## 2026-03-31
 

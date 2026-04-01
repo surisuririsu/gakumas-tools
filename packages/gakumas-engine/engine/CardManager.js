@@ -948,22 +948,34 @@ export default class CardManager extends EngineComponent {
   }
 
   removeTroubleFromDeckOrDiscards(state) {
-    const troubleCards = state[S.cardMap].filter((c) => c.type == "trouble");
+    // Find trouble cards with their indices
+    const troubleCards = [];
+    for (let idx = 0; idx < state[S.cardMap].length; idx++) {
+      const card = state[S.cardMap][idx];
+      if (SkillCards.getById(card.id)?.type === "trouble") {
+        troubleCards.push({ card, idx });
+      }
+    }
     if (!troubleCards.length) return;
 
-    const card = troubleCards[Math.floor(Math.random() * troubleCards.length)];
-    let index = state[S.deckCards].indexOf(card);
-    let pile = S.deckCards;
-    if (index == -1) {
-      index = state[S.discardedCards].indexOf(card);
-      pile = S.discardedCards;
-    }
-    if (index != -1) {
-      state[pile].splice(index, 1);
-      this.logger.log(state, "removeCard", {
-        type: "skillCard",
-        id: state[S.cardMap][card].id,
-      });
+    // Shuffle and try to find one in deck or discards
+    shuffle(troubleCards);
+    for (const { card, idx } of troubleCards) {
+      let index = state[S.deckCards].indexOf(idx);
+      let pile = S.deckCards;
+      if (index === -1) {
+        index = state[S.discardedCards].indexOf(idx);
+        pile = S.discardedCards;
+      }
+      if (index !== -1) {
+        state[pile].splice(index, 1);
+        state[S.removedCards].push(idx);
+        this.logger.log(state, "removeCard", {
+          type: "skillCard",
+          id: card.id,
+        });
+        return;
+      }
     }
   }
 
