@@ -495,6 +495,7 @@ export default class CardManager extends EngineComponent {
   }
 
   addRandomUpgradedCardToHand(state, rarities = ["R", "SR", "SSR"]) {
+    if (state[S.handCards].length >= 5) return;
     const validSkillCards = SkillCards.getFiltered({
       rarities: rarities,
       plans: [this.getConfig(state).idol.plan, "free"],
@@ -544,6 +545,7 @@ export default class CardManager extends EngineComponent {
   }
 
   addCardToHand(state, cardId) {
+    if (state[S.handCards].length >= 5) return;
     const skillCard = SkillCards.getById(cardId);
 
     state[S.cardMap].push({
@@ -559,6 +561,7 @@ export default class CardManager extends EngineComponent {
 
   // From deck/discards
   moveCardToHand(state, cardId, exact) {
+    if (state[S.handCards].length >= 5) return;
     let matchingCards = [];
     for (let pile of [S.deckCards, S.discardedCards]) {
       for (let i = 0; i < state[pile].length; i++) {
@@ -588,6 +591,7 @@ export default class CardManager extends EngineComponent {
   }
 
   moveCardToHandFromRemoved(state, cardBaseId) {
+    if (state[S.handCards].length >= 5) return;
     let cards = state[S.cardMap]
       .map((c, i) => (c.baseId == cardBaseId ? i : -1))
       .filter((i) => i != -1);
@@ -668,7 +672,11 @@ export default class CardManager extends EngineComponent {
       }
     }
     if (!ssrCards.length) return;
-    for (let i = 0; i < num && ssrCards.length; i++) {
+    for (
+      let i = 0;
+      i < num && ssrCards.length && state[S.handCards].length < 5;
+      i++
+    ) {
       const pick = ssrCards.splice(
         Math.floor(getRand() * ssrCards.length),
         1,
@@ -704,6 +712,7 @@ export default class CardManager extends EngineComponent {
   }
 
   movePreservationCardToHand(state) {
+    if (state[S.handCards].length >= 5) return;
     let preservationCards = [];
     for (let pile of [S.deckCards, S.discardedCards]) {
       for (let i = 0; i < state[pile].length; i++) {
@@ -730,6 +739,7 @@ export default class CardManager extends EngineComponent {
   }
 
   movePIdolCardToHand(state) {
+    if (state[S.handCards].length >= 5) return;
     let pIdolCards = [];
     for (let pile of [S.deckCards, S.discardedCards]) {
       for (let i = 0; i < state[pile].length; i++) {
@@ -850,7 +860,11 @@ export default class CardManager extends EngineComponent {
     indicesToMove.sort((a, b) => b - a);
     if (indicesToMove.length === 0) return;
     // Find cards and move to hand
-    for (let j = 0; j < indicesToMove.length; j++) {
+    for (
+      let j = 0;
+      j < indicesToMove.length && state[S.handCards].length < 5;
+      j++
+    ) {
       let indexToMove = indicesToMove[j];
       for (let i = 0; i < sources.length; i++) {
         if (indexToMove < sourceCards[i].length) {
@@ -930,10 +944,13 @@ export default class CardManager extends EngineComponent {
   }
 
   addHeldCardsToHand(state) {
+    const movedCards = [];
     while (state[S.heldCards].length) {
       const card = state[S.heldCards].pop();
       state[S.handCards].push(card);
-
+      movedCards.push(card);
+    }
+    for (const card of movedCards) {
       state[S.movedCard] = card;
       this.engine.effectManager.triggerEffectsForPhase(
         state,

@@ -6,6 +6,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-04-01
 
 - Fix removing trouble cards
+- Fix hand card limit on methods that add/move cards to hand
 
 ## 2026-03-31
 
