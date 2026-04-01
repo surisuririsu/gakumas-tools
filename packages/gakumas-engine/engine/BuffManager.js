@@ -19,7 +19,12 @@ export default class BuffManager extends EngineComponent {
       isStrength: (state) => state[S.stance].startsWith("str"),
       isNotStrength: (state) => !state[S.stance].startsWith("str"),
       isFullPower: (state) => state[S.stance] == "fullPower",
-      isDirectEffect: (state) => state[S.parentPhase] === "processCard",
+      isDirectEffect: (state) =>
+        state[S.parentPhase] === "processCard" ||
+        state[S.parentPhase] === "processCost" ||
+        (state[S.phase] == "stanceChanged" &&
+          state[S.prevStance] != "fullPower" &&
+          state[S.stance] == "fullPower"),
       stanceChangedTimes: (state) =>
         state[S.strengthTimes] +
         state[S.preservationTimes] +

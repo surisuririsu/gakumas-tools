@@ -8,6 +8,8 @@ Dates are based on Eastern Time Zone.
 - Fix removing trouble cards
 - Fix hand card limit on methods that add/move cards to hand
 - Fix doubleCardEffectCards triggering on legend cards, effect of Expert, and add helper variable for direct effect
+- Fix 0 cost and direct effect triggers
+- Fix 0 cost and direct effect triggers
 
 ## 2026-03-31
 
