@@ -791,7 +791,9 @@ import image_791 from "./791.png";
 import image_792 from "./792.png";
 import image_793 from "./793.png";
 import image_794 from "./794.png";
+import image_795 from "./795.png";
 import image_796 from "./796.png";
+import image_797 from "./797.png";
 import image_798 from "./798.png";
 
 const IMAGES = {
@@ -1588,7 +1590,9 @@ const IMAGES = {
   '792': image_792,
   '793': image_793,
   '794': image_794,
+  '795': image_795,
   '796': image_796,
+  '797': image_797,
   '798': image_798,
 };
 

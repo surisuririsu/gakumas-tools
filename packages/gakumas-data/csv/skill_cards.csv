@@ -793,7 +793,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 792,あさり推し♡+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,132,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
 793,NEOインパクト,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
 794,NEOインパクト+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-795,いつかあなたの隣で,,SSR,active,sense,1,FALSE,TRUE,pIdol,134,FALSE,,do:cost-=5,"do:goodConditionTurns+=7;at:turn,do:score+=goodConditionTurns,limit:1",,
+795,いつかあなたの隣で,,SSR,active,sense,1,FALSE,TRUE,pIdol,134,FALSE,,do:cost-=8,"do:goodConditionTurns+=7;at:turn,do:score+=goodConditionTurns,limit:1",,
 796,いつかあなたの隣で+,,SSR,active,sense,1,TRUE,TRUE,pIdol,134,FALSE,,do:cost-=5,"do:goodConditionTurns+=7;at:turn,do:score+=goodConditionTurns,limit:1",,
-797,いつもあなたの隣で,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,135,FALSE,,do:cost-=3,"do:setStance(strength),do:score+=7,do:genki+=7",,"at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:this,do:g.score+=7,limit:2"
+797,いつもあなたの隣で,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,135,FALSE,,do:cost-=6,"do:setStance(strength),do:score+=7,do:genki+=7",,"at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:this,do:g.score+=7,limit:2"
 798,いつもあなたの隣で+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,135,FALSE,,do:cost-=3,"do:setStance(strength),do:score+=7,do:genki+=7",,"at:stanceChanged,if:parentPhase==processCard,if:isPreservation,target:this,do:g.score+=7,limit:2"
