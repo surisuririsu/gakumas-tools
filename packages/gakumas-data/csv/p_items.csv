@@ -156,8 +156,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 155,初恋の証・清夏+,R,TRUE,logic,stage,pIdol,55,FALSE,"at:afterCardUsed,if:motivation>=8,do:score+=motivation*2.1,do:fixedStamina-=1,limit:2"
 156,初恋の証・広,R,FALSE,sense,stage,pIdol,56,FALSE,"at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=2,do:costReduction+=1,do:upgradeRandomCardInHand,limit:1,group:1"
 157,初恋の証・広+,R,TRUE,sense,stage,pIdol,56,FALSE,"at:afterStartOfTurn,if:stamina<=maxStamina*0.5,do:concentration+=4,do:costReduction+=2,do:upgradeRandomCardInHand,limit:1,group:1"
-158,これでばっちり,SSR,FALSE,logic,stage,pIdol,57,FALSE,"at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.5,do:genki=0,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1"
-159,これでばっちり+,SSR,TRUE,logic,stage,pIdol,57,FALSE,"at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.7,do:genki=0,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1"
+158,これでばっちり,SSR,FALSE,logic,stage,pIdol,57,FALSE,"at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.5,do:genki-=genki,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1"
+159,これでばっちり+,SSR,TRUE,logic,stage,pIdol,57,FALSE,"at:afterCardUsed,if:cardEffects&fixedStamina,do:goodImpressionTurns+=genki*0.7,do:genki-=genki,do:score+=goodImpressionTurns*2,do:fixedStamina-=5,limit:1"
 160,会長の完璧な計画,SSR,FALSE,logic,produce,support,,FALSE,"at:cardReceived,if:cardEffects&genki,if:visual>=200,do:minimumRarity=2,do:getRandomPDrinks=1,limit:4"
 161,ぜったいマル秘レシピ,SR,FALSE,logic,produce,support,,FALSE,"at:cardReceived,if:cardEffects&goodImpressionTurns,if:visual>=700,do:removeSelectedCard,do:pPoints+=40,limit:1"
 162,アニメイト装備,SSR,FALSE,sense,stage,pIdol,58,FALSE,"at:everyTurn,if:turnsElapsed%2==1,if:goodConditionTurns>=1,do:concentration+=goodConditionTurns*0.4,do:concentration+=1,limit:2"
@@ -278,8 +278,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 277,N.I.Aライト（金白）,SSR,FALSE,logic,stage,produce,,FALSE,
 278,N.I.Aバンド（金黒）,SSR,FALSE,anomaly,stage,produce,,FALSE,
 279,N.I.Aライト（金黒）,SSR,FALSE,anomaly,stage,produce,,FALSE,
-280,伝説のidol装備,SSR,FALSE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isDirectEffect,if:isStrength,if:genki>=50,do:score+=genki*4.4,do:genki=0,do:fixedStamina-=2,limit:2"
-281,伝説のidol装備+,SSR,TRUE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isDirectEffect,if:isStrength,if:genki>=50,do:score+=genki*5,do:genki=0,limit:2"
+280,伝説のidol装備,SSR,FALSE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isDirectEffect,if:isStrength,if:genki>=50,do:score+=genki*4.4,do:genki-=genki,do:fixedStamina-=2,limit:2"
+281,伝説のidol装備+,SSR,TRUE,anomaly,stage,pIdol,94,FALSE,"at:stanceChanged,if:isDirectEffect,if:isStrength,if:genki>=50,do:score+=genki*5,do:genki-=genki,limit:2"
 282,居残りの生徒会室,SSR,FALSE,anomaly,stage,support,,FALSE,"at:startOfTurn,if:isDanceTurn,if:strengthTimes>=3,do:enthusiasmBonus+=10,limit:1"
 283,のびのびバンド,SR,FALSE,anomaly,produce,support,,FALSE,
 284,世界を救ったマイク,SSR,FALSE,sense,stage,pIdol,95,FALSE,"at:cardUsed,if:cardEffects&concentration,do:halfCostTurns+=2,limit:2"
@@ -414,3 +414,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 413,夢を叶えるために,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:countCards(removed)>=7,do:goodConditionTurns+=1"
 414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,
 415,おかいものバッグ,SSR,FALSE,anomaly,stage,support,,TRUE,"at:stanceChanged,if:isDirectEffect,if:isDanceTurn,if:genki==0,do:halfCostTurns+=1"
+416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,"at:endOfTurn,if:turnsElapsed%3==2,do:score+=genki*1.3,do:genki-=genki,limit:3;at:everyTurn,if:turnsElapsed%3==2,limit:3;at:turn,do:drawCard,do:drawCard,limit:1"
+417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,"at:endOfTurn,if:turnsElapsed%3==2,do:score+=genki*1.3,do:genki-=genki,limit:3;at:everyTurn,if:turnsElapsed%3==2,limit:3;at:turn,do:drawCard,do:drawCard,limit:1"
+419,もぐもぐ定食,SR,FALSE,logic,produce,support,,FALSE,

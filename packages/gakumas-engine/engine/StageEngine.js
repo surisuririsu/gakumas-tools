@@ -39,6 +39,7 @@ export default class StageEngine {
     state[S.stamina] = this.getConfig(state).idol.params.stamina;
     state[S.consumedStamina] = 0;
     state[S.genki] = 0;
+    state[S.consumedGenki] = 0;
     state[S.score] = 0;
 
     // Turns

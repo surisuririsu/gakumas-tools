@@ -7,6 +7,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-04-03
 
 - Add okaimono bag
+- Add suisai shujinkou gacha preview
 
 ## 2026-04-01
 
