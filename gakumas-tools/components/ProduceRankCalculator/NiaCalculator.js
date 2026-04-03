@@ -37,11 +37,13 @@ const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
   label: i + 10,
 }));
 
-const IDOL_OPTIONS = Idols.getAll().map((idol) => ({
-  id: idol.id,
-  iconSrc: gkImg(idol).icon,
-  alt: idol.name,
-}));
+const IDOL_OPTIONS = Idols.getAll()
+  .filter((idol) => idol.id !== 14)
+  .map((idol) => ({
+    id: idol.id,
+    iconSrc: gkImg(idol).icon,
+    alt: idol.name,
+  }));
 
 const STAGE_OPTIONS_BY_DIFFICULTY = {
   pro: [
@@ -67,7 +69,7 @@ export default function NiaCalculator() {
         value: difficulty,
         label: t(`difficulties.${difficulty}`),
       })),
-    [t]
+    [t],
   );
   const TABLE_HEADERS = [t("produceRank"), "Vo", "Da", "Vi"];
 
@@ -109,27 +111,27 @@ export default function NiaCalculator() {
         paramBonuses,
         affection,
         params,
-        votes
+        votes,
       )
     : null;
 
   const gainedParams = calculateGainedParams(
     paramRegimesByOrder,
     paramOrder,
-    scores
+    scores,
   );
   const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
   const challengeParams = calculateChallengeParams(
     gainedParams,
     bonusParams,
-    challengeParamBonus
+    challengeParamBonus,
   );
   const postAuditionParams = calculatePostAuditionParams(
     maxParams,
     params,
     gainedParams,
     challengeParams,
-    bonusParams
+    bonusParams,
   );
   const totalScore = scores.reduce((acc, cur) => acc + cur, 0);
   const gainedVotes = calculateGainedVotes(voteRegimes, affection, totalScore);
@@ -137,7 +139,7 @@ export default function NiaCalculator() {
   const voteRank = getVoteRank(totalVotes);
 
   const paramRating = Math.floor(
-    postAuditionParams.reduce((acc, cur) => acc + cur, 0) * 2.3
+    postAuditionParams.reduce((acc, cur) => acc + cur, 0) * 2.3,
   );
 
   let actualRating = "?";
@@ -267,8 +269,8 @@ export default function NiaCalculator() {
                   if (recommendedScores[rank]) {
                     return row.concat(
                       recommendedScores[rank].map((score) =>
-                        score.toLocaleString()
-                      )
+                        score.toLocaleString(),
+                      ),
                     );
                   } else {
                     return row.concat(["-", "-", "-"]);

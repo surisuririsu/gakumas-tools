@@ -26,6 +26,7 @@ export const PARAM_ORDER_BY_IDOL = {
   11: [2, 3, 1],
   12: [1, 3, 2],
   13: [2, 1, 3],
+  14: [1, 2, 3],
 };
 
 export const BALANCE_BY_IDOL = {
@@ -42,6 +43,7 @@ export const BALANCE_BY_IDOL = {
   11: "flat",
   12: "skew",
   13: "skew",
+  14: "flat",
 };
 
 export const PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER = {
@@ -209,12 +211,12 @@ export function calculateMaxScores(
   maxParams,
   paramOrder,
   params,
-  paramBonuses
+  paramBonuses,
 ) {
   return paramOrder.map((order, i) => {
     const regimes = paramRegimesByOrder[order];
     const maxGain = Math.ceil(
-      (maxParams - params[i]) / (1 + paramBonuses[i] / 100)
+      (maxParams - params[i]) / (1 + paramBonuses[i] / 100),
     );
     let regime = regimes[0];
     for (let j = 1; j < regimes.length; j++) {
@@ -232,19 +234,19 @@ export function calculateMaxScores(
 
 export function calculateBonusParams(gainedParams, paramBonuses) {
   return gainedParams.map((param, i) =>
-    Math.floor((param * paramBonuses[i]) / 100)
+    Math.floor((param * paramBonuses[i]) / 100),
   );
 }
 
 export function calculateChallengeParams(
   gainedParams,
   bonusParams,
-  challengeParamBonus
+  challengeParamBonus,
 ) {
   return gainedParams.map(
     (param, i) =>
       Math.floor((param * challengeParamBonus) / 100) +
-      Math.floor((bonusParams[i] * challengeParamBonus) / 100)
+      Math.floor((bonusParams[i] * challengeParamBonus) / 100),
   );
 }
 
@@ -253,13 +255,13 @@ export function calculatePostAuditionParams(
   params,
   gainedParams,
   challengeParams,
-  bonusParams
+  bonusParams,
 ) {
   return params.map((param, i) =>
     Math.min(
       param + gainedParams[i] + challengeParams[i] + bonusParams[i],
-      maxParams
-    )
+      maxParams,
+    ),
   );
 }
 
@@ -307,7 +309,8 @@ export function calculateGainedVotes(voteRegimes, affection, score) {
     const { threshold, multiplier, constant } = voteRegimes[j];
     if (score > threshold) {
       return Math.floor(
-        Math.ceil(score * multiplier + constant) * (1 + 0.05 * (affection - 10))
+        Math.ceil(score * multiplier + constant) *
+          (1 + 0.05 * (affection - 10)),
       );
     }
   }
@@ -320,7 +323,7 @@ function calculateScoreForVotes(voteRegimes, affection, votes) {
     if (votes > constant) {
       return Math.floor(
         (Math.ceil(votes / (1 + 0.05 * (affection - 10))) - constant) /
-          multiplier
+          multiplier,
       );
     }
   }
@@ -370,7 +373,7 @@ export function calculateRecommendedScores(
   paramBonuses,
   affection,
   params,
-  votes
+  votes,
 ) {
   let sft = 0;
   const maxScores = calculateMaxScores(
@@ -378,7 +381,7 @@ export function calculateRecommendedScores(
     maxParams,
     paramOrder,
     params,
-    paramBonuses
+    paramBonuses,
   );
   let recommendedScores = {};
   let currentScores = [0, 0, 0];
@@ -394,33 +397,33 @@ export function calculateRecommendedScores(
     const gainedParams = calculateGainedParams(
       paramRegimesByOrder,
       paramOrder,
-      currentScores
+      currentScores,
     );
     // console.log(gainedParams);
     const bonusParams = calculateBonusParams(gainedParams, paramBonuses);
     const challengeParams = calculateChallengeParams(
       gainedParams,
       bonusParams,
-      challengeParamBonus
+      challengeParamBonus,
     );
     const postAuditionParams = calculatePostAuditionParams(
       maxParams,
       params,
       gainedParams,
       challengeParams,
-      bonusParams
+      bonusParams,
     );
 
     const totalScore = currentScores.reduce((acc, cur) => acc + cur, 0);
     const gainedVotes = calculateGainedVotes(
       voteRegimes,
       affection,
-      totalScore
+      totalScore,
     );
     const postAuditionVotes = votes + gainedVotes;
 
     const currentParamRating = Math.floor(
-      postAuditionParams.reduce((acc, cur) => acc + cur, 0) * 2.3
+      postAuditionParams.reduce((acc, cur) => acc + cur, 0) * 2.3,
     );
 
     let currentVoteRating = 0;
@@ -477,10 +480,10 @@ export function calculateRecommendedScores(
     // Current regimes
     const paramRegimes = paramRegimesByOrder[paramOrder[selectedParam]];
     const currentParamRegimeIndex = paramRegimes.findIndex(
-      (regime) => regime.multiplier == maxMultiplier
+      (regime) => regime.multiplier == maxMultiplier,
     );
     const currentVoteRegimeIndex = voteRegimes.findIndex(
-      (regime) => totalScore >= regime.threshold
+      (regime) => totalScore >= regime.threshold,
     );
 
     // Score to next param regime
@@ -513,7 +516,7 @@ export function calculateRecommendedScores(
           (1 + paramBonuses[selectedParam] / 100) +
           currentVoteRegime.multiplier *
             (1 + 0.05 * (affection - 10)) *
-            currentVoteRank?.multiplier || 0)
+            currentVoteRank?.multiplier || 0),
     );
 
     const targetScores = [
