@@ -12,9 +12,11 @@ const BUFF_TYPES = [
   { action: "setScoreDebuff", field: S.scoreDebuffs },
   { action: "setGoodImpressionTurnsBuff", field: S.goodImpressionTurnsBuffs },
   { action: "setGoodImpressionTurnsEffectBuff", field: S.goodImpressionTurnsEffectBuffs },
+  { action: "setGoodImpressionTurnsTimesBuff", field: S.goodImpressionTurnsTimesBuffs },
   { action: "setMotivationBuff", field: S.motivationBuffs },
   { action: "setGoodConditionTurnsBuff", field: S.goodConditionTurnsBuffs },
   { action: "setConcentrationBuff", field: S.concentrationBuffs },
+  { action: "setConcentrationEffectBuff", field: S.concentrationEffectBuffs },
   { action: "setEnthusiasmBuff", field: S.enthusiasmBuffs },
   { action: "setFullPowerChargeBuff", field: S.fullPowerChargeBuffs },
 ];
@@ -24,11 +26,19 @@ export default class BuffManager extends EngineComponent {
     super(engine);
 
     this.variableResolvers = {
-      isPreservation: (state) => state[S.stance].startsWith("pre"),
+      isPreservation: (state) =>
+        state[S.stance].startsWith("pre") || state[S.stance] === "leisure",
+      isNotPreservation: (state) =>
+        !state[S.stance].startsWith("pre") && state[S.stance] != "leisure",
       isStrength: (state) => state[S.stance].startsWith("str"),
-      isNotStrength: (state) =>
-        state[S.stance] == "none" || state[S.stance].startsWith("pre"),
+      isNotStrength: (state) => !state[S.stance].startsWith("str"),
       isFullPower: (state) => state[S.stance] == "fullPower",
+      isDirectEffect: (state) =>
+        state[S.parentPhase] === "processCard" ||
+        state[S.parentPhase] === "processCost" ||
+        (state[S.phase] == "stanceChanged" &&
+          state[S.prevStance] != "fullPower" &&
+          state[S.stance] == "fullPower"),
       stanceChangedTimes: (state) =>
         state[S.strengthTimes] +
         state[S.preservationTimes] +
@@ -83,9 +93,11 @@ export default class BuffManager extends EngineComponent {
     state[S.scoreDebuffs] = [];
     state[S.goodImpressionTurnsBuffs] = [];
     state[S.goodImpressionTurnsEffectBuffs] = [];
+    state[S.goodImpressionTurnsTimesBuffs] = [];
     state[S.motivationBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
+    state[S.concentrationEffectBuffs] = [];
     state[S.enthusiasmBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
 
@@ -110,6 +122,7 @@ export default class BuffManager extends EngineComponent {
     state[S.preservationTimes] = 0;
     state[S.fullPowerTimes] = 0;
     state[S.leisureTimes] = 0;
+    state[S.stanceChangedByCardTimes] = 0;
 
     // Buffs/debuffs protected from decrement
     state[S.freshBuffs] = {};
@@ -124,6 +137,7 @@ export default class BuffManager extends EngineComponent {
 
     // Other
     state[S.nullifySelect] = 0;
+    state[S.freeCardUses] = 0;
   }
 
   setBuff(state, field, amount, turns, logLabel) {
@@ -224,6 +238,9 @@ export default class BuffManager extends EngineComponent {
         state[S.fullPowerTimes]++;
       } else if (state[S.stance] == "leisure") {
         state[S.leisureTimes]++;
+      }
+      if (state[S.phase] == "processCard") {
+        state[S.stanceChangedByCardTimes]++;
       }
     }
   }

@@ -8,6 +8,9 @@ export default class EffectManager extends EngineComponent {
     const config = this.getConfig(state);
 
     state[S.effects] = [];
+    state[S.effectInstanceId] = 0;
+    state[S.effectCounters] = {};
+    state[S.currentEffectInstanceId] = null;
 
     // Set default effects
     this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
@@ -59,6 +62,7 @@ export default class EffectManager extends EngineComponent {
   setEffects(state, effects, source) {
     for (let i = 0; i < effects.length; i++) {
       const effect = { ...effects[i] };
+      effect.effectInstanceId = state[S.effectInstanceId]++;
       if (source) {
         effect.source = source;
       }
@@ -117,6 +121,14 @@ export default class EffectManager extends EngineComponent {
 
   triggerEffects(state, effects, cndState, card, skipConditions) {
     const conditionState = cndState || shallowCopy(state);
+
+    // Deep copy effectCounters so condition checks see pre-modification values
+    if (state[S.effectCounters]) {
+      conditionState[S.effectCounters] = {};
+      for (let id in state[S.effectCounters]) {
+        conditionState[S.effectCounters][id] = { ...state[S.effectCounters][id] };
+      }
+    }
 
     let triggeredEffects = [];
 
@@ -183,6 +195,11 @@ export default class EffectManager extends EngineComponent {
         this.logger.log(state, "entityStart", effect.source);
       }
 
+      // Track current effect instance
+      const prevInstanceId = state[S.currentEffectInstanceId];
+      state[S.currentEffectInstanceId] = effect.effectInstanceId;
+      conditionState[S.currentEffectInstanceId] = effect.effectInstanceId;
+
       this.logger.debug("Executing actions", effect.actions);
 
       // Apply growth or actions or effects
@@ -215,6 +232,9 @@ export default class EffectManager extends EngineComponent {
           this.logger.log(state, "setEffect");
         }
       }
+
+      // Restore previous effect instance
+      state[S.currentEffectInstanceId] = prevInstanceId;
 
       // Log source end
       if (effect.source) {

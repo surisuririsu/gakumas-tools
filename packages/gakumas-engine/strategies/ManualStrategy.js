@@ -21,6 +21,16 @@ export class MoveToHandSelectionRequest extends Error {
   }
 }
 
+export class UseCardFreeSelectionRequest extends Error {
+  constructor(state, cards, num) {
+    super("Use card free selection required");
+    this.name = "UseCardFreeSelectionRequest";
+    this.state = state;
+    this.cards = cards;
+    this.num = num;
+  }
+}
+
 export default class ManualStrategy extends BaseStrategy {
   constructor(engine, inputCallback) {
     super(engine);
@@ -76,6 +86,16 @@ export default class ManualStrategy extends BaseStrategy {
     return indices;
   }
 
+  pickCardsToUseFree(state, cards, num = 1) {
+    if (!this.pickCardsToUseFreeIndices) {
+      throw new UseCardFreeSelectionRequest(state, cards, num);
+    }
+
+    const indices = this.pickCardsToUseFreeIndices;
+    delete this.pickCardsToUseFreeIndices;
+    return indices;
+  }
+
   async handleException(exception, state, decision) {
     if (exception instanceof HoldSelectionRequest) {
       const selectedIndices = await this.inputCallback({
@@ -95,6 +115,15 @@ export default class ManualStrategy extends BaseStrategy {
       });
 
       this.pickCardsToMoveToHandIndices = selectedIndices;
+    } else if (exception instanceof UseCardFreeSelectionRequest) {
+      const selectedIndices = await this.inputCallback({
+        type: "USE_CARD_FREE_SELECTION",
+        state: exception.state,
+        cards: exception.cards,
+        num: exception.num,
+      });
+
+      this.pickCardsToUseFreeIndices = selectedIndices;
     } else {
       throw exception;
     }

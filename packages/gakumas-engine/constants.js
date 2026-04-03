@@ -124,6 +124,7 @@ export const ALL_FIELDS = [
   "stamina",
   "consumedStamina",
   "genki",
+  "consumedGenki",
   "score",
 
   // Turns
@@ -150,7 +151,9 @@ export const ALL_FIELDS = [
   "scoreDebuffs",
   "goodImpressionTurnsBuffs",
   "goodImpressionTurnsEffectBuffs",
+  "goodImpressionTurnsTimesBuffs",
   "concentrationBuffs",
+  "concentrationEffectBuffs",
   "goodConditionTurns",
   "goodConditionTurnsMultiplier",
   "goodConditionTurnsBuffs",
@@ -175,6 +178,7 @@ export const ALL_FIELDS = [
   "preservationTimes",
   "leisureTimes",
   "fullPowerTimes",
+  "stanceChangedByCardTimes",
   "freshBuffs",
 
   // Cards
@@ -198,6 +202,9 @@ export const ALL_FIELDS = [
   "effects",
   "phase",
   "parentPhase",
+  "effectInstanceId",
+  "effectCounters",
+  "currentEffectInstanceId",
 
   // Special
   "pcchiCardsUsed",
@@ -205,6 +212,7 @@ export const ALL_FIELDS = [
   "holidayCardsUsed",
   "onigiriCardsUsed",
   "nullifySelect",
+  "freeCardUses",
 
   // Delta
   "goodImpressionTurnsDelta",
@@ -249,6 +257,7 @@ export const CARD_PILES = [
   S.handCards,
   S.discardedCards,
   S.removedCards,
+  S.heldCards,
 ];
 
 export const COST_FIELDS = [
