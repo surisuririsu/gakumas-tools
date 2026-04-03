@@ -413,3 +413,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 412,あたしたちの約束+,SSR,TRUE,anomaly,stage,pIdol,135,FALSE,"at:endOfTurn,if:cumulativeFullPowerCharge>=13,target:797,do:g.scoreTimes+=1,limit:2;at:endOfTurn,if:cumulativeFullPowerCharge>=13,limit:2;at:turn,do:moveCardToHand(797),limit:1"
 413,夢を叶えるために,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:countCards(removed)>=7,do:goodConditionTurns+=1"
 414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,
+415,おかいものバッグ,SSR,FALSE,anomaly,stage,support,,TRUE,"at:stanceChanged,if:isDirectEffect,if:isDanceTurn,if:genki==0,do:halfCostTurns+=1"
