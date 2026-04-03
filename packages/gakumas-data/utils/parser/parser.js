@@ -9,7 +9,7 @@
  * effectBody = (conditionBlock | targetBlock | phaseBlock | action | modifier)*
  * conditionBlock = "if:" condition ("{" effectBody "}")?
  * targetBlock = "target:" condition ("{" effectBody "}")?
- * action = "do:" assignmentExpr
+ * action = ("do:")? assignmentExpr
  * modifier = "limit:" number | "ttl:" number | "delay:" number | "group:" number
  *
  * condition = orExpr
@@ -166,6 +166,9 @@ export class Parser {
         return this.parseTargetBlock();
       case TokenType.DO:
         return this.parseAction();
+      case TokenType.IDENTIFIER:
+        // Bare action without "do:" prefix
+        return this.parseBareAction();
       case TokenType.EOF:
       case TokenType.RBRACE:
         return null;
@@ -227,6 +230,12 @@ export class Parser {
     this.expect(TokenType.COLON, "Expected ':' after 'do'");
     const expr = this.parseAssignmentExpr();
 
+    return { type: "action", expr };
+  }
+
+  parseBareAction() {
+    // Parse action without "do:" prefix (identifier already verified by caller)
+    const expr = this.parseAssignmentExpr();
     return { type: "action", expr };
   }
 
