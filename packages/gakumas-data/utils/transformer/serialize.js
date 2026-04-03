@@ -106,7 +106,7 @@ export function serializeEffect(effect, indent = 0) {
 
     if (effect.actions) {
       for (const action of effect.actions) {
-        result += `${innerPad}do:${serializeExpr(action)}\n`;
+        result += `${innerPad}${serializeExpr(action)}\n`;
       }
     }
 
