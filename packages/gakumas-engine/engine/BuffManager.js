@@ -320,6 +320,7 @@ export default class BuffManager extends EngineComponent {
       S.motivationBuffs,
       S.goodConditionTurnsBuffs,
       S.concentrationBuffs,
+      S.concentrationEffectBuffs,
       S.enthusiasmBuffs,
       S.fullPowerChargeBuffs,
     ];
