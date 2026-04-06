@@ -1,4 +1,4 @@
-export const DEBUG = false;
+export const DEBUG = true;
 
 export const TOKEN_REGEX = /([=!]?=|[<>+\-*/%]=?|&)/;
 export const NUMBER_REGEX = /^-?\d+(?:\.\d+)?$/;

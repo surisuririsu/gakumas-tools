@@ -12,7 +12,17 @@ function mulberry32(a) {
   };
 }
 
-export const getRand = DEBUG ? mulberry32(seed) : Math.random;
+let _getRand = DEBUG ? mulberry32(seed) : Math.random;
+
+export function getRand() {
+  return _getRand();
+}
+
+export function resetRand(customSeed) {
+  if (DEBUG) {
+    _getRand = mulberry32(customSeed ?? seed);
+  }
+}
 
 export function shuffle(arr) {
   let currentIndex = arr.length;
