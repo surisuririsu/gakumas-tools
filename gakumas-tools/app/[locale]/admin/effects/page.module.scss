@@ -1,0 +1,287 @@
+.page {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(229, 188, 111, 0.22), transparent 32rem),
+    linear-gradient(135deg, #f8f1e3 0%, #eef5ef 44%, #e4edf4 100%);
+  color: #19231f;
+  padding: 24px;
+  overflow: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    letter-spacing: -0.08em;
+    line-height: 0.9;
+  }
+
+  p {
+    margin: 8px 0 0;
+    max-width: 720px;
+    color: #536057;
+  }
+}
+
+.eyebrow {
+  margin: 0;
+  color: #8b5d1f;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.typeNav,
+.navButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  a,
+  span {
+    border: 1px solid rgba(25, 35, 31, 0.22);
+    border-radius: 999px;
+    color: inherit;
+    padding: 9px 14px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.55);
+  }
+}
+
+.typeNav .activeType,
+.navButtons a:hover {
+  background: #19231f;
+  color: #fff8eb;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 70vh;
+}
+
+.sidebar,
+.review {
+  border: 1px solid rgba(25, 35, 31, 0.18);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 24px 80px rgba(23, 37, 31, 0.12);
+}
+
+.sidebar {
+  overflow: hidden;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px;
+  border-bottom: 1px solid rgba(25, 35, 31, 0.14);
+}
+
+.entityList {
+  max-height: calc(100vh - 240px);
+  overflow: auto;
+  padding: 8px;
+
+  a {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    border-radius: 16px;
+    color: inherit;
+    padding: 10px;
+    text-decoration: none;
+  }
+
+  a:hover,
+  .activeEntity {
+    background: #e7d8b9;
+  }
+
+  span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.review {
+  padding: 22px;
+  overflow: hidden;
+}
+
+.entityHeader,
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 18px;
+}
+
+.entityHeader {
+  align-items: end;
+  margin-bottom: 18px;
+
+  h2 {
+    margin: 4px 0;
+    font-size: clamp(1.6rem, 3vw, 3rem);
+    letter-spacing: -0.05em;
+  }
+
+  p {
+    margin: 0;
+    color: #59645d;
+  }
+}
+
+.navButtons {
+  justify-content: flex-end;
+
+  span {
+    opacity: 0.45;
+  }
+}
+
+.effects {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.field {
+  border: 1px solid rgba(25, 35, 31, 0.14);
+  border-radius: 24px;
+  background: rgba(255, 252, 245, 0.86);
+  padding: 18px;
+
+  h3 {
+    margin: 0 0 12px;
+    font-size: 1.35rem;
+  }
+
+  h4 {
+    margin: 0 0 8px;
+    color: #4c5a52;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+.stringGrid,
+.parsedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.parsedGrid {
+  margin-top: 12px;
+}
+
+.code,
+.json,
+.error {
+  min-height: 48px;
+  max-height: 420px;
+  overflow: auto;
+  border-radius: 16px;
+  margin: 0;
+  padding: 14px;
+  background: #17231e;
+  color: #e8f2e6;
+  font-family: "SFMono-Regular", "Cascadia Code", "Liberation Mono", monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.json {
+  background: #21302a;
+  color: #d5e5d4;
+  white-space: pre;
+}
+
+.error {
+  background: #431f1f;
+  color: #ffd9d9;
+}
+
+.keyword {
+  color: #f0bf68;
+  font-weight: 800;
+}
+
+.punctuation {
+  color: #a7d7b5;
+}
+
+.operator {
+  color: #84c7ef;
+}
+
+.parsedColumn {
+  min-width: 0;
+}
+
+.parsedLabel {
+  margin: 12px 0 6px;
+  color: #657168;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.imagePanel {
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
+.imageFrame {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid rgba(25, 35, 31, 0.16);
+  border-radius: 26px;
+  background: #f7ecd5;
+
+  img {
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 1100px) {
+  .header,
+  .workspace,
+  .entityHeader,
+  .contentGrid,
+  .stringGrid,
+  .parsedGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    display: grid;
+  }
+
+  .entityList {
+    max-height: 260px;
+  }
+
+  .imagePanel {
+    position: static;
+  }
+}
