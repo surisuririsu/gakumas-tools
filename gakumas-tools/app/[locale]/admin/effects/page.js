@@ -1,93 +1,123 @@
-import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 import gkImg from "gakumas-images";
+import {
+  deserializeEffectSequence as deserializeLegacyEffectSequence,
+} from "gakumas-data";
+import {
+  parseEffects,
+  transformEffects,
+} from "gakumas-data-structured";
+import { getReviewDataset } from "../../../../../packages/gakumas-data-structured/review/index.js";
+import Button from "@/components/Button";
 import Image from "@/components/Image";
-import { deserializeEffectSequence } from "../../../../../packages/gakumas-data/utils/effects.js";
-import legacyCustomizations from "../../../../../packages/gakumas-data/json/customizations.json";
-import legacyPItems from "../../../../../packages/gakumas-data/json/p_items.json";
-import legacySkillCards from "../../../../../packages/gakumas-data/json/skill_cards.json";
-import legacyStages from "../../../../../packages/gakumas-data/json/stages.json";
-import structuredCustomizations from "../../../../../packages/gakumas-data/structured/json/customizations.json";
-import structuredPItems from "../../../../../packages/gakumas-data/structured/json/p_items.json";
-import structuredSkillCards from "../../../../../packages/gakumas-data/structured/json/skill_cards.json";
-import structuredStages from "../../../../../packages/gakumas-data/structured/json/stages.json";
-import { parseEffects as parseStructuredEffects } from "../../../../../packages/gakumas-data/structured/utils/parser/index.js";
-import { transformEffects as transformStructuredEffects } from "../../../../../packages/gakumas-data/structured/utils/transformer/index.js";
 import styles from "./page.module.scss";
-
-const EFFECT_FIELDS_BY_TYPE = {
-  skillCards: ["conditions", "cost", "effects", "growth"],
-  pItems: ["effects"],
-  stages: ["effects"],
-  customizations: ["conditions", "cost", "effects", "growth"],
-};
 
 const DATASETS = {
   skillCards: {
     label: "Skill Cards",
-    legacy: legacySkillCards,
-    structured: structuredSkillCards,
     imageType: "skillCard",
+    fields: ["conditions", "cost", "effects", "growth"],
   },
   pItems: {
     label: "P-Items",
-    legacy: legacyPItems,
-    structured: structuredPItems,
     imageType: "pItem",
+    fields: ["effects"],
+  },
+  pDrinks: {
+    label: "Drinks",
+    imageType: "pDrink",
+    fields: ["effects"],
   },
   stages: {
     label: "Stages",
-    legacy: legacyStages,
-    structured: structuredStages,
+    fields: ["effects"],
   },
   customizations: {
     label: "Customizations",
-    legacy: legacyCustomizations,
-    structured: structuredCustomizations,
+    fields: ["conditions", "cost", "effects", "growth"],
   },
 };
+
+const DEFAULT_DATASET_TYPE = "skillCards";
+const EFFECT_KEYWORDS = new Set([
+  "at",
+  "if",
+  "target",
+  "do",
+  "limit",
+  "ttl",
+  "delay",
+  "level",
+  "line",
+  "group",
+]);
+const EFFECT_TOKEN_PATTERN =
+  /(at|if|target|do|limit|ttl|delay|level|line|group|[{}\[\]();,]|[+\-*/%&|!<>=]=?|:)/g;
+const PUNCTUATION_PATTERN = /^[{}\[\]();,]$/;
+const OPERATOR_PATTERN = /^[+\-*/%&|!<>=]=?|:$/;
 
 export const metadata = {
   title: "Effect Verification",
 };
 
-function byId(data) {
-  return new Map(data.map((entry) => [String(entry.id), entry]));
+export const dynamic = "force-dynamic";
+
+function getSelectedType(query) {
+  return DATASETS[query?.type] ? query.type : DEFAULT_DATASET_TYPE;
 }
 
-function getEntities(type) {
-  const dataset = DATASETS[type];
-  const structuredById = byId(dataset.structured);
-  return dataset.legacy.map((legacy) => ({
-    id: legacy.id,
-    legacy,
-    structured: structuredById.get(String(legacy.id)),
-  }));
-}
-
-function getEntityUrl(locale, type, id) {
-  return `/${locale}/admin/effects?type=${type}&id=${id}`;
-}
-
-function parseLegacy(value) {
-  try {
-    return { ok: true, value: deserializeEffectSequence(value || "") };
-  } catch (error) {
-    return { ok: false, error: error.message };
+function getSelectedId(query) {
+  if (query?.id === undefined || query?.id === null || query.id === "") {
+    return null;
   }
+
+  return String(query.id);
 }
 
-function parseStructured(value) {
-  try {
-    const ast = parseStructuredEffects(value || "");
-    return {
-      ok: true,
-      ast,
-      engine: transformStructuredEffects(ast),
-    };
-  } catch (error) {
-    return { ok: false, error: error.message };
+function getSelectedEntry(entries, selectedId) {
+  if (!entries.length) {
+    return null;
   }
+
+  const selectedIndex =
+    selectedId === null
+      ? 0
+      : Math.max(
+          entries.findIndex((entry) => String(entry.id) === selectedId),
+          0,
+        );
+
+  return {
+    index: selectedIndex,
+    entry: entries[selectedIndex],
+  };
+}
+
+function getEntityName(entity) {
+  return entity?.name || entity?.alias || "Unknown";
+}
+
+function getEntityDetails(entity) {
+  return [entity?.rarity, entity?.plan, entity?.type, entity?.mode]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function getTypeUrl(type) {
+  return `/admin/effects?type=${type}`;
+}
+
+function getEntityUrl(type, id) {
+  return `/admin/effects?type=${type}&id=${id}`;
+}
+
+function getEffectText(value) {
+  return typeof value === "string" ? value : "";
+}
+
+function tokenizeEffect(value) {
+  return (getEffectText(value) || "(empty)").split(EFFECT_TOKEN_PATTERN);
 }
 
 function JsonBlock({ value }) {
@@ -99,29 +129,25 @@ function JsonBlock({ value }) {
 }
 
 function EffectCode({ value }) {
-  const parts = String(value || "(empty)").split(
-    /(at|if|target|do|limit|ttl|delay|level|line|group|[{}\[\]();,]|[+\-*/%&|!<>=]=?|:)/g,
-  );
-
   return (
     <pre className={styles.code}>
-      {parts.map((part, index) => {
+      {tokenizeEffect(value).map((part, index) => {
         if (!part) return null;
-        if (/^(at|if|target|do|limit|ttl|delay|level|line|group)$/.test(part)) {
+        if (EFFECT_KEYWORDS.has(part)) {
           return (
             <span className={styles.keyword} key={index}>
               {part}
             </span>
           );
         }
-        if (/^[{}\[\]();,]$/.test(part)) {
+        if (PUNCTUATION_PATTERN.test(part)) {
           return (
             <span className={styles.punctuation} key={index}>
               {part}
             </span>
           );
         }
-        if (/^[+\-*/%&|!<>=]=?|:$/.test(part)) {
+        if (OPERATOR_PATTERN.test(part)) {
           return (
             <span className={styles.operator} key={index}>
               {part}
@@ -134,13 +160,73 @@ function EffectCode({ value }) {
   );
 }
 
+function parseLegacy(value) {
+  if (typeof value !== "string") {
+    return {
+      ok: false,
+      error: `Expected string, received ${typeof value}`,
+    };
+  }
+
+  try {
+    return {
+      ok: true,
+      value: deserializeLegacyEffectSequence(value),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error.message,
+    };
+  }
+}
+
+function parseStructured(value) {
+  if (typeof value !== "string") {
+    return {
+      ok: false,
+      error: `Expected string, received ${typeof value}`,
+    };
+  }
+
+  try {
+    const ast = parseEffects(value);
+    return {
+      ok: true,
+      ast,
+      engine: transformEffects(ast),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error.message,
+    };
+  }
+}
+
+function reviewField(field, legacyEntry, structuredEntry) {
+  const legacyValue = getEffectText(legacyEntry?.[field]);
+  const structuredValue = getEffectText(structuredEntry?.[field]);
+  const legacy = parseLegacy(legacyValue);
+  const structured = parseStructured(structuredValue);
+
+  return {
+    field,
+    legacyValue,
+    structuredValue,
+    legacy,
+    structured,
+  };
+}
+
 function EntityImage({ type, entity }) {
   if (!type || !entity) return null;
 
+  const entityName = getEntityName(entity);
   const { details } = gkImg({
     _type: type,
     id: entity.id,
-    name: entity.name,
+    name: entityName,
   });
 
   if (!details) return null;
@@ -150,9 +236,9 @@ function EntityImage({ type, entity }) {
       <div className={styles.imageFrame}>
         <Image
           src={details}
-          alt={entity.name}
-          fill
-          sizes="360px"
+          alt={entityName}
+          width={480}
+          height={680}
           draggable={false}
         />
       </div>
@@ -160,161 +246,186 @@ function EntityImage({ type, entity }) {
   );
 }
 
-function ParsedColumn({ title, parsed, structured }) {
+function EffectField({ review }) {
   return (
-    <div className={styles.parsedColumn}>
-      <h4>{title}</h4>
-      {parsed.ok ? (
-        structured ? (
-          <>
-            <div className={styles.parsedLabel}>AST</div>
-            <JsonBlock value={parsed.ast} />
-            <div className={styles.parsedLabel}>Engine object</div>
-            <JsonBlock value={parsed.engine} />
-          </>
-        ) : (
-          <JsonBlock value={parsed.value} />
-        )
-      ) : (
-        <pre className={styles.error}>{parsed.error}</pre>
-      )}
-    </div>
+    <section className={styles.field}>
+      <div className={styles.fieldHeader}>
+        <h3>{review.field}</h3>
+      </div>
+      <div className={styles.stringGrid}>
+        <div>
+          <h4>Legacy</h4>
+          <EffectCode value={review.legacyValue} />
+        </div>
+        <div>
+          <h4>Structured</h4>
+          <EffectCode value={review.structuredValue} />
+        </div>
+      </div>
+      <details className={styles.parsedDetails}>
+        <summary>Parsed output</summary>
+        <div className={styles.parsedGrid}>
+          <div className={styles.parsedColumn}>
+            <div className={styles.parsedLabel}>Legacy engine object</div>
+            {review.legacy.ok ? (
+              <JsonBlock value={review.legacy.value} />
+            ) : (
+              <pre className={styles.error}>{review.legacy.error}</pre>
+            )}
+          </div>
+          <div className={styles.parsedColumn}>
+            <div className={styles.parsedLabel}>Structured AST</div>
+            {review.structured.ok ? (
+              <JsonBlock value={review.structured.ast} />
+            ) : (
+              <pre className={styles.error}>{review.structured.error}</pre>
+            )}
+            {review.structured.ok ? (
+              <>
+                <div className={styles.parsedLabel}>
+                  Structured engine object
+                </div>
+                <JsonBlock value={review.structured.engine} />
+              </>
+            ) : null}
+          </div>
+        </div>
+      </details>
+    </section>
   );
 }
 
-function EffectField({ field, legacyValue, structuredValue }) {
-  const legacyParsed = parseLegacy(legacyValue);
-  const structuredParsed = parseStructured(structuredValue);
+async function getReviewPageState(searchParams) {
+  const query = await searchParams;
+  const type = getSelectedType(query);
+  const dataset = await getReviewDataset(type);
+  const selected = getSelectedEntry(dataset.entries, getSelectedId(query));
 
-  return (
-    <section className={styles.field}>
-      <h3>{field}</h3>
-      <div className={styles.stringGrid}>
-        <div>
-          <h4>Old string</h4>
-          <EffectCode value={legacyValue} />
-        </div>
-        <div>
-          <h4>New string</h4>
-          <EffectCode value={structuredValue} />
-        </div>
-      </div>
-      <div className={styles.parsedGrid}>
-        <ParsedColumn title="Old parsed object" parsed={legacyParsed} />
-        <ParsedColumn
-          title="New parsed form"
-          parsed={structuredParsed}
-          structured
-        />
-      </div>
-    </section>
+  if (!selected?.entry) {
+    notFound();
+  }
+
+  const legacyEntry = dataset.getLegacyById(selected.entry.id);
+  const structuredEntry = dataset.getStructuredById(selected.entry.id);
+
+  if (!legacyEntry || !structuredEntry) {
+    notFound();
+  }
+
+  const reviews = DATASETS[type].fields.map((field) =>
+    reviewField(field, legacyEntry, structuredEntry),
   );
+
+  return {
+    type,
+    dataset,
+    selectedIndex: selected.index,
+    legacyEntry,
+    reviews,
+    prevEntry: dataset.entries[selected.index - 1] || null,
+    nextEntry: dataset.entries[selected.index + 1] || null,
+  };
 }
 
 export default async function EffectVerificationPage({ params, searchParams }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const query = await searchParams;
-  const type = DATASETS[query.type] ? query.type : "skillCards";
-  const dataset = DATASETS[type];
-  const entities = getEntities(type);
-  const selectedIndex = Math.max(
-    entities.findIndex((entity) => String(entity.id) === String(query.id)),
-    0,
-  );
-  const selected = entities[selectedIndex];
-  const fields = EFFECT_FIELDS_BY_TYPE[type];
-  const prev = entities[selectedIndex - 1];
-  const next = entities[selectedIndex + 1];
+
+  const {
+    type,
+    dataset,
+    selectedIndex,
+    legacyEntry,
+    reviews,
+    prevEntry,
+    nextEntry,
+  } = await getReviewPageState(searchParams);
+  const entityName = getEntityName(legacyEntry);
+  const entityDetails = getEntityDetails(legacyEntry);
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>Admin</p>
-          <h1>Effect verification</h1>
-          <p>
-            Review legacy and structured effect syntax side by side, including
-            parsed objects and AST output.
-          </p>
-        </div>
-        <nav className={styles.typeNav}>
-          {Object.entries(DATASETS).map(([key, value]) => (
-            <Link
-              className={key === type ? styles.activeType : ""}
-              href={getEntityUrl(locale, key, getEntities(key)[0]?.id)}
-              key={key}
-            >
-              {value.label}
-            </Link>
-          ))}
-        </nav>
-      </header>
+      <nav className={styles.typeNav}>
+        {Object.entries(DATASETS).map(([key, value]) => (
+          <Button
+            href={getTypeUrl(key)}
+            key={key}
+            style={key === type ? "primary" : "secondary"}
+          >
+            {value.label}
+          </Button>
+        ))}
+      </nav>
 
-      <div className={styles.workspace}>
-        <aside className={styles.sidebar}>
-          <div className={styles.sidebarHeader}>
-            <strong>{dataset.label}</strong>
-            <span>
-              {selectedIndex + 1} / {entities.length}
-            </span>
+      <main className={styles.review}>
+        <section className={styles.controls}>
+          <form action={`/${locale}/admin/effects`} className={styles.selectForm}>
+            <input name="type" type="hidden" value={type} />
+            <label className={styles.selectLabel} htmlFor="effect-entry-id">
+              Entity
+            </label>
+            <select
+              className={styles.select}
+              defaultValue={String(legacyEntry.id)}
+              id="effect-entry-id"
+              name="id"
+            >
+              {dataset.entries.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.id} · {entry.name}
+                </option>
+              ))}
+            </select>
+            <button className={styles.selectButton} type="submit">
+              Open
+            </button>
+          </form>
+
+          <div className={styles.navButtons}>
+            <Button
+              disabled={!prevEntry}
+              href={
+                prevEntry ? getEntityUrl(type, prevEntry.id) : undefined
+              }
+              style="secondary"
+            >
+              Previous
+            </Button>
+            <Button
+              disabled={!nextEntry}
+              href={
+                nextEntry ? getEntityUrl(type, nextEntry.id) : undefined
+              }
+              style="secondary"
+            >
+              Next
+            </Button>
           </div>
-          <div className={styles.entityList}>
-            {entities.map((entity) => (
-              <Link
-                className={entity.id === selected.id ? styles.activeEntity : ""}
-                href={getEntityUrl(locale, type, entity.id)}
-                key={entity.id}
-              >
-                <span>{entity.id}</span>
-                <span>{entity.legacy.name || entity.legacy.alias}</span>
-              </Link>
+        </section>
+
+        <div className={styles.entityHeader}>
+          <div>
+            <p className={styles.eyebrow}>{DATASETS[type].label}</p>
+            <h2>{entityName}</h2>
+            <p className={styles.meta}>
+              #{legacyEntry.id}
+              {entityDetails ? ` · ${entityDetails}` : ""}
+            </p>
+          </div>
+          <div className={styles.position}>
+            {selectedIndex + 1} / {dataset.entries.length}
+          </div>
+        </div>
+
+        <div className={styles.contentGrid}>
+          <div className={styles.effects}>
+            {reviews.map((review) => (
+              <EffectField key={review.field} review={review} />
             ))}
           </div>
-        </aside>
-
-        <main className={styles.review}>
-          <div className={styles.entityHeader}>
-            <div>
-              <p className={styles.eyebrow}>{dataset.label}</p>
-              <h2>
-                {selected.legacy.id}.{" "}
-                {selected.legacy.name || selected.legacy.alias}
-              </h2>
-              <p>
-                {selected.legacy.rarity ? `${selected.legacy.rarity} · ` : ""}
-                {selected.legacy.plan || selected.legacy.type || ""}
-              </p>
-            </div>
-            <div className={styles.navButtons}>
-              {prev ? (
-                <Link href={getEntityUrl(locale, type, prev.id)}>Previous</Link>
-              ) : (
-                <span>Previous</span>
-              )}
-              {next ? (
-                <Link href={getEntityUrl(locale, type, next.id)}>Next</Link>
-              ) : (
-                <span>Next</span>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.contentGrid}>
-            <div className={styles.effects}>
-              {fields.map((field) => (
-                <EffectField
-                  field={field}
-                  legacyValue={selected.legacy[field]}
-                  structuredValue={selected.structured?.[field]}
-                  key={field}
-                />
-              ))}
-            </div>
-            <EntityImage type={dataset.imageType} entity={selected.legacy} />
-          </div>
-        </main>
-      </div>
+          <EntityImage type={DATASETS[type].imageType} entity={legacyEntry} />
+        </div>
+      </main>
     </div>
   );
 }

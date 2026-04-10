@@ -1,9 +1,9 @@
 import {
-  StructuredCustomizations as Customizations,
-  StructuredPIdols as PIdols,
-  StructuredPItems as PItems,
-  StructuredSkillCards as SkillCards,
-} from "gakumas-data";
+  Customizations,
+  PIdols,
+  PItems,
+  SkillCards,
+} from "gakumas-data-structured";
 import { getBaseId } from "../utils";
 
 export default class IdolConfig {

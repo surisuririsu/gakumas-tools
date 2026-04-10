@@ -1,7 +1,7 @@
 import {
-  StructuredPItems as PItems,
-  StructuredSkillCards as SkillCards,
-} from "gakumas-data";
+  PItems,
+  SkillCards,
+} from "gakumas-data-structured";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";

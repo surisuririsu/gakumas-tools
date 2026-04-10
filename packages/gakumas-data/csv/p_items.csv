@@ -414,6 +414,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 413,夢を叶えるために,SSR,FALSE,sense,stage,support,,FALSE,"at:startOfTurn,if:isVisualTurn,if:countCards(removed)>=7,do:goodConditionTurns+=1"
 414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,
 415,おかいものバッグ,SSR,FALSE,anomaly,stage,support,,TRUE,"at:stanceChanged,if:isDirectEffect,if:isDanceTurn,if:genki==0,do:halfCostTurns+=1"
-416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,"at:endOfTurn,if:turnsElapsed%3==2,do:score+=genki*1.3,do:genki-=genki,limit:3;at:everyTurn,if:turnsElapsed%3==2,limit:3;at:turn,do:drawCard,do:drawCard,limit:1"
+416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,"at:endOfTurn,if:turnsElapsed%3==2,do:score+=genki*1.1,do:genki-=genki,limit:3;at:everyTurn,if:turnsElapsed%3==2,limit:3;at:turn,do:drawCard,limit:1"
 417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,"at:endOfTurn,if:turnsElapsed%3==2,do:score+=genki*1.3,do:genki-=genki,limit:3;at:everyTurn,if:turnsElapsed%3==2,limit:3;at:turn,do:drawCard,do:drawCard,limit:1"
 419,もぐもぐ定食,SR,FALSE,logic,produce,support,,FALSE,

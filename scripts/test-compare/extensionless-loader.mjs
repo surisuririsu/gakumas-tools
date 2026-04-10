@@ -27,7 +27,11 @@ async function resolveFilePath(filePath) {
 }
 
 async function resolveWorkspacePackage(specifier) {
-  for (const packageName of ["gakumas-data", "gakumas-engine"]) {
+  for (const packageName of [
+    "gakumas-data",
+    "gakumas-data-structured",
+    "gakumas-engine",
+  ]) {
     if (specifier === packageName || specifier.startsWith(`${packageName}/`)) {
       const subpath =
         specifier === packageName ? "index" : specifier.slice(packageName.length + 1);

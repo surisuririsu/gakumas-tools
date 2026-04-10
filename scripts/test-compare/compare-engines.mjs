@@ -14,8 +14,8 @@ import {
 } from "../../packages/gakumas-engine/index.js";
 import {
   LegacyStages,
-  StructuredStages,
 } from "../../packages/gakumas-data/index.js";
+import { Stages as StructuredStages } from "../../packages/gakumas-data-structured/index.js";
 import { readFile } from "node:fs/promises";
 
 function deserializeIds(str) {

@@ -14,6 +14,7 @@
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
     "gakumas-data": "workspace:*",
+    "gakumas-data-structured": "workspace:*",
     "gakumas-engine": "workspace:*",
     "gakumas-images": "workspace:*",
     "mongodb": "^7.1.0",

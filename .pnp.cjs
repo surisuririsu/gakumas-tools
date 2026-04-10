@@ -23,6 +23,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/gakumas-data"\
     },\
     {\
+      "name": "gakumas-data-structured",\
+      "reference": "workspace:packages/gakumas-data-structured"\
+    },\
+    {\
       "name": "gakumas-engine",\
       "reference": "workspace:packages/gakumas-engine"\
     },\
@@ -36,6 +40,7 @@ const RAW_RUNTIME_STATE =
   "pnpZipBackend": "libzip",\
   "fallbackExclusionList": [\
     ["gakumas-data", ["workspace:packages/gakumas-data"]],\
+    ["gakumas-data-structured", ["workspace:packages/gakumas-data-structured"]],\
     ["gakumas-engine", ["workspace:packages/gakumas-engine"]],\
     ["gakumas-images", ["virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#workspace:packages/gakumas-images", "workspace:packages/gakumas-images"]],\
     ["gakumas-tools", ["workspace:gakumas-tools"]],\
@@ -3488,11 +3493,22 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
+    ["gakumas-data-structured", [\
+      ["workspace:packages/gakumas-data-structured", {\
+        "packageLocation": "./packages/gakumas-data-structured/",\
+        "packageDependencies": [\
+          ["gakumas-data", "workspace:packages/gakumas-data"],\
+          ["gakumas-data-structured", "workspace:packages/gakumas-data-structured"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["gakumas-engine", [\
       ["workspace:packages/gakumas-engine", {\
         "packageLocation": "./packages/gakumas-engine/",\
         "packageDependencies": [\
           ["gakumas-data", "workspace:packages/gakumas-data"],\
+          ["gakumas-data-structured", "workspace:packages/gakumas-data-structured"],\
           ["gakumas-engine", "workspace:packages/gakumas-engine"]\
         ],\
         "linkType": "SOFT"\
@@ -3530,6 +3546,7 @@ const RAW_RUNTIME_STATE =
           ["eslint", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:10.0.3"],\
           ["eslint-config-next", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:16.1.7"],\
           ["gakumas-data", "workspace:packages/gakumas-data"],\
+          ["gakumas-data-structured", "workspace:packages/gakumas-data-structured"],\
           ["gakumas-engine", "workspace:packages/gakumas-engine"],\
           ["gakumas-images", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#workspace:packages/gakumas-images"],\
           ["gakumas-tools", "workspace:gakumas-tools"],\

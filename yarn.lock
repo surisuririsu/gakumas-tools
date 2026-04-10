@@ -2805,6 +2805,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gakumas-data-structured@workspace:*, gakumas-data-structured@workspace:packages/gakumas-data-structured":
+  version: 0.0.0-use.local
+  resolution: "gakumas-data-structured@workspace:packages/gakumas-data-structured"
+  dependencies:
+    gakumas-data: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "gakumas-data@workspace:*, gakumas-data@workspace:packages/gakumas-data":
   version: 0.0.0-use.local
   resolution: "gakumas-data@workspace:packages/gakumas-data"
@@ -2816,6 +2824,7 @@ __metadata:
   resolution: "gakumas-engine@workspace:packages/gakumas-engine"
   dependencies:
     gakumas-data: "workspace:*"
+    gakumas-data-structured: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2843,6 +2852,7 @@ __metadata:
     eslint: "npm:^10.0.3"
     eslint-config-next: "npm:^16.1.7"
     gakumas-data: "workspace:*"
+    gakumas-data-structured: "workspace:*"
     gakumas-engine: "workspace:*"
     gakumas-images: "workspace:*"
     mongodb: "npm:^7.1.0"

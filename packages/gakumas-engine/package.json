@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "gakumas-data": "workspace:*"
+    "gakumas-data": "workspace:*",
+    "gakumas-data-structured": "workspace:*"
   }
 }

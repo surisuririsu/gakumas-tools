@@ -4,7 +4,7 @@
  * Evaluates target expressions to find matching cards.
  * Supports boolean operators (AND, OR, NOT) and various card filters.
  */
-import { StructuredSkillCards as SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data-structured";
 import { S } from "../../constants";
 
 /**

@@ -1,4 +1,4 @@
-import { deserializeStructuredEffectSequence as deserializeEffectSequence } from "gakumas-data";
+import { deserializeEffectSequence } from "gakumas-data-structured";
 
 export const DEBUG = true;
 

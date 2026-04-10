@@ -1,0 +1,11 @@
+{
+  "name": "gakumas-data-structured",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "generate": "python -m scripts.csv_to_json"
+  },
+  "dependencies": {
+    "gakumas-data": "workspace:*"
+  }
+}

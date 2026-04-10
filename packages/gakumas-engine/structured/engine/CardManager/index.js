@@ -1,7 +1,7 @@
 import {
-  StructuredCustomizations as Customizations,
-  StructuredSkillCards as SkillCards,
-} from "gakumas-data";
+  Customizations,
+  SkillCards,
+} from "gakumas-data-structured";
 import { CARD_PILES, COST_FIELDS, S } from "../../constants";
 import EngineComponent from "../EngineComponent";
 import { getBaseId, getRand, shallowCopy, shuffle } from "../../utils";

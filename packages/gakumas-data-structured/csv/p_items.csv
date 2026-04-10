@@ -414,6 +414,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 413,夢を叶えるために,SSR,FALSE,sense,stage,support,,FALSE,
 414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,
 415,おかいものバッグ,SSR,FALSE,anomaly,stage,support,,TRUE,
-416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,
-417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,
+416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.1; genki-=genki }; limit:3 }; at:everyTurn { if:turnsElapsed%3==2; limit:3 }; at:turn { drawCard; limit:1 }
+417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.3; genki-=genki }; limit:3 }; at:everyTurn { if:turnsElapsed%3==2; limit:3 }; at:turn { drawCard; drawCard; limit:1 }
 419,もぐもぐ定食,SR,FALSE,logic,produce,support,,FALSE,
