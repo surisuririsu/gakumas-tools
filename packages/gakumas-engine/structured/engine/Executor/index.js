@@ -103,9 +103,16 @@ export default class Executor extends EngineComponent {
     state[S.concentrationMultiplier] = 1;
     state[S.motivationMultiplier] = 1;
 
-    // Execute actions
+    // Execute actions, triggering increase/decrease effects per-action
+    // (matching actual game behavior where p-items trigger between actions)
     let scoreTimes = state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
+      // Snapshot state before this action for per-action triggers
+      let actionPrev = {};
+      for (let k = 0; k < FIELDS_TO_DIFF.length; k++) {
+        actionPrev[FIELDS_TO_DIFF[k]] = state[FIELDS_TO_DIFF[k]];
+      }
+
       this.executeAction(state, actions[i], card);
 
       if (scoreTimes) {
@@ -127,6 +134,16 @@ export default class Executor extends EngineComponent {
         if (state[NON_NEGATIVE_FIELDS[i]] < 0) {
           state[NON_NEGATIVE_FIELDS[i]] = 0;
         }
+      }
+
+      // Fire increase/decrease triggers after each action
+      if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+        this.triggerChangeEffects(state, actionPrev);
+      }
+
+      // Consumed genki
+      if (state[S.genki] < actionPrev[S.genki]) {
+        state[S.consumedGenki] += actionPrev[S.genki] - state[S.genki];
       }
     }
 
@@ -154,10 +171,6 @@ export default class Executor extends EngineComponent {
           state[S.freshBuffs][field] = true;
         }
       }
-    }
-
-    if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
-      this.triggerChangeEffects(state, prev);
     }
   }
 
