@@ -4,6 +4,11 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+## 2026-04-10
+
+- Update shujinkou ume
+
 ## 2026-04-03
 
 - Add okaimono bag

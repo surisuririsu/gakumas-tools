@@ -735,10 +735,12 @@ import image_79_7 from "./79_7.png";
 import image_797 from "./797.png";
 import image_798 from "./798.png";
 import image_79_8 from "./79_8.png";
+import image_799 from "./799.png";
 import image_79_9 from "./79_9.png";
 import image_800 from "./800.png";
 import image_801 from "./801.png";
 import image_80_1 from "./80_1.png";
+import image_802 from "./802.png";
 import image_80_2 from "./80_2.png";
 import image_80_3 from "./80_3.png";
 import image_80_4 from "./80_4.png";
@@ -3912,10 +3914,12 @@ const IMAGES = {
   '797': image_797,
   '798': image_798,
   '79_8': image_79_8,
+  '799': image_799,
   '79_9': image_79_9,
   '800': image_800,
   '801': image_801,
   '80_1': image_80_1,
+  '802': image_802,
   '80_2': image_80_2,
   '80_3': image_80_3,
   '80_4': image_80_4,
