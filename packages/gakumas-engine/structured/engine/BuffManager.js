@@ -11,8 +11,14 @@ const BUFF_TYPES = [
   { action: "setScoreBuff", field: S.scoreBuffs },
   { action: "setScoreDebuff", field: S.scoreDebuffs },
   { action: "setGoodImpressionTurnsBuff", field: S.goodImpressionTurnsBuffs },
-  { action: "setGoodImpressionTurnsEffectBuff", field: S.goodImpressionTurnsEffectBuffs },
-  { action: "setGoodImpressionTurnsTimesBuff", field: S.goodImpressionTurnsTimesBuffs },
+  {
+    action: "setGoodImpressionTurnsEffectBuff",
+    field: S.goodImpressionTurnsEffectBuffs,
+  },
+  {
+    action: "setGoodImpressionTurnsTimesBuff",
+    field: S.goodImpressionTurnsTimesBuffs,
+  },
   { action: "setMotivationBuff", field: S.motivationBuffs },
   { action: "setGoodConditionTurnsBuff", field: S.goodConditionTurnsBuffs },
   { action: "setConcentrationBuff", field: S.concentrationBuffs },
@@ -28,8 +34,6 @@ export default class BuffManager extends EngineComponent {
     this.variableResolvers = {
       isPreservation: (state) =>
         state[S.stance].startsWith("pre") || state[S.stance] === "leisure",
-      isNotPreservation: (state) =>
-        !state[S.stance].startsWith("pre") && state[S.stance] != "leisure",
       isStrength: (state) => state[S.stance].startsWith("str"),
       isNotStrength: (state) => !state[S.stance].startsWith("str"),
       isFullPower: (state) => state[S.stance] == "fullPower",
@@ -67,7 +71,11 @@ export default class BuffManager extends EngineComponent {
       this[action] = (state, amount, turns) =>
         this.setBuff(state, field, amount, turns, action);
       this.specialActions[action] = (state, amount, turns) =>
-        this[action](state, parseFloat(amount), turns ? parseInt(turns, 10) : null);
+        this[action](
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null,
+        );
     }
   }
 

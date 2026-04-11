@@ -30,7 +30,9 @@ export function astContainsIdentifier(node, identifierName) {
         astContainsIdentifier(node.right, identifierName)
       );
     case "call":
-      return node.args.some((arg) => astContainsIdentifier(arg, identifierName));
+      return node.args.some((arg) =>
+        astContainsIdentifier(arg, identifierName),
+      );
     default:
       return false;
   }
@@ -118,7 +120,7 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     // Apply concentration
     const concentrationEffectBuff = state[S.concentrationEffectBuffs].reduce(
       (acc, cur) => acc + cur.amount,
-      state[S.concentrationMultiplier]
+      state[S.concentrationMultiplier],
     );
     score += state[S.concentration] * concentrationEffectBuff;
 
@@ -157,13 +159,13 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     // Score buff effects
     let scoreBuff = state[S.scoreBuffs].reduce(
       (acc, cur) => acc + cur.amount,
-      0
+      0,
     );
 
     if (state[S.prideTurns]) {
       const buffAmount = Math.min(
         state[S.goodImpressionTurns],
-        state[S.motivation]
+        state[S.motivation],
       );
       scoreBuff += Math.min(buffAmount * 0.02, 0.5);
     }
@@ -173,7 +175,7 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     // Score debuff effects
     score *= Math.max(
       state[S.scoreDebuffs].reduce((acc, cur) => acc - cur.amount, 1),
-      0
+      0,
     );
 
     // Apply poor condition
@@ -196,7 +198,7 @@ export function resolveGoodImpressionTurns(state, goodImpressionTurns) {
   // Apply good impression turns buffs
   goodImpressionTurns *= state[S.goodImpressionTurnsBuffs].reduce(
     (acc, cur) => acc + cur.amount,
-    1
+    1,
   );
 
   state[S.goodImpressionTurns] += goodImpressionTurns;
@@ -206,7 +208,7 @@ export function resolveMotivation(state, motivation) {
   // Apply motivation buffs
   motivation *= state[S.motivationBuffs].reduce(
     (acc, cur) => acc + cur.amount,
-    1
+    1,
   );
 
   state[S.motivation] += motivation;
@@ -216,7 +218,7 @@ export function resolveGoodConditionTurns(state, goodConditionTurns) {
   // Apply good condition turns buffs
   goodConditionTurns *= state[S.goodConditionTurnsBuffs].reduce(
     (acc, cur) => acc + cur.amount,
-    1
+    1,
   );
 
   state[S.goodConditionTurns] += goodConditionTurns;
@@ -226,7 +228,7 @@ export function resolveConcentration(state, concentration) {
   // Apply concentration buffs
   concentration *= state[S.concentrationBuffs].reduce(
     (acc, cur) => acc + cur.amount,
-    1
+    1,
   );
 
   state[S.concentration] += concentration;
@@ -248,8 +250,6 @@ export function resolveGenki(state, genki) {
 }
 
 export function resolveStamina(state, stamina) {
-  if (state[S.nullifyCostCards]) return;
-
   // Apply stance
   if (state[S.stance].startsWith("strength")) {
     stamina *= 2;
@@ -287,7 +287,7 @@ export function resolveEnthusiasm(state, enthusiasm) {
   enthusiasm += state[S.enthusiasmBonus];
   enthusiasm *= state[S.enthusiasmBuffs].reduce(
     (acc, cur) => acc + cur.amount,
-    1
+    1,
   );
   state[S.enthusiasm] += enthusiasm;
 }
@@ -297,7 +297,7 @@ export function resolveFullPowerCharge(state, fullPowerCharge) {
     // Apply full power charge buffs
     fullPowerCharge *= state[S.fullPowerChargeBuffs].reduce(
       (acc, cur) => acc + cur.amount,
-      1
+      1,
     );
     state[S.cumulativeFullPowerCharge] += fullPowerCharge;
   }
