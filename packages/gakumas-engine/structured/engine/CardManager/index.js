@@ -1,7 +1,4 @@
-import {
-  Customizations,
-  SkillCards,
-} from "gakumas-data-structured";
+import { Customizations, SkillCards } from "gakumas-data-structured";
 import { CARD_PILES, COST_FIELDS, S } from "../../constants";
 import EngineComponent from "../EngineComponent";
 import { getBaseId, getRand, shallowCopy, shuffle } from "../../utils";
@@ -26,9 +23,6 @@ export default class CardManager extends EngineComponent {
         SkillCards.getById(state[S.cardMap][state[S.lastUsedCard]].id).type,
       movedCardId: (state) =>
         state[S.movedCard] != null && state[S.cardMap][state[S.movedCard]].id,
-      numHeldCards: (state) => state[S.heldCards].length,
-      numRemovedCards: (state) => state[S.removedCards].length,
-      unremovedTroubleCards: (state) => this.countUnremovedTroubleCards(state),
       countCards: (state, targetRule) =>
         this.getTargetRuleCards(state, targetRule, null).size,
     };
