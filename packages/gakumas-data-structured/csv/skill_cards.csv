@@ -233,7 +233,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 232,本気の趣味,,SSR,mental,logic,1,FALSE,TRUE,pIdol,26,FALSE,,cost-=0,genki+=5; if:motivation>=3 { genki+=4 },1,
 233,本気の趣味+,"90,37",SSR,mental,logic,1,TRUE,TRUE,pIdol,26,FALSE,,cost-=0,genki+=7; if:motivation>=3 { genki+=7 },1,
 234,距離感,,SSR,mental,sense,1,FALSE,TRUE,pIdol,27,FALSE,,cost-=4,concentration+=4; fixedStamina+=4,1,
-235,距離感+,"92,38",SSR,mental,sense,1,TRUE,TRUE,pIdol,27,FALSE,,cost-=3,concentration+=5; fixedStamina+=5,1,
+235,距離感+,"92,38",SSR,mental,sense,1,TRUE,TRUE,pIdol,27,FALSE,,cost-=3,@base concentration+=5; fixedStamina+=5,1,
 236,お姉ちゃんだもの！,,SR,active,free,1,FALSE,TRUE,support,,FALSE,if:score<=1000,cost-=3,score+=6; genki+=6; at:turn { drawCard; limit:1 },1,
 237,お姉ちゃんだもの！+,"59,4,47",SR,active,free,1,TRUE,TRUE,support,,FALSE,if:score<=1000,cost-=3,score+=10; genki+=9; at:turn { drawCard; limit:1 },1,
 238,おアツイ視線,,SR,mental,free,1,FALSE,TRUE,support,,FALSE,if:genki==0,cost-=0,genki+=5; halfCostTurns+=2; at:turn { drawCard; limit:1 },1,

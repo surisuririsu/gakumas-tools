@@ -90,7 +90,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 89,preservationAdd1,温存追加,effect,70,1,,,,setStance(preservation),,
 90,genkiAdd1_3_mm_1.5,元気追加,genki,100,1,,,,motivationMultiplier=1.5; genki+=3,,
 91,seisouEffect1,効果変更,effect,100,1,,,,"@base do { goodConditionTurnsMultiplier=2; score+=18 }; @bonus do { concentrationMultiplier=3; score+=20 }",,
-92,kyorikanEffect1,効果変更,effect,100,1,,,,+ at:startOfTurn { if:stamina>=maxStamina*0.5 { concentration+=2 } },,
+92,kyorikanEffect1,効果変更,effect,100,1,,,,@base at:startOfTurn { if:stamina>=maxStamina*0.5 { concentration+=2 } },,
 93,strengthAdd1,強気追加,effect,70,1,,,,setStance(strength),,
 94,turnAdd1,効果追加,effect,100,1,,,,turnsRemaining+=1,,
 95,lsmEffectAdd1,効果追加,effect,100,1,,,,at:endOfTurn { score+=5; fixedStamina-=1; limit:4 },,
