@@ -149,10 +149,24 @@ export default class EffectManager extends EngineComponent {
 
       // Delayed effects
       if (effect.phase) {
+        // If this is a bare phase effect (no actions/effects), pass the next
+        // effect along so setEffects can absorb it as nested — matching the
+        // p-item/growth init pattern so cards can use the same gating
+        // structure (at:turnSkipped; at:turn,... on card 723).
+        const toSet = [effect];
+        if (
+          !effect.actions &&
+          !effect.effects &&
+          i + 1 < effects.length &&
+          !skipNextEffect
+        ) {
+          toSet.push(effects[i + 1]);
+          i++;
+        }
         this.logger.debug("Setting effects", effect.effects);
         this.setEffects(
           state,
-          [effect],
+          toSet,
           card != null
             ? {
                 type: "skillCardEffect",
