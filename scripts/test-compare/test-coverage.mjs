@@ -93,6 +93,16 @@ const STAGE_BY_PLAN = (() => {
 const FILLERS = [1, 2, 3, 4, 5];
 const SAFE_STAGE = STAGE_BY_PLAN.sense ?? Stages.getAll().find((s) => s.type === "contest")?.id;
 
+// Plan-specific stat-building decks. Used when testing p-items whose effects
+// gate on plan-characteristic stats — they need those stats to actually fire.
+// Each upgraded variant generates more of the stat, helping cross high thresholds.
+const STAT_BUILDERS = {
+  sense: [16, 18, 24, 28, 15, 17], // goodCondition + concentration (upgraded variants)
+  logic: [10, 22, 19, 21, 9, 40], // goodImpression + motivation (upgraded)
+  anomaly: [369, 377, 368, 376, 4, 3], // stance strength + preservation
+  free: [4, 10, 16, 18, 22, 3], // a bit of everything (upgraded)
+};
+
 function planOf(entity) {
   if (entity.plan && entity.plan !== "free") return entity.plan;
   return "sense";
@@ -105,9 +115,10 @@ function makeLoadout({ stage, cards, items, customs }) {
   const custStr =
     customs != null ? customs : "------";
   const side2CustStr = "------";
+  // Higher stamina → more turns → more chances for time/state triggers to fire.
   return (
     `stage=${stage}` +
-    `&support_bonus=0&params=1500-1500-1500-45&items=${itemsStr}` +
+    `&support_bonus=0&params=2000-2000-2000-90&items=${itemsStr}` +
     `&cards=${side1.join("-")}_${side2.join("-")}` +
     `&customizations=${custStr}_${side2CustStr}`
   );
@@ -128,14 +139,19 @@ function pItemLoadout(itemId) {
   if (!item) return null;
   const plan = planOf(item);
   const stage = STAGE_BY_PLAN[plan] ?? SAFE_STAGE;
-  // If it's a signature item, include a signature card for the same pIdol so
-  // the pIdol is inferred and the item's context matches the game's intent.
+  // Build a plan-matched deck so stat-dependent conditions have a chance to fire.
   const cards = [];
   if (item.pIdolId) {
     const sigCard = SkillCards.getAll().find(
       (c) => c.pIdolId === item.pIdolId && c.sourceType === "pIdol",
     );
     if (sigCard) cards.push(sigCard.id);
+  }
+  // Pad with stat-builders for this plan.
+  const builders = STAT_BUILDERS[plan] ?? STAT_BUILDERS.free;
+  for (const b of builders) {
+    if (cards.length >= 6) break;
+    if (!cards.includes(b)) cards.push(b);
   }
   return makeLoadout({ stage, cards, items: [itemId] });
 }
@@ -159,9 +175,17 @@ function customizationLoadout(custId) {
   const plan = planOf(card);
   const stage = STAGE_BY_PLAN[plan] ?? SAFE_STAGE;
   const level = Array.isArray(cust.price) ? cust.price.length : 1;
+  // Include stat-builders so the customized card's conditional effects have
+  // a chance to fire.
+  const builders = STAT_BUILDERS[plan] ?? STAT_BUILDERS.free;
+  const cards = [card.id];
+  for (const b of builders) {
+    if (cards.length >= 6) break;
+    if (!cards.includes(b)) cards.push(b);
+  }
   return makeLoadout({
     stage,
-    cards: [card.id],
+    cards,
     items: [],
     customs: `${custId}x${level}-----`,
   });
