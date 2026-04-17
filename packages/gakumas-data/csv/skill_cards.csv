@@ -721,7 +721,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 720,最高傑作,,L,active,sense,1,FALSE,TRUE,produce,,FALSE,,do:goodConditionTurns-=5,"do:concentrationMultiplier=3.5,do:score+=4;if:countCards(deck)+countCards(discarded)>=9;at:startOfTurn,do:goodConditionTurns+=1,do:concentration+=1,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:3",,
 721,スーパーノヴァ,,L,active,anomaly,1,FALSE,TRUE,produce,,FALSE,if:stance==strength2,do:cost-=1,do:score+=1,1,"at:stanceChanged,if:isDirectEffect,if:stanceChangedTimes%2==1,target:this,do:g.score+=20,do:g.scoreTimes+=1,do:g.cost-=1,limit:12;at:cardMovedToHand,if:movedCardId==721,do:drawCard"
 722,完全無欠,,L,mental,sense,1,FALSE,TRUE,produce,,TRUE,,do:cost-=6,"do:setGoodConditionTurnsBuff(0.25),do:setConcentrationBuff(0.25),do:cardUsesRemaining+=1,do:drawCard,do:drawCard",1,
-723,王者の風格,,L,mental,sense,1,FALSE,TRUE,produce,,FALSE,,do:cost-=4,"do:goodConditionTurns+=3,do:concentration+=3,do:cardUsesRemaining+=1;at:turnSkipped;at:turn,do:setScoreBuff(1.1,1),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:1;at:turnSkipped,if:perfectConditionTurns>=1;at:turn,delay:1,do:noActiveTurns+=1,limit:1",1,
+723,王者の風格,,L,mental,sense,1,FALSE,TRUE,produce,,FALSE,,do:cost-=6,"do:goodConditionTurns+=3,do:concentration+=3,do:cardUsesRemaining+=1;at:turnSkipped;at:turn,do:setScoreBuff(1.1,1),do:cardUsesRemaining+=1,do:drawCard,do:drawCard,limit:1;at:turnSkipped;at:turn,delay:1,do:noActiveTurns+=1,limit:1",1,
 724,エクセレント♪,,L,mental,logic,1,FALSE,TRUE,produce,,FALSE,,do:cost-=5,"do:cardUsesRemaining+=1;at:afterStartOfTurn,do:drawCard,limit:5;at:afterStartOfTurn,do:useRandomCardFree(hand\R),do:useRandomCardFree(hand\R)",1,
 725,究極スマイル,,L,mental,logic,1,FALSE,TRUE,produce,,FALSE,if:goodImpressionTurns>=6,do:cost-=7,"do:setGoodImpressionTurnsEffectBuff(1);target:all,do:g.goodImpressionTurns+=6;do:cardUsesRemaining+=1",1,
 726,最強パフォーマー,,L,mental,logic,1,FALSE,TRUE,produce,,FALSE,if:motivation>=9,do:cost-=6,"do:cardUsesRemaining+=1,do:motivation+=5;at:staminaDecreased,if:parentPhase==processCost,do:motivationMultiplier=2.5,do:genki+=4",1,
@@ -787,12 +787,12 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 786,天下無双,,L,active,sense,1,FALSE,TRUE,produce,,FALSE,,do:cost-=4,"do:perfectConditionTurns+=7,do:cardUsesRemaining+=1;at:afterCardUsed,if:perfectConditionTurns>=5,do:concentrationMultiplier=2,do:score+=2,do:perfectConditionTurns-=1",1,
 787,グランドフィナーレ,,L,active,anomaly,1,FALSE,TRUE,produce,,FALSE,,do:cost-=0,"do:score+=50+cumulativeFullPowerCharge*3.5,do:fixedStamina-=maxStamina",1,"at:cardMovedToHeld,if:movedCardId==787,target:held,do:g.scoreTimes+=1"
 788,トップクオリティ,,L,mental,anomaly,1,FALSE,TRUE,produce,,FALSE,if:isPreservation,do:cost-=6,"do:cardUsesRemaining+=1;at:afterActiveCardUsed,if:isStrength,do:enthusiasmBonus+=3;at:afterMentalCardUsed,if:isPreservation,do:setEnthusiasmBuff(0.5)",1,
-789,先生でアイドル！,,SSR,mental,sense,1,FALSE,TRUE,pIdol,131,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-790,先生でアイドル！+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,131,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-791,あさり推し♡,,SSR,mental,logic,1,FALSE,TRUE,pIdol,132,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-792,あさり推し♡+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,132,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-793,NEOインパクト,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
-794,NEOインパクト+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discards)",1,
+789,先生でアイドル！,,SSR,mental,sense,1,FALSE,TRUE,pIdol,131,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
+790,先生でアイドル！+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,131,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
+791,あさり推し♡,,SSR,mental,logic,1,FALSE,TRUE,pIdol,132,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
+792,あさり推し♡+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,132,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
+793,NEOインパクト,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
+794,NEOインパクト+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,133,TRUE,,do:cost-=0,"do:cardUsesRemaining+=1,do:doubleCardEffectCards+=1,do:useSelectedCardFree(deck|discarded)",1,
 795,いつかあなたの隣で,,SSR,active,sense,1,FALSE,TRUE,pIdol,134,FALSE,,do:cost-=8,"do:goodConditionTurns+=7;at:turn,do:score+=goodConditionTurns,limit:1",,
 796,いつかあなたの隣で+,,SSR,active,sense,1,TRUE,TRUE,pIdol,134,FALSE,,do:cost-=5,"do:goodConditionTurns+=7;at:turn,do:score+=goodConditionTurns,limit:1",,
 797,いつもあなたの隣で,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,135,FALSE,,do:cost-=6,"do:setStance(strength),do:score+=7,do:genki+=7",,"at:stanceChanged,if:isDirectEffect,if:isPreservation,target:this,do:g.score+=7,limit:2"

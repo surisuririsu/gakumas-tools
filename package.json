@@ -9,6 +9,7 @@
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "test:compare": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/compare-engines.mjs",
     "test:customizations": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/test-customizations.mjs",
+    "test:coverage": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/test-coverage.mjs",
     "changelog": "node ./scripts/changelog.js",
     "backup-db": "yarn workspace gakumas-tools backup-db"
   },

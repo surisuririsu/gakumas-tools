@@ -11,8 +11,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 10,必携ステンレスボトル+,R,TRUE,sense,stage,pIdol,2,FALSE,at:startOfTurn { if:concentration>=3 { concentration+=6 }; limit:1 }
 11,ちびども手作りメダル,R,FALSE,logic,stage,pIdol,3,FALSE,at:endOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=2 }; limit:2 }
 12,ちびども手作りメダル+,R,TRUE,logic,stage,pIdol,3,FALSE,at:endOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=2 }; limit:3 }
-13,紳士風ハンカチーフ,R,FALSE,sense,stage,pIdol,4,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { concentration+=1 }; limit:2 }
-14,紳士風ハンカチーフ+,R,TRUE,sense,stage,pIdol,4,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { concentration+=2 }; limit:2 }
+13,紳士風ハンカチーフ,R,FALSE,sense,stage,pIdol,4,FALSE,at:afterStartOfTurn { if:goodConditionTurns>=1 { concentration+=1 }; limit:2 }
+14,紳士風ハンカチーフ+,R,TRUE,sense,stage,pIdol,4,FALSE,at:afterStartOfTurn { if:goodConditionTurns>=1 { concentration+=2 }; limit:2 }
 15,緑のお揃いブレス,R,FALSE,logic,stage,pIdol,5,FALSE,at:goodImpressionTurnsIncreased { if:isDirectEffect { goodImpressionTurns+=3 }; limit:1 }
 16,緑のお揃いブレス+,R,TRUE,logic,stage,pIdol,5,FALSE,at:goodImpressionTurnsIncreased { if:isDirectEffect { goodImpressionTurns+=5 }; limit:1 }
 17,願いを叶えるお守り,R,FALSE,logic,stage,pIdol,6,FALSE,at:motivationIncreased { if:isDirectEffect { motivation+=2 }; limit:1 }
@@ -47,8 +47,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 46,自分を守るイヤホン+,SSR,TRUE,sense,stage,pIdol,20,FALSE,at:cardUsed { if:concentration>=5 { cardUsesRemaining+=1; concentration+=3 }; limit:1 }
 47,ピッグドリーム貯金箱,SSR,FALSE,logic,stage,pIdol,21,FALSE,at:afterCardUsed { if:goodImpressionTurns>=6 { goodImpressionTurns+=3; cardUsesRemaining+=1 }; limit:1 }
 48,ピッグドリーム貯金箱+,SSR,TRUE,logic,stage,pIdol,21,FALSE,at:afterCardUsed { if:goodImpressionTurns>=6 { goodImpressionTurns+=5; cardUsesRemaining+=1 }; limit:1 }
-49,内なる光の耳飾り,SSR,FALSE,sense,stage,pIdol,22,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { concentration+=2; genki+=1 }; limit:2 }
-50,内なる光の耳飾り+,SSR,TRUE,sense,stage,pIdol,22,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { concentration+=3; genki+=1 }; limit:2 }
+49,内なる光の耳飾り,SSR,FALSE,sense,stage,pIdol,22,FALSE,at:afterStartOfTurn { if:goodConditionTurns>=1 { concentration+=2; genki+=1 }; limit:2 }
+50,内なる光の耳飾り+,SSR,TRUE,sense,stage,pIdol,22,FALSE,at:afterStartOfTurn { if:goodConditionTurns>=1 { concentration+=3; genki+=1 }; limit:2 }
 51,夢へのライフログ,SSR,FALSE,logic,stage,pIdol,23,FALSE,at:endOfTurn { if:genki>=7 { goodImpressionTurns*=1.5; score+=goodImpressionTurns*0.3 }; limit:1 }
 52,夢へのライフログ+,SSR,TRUE,logic,stage,pIdol,23,FALSE,at:endOfTurn { if:genki>=7 { goodImpressionTurns*=1.5; score+=goodImpressionTurns }; limit:1 }
 53,ひみつ特訓カーデ,SSR,FALSE,logic,stage,pIdol,24,FALSE,at:motivationIncreased { if:isDirectEffect { motivation+=3 }; limit:2 }
