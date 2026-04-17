@@ -3,14 +3,23 @@
  *
  * Grammar (EBNF):
  *
- * effectSequence = effect (";" effect)*
- * effect = phaseBlock | conditionBlock | targetBlock | action | modifier
- * phaseBlock = "at:" phase "{" effectBody "}"
+ * effectSequence = anchoredEffect (";" anchoredEffect)*
+ * anchoredEffect = ("@" IDENTIFIER)? effect
+ * effect = phaseBlock | conditionBlock | targetBlock | action | actionBlock | modifier
+ * phaseBlock = "at:" phase ("{" effectBody "}")?      // body required outside patch mode
  * effectBody = (conditionBlock | targetBlock | phaseBlock | action | modifier)*
  * conditionBlock = "if:" condition ("{" effectBody "}")?
  * targetBlock = "target:" condition ("{" effectBody "}")?
- * action = ("do:")? assignmentExpr
+ * action = "do:" assignmentExpr | assignmentExpr
+ * actionBlock = "do" [":"] "{" actionBody "}"
+ * actionBody = (action | modifier)*
  * modifier = "limit:" number | "ttl:" number | "delay:" number | "group:" number
+ *
+ * patchSequence = patch (";" patch)*                  // entry point for customization columns
+ * patch = appendPatch | anchorPatch | modifier        // top-level modifiers attach to previous patch
+ * appendPatch = "+" effect
+ * anchorPatch = "@" IDENTIFIER partialEffect
+ * partialEffect = like effect, but "at:" may be body-less (sets phase only)
  *
  * condition = orExpr
  * orExpr = andExpr ("|" andExpr)*
@@ -143,15 +152,112 @@ export class Parser {
     const effects = [];
 
     while (!this.isAtEnd()) {
+      // Optional anchor prefix "@name" on top-level effects
+      let anchor = null;
+      if (this.check(TokenType.AT_SIGN)) {
+        this.advance();
+        const idToken = this.expect(
+          TokenType.IDENTIFIER,
+          "Expected anchor name after '@'"
+        );
+        anchor = idToken.value;
+      }
+
       const effect = this.parseEffect();
       if (effect) {
+        if (anchor) effect.anchor = anchor;
         effects.push(effect);
+      } else if (anchor) {
+        throw new Error(
+          `Anchor '@${anchor}' has no effect at line ${this.peek().line}, col ${this.peek().col}`
+        );
       }
       // Skip optional semicolons between effects
       while (this.match(TokenType.SEMICOLON)) {}
     }
 
     return { type: "sequence", effects };
+  }
+
+  /**
+   * Parse a patch sequence used for customization columns.
+   *
+   * Syntax:
+   *   + <effect>              append a new effect to the card's attribute list
+   *   @name <partial>         patch the effect labeled @name on the card
+   *   level:N, limit:N, ...   attach as a top-level modifier to the previous patch
+   *
+   * Emits: { type: "patchSequence", patches: [...] }
+   * Each patch is { op, anchor?, effect?, level? }.
+   */
+  parsePatchSequence() {
+    const patches = [];
+    let pendingModifiers = {};
+
+    const flushPending = () => {
+      if (Object.keys(pendingModifiers).length === 0) return;
+      if (patches.length > 0) {
+        Object.assign(patches[patches.length - 1], pendingModifiers);
+      }
+      pendingModifiers = {};
+    };
+
+    while (!this.isAtEnd()) {
+      const token = this.peek();
+
+      if (MODIFIER_TOKENS.includes(token.type)) {
+        const mod = this.parseModifier();
+        pendingModifiers[mod.type] = mod.value;
+      } else if (token.type === TokenType.PLUS) {
+        flushPending();
+        this.advance();
+        const effect = this.parseEffect();
+        if (!effect) {
+          throw new Error(
+            `Expected effect after '+' at line ${this.peek().line}, col ${this.peek().col}`
+          );
+        }
+        patches.push({ op: "append", effect });
+      } else if (token.type === TokenType.AT_SIGN) {
+        flushPending();
+        this.advance();
+        const idToken = this.expect(
+          TokenType.IDENTIFIER,
+          "Expected anchor name after '@'"
+        );
+        const effect = this.parsePartialEffect();
+        if (!effect) {
+          throw new Error(
+            `Expected patch body after '@${idToken.value}' at line ${this.peek().line}, col ${this.peek().col}`
+          );
+        }
+        patches.push({ op: "patch", anchor: idToken.value, effect });
+      } else if (token.type === TokenType.SEMICOLON) {
+        this.advance();
+      } else {
+        // Implicit append: parse a bare effect as an append patch
+        flushPending();
+        const effect = this.parseEffect();
+        if (!effect) {
+          throw new Error(
+            `Expected '+', '@', or effect in patch sequence at line ${token.line}, col ${token.col}. Got ${token.type}`
+          );
+        }
+        patches.push({ op: "append", effect });
+      }
+    }
+
+    flushPending();
+
+    return { type: "patchSequence", patches };
+  }
+
+  parsePartialEffect() {
+    const token = this.peek();
+    if (token.type === TokenType.AT) {
+      return this.parsePhaseBlock(true /* partial */);
+    }
+    return this.parseEffect();
   }
 
   parseEffect() {
@@ -184,13 +290,20 @@ export class Parser {
 
   // Block parsing
 
-  parsePhaseBlock() {
+  parsePhaseBlock(partial = false) {
     this.expect(TokenType.AT, "Expected 'at'");
     this.expect(TokenType.COLON, "Expected ':' after 'at'");
     const phaseToken = this.expect(TokenType.IDENTIFIER, "Expected phase name");
-    this.expect(TokenType.LBRACE, "Expected '{' after phase");
-    const body = this.parseEffectBody();
-    this.expect(TokenType.RBRACE, "Expected '}' to close phase block");
+
+    let body = [];
+    if (this.match(TokenType.LBRACE)) {
+      body = this.parseEffectBody();
+      this.expect(TokenType.RBRACE, "Expected '}' to close phase block");
+    } else if (!partial) {
+      throw new Error(
+        `Expected '{' after phase at line ${this.peek().line}, col ${this.peek().col}`
+      );
+    }
 
     return { type: "phase", phase: phaseToken.value, body };
   }
@@ -227,7 +340,20 @@ export class Parser {
 
   parseAction() {
     this.expect(TokenType.DO, "Expected 'do'");
-    this.expect(TokenType.COLON, "Expected ':' after 'do'");
+    const hasColon = !!this.match(TokenType.COLON);
+
+    if (this.match(TokenType.LBRACE)) {
+      const body = this.parseActionBody();
+      this.expect(TokenType.RBRACE, "Expected '}' to close do block");
+      return { type: "actionBlock", body };
+    }
+
+    if (!hasColon) {
+      throw new Error(
+        `Expected ':' or '{' after 'do' at line ${this.peek().line}, col ${this.peek().col}`
+      );
+    }
+
     const expr = this.parseAssignmentExpr();
 
     return { type: "action", expr };
@@ -245,6 +371,40 @@ export class Parser {
     const value = this.expect(TokenType.NUMBER, "Expected number after ':'");
 
     return { type: MODIFIER_TYPE_MAP[token.type], value: value.value };
+  }
+
+  parseActionBody() {
+    const body = [];
+
+    while (!this.check(TokenType.RBRACE) && !this.check(TokenType.EOF)) {
+      const token = this.peek();
+      let effect;
+
+      if (token.type === TokenType.DO) {
+        effect = this.parseAction();
+        if (effect?.type === "actionBlock") {
+          throw new Error(
+            `Nested do blocks are not supported at line ${token.line}, col ${token.col}`
+          );
+        }
+      } else if (token.type === TokenType.IDENTIFIER) {
+        effect = this.parseBareAction();
+      } else if (MODIFIER_TOKENS.includes(token.type)) {
+        effect = this.parseModifier();
+      } else {
+        throw new Error(
+          `Expected action or modifier in do block at line ${token.line}, col ${token.col}. Got ${token.type}`
+        );
+      }
+
+      if (effect) {
+        body.push(effect);
+      }
+
+      while (this.match(TokenType.SEMICOLON)) {}
+    }
+
+    return body;
   }
 
   parseEffectBody() {

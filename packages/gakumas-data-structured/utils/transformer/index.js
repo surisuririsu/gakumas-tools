@@ -3,5 +3,5 @@
  *
  * Transforms parsed AST into engine format and back to string.
  */
-export { transformEffects } from "./transform";
-export { serializeExpr, serializeEffect } from "./serialize";
+export { transformEffects, transformPatches } from "./transform";
+export { serializeExpr, serializeEffect, serializePatches } from "./serialize";

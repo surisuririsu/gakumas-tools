@@ -46,6 +46,7 @@ export const TokenType = {
   AND: "AND", // &
   OR: "OR", // |
   NOT: "NOT", // !
+  AT_SIGN: "AT_SIGN", // @ (anchor marker)
 
   // Literals
   NUMBER: "NUMBER",

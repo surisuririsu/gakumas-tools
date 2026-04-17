@@ -8,7 +8,9 @@ export { default as Stages } from "./data/stages";
 export {
   serializeEffect,
   serializeEffectSequence,
+  serializePatches,
   deserializeEffectSequence,
+  deserializePatchSequence,
 } from "./utils/effects";
-export { parseEffects } from "./utils/parser";
-export { transformEffects } from "./utils/transformer";
+export { parseEffects, parsePatches } from "./utils/parser";
+export { transformEffects, transformPatches } from "./utils/transformer";

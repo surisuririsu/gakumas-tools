@@ -115,6 +115,7 @@ export class Tokenizer {
       ",": TokenType.COMMA,
       "&": TokenType.AND,
       "|": TokenType.OR,
+      "@": TokenType.AT_SIGN,
     };
 
     if (singleCharTokens[char]) {

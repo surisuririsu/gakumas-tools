@@ -4,6 +4,28 @@ import EngineComponent from "../EngineComponent";
 import { getBaseId, getRand, shallowCopy, shuffle } from "../../utils";
 import { getTargetRuleCards } from "./targeting";
 
+const PATCHABLE_FIELDS = [
+  "phase",
+  "conditions",
+  "targets",
+  "actions",
+  "effects",
+  "limit",
+  "ttl",
+  "delay",
+  "group",
+];
+
+function mergePatch(original, delta) {
+  const merged = { ...original };
+  for (const field of PATCHABLE_FIELDS) {
+    if (delta[field] !== undefined) {
+      merged[field] = delta[field];
+    }
+  }
+  return merged;
+}
+
 export default class CardManager extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -192,15 +214,24 @@ export default class CardManager extends EngineComponent {
     const c11n = state[S.cardMap][card].c11n;
     if (!c11n || !Object.keys(c11n).length) return attr;
 
-    attr = [...attr];
+    attr = attr.map((e) => ({ ...e }));
     for (let k in c11n) {
-      const c11nAttr = Customizations.getById(k)[attribute] || [];
-      for (let i = 0; i < c11nAttr.length; i++) {
-        if ((c11nAttr[i].level || 1) != c11n[k]) continue;
-        if (c11nAttr[i].line) {
-          attr.splice(c11nAttr[i].line - 1, 1, c11nAttr[i]);
-        } else {
-          attr = attr.concat(c11nAttr[i]);
+      const patches = Customizations.getById(k)[attribute] || [];
+      for (let i = 0; i < patches.length; i++) {
+        const patch = patches[i];
+        if ((patch.level || 1) != c11n[k]) continue;
+
+        if (patch.op === "append") {
+          attr = attr.concat(patch.effect);
+        } else if (patch.op === "patch") {
+          const idx = attr.findIndex((e) => e.anchor === patch.anchor);
+          if (idx < 0) {
+            console.warn(
+              `Customization ${k} references unknown anchor '@${patch.anchor}' on skill card ${skillCard.id}`
+            );
+            continue;
+          }
+          attr[idx] = mergePatch(attr[idx], patch.delta);
         }
       }
     }

@@ -27,3 +27,19 @@ export function parseEffects(input) {
   const parser = new Parser(tokens);
   return parser.parseEffectSequence();
 }
+
+/**
+ * Parse a customization patch sequence into an AST
+ * @param {string} input - The patch string to parse
+ * @returns {Object} The parsed AST
+ */
+export function parsePatches(input) {
+  if (!input || !input.trim()) {
+    return { type: "patchSequence", patches: [] };
+  }
+
+  const tokenizer = new Tokenizer(input);
+  const tokens = tokenizer.tokenize();
+  const parser = new Parser(tokens);
+  return parser.parsePatchSequence();
+}
