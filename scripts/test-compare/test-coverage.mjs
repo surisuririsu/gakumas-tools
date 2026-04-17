@@ -95,12 +95,16 @@ const SAFE_STAGE = STAGE_BY_PLAN.sense ?? Stages.getAll().find((s) => s.type ===
 
 // Plan-specific stat-building decks. Used when testing p-items whose effects
 // gate on plan-characteristic stats — they need those stats to actually fire.
-// Each upgraded variant generates more of the stat, helping cross high thresholds.
+// Heavy-stat R/R+ produce cards chosen so thresholds like goodCondition>=12,
+// concentration>=10, goodImpression>=6, motivation>=5, genki>=30 get hit.
 const STAT_BUILDERS = {
-  sense: [16, 18, 24, 28, 15, 17], // goodCondition + concentration (upgraded variants)
-  logic: [10, 22, 19, 21, 9, 40], // goodImpression + motivation (upgraded)
-  anomaly: [369, 377, 368, 376, 4, 3], // stance strength + preservation
-  free: [4, 10, 16, 18, 22, 3], // a bit of everything (upgraded)
+  // goodCondition + concentration heavy (sense plan triggers)
+  sense: [55, 53, 33, 16, 18, 28],
+  // goodImpression + motivation heavy (logic plan triggers)
+  logic: [65, 43, 61, 10, 22, 63],
+  // stance + genki heavy (anomaly plan triggers)
+  anomaly: [369, 377, 368, 376, 63, 51],
+  free: [55, 65, 43, 63, 18, 22],
 };
 
 function planOf(entity) {
@@ -137,6 +141,10 @@ function skillCardLoadout(cardId) {
 function pItemLoadout(itemId) {
   const item = PItems.getById(itemId);
   if (!item) return null;
+  // Produce-mode p-items fire only during lesson sequences, not in contest
+  // stages. The test infra only simulates contest stages, so skip them —
+  // their parity would need a separate produce-mode comparison harness.
+  if (item.mode !== "stage") return null;
   const plan = planOf(item);
   const stage = STAGE_BY_PLAN[plan] ?? SAFE_STAGE;
   // Build a plan-matched deck so stat-dependent conditions have a chance to fire.
