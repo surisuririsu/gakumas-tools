@@ -405,6 +405,7 @@ export default class CardManager extends EngineComponent {
       state[S.effectInstanceId]++;
       this.engine.effectManager.triggerEffects(state, effects, null, card);
     }
+    state[S.effectInstanceId]++;
     this.engine.effectManager.triggerEffects(state, effects, null, card);
     delete state[S.phase];
 
