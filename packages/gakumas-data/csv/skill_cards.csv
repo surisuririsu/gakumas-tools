@@ -248,8 +248,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 247,花萌ゆ季節+,"27,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=1,"do:addRandomUpgradedCardToHand,do:cardUsesRemaining+=1;at:turn,do:drawCard,limit:1",1,
 248,陽だまりの生徒会室,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=3,"do:fixedStamina+=3,do:cardUsesRemaining+=1",1,
 249,陽だまりの生徒会室+,"3,27",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=2,"do:fixedStamina+=5,do:cardUsesRemaining+=1",1,
-250,心のアルバム,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=3,do:genki+=3;at:turn,do:drawCard,limit:2",1,
-251,心のアルバム+,"2,38",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=6,do:genki+=5;at:turn,do:drawCard,limit:2",1,
+250,心のアルバム,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=3,do:genki+=3;at:turn,do:drawCard,limit:1;at:turn,delay:1,do:drawCard,limit:1",1,
+251,心のアルバム+,"2,38",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=0,"do:score+=6,do:genki+=5;at:turn,do:drawCard,limit:1;at:turn,delay:1,do:drawCard,limit:1",1,
 252,ティーパーティ,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=3,"do:cardUsesRemaining+=1,do:upgradeHand",1,
 253,ティーパーティ+,"36,27",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=1,"do:cardUsesRemaining+=1,do:drawCard,do:upgradeHand",1,
 254,光のステージ,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=3,"do:costReduction+=1,do:cardUsesRemaining+=1",1,
@@ -260,8 +260,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 259,ダメダメクッキング+,"19,21",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,do:cost-=6,"do:goodImpressionTurns+=5,do:motivation+=4;at:turn,do:upgradeHand,limit:1",1,
 260,新生徒会爆誕！,,SSR,mental,free,1,FALSE,TRUE,support,,TRUE,,do:cost-=5,"do:halfCostTurns+=2,do:cardUsesRemaining+=1",1,
 261,新生徒会爆誕！+,"27,24",SSR,mental,free,1,TRUE,TRUE,support,,TRUE,,do:cost-=4,"do:halfCostTurns+=4,do:cardUsesRemaining+=1",1,
-262,薄れゆく壁,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=5,"do:genki+=3;at:turn,do:upgradeHand,limit:2",1,
-263,薄れゆく壁+,"26,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=2,"do:genki+=3;at:turn,do:upgradeHand,limit:2",1,
+262,薄れゆく壁,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,do:cost-=5,"do:genki+=3;at:turn,do:upgradeHand,limit:1;at:turn,delay:1,do:upgradeHand,limit:1",1,
+263,薄れゆく壁+,"26,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,do:cost-=2,"do:genki+=3;at:turn,do:upgradeHand,limit:1;at:turn,delay:1,do:upgradeHand,limit:1",1,
 264,絡まる想い,,SSR,mental,logic,1,FALSE,TRUE,pIdol,28,TRUE,,do:cost-=8,do:goodImpressionTurns+=8,1,
 265,絡まる想い+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,28,TRUE,,do:cost-=8,do:goodImpressionTurns+=10,1,
 266,なに聴いてるの？,,SR,active,logic,1,FALSE,TRUE,support,,FALSE,,do:cost-=0,"do:genki+=2,do:fixedStamina+=3",1,
@@ -410,8 +410,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 409,オープニングアクト+,"40,48,63",SR,active,anomaly,29,TRUE,FALSE,produce,,FALSE,,do:cost-=4,"do:setStance(strength),do:score+=14,do:fullPowerCharge+=3",1,
 410,始まりの笑顔,,SR,active,anomaly,34,FALSE,TRUE,produce,,FALSE,,do:fullPowerCharge-=2,"do:setStance(strength),do:score+=6,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1",,
 411,始まりの笑顔+,"48,58,40",SR,active,anomaly,34,TRUE,TRUE,produce,,FALSE,,do:fullPowerCharge-=1,"do:setStance(strength),do:score+=8,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1",,
-412,理想のテンポ,,SR,active,anomaly,52,FALSE,FALSE,produce,,FALSE,,do:cost-=5,"do:score+=6,do:score+=6;if:isNotPreservation,do:cardUsesRemaining+=1",1,"at:stanceChanged,target:this,do:g.score+=5"
-413,理想のテンポ+,"29,47,28",SR,active,anomaly,52,TRUE,FALSE,produce,,FALSE,,do:cost-=5,"do:score+=6,do:score+=6;if:isNotPreservation,do:cardUsesRemaining+=1",1,"at:stanceChanged,target:this,do:g.score+=7"
+412,理想のテンポ,,SR,active,anomaly,52,FALSE,FALSE,produce,,FALSE,,do:cost-=5,"do:score+=6,do:score+=6;if:isNotPreservation,do:cardUsesRemaining+=1",1,"at:stanceChanged,if:isDirectEffect,target:this,do:g.score+=5"
+413,理想のテンポ+,"29,47,28",SR,active,anomaly,52,TRUE,FALSE,produce,,FALSE,,do:cost-=5,"do:score+=6,do:score+=6;if:isNotPreservation,do:cardUsesRemaining+=1",1,"at:stanceChanged,if:isDirectEffect,target:this,do:g.score+=7"
 414,トレーニングの成果,,SR,active,anomaly,58,FALSE,FALSE,produce,,FALSE,,do:cost-=5,"do:fullPowerCharge+=3,do:score+=28+cumulativeFullPowerCharge;at:beforeStartOfTurn,if:prevStance==fullPower,if:stance==none,do:setStance(preservation2),limit:1",1,
 415,トレーニングの成果+,"48,60,29",SR,active,anomaly,58,TRUE,FALSE,produce,,FALSE,,do:cost-=5,"do:fullPowerCharge+=4,do:score+=28+cumulativeFullPowerCharge*2;at:beforeStartOfTurn,if:prevStance==fullPower,if:stance==none,do:setStance(preservation2),limit:1",1,
 416,潜在能力,,SR,mental,anomaly,1,FALSE,FALSE,produce,,FALSE,,do:cost-=6,"do:genki+=10,do:fullPowerCharge+=3,do:holdSelectedFromHand",1,
@@ -428,8 +428,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 427,キセキの魔法+,"6,30",SSR,active,logic,59,TRUE,TRUE,produce,,FALSE,if:goodImpressionTurns>=10,do:stamina-=4,"do:score+=goodImpressionTurns*5;if:countCards(T)-countCards(removed\T)>=2,do:score+=goodImpressionTurns*5",1,
 428,翔び立て！,,SSR,active,anomaly,11,FALSE,TRUE,produce,,FALSE,,do:cost-=6,"do:fullPowerCharge+=3,do:score+=10+cumulativeFullPowerCharge",1,"at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=20,limit:1"
 429,翔び立て！+,"42,4",SSR,active,anomaly,11,TRUE,TRUE,produce,,FALSE,,do:cost-=5,"do:fullPowerCharge+=4,do:score+=10+cumulativeFullPowerCharge*1.5",1,"at:stanceChanged,if:stance==fullPower,target:this,do:g.score+=30,limit:1"
-430,総合芸術,,SSR,active,anomaly,12,FALSE,TRUE,produce,,FALSE,if:stance!=none,do:cost-=7,"do:setStance(strength),do:score+=7",,"at:stanceChanged,target:this,do:g.score+=15,limit:4"
-431,総合芸術+,"29,2",SSR,active,anomaly,12,TRUE,TRUE,produce,,FALSE,if:stance!=none,do:cost-=7,"do:setStance(strength),do:score+=10",,"at:stanceChanged,target:this,do:g.score+=20,limit:4"
+430,総合芸術,,SSR,active,anomaly,12,FALSE,TRUE,produce,,FALSE,if:stance!=none,do:cost-=7,"do:setStance(strength),do:score+=7",,"at:stanceChanged,if:isDirectEffect,target:this,do:g.score+=15,limit:4"
+431,総合芸術+,"29,2",SSR,active,anomaly,12,TRUE,TRUE,produce,,FALSE,if:stance!=none,do:cost-=7,"do:setStance(strength),do:score+=10",,"at:stanceChanged,if:isDirectEffect,target:this,do:g.score+=20,limit:4"
 432,心・技・体,,SSR,active,anomaly,30,FALSE,TRUE,produce,,FALSE,,do:cost-=8,"do:setStance(strength2),do:score+=7,do:fullPowerCharge+=3,do:halfCostTurns+=2",1,
 433,心・技・体+,"2,29",SSR,active,anomaly,30,TRUE,TRUE,produce,,FALSE,,do:cost-=8,"do:setStance(strength2),do:score+=16,do:fullPowerCharge+=4,do:halfCostTurns+=4",1,
 434,輝け！,,SSR,active,anomaly,41,FALSE,TRUE,produce,,FALSE,,do:cost-=7,"do:fullPowerCharge+=3;at:turn,do:setStance(preservation),limit:1;if:isFullPower,do:score+=20,do:score+=20",1,
@@ -564,8 +564,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 563,どんな世界でも+,,SSR,active,sense,1,TRUE,TRUE,pIdol,95,FALSE,,do:cost-=4,"do:concentrationMultiplier=2,do:score+=17,do:cardUsesRemaining+=1",1,
 564,戦う理由,,SSR,mental,logic,1,FALSE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=2,do:goodImpressionTurns+=3,do:goodImpressionTurns*=1.1",,
 565,戦う理由+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,96,FALSE,,do:cost-=1,"do:genki+=3,do:goodImpressionTurns+=4,do:goodImpressionTurns*=1.1",,
-566,もうためらわない,,SSR,active,sense,1,FALSE,TRUE,pIdol,97,FALSE,,do:stamina-=6,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
-567,もうためらわない+,,SSR,active,sense,1,TRUE,TRUE,pIdol,97,FALSE,,do:stamina-=3,"at:concentrationIncreased,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
+566,もうためらわない,,SSR,active,sense,1,FALSE,TRUE,pIdol,97,FALSE,,do:stamina-=6,"at:concentrationIncreased,if:isDirectEffect,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
+567,もうためらわない+,,SSR,active,sense,1,TRUE,TRUE,pIdol,97,FALSE,,do:stamina-=3,"at:concentrationIncreased,if:isDirectEffect,if:concentrationDelta>=7,do:concentrationMultiplier=1.5,do:score+=12",1,
 568,憧れのアイドル,,SSR,active,logic,1,FALSE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=2;at:turn,do:genki+=3,limit:1;at:genkiIncreased,if:isDirectEffect,if:genkiDelta>=30,do:score+=genki*0.2",1,
 569,憧れのアイドル+,,SSR,active,logic,1,TRUE,TRUE,pIdol,98,FALSE,,do:stamina-=2,"do:motivation+=3;at:turn,do:genki+=3,limit:1;at:genkiIncreased,if:isDirectEffect,if:genkiDelta>=30,do:score+=genki*0.3",1,
 570,初めての野望,,R,active,logic,1,FALSE,TRUE,pIdol,99,FALSE,,do:cost-=6,"at:endOfTurn,do:score+=genki*0.5,limit:3",1,

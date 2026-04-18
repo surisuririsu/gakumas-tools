@@ -3,37 +3,46 @@
 
 .panel {
   position: relative;
-  border: 2px solid tokens.$surface-border;
+  border: 1px solid tokens.$surface-border;
   border-radius: tokens.$radius-md;
   background-color: tokens.$surface-panel;
-  box-shadow: tokens.$shadow-pop;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 }
 
 .padded {
-  padding: tokens.$space-4 tokens.$space-4 tokens.$space-3;
+  padding: tokens.$space-4;
 }
 
-.label {
-  position: absolute;
-  top: -12px;
-  left: tokens.$space-3;
-  padding: 0 tokens.$space-2;
-  background-color: tokens.$surface-panel;
-  color: tokens.$surface-ink-muted;
+// Header extends to the panel's inner edges via negative margins so the
+// label banner sits flush with the top-left corner and gets clipped by
+// the panel's rounded corner.
+.header {
+  display: flex;
+  align-items: center;
+  margin: -#{tokens.$space-4};
+  margin-bottom: tokens.$space-3;
+}
+
+// Label banner — enters from the top-left, width sized to the text. Same
+// gradient as the navbar to reinforce the brand-accent echo.
+.labelBanner {
+  padding: tokens.$space-1 tokens.$space-3;
+  background: linear-gradient(
+    100deg,
+    colors.$gk-orange 0%,
+    colors.$gk-orange-light 100%
+  );
+  color: colors.$white;
   font-size: tokens.$text-sm;
   font-weight: 700;
   letter-spacing: 0.04em;
-  line-height: 16px;
+  line-height: 1.4;
   text-transform: uppercase;
+  border-bottom-right-radius: tokens.$radius-sm;
 }
 
-// Mirrors the label: floats on the top border, punching through with the
-// panel bg. Caller supplies the button/content.
 .headerAction {
-  position: absolute;
-  top: -12px;
-  right: tokens.$space-3;
-  padding: 0 tokens.$space-1;
-  background-color: tokens.$surface-panel;
-  line-height: 0;
+  margin-left: auto;
+  padding-right: tokens.$space-3;
 }

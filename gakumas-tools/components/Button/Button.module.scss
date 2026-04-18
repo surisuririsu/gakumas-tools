@@ -9,8 +9,6 @@
   gap: tokens.$space-2;
   border-radius: tokens.$radius-sm;
   transition:
-    transform 0.08s ease,
-    box-shadow 0.08s ease,
     background-color 0.15s ease,
     color 0.15s ease;
 }
@@ -32,24 +30,10 @@
   font-size: tokens.$text-lg;
 }
 
-// Solid-fill variants share an offset-shadow "pressable" treatment —
-// echoing the Panel's neo-pop shadow so the whole app speaks one language.
-.default,
-.primary,
-.red,
-.blue {
-  box-shadow: tokens.$shadow-pop-sm;
-
-  &:active {
-    transform: translate(1px, 2px);
-    box-shadow: 0 0 0 0 transparent;
-  }
-}
-
 .default {
   background-color: colors.$white;
   color: colors.$black;
-  border: 1px solid tokens.$surface-border-strong;
+  border: 1px solid tokens.$surface-border;
 
   &:hover,
   &:focus-visible {
@@ -121,7 +105,6 @@
 }
 
 .disabled {
-  box-shadow: none !important;
   background-color: colors.$gray-extra-light;
   color: colors.$gray;
   cursor: default;

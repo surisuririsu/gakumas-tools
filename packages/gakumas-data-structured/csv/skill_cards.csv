@@ -248,8 +248,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 247,花萌ゆ季節+,"27,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,cost-=1,addRandomUpgradedCardToHand; cardUsesRemaining+=1; at:turn { drawCard; limit:1 },1,
 248,陽だまりの生徒会室,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,cost-=3,fixedStamina+=3; cardUsesRemaining+=1,1,
 249,陽だまりの生徒会室+,"3,27",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,cost-=2,fixedStamina+=5; cardUsesRemaining+=1,1,
-250,心のアルバム,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,cost-=0,score+=3; genki+=3; at:turn { drawCard; limit:2 },1,
-251,心のアルバム+,"2,38",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,cost-=0,score+=6; genki+=5; at:turn { drawCard; limit:2 },1,
+250,心のアルバム,,SSR,active,free,1,FALSE,TRUE,support,,FALSE,,cost-=0,score+=3; genki+=3; at:turn { drawCard; limit:1 }; at:turn { drawCard; limit:1; delay:1 },1,
+251,心のアルバム+,"2,38",SSR,active,free,1,TRUE,TRUE,support,,FALSE,,cost-=0,score+=6; genki+=5; at:turn { drawCard; limit:1 }; at:turn { drawCard; limit:1; delay:1 },1,
 252,ティーパーティ,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,cost-=3,cardUsesRemaining+=1; upgradeHand,1,
 253,ティーパーティ+,"36,27",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,cost-=1,cardUsesRemaining+=1; drawCard; upgradeHand,1,
 254,光のステージ,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,cost-=3,costReduction+=1; cardUsesRemaining+=1,1,
@@ -260,8 +260,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 259,ダメダメクッキング+,"19,21",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,cost-=6,goodImpressionTurns+=5; motivation+=4; at:turn { upgradeHand; limit:1 },1,
 260,新生徒会爆誕！,,SSR,mental,free,1,FALSE,TRUE,support,,TRUE,,cost-=5,halfCostTurns+=2; cardUsesRemaining+=1,1,
 261,新生徒会爆誕！+,"27,24",SSR,mental,free,1,TRUE,TRUE,support,,TRUE,,cost-=4,halfCostTurns+=4; cardUsesRemaining+=1,1,
-262,薄れゆく壁,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,cost-=5,genki+=3; at:turn { upgradeHand; limit:2 },1,
-263,薄れゆく壁+,"26,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,cost-=2,genki+=3; at:turn { upgradeHand; limit:2 },1,
+262,薄れゆく壁,,SSR,mental,free,1,FALSE,TRUE,support,,FALSE,,cost-=5,genki+=3; at:turn { upgradeHand; limit:1 }; at:turn { upgradeHand; limit:1; delay:1 },1,
+263,薄れゆく壁+,"26,3",SSR,mental,free,1,TRUE,TRUE,support,,FALSE,,cost-=2,genki+=3; at:turn { upgradeHand; limit:1 }; at:turn { upgradeHand; limit:1; delay:1 },1,
 264,絡まる想い,,SSR,mental,logic,1,FALSE,TRUE,pIdol,28,TRUE,,cost-=8,goodImpressionTurns+=8,1,
 265,絡まる想い+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,28,TRUE,,cost-=8,goodImpressionTurns+=10,1,
 266,なに聴いてるの？,,SR,active,logic,1,FALSE,TRUE,support,,FALSE,,cost-=0,genki+=2; fixedStamina+=3,1,
@@ -410,8 +410,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 409,オープニングアクト+,"40,48,63",SR,active,anomaly,29,TRUE,FALSE,produce,,FALSE,,cost-=4,setStance(strength); score+=14; fullPowerCharge+=3,1,
 410,始まりの笑顔,,SR,active,anomaly,34,FALSE,TRUE,produce,,FALSE,,fullPowerCharge-=2,setStance(strength); score+=6; halfCostTurns+=2; at:turn { drawCard; limit:1 },,
 411,始まりの笑顔+,"48,58,40",SR,active,anomaly,34,TRUE,TRUE,produce,,FALSE,,fullPowerCharge-=1,setStance(strength); score+=8; halfCostTurns+=2; at:turn { drawCard; limit:1 },,
-412,理想のテンポ,,SR,active,anomaly,52,FALSE,FALSE,produce,,FALSE,,cost-=5,score+=6; score+=6; if:!isPreservation { cardUsesRemaining+=1 },1,at:stanceChanged { target:this { g.score+=5 } }
-413,理想のテンポ+,"29,47,28",SR,active,anomaly,52,TRUE,FALSE,produce,,FALSE,,cost-=5,score+=6; score+=6; if:!isPreservation { cardUsesRemaining+=1 },1,at:stanceChanged { target:this { g.score+=7 } }
+412,理想のテンポ,,SR,active,anomaly,52,FALSE,FALSE,produce,,FALSE,,cost-=5,score+=6; score+=6; if:!isPreservation { cardUsesRemaining+=1 },1,at:stanceChanged { if:isDirectEffect { target:this { g.score+=5 } } }
+413,理想のテンポ+,"29,47,28",SR,active,anomaly,52,TRUE,FALSE,produce,,FALSE,,cost-=5,score+=6; score+=6; if:!isPreservation { cardUsesRemaining+=1 },1,at:stanceChanged { if:isDirectEffect { target:this { g.score+=7 } } }
 414,トレーニングの成果,,SR,active,anomaly,58,FALSE,FALSE,produce,,FALSE,,cost-=5,fullPowerCharge+=3; score+=28+cumulativeFullPowerCharge; at:beforeStartOfTurn { if:prevStance==fullPower & stance==none { setStance(preservation2) }; limit:1 },1,
 415,トレーニングの成果+,"48,60,29",SR,active,anomaly,58,TRUE,FALSE,produce,,FALSE,,cost-=5,fullPowerCharge+=4; score+=28+cumulativeFullPowerCharge*2; at:beforeStartOfTurn { if:prevStance==fullPower & stance==none { setStance(preservation2) }; limit:1 },1,
 416,潜在能力,,SR,mental,anomaly,1,FALSE,FALSE,produce,,FALSE,,cost-=6,genki+=10; fullPowerCharge+=3; holdSelected[hand],1,
@@ -428,8 +428,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 427,キセキの魔法+,"6,30",SSR,active,logic,59,TRUE,TRUE,produce,,FALSE,if:goodImpressionTurns>=10,stamina-=4,score+=goodImpressionTurns*5; if:countCards[T & !removed]>=2 { score+=goodImpressionTurns*5 },1,
 428,翔び立て！,,SSR,active,anomaly,11,FALSE,TRUE,produce,,FALSE,,cost-=6,fullPowerCharge+=3; score+=10+cumulativeFullPowerCharge,1,at:stanceChanged { if:stance==fullPower { target:this { g.score+=20 } }; limit:1 }
 429,翔び立て！+,"42,4",SSR,active,anomaly,11,TRUE,TRUE,produce,,FALSE,,cost-=5,fullPowerCharge+=4; score+=10+cumulativeFullPowerCharge*1.5,1,at:stanceChanged { if:stance==fullPower { target:this { g.score+=30 } }; limit:1 }
-430,総合芸術,,SSR,active,anomaly,12,FALSE,TRUE,produce,,FALSE,if:stance!=none,cost-=7,setStance(strength); score+=7,,at:stanceChanged { target:this { g.score+=15 }; limit:4 }
-431,総合芸術+,"29,2",SSR,active,anomaly,12,TRUE,TRUE,produce,,FALSE,if:stance!=none,cost-=7,setStance(strength); score+=10,,at:stanceChanged { target:this { g.score+=20 }; limit:4 }
+430,総合芸術,,SSR,active,anomaly,12,FALSE,TRUE,produce,,FALSE,if:stance!=none,cost-=7,setStance(strength); score+=7,,at:stanceChanged { if:isDirectEffect { target:this { g.score+=15 } }; limit:4 }
+431,総合芸術+,"29,2",SSR,active,anomaly,12,TRUE,TRUE,produce,,FALSE,if:stance!=none,cost-=7,setStance(strength); score+=10,,at:stanceChanged { if:isDirectEffect { target:this { g.score+=20 } }; limit:4 }
 432,心・技・体,,SSR,active,anomaly,30,FALSE,TRUE,produce,,FALSE,,cost-=8,setStance(strength2); score+=7; fullPowerCharge+=3; halfCostTurns+=2,1,
 433,心・技・体+,"2,29",SSR,active,anomaly,30,TRUE,TRUE,produce,,FALSE,,cost-=8,setStance(strength2); score+=16; fullPowerCharge+=4; halfCostTurns+=4,1,
 434,輝け！,,SSR,active,anomaly,41,FALSE,TRUE,produce,,FALSE,,cost-=7,fullPowerCharge+=3; at:turn { setStance(preservation); limit:1 }; if:isFullPower { score+=20; score+=20 },1,

@@ -61,7 +61,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,actions,limit,effe
 60,growHandScoreAdd2,成長追加,effect,"40,70",2,,,,target:hand { g.score+=3 }; level:1; target:hand { g.score+=8 }; level:2,,
 61,growHeldScoreAdd2,成長追加,effect,"40,70",2,,,,target:held { g.score+=3 }; level:1; target:held { g.score+=8 }; level:2,,
 62,growAllScoreAdd2,成長追加,effect,"40,70",2,,,,target:all { g.score+=1 }; level:1; target:all { g.score+=4 }; level:2,,
-63,onStrengthGrowThisAdd2,成長追加,effect,"40,70",2,,,,,,at:stanceChanged { if:isStrength { target:this { g.score+=2 } }; level:1 }; at:stanceChanged { if:isStrength { target:this { g.score+=5 } }; level:2 }
+63,onStrengthGrowThisAdd2,成長追加,effect,"40,70",2,,,,,,at:stanceChanged { if:isDirectEffect & isStrength { target:this { g.score+=2 } }; level:1 }; at:stanceChanged { if:isDirectEffect & isStrength { target:this { g.score+=5 } }; level:2 }
 64,score3_3,パラメータ+,score,"40,40,70",3,,,,,,at:prestage { target:this { g.score+=3 }; level:1 }; at:prestage { target:this { g.score+=6 }; level:2 }; at:prestage { target:this { g.score+=15 }; level:3 }
 65,score3_6,パラメータ+,score,"40,40,70",3,,,,,,at:prestage { target:this { g.score+=6 }; level:1 }; at:prestage { target:this { g.score+=12 }; level:2 }; at:prestage { target:this { g.score+=30 }; level:3 }
 66,scoreByGoodImpressionTurns3,好印象分パラメータ+,score,"40,40,70",3,,,,,,at:prestage { target:this { g.scoreByGoodImpressionTurns+=0.35 }; level:1 }; at:prestage { target:this { g.scoreByGoodImpressionTurns+=0.7 }; level:2 }; at:prestage { target:this { g.scoreByGoodImpressionTurns+=1.5 }; level:3 }

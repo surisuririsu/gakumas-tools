@@ -39,6 +39,8 @@ export default class BuffManager extends EngineComponent {
       isDirectEffect: (state) =>
         state[S.parentPhase] === "processCard" ||
         state[S.parentPhase] === "processCost" ||
+        (state[S.triggeredEffect]?.type === "reservation" &&
+          state[S.triggeredEffect]?.source?.type === "skillCardEffect") ||
         (state[S.phase] == "stanceChanged" &&
           state[S.prevStance] != "fullPower" &&
           state[S.stance] == "fullPower"),

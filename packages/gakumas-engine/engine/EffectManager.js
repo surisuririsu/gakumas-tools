@@ -69,6 +69,13 @@ export default class EffectManager extends EngineComponent {
       if (!effect.actions && i < effects.length - 1) {
         effect.effects = [effects[++i]];
       }
+      // Effects scheduled for a single future turn (e.g. "次のターン" /
+      // "Nターン後" — phase:turn + limit:1) are reservations. When they
+      // fire, isDirectEffect treats them as direct so chain-triggered
+      // p-items with if:isDirectEffect still match.
+      if (effect.phase == "turn" && effect.limit == 1) {
+        effect.type = "reservation";
+      }
       state[S.effects].push(effect);
     }
   }
@@ -230,6 +237,12 @@ export default class EffectManager extends EngineComponent {
 
       this.logger.debug("Executing actions", effect.actions);
 
+      // Track the effect being triggered so isDirectEffect can see whether
+      // this run is a reservation firing (e.g. card-scheduled "next turn"
+      // effects should propagate as direct).
+      const prevTriggeredEffect = state[S.triggeredEffect];
+      state[S.triggeredEffect] = effect;
+
       // Apply growth or actions or effects
       if (effect.targets) {
         // Identify cards to grow
@@ -260,6 +273,8 @@ export default class EffectManager extends EngineComponent {
           this.logger.log(state, "setEffect");
         }
       }
+
+      state[S.triggeredEffect] = prevTriggeredEffect;
 
       // Log source end
       if (effect.source) {

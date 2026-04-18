@@ -890,16 +890,10 @@ export default class CardManager extends EngineComponent {
 
   useRandomCardFree(state, targetRule) {
     const targetCards = this.getTargetRuleCards(state, targetRule);
-    const usableCards = [];
-    for (let card of targetCards.values()) {
-      const pile = this.findCardPile(state, card);
-      if (pile && this.isCardUsable(state, card)) {
-        usableCards.push({ card, pile });
-      }
-    }
-    if (!usableCards.length) return;
-    const { card, pile } =
-      usableCards[Math.floor(getRand() * usableCards.length)];
+    if (!targetCards.size) return;
+    const card = [...targetCards][Math.floor(getRand() * targetCards.size)];
+    const pile = this.findCardPile(state, card);
+    if (!pile) return;
     state[S.freeCardUses]++;
     this.useCard(state, card, pile);
     state[S.freeCardUses]--;
