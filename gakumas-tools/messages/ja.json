@@ -155,7 +155,9 @@
     "produceRank": "プロデュース評価",
     "costRange": "コスト範囲",
     "success": "成功",
-    "failure": "失敗"
+    "failure": "失敗",
+    "clear": "クリア",
+    "confirm": "メモリー計算機をクリアしますか？"
   },
   "TargetSkillCards": {
     "acquired": "取得済み"

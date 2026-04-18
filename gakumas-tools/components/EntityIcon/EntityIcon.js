@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { FaPlus } from "react-icons/fa6";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
@@ -20,6 +21,7 @@ function EntityIcon({
   onClick,
   onSwap,
   showTier,
+  showEmptyPlaceholder,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const { icon } = gkImg(entity, idolId);
@@ -74,7 +76,13 @@ function EntityIcon({
     return (
         <button ref={dragRef} className={className} onClick={() => onClick(entity || {})}>
           <div ref={dropRef} className={styles.dropArea}>
-            {unwrappedElement}
+            {unwrappedElement ||
+              (showEmptyPlaceholder && (
+                <FaPlus
+                  className={styles.emptyPlaceholder}
+                  aria-hidden="true"
+                />
+              ))}
           </div>
       </button>
     );

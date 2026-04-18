@@ -1,9 +1,12 @@
 "use client";
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
+import Button from "@/components/Button";
+import ButtonGroup from "@/components/ButtonGroup";
+import ConfirmModal from "@/components/ConfirmModal";
 import IconSelect from "@/components/IconSelect";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
+import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { COST_RANGES, COST_RANGES_BY_RANK } from "@/utils/contestPower";
 import { generatePossibleMemories } from "@/utils/skillCardLottery";
@@ -41,10 +44,11 @@ function MemoryCalculator() {
     acquiredSkillCardIds,
     rank,
     setRank,
+    clear,
   } = useContext(MemoryCalculatorContext);
   const { idolId } = useContext(WorkspaceContext);
-  const [showOnTargetResults, setShowOnTargetResults] = useState(true);
-  const [showOffTargetResults, setShowOffTargetResults] = useState(false);
+  const { setModal } = useContext(ModalContext);
+  const [resultsTab, setResultsTab] = useState("success");
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
@@ -114,11 +118,28 @@ function MemoryCalculator() {
     <div className={styles.memoryCalculator}>
       <p>{t("note")}</p>
 
-      <label>{t("target")}</label>
-      <TargetSkillCards idolId={idolId} />
+      <div className={styles.buttons}>
+        <Button
+          style="red-secondary"
+          onClick={() =>
+            setModal(
+              <ConfirmModal message={t("confirm")} onConfirm={clear} />
+            )
+          }
+        >
+          {t("clear")}
+        </Button>
+      </div>
 
-      <label>{t("acquired")}</label>
-      <AcquiredSkillCards />
+      <div className={styles.section}>
+        <label>{t("target")}</label>
+        <TargetSkillCards idolId={idolId} />
+      </div>
+
+      <div className={styles.section}>
+        <label>{t("acquired")}</label>
+        <AcquiredSkillCards />
+      </div>
 
       <label>{t("produceRank")}</label>
       <div className={styles.rankSelect}>
@@ -130,37 +151,26 @@ function MemoryCalculator() {
         {costRange.min} ~ {costRange.max}
       </div>
 
-      <button
-        className={styles.resultsToggle}
-        onClick={() => setShowOnTargetResults(!showOnTargetResults)}
-      >
-        <label>
-          {t("success")} ({(onTargetProbability * 100).toFixed(2)}%)
-        </label>
-        {showOnTargetResults ? <FaChevronUp /> : <FaChevronDown />}
-      </button>
-      {showOnTargetResults && (
-        <MemoryCalculatorResultList
-          memories={onTargetMemories}
-          idolId={idolId}
-        />
-      )}
-
-      <button
-        className={styles.resultsToggle}
-        onClick={() => setShowOffTargetResults(!showOffTargetResults)}
-      >
-        <label>
-          {t("failure")} ({(offTargetProbability * 100).toFixed(2)}%)
-        </label>
-        {showOffTargetResults ? <FaChevronUp /> : <FaChevronDown />}
-      </button>
-      {showOffTargetResults && (
-        <MemoryCalculatorResultList
-          memories={offTargetMemories}
-          idolId={idolId}
-        />
-      )}
+      <ButtonGroup
+        selected={resultsTab}
+        onChange={setResultsTab}
+        options={[
+          {
+            value: "success",
+            label: `${t("success")} (${(onTargetProbability * 100).toFixed(2)}%)`,
+          },
+          {
+            value: "failure",
+            label: `${t("failure")} (${(offTargetProbability * 100).toFixed(2)}%)`,
+          },
+        ]}
+      />
+      <MemoryCalculatorResultList
+        memories={
+          resultsTab === "success" ? onTargetMemories : offTargetMemories
+        }
+        idolId={idolId}
+      />
     </div>
   );
 }

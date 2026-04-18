@@ -21,11 +21,24 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
+}
+
+.emptyPlaceholder {
+  color: colors.$gray-light;
+  width: 40%;
+  height: 40%;
+  transition: color 0.2s;
 }
 
 button.entityIcon:hover {
   outline: 3px solid colors.$gk-orange;
+}
+
+button.entityIcon:hover .emptyPlaceholder,
+button.entityIcon:focus .emptyPlaceholder {
+  color: colors.$gk-orange;
 }
 
 .fill {

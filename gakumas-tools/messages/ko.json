@@ -155,7 +155,9 @@
     "produceRank": "프로듀스 평가",
     "costRange": "코스트 범위",
     "success": "성공",
-    "failure": "실패"
+    "failure": "실패",
+    "clear": "초기화",
+    "confirm": "메모리 계산기를 초기화할까요?"
   },
   "TargetSkillCards": {
     "acquired": "획득 완료"

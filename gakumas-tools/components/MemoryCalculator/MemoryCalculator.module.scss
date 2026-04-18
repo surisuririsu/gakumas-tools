@@ -9,15 +9,27 @@
   gap: 8px;
 }
 
-.rankSelect {
+.buttons {
+  display: flex;
+  gap: 8px;
   align-self: flex-start;
 }
 
-.resultsToggle {
-  justify-content: flex-start;
+.section {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  color: colors.$gk-orange;
-  font-size: 16px;
+  border: 2px solid colors.$gray-light;
+  border-radius: 8px;
+  padding: 8px 12px 12px;
+
+  & > label:first-child {
+    margin-top: 0;
+  }
+}
+
+.rankSelect {
+  align-self: flex-start;
 }
 
 .result {

@@ -36,6 +36,7 @@ function AcquiredSkillCards() {
           }
           idolId={idolId}
           showTier
+          showEmptyPlaceholder
         />
       ))}
     </div>

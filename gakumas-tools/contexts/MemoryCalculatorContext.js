@@ -1,15 +1,52 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { SkillCards } from "gakumas-data";
+
+const MEMORY_CALCULATOR_STORAGE_KEY = "gakumas-tools.memoryCalculator";
 
 const MemoryCalculatorContext = createContext();
 
 export function MemoryCalculatorContextProvider({ children }) {
+  const [loaded, setLoaded] = useState(false);
   const [targetSkillCardIds, _setTargetSkillCardIds] = useState([0]);
   const [alternateSkillCardIds, _setAlternateSkillCardIds] = useState([]);
   const [targetNegations, _setTargetNegations] = useState([]);
   const [acquiredSkillCardIds, _setAcquiredSkillCardIds] = useState([0]);
   const [rank, setRank] = useState("SS+");
+
+  useEffect(() => {
+    const stored = localStorage.getItem(MEMORY_CALCULATOR_STORAGE_KEY);
+    if (stored) {
+      const data = JSON.parse(stored);
+      if (data.targetSkillCardIds) _setTargetSkillCardIds(data.targetSkillCardIds);
+      if (data.alternateSkillCardIds) _setAlternateSkillCardIds(data.alternateSkillCardIds);
+      if (data.targetNegations) _setTargetNegations(data.targetNegations);
+      if (data.acquiredSkillCardIds) _setAcquiredSkillCardIds(data.acquiredSkillCardIds);
+      if (data.rank) setRank(data.rank);
+    }
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(
+      MEMORY_CALCULATOR_STORAGE_KEY,
+      JSON.stringify({
+        targetSkillCardIds,
+        alternateSkillCardIds,
+        targetNegations,
+        acquiredSkillCardIds,
+        rank,
+      })
+    );
+  }, [
+    loaded,
+    targetSkillCardIds,
+    alternateSkillCardIds,
+    targetNegations,
+    acquiredSkillCardIds,
+    rank,
+  ]);
 
   function setTargetSkillCardIds(callback) {
     let removedIndices = [];
@@ -124,6 +161,14 @@ export function MemoryCalculatorContextProvider({ children }) {
     _setAlternateSkillCardIds([]);
   }
 
+  function clear() {
+    _setTargetSkillCardIds([0]);
+    _setAlternateSkillCardIds([]);
+    _setTargetNegations([]);
+    _setAcquiredSkillCardIds([0]);
+    setRank("SS+");
+  }
+
   return (
     <MemoryCalculatorContext.Provider
       value={{
@@ -139,6 +184,7 @@ export function MemoryCalculatorContextProvider({ children }) {
         replaceAlternateCardId,
         replaceAcquiredCardId,
         clearTargetCardIds,
+        clear,
         rank,
         setRank,
       }}

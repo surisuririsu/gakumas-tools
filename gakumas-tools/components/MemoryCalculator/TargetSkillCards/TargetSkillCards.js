@@ -74,6 +74,7 @@ function TargetSkillCards({ idolId }) {
               idolId={idolId}
               size="fill"
               showTier
+              showEmptyPlaceholder
             />
 
             {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
