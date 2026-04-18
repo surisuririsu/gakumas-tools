@@ -9,9 +9,9 @@ SKILL_CARDS.forEach((skillCard) => {
     .filter((c) => c);
   skillCard.conditions = deserializeEffectSequence(skillCard.conditions);
   skillCard.cost = deserializeEffectSequence(skillCard.cost);
-  skillCard.effects = deserializeEffectSequence(skillCard.effects);
+  skillCard.actions = deserializeEffectSequence(skillCard.actions);
   skillCard.limit = skillCard.limit || null;
-  skillCard.growth = deserializeEffectSequence(skillCard.growth);
+  skillCard.effects = deserializeEffectSequence(skillCard.effects);
   skillCard.pIdolId = skillCard.pIdolId || null;
   skillCard.contestPower = getSkillCardContestPower(skillCard);
 });

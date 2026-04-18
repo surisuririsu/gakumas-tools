@@ -201,7 +201,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 200,N.I.Aライト（黒）,SSR,FALSE,anomaly,produce,produce,,FALSE,
 201,すごすぎるバトン,SSR,FALSE,free,produce,support,,FALSE,
 202,ボクの一部,SSR,FALSE,anomaly,stage,pIdol,69,FALSE,at:cardUsed { if:usedCardBaseId==382 & isPreservation { drawCard; halfCostTurns+=1; fixedStamina-=1; target:382 { g.score+=10 } }; limit:3 }
-203,ボクの一部+,SSR,TRUE,anomaly,stage,pIdol,69,FALSE,at:cardUsed { if:usedCardBaseId==382 & isPreservation { drawCard; drawCard; halfCostTurns+=1; fixedStamina-=1; target:382 { g.score+=10 } }; limit:3 }
+203,ボクの一部+,SSR,TRUE,anomaly,stage,pIdol,69,FALSE,at:cardUsed { if:usedCardBaseId==382 & isPreservation { drawCard(2); halfCostTurns+=1; fixedStamina-=1; target:382 { g.score+=10 } }; limit:3 }
 204,いつかの小さな星,SSR,FALSE,sense,stage,pIdol,70,FALSE,at:afterCardUsed { if:usedCardBaseId==30 { turnsRemaining+=1; perfectConditionTurns+=2; fixedStamina-=3 }; limit:2 }
 205,いつかの小さな星+,SSR,TRUE,sense,stage,pIdol,70,FALSE,at:afterCardUsed { if:usedCardBaseId==30 { turnsRemaining+=1; perfectConditionTurns+=3; fixedStamina-=2 }; limit:2 }
 206,きみが見つけた私,SSR,FALSE,anomaly,stage,pIdol,71,FALSE,"at:afterCardUsed { if:usedCardBaseId==394 { setScoreBuff(0.6,2); fullPowerCharge+=10; fixedStamina-=1 }; limit:1 }"
@@ -318,7 +318,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 317,おさぼりタオル,SR,FALSE,free,stage,support,,FALSE,at:startOfTurn { if:isDanceTurn { fixedGenki+=4; at:turn { nullifyDebuff+=1; limit:1 } } limit:1 }
 318,わいわいタンバリン,SSR,FALSE,free,produce,support,,FALSE,
 319,しゅきしゅきはーと,SSR,FALSE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=2; drawCard; cardUsesRemaining+=1; at:cardUsed[mental] { doubleCardEffectCards+=1; limit:1; ttl:1 } } limit:1 }
-320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=10; drawCard; drawCard; cardUsesRemaining+=1; at:cardUsed[mental] { doubleCardEffectCards+=1; limit:1; ttl:1 } } limit:1 }
+320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=10; drawCard(2); cardUsesRemaining+=1; at:cardUsed[mental] { doubleCardEffectCards+=1; limit:1; ttl:1 } } limit:1 }
 321,ピークタイムフラッグ,SSR,FALSE,sense,produce,support,,FALSE,
 322,ふっかつのアイス,SR,FALSE,sense,produce,support,,FALSE,
 323,ミラクルヘッド,SSR,FALSE,logic,stage,pIdol,107,FALSE,"at:startOfTurn { setMotivationBuff(0.5,3); fixedStamina-=2; limit:1 }; at:turn { if:turnsElapsed==1 { genki+=2 }; limit:1 }"
@@ -336,7 +336,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 335,月刊アニメトーク♪,SSR,FALSE,logic,stage,support,,FALSE,at:afterStartOfTurn { if:isVisualTurn { goodImpressionTurns+=3; moveRandomToHand[SSR & (deck | discarded)] }; limit:1 }
 336,メリハリストレッチ,SR,FALSE,logic,produce,support,,FALSE,
 337,フレフレあたし！,SSR,FALSE,sense,stage,pIdol,111,FALSE,at:afterCardUsed[active] { if:perfectConditionTurns>=1 { cardUsesRemaining+=1; drawCard; fixedStamina-=1 }; limit:2 }
-338,フレフレあたし！+,SSR,TRUE,sense,stage,pIdol,111,FALSE,at:afterCardUsed[active] { if:perfectConditionTurns>=1 { cardUsesRemaining+=1; drawCard; drawCard }; limit:2 }
+338,フレフレあたし！+,SSR,TRUE,sense,stage,pIdol,111,FALSE,at:afterCardUsed[active] { if:perfectConditionTurns>=1 { cardUsesRemaining+=1; drawCard(2) }; limit:2 }
 339,お礼のティーセット,SSR,FALSE,sense,produce,support,,FALSE,
 340,びっくり仮装グッズ,SR,FALSE,sense,produce,support,,FALSE,
 341,ごちゃまぜパッション,SSR,FALSE,anomaly,stage,pIdol,112,FALSE,at:startOfTurn { if:isStrength { setStance(preservation); genki+=6 }; limit:1 }
@@ -383,7 +383,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 382,憧れのはじまり+,SSR,TRUE,anomaly,stage,pIdol,123,FALSE,at:stanceChanged { if:isFullPower { nullifyCostActiveCards+=1; target:mental { g.genki+=5 } } limit:3 }
 383,そっくりワンマン,SR,FALSE,anomaly,produce,support,,FALSE,
 384,ひろがる未来へ,SSR,FALSE,sense,stage,pIdol,124,FALSE,at:buffCostConsumed { if:goodConditionTurns>=3 { concentration+=2; goodConditionTurns-=1; at:turn { drawCard; limit:1 } } }
-385,ひろがる未来へ+,SSR,TRUE,sense,stage,pIdol,124,FALSE,at:buffCostConsumed { if:goodConditionTurns>=3 { concentration+=2; goodConditionTurns-=1; at:turn { drawCard; drawCard; limit:1 } } }
+385,ひろがる未来へ+,SSR,TRUE,sense,stage,pIdol,124,FALSE,at:buffCostConsumed { if:goodConditionTurns>=3 { concentration+=2; goodConditionTurns-=1; at:turn { drawCard(2); limit:1 } } }
 386,みちなるシグナル,SSR,FALSE,logic,stage,pIdol,125,FALSE,"at:startOfStage { genki+=7; motivation+=4; fixedStamina-=maxStamina*0.8; limit:1 }; at:buffCostConsumed { fixedStamina+=maxStamina*0.2; setGoodImpressionTurnsEffectBuff(0.1) }"
 387,みちなるシグナル+,SSR,TRUE,logic,stage,pIdol,125,FALSE,"at:startOfStage { genki+=8; motivation+=5; fixedStamina-=maxStamina*0.8; limit:1 }; at:buffCostConsumed { fixedStamina+=maxStamina*0.2; setGoodImpressionTurnsEffectBuff(0.1) }"
 388,はじめてのけんか?,SSR,FALSE,sense,produce,support,,FALSE,
@@ -415,5 +415,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 414,切磋琢磨のタオル,SR,FALSE,anomaly,produce,support,,FALSE,
 415,おかいものバッグ,SSR,FALSE,anomaly,stage,support,,TRUE,at:stanceChanged { if:isDirectEffect & isStrength & isDanceTurn & genki==0 { halfCostTurns+=1 } }
 416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.1; genki=0; at:turn { drawCard; limit:1 } }; limit:3 }
-417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.3; genki=0; at:turn { drawCard; drawCard; limit:1 } }; limit:3 }
+417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.3; genki=0; at:turn { drawCard(2); limit:1 } }; limit:3 }
 419,もぐもぐ定食,SR,FALSE,logic,produce,support,,FALSE,

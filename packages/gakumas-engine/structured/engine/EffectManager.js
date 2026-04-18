@@ -41,19 +41,19 @@ export default class EffectManager extends EngineComponent {
       }
     }
 
-    // Set growth effects
-    this.initializeGrowthEffects(state);
+    // Set card effects
+    this.initializeCardEffects(state);
   }
 
-  initializeGrowthEffects(state) {
+  initializeCardEffects(state) {
     for (let i = 0; i < state[S.cardMap].length; i++) {
       const skillCardId = state[S.cardMap][i].id;
 
       const skillCard = SkillCards.getById(skillCardId);
-      const growth = this.engine.cardManager.getLines(state, i, "growth");
-      if (growth.length) {
-        this.logger.debug("Setting growth effects", skillCard.name, growth);
-        this.setEffects(state, growth, {
+      const cardEffects = this.engine.cardManager.getLines(state, i, "effects");
+      if (cardEffects.length) {
+        this.logger.debug("Setting card effects", skillCard.name, cardEffects);
+        this.setEffects(state, cardEffects, {
           type: "skillCard",
           id: skillCardId,
           idx: i,

@@ -190,7 +190,6 @@ export const VARIABLE_RESOLVERS = new Set([
   // BuffManager
   "isPreservation",
   "isStrength",
-  "isNotStrength",
   "isFullPower",
   "isDirectEffect",
   "stanceChangedTimes",

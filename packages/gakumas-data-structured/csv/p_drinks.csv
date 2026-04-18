@@ -1,4 +1,4 @@
-id,name,rarity,plan,unlockPlv,effects
+id,name,rarity,plan,unlockPlv,actions
 1,初星水,R,free,1,score+=10
 2,烏龍茶,R,free,1,genki+=7
 3,ビタミンドリンク,R,sense,1,goodConditionTurns+=3
@@ -12,7 +12,7 @@ id,name,rarity,plan,unlockPlv,effects
 11,フレッシュビネガー,SR,free,1,upgradeHand; fixedStamina+=3
 12,ブーストエキス,SR,free,55,"setScoreBuff(0.3,3); halfCostTurns+=3; fixedStamina-=2"
 13,パワフル漢方ドリンク,SR,free,60,moveRandomToHand[pIdol & (deck | discarded)]; halfCostTurns+=3
-14,センブリソーダ,SR,free,61,"setScoreBuff(0.1,5); drawCard; drawCard; fixedStamina-=2; at:afterStartOfTurn { drawCard; limit:5 }"
+14,センブリソーダ,SR,free,61,"setScoreBuff(0.1,5); drawCard(2); fixedStamina-=2; at:afterStartOfTurn { drawCard; limit:5 }"
 15,スタミナ爆発ドリンク,SR,sense,21,perfectConditionTurns+=1; genki+=9
 16,おしゃれハーブティー,SR,logic,21,score+=goodImpressionTurns; genki+=3
 17,ほっと緑茶,SR,anomaly,21,holdSelected[deck | discarded]; setStance(preservation2)

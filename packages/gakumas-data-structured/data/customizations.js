@@ -4,8 +4,8 @@ import { deserializePatchSequence } from "../utils/effects";
 CUSTOMIZATIONS.forEach((customization) => {
   customization.conditions = deserializePatchSequence(customization.conditions);
   customization.cost = deserializePatchSequence(customization.cost);
+  customization.actions = deserializePatchSequence(customization.actions);
   customization.effects = deserializePatchSequence(customization.effects);
-  customization.growth = deserializePatchSequence(customization.growth);
 });
 
 const CUSTOMIZATIONS_BY_ID = CUSTOMIZATIONS.reduce((acc, cur) => {

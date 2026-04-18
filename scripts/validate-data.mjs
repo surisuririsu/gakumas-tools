@@ -57,30 +57,33 @@ function validatePatchField(entity, id, column, src) {
 }
 
 // --- Skill cards ---
+// `actions`: immediate actions played when the card is used.
+// `effects`: triggered effects (at:phase) registered when the card enters play.
 for (const card of SKILL_CARDS) {
   validateEffectField("skillCard", card.id, "conditions", card.conditions);
   validateEffectField("skillCard", card.id, "cost", card.cost);
+  validateEffectField("skillCard", card.id, "actions", card.actions);
   validateEffectField("skillCard", card.id, "effects", card.effects);
-  validateEffectField("skillCard", card.id, "growth", card.growth);
 }
 
-// --- Customizations (patch sequences) ---
+// --- Customizations (patch sequences, mirroring skill_cards columns) ---
 for (const cust of CUSTOMIZATIONS) {
   validatePatchField("customization", cust.id, "conditions", cust.conditions);
   validatePatchField("customization", cust.id, "cost", cust.cost);
+  validatePatchField("customization", cust.id, "actions", cust.actions);
   validatePatchField("customization", cust.id, "effects", cust.effects);
-  validatePatchField("customization", cust.id, "growth", cust.growth);
 }
 
-// --- P-items / stages / p-drinks ---
+// --- P-items / stages: triggered effects only ---
 for (const item of P_ITEMS) {
   validateEffectField("pItem", item.id, "effects", item.effects);
 }
 for (const stage of STAGES) {
   validateEffectField("stage", stage.id, "effects", stage.effects);
 }
+// --- P-drinks: immediate actions only ---
 for (const drink of P_DRINKS) {
-  validateEffectField("pDrink", drink.id, "effects", drink.effects);
+  validateEffectField("pDrink", drink.id, "actions", drink.actions);
 }
 
 if (totalErrors > 0) {

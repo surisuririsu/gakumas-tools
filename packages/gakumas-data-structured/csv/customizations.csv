@@ -1,4 +1,4 @@
-id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,growth
+id,alias,name,type,price,max,forceInitialHand,conditions,cost,actions,limit,effects
 1,score1_6,パラメータ+,score,70,1,,,,,,at:prestage { target:this { g.score+=6 } }
 2,score1_12,パラメータ+,score,70,1,,,,,,at:prestage { target:this { g.score+=12 } }
 3,scoreAdd1_6,パラメータ追加,score,70,1,,,,score+=6,,

@@ -35,7 +35,6 @@ export default class BuffManager extends EngineComponent {
       isPreservation: (state) =>
         state[S.stance].startsWith("pre") || state[S.stance] === "leisure",
       isStrength: (state) => state[S.stance].startsWith("str"),
-      isNotStrength: (state) => !state[S.stance].startsWith("str"),
       isFullPower: (state) => state[S.stance] == "fullPower",
       isDirectEffect: (state) =>
         state[S.parentPhase] === "processCard" ||

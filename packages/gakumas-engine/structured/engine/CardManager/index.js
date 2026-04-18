@@ -51,7 +51,10 @@ export default class CardManager extends EngineComponent {
     };
 
     this.specialActions = {
-      drawCard: (state) => this.drawCard(state),
+      drawCard: (state, num) => {
+        const n = num == null ? 1 : parseInt(num, 10);
+        for (let i = 0; i < n; i++) this.drawCard(state);
+      },
       upgradeHand: (state) => this.upgradeHand(state),
       exchangeHand: (state) => this.exchangeHand(state),
       upgradeRandomCardInHand: (state) => this.upgradeRandomCardInHand(state),
@@ -272,9 +275,9 @@ export default class CardManager extends EngineComponent {
   getCardEffects(state, card) {
     let cardEffects = new Set();
     if (card == null) return cardEffects;
-    const effects = this.getLines(state, card, "effects");
-    for (let i = 0; i < effects.length; i++) {
-      const effect = effects[i];
+    const lines = this.getLines(state, card, "actions");
+    for (let i = 0; i < lines.length; i++) {
+      const effect = lines[i];
       if (!effect.actions) continue;
       for (let j = 0; j < effect.actions.length; j++) {
         const action = effect.actions[j];
@@ -417,15 +420,15 @@ export default class CardManager extends EngineComponent {
       );
     }
 
-    const effects = this.getLines(state, card, "effects");
+    const actions = this.getLines(state, card, "actions");
     state[S.phase] = "processCard";
     if (state[S.doubleCardEffectCards] && skillCard.rarity !== "L") {
       state[S.doubleCardEffectCards]--;
       state[S.effectInstanceId]++;
-      this.engine.effectManager.triggerEffects(state, effects, null, card);
+      this.engine.effectManager.triggerEffects(state, actions, null, card);
     }
     state[S.effectInstanceId]++;
-    this.engine.effectManager.triggerEffects(state, effects, null, card);
+    this.engine.effectManager.triggerEffects(state, actions, null, card);
     delete state[S.phase];
 
     state[S.cardsUsed]++;
