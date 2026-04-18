@@ -75,7 +75,10 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  // Auto layout so the card column can absorb whatever space the
+  // (short, nowrap) numeric columns don't need — avoids truncating
+  // names on narrow screens when numbers only need ~40–50px apiece.
+  table-layout: auto;
   font-size: 12px;
 
   th,
@@ -114,15 +117,18 @@
   margin-left: 2px;
 }
 
-// Column widths (table-layout: fixed applies these to the whole column).
-// Card takes ~half; the three numeric columns share the rest.
+// Card column soaks up whatever's left after the numeric columns claim
+// their natural width. `width: 100%` on a single column under auto layout
+// is the standard "flex fill" trick: the browser still shrinks other
+// columns to content first.
 .cardCell {
-  width: 50%;
+  width: 100%;
   text-align: left;
 }
 
 .numericCell {
-  width: auto;
+  width: 1%;
+  white-space: nowrap;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }

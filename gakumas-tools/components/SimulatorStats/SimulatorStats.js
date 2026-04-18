@@ -12,7 +12,7 @@ const TYPES = ["vocal", "dance", "visual"];
 // Columns the user can sort by. `card` is the only text sort; the rest are
 // numeric (and default to descending on first click).
 const SORTABLE_COLS = ["card", "use", "usePct", "score"];
-const DEFAULT_SORT = { by: "use", dir: "desc" };
+const DEFAULT_SORT = { by: "usePct", dir: "desc" };
 
 // Fold cardUsage (keyed by {id, c}) and scoreStats (keyed by type:id,
 // skillCard entries only) into a single per-turn byCard map.
@@ -168,7 +168,7 @@ function TypeBar({ counts }) {
             className={styles[type]}
             style={{ width: `${(counts[type] / total) * 100}%` }}
           />
-        ) : null
+        ) : null,
       )}
     </div>
   );
@@ -227,9 +227,7 @@ function Row({ row, numRuns }) {
             width={32}
             height={32}
           />
-          {row.c && (
-            <CustomizationCounts customizations={row.c} size="small" />
-          )}
+          {row.c && <CustomizationCounts customizations={row.c} size="small" />}
         </div>
         <span className={styles.cardName}>{skillCard.name}</span>
       </td>
@@ -329,7 +327,7 @@ function SimulatorStats({ cardUsage, scoreStats }) {
 
     const numTurns = Math.max(
       cardUsage?.turns?.length || 0,
-      scoreStats?.turns?.length || 0
+      scoreStats?.turns?.length || 0,
     );
     const perTurn = [];
     for (let i = 0; i < numTurns; i++) {
