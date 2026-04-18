@@ -2,8 +2,8 @@ import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
+import CustomizationCounts from "@/components/EntityIcon/CustomizationCounts";
 import Image from "@/components/Image";
-import { FaForward } from "react-icons/fa6";
 import styles from "./CardUsageStats.module.scss";
 
 // Build aggregated totals across all turns.
@@ -46,15 +46,18 @@ function Tile({ entry, ratioPct }) {
     <div className={styles.tile}>
       <div className={styles.icon}>
         {skillCard ? (
-          <Image
-            src={gkImg(skillCard).icon}
-            alt={skillCard.name}
-            title={skillCard.name}
-            width={48}
-            height={48}
-          />
+          <>
+            <Image
+              src={gkImg(skillCard).icon}
+              alt={skillCard.name}
+              title={skillCard.name}
+              width={48}
+              height={48}
+            />
+            {entry.c && <CustomizationCounts customizations={entry.c} />}
+          </>
         ) : (
-          <FaForward size={32} title="skip" />
+          <div className={styles.skipBox} title="skip" />
         )}
       </div>
       <div className={styles.use}>{entry.use}</div>
