@@ -138,7 +138,7 @@ for (let i = 0; i < N; i++) {
     result = await compareQuiet(q);
   } catch (err) {
     errored++;
-    console.log(`ERROR ${i + 1}: ${err.message}\n  ${q}`);
+    console.log(`ERROR ${i + 1}: ${err.message}\n  ${q}\n  ${err.stack}`);
     continue;
   }
   if (result.scoreDelta === 0) {

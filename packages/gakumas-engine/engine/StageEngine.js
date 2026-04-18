@@ -53,7 +53,14 @@ export default class StageEngine {
 
     // Effects
     if (skipEffects) {
+      // evaluateForHold path: skip pre-stage effect registration (default
+      // effects, stage effects, p-items, growth) but still initialize the
+      // skeleton fields — otherwise any card that writes to effectCounter
+      // during the hold preview crashes on undefined `state[S.effectCounters]`.
       state[S.effects] = [];
+      state[S.effectInstanceId] = 0;
+      state[S.effectCounters] = {};
+      state[S.currentEffectInstanceId] = null;
     } else {
       this.effectManager.initializeState(state);
     }

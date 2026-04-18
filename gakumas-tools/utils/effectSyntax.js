@@ -13,89 +13,52 @@ const KEYWORD_TYPES = new Set([
   TokenType.LEVEL,
 ]);
 
-const PUNCTUATION_TYPES = new Set([
-  TokenType.LBRACE,
-  TokenType.RBRACE,
-  TokenType.LPAREN,
-  TokenType.RPAREN,
-  TokenType.LBRACKET,
-  TokenType.RBRACKET,
-  TokenType.SEMICOLON,
-  TokenType.COLON,
-  TokenType.COMMA,
-]);
-
-const OPERATOR_TYPES = new Set([
-  TokenType.EQ,
-  TokenType.NE,
-  TokenType.LT,
-  TokenType.GT,
-  TokenType.LE,
-  TokenType.GE,
-  TokenType.ASSIGN,
-  TokenType.PLUS_ASSIGN,
-  TokenType.MINUS_ASSIGN,
-  TokenType.MUL_ASSIGN,
-  TokenType.DIV_ASSIGN,
-  TokenType.MOD_ASSIGN,
-  TokenType.PLUS,
-  TokenType.MINUS,
-  TokenType.MUL,
-  TokenType.DIV,
-  TokenType.MOD,
-  TokenType.AND,
-  TokenType.OR,
-  TokenType.NOT,
-]);
-
-const OPERATOR_TEXT = {
-  [TokenType.EQ]: "==",
-  [TokenType.NE]: "!=",
-  [TokenType.LT]: "<",
-  [TokenType.GT]: ">",
-  [TokenType.LE]: "<=",
-  [TokenType.GE]: ">=",
-  [TokenType.ASSIGN]: "=",
-  [TokenType.PLUS_ASSIGN]: "+=",
-  [TokenType.MINUS_ASSIGN]: "-=",
-  [TokenType.MUL_ASSIGN]: "*=",
-  [TokenType.DIV_ASSIGN]: "/=",
-  [TokenType.MOD_ASSIGN]: "%=",
-  [TokenType.PLUS]: "+",
-  [TokenType.MINUS]: "-",
-  [TokenType.MUL]: "*",
-  [TokenType.DIV]: "/",
-  [TokenType.MOD]: "%",
-  [TokenType.AND]: "&",
-  [TokenType.OR]: "|",
-  [TokenType.NOT]: "!",
-  [TokenType.AT_SIGN]: "@",
-  [TokenType.LBRACE]: "{",
-  [TokenType.RBRACE]: "}",
-  [TokenType.LPAREN]: "(",
-  [TokenType.RPAREN]: ")",
-  [TokenType.LBRACKET]: "[",
-  [TokenType.RBRACKET]: "]",
-  [TokenType.SEMICOLON]: ";",
-  [TokenType.COLON]: ":",
-  [TokenType.COMMA]: ",",
+// Lexeme + class for tokens that don't carry their text in `value`
+// (everything except keywords, identifiers, and numbers).
+const LEXEMES = {
+  [TokenType.AT_SIGN]: ["@", "anchor"],
+  [TokenType.LBRACE]: ["{", "punctuation"],
+  [TokenType.RBRACE]: ["}", "punctuation"],
+  [TokenType.LPAREN]: ["(", "punctuation"],
+  [TokenType.RPAREN]: [")", "punctuation"],
+  [TokenType.LBRACKET]: ["[", "punctuation"],
+  [TokenType.RBRACKET]: ["]", "punctuation"],
+  [TokenType.SEMICOLON]: [";", "punctuation"],
+  [TokenType.COLON]: [":", "punctuation"],
+  [TokenType.COMMA]: [",", "punctuation"],
+  [TokenType.EQ]: ["==", "operator"],
+  [TokenType.NE]: ["!=", "operator"],
+  [TokenType.LT]: ["<", "operator"],
+  [TokenType.GT]: [">", "operator"],
+  [TokenType.LE]: ["<=", "operator"],
+  [TokenType.GE]: [">=", "operator"],
+  [TokenType.ASSIGN]: ["=", "operator"],
+  [TokenType.PLUS_ASSIGN]: ["+=", "operator"],
+  [TokenType.MINUS_ASSIGN]: ["-=", "operator"],
+  [TokenType.MUL_ASSIGN]: ["*=", "operator"],
+  [TokenType.DIV_ASSIGN]: ["/=", "operator"],
+  [TokenType.MOD_ASSIGN]: ["%=", "operator"],
+  [TokenType.PLUS]: ["+", "operator"],
+  [TokenType.MINUS]: ["-", "operator"],
+  [TokenType.MUL]: ["*", "operator"],
+  [TokenType.DIV]: ["/", "operator"],
+  [TokenType.MOD]: ["%", "operator"],
+  [TokenType.AND]: ["&", "operator"],
+  [TokenType.OR]: ["|", "operator"],
+  [TokenType.NOT]: ["!", "operator"],
 };
 
-function classForToken(type) {
-  if (KEYWORD_TYPES.has(type)) return "keyword";
-  if (PUNCTUATION_TYPES.has(type)) return "punctuation";
-  if (OPERATOR_TYPES.has(type)) return "operator";
-  if (type === TokenType.NUMBER) return "number";
-  if (type === TokenType.IDENTIFIER) return "identifier";
-  if (type === TokenType.AT_SIGN) return "anchor";
-  return null;
+function classify(token) {
+  if (KEYWORD_TYPES.has(token.type)) return [String(token.value), "keyword"];
+  if (token.type === TokenType.NUMBER) return [String(token.value), "number"];
+  if (token.type === TokenType.IDENTIFIER) return [token.value, "identifier"];
+  return LEXEMES[token.type] || null;
 }
 
-// Pair EOF-terminated token list with source offsets so preserved whitespace
-// can be emitted between tokens. The tokenizer strips whitespace but records
-// line/col, which is enough to reconstruct spans via a linear walk.
+// Walks the tokens against the source so whitespace can be preserved between
+// them — the tokenizer records line/col but not byte offsets.
 export function highlightEffects(input) {
-  if (!input) return [{ className: null, text: "" }];
+  if (!input) return [];
 
   let tokens;
   try {
@@ -108,34 +71,16 @@ export function highlightEffects(input) {
   let cursor = 0;
 
   for (const token of tokens) {
-    if (token.type === TokenType.EOF) break;
+    const hit = classify(token);
+    if (!hit) continue;
+    const [text, className] = hit;
 
-    // Keywords, identifiers, and numbers all carry their original text in
-    // `value`; punctuation/operator tokens don't, so fall back to the
-    // fixed lexeme table.
-    const text =
-      token.value != null
-        ? String(token.value)
-        : OPERATOR_TEXT[token.type] || "";
-
-    if (!text) continue;
-
-    // Locate the token in the source starting from cursor. The tokenizer's
-    // line/col aren't byte offsets, so scan for the next occurrence — any
-    // skipped characters are whitespace the tokenizer discarded.
     const idx = input.indexOf(text, cursor);
-    if (idx === -1) {
-      // Shouldn't happen for valid input, but fail safe: emit remaining raw.
-      parts.push({ className: null, text: input.slice(cursor) });
-      cursor = input.length;
-      break;
-    }
-
+    if (idx === -1) break;
     if (idx > cursor) {
       parts.push({ className: null, text: input.slice(cursor, idx) });
     }
-
-    parts.push({ className: classForToken(token.type), text });
+    parts.push({ className, text });
     cursor = idx + text.length;
   }
 

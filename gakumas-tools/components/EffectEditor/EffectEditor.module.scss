@@ -9,6 +9,7 @@ $editor-font:
 
 .editor {
   position: relative;
+  min-height: 120px;
   border: 2px solid colors.$black-medium;
   border-radius: 6px;
   background: colors.$black-medium;
