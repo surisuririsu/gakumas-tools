@@ -269,9 +269,14 @@
     "median": "中位分",
     "max": "最高分",
     "logs": "记录",
-    "cardUsage": "卡片使用次数"
+    "cardUsage": "卡片使用次数",
+    "scoreStats": "分数明细"
   },
   "CardUsageStats": {
+    "total": "合计",
+    "turn": "第{turn}回合"
+  },
+  "ScoreStats": {
     "total": "合计",
     "turn": "第{turn}回合"
   },

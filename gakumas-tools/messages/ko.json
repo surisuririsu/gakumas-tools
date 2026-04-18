@@ -269,9 +269,14 @@
     "median": "중앙값",
     "max": "최댓값",
     "logs": "로그",
-    "cardUsage": "카드 사용 횟수"
+    "cardUsage": "카드 사용 횟수",
+    "scoreStats": "스코어 내역"
   },
   "CardUsageStats": {
+    "total": "합계",
+    "turn": "{turn}턴"
+  },
+  "ScoreStats": {
     "total": "합계",
     "turn": "{turn}턴"
   },

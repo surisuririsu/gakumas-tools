@@ -269,9 +269,14 @@
     "median": "Median",
     "max": "Max",
     "logs": "Logs",
-    "cardUsage": "Card usage"
+    "cardUsage": "Card usage",
+    "scoreStats": "Score breakdown"
   },
   "CardUsageStats": {
+    "total": "Total",
+    "turn": "Turn {turn}"
+  },
+  "ScoreStats": {
     "total": "Total",
     "turn": "Turn {turn}"
   },

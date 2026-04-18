@@ -1,5 +1,5 @@
 import { PIdols, PItems, SkillCards, Stages } from "gakumas-data";
-import { GRAPHED_FIELDS } from "gakumas-engine";
+import { GRAPHED_FIELDS, S } from "gakumas-engine";
 import { MIN_BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
@@ -216,6 +216,37 @@ export function mergeResults(results) {
     }
   }
 
+  // Merge scoreStats across workers.
+  const scoreStats = { numRuns: 0, turns: [] };
+  for (let result of results) {
+    const s = result.scoreStats;
+    if (!s) continue;
+    scoreStats.numRuns += s.numRuns || 0;
+    for (let t = 0; t < s.turns.length; t++) {
+      const from = s.turns[t];
+      if (!from) continue;
+      if (!scoreStats.turns[t]) {
+        scoreStats.turns[t] = {
+          turnTypeCounts: { vocal: 0, dance: 0, visual: 0 },
+          totalScore: 0,
+          byEntity: {},
+        };
+      }
+      const into = scoreStats.turns[t];
+      into.turnTypeCounts.vocal += from.turnTypeCounts.vocal;
+      into.turnTypeCounts.dance += from.turnTypeCounts.dance;
+      into.turnTypeCounts.visual += from.turnTypeCounts.visual;
+      into.totalScore += from.totalScore;
+      for (const key in from.byEntity) {
+        if (!into.byEntity[key]) {
+          into.byEntity[key] = { ...from.byEntity[key] };
+        } else {
+          into.byEntity[key].score += from.byEntity[key].score;
+        }
+      }
+    }
+  }
+
   return {
     graphData: mergedGraphData,
     minRun,
@@ -224,6 +255,7 @@ export function mergeResults(results) {
     averageScore,
     scores,
     cardUsage,
+    scoreStats,
   };
 }
 
@@ -283,6 +315,77 @@ export function accumulateCardUsage(logs, cardUsage) {
       }
     }
   }
+}
+
+/**
+ * Walk a single run's log stream and accumulate per-turn score attribution
+ * into `scoreStats.turns`. Ticks `scoreStats.numRuns`.
+ *
+ * Attribution: entityStart/entityEnd logs bracket an entity's window. We
+ * maintain a stack; each score `diff` log is credited only to the INNERMOST
+ * entity on the stack. Example — a card that produces score, then triggers
+ * a p-item that also produces score: the card's direct score lands on the
+ * card, the p-item's score lands on the p-item. Parents don't double-count.
+ *
+ * Shape: scoreStats.turns[turnIndex] = {
+ *   turnTypeCounts: { vocal, dance, visual },  // rolled-type runs through this turn
+ *   totalScore: number,                         // summed across runs
+ *   byEntity: { [key]: { type, id, score } },   // summed across runs
+ * }
+ * key = `${type}:${id}`.
+ */
+export function accumulateScoreStats(logs, scoreStats) {
+  scoreStats.numRuns = (scoreStats.numRuns || 0) + 1;
+  if (!scoreStats.turns) scoreStats.turns = [];
+
+  let turnIndex = -1;
+  const groupStack = [];
+
+  for (const log of logs) {
+    if (log.logType === "startTurn") {
+      turnIndex++;
+      const turn = ensureScoreTurn(scoreStats.turns, turnIndex);
+      turn.turnTypeCounts[log.data.type] =
+        (turn.turnTypeCounts[log.data.type] || 0) + 1;
+    } else if (log.logType === "entityStart") {
+      groupStack.push({
+        entity: log.data,
+        ownScore: 0,
+        startTurn: turnIndex,
+      });
+    } else if (log.logType === "entityEnd") {
+      const group = groupStack.pop();
+      if (!group || group.ownScore === 0 || group.startTurn < 0) continue;
+      const turn = ensureScoreTurn(scoreStats.turns, group.startTurn);
+      const { type, id } = group.entity;
+      const key = `${type}:${id}`;
+      if (!turn.byEntity[key]) {
+        turn.byEntity[key] = { type, id, score: 0 };
+      }
+      turn.byEntity[key].score += group.ownScore;
+    } else if (log.logType === "diff" && log.data.field === S.score) {
+      const delta =
+        parseFloat(log.data.next) - parseFloat(log.data.prev);
+      if (groupStack.length) {
+        // Innermost only — ancestors aren't credited for a child's delta.
+        groupStack[groupStack.length - 1].ownScore += delta;
+      }
+      if (turnIndex >= 0) {
+        scoreStats.turns[turnIndex].totalScore += delta;
+      }
+    }
+  }
+}
+
+function ensureScoreTurn(turns, i) {
+  if (!turns[i]) {
+    turns[i] = {
+      turnTypeCounts: { vocal: 0, dance: 0, visual: 0 },
+      totalScore: 0,
+      byEntity: {},
+    };
+  }
+  return turns[i];
 }
 
 export function mergeGraphDatas(graphDatas) {
