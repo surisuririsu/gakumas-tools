@@ -184,6 +184,7 @@ export const ALL_FIELDS = [
   "freshBuffs",
 
   // Cards
+  "scoreTimes",
   "cardMap",
   "deckCards",
   "handCards",

@@ -98,7 +98,7 @@ export function transformEffects(ast) {
       flushPending();
 
       const transformed = transformNode(node, {});
-      if (node.anchor && transformed.length > 0) transformed[0].anchor = node.anchor;
+      applyAnchor(transformed, node.anchor);
       results.push(...transformed);
     } else {
       // Flush pending actions/modifiers before processing blocks
@@ -106,7 +106,7 @@ export function transformEffects(ast) {
 
       // Transform the block normally
       const transformed = transformNode(node, {});
-      if (node.anchor && transformed.length > 0) transformed[0].anchor = node.anchor;
+      applyAnchor(transformed, node.anchor);
       results.push(...transformed);
     }
   }
@@ -138,6 +138,13 @@ function transformNode(node, context) {
       }
       throw new Error(`Unknown node type: ${node.type}`);
   }
+}
+
+// Attach an anchor to the first effect in the array, unless it already has
+// one from a sub-expression anchor (inner wins — more specific).
+function applyAnchor(effects, anchor) {
+  if (!anchor || effects.length === 0) return;
+  if (!effects[0].anchor) effects[0].anchor = anchor;
 }
 
 // Simple identifier filters on card-used phases map to the corresponding
@@ -219,71 +226,64 @@ function transformBody(body, context) {
   let pendingModifiers = {};
   let pendingNestedPhases = [];
 
+  const flushPending = () => {
+    if (
+      pendingActions.length === 0 &&
+      Object.keys(pendingModifiers).length === 0 &&
+      pendingNestedPhases.length === 0
+    ) {
+      return;
+    }
+    if (pendingActions.length === 0 && pendingNestedPhases.length === 0) {
+      // Modifiers only — apply to last result.
+      if (results.length > 0) {
+        Object.assign(results[results.length - 1], pendingModifiers);
+      }
+      pendingModifiers = {};
+      return;
+    }
+    const effect = createEffect(context);
+    if (pendingActions.length > 0) effect.actions = pendingActions;
+    Object.assign(effect, pendingModifiers);
+    if (pendingNestedPhases.length > 0) {
+      effect.effects = [...pendingNestedPhases];
+    }
+    results.push(effect);
+    pendingActions = [];
+    pendingModifiers = {};
+    pendingNestedPhases = [];
+  };
+
   for (const node of body) {
     if (isModifier(node)) {
       pendingModifiers[node.type] = node.value;
     } else if (node.type === "phase") {
-      // Nested phase blocks become nested effects
+      // Nested phase blocks become nested effects. Preserve any anchor
+      // attached to the phase block itself.
       const nestedEffects = transformPhaseBlock(node, {});
+      applyAnchor(nestedEffects, node.anchor);
       pendingNestedPhases.push(...nestedEffects);
     } else if (node.type === "action") {
-      pendingActions.push(node.expr);
+      // An anchored action is emitted as its own effect so that
+      // customizations can patch that single line.
+      if (node.anchor) {
+        flushPending();
+        const anchored = createEffect(context);
+        anchored.actions = [node.expr];
+        anchored.anchor = node.anchor;
+        results.push(anchored);
+      } else {
+        pendingActions.push(node.expr);
+      }
     } else if (node.type === "actionBlock") {
-      if (pendingActions.length > 0) {
-        const effect = createEffect(context);
-        effect.actions = pendingActions;
-        Object.assign(effect, pendingModifiers);
-        if (pendingNestedPhases.length > 0) {
-          effect.effects = [...pendingNestedPhases];
-          pendingNestedPhases = [];
-        }
-        results.push(effect);
-        pendingActions = [];
-        pendingModifiers = {};
-      } else if (Object.keys(pendingModifiers).length > 0 && results.length > 0) {
-        Object.assign(results[results.length - 1], pendingModifiers);
-        pendingModifiers = {};
-      }
-
+      flushPending();
       const nested = transformActionBlock(node, context);
-      if (pendingNestedPhases.length > 0 && nested.length > 0) {
-        if (!nested[0].effects) nested[0].effects = [];
-        nested[0].effects.push(...pendingNestedPhases);
-        pendingNestedPhases = [];
-      }
+      applyAnchor(nested, node.anchor);
       results.push(...nested);
     } else if (node.type === "condition" || node.type === "target") {
-      // Flush any pending actions before processing nested blocks
-      if (pendingActions.length > 0) {
-        const effect = createEffect(context);
-        effect.actions = pendingActions;
-        Object.assign(effect, pendingModifiers);
-        if (pendingNestedPhases.length > 0) {
-          effect.effects = [...pendingNestedPhases];
-          pendingNestedPhases = [];
-        }
-        results.push(effect);
-        pendingActions = [];
-        pendingModifiers = {};
-      }
-
-      // Recurse into nested blocks
+      flushPending();
       const nested = transformNode(node, context);
-
-      // Apply pending modifiers and nested phases to nested results
-      if (Object.keys(pendingModifiers).length > 0) {
-        for (const effect of nested) {
-          Object.assign(effect, pendingModifiers);
-        }
-        pendingModifiers = {};
-      }
-
-      if (pendingNestedPhases.length > 0 && nested.length > 0) {
-        if (!nested[0].effects) nested[0].effects = [];
-        nested[0].effects.push(...pendingNestedPhases);
-        pendingNestedPhases = [];
-      }
-
+      applyAnchor(nested, node.anchor);
       results.push(...nested);
     }
   }

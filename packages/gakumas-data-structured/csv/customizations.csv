@@ -82,9 +82,9 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,actions,limit,effe
 81,onFullPowerGrowThisAdd1,成長追加,effect,70,1,,,,,,at:stanceChanged { if:stance==fullPower { target:this { g.score+=3 } } }
 82,growAllScoreAdd1,成長追加,effect,70,1,,,,target:all { g.score+=3 },,
 83,halfCostTurnsAdd1,消費体力減少追加,buff,70,1,,,,halfCostTurns+=2,,
-84,scoreByMotivation2,やる気分パラメータ+,score,"40,70",2,,,,,,at:prestage { target:this { g.scoreByMotivation+=0.7 }; level:1 }; at:prestage { target:this { g.scoreByMotivation+=2.1 }; level:2 }
+84,scoreByMotivation2,やる気分パラメータ+,score,"40,70",2,,,,,,level:1 { at:prestage { target:this { g.scoreByMotivation+=0.7 } } } level:2 { at:prestage { target:this { g.scoreByMotivation+=2.1 } } }
 85,daydreamingCondition1,条件変更,effect,70,1,,@usable if:genki>=15,,,,
-86,daydreamingEffect3,持続効果+,effect,"40,40,70",3,,,,"@trigger at:startOfTurn { score+=genki*0.7; limit:4 }; level:1; @trigger at:startOfTurn { score+=genki*0.8; limit:4 }; level:2; @trigger at:startOfTurn { score+=genki*0.95; limit:4 }; level:3",,
+86,daydreamingEffect3,持続効果+,effect,"40,40,70",3,,,,"level:1 { @trigger at:startOfTurn { score+=genki*0.7; limit:4 } } level:2 { @trigger at:startOfTurn { score+=genki*0.8; limit:4 } } level:3 { @trigger at:startOfTurn { score+=genki*0.95; limit:4 } }",,
 87,toughnessCondition1,条件変更,effect,70,1,,@usable if:preservationTimes>=1,,,,
 88,yumelipEffect1,条件変更,effect,70,1,,,,@trigger if:goodImpressionTurns>=10,,
 89,preservationAdd1,温存追加,effect,70,1,,,,setStance(preservation),,

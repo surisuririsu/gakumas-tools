@@ -90,6 +90,7 @@ export const STATE_FIELDS = new Set([
   "motivation",
   "motivationMultiplier",
   "motivationBuffs",
+  "scoreTimes",
   "prideTurns",
   "stance",
   "prevStance",

@@ -152,26 +152,8 @@ export class Parser {
     const effects = [];
 
     while (!this.isAtEnd()) {
-      // Optional anchor prefix "@name" on top-level effects
-      let anchor = null;
-      if (this.check(TokenType.AT_SIGN)) {
-        this.advance();
-        const idToken = this.expect(
-          TokenType.IDENTIFIER,
-          "Expected anchor name after '@'"
-        );
-        anchor = idToken.value;
-      }
-
       const effect = this.parseEffect();
-      if (effect) {
-        if (anchor) effect.anchor = anchor;
-        effects.push(effect);
-      } else if (anchor) {
-        throw new Error(
-          `Anchor '@${anchor}' has no effect at line ${this.peek().line}, col ${this.peek().col}`
-        );
-      }
+      if (effect) effects.push(effect);
       // Skip optional semicolons between effects
       while (this.match(TokenType.SEMICOLON)) {}
     }
@@ -186,11 +168,17 @@ export class Parser {
    *   + <effect>              append a new effect to the card's attribute list
    *   @name <partial>         patch the effect labeled @name on the card
    *   level:N, limit:N, ...   attach as a top-level modifier to the previous patch
+   *   level:N { ...patches }  apply level N to every patch in the block
    *
    * Emits: { type: "patchSequence", patches: [...] }
    * Each patch is { op, anchor?, effect?, level? }.
    */
   parsePatchSequence() {
+    const patches = this.parsePatchStatements(() => this.isAtEnd());
+    return { type: "patchSequence", patches };
+  }
+
+  parsePatchStatements(isEndOfBlock) {
     const patches = [];
     let pendingModifiers = {};
 
@@ -202,12 +190,29 @@ export class Parser {
       pendingModifiers = {};
     };
 
-    while (!this.isAtEnd()) {
+    while (!isEndOfBlock()) {
       const token = this.peek();
 
       if (MODIFIER_TOKENS.includes(token.type)) {
         const mod = this.parseModifier();
-        pendingModifiers[mod.type] = mod.value;
+        // `level:N { ... }` block applies the level to every inner patch.
+        if (mod.type === "level" && this.check(TokenType.LBRACE)) {
+          flushPending();
+          this.advance(); // consume '{'
+          const inner = this.parsePatchStatements(
+            () => this.isAtEnd() || this.check(TokenType.RBRACE)
+          );
+          this.expect(
+            TokenType.RBRACE,
+            "Expected '}' to close level block"
+          );
+          for (const patch of inner) {
+            patch.level = mod.value;
+            patches.push(patch);
+          }
+        } else {
+          pendingModifiers[mod.type] = mod.value;
+        }
       } else if (token.type === TokenType.PLUS) {
         flushPending();
         this.advance();
@@ -248,8 +253,7 @@ export class Parser {
     }
 
     flushPending();
-
-    return { type: "patchSequence", patches };
+    return patches;
   }
 
   parsePartialEffect() {
@@ -261,31 +265,63 @@ export class Parser {
   }
 
   parseEffect() {
+    // Optional anchor prefix `@name` attaches to whatever follows. Works at
+    // top-level (whole effect) and inside effect bodies (single action) —
+    // customizations can then patch the anchored piece.
+    let anchor = null;
+    if (this.check(TokenType.AT_SIGN)) {
+      this.advance();
+      const idToken = this.expect(
+        TokenType.IDENTIFIER,
+        "Expected anchor name after '@'"
+      );
+      anchor = idToken.value;
+    }
+
     const token = this.peek();
+    let effect;
 
     switch (token.type) {
       case TokenType.AT:
-        return this.parsePhaseBlock();
+        effect = this.parsePhaseBlock();
+        break;
       case TokenType.IF:
-        return this.parseConditionBlock();
+        effect = this.parseConditionBlock();
+        break;
       case TokenType.TARGET:
-        return this.parseTargetBlock();
+        effect = this.parseTargetBlock();
+        break;
       case TokenType.DO:
-        return this.parseAction();
+        effect = this.parseAction();
+        break;
       case TokenType.IDENTIFIER:
         // Bare action without "do:" prefix
-        return this.parseBareAction();
+        effect = this.parseBareAction();
+        break;
       case TokenType.EOF:
       case TokenType.RBRACE:
+        if (anchor) {
+          throw new Error(
+            `Dangling anchor '@${anchor}' at line ${token.line}, col ${token.col}`
+          );
+        }
         return null;
       default:
         if (MODIFIER_TOKENS.includes(token.type)) {
+          if (anchor) {
+            throw new Error(
+              `Cannot anchor a modifier at line ${token.line}, col ${token.col}`
+            );
+          }
           return this.parseModifier();
         }
         throw new Error(
           `Unexpected token ${token.type} at line ${token.line}, col ${token.col}`
         );
     }
+
+    if (effect && anchor) effect.anchor = anchor;
+    return effect;
   }
 
   // Block parsing

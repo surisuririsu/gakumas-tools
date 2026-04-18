@@ -99,13 +99,18 @@ export default class Executor extends EngineComponent {
       state[S.goodConditionTurnsMultiplier];
     const prevConcentrationMultiplier = state[S.concentrationMultiplier];
     const prevMotivationMultiplier = state[S.motivationMultiplier];
+    const prevScoreTimes = state[S.scoreTimes];
     state[S.goodConditionTurnsMultiplier] = 1;
     state[S.concentrationMultiplier] = 1;
     state[S.motivationMultiplier] = 1;
+    // Seed scoreTimes from the card's g.scoreTimes growth so legacy
+    // growth-driven repeats still fire. Actions may also write to
+    // state.scoreTimes directly before the first score action.
+    state[S.scoreTimes] =
+      state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]] || 0;
 
     // Execute actions, triggering increase/decrease effects per-action
     // (matching actual game behavior where p-items trigger between actions)
-    let scoreTimes = state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]];
     for (let i = 0; i < actions.length; i++) {
       // Snapshot state before this action for per-action triggers
       let actionPrev = {};
@@ -115,13 +120,17 @@ export default class Executor extends EngineComponent {
 
       this.executeAction(state, actions[i], card);
 
-      if (scoreTimes) {
+      // Apply scoreTimes to the first score action we see, then consume it.
+      // `state[S.scoreTimes]` is seeded from g.scoreTimes above but may also
+      // be written by a preceding action.
+      if (state[S.scoreTimes]) {
         const action = actions[i];
         if (action.type === "assignment" && action.lhs === "score") {
-          for (let j = 0; j < scoreTimes; j++) {
+          const times = state[S.scoreTimes];
+          state[S.scoreTimes] = 0;
+          for (let j = 0; j < times; j++) {
             this.executeAction(state, actions[i], card);
           }
-          scoreTimes = null;
         }
       }
 
@@ -151,6 +160,7 @@ export default class Executor extends EngineComponent {
     state[S.goodConditionTurnsMultiplier] = prevGoodConditionTurnsMultiplier;
     state[S.concentrationMultiplier] = prevConcentrationMultiplier;
     state[S.motivationMultiplier] = prevMotivationMultiplier;
+    state[S.scoreTimes] = prevScoreTimes;
 
     // Log changed fields
     for (let i = 0; i < LOGGED_FIELDS.length; i++) {

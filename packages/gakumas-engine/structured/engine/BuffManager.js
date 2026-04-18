@@ -145,6 +145,7 @@ export default class BuffManager extends EngineComponent {
     // Other
     state[S.nullifySelect] = 0;
     state[S.freeCardUses] = 0;
+    state[S.scoreTimes] = 0;
   }
 
   setBuff(state, field, amount, turns, logLabel) {
