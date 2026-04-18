@@ -45,10 +45,10 @@ export async function simulate(
     scores.push(result.score);
     graphDatas.push(result.graphData);
 
-    // Accumulate per-turn card usage from this run's flat log stream.
-    // Logs for non-representative runs are dropped after this line, so we
-    // must extract stats now.
-    accumulateCardUsage(result.logs.flat(), cardUsage);
+    // Accumulate per-turn card usage from this run's log stream. Logs for
+    // non-representative runs are dropped after this line, so we must
+    // extract stats now.
+    accumulateCardUsage(result.logs, cardUsage);
   }
 
   const mergedGraphData = mergeGraphDatas(graphDatas);

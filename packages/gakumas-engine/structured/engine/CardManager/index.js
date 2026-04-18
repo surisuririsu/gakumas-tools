@@ -186,7 +186,6 @@ export default class CardManager extends EngineComponent {
     state[S.heldCards] = [];
     state[S.cardsUsed] = 0;
     state[S.activeCardsUsed] = 0;
-    state[S.cardUses] = state[S.cardMap].map(() => 0);
     state[S.usedCard] = null;
     state[S.lastUsedCard] = null;
     state[S.movedCard] = null;
@@ -434,7 +433,6 @@ export default class CardManager extends EngineComponent {
 
     state[S.cardsUsed]++;
     state[S.turnCardsUsed]++;
-    state[S.cardUses][card]++;
     if (skillCard.type == "active") {
       state[S.activeCardsUsed]++;
     }

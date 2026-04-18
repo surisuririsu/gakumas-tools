@@ -2,11 +2,10 @@ import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
-import CustomizationCounts from "@/components/EntityIcon/CustomizationCounts";
+import { CustomizationCounts } from "@/components/EntityIcon";
 import Image from "@/components/Image";
 import styles from "./CardUsageStats.module.scss";
 
-// Build aggregated totals across all turns.
 function buildTotal(turns) {
   const total = {};
   for (const turnData of turns) {

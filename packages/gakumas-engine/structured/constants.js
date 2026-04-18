@@ -193,7 +193,6 @@ export const ALL_FIELDS = [
   "heldCards",
   "cardsUsed",
   "activeCardsUsed",
-  "cardUses",
   "turnCardsUsed",
   "turnCardsUpgraded",
   "thisCardHeld",
