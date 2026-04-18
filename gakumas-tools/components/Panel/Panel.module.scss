@@ -1,0 +1,27 @@
+@use "../../styles/colors";
+
+.panel {
+  position: relative;
+  border: 2px solid colors.$gray;
+  border-radius: 10px;
+  background-color: colors.$white;
+  box-shadow: 2px 3px 0 colors.$gray;
+}
+
+.padded {
+  padding: 16px 14px 14px;
+}
+
+.label {
+  position: absolute;
+  top: -12px;
+  left: 12px;
+  padding: 0 8px;
+  background-color: colors.$white;
+  color: colors.$gk-orange;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 16px;
+  text-transform: uppercase;
+}

@@ -1,12 +1,10 @@
-@use "../../styles/colors";
-
 .memoryCalculator {
   max-width: 500px;
   margin: 0 auto;
   padding: 0 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
 .buttons {
@@ -15,17 +13,12 @@
   align-self: flex-start;
 }
 
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border: 2px solid colors.$gray-light;
-  border-radius: 8px;
-  padding: 8px 12px 12px;
+.resultsPanel {
+  overflow: hidden;
+}
 
-  & > label:first-child {
-    margin-top: 0;
-  }
+.resultsContent {
+  padding: 8px;
 }
 
 .rankSelect {

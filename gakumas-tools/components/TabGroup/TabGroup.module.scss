@@ -1,0 +1,26 @@
+@use "../../styles/colors";
+
+.tabGroup {
+  display: flex;
+  border-bottom: 2px solid colors.$gray-extra-light;
+
+  button {
+    flex: 1;
+    padding: 12px 12px;
+    color: colors.$gray;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+
+    &:hover {
+      color: colors.$gk-red-orange;
+    }
+
+    &.selected {
+      color: colors.$gk-orange;
+      border-bottom-color: colors.$gk-orange;
+    }
+  }
+}

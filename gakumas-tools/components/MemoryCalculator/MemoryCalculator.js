@@ -2,9 +2,10 @@
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import Button from "@/components/Button";
-import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
 import IconSelect from "@/components/IconSelect";
+import Panel from "@/components/Panel";
+import TabGroup from "@/components/TabGroup";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -131,15 +132,13 @@ function MemoryCalculator() {
         </Button>
       </div>
 
-      <div className={styles.section}>
-        <label>{t("target")}</label>
+      <Panel label={t("target")}>
         <TargetSkillCards idolId={idolId} />
-      </div>
+      </Panel>
 
-      <div className={styles.section}>
-        <label>{t("acquired")}</label>
+      <Panel label={t("acquired")}>
         <AcquiredSkillCards />
-      </div>
+      </Panel>
 
       <label>{t("produceRank")}</label>
       <div className={styles.rankSelect}>
@@ -151,26 +150,30 @@ function MemoryCalculator() {
         {costRange.min} ~ {costRange.max}
       </div>
 
-      <ButtonGroup
-        selected={resultsTab}
-        onChange={setResultsTab}
-        options={[
-          {
-            value: "success",
-            label: `${t("success")} (${(onTargetProbability * 100).toFixed(2)}%)`,
-          },
-          {
-            value: "failure",
-            label: `${t("failure")} (${(offTargetProbability * 100).toFixed(2)}%)`,
-          },
-        ]}
-      />
-      <MemoryCalculatorResultList
-        memories={
-          resultsTab === "success" ? onTargetMemories : offTargetMemories
-        }
-        idolId={idolId}
-      />
+      <Panel noPadding className={styles.resultsPanel}>
+        <TabGroup
+          selected={resultsTab}
+          onChange={setResultsTab}
+          options={[
+            {
+              value: "success",
+              label: `${t("success")} (${(onTargetProbability * 100).toFixed(2)}%)`,
+            },
+            {
+              value: "failure",
+              label: `${t("failure")} (${(offTargetProbability * 100).toFixed(2)}%)`,
+            },
+          ]}
+        />
+        <div className={styles.resultsContent}>
+          <MemoryCalculatorResultList
+            memories={
+              resultsTab === "success" ? onTargetMemories : offTargetMemories
+            }
+            idolId={idolId}
+          />
+        </div>
+      </Panel>
     </div>
   );
 }
