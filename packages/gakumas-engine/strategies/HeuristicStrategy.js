@@ -379,17 +379,18 @@ export default class HeuristicStrategy extends BaseStrategy {
     return Math.round(previewState[S.score]);
   }
 
-  pickCardsToHold(state, cards, num = 1) {
-    let scores = [];
-    for (let i = 0; i < cards.length; i++) {
-      scores.push(this.evaluateForHold(state, cards[i]));
-    }
-    const sortedIndices = scores
+  pickCardsToHold(state, cards, num = 1, optional = false) {
+    // When optional, compare candidates against currently-held cards —
+    // only hold a candidate if it beats one of the top-2 held slots.
+    const evalCards = optional ? cards.concat(state[S.heldCards]) : cards;
+    const scores = evalCards.map((c) => this.evaluateForHold(state, c));
+    return scores
       .map((score, index) => ({ score, index }))
       .sort((a, b) => b.score - a.score)
-      .slice(0, num)
-      .map((item) => item.index);
-    return sortedIndices;
+      .slice(0, 2)
+      .map((item) => item.index)
+      .filter((index) => index < cards.length)
+      .slice(0, num);
   }
 
   pickCardsToMoveToHand(state, cards, num = 1) {

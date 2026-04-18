@@ -81,6 +81,8 @@ export default class CardManager extends EngineComponent {
         this.holdSelectedFrom(state, ["deck"], parseInt(num, 10)),
       holdSelectedFromDeckOrDiscards: (state, num = 1) =>
         this.holdSelectedFrom(state, ["deck", "discards"], parseInt(num, 10)),
+      holdSelectedFromDeckOrDiscardsUpto: (state, num = 1) =>
+        this.holdSelectedFrom(state, ["deck", "discards"], parseInt(num, 10), true),
       addHeldCardsToHand: (state) => this.addHeldCardsToHand(state),
       removeTroubleFromDeckOrDiscards: (state) =>
         this.removeTroubleFromDeckOrDiscards(state),
@@ -939,7 +941,7 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  holdSelectedFrom(state, sources, num = 1) {
+  holdSelectedFrom(state, sources, num = 1, optional = false) {
     if (state[S.nullifySelect]) return;
 
     // Collect cards from specified sources
@@ -953,23 +955,28 @@ export default class CardManager extends EngineComponent {
       state,
       cards,
       num,
+      optional,
     );
 
-    indicesToHold.sort((a, b) => b - a);
     if (indicesToHold.length === 0) return;
 
-    // Find cards and move to hold
-    for (let j = 0; j < indicesToHold.length; j++) {
-      let indexToHold = indicesToHold[j];
+    // Splice in reverse index order so earlier splices don't shift later
+    // indices, then add to hold in the original pick order so
+    // enforceHoldLimit evicts the right one.
+    const sortedIndicesToHold = [...indicesToHold].sort((a, b) => b - a);
+    for (let j = 0; j < sortedIndicesToHold.length; j++) {
+      let indexToHold = sortedIndicesToHold[j];
       for (let i = 0; i < sources.length; i++) {
         if (indexToHold < sourceCards[i].length) {
-          const card = state[sourceKeys[i]].splice(indexToHold, 1)[0];
-          this.hold(state, card);
+          state[sourceKeys[i]].splice(indexToHold, 1);
           break;
         } else {
           indexToHold -= sourceCards[i].length;
         }
       }
+    }
+    for (let j = 0; j < indicesToHold.length; j++) {
+      this.hold(state, cards[indicesToHold[j]]);
     }
 
     this.enforceHoldLimit(state);

@@ -23,7 +23,7 @@ id,name,rarity,plan,unlockPlv,actions
 22,初星黒酢,SSR,sense,61,moveSelectedToHand[deck | discarded]; nullifyCostCards+=2; fixedStamina-=2; doubleCostTurns+=1
 23,厳選初星ティー,SSR,logic,27,at:endOfTurn { goodImpressionTurns+=1 }
 24,厳選初星ブレンド,SSR,logic,26,at:endOfTurn { motivation+=1 }
-25,特製ハツボシエキス,SSR,logic,55,at:cardUsed[active] { doubleCardEffectCards+=1; limit:1; ttl:1 }; fixedStamina-=2; doubleCostTurns+=1
+25,特製ハツボシエキス,SSR,logic,55,at:cardUsed[active] { if:cardRarity!=L { doubleCardEffectCards+=1 }; limit:1; ttl:1 }; fixedStamina-=2; doubleCostTurns+=1
 26,初星スーパーソーダ,SSR,anomaly,26,setStance(strength2); halfCostTurns+=1
 27,厳選初星チャイ,SSR,anomaly,27,at:startOfTurn { fullPowerCharge+=1 }
 28,初星湯,SSR,anomaly,60,turnsRemaining+=1; fixedStamina-=2; doubleCostTurns+=1

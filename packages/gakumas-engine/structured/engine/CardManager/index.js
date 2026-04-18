@@ -103,6 +103,8 @@ export default class CardManager extends EngineComponent {
       holdThisCard: (state) => this.holdThisCard(state),
       holdSelected: (state, targetRule, num = 1) =>
         this.holdSelectedByTarget(state, targetRule, parseInt(num, 10)),
+      holdSelectedUpto: (state, targetRule, num = 1) =>
+        this.holdSelectedByTarget(state, targetRule, parseInt(num, 10), true),
       moveHeldCardsToHand: (state) => this.moveHeldCardsToHand(state),
       useRandomCardFree: (state, targetRule) =>
         this.useRandomCardFree(state, targetRule),
@@ -857,7 +859,7 @@ export default class CardManager extends EngineComponent {
     }
   }
 
-  holdSelectedByTarget(state, targetRule, num = 1) {
+  holdSelectedByTarget(state, targetRule, num = 1, optional = false) {
     if (state[S.nullifySelect]) return;
 
     const targetCards = this.getTargetRuleCards(state, targetRule, null);
@@ -868,21 +870,25 @@ export default class CardManager extends EngineComponent {
       state,
       cards,
       num,
+      optional,
     );
 
     if (indicesToHold.length === 0) return;
 
-    indicesToHold.sort((a, b) => b - a);
+    // Splice from each card's pile, then hold in original pick order so
+    // enforceHoldLimit evicts the right one.
     for (let j = 0; j < indicesToHold.length; j++) {
       const cardIdx = cards[indicesToHold[j]];
       for (let i = 0; i < CARD_PILES.length; i++) {
         const pileIndex = state[CARD_PILES[i]].indexOf(cardIdx);
         if (pileIndex !== -1) {
           state[CARD_PILES[i]].splice(pileIndex, 1);
-          this.hold(state, cardIdx);
           break;
         }
       }
+    }
+    for (let j = 0; j < indicesToHold.length; j++) {
+      this.hold(state, cards[indicesToHold[j]]);
     }
 
     this.enforceHoldLimit(state);

@@ -73,7 +73,7 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 72,シーズン19 ステージ3,contest,FALSE,19,3,,logic,"0.33,0.385,0.385","3,5,4","0,0.89,0.11",at:startOfTurn { if:turnsElapsed==8 { goodImpressionTurns*=1.5 }; limit:1 }; at:buffCostConsumed { if:goodImpressionTurns>=10 { goodImpressionTurns+=3; score+=goodImpressionTurns*2.5 } },
 73,シーズン20 ステージ1,contest,FALSE,20,1,,sense,"0.45,0.2,0.35","6,2,4","1,0,0",at:startOfTurn { doubleCostTurns+=1; concentration+=5; limit:2 },
 74,シーズン20 ステージ2,contest,FALSE,20,2,,anomaly,"0.45,0.2,0.35","5,2,3","1,0,0",at:stanceChanged { if:isDirectEffect & isStrength { halfCostTurns+=1; costReduction+=1; setScoreBuff(0.1) }; limit:3 },
-75,シーズン20 ステージ3,contest,FALSE,20,3,,free,"0.45,0.2,0.35","4,2,2","1,0,0",at:startOfTurn { if:turnsRemaining<=2 { at:cardUsed[active] { doubleCardEffectCards+=1; limit:1; ttl:1 }; drawCard }; limit:2 },
+75,シーズン20 ステージ3,contest,FALSE,20,3,,free,"0.45,0.2,0.35","4,2,2","1,0,0",at:startOfTurn { if:turnsRemaining<=2 { at:cardUsed[active] { if:cardRarity!=L { doubleCardEffectCards+=1 }; limit:1; ttl:1 }; drawCard }; limit:2 },
 76,シーズン21 ステージ1,contest,FALSE,21,1,,sense,"0.2,0.45,0.35","2,6,4","0,1,0",at:startOfTurn { if:turnsElapsed==4 { concentration+=2; goodConditionTurns+=7 }; limit:1 },
 77,シーズン21 ステージ2,contest,FALSE,21,2,,logic,"0.2,0.45,0.35","2,6,4","0,1,0",at:afterCardUsed { if:cardHasEffect(genki) { genki+=1; goodImpressionTurns+=3 }; limit:3 },
 78,シーズン21 ステージ3,contest,FALSE,21,3,,anomaly,"0.2,0.45,0.35","2,5,3","0,1,0",at:stanceChanged { if:isDirectEffect & isStrength { halfCostTurns+=1; costReduction+=1; setScoreBuff(0.1) }; limit:3 },
