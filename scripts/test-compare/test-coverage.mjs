@@ -107,22 +107,44 @@ const STAT_BUILDERS = {
   free: [55, 65, 43, 63, 18, 22],
 };
 
+// Alternate scenario decks used for retry when a p-item isn't exercised by
+// the default plan-matched deck — targets less-common triggers.
+const SCENARIO_DECKS = [
+  // Heavy stance cycling — covers isStrength2, isPreservation2, strengthTimes,
+  // preservationTimes, stanceChanged triggers.
+  [433, 423, 437, 411, 368, 376],
+  // FullPowerCharge build-up — covers isFullPower, fullPowerTimes,
+  // cumulativeFullPowerCharge, fullPower stance triggers.
+  [381, 387, 414, 423, 388, 433],
+  // High-cost cards to force stamina-low and heavy cost triggers.
+  [144, 178, 180, 63, 22, 4],
+  // Maximum multi-stat: upgraded condition/impression/motivation/genki builders
+  // to cross higher thresholds.
+  [55, 65, 43, 63, 33, 22],
+  // Long deck with varied cards for turn-type conditions (isVocalTurn,
+  // isVisualTurn, isDanceTurn cycle as turns progress).
+  [4, 10, 16, 22, 28, 40],
+  // Big single-action stat deltas for items gated on *Delta>=7.
+  [113, 145, 179, 151, 119, 125],
+  // Big delta + genki accumulation for items like goodImpressionDelta>=7 + genki>=30.
+  [63, 51, 179, 119, 151, 4],
+];
+
 function planOf(entity) {
   if (entity.plan && entity.plan !== "free") return entity.plan;
   return "sense";
 }
 
-function makeLoadout({ stage, cards, items, customs }) {
-  const side1 = [...cards, ...FILLERS].slice(0, 6);
-  const side2 = [...FILLERS, 1].slice(0, 6);
+function makeLoadout({ stage, cards, items, customs, deckSize = 6, stamina = 90 }) {
+  const side1 = [...cards, ...FILLERS].slice(0, deckSize);
+  const side2 = [...FILLERS, 1].slice(0, deckSize);
   const itemsStr = [...items, 0, 0, 0].slice(0, 3).join("-");
   const custStr =
     customs != null ? customs : "------";
-  const side2CustStr = "------";
-  // Higher stamina → more turns → more chances for time/state triggers to fire.
+  const side2CustStr = Array(side2.length).fill("").join("-");
   return (
     `stage=${stage}` +
-    `&support_bonus=0&params=2000-2000-2000-90&items=${itemsStr}` +
+    `&support_bonus=0&params=2000-2000-2000-${stamina}&items=${itemsStr}` +
     `&cards=${side1.join("-")}_${side2.join("-")}` +
     `&customizations=${custStr}_${side2CustStr}`
   );
@@ -139,29 +161,115 @@ function skillCardLoadout(cardId) {
 }
 
 function pItemLoadout(itemId) {
+  // Returns the FIRST candidate loadout. Use pItemLoadouts for a full list of
+  // scenario variants.
+  const list = pItemLoadouts(itemId);
+  return list ? list[0] : null;
+}
+
+function pItemLoadouts(itemId) {
   const item = PItems.getById(itemId);
   if (!item) return null;
   // Produce-mode p-items fire only during lesson sequences, not in contest
   // stages. The test infra only simulates contest stages, so skip them —
   // their parity would need a separate produce-mode comparison harness.
   if (item.mode !== "stage") return null;
+  // Items with no effect (like N.I.A display items) fire nothing, so parity
+  // is trivially verified. Return a degenerate "no-op" loadout — runBatch
+  // will pass it because scores match and nothing is expected to fire.
+  const hasAnyEffect = Array.isArray(item.effects) && item.effects.length > 0;
+  if (!hasAnyEffect) {
+    const plan = planOf(item);
+    const stage = STAGE_BY_PLAN[plan] ?? SAFE_STAGE;
+    return [makeLoadout({ stage, cards: [], items: [itemId] })];
+  }
   const plan = planOf(item);
   const stage = STAGE_BY_PLAN[plan] ?? SAFE_STAGE;
-  // Build a plan-matched deck so stat-dependent conditions have a chance to fire.
-  const cards = [];
+  // Always start with the signature card if applicable.
+  const baseCards = [];
   if (item.pIdolId) {
     const sigCard = SkillCards.getAll().find(
       (c) => c.pIdolId === item.pIdolId && c.sourceType === "pIdol",
     );
-    if (sigCard) cards.push(sigCard.id);
+    if (sigCard) baseCards.push(sigCard.id);
   }
-  // Pad with stat-builders for this plan.
-  const builders = STAT_BUILDERS[plan] ?? STAT_BUILDERS.free;
-  for (const b of builders) {
-    if (cards.length >= 6) break;
-    if (!cards.includes(b)) cards.push(b);
+  // If the effect gates on a specific card (usedCardBaseId==N), include that
+  // base card (and its +upgrade if present) in the deck so it can be played.
+  const effectText = JSON.stringify(item.effects || "") +
+    (item.effects?.map?.((e) => JSON.stringify(e))?.join?.(" ") || "");
+  // Parse from legacy raw string too — structured data may not preserve the id
+  const rawMatches = [];
+  // Use effect-string if we can reach the raw. Fall back to scanning effects AST for identifiers/numbers.
+  // Simpler: scan all card refs encoded as `usedCardBaseId==N` by walking effect nodes.
+  const findCardIds = (nodes) => {
+    if (!Array.isArray(nodes)) return;
+    for (const n of nodes) walkAst(n, rawMatches);
+  };
+  findCardIds(item.effects);
+  for (const id of rawMatches) {
+    if (baseCards.length >= 3) break;
+    if (!baseCards.includes(id)) baseCards.push(id);
   }
-  return makeLoadout({ stage, cards, items: [itemId] });
+  // Build one loadout per candidate deck: the plan deck first, then the
+  // scenario decks. Each loadout pads baseCards with deck cards up to 6.
+  const loadouts = [];
+  const allDecks = [STAT_BUILDERS[plan] ?? STAT_BUILDERS.free, ...SCENARIO_DECKS];
+  for (const deck of allDecks) {
+    const cards = [...baseCards];
+    for (const b of deck) {
+      if (cards.length >= 6) break;
+      if (!cards.includes(b)) cards.push(b);
+    }
+    loadouts.push(makeLoadout({ stage, cards, items: [itemId] }));
+  }
+  // Big-deck scenario — for items that gate on countCards(all)-basic-trouble>=21.
+  // Use non-N (R+/SR/SSR) produce cards so they aren't excluded by `countCards(N)`.
+  const bigDeck = [
+    24, 28, 33, 43, 51, 53, 55, 59, 61, 63, 65, 75, 77, 105, 113, 118, 125, 145, 151, 179, 411, 437,
+  ];
+  const bigCards = [...baseCards];
+  for (const b of bigDeck) {
+    if (bigCards.length >= 22) break;
+    if (!bigCards.includes(b)) bigCards.push(b);
+  }
+  loadouts.push(
+    makeLoadout({ stage, cards: bigCards, items: [itemId], deckSize: 22 }),
+  );
+  // Low-stamina scenario — for items that gate on stamina<=maxStamina*0.5.
+  // Start with lower stamina so it drops below half quickly.
+  const planBuilders = STAT_BUILDERS[plan] ?? STAT_BUILDERS.free;
+  const lowStaminaCards = [...baseCards];
+  for (const b of planBuilders) {
+    if (lowStaminaCards.length >= 6) break;
+    if (!lowStaminaCards.includes(b)) lowStaminaCards.push(b);
+  }
+  loadouts.push(
+    makeLoadout({
+      stage,
+      cards: lowStaminaCards,
+      items: [itemId],
+      stamina: 25,
+    }),
+  );
+  return loadouts;
+}
+
+// Walk effect AST to collect any `usedCardBaseId==N` references.
+function walkAst(node, out) {
+  if (!node || typeof node !== "object") return;
+  if (
+    node.type === "comparison" &&
+    node.op === "==" &&
+    node.left?.name === "usedCardBaseId" &&
+    node.right?.type === "number"
+  ) {
+    out.push(node.right.value);
+  }
+  for (const k of Object.keys(node)) {
+    const v = node[k];
+    if (Array.isArray(v)) v.forEach((x) => walkAst(x, out));
+    else if (v && typeof v === "object") walkAst(v, out);
+  }
 }
 
 function stageLoadout(stageId) {
@@ -240,50 +348,86 @@ function stripEntity(q, entityType, id) {
   return null;
 }
 
-async function runBatch(label, ids, entityType, makeLoadout) {
+// Check whether the entity appears in the engine's logs (i.e. its effects
+// actually got triggered during the simulation). Catches items whose effect
+// fires but doesn't change score (setBuff / fixedStamina / nullifyCost etc).
+function entityWasLogged(logs, entityType, id) {
+  if (!Array.isArray(logs)) return false;
+  const logType = entityType === "pItem" ? "pItem" : entityType === "cust" ? "customization" : null;
+  for (const l of logs) {
+    if (l?.data?.type === logType && l?.data?.id === id) return true;
+  }
+  return false;
+}
+
+async function runBatch(label, ids, entityType, makeLoadoutOrList) {
   const start = Date.now();
   const pass = [];
   const unverified = []; // entity present but not exercised by either engine
   const fail = [];
   const skip = [];
   for (const id of ids) {
-    const q = makeLoadout(id);
-    if (!q) {
+    const out = makeLoadoutOrList(id);
+    const loadouts = Array.isArray(out) ? out : out ? [out] : null;
+    if (!loadouts || loadouts.length === 0) {
       skip.push(id);
       continue;
     }
-    let r;
-    try {
-      r = await run(q);
-    } catch (e) {
-      fail.push({ id, error: e.message });
-      continue;
+    // Try each loadout until we get either a fail or a verified pass. If all
+    // agree but none exercise the entity, mark as unverified.
+    let verdict = "unverified";
+    let failRecord = null;
+    for (const q of loadouts) {
+      let r;
+      try {
+        r = await run(q);
+      } catch (e) {
+        failRecord = { id, error: e.message };
+        verdict = "fail";
+        break;
+      }
+      if (r.scoreDelta !== 0) {
+        failRecord = {
+          id,
+          legacy: r.legacy.score,
+          structured: r.structured.score,
+          delta: r.scoreDelta,
+        };
+        verdict = "fail";
+        break;
+      }
+      // Entity exercised if it appears in either engine's logs (catches buffs
+      // and non-score-changing effects).
+      if (
+        entityWasLogged(r.legacy.logs, entityType, id) ||
+        entityWasLogged(r.structured.logs, entityType, id)
+      ) {
+        verdict = "pass";
+        break;
+      }
+      // Fall back to the with/without score comparison.
+      const qNo = stripEntity(q, entityType, id);
+      if (!qNo || qNo === q) {
+        verdict = "pass";
+        break;
+      }
+      let r2;
+      try {
+        r2 = await run(qNo);
+      } catch {
+        verdict = "pass";
+        break;
+      }
+      const exercisedInLegacy = r.legacy.score !== r2.legacy.score;
+      const exercisedInStructured = r.structured.score !== r2.structured.score;
+      if (exercisedInLegacy || exercisedInStructured) {
+        verdict = "pass";
+        break;
+      }
+      // otherwise keep trying the next candidate
     }
-    if (r.scoreDelta !== 0) {
-      fail.push({
-        id,
-        legacy: r.legacy.score,
-        structured: r.structured.score,
-        delta: r.scoreDelta,
-      });
-      continue;
-    }
-    // Scores matched — but verify the entity actually did something.
-    const qNo = stripEntity(q, entityType, id);
-    if (!qNo || qNo === q) {
-      pass.push(id);
-      continue;
-    }
-    let r2;
-    try {
-      r2 = await run(qNo);
-    } catch {
-      pass.push(id);
-      continue;
-    }
-    const exercisedInLegacy = r.legacy.score !== r2.legacy.score;
-    const exercisedInStructured = r.structured.score !== r2.structured.score;
-    if (exercisedInLegacy || exercisedInStructured) pass.push(id);
+    if (verdict === "fail") fail.push(failRecord);
+    else if (verdict === "pass") pass.push(id);
     else unverified.push(id);
   }
   const elapsed = ((Date.now() - start) / 1000).toFixed(1);
@@ -298,6 +442,9 @@ async function runBatch(label, ids, entityType, makeLoadout) {
       );
   }
   if (fail.length > 30) console.log(`  ... and ${fail.length - 30} more failures`);
+  if (process.env.SHOW_UNVERIFIED && unverified.length > 0) {
+    console.log(`  Unverified ids: ${unverified.join(",")}`);
+  }
   return {
     pass: pass.length,
     fail: fail.length,
@@ -320,10 +467,12 @@ if (mode === "all" || mode === "cards") {
 }
 
 if (mode === "all" || mode === "items") {
+  // Exclude items with no effect — parity is trivially satisfied for them.
   const missing = PItems.getAll()
     .filter((i) => !covered.pItem.has(i.id))
+    .filter((i) => Array.isArray(i.effects) && i.effects.length > 0)
     .map((i) => i.id);
-  results.items = await runBatch("P-items", missing, "pItem", pItemLoadout);
+  results.items = await runBatch("P-items", missing, "pItem", pItemLoadouts);
 }
 
 if (mode === "all" || mode === "stages") {
