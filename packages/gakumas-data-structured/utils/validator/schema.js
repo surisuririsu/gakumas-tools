@@ -6,151 +6,29 @@
  * not in these sets — catches migration typos and DSL drift at data-build
  * time instead of during silent test divergence.
  *
- * SPECIAL_ACTIONS and VARIABLE_RESOLVERS are derived by instantiating the
- * real engine components against a stub engine and reading back the keys
- * of their `specialActions` / `variableResolvers` maps. This keeps the
- * schema in lockstep with the engine automatically — adding or renaming
- * an action in CardManager/BuffManager updates the schema on the next
- * validator run with no manual edits.
- *
- * PHASES and STATE_FIELDS are still hand-maintained for now (PHASES is a
- * string constant in engine/constants.js; STATE_FIELDS mirrors ALL_FIELDS
- * there). If either becomes a drift source, apply the same introspection
- * treatment.
+ * Every set here derives from the engine itself:
+ *   - PHASES, STATE_FIELDS: imported directly from engine/constants.js
+ *   - SPECIAL_ACTIONS, VARIABLE_RESOLVERS: instantiate the real engine
+ *     components against a stub engine and read back the keys of their
+ *     `specialActions` / `variableResolvers` maps.
+ * Adding or renaming a field/phase/action/resolver in the engine updates
+ * the schema automatically on the next validator run — no manual edits.
  */
+import {
+  PHASES as ENGINE_PHASES,
+  ALL_FIELDS,
+} from "gakumas-engine/structured/constants";
 import TurnManager from "gakumas-engine/structured/engine/TurnManager";
 import CardManager from "gakumas-engine/structured/engine/CardManager";
 import BuffManager from "gakumas-engine/structured/engine/BuffManager";
 import Evaluator from "gakumas-engine/structured/engine/Evaluator";
 
-// Phases that `at:<phase>` may reference.
-// Mirrors PHASES in packages/gakumas-engine/structured/constants.js.
-export const PHASES = new Set([
-  "activeCardUsed",
-  "afterActiveCardUsed",
-  "afterCardUsed",
-  "afterMentalCardUsed",
-  "afterStartOfStage",
-  "afterStartOfTurn",
-  "beforeStartOfTurn",
-  "buffCostConsumed",
-  "cardUsed",
-  "cardMovedToHand",
-  "cardMovedToHeld",
-  "cardRemoved",
-  "concentrationIncreased",
-  "endOfTurn",
-  "everyTurn",
-  "fullPowerChargeIncreased",
-  "genkiIncreased",
-  "goodConditionTurnsIncreased",
-  "goodImpressionTurnsIncreased",
-  "mentalCardUsed",
-  "motivationIncreased",
-  "prestage",
-  "processCard",
-  "processCost",
-  "checkCost",
-  "staminaDecreased",
-  "stanceChanged",
-  "startOfStage",
-  "startOfTurn",
-  "turn",
-  "turnSkipped",
-]);
+// Phases that `at:<phase>` may reference — engine constant.
+export const PHASES = new Set(ENGINE_PHASES);
 
 // Mutable state fields — anything in ALL_FIELDS (engine constants).
 // Also usable on the RHS of expressions as a readable value.
-export const STATE_FIELDS = new Set([
-  "logs",
-  "graphData",
-  "cardUsesRemaining",
-  "stamina",
-  "consumedStamina",
-  "genki",
-  "consumedGenki",
-  "score",
-  "turnsElapsed",
-  "turnsRemaining",
-  "turnTypes",
-  "linkPhase",
-  "halfCostTurns",
-  "doubleCostTurns",
-  "costReduction",
-  "costIncrease",
-  "nullifyCostCards",
-  "nullifyCostActiveCards",
-  "nullifyDebuff",
-  "nullifyGenkiTurns",
-  "doubleCardEffectCards",
-  "noActiveTurns",
-  "noMentalTurns",
-  "poorConditionTurns",
-  "uneaseTurns",
-  "scoreBuffs",
-  "scoreDebuffs",
-  "goodImpressionTurnsBuffs",
-  "goodImpressionTurnsEffectBuffs",
-  "goodImpressionTurnsTimesBuffs",
-  "concentrationBuffs",
-  "concentrationEffectBuffs",
-  "goodConditionTurns",
-  "goodConditionTurnsMultiplier",
-  "goodConditionTurnsBuffs",
-  "perfectConditionTurns",
-  "concentration",
-  "concentrationMultiplier",
-  "goodImpressionTurns",
-  "motivation",
-  "motivationMultiplier",
-  "motivationBuffs",
-  "scoreTimes",
-  "prideTurns",
-  "stance",
-  "prevStance",
-  "lockStanceTurns",
-  "fullPowerCharge",
-  "fullPowerChargeBuffs",
-  "cumulativeFullPowerCharge",
-  "enthusiasm",
-  "enthusiasmBonus",
-  "enthusiasmBuffs",
-  "strengthTimes",
-  "preservationTimes",
-  "leisureTimes",
-  "fullPowerTimes",
-  "stanceChangedByCardTimes",
-  "freshBuffs",
-  "cardMap",
-  "deckCards",
-  "handCards",
-  "discardedCards",
-  "removedCards",
-  "heldCards",
-  "cardsUsed",
-  "activeCardsUsed",
-  "turnCardsUsed",
-  "turnCardsUpgraded",
-  "thisCardHeld",
-  "usedCard",
-  "lastUsedCard",
-  "movedCard",
-  "noCardUseTurns",
-  "effects",
-  "phase",
-  "parentPhase",
-  "effectInstanceId",
-  "effectCounters",
-  "currentEffectInstanceId",
-  "nullifySelect",
-  "freeCardUses",
-  "goodImpressionTurnsDelta",
-  "motivationDelta",
-  "genkiDelta",
-  "goodConditionTurnsDelta",
-  "concentrationDelta",
-  "staminaDelta",
-]);
+export const STATE_FIELDS = new Set(ALL_FIELDS);
 
 // Intermediate-resolver fields. Legal as assignment LHS even though they
 // don't exist directly on state (Executor reroutes them).

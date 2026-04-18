@@ -180,7 +180,7 @@ export const ALL_FIELDS = [
   "preservationTimes",
   "leisureTimes",
   "fullPowerTimes",
-  "stanceChangedByCardTimes",
+  "stanceChangedByDirectEffectTimes",
   "freshBuffs",
 
   // Cards
