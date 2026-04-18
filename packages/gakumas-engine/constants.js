@@ -415,6 +415,10 @@ export const GRAPHED_FIELDS = [
   S.goodImpressionTurns,
   S.motivation,
   S.prideTurns,
+  S.cumulativeFullPowerCharge,
+  S.strengthTimes,
+  S.preservationTimes,
+  S.fullPowerTimes,
 ];
 
 export const FIELDS_TO_DIFF = [
