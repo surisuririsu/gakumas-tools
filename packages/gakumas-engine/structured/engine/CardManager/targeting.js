@@ -87,6 +87,22 @@ function evaluateTargetAST(state, node, source, getCardEffects, getCardRarity) {
         }
         return result;
       }
+      if (name === "baseId" && args.length > 0) {
+        const wantId = args[0].type === "number" ? args[0].value : parseInt(args[0].name, 10);
+        const result = new Set();
+        for (let k = 0; k < state[S.cardMap].length; k++) {
+          if (state[S.cardMap][k].baseId == wantId) result.add(k);
+        }
+        return result;
+      }
+      if (name === "id" && args.length > 0) {
+        const wantId = args[0].type === "number" ? args[0].value : parseInt(args[0].name, 10);
+        const result = new Set();
+        for (let k = 0; k < state[S.cardMap].length; k++) {
+          if (state[S.cardMap][k].id == wantId) result.add(k);
+        }
+        return result;
+      }
       console.warn(`Unknown target function: ${name}`);
       return new Set();
     }

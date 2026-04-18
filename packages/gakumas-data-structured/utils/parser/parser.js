@@ -295,6 +295,14 @@ export class Parser {
     this.expect(TokenType.COLON, "Expected ':' after 'at'");
     const phaseToken = this.expect(TokenType.IDENTIFIER, "Expected phase name");
 
+    // Optional target-rule filter: at:phase[targetExpr] — fires only when the
+    // phase's source card (typically state.usedCard) matches the rule.
+    let filter = null;
+    if (this.match(TokenType.LBRACKET)) {
+      filter = this.parseCondition();
+      this.expect(TokenType.RBRACKET, "Expected ']' after phase filter");
+    }
+
     let body = [];
     if (this.match(TokenType.LBRACE)) {
       body = this.parseEffectBody();
@@ -305,7 +313,7 @@ export class Parser {
       );
     }
 
-    return { type: "phase", phase: phaseToken.value, body };
+    return { type: "phase", phase: phaseToken.value, filter, body };
   }
 
   parseConditionBlock() {

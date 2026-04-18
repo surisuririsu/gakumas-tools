@@ -100,7 +100,7 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,effects,limit,grow
 99,oneMoreStepEffect1,パラメータ追加,score,100,1,,,,at:turn { score+=5; limit:2 },,
 100,ukenagashiEffect1_1,条件変更(集中),effect,70,1,,,,@concLine if:concentration>=10,,
 101,ukenagashiEffect1_2,条件変更(好調),effect,70,1,,,,@goodLine if:goodConditionTurns>=8,,
-102,onigiriEffect1,効果変更,effect,100,1,,,,"@base at:activeCardUsed { effectCounter+=1 }; + at:activeCardUsed { if:effectCounter%3==2 { genki+=12*cardsUsed+2 }; limit:2 }",,
+102,onigiriEffect1,効果変更,effect,100,1,,,,"@base at:cardUsed[active] { effectCounter+=1 }; + at:cardUsed[active] { if:effectCounter%3==2 { genki+=12*cardsUsed+2 }; limit:2 }",,
 103,fullPowerCharge1,全力値+,buff,70,1,,,,,,at:prestage { target:this { g.fullPowerCharge+=2 } }
 104,perfectConditionCost1,絶好調コスト値-,cost,40,1,,,,,,at:prestage { target:this { g.typedCost+=1 } }
 105,bishittoCondition1,条件変更,effect,70,1,,@usable if:goodImpressionTurns>=6,,,,

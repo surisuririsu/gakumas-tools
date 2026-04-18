@@ -97,6 +97,18 @@ export default class EffectManager extends EngineComponent {
     for (let i = 0; i < state[S.effects].length; i++) {
       const effect = state[S.effects][i];
       if (effect.phase != phase) continue;
+      // Phase target filter: at:phase[rule] — fires only when the source
+      // card (state.usedCard) matches the target rule.
+      if (effect.filter) {
+        const sourceCard = state[S.usedCard];
+        if (sourceCard == null) continue;
+        const matching = this.engine.cardManager.getTargetRuleCards(
+          state,
+          effect.filter,
+          null,
+        );
+        if (!matching.has(sourceCard)) continue;
+      }
       const group = effect.group || 0;
       if (!effectsByGroup[group]) effectsByGroup[group] = [];
       effectsByGroup[group].push({ ...effect, phase: null, index: i });

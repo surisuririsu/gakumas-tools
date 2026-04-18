@@ -140,8 +140,30 @@ function transformNode(node, context) {
   }
 }
 
+// Simple identifier filters on card-used phases map to the corresponding
+// legacy special phase so firing order matches (activeCardUsed fires after
+// cardUsed, etc.). More complex filters fire at the base phase with the
+// filter attached.
+const PHASE_FILTER_SHORTCUTS = {
+  "cardUsed:active": "activeCardUsed",
+  "cardUsed:mental": "mentalCardUsed",
+  "afterCardUsed:active": "afterActiveCardUsed",
+  "afterCardUsed:mental": "afterMentalCardUsed",
+};
+
 function transformPhaseBlock(node, context) {
-  return transformBody(node.body, { ...context, phase: node.phase });
+  let phase = node.phase;
+  let filter = node.filter;
+  if (filter && filter.type === "identifier") {
+    const shortcut = PHASE_FILTER_SHORTCUTS[`${phase}:${filter.name}`];
+    if (shortcut) {
+      phase = shortcut;
+      filter = null;
+    }
+  }
+  const nextContext = { ...context, phase };
+  if (filter) nextContext.filter = filter;
+  return transformBody(node.body, nextContext);
 }
 
 function transformConditionBlock(node, context) {
@@ -315,6 +337,10 @@ function createEffect(context) {
     effect.phase = context.phase;
   }
 
+  if (context.filter) {
+    effect.filter = context.filter;
+  }
+
   if (context.conditions && context.conditions.length > 0) {
     effect.conditions = [...context.conditions];
   }
@@ -395,10 +421,23 @@ function buildDelta(node) {
 function applyToDelta(delta, node) {
   if (!node) return;
   switch (node.type) {
-    case "phase":
-      delta.phase = node.phase;
+    case "phase": {
+      // Apply the same phase-filter shortcut as transformPhaseBlock so
+      // patches using `at:cardUsed[active]` map to the legacy special phase.
+      let phase = node.phase;
+      let filter = node.filter;
+      if (filter && filter.type === "identifier") {
+        const shortcut = PHASE_FILTER_SHORTCUTS[`${phase}:${filter.name}`];
+        if (shortcut) {
+          phase = shortcut;
+          filter = null;
+        }
+      }
+      delta.phase = phase;
+      if (filter) delta.filter = filter;
       for (const child of node.body) applyToDelta(delta, child);
       break;
+    }
     case "condition":
       delta.conditions = [node.expr];
       for (const child of node.body) applyToDelta(delta, child);
