@@ -6,6 +6,7 @@ import styles from "./Modal.module.scss";
 function Modal({ children, dismissable = true }) {
   const { closeModal } = useContext(ModalContext);
   const modalRef = useRef(null);
+  const mouseDownOnOverlayRef = useRef(false);
 
   useEffect(() => {
     // Focus the modal container or first focusable element
@@ -57,14 +58,29 @@ function Modal({ children, dismissable = true }) {
     };
   }, []);
 
-  const handleOverlayClick = () => {
-    if (dismissable) {
-      closeModal();
-    }
+  const handleOverlayMouseDown = (e) => {
+    mouseDownOnOverlayRef.current = e.target === e.currentTarget;
+  };
+
+  const handleOverlayMouseUp = (e) => {
+    // Only dismiss when both the press and the release land on the overlay
+    // itself. A drag that crosses the overlay/modal boundary in either
+    // direction fires `click` on the nearest common ancestor (the overlay),
+    // which would otherwise look indistinguishable from a real outside click.
+    const dismiss =
+      dismissable &&
+      mouseDownOnOverlayRef.current &&
+      e.target === e.currentTarget;
+    mouseDownOnOverlayRef.current = false;
+    if (dismiss) closeModal();
   };
 
   return (
-    <div className={styles.overlay} onClick={handleOverlayClick}>
+    <div
+      className={styles.overlay}
+      onMouseDown={handleOverlayMouseDown}
+      onMouseUp={handleOverlayMouseUp}
+    >
       <div 
         ref={modalRef}
         className={styles.modal} 

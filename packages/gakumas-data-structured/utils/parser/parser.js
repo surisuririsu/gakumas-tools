@@ -240,7 +240,13 @@ export class Parser {
       } else if (token.type === TokenType.SEMICOLON) {
         this.advance();
       } else {
-        // Implicit append: parse a bare effect as an append patch
+        // Implicit append: parse a bare effect as an append patch. If the
+        // effect is a bare action, keep consuming follow-on bare actions
+        // (skipping `;` separators) and merge them into a single action
+        // block so they share one effect — mirrors the transformer's
+        // "consecutive actions collapse into one effect" behavior and
+        // preserves cross-action state like `motivationMultiplier=X`
+        // being visible to a subsequent `genki+=3` in the same play step.
         flushPending();
         const effect = this.parseEffect();
         if (!effect) {
@@ -248,7 +254,47 @@ export class Parser {
             `Expected '+', '@', or effect in patch sequence at line ${token.line}, col ${token.col}. Got ${token.type}`
           );
         }
-        patches.push({ op: "append", effect });
+        if (effect.type === "action") {
+          const actions = [effect];
+          while (!this.isAtEnd()) {
+            // Skip semicolons.
+            while (this.match(TokenType.SEMICOLON)) {}
+            const t = this.peek();
+            // Stop at explicit patch markers or end of block.
+            if (
+              t.type === TokenType.PLUS ||
+              t.type === TokenType.AT_SIGN ||
+              t.type === TokenType.RBRACE ||
+              MODIFIER_TOKENS.includes(t.type)
+            ) {
+              break;
+            }
+            const next = this.parseEffect();
+            if (!next) break;
+            if (next.type !== "action") {
+              // Non-action bare effect — flush collected actions as one
+              // patch, then emit this one separately.
+              patches.push({
+                op: "append",
+                effect: { type: "actionBlock", body: actions },
+              });
+              patches.push({ op: "append", effect: next });
+              actions.length = 0;
+              break;
+            }
+            actions.push(next);
+          }
+          if (actions.length === 1) {
+            patches.push({ op: "append", effect: actions[0] });
+          } else if (actions.length > 1) {
+            patches.push({
+              op: "append",
+              effect: { type: "actionBlock", body: actions },
+            });
+          }
+        } else {
+          patches.push({ op: "append", effect });
+        }
       }
     }
 

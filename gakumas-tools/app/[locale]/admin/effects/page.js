@@ -11,6 +11,7 @@ import {
 import { getReviewDataset } from "../../../../../packages/gakumas-data-structured/review/index.js";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
+import { highlightEffects } from "@/utils/effectSyntax";
 import styles from "./page.module.scss";
 
 const DATASETS = {
@@ -40,22 +41,6 @@ const DATASETS = {
 };
 
 const DEFAULT_DATASET_TYPE = "skillCards";
-const EFFECT_KEYWORDS = new Set([
-  "at",
-  "if",
-  "target",
-  "do",
-  "limit",
-  "ttl",
-  "delay",
-  "level",
-  "line",
-  "group",
-]);
-const EFFECT_TOKEN_PATTERN =
-  /(at|if|target|do|limit|ttl|delay|level|line|group|[{}\[\]();,]|[+\-*/%&|!<>=]=?|:)/g;
-const PUNCTUATION_PATTERN = /^[{}\[\]();,]$/;
-const OPERATOR_PATTERN = /^[+\-*/%&|!<>=]=?|:$/;
 
 export const metadata = {
   title: "Effect Verification",
@@ -116,10 +101,6 @@ function getEffectText(value) {
   return typeof value === "string" ? value : "";
 }
 
-function tokenizeEffect(value) {
-  return (getEffectText(value) || "(empty)").split(EFFECT_TOKEN_PATTERN);
-}
-
 function JsonBlock({ value }) {
   return (
     <pre className={styles.json}>
@@ -129,33 +110,20 @@ function JsonBlock({ value }) {
 }
 
 function EffectCode({ value }) {
+  const text = getEffectText(value) || "(empty)";
+  const parts = highlightEffects(text);
+
   return (
     <pre className={styles.code}>
-      {tokenizeEffect(value).map((part, index) => {
-        if (!part) return null;
-        if (EFFECT_KEYWORDS.has(part)) {
-          return (
-            <span className={styles.keyword} key={index}>
-              {part}
-            </span>
-          );
-        }
-        if (PUNCTUATION_PATTERN.test(part)) {
-          return (
-            <span className={styles.punctuation} key={index}>
-              {part}
-            </span>
-          );
-        }
-        if (OPERATOR_PATTERN.test(part)) {
-          return (
-            <span className={styles.operator} key={index}>
-              {part}
-            </span>
-          );
-        }
-        return <span key={index}>{part}</span>;
-      })}
+      {parts.map((part, index) =>
+        part.className ? (
+          <span className={styles[part.className]} key={index}>
+            {part.text}
+          </span>
+        ) : (
+          <span key={index}>{part.text}</span>
+        )
+      )}
     </pre>
   );
 }

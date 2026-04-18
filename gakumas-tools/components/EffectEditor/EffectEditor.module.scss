@@ -1,0 +1,80 @@
+@use "sass:color";
+@use "../../styles/colors";
+
+$editor-font:
+  "SFMono-Regular",
+  "Cascadia Code",
+  "Liberation Mono",
+  monospace;
+
+.editor {
+  position: relative;
+  border: 2px solid colors.$black-medium;
+  border-radius: 6px;
+  background: colors.$black-medium;
+  overflow: hidden;
+
+  &:focus-within {
+    border-color: colors.$gk-orange;
+  }
+}
+
+// Shared typography so colored tokens align pixel-for-pixel with the text
+// the user types into the textarea above them.
+.highlight,
+.input {
+  margin: 0;
+  padding: 8px 16px;
+  font-family: $editor-font;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  tab-size: 2;
+}
+
+// Pre is in flow — it drives the container's height so the editor auto-grows
+// with content. Everything else (including the textarea) overlays on top.
+.highlight {
+  min-height: 100%;
+  color: colors.$white-dark;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  resize: none;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  caret-color: colors.$white-dark;
+  overflow: hidden;
+}
+
+.keyword {
+  color: colors.$china;
+}
+
+.anchor {
+  color: colors.$red;
+}
+
+.number {
+  color: colors.$class-1-2;
+}
+
+.operator {
+  color: colors.$white-dark;
+}
+
+.punctuation {
+  color: colors.$white-dark;
+}
+
+.identifier {
+  color: colors.$hiro;
+}

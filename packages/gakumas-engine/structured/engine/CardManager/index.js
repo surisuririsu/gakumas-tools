@@ -27,6 +27,24 @@ function mergePatch(original, delta) {
   return merged;
 }
 
+// Extract the "effect name" for a single action — what a cardEffects
+// membership check (e.g. `if:cardHasEffect(X)`) would match against.
+function actionEffectName(action) {
+  if (!action) return null;
+  if (action.type === "assignment") return action.lhs;
+  if (action.type === "call") {
+    if (action.name === "setStance" && action.args.length > 0) {
+      const arg = action.args[0];
+      return arg.type === "identifier"
+        ? arg.name.replace(/\d/g, "")
+        : String(arg.value).replace(/\d/g, "");
+    }
+    return action.name;
+  }
+  if (action.type === "identifier") return action.name;
+  return null;
+}
+
 export default class CardManager extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -276,35 +294,23 @@ export default class CardManager extends EngineComponent {
     let cardEffects = new Set();
     if (card == null) return cardEffects;
     const lines = this.getLines(state, card, "actions");
-    for (let i = 0; i < lines.length; i++) {
-      const effect = lines[i];
-      if (!effect.actions) continue;
-      for (let j = 0; j < effect.actions.length; j++) {
-        const action = effect.actions[j];
-        if (!action) continue;
 
-        let cardEffect = null;
-        if (action.type === "assignment") {
-          cardEffect = action.lhs;
-        } else if (action.type === "call") {
-          if (action.name === "setStance" && action.args.length > 0) {
-            const arg = action.args[0];
-            cardEffect =
-              arg.type === "identifier"
-                ? arg.name.replace(/\d/g, "")
-                : String(arg.value).replace(/\d/g, "");
-          } else {
-            cardEffect = action.name;
-          }
-        } else if (action.type === "identifier") {
-          cardEffect = action.name;
+    // Walk every action in every effect, recursing into nested `effects`
+    // (from conditional-phase blocks like `if:X { at:phase { Y } }`) so the
+    // stage's `cardEffects & X` check matches cards where the relevant
+    // action only appears in a deferred/conditional branch — parity with
+    // legacy, which reads from a flat effects list where those actions are
+    // already top-level entries.
+    const walk = (effects) => {
+      for (const effect of effects || []) {
+        for (const action of effect.actions || []) {
+          const name = actionEffectName(action);
+          if (name) cardEffects.add(name);
         }
-
-        if (cardEffect) {
-          cardEffects.add(cardEffect);
-        }
+        if (effect.effects) walk(effect.effects);
       }
-    }
+    };
+    walk(lines);
     return cardEffects;
   }
 

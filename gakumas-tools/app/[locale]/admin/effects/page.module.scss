@@ -236,12 +236,25 @@
   font-weight: 600;
 }
 
+.anchor {
+  color: colors.$effect-2;
+  font-weight: 600;
+}
+
 .punctuation {
   color: colors.$gray-extra-light;
 }
 
 .operator {
   color: colors.$blue;
+}
+
+.number {
+  color: colors.$buff;
+}
+
+.identifier {
+  color: colors.$white;
 }
 
 .badgeError {

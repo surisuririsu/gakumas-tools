@@ -5,6 +5,7 @@ import {
   deserializeEffectSequence,
 } from "gakumas-data-structured";
 import Button from "@/components/Button";
+import EffectEditor from "@/components/EffectEditor";
 import ParametersInput from "@/components/ParametersInput";
 import styles from "./StageCustomizer.module.scss";
 import ButtonGroup from "../ButtonGroup";
@@ -98,10 +99,7 @@ function StageCustomizer({ initialStage, onApply }) {
 
       <label>{t("effects")}</label>
       <div className={styles.effects}>
-        <textarea
-          defaultValue={effects}
-          onChange={(e) => setEffects(e.target.value)}
-        />
+        <EffectEditor value={effects} onChange={setEffects} />
         <a
           href="https://github.com/surisuririsu/gakumas-tools/blob/master/packages/gakumas-data/Effects.md"
           target="_blank"

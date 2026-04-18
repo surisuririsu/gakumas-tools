@@ -142,7 +142,11 @@ export function serializeEffect(effect, indent = 0) {
   }
   if (effect.targets && effect.targets.length > 0) {
     for (const target of effect.targets) {
-      wrappers.push(`target:${serializeExpr(target)}`);
+      // `transformTargetBlock` unwraps identifier targets to bare strings
+      // while leaving complex expressions as AST nodes — serialize both.
+      wrappers.push(
+        `target:${typeof target === "string" ? target : serializeExpr(target)}`
+      );
     }
   }
 

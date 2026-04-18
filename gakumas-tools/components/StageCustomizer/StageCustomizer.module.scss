@@ -12,15 +12,7 @@
 .effects {
   display: flex;
   flex-direction: column;
-
-  textarea {
-    min-height: 80px;
-    resize: vertical;
-    font-size: 16px;
-    border: 2px solid colors.$gk-orange;
-    border-radius: 4px;
-    padding: 8px;
-  }
+  gap: 4px;
 
   a {
     color: colors.$blue;
