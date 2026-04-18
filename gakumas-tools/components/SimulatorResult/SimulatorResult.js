@@ -7,11 +7,11 @@ import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
-const TABS = ["logs", "stats"];
+const TABS = ["stats", "logs"];
 
 function SimulatorResult({ data, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
-  const [tab, setTab] = useState("logs");
+  const [tab, setTab] = useState("stats");
 
   return (
     <div id="simulator_result" className={styles.result}>
