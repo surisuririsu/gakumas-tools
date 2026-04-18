@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data-structured";
 import {
   calculateSkillCardCost,
   COST_RANGES_BY_RANK,

@@ -1,6 +1,6 @@
 import { deserializeEffectSequence } from "gakumas-data-structured";
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export const STANCES = [
   "none",
@@ -28,49 +28,49 @@ function parseEffect(effectStr, source) {
 
 export const DEFAULT_EFFECTS = parseEffect(
   "at:cardUsed { if:stance==strength2 { do:fixedStamina-=1 } }",
-  { type: "default", id: "強気2" }
+  { type: "default", id: "強気2" },
 );
 
 export const FULL_POWER_EFFECTS = [
-  ...parseEffect(
-    "if:stance==fullPower { do:setStance(none) }",
-    { type: "default", id: "全力" }
-  ),
+  ...parseEffect("if:stance==fullPower { do:setStance(none) }", {
+    type: "default",
+    id: "全力",
+  }),
   ...parseEffect(
     "if:lockStanceTurns==0 & fullPowerCharge>=10 { do:setStance(fullPower); do:fullPowerCharge-=10 }",
-    { type: "default", id: "全力" }
+    { type: "default", id: "全力" },
   ),
 ];
 
 export const GOOD_IMPRESSION_EFFECTS = parseEffect(
   "if:goodImpressionTurns>=1 { do:score+=goodImpressionTurns*goodImpressionTurnsEffectBuff }",
-  { type: "default", id: "好印象" }
+  { type: "default", id: "好印象" },
 );
 
 export const STANCE_CHANGED_EFFECTS = [
   ...parseEffect(
     "if:prevStance==preservation & stance!=leisure { do:enthusiasm+=5; do:cardUsesRemaining+=1 }",
-    { type: "default", id: "温存" }
+    { type: "default", id: "温存" },
   ),
   ...parseEffect(
     "if:prevStance==preservation2 & stance!=leisure { do:enthusiasm+=8; do:fixedGenki+=5; do:cardUsesRemaining+=1 }",
-    { type: "default", id: "温存2" }
+    { type: "default", id: "温存2" },
   ),
   ...parseEffect(
     "if:prevStance==leisure { do:fixedGenki+=5; do:cardUsesRemaining+=1 }",
-    { type: "default", id: "のんびり" }
+    { type: "default", id: "のんびり" },
   ),
   ...parseEffect(
     "if:prevStance==leisure & stance==fullPower { target:all { do:g.score+=10 } }",
-    { type: "default", id: "のんびり" }
+    { type: "default", id: "のんびり" },
   ),
   ...parseEffect(
     "if:prevStance==leisure & stance!=fullPower { do:enthusiasm+=10 }",
-    { type: "default", id: "のんびり" }
+    { type: "default", id: "のんびり" },
   ),
   ...parseEffect(
     "if:stance==fullPower { do:cardUsesRemaining+=1; do:moveHeldCardsToHand }",
-    { type: "default", id: "全力" }
+    { type: "default", id: "全力" },
   ),
 ];
 

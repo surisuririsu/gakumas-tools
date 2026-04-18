@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { IdolConfig } from "gakumas-engine";
+import { IdolConfig } from "gakumas-engine/structured";
 import Preview from "@/components/Preview";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 

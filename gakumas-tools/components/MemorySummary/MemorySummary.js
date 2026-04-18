@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { PIdols, PItems, SkillCards } from "gakumas-data-structured";
 import gkImg from "gakumas-images";
 import EntityIcon from "@/components/EntityIcon";
 import Image from "@/components/Image";

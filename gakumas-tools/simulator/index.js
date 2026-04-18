@@ -1,4 +1,4 @@
-import { StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
+import { StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine/structured";
 import {
   accumulateCardUsage,
   accumulateScoreStats,

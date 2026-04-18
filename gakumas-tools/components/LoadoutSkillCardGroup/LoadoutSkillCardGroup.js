@@ -11,7 +11,9 @@ import {
   FaFilm,
   FaPercent,
 } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data-structured";
+import gkImg from "gakumas-images";
+import Image from "@/components/Image";
 import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
 import StageSkillCards from "@/components/StageSkillCards";
@@ -47,18 +49,27 @@ function LoadoutSkillCardGroup({
   );
   const { setModal, closeModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
+  const [costExpanded, setCostExpanded] = useState(false);
 
-  const cost = useMemo(
+  const costBreakdown = useMemo(
     () =>
       skillCardIds
         .filter((id) => id)
-        .map(SkillCards.getById)
-        .reduce(
-          (acc, cur) =>
-            acc + (cur.sourceType == "pIdol" ? 0 : cur.contestPower),
-          0
-        ),
+        .map((id) => {
+          const card = SkillCards.getById(id);
+          return {
+            id,
+            name: card.name,
+            cost: card.sourceType == "pIdol" ? 0 : card.contestPower,
+            card,
+          };
+        }),
     [skillCardIds]
+  );
+
+  const cost = useMemo(
+    () => costBreakdown.reduce((acc, cur) => acc + cur.cost, 0),
+    [costBreakdown]
   );
 
   return (
@@ -75,8 +86,15 @@ function LoadoutSkillCardGroup({
       />
 
       <div className={styles.sub}>
-        <div className={styles.cost}>
-          {t("cost")}: {cost}
+        <div className={styles.costWrapper}>
+          <button
+            type="button"
+            className={c(styles.cost, costExpanded && styles.costOpen)}
+            onClick={() => setCostExpanded((v) => !v)}
+            aria-expanded={costExpanded}
+          >
+            {t("cost")}: {cost}
+          </button>
         </div>
         <div
           className={c(styles.buttonGroup, expanded && styles.expanded)}
@@ -163,6 +181,23 @@ function LoadoutSkillCardGroup({
           <FaEllipsis />
         </button>
       </div>
+
+      {costExpanded && (
+        <ul className={styles.costBreakdown}>
+          {costBreakdown.map((item, i) => (
+            <li key={`${i}_${item.id}`}>
+              <Image
+                src={gkImg(item.card, idolId).icon}
+                width={20}
+                height={20}
+                alt=""
+              />
+              <span className={styles.breakdownName}>{item.name}</span>
+              <span className={styles.breakdownCost}>{item.cost}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

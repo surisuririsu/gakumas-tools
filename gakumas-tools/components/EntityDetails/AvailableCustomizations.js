@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Customizations } from "gakumas-data";
+import { Customizations } from "gakumas-data-structured";
 import c from "@/utils/classNames";
 import styles from "./EntityDetails.module.scss";
 

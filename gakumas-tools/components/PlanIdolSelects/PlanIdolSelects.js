@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Idols } from "gakumas-data";
+import { Idols } from "gakumas-data-structured";
 import gkImg from "gakumas-images";
 import IconSelect from "@/components/IconSelect";
 import { PLANS } from "@/utils/plans";

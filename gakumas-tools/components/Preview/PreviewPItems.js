@@ -1,4 +1,4 @@
-import { PItems } from "gakumas-data";
+import { PItems } from "gakumas-data-structured";
 import gkImg from "gakumas-images";
 import styles from "./Preview.styles";
 

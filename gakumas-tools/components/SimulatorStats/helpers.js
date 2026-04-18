@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data-structured";
 
 // Fold cardUsage (keyed by {id, c}) and scoreStats (keyed by type:id,
 // skillCard entries only) into a single per-turn byCard map.

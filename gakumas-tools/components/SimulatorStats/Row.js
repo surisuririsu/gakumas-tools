@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { SkillCards } from "gakumas-data";
+import { SkillCards } from "gakumas-data-structured";
 import gkImg from "gakumas-images";
 import { CustomizationCounts } from "@/components/EntityIcon";
 import Image from "@/components/Image";

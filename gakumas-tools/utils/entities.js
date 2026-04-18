@@ -1,4 +1,4 @@
-import { PDrinks, PItems, SkillCards } from "gakumas-data";
+import { PDrinks, PItems, SkillCards } from "gakumas-data-structured";
 import { comparePDrinks, comparePItems, compareSkillCards } from "@/utils/sort";
 
 export const EntityTypes = {

@@ -1,5 +1,5 @@
-import { PIdols, PItems, SkillCards, Stages } from "gakumas-data";
-import { GRAPHED_FIELDS, S } from "gakumas-engine";
+import { PIdols, PItems, SkillCards, Stages } from "gakumas-data-structured";
+import { GRAPHED_FIELDS, S } from "gakumas-engine/structured";
 import { MIN_BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,

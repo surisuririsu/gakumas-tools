@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Stages } from "gakumas-data";
+import { Stages } from "gakumas-data-structured";
 import {
   loadoutFromSearchParams,
   loadoutsFromSearchParams,

@@ -18,7 +18,7 @@ import {
   StageEngine,
   StagePlayer,
   S,
-} from "gakumas-engine";
+} from "gakumas-engine/structured";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Input from "@/components/Input";

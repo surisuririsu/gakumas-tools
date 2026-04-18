@@ -12,7 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { S } from "gakumas-engine";
+import { S } from "gakumas-engine/structured";
 import c from "@/utils/classNames";
 import styles from "./AreaPlot.module.scss";
 

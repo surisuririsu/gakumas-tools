@@ -485,7 +485,11 @@ export default class CardManager extends EngineComponent {
       );
     }
 
-    if (state[S.cardUsesRemaining] < 1) {
+    // Free uses don't consume cardUsesRemaining, so they can't end the
+    // turn — mirror legacy to keep parity across free-use chains (e.g.
+    // `useAllFree[held]` triggered from a card's own actions while
+    // cardUsesRemaining is already 0).
+    if (!usingFree && state[S.cardUsesRemaining] < 1) {
       this.engine.turnManager.endTurn(state);
     }
   }

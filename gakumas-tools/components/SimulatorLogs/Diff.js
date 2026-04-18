@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
-import { ALL_FIELDS, DEBUFF_FIELDS } from "gakumas-engine";
+import { ALL_FIELDS, DEBUFF_FIELDS } from "gakumas-engine/structured";
 import styles from "./SimulatorLogs.module.scss";
 
 function Diff({ field, next, prev }) {
