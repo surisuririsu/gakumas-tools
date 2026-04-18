@@ -25,8 +25,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 24,いつものメイクポーチ+,R,TRUE,sense,stage,pIdol,9,FALSE,at:cardUsed[active] { if:stamina>=maxStamina*0.5 { concentration+=3 }; limit:1 }
 25,咲季の完全食レシピ,SR,FALSE,sense,stage,pIdol,10,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { genki+=9 }; limit:1 }
 26,咲季の完全食レシピ+,SR,TRUE,sense,stage,pIdol,10,FALSE,at:startOfTurn { if:goodConditionTurns>=1 { genki+=12 }; limit:1 }
-27,私の「初」の楽譜,SR,FALSE,sense,stage,pIdol,11,FALSE,at:startOfTurn { if:genki==0 { fixedStamina-=1; concentration+=3 }; limit:2 }
-28,私の「初」の楽譜+,SR,TRUE,sense,stage,pIdol,11,FALSE,at:startOfTurn { if:genki==0 { fixedStamina-=1; concentration+=4 }; limit:2 }
+27,私の「初」の楽譜,SR,FALSE,sense,stage,pIdol,11,FALSE,at:startOfTurn { if:genki==0 { cost-=1; concentration+=3 }; limit:2 }
+28,私の「初」の楽譜+,SR,TRUE,sense,stage,pIdol,11,FALSE,at:startOfTurn { if:genki==0 { cost-=1; concentration+=4 }; limit:2 }
 29,お気にのスニーカー,SR,FALSE,logic,stage,pIdol,12,FALSE,at:endOfTurn { if:genki>=7 { goodImpressionTurns+=4 }; limit:1 }
 30,お気にのスニーカー+,SR,TRUE,logic,stage,pIdol,12,FALSE,at:endOfTurn { if:genki>=7 { goodImpressionTurns+=5 }; limit:1 }
 31,Dearリトルプリンス,SR,FALSE,sense,stage,pIdol,13,FALSE,at:goodConditionTurnsIncreased { if:isDirectEffect { goodConditionTurns+=3 }; limit:1 }
@@ -317,8 +317,8 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 316,夢見る星+,SSR,TRUE,anomaly,stage,pIdol,105,FALSE,"at:cardUsed { if:isFullPower & turnCardsUsed%3==2 { setFullPowerChargeBuff(0.5,1) }; group:1 }; at:cardUsed { if:isFullPower & turnCardsUsed%3==2 { at:turn { setStance(preservation2); limit:1 } }; group:11 }"
 317,おさぼりタオル,SR,FALSE,free,stage,support,,FALSE,at:startOfTurn { if:isDanceTurn { fixedGenki+=4; at:turn { nullifyDebuff+=1; limit:1 } } limit:1 }
 318,わいわいタンバリン,SSR,FALSE,free,produce,support,,FALSE,
-319,しゅきしゅきはーと,SSR,FALSE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=2; drawCard; cardUsesRemaining+=1; at:cardUsed[mental] { doubleCardEffectCards+=1; limit:1; ttl:1 } } limit:1 }
-320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=10; drawCard(2); cardUsesRemaining+=1; at:cardUsed[mental] { doubleCardEffectCards+=1; limit:1; ttl:1 } } limit:1 }
+319,しゅきしゅきはーと,SSR,FALSE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=2; drawCard; cardUsesRemaining+=1; at:cardUsed[mental] { if:cardRarity!=L { doubleCardEffectCards+=1 }; limit:1; ttl:1 } } limit:1 }
+320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,at:afterCardUsed[mental] { if:concentration>=13 { genki+=10; drawCard(2); cardUsesRemaining+=1; at:cardUsed[mental] { if:cardRarity!=L { doubleCardEffectCards+=1 }; limit:1; ttl:1 } } limit:1 }
 321,ピークタイムフラッグ,SSR,FALSE,sense,produce,support,,FALSE,
 322,ふっかつのアイス,SR,FALSE,sense,produce,support,,FALSE,
 323,ミラクルヘッド,SSR,FALSE,logic,stage,pIdol,107,FALSE,"at:startOfTurn { setMotivationBuff(0.5,3); fixedStamina-=2; limit:1 }; at:turn { if:turnsElapsed==1 { genki+=2 }; limit:1 }"
@@ -369,13 +369,13 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 368,あの頃憧れたヒーロー,SSR,FALSE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { cardUsesRemaining+=1; moveRandomToHand[removed & 640]; goodConditionTurns+=7; fixedStamina-=3 }; limit:1 }
 369,あの頃憧れたヒーロー+,SSR,TRUE,sense,stage,pIdol,121,FALSE,at:cardUsed { if:usedCardBaseId==106 { cardUsesRemaining+=1; moveRandomToHand[removed & 640]; goodConditionTurns+=9 }; limit:1 }
 370,無我の境地,SSR,FALSE,sense,produce,support,,FALSE,
-371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { fixedStamina+=7; removeAll[basic & (deck | discarded | hand)] } }
-372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { goodConditionTurns+=5; removeAll[basic & (deck | discarded | hand)] } }
-373,ガラスはつみ (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { concentration+=5; removeAll[basic & (deck | discarded | hand)] } }
-374,はつぼしメダル (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { goodImpressionTurns+=5; removeAll[basic & (deck | discarded | hand)] } }
-375,ガラスはつみ (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { motivation+=5; removeAll[basic & (deck | discarded | hand)] } }
-376,はつぼしメダル (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { target:effect(strength) { g.score+=10 }; removeAll[basic & (deck | discarded | hand)] } }
-377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { target:effect(fullPowerCharge) { g.score+=10 }; removeAll[basic & (deck | discarded | hand)] } }
+371,はつぼし記章,SSR,FALSE,free,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { fixedStamina+=7; removeRandom[basic & (deck | discarded | hand)] } }
+372,はつぼしメダル (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { goodConditionTurns+=5; removeRandom[basic & (deck | discarded | hand)] } }
+373,ガラスはつみ (橙),SSR,FALSE,sense,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { concentration+=5; removeRandom[basic & (deck | discarded | hand)] } }
+374,はつぼしメダル (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { goodImpressionTurns+=5; removeRandom[basic & (deck | discarded | hand)] } }
+375,ガラスはつみ (白),SSR,FALSE,logic,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { motivation+=5; removeRandom[basic & (deck | discarded | hand)] } }
+376,はつぼしメダル (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { target:effect(strength) { g.score+=10 }; removeRandom[basic & (deck | discarded | hand)] } }
+377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { target:effect(fullPowerCharge) { g.score+=10 }; removeRandom[basic & (deck | discarded | hand)] } }
 378,だから、おいで,SSR,FALSE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=10; setScoreDebuff(0.6, 2); at:cardUsed[mental] { motivation+=1; limit:5 } } limit:1 }"
 379,だから、おいで+,SSR,TRUE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=13; setScoreDebuff(0.6, 2); at:cardUsed[mental] { motivation+=1; limit:5 } } limit:1 }"
 380,ぴったりコレクション,SSR,FALSE,sense,stage,support,,TRUE,at:cardUsed[active] { if:isVisualTurn & goodConditionTurns>=3 { concentration+=2; score+=4 }; limit:1 }

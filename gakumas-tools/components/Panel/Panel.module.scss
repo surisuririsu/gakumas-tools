@@ -1,27 +1,39 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .panel {
   position: relative;
-  border: 2px solid colors.$gray;
-  border-radius: 10px;
-  background-color: colors.$white;
-  box-shadow: 2px 3px 0 colors.$gray;
+  border: 2px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  box-shadow: tokens.$shadow-pop;
 }
 
 .padded {
-  padding: 16px 14px 14px;
+  padding: tokens.$space-4 tokens.$space-4 tokens.$space-3;
 }
 
 .label {
   position: absolute;
   top: -12px;
-  left: 12px;
-  padding: 0 8px;
-  background-color: colors.$white;
-  color: colors.$gk-orange;
-  font-size: 13px;
+  left: tokens.$space-3;
+  padding: 0 tokens.$space-2;
+  background-color: tokens.$surface-panel;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 16px;
   text-transform: uppercase;
+}
+
+// Mirrors the label: floats on the top border, punching through with the
+// panel bg. Caller supplies the button/content.
+.headerAction {
+  position: absolute;
+  top: -12px;
+  right: tokens.$space-3;
+  padding: 0 tokens.$space-1;
+  background-color: tokens.$surface-panel;
+  line-height: 0;
 }

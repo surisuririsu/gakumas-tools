@@ -1,0 +1,72 @@
+@use "sass:color";
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.alert {
+  display: flex;
+  align-items: stretch;
+  border-radius: tokens.$radius-sm;
+  overflow: hidden;
+  font-size: tokens.$text-sm;
+  line-height: 1.45;
+}
+
+.bar {
+  flex-shrink: 0;
+  width: 4px;
+}
+
+.content {
+  flex: 1;
+  padding: tokens.$space-2 tokens.$space-3;
+}
+
+.neutral {
+  .bar {
+    background-color: tokens.$surface-border-strong;
+  }
+  .content {
+    background-color: tokens.$surface-muted;
+    color: tokens.$surface-ink-muted;
+  }
+}
+
+.info {
+  .bar {
+    background-color: colors.$blue;
+  }
+  .content {
+    background-color: color.mix(colors.$blue, white, 15%);
+    color: color.adjust(colors.$blue, $lightness: -35%);
+  }
+}
+
+.success {
+  .bar {
+    background-color: colors.$custom-green;
+  }
+  .content {
+    background-color: color.mix(colors.$custom-green, white, 14%);
+    color: color.adjust(colors.$custom-green, $lightness: -28%);
+  }
+}
+
+.warning {
+  .bar {
+    background-color: colors.$gk-orange;
+  }
+  .content {
+    background-color: color.mix(colors.$gk-orange, white, 16%);
+    color: color.adjust(colors.$gk-orange, $lightness: -30%);
+  }
+}
+
+.danger {
+  .bar {
+    background-color: colors.$red-dark;
+  }
+  .content {
+    background-color: color.mix(colors.$red, white, 18%);
+    color: color.adjust(colors.$red, $lightness: -30%);
+  }
+}

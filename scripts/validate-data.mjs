@@ -8,20 +8,33 @@
  *
  * Exit code is non-zero if any validation errors were found.
  *
- * Imports parser/validator via sub-paths so the data-package side effect
- * (which mutates the imported JSON in place by deserializing strings) doesn't
- * run — we need the raw source strings.
+ * JSON is read fresh from disk rather than imported — otherwise any
+ * transitive import of `gakumas-data-structured` (e.g. via the schema
+ * introspecting engine components) runs its side-effectful deserializer
+ * and mutates the module-cached JSON in place, leaving us with ASTs
+ * instead of the raw DSL strings the validator needs.
  */
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
 import { parseEffects, parsePatches } from "gakumas-data-structured/utils/parser";
 import {
   validateEffectAst,
   validatePatchAst,
 } from "gakumas-data-structured/utils/validator";
-import CUSTOMIZATIONS from "gakumas-data-structured/json/customizations.json";
-import SKILL_CARDS from "gakumas-data-structured/json/skill_cards.json";
-import P_ITEMS from "gakumas-data-structured/json/p_items.json";
-import STAGES from "gakumas-data-structured/json/stages.json";
-import P_DRINKS from "gakumas-data-structured/json/p_drinks.json";
+
+const JSON_DIR = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../packages/gakumas-data-structured/json",
+);
+const readJson = (name) =>
+  JSON.parse(readFileSync(resolve(JSON_DIR, name), "utf8"));
+
+const CUSTOMIZATIONS = readJson("customizations.json");
+const SKILL_CARDS = readJson("skill_cards.json");
+const P_ITEMS = readJson("p_items.json");
+const STAGES = readJson("stages.json");
+const P_DRINKS = readJson("p_drinks.json");
 
 let totalErrors = 0;
 

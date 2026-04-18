@@ -1017,35 +1017,25 @@ export default class CardManager extends EngineComponent {
   }
 
   removeTroubleFromDeckOrDiscards(state) {
-    // Find trouble cards with their indices
-    const troubleCards = [];
-    for (let idx = 0; idx < state[S.cardMap].length; idx++) {
-      const card = state[S.cardMap][idx];
-      if (SkillCards.getById(card.id)?.type === "trouble") {
-        troubleCards.push({ card, idx });
+    const candidates = [];
+    for (const pile of [S.deckCards, S.discardedCards]) {
+      for (let i = 0; i < state[pile].length; i++) {
+        const cardIdx = state[pile][i];
+        const card = state[S.cardMap][cardIdx];
+        if (SkillCards.getById(card.id)?.type === "trouble") {
+          candidates.push({ pile, index: i, cardIdx, id: card.id });
+        }
       }
     }
-    if (!troubleCards.length) return;
+    if (!candidates.length) return;
 
-    // Shuffle and try to find one in deck or discards
-    shuffle(troubleCards);
-    for (const { card, idx } of troubleCards) {
-      let index = state[S.deckCards].indexOf(idx);
-      let pile = S.deckCards;
-      if (index === -1) {
-        index = state[S.discardedCards].indexOf(idx);
-        pile = S.discardedCards;
-      }
-      if (index !== -1) {
-        state[pile].splice(index, 1);
-        state[S.removedCards].push(idx);
-        this.logger.log(state, "removeCard", {
-          type: "skillCard",
-          id: card.id,
-        });
-        return;
-      }
-    }
+    const pick = candidates[Math.floor(getRand() * candidates.length)];
+    state[pick.pile].splice(pick.index, 1);
+    state[S.removedCards].push(pick.cardIdx);
+    this.logger.log(state, "removeCard", {
+      type: "skillCard",
+      id: pick.id,
+    });
   }
 
   getTargetRuleCards(state, targetRule, source) {

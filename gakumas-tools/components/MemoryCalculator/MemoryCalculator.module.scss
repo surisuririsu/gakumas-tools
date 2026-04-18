@@ -1,16 +1,40 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
 .memoryCalculator {
-  max-width: 500px;
+  max-width: 560px;
   margin: 0 auto;
-  padding: 0 16px 16px;
+  padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: tokens.$space-5;
 }
 
-.buttons {
+.settingsRow {
   display: flex;
-  gap: 8px;
-  align-self: flex-start;
+  flex-wrap: wrap;
+  gap: tokens.$space-5;
+}
+
+.settingField {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+.settingLabel {
+  font-size: tokens.$text-xs;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: tokens.$surface-ink-muted;
+}
+
+.costRange {
+  font-size: tokens.$text-lg;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: tokens.$surface-ink;
 }
 
 .resultsPanel {
@@ -18,17 +42,13 @@
 }
 
 .resultsContent {
-  padding: 8px;
-}
-
-.rankSelect {
-  align-self: flex-start;
+  padding: tokens.$space-2;
 }
 
 .result {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: tokens.$space-1;
 }
 
 .card {

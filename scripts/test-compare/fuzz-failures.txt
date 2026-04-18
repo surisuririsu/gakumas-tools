@@ -1,9 +1,7 @@
-# Fuzz failures from seed=1, N=1000
-# 2 failures / 1000 runs / 0 errors
+# Fuzz failures from seed=3, N=1000
+# 1 failures / 1000 runs / 0 errors
 # Each non-comment line is a test-urls.txt-compatible query string.
 # Prefix comments show legacy/structured/delta for context.
 
-# legacy=20242 structured=19527 delta=-715
-stage=97&support_bonus=0.04&params=2071-2209-1188-48&items=275-410-385-394&cards=641-584-109-562-112-709&customizations=-----e29x1
-# legacy=9111 structured=11297 delta=2186
-stage=21&support_bonus=0.04&params=928-790-2055-40&items=141-118-92-405&cards=724-209-321-258-500-517&customizations=-----e85x1e86x1
+# legacy=8036 structured=7967 delta=-69
+stage=3&support_bonus=0.04&params=1636-1865-1235-47&items=323-239-139-324&cards=521-246-94-517-569-453&customizations=-----e27x1

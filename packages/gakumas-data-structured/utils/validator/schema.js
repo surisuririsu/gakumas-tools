@@ -1,13 +1,27 @@
 /**
  * Validator schema.
  *
- * Hand-maintained whitelists of every identifier/function/phase/field the
- * structured engine understands. The validator walks parsed ASTs and flags
- * any name not in these sets — catches migration typos and DSL drift at
- * data-build time instead of during silent test divergence.
+ * Whitelists of every identifier/function/phase/field the structured
+ * engine understands. The validator walks parsed ASTs and flags any name
+ * not in these sets — catches migration typos and DSL drift at data-build
+ * time instead of during silent test divergence.
  *
- * If you rename something in the engine, update the matching list here.
+ * SPECIAL_ACTIONS and VARIABLE_RESOLVERS are derived by instantiating the
+ * real engine components against a stub engine and reading back the keys
+ * of their `specialActions` / `variableResolvers` maps. This keeps the
+ * schema in lockstep with the engine automatically — adding or renaming
+ * an action in CardManager/BuffManager updates the schema on the next
+ * validator run with no manual edits.
+ *
+ * PHASES and STATE_FIELDS are still hand-maintained for now (PHASES is a
+ * string constant in engine/constants.js; STATE_FIELDS mirrors ALL_FIELDS
+ * there). If either becomes a drift source, apply the same introspection
+ * treatment.
  */
+import TurnManager from "gakumas-engine/structured/engine/TurnManager";
+import CardManager from "gakumas-engine/structured/engine/CardManager";
+import BuffManager from "gakumas-engine/structured/engine/BuffManager";
+import Evaluator from "gakumas-engine/structured/engine/Evaluator";
 
 // Phases that `at:<phase>` may reference.
 // Mirrors PHASES in packages/gakumas-engine/structured/constants.js.
@@ -167,98 +181,34 @@ export const GROWTH_FIELDS = new Set([
   "g.stanceLevel",
 ]);
 
+// Introspect the real engine components so the schema stays in lockstep.
+// Stub engine supplies just the fields constructors touch (logger, plus
+// the manager refs that Evaluator merges variableResolvers from).
+function introspectEngine() {
+  const stubEngine = { logger: {} };
+  stubEngine.turnManager = new TurnManager(stubEngine);
+  stubEngine.cardManager = new CardManager(stubEngine);
+  stubEngine.buffManager = new BuffManager(stubEngine);
+  const evaluator = new Evaluator(stubEngine);
+  return {
+    variableResolvers: Object.keys(evaluator.variableResolvers),
+    specialActions: [
+      ...Object.keys(stubEngine.cardManager.specialActions),
+      ...Object.keys(stubEngine.buffManager.specialActions),
+    ],
+  };
+}
+
+const { variableResolvers, specialActions } = introspectEngine();
+
 // Value-producing function calls / identifiers available in condition or
 // expression position (not actions). Union of variableResolvers from every
 // engine component.
-export const VARIABLE_RESOLVERS = new Set([
-  // Evaluator
-  "maxStamina",
-  "clearRatio",
-  "effectCounter",
-  // TurnManager
-  "isVocalTurn",
-  "isDanceTurn",
-  "isVisualTurn",
-  // CardManager
-  "cardHasEffect",
-  "cardSourceType",
-  "cardRarity",
-  "usedCardId",
-  "usedCardBaseId",
-  "lastUsedCardType",
-  "movedCardId",
-  "countCards",
-  // BuffManager
-  "isPreservation",
-  "isStrength",
-  "isFullPower",
-  "isDirectEffect",
-  "stanceChangedTimes",
-  "goodImpressionTurnsEffectBuff",
-]);
-
-// Buff-type action names generated from BUFF_TYPES in BuffManager.
-const BUFF_ACTIONS = [
-  "setScoreBuff",
-  "setScoreDebuff",
-  "setGoodImpressionTurnsBuff",
-  "setGoodImpressionTurnsEffectBuff",
-  "setGoodImpressionTurnsTimesBuff",
-  "setMotivationBuff",
-  "setGoodConditionTurnsBuff",
-  "setConcentrationBuff",
-  "setConcentrationEffectBuff",
-  "setEnthusiasmBuff",
-  "setFullPowerChargeBuff",
-];
+export const VARIABLE_RESOLVERS = new Set(variableResolvers);
 
 // Action names (identifier form or call form) — all names in any
 // specialActions map on an engine component.
-export const SPECIAL_ACTIONS = new Set([
-  // CardManager
-  "drawCard",
-  "upgradeHand",
-  "exchangeHand",
-  "upgradeRandomCardInHand",
-  "addRandomUpgradedCardToHand",
-  "addRandomUpgradedSSRCardToHand",
-  "addCardToTopOfDeck",
-  "addCardToDeck",
-  "addCardToHand",
-  "moveCardToTopOfDeck",
-  "moveCardToHand",
-  "moveCardToHandFromDeckOrDiscards",
-  "moveCardToHandFromRemoved",
-  "moveSelectedToHand",
-  "holdCard",
-  "holdThisCard",
-  "holdSelected",
-  "moveHeldCardsToHand",
-  "useRandomCardFree",
-  "useAllCardsFree",
-  "useSelectedCardFree",
-  "moveRandomToHand",
-  "moveAllToHand",
-  "moveRandomToTopOfDeck",
-  "moveAllToTopOfDeck",
-  "moveAllToDeck",
-  "holdRandom",
-  "holdAll",
-  "holdThis",
-  "useRandomFree",
-  "useSelectedFree",
-  "useAllFree",
-  "removeAll",
-  "removeCard",
-  "moveToHand",
-  "moveToTopOfDeck",
-  "moveToDeck",
-  // BuffManager
-  "removeDebuffs",
-  "setStance",
-  "decreaseFullPowerCharge",
-  ...BUFF_ACTIONS,
-]);
+export const SPECIAL_ACTIONS = new Set(specialActions);
 
 // Stance names (valid identifiers resolved to string stance).
 export const STANCES = new Set([

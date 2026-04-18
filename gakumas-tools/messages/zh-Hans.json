@@ -157,7 +157,7 @@
     "success": "成功",
     "failure": "失败",
     "clear": "清除",
-    "confirm": "您确定要清除记忆计算器吗？"
+    "confirm": "您确定要清除这些技能卡吗？"
   },
   "TargetSkillCards": {
     "acquired": "已获得"

@@ -159,6 +159,11 @@ export function MemoryCalculatorContextProvider({ children }) {
   function clearTargetCardIds() {
     _setTargetSkillCardIds([0]);
     _setAlternateSkillCardIds([]);
+    _setTargetNegations([]);
+  }
+
+  function clearAcquiredCardIds() {
+    _setAcquiredSkillCardIds([0]);
   }
 
   function clear() {
@@ -184,6 +189,7 @@ export function MemoryCalculatorContextProvider({ children }) {
         replaceAlternateCardId,
         replaceAcquiredCardId,
         clearTargetCardIds,
+        clearAcquiredCardIds,
         clear,
         rank,
         setRank,

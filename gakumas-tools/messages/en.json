@@ -157,7 +157,7 @@
     "success": "Success",
     "failure": "Failure",
     "clear": "Clear",
-    "confirm": "Are you sure you want to clear the memory calculator?"
+    "confirm": "Are you sure you want to clear these skill cards?"
   },
   "TargetSkillCards": {
     "acquired": "Acquired"

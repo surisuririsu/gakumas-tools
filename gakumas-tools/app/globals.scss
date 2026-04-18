@@ -1,4 +1,5 @@
 @use "../styles/colors";
+@use "../styles/tokens";
 
 * {
   box-sizing: border-box;
@@ -12,13 +13,13 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-color: colors.$white-dark;
+  background-color: tokens.$surface-bg;
 }
 
 main {
   min-width: 350px;
   flex: 1;
-  color: colors.$black-dark;
+  color: tokens.$surface-ink;
   overflow: auto;
   container-type: inline-size;
 }
@@ -26,7 +27,7 @@ main {
 h1,
 h2,
 h3 {
-  color: colors.$gk-orange;
+  color: tokens.$surface-ink;
   font-weight: 400;
   text-transform: uppercase;
 }
@@ -35,7 +36,7 @@ label {
   margin-top: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: colors.$gk-orange;
+  color: tokens.$surface-ink-muted;
 }
 
 a {

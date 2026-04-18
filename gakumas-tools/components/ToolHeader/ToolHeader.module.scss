@@ -1,11 +1,11 @@
 @use "../../styles/colors";
 
 .toolHeader {
-  color: colors.$black;
-  transition: color 0.2s;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.15s;
 
   &:hover {
-    color: colors.$gk-orange;
+    color: colors.$white;
   }
 
   @media only screen and (max-width: 600px) {

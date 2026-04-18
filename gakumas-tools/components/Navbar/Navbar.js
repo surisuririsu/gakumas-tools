@@ -17,8 +17,9 @@ function Navbar() {
   return (
     <>
       <nav className={c(styles.navbar, OSHI_PROPS && styles.hasOshi)}>
-        <Link href="/">
-          <h1>Gakumas Tools</h1>
+        <Link href="/" className={styles.brand}>
+          <span className={styles.brandPrimary}>Gakumas</span>
+          <span className={styles.brandSecondary}>Tools</span>
         </Link>
 
         <div className={styles.links}>

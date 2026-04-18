@@ -134,12 +134,10 @@ export default class CardManager extends EngineComponent {
         this.useSelectedCardFree(state, targetRule, parseInt(num, 10)),
       useAllFree: (state, targetRule) =>
         this.useAllCardsFree(state, targetRule),
-      removeAll: (state, targetRule) =>
+      removeRandom: (state, targetRule) =>
         this.removeCardByTarget(state, targetRule),
 
       // Legacy action aliases (keep for backward-compat during migration).
-      removeCard: (state, targetRule) =>
-        this.removeCardByTarget(state, targetRule),
       moveToHand: (state, targetRule, num = 1) =>
         this.moveToHandByTarget(state, targetRule, parseInt(num, 10)),
       moveToTopOfDeck: (state, targetRule, num = 1) =>
@@ -963,6 +961,7 @@ export default class CardManager extends EngineComponent {
     if (!candidates.length) return;
     const pick = candidates[Math.floor(getRand() * candidates.length)];
     state[pick.pile].splice(pick.index, 1);
+    state[S.removedCards].push(pick.cardIdx);
     this.logger.log(state, "removeCard", {
       type: "skillCard",
       id: state[S.cardMap][pick.cardIdx].id,

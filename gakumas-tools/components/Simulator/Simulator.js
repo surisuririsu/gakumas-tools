@@ -19,6 +19,7 @@ import {
   StagePlayer,
   S,
 } from "gakumas-engine/structured";
+import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import Input from "@/components/Input";
@@ -205,10 +206,10 @@ export default function Simulator() {
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
       <div className={styles.configurator}>
-        {stage.preview && <div>{t("previewNote")}</div>}
+        {stage.preview && <Alert>{t("previewNote")}</Alert>}
         <StageSelect />
         {stage.type !== "contest" ? (
-          t("enterPercents")
+          <Alert>{t("enterPercents")}</Alert>
         ) : (
           <div className={styles.percentRow}>
             <div className={styles.enterPercentsToggle}>
@@ -235,7 +236,9 @@ export default function Simulator() {
             )}
           </div>
         )}
-        {stage.type == "linkContest" && <div>{t("linkContestNote")}</div>}
+        {stage.type == "linkContest" && (
+          <Alert variant="warning">{t("linkContestNote")}</Alert>
+        )}
         {stage.type == "linkContest" ? (
           <div className={styles.loadoutTabs}>
             {loadouts.map((loadout, index) => (

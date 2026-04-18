@@ -157,7 +157,7 @@
     "success": "成功",
     "failure": "失敗",
     "clear": "クリア",
-    "confirm": "メモリー計算機をクリアしますか？"
+    "confirm": "これらのスキルカードをクリアしますか？"
   },
   "TargetSkillCards": {
     "acquired": "取得済み"

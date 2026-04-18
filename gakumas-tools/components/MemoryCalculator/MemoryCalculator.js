@@ -1,6 +1,7 @@
 "use client";
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
 import IconSelect from "@/components/IconSelect";
@@ -45,11 +46,15 @@ function MemoryCalculator() {
     acquiredSkillCardIds,
     rank,
     setRank,
-    clear,
+    clearTargetCardIds,
+    clearAcquiredCardIds,
   } = useContext(MemoryCalculatorContext);
   const { idolId } = useContext(WorkspaceContext);
   const { setModal } = useContext(ModalContext);
   const [resultsTab, setResultsTab] = useState("success");
+
+  const confirmClear = (onConfirm) =>
+    setModal(<ConfirmModal message={t("confirm")} onConfirm={onConfirm} />);
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
@@ -117,38 +122,56 @@ function MemoryCalculator() {
 
   return (
     <div className={styles.memoryCalculator}>
-      <p>{t("note")}</p>
+      <Alert>{t("note")}</Alert>
 
-      <div className={styles.buttons}>
-        <Button
-          style="red-secondary"
-          onClick={() =>
-            setModal(
-              <ConfirmModal message={t("confirm")} onConfirm={clear} />
-            )
-          }
-        >
-          {t("clear")}
-        </Button>
-      </div>
-
-      <Panel label={t("target")}>
+      <Panel
+        label={t("target")}
+        headerAction={
+          <Button
+            style="red-secondary"
+            size="sm"
+            onClick={() => confirmClear(clearTargetCardIds)}
+          >
+            {t("clear")}
+          </Button>
+        }
+      >
         <TargetSkillCards idolId={idolId} />
       </Panel>
 
-      <Panel label={t("acquired")}>
+      <Panel
+        label={t("acquired")}
+        headerAction={
+          <Button
+            style="red-secondary"
+            size="sm"
+            onClick={() => confirmClear(clearAcquiredCardIds)}
+          >
+            {t("clear")}
+          </Button>
+        }
+      >
         <AcquiredSkillCards />
       </Panel>
 
-      <label>{t("produceRank")}</label>
-      <div className={styles.rankSelect}>
-        <IconSelect options={RANK_OPTIONS} selected={rank} onChange={setRank} />
-      </div>
-
-      <label>{t("costRange")}</label>
-      <div>
-        {costRange.min} ~ {costRange.max}
-      </div>
+      <Panel>
+        <div className={styles.settingsRow}>
+          <div className={styles.settingField}>
+            <div className={styles.settingLabel}>{t("produceRank")}</div>
+            <IconSelect
+              options={RANK_OPTIONS}
+              selected={rank}
+              onChange={setRank}
+            />
+          </div>
+          <div className={styles.settingField}>
+            <div className={styles.settingLabel}>{t("costRange")}</div>
+            <div className={styles.costRange}>
+              {costRange.min} ~ {costRange.max}
+            </div>
+          </div>
+        </div>
+      </Panel>
 
       <Panel noPadding className={styles.resultsPanel}>
         <TabGroup

@@ -5,16 +5,7 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      朗読劇『カラフル』チケット発売中！伊藤舞音さんは4/22と4/26の①・⑧・⑨に出演されます！
-      <IdolIcon idolId={6} />
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "https://otonashogakusei-fc.com/news/PDFJMMDB8vJqTzfpTypXSX",
-};
+export const OSHI_PROPS = null;
 
 export default function Oshi({
   text,

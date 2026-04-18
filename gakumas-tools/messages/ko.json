@@ -157,7 +157,7 @@
     "success": "성공",
     "failure": "실패",
     "clear": "초기화",
-    "confirm": "메모리 계산기를 초기화할까요?"
+    "confirm": "이 스킬 카드들을 초기화할까요?"
   },
   "TargetSkillCards": {
     "acquired": "획득 완료"
