@@ -269,16 +269,15 @@
     "median": "中央値",
     "max": "最大値",
     "logs": "ログ",
-    "cardUsage": "カード使用回数",
-    "scoreStats": "スコア内訳"
+    "stats": "統計"
   },
-  "CardUsageStats": {
+  "SimulatorStats": {
     "total": "合計",
-    "turn": "{turn}ターン目"
-  },
-  "ScoreStats": {
-    "total": "合計",
-    "turn": "{turn}ターン目"
+    "turn": "{turn}ターン目",
+    "card": "カード",
+    "uses": "使用",
+    "usePct": "使用率",
+    "score": "スコア"
   },
   "SimulatorResultGraphs": {
     "score": "スコア"

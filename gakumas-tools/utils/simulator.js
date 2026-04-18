@@ -229,6 +229,7 @@ export function mergeResults(results) {
         scoreStats.turns[t] = {
           turnTypeCounts: { vocal: 0, dance: 0, visual: 0 },
           totalScore: 0,
+          totalScoreByType: { vocal: 0, dance: 0, visual: 0 },
           byEntity: {},
         };
       }
@@ -237,11 +238,21 @@ export function mergeResults(results) {
       into.turnTypeCounts.dance += from.turnTypeCounts.dance;
       into.turnTypeCounts.visual += from.turnTypeCounts.visual;
       into.totalScore += from.totalScore;
+      into.totalScoreByType.vocal += from.totalScoreByType.vocal;
+      into.totalScoreByType.dance += from.totalScoreByType.dance;
+      into.totalScoreByType.visual += from.totalScoreByType.visual;
       for (const key in from.byEntity) {
+        const src = from.byEntity[key];
         if (!into.byEntity[key]) {
-          into.byEntity[key] = { ...from.byEntity[key] };
+          into.byEntity[key] = {
+            ...src,
+            scoreByType: { ...src.scoreByType },
+          };
         } else {
-          into.byEntity[key].score += from.byEntity[key].score;
+          into.byEntity[key].score += src.score;
+          into.byEntity[key].scoreByType.vocal += src.scoreByType.vocal;
+          into.byEntity[key].scoreByType.dance += src.scoreByType.dance;
+          into.byEntity[key].scoreByType.visual += src.scoreByType.visual;
         }
       }
     }
@@ -327,31 +338,29 @@ export function accumulateCardUsage(logs, cardUsage) {
  * a p-item that also produces score: the card's direct score lands on the
  * card, the p-item's score lands on the p-item. Parents don't double-count.
  *
- * Shape: scoreStats.turns[turnIndex] = {
- *   turnTypeCounts: { vocal, dance, visual },  // rolled-type runs through this turn
- *   totalScore: number,                         // summed across runs
- *   byEntity: { [key]: { type, id, score } },   // summed across runs
- * }
- * key = `${type}:${id}`.
+ * scoreByType buckets each credit by the turn-type rolled that run, so the
+ * UI can show "this card produced X on dance turns."
  */
 export function accumulateScoreStats(logs, scoreStats) {
   scoreStats.numRuns = (scoreStats.numRuns || 0) + 1;
   if (!scoreStats.turns) scoreStats.turns = [];
 
   let turnIndex = -1;
+  let turnType = null;
   const groupStack = [];
 
   for (const log of logs) {
     if (log.logType === "startTurn") {
       turnIndex++;
+      turnType = log.data.type;
       const turn = ensureScoreTurn(scoreStats.turns, turnIndex);
-      turn.turnTypeCounts[log.data.type] =
-        (turn.turnTypeCounts[log.data.type] || 0) + 1;
+      turn.turnTypeCounts[turnType] = (turn.turnTypeCounts[turnType] || 0) + 1;
     } else if (log.logType === "entityStart") {
       groupStack.push({
         entity: log.data,
         ownScore: 0,
         startTurn: turnIndex,
+        startTurnType: turnType,
       });
     } else if (log.logType === "entityEnd") {
       const group = groupStack.pop();
@@ -360,18 +369,27 @@ export function accumulateScoreStats(logs, scoreStats) {
       const { type, id } = group.entity;
       const key = `${type}:${id}`;
       if (!turn.byEntity[key]) {
-        turn.byEntity[key] = { type, id, score: 0 };
+        turn.byEntity[key] = {
+          type,
+          id,
+          score: 0,
+          scoreByType: { vocal: 0, dance: 0, visual: 0 },
+        };
       }
       turn.byEntity[key].score += group.ownScore;
+      if (group.startTurnType) {
+        turn.byEntity[key].scoreByType[group.startTurnType] += group.ownScore;
+      }
     } else if (log.logType === "diff" && log.data.field === S.score) {
-      const delta =
-        parseFloat(log.data.next) - parseFloat(log.data.prev);
+      const delta = parseFloat(log.data.next) - parseFloat(log.data.prev);
       if (groupStack.length) {
         // Innermost only — ancestors aren't credited for a child's delta.
         groupStack[groupStack.length - 1].ownScore += delta;
       }
       if (turnIndex >= 0) {
-        scoreStats.turns[turnIndex].totalScore += delta;
+        const turn = scoreStats.turns[turnIndex];
+        turn.totalScore += delta;
+        if (turnType) turn.totalScoreByType[turnType] += delta;
       }
     }
   }
@@ -382,6 +400,7 @@ function ensureScoreTurn(turns, i) {
     turns[i] = {
       turnTypeCounts: { vocal: 0, dance: 0, visual: 0 },
       totalScore: 0,
+      totalScoreByType: { vocal: 0, dance: 0, visual: 0 },
       byEntity: {},
     };
   }

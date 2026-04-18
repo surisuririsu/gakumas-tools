@@ -269,16 +269,15 @@
     "median": "Median",
     "max": "Max",
     "logs": "Logs",
-    "cardUsage": "Card usage",
-    "scoreStats": "Score breakdown"
+    "stats": "Stats"
   },
-  "CardUsageStats": {
+  "SimulatorStats": {
     "total": "Total",
-    "turn": "Turn {turn}"
-  },
-  "ScoreStats": {
-    "total": "Total",
-    "turn": "Turn {turn}"
+    "turn": "Turn {turn}",
+    "card": "Card",
+    "uses": "Uses",
+    "usePct": "Use %",
+    "score": "Score"
   },
   "SimulatorResultGraphs": {
     "score": "Score"

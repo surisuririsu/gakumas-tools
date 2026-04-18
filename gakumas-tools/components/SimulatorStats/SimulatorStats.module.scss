@@ -1,0 +1,157 @@
+@use "sass:color";
+@use "../../styles/colors";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: colors.$black-dark;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// Plain large text marker — visually heavier than the table rows, no
+// background to compete with the right-side type chips.
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.typeChips {
+  display: flex;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.chip {
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: colors.$white;
+  white-space: nowrap;
+
+  &.vocal {
+    background-color: colors.$vocal-light;
+  }
+  &.dance {
+    background-color: colors.$dance-light;
+  }
+  &.visual {
+    background-color: colors.$visual-light;
+  }
+}
+
+.typeBar {
+  display: flex;
+  height: 3px;
+
+  > div {
+    height: 100%;
+  }
+
+  .vocal {
+    background-color: colors.$vocal-light;
+  }
+  .dance {
+    background-color: colors.$dance-light;
+  }
+  .visual {
+    background-color: colors.$visual-light;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+
+  th,
+  td {
+    padding: 4px 6px;
+    vertical-align: middle;
+  }
+
+  th {
+    font-weight: 600;
+    color: colors.$gray-dark;
+    border-bottom: 1px solid colors.$gray-extra-light;
+    white-space: nowrap;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: color.adjust(colors.$gk-orange, $lightness: 45%);
+  }
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    color: colors.$black-dark;
+  }
+}
+
+.activeSort {
+  color: colors.$black-dark;
+}
+
+.sortArrow {
+  font-size: 10px;
+  margin-left: 2px;
+}
+
+// Column widths (table-layout: fixed applies these to the whole column).
+// Card takes ~half; the three numeric columns share the rest.
+.cardCell {
+  width: 50%;
+  text-align: left;
+}
+
+.numericCell {
+  width: auto;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+tbody .cardCell {
+  overflow: hidden;
+}
+
+tbody .cardCell > div,
+tbody .cardCell > span {
+  vertical-align: middle;
+}
+
+tbody .cardCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconWrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.cardName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}

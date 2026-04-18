@@ -1,14 +1,13 @@
 import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
-import CardUsageStats from "@/components/CardUsageStats";
-import ScoreStats from "@/components/ScoreStats";
 import SimulatorLogs from "@/components/SimulatorLogs";
+import SimulatorStats from "@/components/SimulatorStats";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
-const TABS = ["logs", "cardUsage", "scoreStats"];
+const TABS = ["logs", "stats"];
 
 function SimulatorResult({ data, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
@@ -52,9 +51,12 @@ function SimulatorResult({ data, idolId, plan }) {
         />
       )}
 
-      {tab === "cardUsage" && <CardUsageStats cardUsage={data.cardUsage} />}
-
-      {tab === "scoreStats" && <ScoreStats scoreStats={data.scoreStats} />}
+      {tab === "stats" && (
+        <SimulatorStats
+          cardUsage={data.cardUsage}
+          scoreStats={data.scoreStats}
+        />
+      )}
 
       <KofiAd />
     </div>

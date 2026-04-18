@@ -73,6 +73,25 @@ button.entityIcon:focus .emptyPlaceholder {
   gap: 2px;
 }
 
+// Compact variant for small icons (e.g., in stats tables where the icon
+// footprint is ~32px and the default 20px badges overflow it).
+.smallCustomizations {
+  top: 55%;
+  gap: 1px;
+}
+
+.smallBadge {
+  width: 12px;
+  height: 12px;
+  font-size: 9px;
+
+  @container (width < 600px) {
+    width: 11px;
+    height: 11px;
+    font-size: 8px;
+  }
+}
+
 .customization {
   color: colors.$white;
   font-weight: 600;
