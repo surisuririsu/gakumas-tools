@@ -266,7 +266,12 @@
     "average": "平均分",
     "median": "中位分",
     "max": "最高分",
-    "logs": "记录"
+    "logs": "记录",
+    "cardUsage": "卡片使用次数"
+  },
+  "CardUsageStats": {
+    "total": "合计",
+    "turn": "第{turn}回合"
   },
   "SimulatorResultGraphs": {
     "score": "分数"

@@ -1,0 +1,65 @@
+@use "sass:color";
+@use "../../styles/colors";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: colors.$black-dark;
+}
+
+// Matches the SimulatorLogs turn style: colored left border + header,
+// padded child content.
+.turn {
+  border-left: 4px solid colors.$gk-orange-light;
+  margin-bottom: -8px;
+}
+
+.turnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 16px 2px 0;
+  padding: 6px 8px;
+  background-color: colors.$gk-orange-light;
+  color: colors.$white;
+  font-weight: 600;
+}
+
+.turnBody {
+  padding: 12px;
+  padding-right: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 52px);
+  gap: 6px 4px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: colors.$gray-dark;
+}
+
+.use {
+  font-weight: 600;
+}
+
+.ratio {
+  color: colors.$gray-dark;
+}

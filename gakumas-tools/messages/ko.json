@@ -266,7 +266,12 @@
     "average": "평균값",
     "median": "중앙값",
     "max": "최댓값",
-    "logs": "로그"
+    "logs": "로그",
+    "cardUsage": "카드 사용 횟수"
+  },
+  "CardUsageStats": {
+    "total": "합계",
+    "turn": "{turn}턴"
   },
   "SimulatorResultGraphs": {
     "score": "스코어"

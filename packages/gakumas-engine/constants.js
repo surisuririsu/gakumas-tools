@@ -1,4 +1,4 @@
-export const DEBUG = true;
+export const DEBUG = false;
 
 export const TOKEN_REGEX = /([=!]?=|[<>+\-*/%]=?|&)/;
 export const NUMBER_REGEX = /^-?\d+(?:\.\d+)?$/;
@@ -208,6 +208,7 @@ export const ALL_FIELDS = [
   "heldCards",
   "cardsUsed",
   "activeCardsUsed",
+  "cardUses",
   "turnCardsUsed",
   "turnCardsUpgraded",
   "thisCardHeld",

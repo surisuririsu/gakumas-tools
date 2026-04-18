@@ -266,7 +266,12 @@
     "average": "平均値",
     "median": "中央値",
     "max": "最大値",
-    "logs": "ログ"
+    "logs": "ログ",
+    "cardUsage": "カード使用回数"
+  },
+  "CardUsageStats": {
+    "total": "合計",
+    "turn": "{turn}ターン目"
   },
   "SimulatorResultGraphs": {
     "score": "スコア"

@@ -1,12 +1,17 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
+import ButtonGroup from "@/components/ButtonGroup";
+import CardUsageStats from "@/components/CardUsageStats";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
+const TABS = ["logs", "cardUsage"];
+
 function SimulatorResult({ data, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
+  const [tab, setTab] = useState("logs");
 
   return (
     <div id="simulator_result" className={styles.result}>
@@ -31,13 +36,22 @@ function SimulatorResult({ data, idolId, plan }) {
 
       <SimulatorResultGraphs data={data} plan={plan} />
 
-      <label>{t("logs")}</label>
-      <SimulatorLogs
-        minRun={data.minRun}
-        averageRun={data.averageRun}
-        maxRun={data.maxRun}
-        idolId={idolId}
+      <ButtonGroup
+        options={TABS.map((value) => ({ value, label: t(value) }))}
+        selected={tab}
+        onChange={setTab}
       />
+
+      {tab === "logs" && (
+        <SimulatorLogs
+          minRun={data.minRun}
+          averageRun={data.averageRun}
+          maxRun={data.maxRun}
+          idolId={idolId}
+        />
+      )}
+
+      {tab === "cardUsage" && <CardUsageStats cardUsage={data.cardUsage} />}
 
       <KofiAd />
     </div>

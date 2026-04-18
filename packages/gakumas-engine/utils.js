@@ -18,10 +18,11 @@ export function getRand() {
   return _getRand();
 }
 
+// Seed the RNG for deterministic runs. DEBUG only controls the *default*
+// RNG; calling resetRand always switches to the seeded stream — parity
+// tests rely on this.
 export function resetRand(customSeed) {
-  if (DEBUG) {
-    _getRand = mulberry32(customSeed ?? seed);
-  }
+  _getRand = mulberry32(customSeed ?? seed);
 }
 
 export function shuffle(arr) {

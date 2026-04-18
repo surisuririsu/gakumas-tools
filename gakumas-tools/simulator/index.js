@@ -1,5 +1,9 @@
 import { StageEngine, StagePlayer, STRATEGIES } from "gakumas-engine";
-import { formatRun, mergeGraphDatas } from "@/utils/simulator";
+import {
+  accumulateCardUsage,
+  formatRun,
+  mergeGraphDatas,
+} from "@/utils/simulator";
 
 export async function simulate(
   idolStageConfig,
@@ -16,6 +20,7 @@ export async function simulate(
   let minRun, averageRun, maxRun;
   let scores = [];
   let graphDatas = [];
+  const cardUsage = { numRuns: 0, turns: [] };
 
   for (let i = 0; i < numRuns; i++) {
     const result = await new StagePlayer(engine, strategy).play();
@@ -39,6 +44,11 @@ export async function simulate(
 
     scores.push(result.score);
     graphDatas.push(result.graphData);
+
+    // Accumulate per-turn card usage from this run's flat log stream.
+    // Logs for non-representative runs are dropped after this line, so we
+    // must extract stats now.
+    accumulateCardUsage(result.logs.flat(), cardUsage);
   }
 
   const mergedGraphData = mergeGraphDatas(graphDatas);
@@ -50,5 +60,6 @@ export async function simulate(
     maxRun: formatRun(maxRun),
     averageScore,
     scores,
+    cardUsage,
   };
 }

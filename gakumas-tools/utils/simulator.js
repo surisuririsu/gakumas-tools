@@ -195,6 +195,27 @@ export function mergeResults(results) {
   const graphDatas = results.map((result) => result.graphData);
   const mergedGraphData = mergeGraphDatas(graphDatas);
 
+  // Merge cardUsage across workers: element-wise per turn, key-wise per card.
+  const cardUsage = { numRuns: 0, turns: [] };
+  for (let result of results) {
+    const s = result.cardUsage;
+    if (!s) continue;
+    cardUsage.numRuns += s.numRuns || 0;
+    for (let t = 0; t < s.turns.length; t++) {
+      if (!cardUsage.turns[t]) cardUsage.turns[t] = {};
+      const into = cardUsage.turns[t];
+      const from = s.turns[t] || {};
+      for (const key in from) {
+        if (!into[key]) {
+          into[key] = { ...from[key] };
+        } else {
+          into[key].use += from[key].use;
+          into[key].draw += from[key].draw;
+        }
+      }
+    }
+  }
+
   return {
     graphData: mergedGraphData,
     minRun,
@@ -202,7 +223,66 @@ export function mergeResults(results) {
     maxRun,
     averageScore,
     scores,
+    cardUsage,
   };
+}
+
+/**
+ * Walk a single run's flat log stream and accumulate per-turn
+ * {id, c, use, draw} counts into `cardUsage.turns`. Also ticks
+ * `cardUsage.numRuns`.
+ *
+ * Shape: cardUsage.turns[turnIndex] is an object keyed by stringified
+ * `{id, c}`; values are `{ id, c, use, draw }`. A synthetic `{id: 0}` row
+ * counts skipped turns (selectedIndex === null).
+ */
+export function accumulateCardUsage(logs, cardUsage) {
+  cardUsage.numRuns = (cardUsage.numRuns || 0) + 1;
+  if (!cardUsage.turns) cardUsage.turns = [];
+
+  let turnIndex = -1;
+  let drawnThisTurn = null;
+
+  for (const log of logs) {
+    if (log.logType === "startTurn") {
+      turnIndex++;
+      if (!cardUsage.turns[turnIndex]) cardUsage.turns[turnIndex] = {};
+      drawnThisTurn = new Set();
+      continue;
+    }
+    if (log.logType !== "hand") continue;
+    if (turnIndex < 0 || !drawnThisTurn) continue;
+
+    const turnData = cardUsage.turns[turnIndex];
+    const { handCards, selectedIndex } = log.data;
+
+    for (let i = 0; i < handCards.length; i++) {
+      const { id, c } = handCards[i];
+      const key = JSON.stringify({ id, c: c || null });
+      // Count a card as "drawn" once per turn even if it appears in
+      // multiple hand presentations (e.g., after a moveToHand).
+      if (!drawnThisTurn.has(key)) {
+        drawnThisTurn.add(key);
+        if (!turnData[key]) {
+          turnData[key] = { id, c: c || null, use: 0, draw: 1 };
+        } else {
+          turnData[key].draw++;
+        }
+      }
+      if (i === selectedIndex) {
+        turnData[key].use++;
+      }
+    }
+
+    if (selectedIndex == null) {
+      const key = "SKIP";
+      if (!turnData[key]) {
+        turnData[key] = { id: 0, c: null, use: 1, draw: 0 };
+      } else {
+        turnData[key].use++;
+      }
+    }
+  }
 }
 
 export function mergeGraphDatas(graphDatas) {

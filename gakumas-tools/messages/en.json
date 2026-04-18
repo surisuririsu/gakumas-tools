@@ -266,7 +266,12 @@
     "average": "Average",
     "median": "Median",
     "max": "Max",
-    "logs": "Logs"
+    "logs": "Logs",
+    "cardUsage": "Card usage"
+  },
+  "CardUsageStats": {
+    "total": "Total",
+    "turn": "Turn {turn}"
   },
   "SimulatorResultGraphs": {
     "score": "Score"

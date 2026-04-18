@@ -5,13 +5,17 @@ import {
   LegacyStageEngine,
   LegacyStagePlayer,
   LEGACY_STRATEGIES,
-  StructuredIdolConfig,
-  StructuredIdolStageConfig,
-  StructuredStageConfig,
-  StructuredStageEngine,
-  StructuredStagePlayer,
-  STRUCTURED_STRATEGIES,
+  resetRand as resetLegacyRand,
 } from "../../packages/gakumas-engine/index.js";
+import {
+  IdolConfig as StructuredIdolConfig,
+  IdolStageConfig as StructuredIdolStageConfig,
+  StageConfig as StructuredStageConfig,
+  StageEngine as StructuredStageEngine,
+  StagePlayer as StructuredStagePlayer,
+  STRATEGIES as STRUCTURED_STRATEGIES,
+  resetRand as resetStructuredRand,
+} from "../../packages/gakumas-engine/structured/index.js";
 import {
   LegacyStages,
 } from "../../packages/gakumas-data/index.js";
@@ -107,6 +111,11 @@ export async function compareEngines(
     throw new Error(`Unknown strategy: ${strategyName}`);
   }
 
+  // Parity depends on both engines consuming the same seeded RNG stream.
+  // Reset before each pair so the two runs are comparable and one pair
+  // doesn't pollute the next.
+  resetLegacyRand();
+  resetStructuredRand();
   const [legacy, structured] = await Promise.all([
     runStrategy(
       configs.legacy,
