@@ -10,9 +10,9 @@ import styles from "./ShareModal.module.scss";
 async function exportImage() {
   const node = document.getElementById("simulator_loadout");
   if (!node) return;
-  // Toggle `.exporting` on the root so the real DOM reflows before capture
-  // — html-to-image's `filter` skips cloning but doesn't collapse layout,
-  // which is why hidden regions came out as blank space.
+  // `.exporting` makes [data-export-hide] elements collapse (display: none)
+  // so the real DOM reflows before capture — html-to-image's `filter` skips
+  // cloning but leaves the parent's original height, causing blank space.
   node.classList.add("exporting");
   try {
     const { toPng } = await import("html-to-image");

@@ -1,15 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
-@use "../../styles/mixins";
 @use "../../styles/tokens";
-
-.oshi {
-  font-size: 24px;
-  font-weight: bold;
-  color: colors.$blue;
-  text-decoration: underline;
-  text-align: center;
-}
 
 .loadoutEditor {
   display: flex;
@@ -69,11 +60,6 @@
   padding: 0 4px;
 }
 
-.note a {
-  color: colors.$blue-dark;
-  text-decoration: underline;
-}
-
 .supportBonusInput {
   display: flex;
   gap: tokens.$space-2;
@@ -84,9 +70,6 @@
   }
 }
 
-// Auto/Manual toggle sits next to the num-runs slider on wide screens;
-// wraps under on narrow screens. Strategy picker shrinks to content so
-// it doesn't hog the row.
 .simControls {
   display: flex;
   align-items: center;
@@ -98,14 +81,10 @@
   flex: 0 0 auto;
   min-width: 160px;
 
-  // Tighter padding keeps the picker shorter than the default button-group
-  // height — this is a mode toggle, not a primary action.
   button {
     padding: tokens.$space-1 tokens.$space-3;
   }
 
-  // On narrow screens where the row wraps, the picker is alone on its line
-  // and should fill the full width.
   @media (max-width: 500px) {
     flex: 1 1 100%;
   }
@@ -182,23 +161,11 @@
   }
 }
 
-.strategySelect {
-  border: 2px solid colors.$gray-light;
-  border-radius: 4px;
-  padding: 4px;
-  display: none;
-}
-
 .subLinks {
   display: flex;
   justify-content: space-between;
   color: colors.$blue;
   font-size: 12px;
-}
-
-.url {
-  font-size: 10px;
-  word-break: break-all;
 }
 
 .buttons {
@@ -208,18 +175,8 @@
   gap: tokens.$space-2;
 }
 
-// Hide button text on narrow screens so the action toolbar collapses
-// into icons — icons remain to anchor the affordance.
 .buttonText {
   @media (max-width: 480px) {
     display: none;
   }
-}
-
-.loader {
-  flex: 0;
-}
-
-.ad {
-  margin-bottom: 16px;
 }

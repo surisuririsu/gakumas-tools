@@ -9,7 +9,6 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { FaHashtag, FaPercent } from "react-icons/fa6";
-import { Tooltip } from "react-tooltip";
 import {
   IdolConfig,
   StageConfig,
@@ -359,8 +358,6 @@ export default function Simulator() {
           plan={config.idol.plan || plan}
         />
       )}
-
-      <Tooltip id="indications-tooltip" />
     </div>
   );
 }

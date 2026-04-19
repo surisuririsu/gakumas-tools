@@ -21,9 +21,6 @@
   gap: tokens.$space-2;
 }
 
-// Min/avg/median/max headline stats. Orange thead + pale-orange tbody
-// gives the result its own brand moment; tighter padding keeps it compact
-// since there's only one data row.
 .stats {
   thead {
     background: tokens.$gradient-brand;

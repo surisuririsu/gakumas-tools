@@ -1,5 +1,5 @@
 "use client";
-import { memo, useContext, useState } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
@@ -35,6 +35,14 @@ function SimulatorButtons() {
   const { loadoutHistory } = useContext(LoadoutHistoryContext);
   const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
+  const copiedTimerRef = useRef(null);
+
+  useEffect(
+    () => () => {
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+    },
+    []
+  );
 
   return (
     <div className={styles.buttons} data-export-hide="true">
@@ -78,7 +86,13 @@ function SimulatorButtons() {
             onClick={() => {
               navigator.clipboard.writeText(simulatorUrl);
               setLinkCopied(true);
-              setTimeout(() => setLinkCopied(false), 3000);
+              if (copiedTimerRef.current) {
+                clearTimeout(copiedTimerRef.current);
+              }
+              copiedTimerRef.current = setTimeout(
+                () => setLinkCopied(false),
+                3000
+              );
             }}
           >
             {linkCopied ? <FaCheck /> : <FaRegCopy />}

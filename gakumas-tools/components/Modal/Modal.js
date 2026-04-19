@@ -9,18 +9,18 @@ function Modal({ children, dismissable = true }) {
   const mouseDownOnOverlayRef = useRef(false);
 
   useEffect(() => {
-    if (modalRef.current) {
-      const focusableElements = modalRef.current.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-
-      if (focusableElements.length > 0) {
-        focusableElements[0].focus();
-      } else {
-        modalRef.current.focus();
-      }
+    if (!modalRef.current) return;
+    const focusableElements = modalRef.current.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements.length > 0) {
+      focusableElements[0].focus();
+    } else {
+      modalRef.current.focus();
     }
+  }, []);
 
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && dismissable) {
         e.preventDefault();
@@ -53,11 +53,8 @@ function Modal({ children, dismissable = true }) {
     };
 
     document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [dismissable, closeModal]);
 
   const handleOverlayMouseDown = (e) => {
     mouseDownOnOverlayRef.current = e.target === e.currentTarget;
