@@ -54,7 +54,6 @@
     "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!"
   },
   "Calculator": {
-    "scenario": "Scenario",
     "scenarios": {
       "hajime": "Hajime",
       "nia": "N.I.A"

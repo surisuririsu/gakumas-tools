@@ -24,8 +24,6 @@
     box-shadow 0.2s ease;
 }
 
-// Unselected: scenario color on text + border. Selected: gradient fill,
-// white text, soft drop shadow tinted to the scenario hue.
 .hajime {
   color: tokens.$hajime-color;
   border-color: tokens.$hajime-color;
@@ -34,7 +32,7 @@
     background: tokens.$gradient-hajime;
     color: colors.$white;
     border-color: transparent;
-    box-shadow: 0 4px 14px rgba(224, 104, 64, 0.28);
+    box-shadow: tokens.$shadow-hajime;
   }
 }
 
@@ -46,6 +44,6 @@
     background: tokens.$gradient-nia;
     color: colors.$white;
     border-color: transparent;
-    box-shadow: 0 4px 14px rgba(122, 91, 255, 0.28);
+    box-shadow: tokens.$shadow-nia;
   }
 }

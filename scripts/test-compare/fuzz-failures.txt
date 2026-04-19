@@ -1,4 +1,4 @@
-# Fuzz failures from seed=5, N=2000
+# Fuzz failures from seed=7, N=2000
 # 0 failures / 2000 runs / 0 errors
 # Each non-comment line is a test-urls.txt-compatible query string.
 # Prefix comments show legacy/structured/delta for context.

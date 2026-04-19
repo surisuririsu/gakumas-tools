@@ -6,11 +6,13 @@ import { Idols } from "gakumas-data-structured";
 import gkImg from "gakumas-images";
 import Alert from "@/components/Alert";
 import ButtonGroup from "@/components/ButtonGroup";
+import DifficultyPicker from "@/components/DifficultyPicker";
 import IconSelect from "@/components/IconSelect";
 import Input from "@/components/Input";
 import LineChart from "@/components/LineChart";
 import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
+import ProduceRankResult from "@/components/ProduceRankResult";
 import Table from "@/components/Table";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { getRank, TARGET_RATING_BY_RANK } from "@/utils/produceRank";
@@ -65,14 +67,7 @@ const FINAL_AUDITIONS = ["quartet", "finale"];
 export default function NiaCalculator() {
   const t = useTranslations("Calculator");
 
-  const DIFFICULTY_OPTIONS = useMemo(
-    () =>
-      ["pro", "master"].map((difficulty) => ({
-        value: difficulty,
-        label: t(`difficulties.${difficulty}`),
-      })),
-    [t],
-  );
+  const DIFFICULTIES = ["pro", "master"];
   const TABLE_HEADERS = [t("produceRank"), "Vo", "Da", "Vi"];
 
   const { idolId, setIdolId } = useContext(WorkspaceContext);
@@ -103,19 +98,34 @@ export default function NiaCalculator() {
   const maxParams = MAX_PARAMS_BY_DIFFICULTY[difficulty];
   const paramOrder = PARAM_ORDER_BY_IDOL[idolId];
 
-  const recommendedScores = FINAL_AUDITIONS.includes(stage)
-    ? calculateRecommendedScores(
-        paramRegimesByOrder,
-        voteRegimes,
-        maxParams,
-        paramOrder,
-        challengeParamBonus,
-        paramBonuses,
-        affection,
-        params,
-        votes,
-      )
-    : null;
+  const recommendedScores = useMemo(
+    () =>
+      FINAL_AUDITIONS.includes(stage)
+        ? calculateRecommendedScores(
+            paramRegimesByOrder,
+            voteRegimes,
+            maxParams,
+            paramOrder,
+            challengeParamBonus,
+            paramBonuses,
+            affection,
+            params,
+            votes,
+          )
+        : null,
+    [
+      stage,
+      paramRegimesByOrder,
+      voteRegimes,
+      maxParams,
+      paramOrder,
+      challengeParamBonus,
+      paramBonuses,
+      affection,
+      params,
+      votes,
+    ],
+  );
 
   const gainedParams = calculateGainedParams(
     paramRegimesByOrder,
@@ -155,8 +165,8 @@ export default function NiaCalculator() {
   return (
     <>
       <label>{t("difficulty")}</label>
-      <ButtonGroup
-        options={DIFFICULTY_OPTIONS}
+      <DifficultyPicker
+        difficulties={DIFFICULTIES}
         selected={difficulty}
         onChange={(diff) => {
           if (diff === "master") {
@@ -330,13 +340,8 @@ export default function NiaCalculator() {
               </div>
             </div>
 
-            <div className={styles.produceRank}>
-              <label>{t("produceRank")}</label>
-              <span>
-                {actualRating.toLocaleString()}{" "}
-                {actualRank ? `(${actualRank})` : null}
-              </span>
-            </div>
+            <label>{t("produceRank")}</label>
+            <ProduceRankResult rating={actualRating} rank={actualRank} />
           </div>
         </Panel>
 

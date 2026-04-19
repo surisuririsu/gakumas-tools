@@ -54,7 +54,6 @@
     "introduction": "프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션 등 편리한 기능을 제공합니다."
   },
   "Calculator": {
-    "scenario": "시나리오",
     "scenarios": {
       "hajime": "하지메",
       "nia": "N.I.A"

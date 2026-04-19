@@ -1,0 +1,16 @@
+@use "../../styles/tokens";
+
+.result {
+  text-align: center;
+  padding: tokens.$space-2 0;
+
+  span {
+    background: tokens.$gradient-brand;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+}

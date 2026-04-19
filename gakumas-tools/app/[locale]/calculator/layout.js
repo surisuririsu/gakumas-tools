@@ -1,18 +1,15 @@
 "use client";
 import ScenarioPicker from "@/components/ScenarioPicker";
 import { useRouter, usePathname } from "@/i18n/routing";
+import { SCENARIOS } from "@/utils/scenarios";
 import styles from "./layout.module.scss";
 
 export default function CalculatorLayout({ children }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  let currentScenario = null;
-  if (pathname.startsWith("/calculator/hajime")) {
-    currentScenario = "hajime";
-  } else if (pathname.startsWith("/calculator/nia")) {
-    currentScenario = "nia";
-  }
+  const currentScenario =
+    SCENARIOS.find((s) => pathname.startsWith(`/calculator/${s}`)) || null;
 
   return (
     <div className={styles.calculator}>

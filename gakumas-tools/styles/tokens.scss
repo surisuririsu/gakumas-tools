@@ -35,9 +35,32 @@ $gradient-brand: linear-gradient(
   colors.$gk-orange-light 100%
 );
 
-// Scenario gradients — match the in-game scenario aesthetics.
 $gradient-hajime: linear-gradient(100deg, #ff9870 0%, #ffbca3 100%);
 $gradient-nia: linear-gradient(100deg, #5a8bff 0%, #b56bff 100%);
 
 $hajime-color: #e06840;
 $nia-color: #7a5bff;
+
+$shadow-hajime: 0 4px 14px rgba(224, 104, 64, 0.28);
+$shadow-nia: 0 4px 14px rgba(122, 91, 255, 0.28);
+
+// Difficulty palette — matches the in-game produce pill gradients.
+$gradient-regular: linear-gradient(100deg, #ffa563 0%, #ffb0c0 100%);
+$gradient-pro: linear-gradient(100deg, #7ea5ff 0%, #f2a4cc 100%);
+$gradient-master: linear-gradient(100deg, #ff5f92 0%, #ff8f60 100%);
+$gradient-legend: linear-gradient(
+  100deg,
+  #7d9cff 0%,
+  #c88eff 50%,
+  #ff7db9 100%
+);
+
+$regular-color: #e07e2f;
+$pro-color: #5a7cd9;
+$master-color: #e03f6f;
+$legend-color: #8360e0;
+
+$shadow-regular: 0 4px 14px rgba(224, 126, 47, 0.28);
+$shadow-pro: 0 4px 14px rgba(90, 124, 217, 0.28);
+$shadow-master: 0 4px 14px rgba(224, 63, 111, 0.28);
+$shadow-legend: 0 4px 14px rgba(131, 96, 224, 0.28);

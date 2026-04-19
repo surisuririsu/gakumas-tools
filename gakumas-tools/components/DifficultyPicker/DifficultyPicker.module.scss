@@ -1,0 +1,71 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.difficultyPicker {
+  display: flex;
+  gap: tokens.$space-2;
+  flex-wrap: wrap;
+}
+
+.difficultyChip {
+  flex: 1;
+  min-width: 80px;
+  padding: tokens.$space-2 tokens.$space-3;
+  border: 1px solid transparent;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  font-size: tokens.$text-sm;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+@mixin variant($color, $gradient, $shadow) {
+  color: $color;
+  border-color: $color;
+
+  &.selected {
+    background: $gradient;
+    color: colors.$white;
+    border-color: transparent;
+    box-shadow: $shadow;
+  }
+}
+
+.regular {
+  @include variant(
+    tokens.$regular-color,
+    tokens.$gradient-regular,
+    tokens.$shadow-regular
+  );
+}
+
+.pro {
+  @include variant(
+    tokens.$pro-color,
+    tokens.$gradient-pro,
+    tokens.$shadow-pro
+  );
+}
+
+.master {
+  @include variant(
+    tokens.$master-color,
+    tokens.$gradient-master,
+    tokens.$shadow-master
+  );
+}
+
+.legend {
+  @include variant(
+    tokens.$legend-color,
+    tokens.$gradient-legend,
+    tokens.$shadow-legend
+  );
+}

@@ -14,7 +14,6 @@
   margin-top: tokens.$space-3;
 }
 
-// Inner wrapper for panel contents so inputs/labels get a vertical stack.
 .section {
   display: flex;
   flex-direction: column;
@@ -99,26 +98,6 @@
   justify-content: space-around;
   gap: tokens.$space-2;
   text-align: center;
-}
-
-// Produce rank — the page's final answer. Gets gradient-filled text to
-// echo the navbar/homepage without adding new chrome.
-.produceRank {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  gap: tokens.$space-2;
-  padding: tokens.$space-3 0 tokens.$space-1;
-
-  span {
-    background: tokens.$gradient-brand;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
 }
 
 @container (width < 530px) {

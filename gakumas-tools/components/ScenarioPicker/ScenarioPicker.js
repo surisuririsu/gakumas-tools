@@ -1,11 +1,9 @@
-import { memo } from "react";
 import { useTranslations } from "next-intl";
 import c from "@/utils/classNames";
+import { SCENARIOS } from "@/utils/scenarios";
 import styles from "./ScenarioPicker.module.scss";
 
-const SCENARIOS = ["hajime", "nia"];
-
-function ScenarioPicker({ selected, onChange }) {
+export default function ScenarioPicker({ selected, onChange }) {
   const t = useTranslations("Calculator");
 
   return (
@@ -27,5 +25,3 @@ function ScenarioPicker({ selected, onChange }) {
     </div>
   );
 }
-
-export default memo(ScenarioPicker);
