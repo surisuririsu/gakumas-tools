@@ -8,7 +8,7 @@ import styles from "./Oshi.module.scss";
 export const OSHI_PROPS = {
   text: (
     <div>
-      朗読劇『結びの言葉』チケット発売中！伊藤舞音さんは5/13と5/14の①・②・③に出演されます！
+      朗読劇『結びの言葉』チケット発売中！伊藤舞音さんは5/13と5/14の①②③に出演されます！
       <IdolIcon idolId={6} />
     </div>
   ),

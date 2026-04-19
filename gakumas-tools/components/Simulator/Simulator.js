@@ -385,6 +385,8 @@ export default function Simulator() {
           plan={config.idol.plan || plan}
         />
       )}
+
+      {!simulatorData && <div className={styles.resultPlaceholder} />}
     </div>
   );
 }
