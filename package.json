@@ -11,6 +11,12 @@
     "test:customizations": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/test-customizations.mjs",
     "test:coverage": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/test-coverage.mjs",
     "test:fuzz": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/fuzz-loadouts.mjs",
+    "test:regression": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/run.mjs",
+    "test:regression:update": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/run.mjs --update",
+    "regression:add": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/add.mjs",
+    "regression:bootstrap": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/generate-suite.mjs",
+    "bench": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/bench.mjs",
+    "bench:update": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/bench.mjs --update",
     "validate:data": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/validate-data.mjs",
     "changelog": "node ./scripts/changelog.js",
     "backup-db": "yarn workspace gakumas-tools backup-db"
