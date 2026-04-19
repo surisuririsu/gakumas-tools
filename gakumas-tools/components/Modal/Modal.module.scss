@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .overlay {
   position: fixed;
@@ -11,8 +12,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
-  background-color: color.adjust(colors.$black, $alpha: -0.5);
+  padding: tokens.$space-2;
+  background-color: rgba(0, 0, 0, 0.45);
+  animation: overlayIn 0.15s ease-out;
 }
 
 .modal {
@@ -22,35 +24,65 @@
   max-height: calc(100dvh - 16px);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 16px color.adjust(colors.$black, $alpha: -0.5);
-  border-radius: 8px;
-  padding: 48px 32px 32px;
-  background-color: colors.$white;
+  padding: tokens.$space-6 tokens.$space-5 tokens.$space-5;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
   container-type: inline-size;
+  animation: modalIn 0.18s cubic-bezier(0.2, 0, 0.2, 1);
 
   @media only screen and (max-width: 600px) {
-    padding: 48px 16px 16px;
+    padding: tokens.$space-6 tokens.$space-3 tokens.$space-3;
   }
 
   h3 {
-    margin-bottom: 24px;
+    margin-bottom: tokens.$space-4;
     color: colors.$gk-orange;
   }
 
   p {
-    margin-bottom: 16px;
+    margin-bottom: tokens.$space-3;
   }
 }
 
 .close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 24px;
-  color: colors.$black;
-  transition: all 0.2s;
+  top: tokens.$space-2;
+  right: tokens.$space-2;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: tokens.$surface-ink-muted;
+  font-size: 18px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
-    color: colors.$gk-orange;
+    background-color: tokens.$surface-muted;
+    color: tokens.$surface-ink;
+  }
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

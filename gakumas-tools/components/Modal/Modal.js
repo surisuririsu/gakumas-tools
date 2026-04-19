@@ -23,27 +23,30 @@ function Modal({ children, dismissable = true }) {
       }
     }
 
-    // Handle tab key to trap focus within modal
     const handleKeyDown = (e) => {
+      if (e.key === "Escape" && dismissable) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+
       if (e.key !== "Tab" || !modalRef.current) return;
 
       const focusableElements = modalRef.current.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
-      
+
       if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
 
       if (e.shiftKey) {
-        // Shift + Tab
         if (document.activeElement === firstElement) {
           lastElement.focus();
           e.preventDefault();
         }
       } else {
-        // Tab
         if (document.activeElement === lastElement) {
           firstElement.focus();
           e.preventDefault();

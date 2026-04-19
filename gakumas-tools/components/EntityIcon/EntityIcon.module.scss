@@ -10,6 +10,7 @@
   box-shadow: inset 0 0 0 2px colors.$gray-light;
   border-radius: 8%;
   background-color: colors.$gray-extra-light;
+  container-type: inline-size;
 
   img {
     border-radius: 8%;
@@ -93,7 +94,7 @@ button.entityIcon:focus .emptyPlaceholder {
   height: 12px;
   font-size: 9px;
 
-  @container (width < 400px) {
+  @container (width < 70px) {
     width: 11px;
     height: 11px;
     font-size: 8px;
@@ -111,7 +112,7 @@ button.entityIcon:focus .emptyPlaceholder {
     box-shadow: 0 0 6px $c11n-color;
   }
 
-  @container (width < 400px) {
+  @container (width < 70px) {
     width: 16px;
     height: 16px;
     font-size: 12px;
