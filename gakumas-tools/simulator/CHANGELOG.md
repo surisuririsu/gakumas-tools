@@ -4,6 +4,12 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+
+## 2026-04-13
+
+- S43 preview
+
 ## 2026-04-10
 
 - Update shujinkou ume
