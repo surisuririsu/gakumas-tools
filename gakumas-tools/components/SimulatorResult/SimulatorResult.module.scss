@@ -24,18 +24,18 @@
 .stats {
   thead {
     background: tokens.$gradient-brand;
-  }
 
-  th {
-    color: colors.$white;
+    th {
+      color: colors.$white;
+    }
   }
 
   tbody {
     background-color: colors.$gk-orange-extra-light;
-  }
 
-  tbody tr {
-    border-bottom: 0;
+    tr {
+      border-bottom: 0;
+    }
   }
 
   td {

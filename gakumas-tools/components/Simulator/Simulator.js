@@ -68,6 +68,7 @@ export default function Simulator() {
 
   const [pendingDecision, setPendingDecision] = useState(null);
   const resolveDecisionRef = useRef(null);
+  const [progress, setProgress] = useState(0);
 
   const config = useMemo(() => {
     const idolConfig = new IdolConfig(loadout);
@@ -166,11 +167,18 @@ export default function Simulator() {
 
   async function runSimulation() {
     setRunning(true);
+    setProgress(0);
 
     console.time("simulation");
 
     if (SYNC || !workersRef.current) {
-      const result = await simulate(config, linkConfigs, strategy, numRuns);
+      const result = await simulate(
+        config,
+        linkConfigs,
+        strategy,
+        numRuns,
+        (completed) => setProgress(completed),
+      );
       setResult(result);
     } else {
       const numWorkers = workersRef.current.length;
@@ -180,7 +188,13 @@ export default function Simulator() {
       for (let i = 0; i < numWorkers; i++) {
         promises.push(
           new Promise((resolve) => {
-            workersRef.current[i].onmessage = (e) => resolve(e.data);
+            workersRef.current[i].onmessage = (e) => {
+              if (e.data.type === "progress") {
+                setProgress((p) => p + e.data.delta);
+              } else if (e.data.type === "result") {
+                resolve(e.data.result);
+              }
+            };
             workersRef.current[i].postMessage({
               idolStageConfig: config,
               linkConfigs: linkConfigs,
@@ -312,14 +326,24 @@ export default function Simulator() {
 
         <div data-export-hide="true">
           {strategy === "HeuristicStrategy" && (
-            <Button
-              style="blue"
-              fill
-              onClick={runSimulation}
-              disabled={running}
-            >
-              {running ? <Loader /> : t("simulate")}
-            </Button>
+            <>
+              <Button
+                style="blue"
+                fill
+                onClick={runSimulation}
+                disabled={running}
+              >
+                {running ? <Loader /> : t("simulate")}
+              </Button>
+              {running && numRuns > 0 && (
+                <div
+                  className={styles.progressBar}
+                  style={{
+                    "--progress": `${Math.min(100, (progress / numRuns) * 100)}%`,
+                  }}
+                />
+              )}
+            </>
           )}
 
           {strategy === "ManualStrategy" && (

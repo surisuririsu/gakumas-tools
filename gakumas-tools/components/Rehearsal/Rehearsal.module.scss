@@ -1,27 +1,70 @@
-@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .rehearsal {
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: tokens.$space-3;
   margin: 0 auto;
-  padding: 32px;
+  padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
 }
 
 .help {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: tokens.$space-4;
+}
+
+.uploadLabel {
+  display: inline-flex;
+  justify-content: center;
+  gap: tokens.$space-2;
+  border: 2px dashed colors.$gk-orange;
+  border-radius: tokens.$radius-md;
+  padding: tokens.$space-4;
+  background-color: colors.$gk-orange-extra-light;
+  color: colors.$gk-orange;
+  cursor: pointer;
+  font-size: 32px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: colors.$white-dark;
+  }
 }
 
 .progress {
-  margin-top: 4px;
   display: flex;
-  gap: 4px;
+  flex-direction: column;
+  gap: tokens.$space-1;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+}
+
+.progressLabel {
+  display: flex;
   align-items: center;
-  color: colors.$gk-orange;
+  justify-content: space-between;
+  gap: tokens.$space-2;
+}
+
+.progressBar {
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
+  background-color: tokens.$surface-muted;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: var(--progress, 0%);
+    background: tokens.$gradient-brand;
+    border-radius: inherit;
+    transition: width 0.2s ease;
+  }
 }
 
 .tableWrapper {
@@ -29,28 +72,26 @@
 
   table {
     width: 100%;
+    border-collapse: collapse;
   }
 
   thead {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 20%);
+    background-color: tokens.$surface-muted;
   }
 
-  tbody {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 40%);
+  th {
+    color: tokens.$surface-ink-muted;
+    font-weight: 600;
   }
 
   th,
   td {
-    padding: 8px;
+    padding: tokens.$space-2;
   }
 }
 
-.ad {
-  margin-top: 24px;
-}
-
 .chartButtons {
-  background-color: colors.$white-dark;
+  background-color: tokens.$surface-muted;
 
   th {
     padding: 0;
@@ -59,19 +100,17 @@
   button {
     width: 100%;
     border: 1px solid transparent;
-    padding: 8px;
-    background-color: colors.$gk-orange-extra-light;
+    padding: tokens.$space-2;
+    background-color: transparent;
+    color: tokens.$surface-ink-muted;
     transition: all 0.2s;
 
     &.selected {
-      border-color: colors.$gk-orange;
-      background-color: colors.$gk-orange;
+      background: tokens.$gradient-brand;
       color: colors.$white;
     }
 
-    &:hover {
-      border-color: colors.$gk-orange;
-      background-color: colors.$white-dark;
+    &:hover:not(.selected) {
       color: colors.$gk-red-orange;
     }
   }
@@ -80,44 +119,51 @@
 .statsWrapper {
   display: flex;
   flex-direction: column;
-  border: 2px solid colors.$gray-light;
-  border-radius: 8px;
-  padding: 16px;
+  gap: tokens.$space-2;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  padding: tokens.$space-4;
 }
 
 .stats {
-  text-align: center;
-
   thead {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 20%);
+    background: tokens.$gradient-brand;
+
+    th {
+      color: colors.$white;
+    }
   }
 
   tbody {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 40%);
+    background-color: colors.$gk-orange-extra-light;
+
+    tr {
+      border-bottom: 0;
+    }
   }
 
-  th {
-    width: 25%;
+  td {
+    font-size: tokens.$text-lg;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
-}
 
-.uploadLabel {
-  display: inline-flex;
-  justify-content: center;
-  gap: 8px;
-  border: 2px dashed colors.$gk-orange;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: colors.$gk-orange-extra-light;
-  cursor: pointer;
-  font-size: 32px;
-  transition: background-color 0.2s;
-}
-
-.uploadLabel:hover {
-  background-color: colors.$white-dark;
+  th,
+  td {
+    padding: tokens.$space-1 tokens.$space-2;
+  }
 }
 
 .delete button {
   margin: auto;
+  color: tokens.$surface-ink-muted;
+  transition: color 0.2s;
+
+  &:hover {
+    color: colors.$gk-red-orange;
+  }
+}
+
+.ad {
+  margin-top: tokens.$space-4;
 }

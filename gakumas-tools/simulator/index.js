@@ -10,7 +10,8 @@ export async function simulate(
   idolStageConfig,
   linkConfigs,
   strategyName,
-  numRuns
+  numRuns,
+  onProgress
 ) {
   const engine = new StageEngine(idolStageConfig, linkConfigs);
   const strategy = new STRATEGIES[strategyName](engine);
@@ -23,6 +24,8 @@ export async function simulate(
   let graphDatas = [];
   const cardUsage = { numRuns: 0, turns: [] };
   const scoreStats = { numRuns: 0, turns: [] };
+
+  const progressStep = Math.max(1, Math.floor(numRuns / 20));
 
   for (let i = 0; i < numRuns; i++) {
     const result = await new StagePlayer(engine, strategy).play();
@@ -52,6 +55,10 @@ export async function simulate(
     // extract stats now.
     accumulateCardUsage(result.logs, cardUsage);
     accumulateScoreStats(result.logs, scoreStats);
+
+    if (onProgress && ((i + 1) % progressStep === 0 || i === numRuns - 1)) {
+      onProgress(i + 1);
+    }
   }
 
   const mergedGraphData = mergeGraphDatas(graphDatas);

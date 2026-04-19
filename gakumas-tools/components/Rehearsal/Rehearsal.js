@@ -19,6 +19,7 @@ import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
+import Table from "@/components/Table";
 import {
   getScoresFromFile,
   getScoresFromImage,
@@ -300,12 +301,20 @@ function Rehearsal() {
 
       {progress != null && (
         <div className={styles.progress}>
-          {processingStatus ? (
-            <>{processingStatus}</>
-          ) : (
-            <>
-              Progress: {progress}/{total} {progress == total && <FaCheck />}
-            </>
+          <div className={styles.progressLabel}>
+            <span>
+              {processingStatus ||
+                `Progress: ${progress}/${total}`}
+            </span>
+            {progress === total && !processingStatus && <FaCheck />}
+          </div>
+          {typeof total === "number" && total > 0 && (
+            <div
+              className={styles.progressBar}
+              style={{
+                "--progress": `${Math.min(100, (progress / total) * 100)}%`,
+              }}
+            />
           )}
         </div>
       )}
@@ -326,24 +335,23 @@ function Rehearsal() {
 
           {selected !== null && (
             <div className={styles.statsWrapper}>
-              <table className={styles.stats}>
-                <thead>
-                  <tr>
-                    <th>{tRes("min")}</th>
-                    <th>{tRes("average")}</th>
-                    <th>{tRes("median")}</th>
-                    <th>{tRes("max")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{selectedData.min}</td>
-                    <td>{selectedData.average}</td>
-                    <td>{selectedData.median}</td>
-                    <td>{selectedData.max}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <Table
+                className={styles.stats}
+                headers={[
+                  tRes("min"),
+                  tRes("average"),
+                  tRes("median"),
+                  tRes("max"),
+                ]}
+                rows={[
+                  [
+                    selectedData.min,
+                    selectedData.average,
+                    selectedData.median,
+                    selectedData.max,
+                  ],
+                ]}
+              />
               <DistributionPlot
                 label={`${t("score")} (n=${selectedData.scores.length})`}
                 data={selectedData.bucketedScores}
