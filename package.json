@@ -15,6 +15,7 @@
     "test:regression:update": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/run.mjs --update",
     "regression:add": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/add.mjs",
     "regression:bootstrap": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/generate-suite.mjs",
+    "regression:coverage": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/coverage.mjs",
     "bench": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/bench.mjs",
     "bench:update": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/regression/bench.mjs --update",
     "validate:data": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/validate-data.mjs",
