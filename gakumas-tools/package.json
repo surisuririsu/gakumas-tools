@@ -14,7 +14,6 @@
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
     "gakumas-data": "workspace:*",
-    "gakumas-data-legacy": "workspace:*",
     "gakumas-engine": "workspace:*",
     "gakumas-images": "workspace:*",
     "html-to-image": "^1.11.13",

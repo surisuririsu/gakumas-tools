@@ -1,12 +1,11 @@
-# gakumas-data-structured
+# gakumas-data
 
-Gakumas data with effects in a block-structured, AST-parsed DSL (successor
-to the comma-separated format in `gakumas-data`).
+Gakumas data with effects in a block-structured, AST-parsed DSL.
 
 ## Usage
 
 ```js
-import { SkillCards, PItems, Customizations } from 'gakumas-data-structured';
+import { SkillCards, PItems, Customizations } from 'gakumas-data';
 
 const card = SkillCards.getById(720);
 const item = PItems.getById(101);

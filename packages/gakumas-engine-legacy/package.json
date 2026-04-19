@@ -1,8 +1,0 @@
-{
-  "name": "gakumas-engine-legacy",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "gakumas-data-legacy": "workspace:*"
-  }
-}

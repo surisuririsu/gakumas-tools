@@ -19,9 +19,53 @@ import {
   resetRand,
 } from "gakumas-engine";
 import { Stages } from "gakumas-data";
-import { loadoutFromQuery } from "../test-compare/compare-engines.mjs";
 
 const REGRESSION_DIR = dirname(fileURLToPath(import.meta.url));
+
+// --- Query parser ---
+
+// Query strings are the same shape the app's loadout URL uses: cards in
+// groups separated by "_", customizations aligned to each card slot.
+
+function deserializeIds(str) {
+  return str.split("-").map((n) => parseInt(n, 10) || 0);
+}
+
+function deserializeCustomizations(str) {
+  return str.split("-").map((c) =>
+    c
+      .split("e")
+      .filter((e) => e)
+      .reduce((acc, cur) => {
+        const [k, v] = cur.split("x");
+        acc[k] = parseInt(v, 10);
+        return acc;
+      }, {}),
+  );
+}
+
+export function loadoutFromQuery(queryString) {
+  const searchParams = new URLSearchParams(queryString);
+  const skillCardIdGroups = (searchParams.get("cards") || "")
+    .split("_")
+    .map(deserializeIds);
+  let customizationGroups = (searchParams.get("customizations") || "")
+    .split("_")
+    .map(deserializeCustomizations);
+
+  if (skillCardIdGroups.length != customizationGroups.length) {
+    customizationGroups = skillCardIdGroups.map((g) => g.map(() => ({})));
+  }
+
+  return {
+    stageId: parseInt(searchParams.get("stage"), 10),
+    supportBonus: parseFloat(searchParams.get("support_bonus")) || null,
+    params: deserializeIds(searchParams.get("params") || ""),
+    pItemIds: deserializeIds(searchParams.get("items") || ""),
+    skillCardIdGroups,
+    customizationGroups,
+  };
+}
 export const SUITE_PATH = resolve(REGRESSION_DIR, "suite.jsonl");
 export const PERF_BASELINE_PATH = resolve(REGRESSION_DIR, "perf-baseline.json");
 

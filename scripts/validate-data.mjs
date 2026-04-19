@@ -1,18 +1,17 @@
 /**
- * Walks every DSL field across the structured data JSON files and reports
- * any unknown phase, identifier, function, or field name.
+ * Walks every DSL field across the data JSON files and reports any
+ * unknown phase, identifier, function, or field name.
  *
  * Run via:
- *   node --loader ./scripts/test-compare/extensionless-loader.mjs \
- *        ./scripts/validate-data.mjs
+ *   yarn validate:data
  *
  * Exit code is non-zero if any validation errors were found.
  *
  * JSON is read fresh from disk rather than imported — otherwise any
- * transitive import of `gakumas-data-structured` (e.g. via the schema
- * introspecting engine components) runs its side-effectful deserializer
- * and mutates the module-cached JSON in place, leaving us with ASTs
- * instead of the raw DSL strings the validator needs.
+ * transitive import of `gakumas-data` (e.g. via the schema introspecting
+ * engine components) runs its side-effectful deserializer and mutates
+ * the module-cached JSON in place, leaving us with ASTs instead of the
+ * raw DSL strings the validator needs.
  */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

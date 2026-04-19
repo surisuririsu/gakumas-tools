@@ -10,8 +10,7 @@
  * Use this to spot entities the regression suite never exercises.
  */
 import { PItems, SkillCards, Stages, Customizations } from "gakumas-data";
-import { loadSuite } from "./lib.mjs";
-import { loadoutFromQuery } from "../test-compare/compare-engines.mjs";
+import { loadSuite, loadoutFromQuery } from "./lib.mjs";
 
 const suite = loadSuite();
 const seenStages = new Set();

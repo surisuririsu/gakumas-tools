@@ -1,11 +1,8 @@
-# Gakumas Structured Data Effects DSL
+# Gakumas Data Effects DSL
 
 Effects on p-items, skill cards, stages, p-drinks, and customizations are
 expressed in a structured, block-scoped DSL that is parsed into an AST, then
 transformed into the engine's runtime effect format.
-
-This is the successor to the comma-separated format in `gakumas-data`. See
-[gakumas-data/Effects.md](../gakumas-data/Effects.md) for the legacy form.
 
 ## At a glance
 

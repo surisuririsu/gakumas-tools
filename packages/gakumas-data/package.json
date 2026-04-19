@@ -4,8 +4,5 @@
   "type": "module",
   "scripts": {
     "generate": "python -m scripts.csv_to_json"
-  },
-  "dependencies": {
-    "gakumas-data-legacy": "workspace:*"
   }
 }

@@ -17,8 +17,13 @@
  * hand-curated entries that were pinned for specific regression coverage.
  */
 import { PItems, SkillCards, Stages, Customizations } from "gakumas-data";
-import { runSuite, writeSuite, loadSuite, SUITE_PATH } from "./lib.mjs";
-import { loadoutFromQuery } from "../test-compare/compare-engines.mjs";
+import {
+  loadSuite,
+  loadoutFromQuery,
+  runSuite,
+  SUITE_PATH,
+  writeSuite,
+} from "./lib.mjs";
 
 const N = parseInt(process.argv[2], 10) || 500;
 const seedArg = process.argv.find((a) => a.startsWith("--seed="));

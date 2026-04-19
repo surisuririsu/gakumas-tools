@@ -5,7 +5,7 @@ import path from "node:path";
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "..",
 );
 
 async function fileExists(filePath) {
@@ -27,11 +27,7 @@ async function resolveFilePath(filePath) {
 }
 
 async function resolveWorkspacePackage(specifier) {
-  for (const packageName of [
-    "gakumas-data-legacy",
-    "gakumas-data",
-    "gakumas-engine-legacy",
-  ]) {
+  for (const packageName of ["gakumas-data", "gakumas-engine"]) {
     if (specifier === packageName || specifier.startsWith(`${packageName}/`)) {
       const subpath =
         specifier === packageName ? "index" : specifier.slice(packageName.length + 1);

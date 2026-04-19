@@ -2805,25 +2805,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data-legacy@workspace:*, gakumas-data-legacy@workspace:packages/gakumas-data-legacy":
-  version: 0.0.0-use.local
-  resolution: "gakumas-data-legacy@workspace:packages/gakumas-data-legacy"
-  languageName: unknown
-  linkType: soft
-
 "gakumas-data@workspace:*, gakumas-data@workspace:packages/gakumas-data":
   version: 0.0.0-use.local
   resolution: "gakumas-data@workspace:packages/gakumas-data"
-  dependencies:
-    gakumas-data-legacy: "workspace:*"
-  languageName: unknown
-  linkType: soft
-
-"gakumas-engine-legacy@workspace:*, gakumas-engine-legacy@workspace:packages/gakumas-engine-legacy":
-  version: 0.0.0-use.local
-  resolution: "gakumas-engine-legacy@workspace:packages/gakumas-engine-legacy"
-  dependencies:
-    gakumas-data-legacy: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2848,9 +2832,7 @@ __metadata:
   resolution: "gakumas-tools-monorepo@workspace:."
   dependencies:
     gakumas-data: "workspace:*"
-    gakumas-data-legacy: "workspace:*"
     gakumas-engine: "workspace:*"
-    gakumas-engine-legacy: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2864,7 +2846,6 @@ __metadata:
     eslint: "npm:^10.0.3"
     eslint-config-next: "npm:^16.1.7"
     gakumas-data: "workspace:*"
-    gakumas-data-legacy: "workspace:*"
     gakumas-engine: "workspace:*"
     gakumas-images: "workspace:*"
     html-to-image: "npm:^1.11.13"

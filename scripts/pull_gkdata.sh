@@ -18,7 +18,7 @@ customizations:$GID_CUSTOMIZATIONS
 p_drinks:$GID_P_DRINKS"
 
 echo "$tabs" | while IFS=: read -r name gid; do
-  out_path="packages/gakumas-data-legacy/csv/${name}.csv"
+  out_path="packages/gakumas-data/csv/${name}.csv"
   echo "→ Downloading $name..."
   curl -s -L "${BASE_URL}&gid=${gid}" -o "$out_path"
 done
