@@ -474,8 +474,8 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 473,自慢のお姉ちゃんだぞ+,,SSR,active,logic,1,TRUE,TRUE,pIdol,68,FALSE,,cost-=7,at:endOfTurn { if:turnsRemaining<=3 { score+=goodImpressionTurns*1.8 } },1,
 474,練習再開！,,SSR,mental,sense,1,FALSE,TRUE,support,,FALSE,,cost-=3,goodConditionTurns+=1; exchangeHand; cardUsesRemaining+=1,1,
 475,練習再開！+,"29,13",SSR,mental,sense,1,TRUE,TRUE,support,,FALSE,,cost-=3,goodConditionTurns+=3; exchangeHand; cardUsesRemaining+=1,1,
-476,手にした答え,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,69,FALSE,,cost-=7,"target:382 { g.scoreTimes+=1 }; moveRandomToHand[id(383) & (deck | discarded)]; cardUsesRemaining+=1",1,
-477,手にした答え+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,69,FALSE,,cost-=6,"setStance(preservation2); target:382 { g.scoreTimes+=1 }; moveRandomToHand[id(383) & (deck | discarded)]; cardUsesRemaining+=1",1,
+476,手にした答え,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,69,FALSE,,cost-=7,target:382 { g.scoreTimes+=1 }; moveRandomToHand[id(383) & (deck | discarded)]; cardUsesRemaining+=1,1,
+477,手にした答え+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,69,FALSE,,cost-=6,setStance(preservation2); target:382 { g.scoreTimes+=1 }; moveRandomToHand[id(383) & (deck | discarded)]; cardUsesRemaining+=1,1,
 478,夢はまだ続く,,SSR,active,sense,1,FALSE,TRUE,pIdol,70,FALSE,if:goodConditionTurns>=1,cost-=4,score+=goodConditionTurns; goodConditionTurns+=1; cardUsesRemaining+=1,,
 479,夢はまだ続く+,,SSR,active,sense,1,TRUE,TRUE,pIdol,70,FALSE,if:goodConditionTurns>=1,cost-=4,score+=goodConditionTurns*1.5; goodConditionTurns+=3; cardUsesRemaining+=1,,
 480,アイドルにしてくれた,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,71,FALSE,if:fullPowerTimes>=1,cost-=3,score+=20,1,at:stanceChanged { if:isFullPower { target:this { g.scoreTimes+=1 } }; limit:4 }
