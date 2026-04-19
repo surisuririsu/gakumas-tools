@@ -17,15 +17,15 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { parseEffects, parsePatches } from "gakumas-data-structured/utils/parser";
+import { parseEffects, parsePatches } from "gakumas-data/utils/parser";
 import {
   validateEffectAst,
   validatePatchAst,
-} from "gakumas-data-structured/utils/validator";
+} from "gakumas-data/utils/validator";
 
 const JSON_DIR = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "../packages/gakumas-data-structured/json",
+  "../packages/gakumas-data/json",
 );
 const readJson = (name) =>
   JSON.parse(readFileSync(resolve(JSON_DIR, name), "utf8"));

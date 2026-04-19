@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { SkillCards } from "gakumas-data-structured";
-import { S } from "gakumas-engine/structured";
+import { SkillCards } from "gakumas-data";
+import { S } from "gakumas-engine";
 import Button from "@/components/Button";
 import EntityIcon from "@/components/EntityIcon";
 import Modal from "@/components/Modal";

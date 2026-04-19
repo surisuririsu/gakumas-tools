@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useEffect, useState } from "react";
-import { SkillCards } from "gakumas-data-structured";
+import { SkillCards } from "gakumas-data";
 
 const MEMORY_CALCULATOR_STORAGE_KEY = "gakumas-tools.memoryCalculator";
 

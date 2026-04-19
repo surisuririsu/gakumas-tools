@@ -1,4 +1,9 @@
-import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data";
+import {
+  Customizations,
+  PIdols,
+  PItems,
+  SkillCards,
+} from "gakumas-data";
 import { getBaseId } from "../utils";
 
 export default class IdolConfig {

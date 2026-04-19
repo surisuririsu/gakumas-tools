@@ -17,7 +17,7 @@ import {
   StageEngine,
   StagePlayer,
   S,
-} from "gakumas-engine/structured";
+} from "gakumas-engine";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";

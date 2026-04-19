@@ -1,4 +1,4 @@
-import { Idols } from "gakumas-data-structured";
+import { Idols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 

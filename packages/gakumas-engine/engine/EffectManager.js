@@ -1,4 +1,7 @@
-import { PItems, SkillCards } from "gakumas-data";
+import {
+  PItems,
+  SkillCards,
+} from "gakumas-data";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
@@ -38,19 +41,19 @@ export default class EffectManager extends EngineComponent {
       }
     }
 
-    // Set growth effects
-    this.initializeGrowthEffects(state);
+    // Set card effects
+    this.initializeCardEffects(state);
   }
 
-  initializeGrowthEffects(state) {
+  initializeCardEffects(state) {
     for (let i = 0; i < state[S.cardMap].length; i++) {
       const skillCardId = state[S.cardMap][i].id;
 
       const skillCard = SkillCards.getById(skillCardId);
-      const growth = this.engine.cardManager.getLines(state, i, "growth");
-      if (growth.length) {
-        this.logger.debug("Setting growth effects", skillCard.name, growth);
-        this.setEffects(state, growth, {
+      const cardEffects = this.engine.cardManager.getLines(state, i, "effects");
+      if (cardEffects.length) {
+        this.logger.debug("Setting card effects", skillCard.name, cardEffects);
+        this.setEffects(state, cardEffects, {
           type: "skillCard",
           id: skillCardId,
           idx: i,
@@ -66,9 +69,6 @@ export default class EffectManager extends EngineComponent {
       if (source) {
         effect.source = source;
       }
-      if (!effect.actions && i < effects.length - 1) {
-        effect.effects = [effects[++i]];
-      }
       // Effects scheduled for a single future turn (e.g. "次のターン" /
       // "Nターン後" — phase:turn + limit:1) are reservations. When they
       // fire, isDirectEffect treats them as direct so chain-triggered
@@ -76,6 +76,7 @@ export default class EffectManager extends EngineComponent {
       if (effect.phase == "turn" && effect.limit == 1) {
         effect.type = "reservation";
       }
+      // Nested effects are now explicit in the AST - no more fallthrough
       state[S.effects].push(effect);
     }
   }
@@ -103,6 +104,18 @@ export default class EffectManager extends EngineComponent {
     for (let i = 0; i < state[S.effects].length; i++) {
       const effect = state[S.effects][i];
       if (effect.phase != phase) continue;
+      // Phase target filter: at:phase[rule] — fires only when the source
+      // card (state.usedCard) matches the target rule.
+      if (effect.filter) {
+        const sourceCard = state[S.usedCard];
+        if (sourceCard == null) continue;
+        const matching = this.engine.cardManager.getTargetRuleCards(
+          state,
+          effect.filter,
+          null,
+        );
+        if (!matching.has(sourceCard)) continue;
+      }
       const group = effect.group || 0;
       if (!effectsByGroup[group]) effectsByGroup[group] = [];
       effectsByGroup[group].push({ ...effect, phase: null, index: i });
@@ -140,40 +153,18 @@ export default class EffectManager extends EngineComponent {
     }
 
     let triggeredEffects = [];
-    let skipNextEffect = false;
 
     this.logger.debug(effects);
 
     for (let i = 0; i < effects.length; i++) {
-      // Skip effect if condition not satisfied
-      if (skipNextEffect) {
-        this.logger.debug("Skipping effect", effects[i]);
-        skipNextEffect = false;
-        continue;
-      }
-
       const effect = effects[i];
 
-      // Delayed effects
+      // Delayed effects (nested phase blocks)
       if (effect.phase) {
-        // If this is a bare phase effect (no actions/effects), pass the next
-        // effect along so setEffects can absorb it as nested — matching the
-        // p-item/growth init pattern so cards can use the same gating
-        // structure (at:turnSkipped; at:turn,... on card 723).
-        const toSet = [effect];
-        if (
-          !effect.actions &&
-          !effect.effects &&
-          i + 1 < effects.length &&
-          !skipNextEffect
-        ) {
-          toSet.push(effects[i + 1]);
-          i++;
-        }
-        this.logger.debug("Setting effects", effect.effects);
+        this.logger.debug("Setting delayed effect", effect);
         this.setEffects(
           state,
-          toSet,
+          [effect],
           card != null
             ? {
                 type: "skillCardEffect",
@@ -209,7 +200,7 @@ export default class EffectManager extends EngineComponent {
       state[S.currentEffectInstanceId] = effect.effectInstanceId;
       conditionState[S.currentEffectInstanceId] = effect.effectInstanceId;
 
-      // Check conditions
+      // Check conditions (AST nodes with proper AND support)
       if (!skipConditions && effect.conditions) {
         let satisfied = true;
         for (let j = 0; j < effect.conditions.length; j++) {
@@ -223,9 +214,6 @@ export default class EffectManager extends EngineComponent {
         }
         if (!satisfied) {
           state[S.currentEffectInstanceId] = prevInstanceId;
-          if (!effect.actions && !effect.effects) {
-            skipNextEffect = true;
-          }
           continue;
         }
       }
@@ -265,13 +253,21 @@ export default class EffectManager extends EngineComponent {
         if (effect.actions) {
           this.engine.executor.executeActions(state, effect.actions, card);
         }
+      }
 
-        // Delayed effects from p-items
-        if (effect.effects) {
-          this.logger.debug("Setting effects", effect.effects);
-          this.setEffects(state, effect.effects, effect.source);
-          this.logger.log(state, "setEffect");
-        }
+      // Delayed effects from p-items
+      if (effect.effects) {
+        this.logger.debug("Setting effects", effect.effects);
+        // Inherit the parent's group so registered nested effects trigger
+        // in the correct order relative to sibling-grouped effects. Legacy
+        // annotates each effect with an explicit group in the CSV; our
+        // structured DSL puts group on the outer block, so we propagate
+        // it here for grouping parity.
+        const toSet = effect.group != null
+          ? effect.effects.map((e) => (e.group != null ? e : { ...e, group: effect.group }))
+          : effect.effects;
+        this.setEffects(state, toSet, effect.source);
+        this.logger.log(state, "setEffect");
       }
 
       state[S.triggeredEffect] = prevTriggeredEffect;

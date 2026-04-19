@@ -1,4 +1,4 @@
-import { PItems, SkillCards } from "gakumas-data-structured";
+import { PItems, SkillCards } from "gakumas-data";
 import * as ort from "onnxruntime-web";
 import {
   DEBUG,

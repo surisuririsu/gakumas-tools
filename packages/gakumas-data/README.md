@@ -1,32 +1,41 @@
-# gakumas-data
+# gakumas-data-structured
 
-Data utilities for Gakumas-related projects in JavaScript.
+Gakumas data with effects in a block-structured, AST-parsed DSL (successor
+to the comma-separated format in `gakumas-data`).
 
 ## Usage
 
-To use, import the relevant classes and access the data via static methods.
+```js
+import { SkillCards, PItems, Customizations } from 'gakumas-data-structured';
 
-### Example
-
-```
-import { Idols, PIdols, SkillCards } from 'gakumas-data';
-
-const ybbKotone = PIdols.getById(32);
-const kotone = Idols.getById(ybbKotone.idolId);
-const allSkillCards = SkillCards.getAll();
-const mentalSSRSkillCards = SkillCards.getFiltered({ types: ['mental'], rarities: ['SSR'] });
-...
+const card = SkillCards.getById(720);
+const item = PItems.getById(101);
+const cust = Customizations.getById(86);
 ```
 
-## Data
+## Effect DSL
 
-Data is manually transcribed and maintained in this Google Sheet: [Gakumas Data](https://docs.google.com/spreadsheets/d/19E3wGFhnmcK9jdP8dTIFo0_XUx1jCqYGvzzGAXQqaq4/view)
+See **[Effects.md](./Effects.md)** for the full DSL reference — phases,
+conditions, target rules, modifiers, anchors, customization patches, and
+the complete inventory of state variables and actions.
 
-### Updating data
+## Data files
 
-1. Fork the project.
-2. Make a copy of the Google Sheet with your changes.
-3. Download the sheet as CSV and replace the content of the relevant file in the project.
-4. Run `npm run generate` or `yarn generate` to update the corresponding JSON files.
-5. Bump the version number in `package.json` and commit your changes.
-6. Make a pull request.
+CSVs under `csv/` are the source of truth. JSON under `json/` is generated
+by `python3 scripts/csv_to_json.py`.
+
+Each CSV row's DSL columns (`conditions`, `cost`, `actions`, `effects`) are
+parsed at package import time via `deserializeEffectSequence` or
+`deserializePatchSequence`.
+
+## Validation
+
+Every DSL field is validated against a schema of known phases, variables,
+actions, and target identifiers:
+
+```
+yarn validate:data
+```
+
+Unknown references fail with a precise error pointing at the entity and
+column.

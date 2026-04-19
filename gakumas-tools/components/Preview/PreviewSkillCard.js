@@ -1,4 +1,4 @@
-import { Customizations } from "gakumas-data-structured";
+import { Customizations } from "gakumas-data";
 import gkImg from "gakumas-images";
 import { countCustomizations } from "@/utils/customizations";
 import styles from "./Preview.styles";

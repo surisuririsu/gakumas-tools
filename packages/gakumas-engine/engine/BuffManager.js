@@ -7,6 +7,26 @@ import {
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
+const BUFF_TYPES = [
+  { action: "setScoreBuff", field: S.scoreBuffs },
+  { action: "setScoreDebuff", field: S.scoreDebuffs },
+  { action: "setGoodImpressionTurnsBuff", field: S.goodImpressionTurnsBuffs },
+  {
+    action: "setGoodImpressionTurnsEffectBuff",
+    field: S.goodImpressionTurnsEffectBuffs,
+  },
+  {
+    action: "setGoodImpressionTurnsTimesBuff",
+    field: S.goodImpressionTurnsTimesBuffs,
+  },
+  { action: "setMotivationBuff", field: S.motivationBuffs },
+  { action: "setGoodConditionTurnsBuff", field: S.goodConditionTurnsBuffs },
+  { action: "setConcentrationBuff", field: S.concentrationBuffs },
+  { action: "setConcentrationEffectBuff", field: S.concentrationEffectBuffs },
+  { action: "setEnthusiasmBuff", field: S.enthusiasmBuffs },
+  { action: "setFullPowerChargeBuff", field: S.fullPowerChargeBuffs },
+];
+
 export default class BuffManager extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -14,10 +34,7 @@ export default class BuffManager extends EngineComponent {
     this.variableResolvers = {
       isPreservation: (state) =>
         state[S.stance].startsWith("pre") || state[S.stance] === "leisure",
-      isNotPreservation: (state) =>
-        !state[S.stance].startsWith("pre") && state[S.stance] != "leisure",
       isStrength: (state) => state[S.stance].startsWith("str"),
-      isNotStrength: (state) => !state[S.stance].startsWith("str"),
       isFullPower: (state) => state[S.stance] == "fullPower",
       isDirectEffect: (state) =>
         state[S.parentPhase] === "processCard" ||
@@ -39,72 +56,6 @@ export default class BuffManager extends EngineComponent {
     };
 
     this.specialActions = {
-      setScoreBuff: (state, amount, turns) =>
-        this.setScoreBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setScoreDebuff: (state, amount, turns) =>
-        this.setScoreDebuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setGoodImpressionTurnsBuff: (state, amount, turns) =>
-        this.setGoodImpressionTurnsBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setGoodImpressionTurnsEffectBuff: (state, amount, turns) =>
-        this.setGoodImpressionTurnsEffectBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setGoodImpressionTurnsTimesBuff: (state, amount, turns) =>
-        this.setGoodImpressionTurnsTimesBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setMotivationBuff: (state, amount, turns) =>
-        this.setMotivationBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setGoodConditionTurnsBuff: (state, amount, turns) =>
-        this.setGoodConditionTurnsBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setConcentrationBuff: (state, amount, turns) =>
-        this.setConcentrationBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setConcentrationEffectBuff: (state, amount, turns) =>
-        this.setConcentrationEffectBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setEnthusiasmBuff: (state, amount, turns) =>
-        this.setEnthusiasmBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
-      setFullPowerChargeBuff: (state, amount, turns) =>
-        this.setFullPowerChargeBuff(
-          state,
-          parseFloat(amount),
-          turns ? parseInt(turns, 10) : null,
-        ),
       removeDebuffs: (state, amount) =>
         this.removeDebuffs(state, parseInt(amount, 10)),
       setStance: (state, stance) => this.setStance(state, stance),
@@ -115,6 +66,18 @@ export default class BuffManager extends EngineComponent {
         );
       },
     };
+
+    // Generate buff methods and special actions
+    for (const { action, field } of BUFF_TYPES) {
+      this[action] = (state, amount, turns) =>
+        this.setBuff(state, field, amount, turns, action);
+      this.specialActions[action] = (state, amount, turns) =>
+        this[action](
+          state,
+          parseFloat(amount),
+          turns ? parseInt(turns, 10) : null,
+        );
+    }
   }
 
   initializeState(state) {
@@ -184,6 +147,7 @@ export default class BuffManager extends EngineComponent {
     // Other
     state[S.nullifySelect] = 0;
     state[S.freeCardUses] = 0;
+    state[S.scoreTimes] = 0;
   }
 
   setBuff(state, field, amount, turns, logLabel) {
@@ -201,92 +165,6 @@ export default class BuffManager extends EngineComponent {
       amount,
       turns,
     });
-  }
-
-  setScoreBuff(state, amount, turns) {
-    this.setBuff(state, S.scoreBuffs, amount, turns, "setScoreBuff");
-  }
-
-  setScoreDebuff(state, amount, turns) {
-    this.setBuff(state, S.scoreDebuffs, amount, turns, "setScoreDebuff");
-  }
-
-  setGoodImpressionTurnsBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.goodImpressionTurnsBuffs,
-      amount,
-      turns,
-      "setGoodImpressionTurnsBuff",
-    );
-  }
-
-  setGoodImpressionTurnsEffectBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.goodImpressionTurnsEffectBuffs,
-      amount,
-      turns,
-      "setGoodImpressionTurnsEffectBuff",
-    );
-  }
-
-  setGoodImpressionTurnsTimesBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.goodImpressionTurnsTimesBuffs,
-      amount,
-      turns,
-      "setGoodImpressionTurnsTimesBuff",
-    );
-  }
-
-  setMotivationBuff(state, amount, turns) {
-    this.setBuff(state, S.motivationBuffs, amount, turns, "setMotivationBuff");
-  }
-
-  setGoodConditionTurnsBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.goodConditionTurnsBuffs,
-      amount,
-      turns,
-      "setGoodConditionTurnsBuff",
-    );
-  }
-
-  setConcentrationBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.concentrationBuffs,
-      amount,
-      turns,
-      "setConcentrationBuff",
-    );
-  }
-
-  setConcentrationEffectBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.concentrationEffectBuffs,
-      amount,
-      turns,
-      "setConcentrationEffectBuff",
-    );
-  }
-
-  setEnthusiasmBuff(state, amount, turns) {
-    this.setBuff(state, S.enthusiasmBuffs, amount, turns, "setEnthusiasmBuff");
-  }
-
-  setFullPowerChargeBuff(state, amount, turns) {
-    this.setBuff(
-      state,
-      S.fullPowerChargeBuffs,
-      amount,
-      turns,
-      "setFullPowerChargeBuff",
-    );
   }
 
   removeDebuffs(state, amount) {
@@ -313,21 +191,7 @@ export default class BuffManager extends EngineComponent {
       }
     }
 
-    const buffArrayFields = [
-      S.scoreBuffs,
-      S.scoreDebuffs,
-      S.goodImpressionTurnsBuffs,
-      S.goodImpressionTurnsEffectBuffs,
-      S.goodImpressionTurnsTimesBuffs,
-      S.motivationBuffs,
-      S.goodConditionTurnsBuffs,
-      S.concentrationBuffs,
-      S.concentrationEffectBuffs,
-      S.enthusiasmBuffs,
-      S.fullPowerChargeBuffs,
-    ];
-
-    for (const field of buffArrayFields) {
+    for (const { field } of BUFF_TYPES) {
       const buffs = state[field];
       state[field] = [];
       for (let i = 0; i < buffs.length; i++) {

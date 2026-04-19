@@ -1,4 +1,4 @@
-import { Customizations } from "gakumas-data-structured";
+import { Customizations } from "gakumas-data";
 import c from "@/utils/classNames";
 import { countCustomizations } from "@/utils/customizations";
 import styles from "./EntityIcon.module.scss";

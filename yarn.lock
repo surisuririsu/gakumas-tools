@@ -2805,17 +2805,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gakumas-data-structured@workspace:*, gakumas-data-structured@workspace:packages/gakumas-data-structured":
+"gakumas-data-legacy@workspace:*, gakumas-data-legacy@workspace:packages/gakumas-data-legacy":
   version: 0.0.0-use.local
-  resolution: "gakumas-data-structured@workspace:packages/gakumas-data-structured"
-  dependencies:
-    gakumas-data: "workspace:*"
+  resolution: "gakumas-data-legacy@workspace:packages/gakumas-data-legacy"
   languageName: unknown
   linkType: soft
 
 "gakumas-data@workspace:*, gakumas-data@workspace:packages/gakumas-data":
   version: 0.0.0-use.local
   resolution: "gakumas-data@workspace:packages/gakumas-data"
+  dependencies:
+    gakumas-data-legacy: "workspace:*"
+  languageName: unknown
+  linkType: soft
+
+"gakumas-engine-legacy@workspace:*, gakumas-engine-legacy@workspace:packages/gakumas-engine-legacy":
+  version: 0.0.0-use.local
+  resolution: "gakumas-engine-legacy@workspace:packages/gakumas-engine-legacy"
+  dependencies:
+    gakumas-data-legacy: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2824,7 +2832,6 @@ __metadata:
   resolution: "gakumas-engine@workspace:packages/gakumas-engine"
   dependencies:
     gakumas-data: "workspace:*"
-    gakumas-data-structured: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2839,6 +2846,11 @@ __metadata:
 "gakumas-tools-monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "gakumas-tools-monorepo@workspace:."
+  dependencies:
+    gakumas-data: "workspace:*"
+    gakumas-data-legacy: "workspace:*"
+    gakumas-engine: "workspace:*"
+    gakumas-engine-legacy: "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2852,7 +2864,7 @@ __metadata:
     eslint: "npm:^10.0.3"
     eslint-config-next: "npm:^16.1.7"
     gakumas-data: "workspace:*"
-    gakumas-data-structured: "workspace:*"
+    gakumas-data-legacy: "workspace:*"
     gakumas-engine: "workspace:*"
     gakumas-images: "workspace:*"
     html-to-image: "npm:^1.11.13"

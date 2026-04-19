@@ -11,7 +11,7 @@ import {
   FaFilm,
   FaPercent,
 } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data-structured";
+import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import MemoryImporterModal from "@/components/MemoryImporterModal";

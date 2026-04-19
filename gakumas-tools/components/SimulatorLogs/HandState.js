@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { ALL_FIELDS, S } from "gakumas-engine/structured";
+import { ALL_FIELDS, S } from "gakumas-engine";
 import TurnIndicator from "./TurnIndicator";
 import styles from "./SimulatorLogs.module.scss";
 

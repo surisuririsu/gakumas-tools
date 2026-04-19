@@ -9,7 +9,7 @@
  * back-to-back (not interleaved) so we measure steady-state per-engine cost.
  */
 import { performance } from "node:perf_hooks";
-import { PItems, SkillCards, Stages } from "gakumas-data-structured";
+import { PItems, SkillCards, Stages } from "gakumas-data";
 import {
   LegacyIdolConfig,
   LegacyIdolStageConfig,
@@ -18,7 +18,7 @@ import {
   LegacyStagePlayer,
   LEGACY_STRATEGIES,
   resetRand as resetLegacyRand,
-} from "gakumas-engine";
+} from "gakumas-engine-legacy";
 import {
   IdolConfig as StructuredIdolConfig,
   IdolStageConfig as StructuredIdolStageConfig,
@@ -27,9 +27,9 @@ import {
   StagePlayer as StructuredStagePlayer,
   STRATEGIES as STRUCTURED_STRATEGIES,
   resetRand as resetStructuredRand,
-} from "gakumas-engine/structured";
-import { LegacyStages } from "gakumas-data";
-import { Stages as StructuredStages } from "gakumas-data-structured";
+} from "gakumas-engine";
+import { LegacyStages } from "gakumas-data-legacy";
+import { Stages as StructuredStages } from "gakumas-data";
 import { loadoutFromQuery } from "./compare-engines.mjs";
 
 const N = parseInt(process.argv[2], 10) || 200;

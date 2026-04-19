@@ -1,4 +1,4 @@
-import { Tokenizer, TokenType } from "gakumas-data-structured";
+import { Tokenizer, TokenType } from "gakumas-data";
 
 const KEYWORD_TYPES = new Set([
   TokenType.AT,

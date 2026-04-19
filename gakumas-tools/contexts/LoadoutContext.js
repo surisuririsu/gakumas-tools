@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { Stages } from "gakumas-data-structured";
+import { Stages } from "gakumas-data";
 import { usePathname } from "@/i18n/routing";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";

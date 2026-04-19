@@ -41,7 +41,7 @@ export default class ManualStrategy extends BaseStrategy {
     const logIndex = this.engine.logger.log(state, "hand", null);
 
     const usableCards = state[S.handCards].filter((card) =>
-      this.engine.isCardUsable(state, card),
+      this.engine.isCardUsable(state, card)
     );
 
     this.engine.logger.logs[logIndex].data = {
@@ -50,7 +50,7 @@ export default class ManualStrategy extends BaseStrategy {
         c: state[S.cardMap][card].c11n,
       })),
       scores: state[S.handCards].map((card) =>
-        usableCards.includes(card) ? 0 : -Infinity,
+        usableCards.includes(card) ? 0 : -Infinity
       ),
       selectedIndex: null,
       state: this.engine.logger.getHandStateForLogging(state),

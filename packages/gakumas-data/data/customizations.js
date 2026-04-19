@@ -1,13 +1,11 @@
 import CUSTOMIZATIONS from "../json/customizations.json";
-import { deserializeEffectSequence } from "../utils/effects";
+import { deserializePatchSequence } from "../utils/effects";
 
 CUSTOMIZATIONS.forEach((customization) => {
-  customization.conditions = deserializeEffectSequence(
-    customization.conditions
-  );
-  customization.cost = deserializeEffectSequence(customization.cost);
-  customization.effects = deserializeEffectSequence(customization.effects);
-  customization.growth = deserializeEffectSequence(customization.growth);
+  customization.conditions = deserializePatchSequence(customization.conditions);
+  customization.cost = deserializePatchSequence(customization.cost);
+  customization.actions = deserializePatchSequence(customization.actions);
+  customization.effects = deserializePatchSequence(customization.effects);
 });
 
 const CUSTOMIZATIONS_BY_ID = CUSTOMIZATIONS.reduce((acc, cur) => {

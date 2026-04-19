@@ -67,8 +67,41 @@ export function shallowCopy(state) {
   return [...state];
 }
 
+// Recursive clone specialized for engine state. ~4x faster than
+// JSON.parse(JSON.stringify) on a typical mid-run state. Two specializations:
+// (1) effect objects — identified by `effectInstanceId` — are shallow-cloned
+// so their AST-valued fields (conditions/actions/effects/targets/filter/
+// source) are shared by reference across copies. Those fields come from the
+// DSL parser and are never mutated after setEffects spreads them in, so the
+// shared refs remain safe; skipping them avoids recursing through the
+// entire per-card/per-p-item AST on every useCard/endTurn.
+// (2) primitives and arrays follow the standard recursive path so every
+// other mutable field (piles, cardMap entries with `growth`, effectCounters,
+// buff arrays, graphData) gets a full independent copy.
+function cloneValue(v) {
+  if (v === null || typeof v !== "object") return v;
+  if (Array.isArray(v)) {
+    const n = v.length;
+    const out = new Array(n);
+    for (let i = 0; i < n; i++) out[i] = cloneValue(v[i]);
+    return out;
+  }
+  if ("effectInstanceId" in v) {
+    const out = {};
+    for (const k in v) out[k] = v[k];
+    return out;
+  }
+  const out = {};
+  for (const k in v) out[k] = cloneValue(v[k]);
+  return out;
+}
+
 export function deepCopy(state) {
-  return JSON.parse(JSON.stringify(state));
+  if (!Array.isArray(state)) return cloneValue(state);
+  const n = state.length;
+  const out = new Array(n);
+  for (let i = 0; i < n; i++) out[i] = cloneValue(state[i]);
+  return out;
 }
 
 export function getBaseId(entity) {

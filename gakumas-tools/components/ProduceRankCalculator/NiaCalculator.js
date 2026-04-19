@@ -2,7 +2,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCircleChevronDown } from "react-icons/fa6";
-import { Idols } from "gakumas-data-structured";
+import { Idols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Alert from "@/components/Alert";
 import ButtonGroup from "@/components/ButtonGroup";

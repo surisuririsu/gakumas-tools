@@ -1,29 +1,29 @@
-id,name,rarity,plan,unlockPlv,effects
-1,初星水,R,free,1,do:score+=10
-2,烏龍茶,R,free,1,do:genki+=7
-3,ビタミンドリンク,R,sense,1,do:goodConditionTurns+=3
-4,アイスコーヒー,R,sense,1,do:concentration+=3
-5,ルイボスティー,R,logic,1,do:goodImpressionTurns+=3
-6,ホットコーヒー,R,logic,1,do:motivation+=3
-7,ジンジャーエール,R,anomaly,1,"do:setStance(strength),do:fullPowerCharge+=1"
-8,ほうじ茶,R,anomaly,1,"do:setStance(preservation),do:fullPowerCharge+=2"
-9,ミックススムージー,SR,free,8,"do:exchangeHand,do:fixedStamina+=2"
-10,リカバリドリンク,SR,free,15,do:fixedStamina+=6
-11,フレッシュビネガー,SR,free,1,"do:upgradeHand,do:fixedStamina+=3"
-12,ブーストエキス,SR,free,55,"do:setScoreBuff(0.3,3),do:halfCostTurns+=3,do:fixedStamina-=2"
-13,パワフル漢方ドリンク,SR,free,60,"do:movePIdolCardToHand,do:halfCostTurns+=3"
-14,センブリソーダ,SR,free,61,"do:setScoreBuff(0.1,5),do:drawCard,do:drawCard,do:fixedStamina-=2;at:afterStartOfTurn,do:drawCard,limit:5"
-15,スタミナ爆発ドリンク,SR,sense,21,"do:perfectConditionTurns+=1,do:genki+=9"
-16,おしゃれハーブティー,SR,logic,21,"do:score+=goodImpressionTurns,do:genki+=3"
-17,ほっと緑茶,SR,anomaly,21,"do:holdSelectedFromDeckOrDiscards,do:setStance(preservation2)"
-18,初星ホエイプロテイン,SSR,free,1,do:cardUsesRemaining+=1
-19,初星スペシャル青汁,SSR,free,15,do:addRandomUpgradedSSRCardToHand
-20,厳選初星マキアート,SSR,sense,27,"at:endOfTurn,do:concentration+=1"
-21,初星ブーストエナジー,SSR,sense,26,"do:perfectConditionTurns+=2,do:upgradeHand"
-22,初星黒酢,SSR,sense,61,"do:moveSelectedFromDeckOrDiscardsToHand,do:nullifyCostCards+=2,do:fixedStamina-=2,do:doubleCostTurns+=1"
-23,厳選初星ティー,SSR,logic,27,"at:endOfTurn,do:goodImpressionTurns+=1"
-24,厳選初星ブレンド,SSR,logic,26,"at:endOfTurn,do:motivation+=1"
-25,特製ハツボシエキス,SSR,logic,55,"at:activeCardUsed,if:cardRarity!=L,do:doubleCardEffectCards+=1,limit:1,ttl:1;do:fixedStamina-=2,do:doubleCostTurns+=1"
-26,初星スーパーソーダ,SSR,anomaly,26,"do:setStance(strength2),do:halfCostTurns+=1"
-27,厳選初星チャイ,SSR,anomaly,27,"at:startOfTurn,do:fullPowerCharge+=1"
-28,初星湯,SSR,anomaly,60,"do:turnsRemaining+=1,do:fixedStamina-=2,do:doubleCostTurns+=1"
+id,name,rarity,plan,unlockPlv,actions
+1,初星水,R,free,1,score+=10
+2,烏龍茶,R,free,1,genki+=7
+3,ビタミンドリンク,R,sense,1,goodConditionTurns+=3
+4,アイスコーヒー,R,sense,1,concentration+=3
+5,ルイボスティー,R,logic,1,goodImpressionTurns+=3
+6,ホットコーヒー,R,logic,1,motivation+=3
+7,ジンジャーエール,R,anomaly,1,setStance(strength); fullPowerCharge+=1
+8,ほうじ茶,R,anomaly,1,setStance(preservation); fullPowerCharge+=2
+9,ミックススムージー,SR,free,8,exchangeHand; fixedStamina+=2
+10,リカバリドリンク,SR,free,15,fixedStamina+=6
+11,フレッシュビネガー,SR,free,1,upgradeHand; fixedStamina+=3
+12,ブーストエキス,SR,free,55,"setScoreBuff(0.3,3); halfCostTurns+=3; fixedStamina-=2"
+13,パワフル漢方ドリンク,SR,free,60,moveRandomToHand[pIdol & (deck | discarded)]; halfCostTurns+=3
+14,センブリソーダ,SR,free,61,"setScoreBuff(0.1,5); drawCard(2); fixedStamina-=2; at:afterStartOfTurn { drawCard; limit:5 }"
+15,スタミナ爆発ドリンク,SR,sense,21,perfectConditionTurns+=1; genki+=9
+16,おしゃれハーブティー,SR,logic,21,score+=goodImpressionTurns; genki+=3
+17,ほっと緑茶,SR,anomaly,21,holdSelected[deck | discarded]; setStance(preservation2)
+18,初星ホエイプロテイン,SSR,free,1,cardUsesRemaining+=1
+19,初星スペシャル青汁,SSR,free,15,addRandomUpgradedSSRCardToHand
+20,厳選初星マキアート,SSR,sense,27,at:endOfTurn { concentration+=1 }
+21,初星ブーストエナジー,SSR,sense,26,perfectConditionTurns+=2; upgradeHand
+22,初星黒酢,SSR,sense,61,moveSelectedToHand[deck | discarded]; nullifyCostCards+=2; fixedStamina-=2; doubleCostTurns+=1
+23,厳選初星ティー,SSR,logic,27,at:endOfTurn { goodImpressionTurns+=1 }
+24,厳選初星ブレンド,SSR,logic,26,at:endOfTurn { motivation+=1 }
+25,特製ハツボシエキス,SSR,logic,55,at:cardUsed[active] { if:cardRarity!=L { doubleCardEffectCards+=1 }; limit:1; ttl:1 }; fixedStamina-=2; doubleCostTurns+=1
+26,初星スーパーソーダ,SSR,anomaly,26,setStance(strength2); halfCostTurns+=1
+27,厳選初星チャイ,SSR,anomaly,27,at:startOfTurn { fullPowerCharge+=1 }
+28,初星湯,SSR,anomaly,60,turnsRemaining+=1; fixedStamina-=2; doubleCostTurns+=1

@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { PItems, SkillCards, Stages } from "gakumas-data-structured";
+import { PItems, SkillCards, Stages } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import { FALLBACK_STAGE } from "@/simulator/constants";

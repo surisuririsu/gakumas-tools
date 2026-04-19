@@ -28,9 +28,9 @@ async function resolveFilePath(filePath) {
 
 async function resolveWorkspacePackage(specifier) {
   for (const packageName of [
+    "gakumas-data-legacy",
     "gakumas-data",
-    "gakumas-data-structured",
-    "gakumas-engine",
+    "gakumas-engine-legacy",
   ]) {
     if (specifier === packageName || specifier.startsWith(`${packageName}/`)) {
       const subpath =

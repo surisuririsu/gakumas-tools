@@ -1,0 +1,8 @@
+{
+  "name": "gakumas-data-legacy",
+  "version": "11.10.1",
+  "type": "module",
+  "scripts": {
+    "generate": "python -m scripts.csv_to_json"
+  }
+}

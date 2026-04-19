@@ -1,8 +1,11 @@
 {
   "name": "gakumas-data",
-  "version": "11.10.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "generate": "python -m scripts.csv_to_json"
+  },
+  "dependencies": {
+    "gakumas-data-legacy": "workspace:*"
   }
 }

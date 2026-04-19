@@ -3,7 +3,7 @@ import { deserializeEffectSequence } from "../utils/effects";
 
 P_DRINKS.forEach((pDrink) => {
   pDrink._type = "pDrink";
-  pDrink.effects = deserializeEffectSequence(pDrink.effects);
+  pDrink.actions = deserializeEffectSequence(pDrink.actions);
 });
 
 const P_DRINKS_BY_ID = P_DRINKS.reduce((acc, cur) => {

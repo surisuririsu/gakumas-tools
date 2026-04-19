@@ -5,7 +5,7 @@
     "dev": "yarn workspace gakumas-tools dev",
     "build": "yarn workspace gakumas-tools build",
     "process": "python -m scripts.process_screenshots_iphone",
-    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-data-structured generate && yarn workspace gakumas-images generate && python -m scripts.generate",
+    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data-legacy generate && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "test:compare": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/compare-engines.mjs",
     "test:customizations": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/test-compare/test-customizations.mjs",
@@ -14,6 +14,12 @@
     "validate:data": "node --loader ./scripts/test-compare/extensionless-loader.mjs ./scripts/validate-data.mjs",
     "changelog": "node ./scripts/changelog.js",
     "backup-db": "yarn workspace gakumas-tools backup-db"
+  },
+  "dependencies": {
+    "gakumas-data": "workspace:*",
+    "gakumas-data-legacy": "workspace:*",
+    "gakumas-engine": "workspace:*",
+    "gakumas-engine-legacy": "workspace:*"
   },
   "workspaces": [
     "gakumas-tools",

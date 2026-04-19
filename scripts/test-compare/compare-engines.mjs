@@ -6,7 +6,7 @@ import {
   LegacyStagePlayer,
   LEGACY_STRATEGIES,
   resetRand as resetLegacyRand,
-} from "../../packages/gakumas-engine/index.js";
+} from "../../packages/gakumas-engine-legacy/index.js";
 import {
   IdolConfig as StructuredIdolConfig,
   IdolStageConfig as StructuredIdolStageConfig,
@@ -15,11 +15,11 @@ import {
   StagePlayer as StructuredStagePlayer,
   STRATEGIES as STRUCTURED_STRATEGIES,
   resetRand as resetStructuredRand,
-} from "../../packages/gakumas-engine/structured/index.js";
+} from "../../packages/gakumas-engine/index.js";
 import {
   LegacyStages,
-} from "../../packages/gakumas-data/index.js";
-import { Stages as StructuredStages } from "../../packages/gakumas-data-structured/index.js";
+} from "../../packages/gakumas-data-legacy/index.js";
+import { Stages as StructuredStages } from "../../packages/gakumas-data/index.js";
 import { readFile } from "node:fs/promises";
 
 function deserializeIds(str) {

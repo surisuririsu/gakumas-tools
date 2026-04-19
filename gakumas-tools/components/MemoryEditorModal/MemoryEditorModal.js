@@ -1,7 +1,7 @@
 "use client";
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { PIdols, SkillCards } from "gakumas-data-structured";
+import { PIdols, SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import Input from "@/components/Input";

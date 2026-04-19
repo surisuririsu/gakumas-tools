@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { PIdols } from "gakumas-data-structured";
+import { PIdols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import styles from "./PIdol.module.scss";

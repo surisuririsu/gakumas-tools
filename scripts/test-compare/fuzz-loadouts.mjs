@@ -14,10 +14,10 @@
  * run so it always reflects the latest fuzz output.
  */
 import { writeFileSync } from "node:fs";
-import { PItems, SkillCards, Stages } from "gakumas-data-structured";
+import { PItems, SkillCards, Stages } from "gakumas-data";
 import { compareEngines, loadoutFromQuery } from "./compare-engines.mjs";
-import { resetRand as resetLegacy } from "gakumas-engine";
-import { resetRand as resetStructured } from "gakumas-engine/structured";
+import { resetRand as resetLegacy } from "gakumas-engine-legacy";
+import { resetRand as resetStructured } from "gakumas-engine";
 
 const FAILURES_PATH = new URL("./fuzz-failures.txt", import.meta.url);
 

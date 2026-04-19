@@ -19,13 +19,13 @@ import {
   PItems,
   Stages,
   Customizations,
-} from "gakumas-data-structured";
+} from "gakumas-data";
 import {
   compareEngines,
   loadoutFromQuery,
 } from "./compare-engines.mjs";
-import { resetRand as resetLegacy } from "gakumas-engine";
-import { resetRand as resetStructured } from "gakumas-engine/structured";
+import { resetRand as resetLegacy } from "gakumas-engine-legacy";
+import { resetRand as resetStructured } from "gakumas-engine";
 
 const origConsole = { ...console };
 const noop = () => {};

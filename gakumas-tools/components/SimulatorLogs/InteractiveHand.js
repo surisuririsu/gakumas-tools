@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaEllipsisVertical } from "react-icons/fa6";
-import { SkillCards } from "gakumas-data-structured";
+import { SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
 import EntityIcon from "@/components/EntityIcon";
 import c from "@/utils/classNames";

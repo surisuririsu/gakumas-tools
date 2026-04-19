@@ -1,4 +1,4 @@
-import { SkillCards } from "gakumas-data-structured";
+import { SkillCards } from "gakumas-data";
 import PreviewSkillCard from "./PreviewSkillCard";
 import styles from "./Preview.styles";
 

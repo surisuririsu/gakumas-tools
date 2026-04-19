@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import gkImg from "gakumas-images";
 import {
   deserializeEffectSequence as deserializeLegacyEffectSequence,
-} from "gakumas-data";
+} from "gakumas-data-legacy";
 import {
   parseEffects,
   transformEffects,
-} from "gakumas-data-structured";
-import { getReviewDataset } from "../../../../../packages/gakumas-data-structured/review/index.js";
+} from "gakumas-data";
+import { getReviewDataset } from "../../../../../packages/gakumas-data/review/index.js";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
 import { highlightEffects } from "@/utils/effectSyntax";
