@@ -2,6 +2,7 @@
 import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
+import ScenarioPicker from "@/components/ScenarioPicker";
 import HajimeCalculator from "./HajimeCalculator";
 import NiaCalculator from "./NiaCalculator";
 import LessonCalculator from "../LessonCalculator";
@@ -9,15 +10,6 @@ import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
   const t = useTranslations("Calculator");
-
-  const SCENARIO_OPTIONS = useMemo(
-    () =>
-      ["hajime", "nia"].map((scenario) => ({
-        value: scenario,
-        label: t(`scenarios.${scenario}`),
-      })),
-    [t]
-  );
 
   const CALCULATOR_OPTIONS = useMemo(
     () =>
@@ -33,12 +25,7 @@ function ProduceRankCalculator() {
 
   return (
     <div className={styles.produceRankCalculator}>
-      <label>{t("scenario")}</label>
-      <ButtonGroup
-        options={SCENARIO_OPTIONS}
-        selected={scenario}
-        onChange={setScenario}
-      />
+      <ScenarioPicker selected={scenario} onChange={setScenario} />
 
       {scenario == "hajime" && (
         <>

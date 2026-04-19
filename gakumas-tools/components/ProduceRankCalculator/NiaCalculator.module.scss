@@ -1,18 +1,24 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .bonus {
   font-size: 0.8em;
+  color: tokens.$surface-ink-muted;
 }
 
-.nia section {
+.nia {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 12px 0;
-  border: 2px solid colors.$gray-light;
-  border-radius: 8px;
-  padding: 12px 16px 16px;
+  gap: tokens.$space-5;
+  margin-top: tokens.$space-3;
+}
+
+// Inner wrapper for panel contents so inputs/labels get a vertical stack.
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
 }
 
 .idolSelect {
@@ -58,19 +64,19 @@
 
   td:nth-child(1) {
     padding: 0;
-    background-color: colors.$gray-extra-light;
+    background-color: tokens.$surface-muted;
   }
 
   td:nth-child(2) {
-    background-color: color.scale(colors.$vocal, $alpha: -50%);
+    background-color: color.scale(colors.$vocal, $alpha: -80%);
   }
 
   td:nth-child(3) {
-    background-color: color.scale(colors.$dance, $alpha: -50%);
+    background-color: color.scale(colors.$dance, $alpha: -80%);
   }
 
   td:nth-child(4) {
-    background-color: color.scale(colors.$visual, $alpha: -50%);
+    background-color: color.scale(colors.$visual, $alpha: -80%);
   }
 
   button {
@@ -78,36 +84,40 @@
     height: 100%;
     text-align: center;
     display: flex;
-    padding: 0 8px;
+    padding: 0 tokens.$space-2;
     color: colors.$gray;
   }
 
   .rankButtonLabel {
     flex: 1;
-    color: colors.$black-dark;
+    color: tokens.$surface-ink;
   }
-}
-
-.note a {
-  color: colors.$blue;
 }
 
 .flex {
   display: flex;
   justify-content: space-around;
-  gap: 8px;
+  gap: tokens.$space-2;
   text-align: center;
 }
 
+// Produce rank — the page's final answer. Gets gradient-filled text to
+// echo the navbar/homepage without adding new chrome.
 .produceRank {
   display: flex;
   flex-direction: column;
   text-align: center;
-  gap: 8px;
+  gap: tokens.$space-2;
+  padding: tokens.$space-3 0 tokens.$space-1;
 
   span {
-    font-size: 20px;
-    font-weight: 600;
+    background: tokens.$gradient-brand;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
   }
 }
 

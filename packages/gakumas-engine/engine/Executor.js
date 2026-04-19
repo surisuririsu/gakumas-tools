@@ -19,7 +19,7 @@ import {
   WHOLE_FIELDS,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
-import { formatDiffField } from "../utils";
+import { formatDiffField, safeCeil } from "../utils";
 
 export default class Executor extends EngineComponent {
   constructor(engine) {
@@ -475,7 +475,7 @@ export default class Executor extends EngineComponent {
       score += state[S.enthusiasm];
 
       // Round
-      score = Math.ceil(score);
+      score = safeCeil(score);
 
       // Apply good and perfect condition
       if (state[S.goodConditionTurns]) {
@@ -531,11 +531,11 @@ export default class Executor extends EngineComponent {
       }
 
       // Round
-      score = Math.ceil(score);
+      score = safeCeil(score);
 
       // Turn type multiplier
       score *= this.engine.turnManager.getTurnMultiplier(state);
-      score = Math.ceil(score);
+      score = safeCeil(score);
     }
 
     state[S.score] += score;

@@ -23,7 +23,6 @@ const RANK_OPTIONS = COST_RANGES.toReversed().map(({ rank }) => ({
   alt: rank,
 }));
 
-// Generates all combinations of target cards
 function generateCombinations(slots) {
   if (slots.length === 0) return [[]];
   const restCombos = generateCombinations(slots.slice(1));

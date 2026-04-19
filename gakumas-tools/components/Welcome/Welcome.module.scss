@@ -29,21 +29,16 @@
   }
 }
 
-// Hero wordmark — same two-tone pattern as the navbar brand: primary word
-// heavy, secondary word lighter/dimmer. Layered with a translucent outline
-// "echo" behind for subtle dimension.
 .heroTitle {
   position: relative;
   display: inline-block;
   margin: 0 auto tokens.$space-3;
-  font-size: 64px;
+  font-size: clamp(36px, 8vw, 64px);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
   white-space: nowrap;
 
-  // Small gradient dash beneath the wordmark, matches the navbar's
-  // accent vocabulary without re-using the full gradient again.
   &::after {
     content: "";
     display: block;
@@ -51,22 +46,16 @@
     height: 3px;
     margin: tokens.$space-3 auto 0;
     border-radius: 2px;
-    background: linear-gradient(
-      100deg,
-      colors.$gk-orange 0%,
-      colors.$gk-orange-light 100%
-    );
+    background: tokens.$gradient-brand;
   }
 }
 
-// Japanese echo — same meaning, bigger, outline-only, centered behind the
-// main wordmark. Orange so it reads as a brand layer rather than a shadow.
 .heroTitleEcho {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 104px;
+  font-size: clamp(58px, 13vw, 104px);
   font-weight: 800;
   letter-spacing: normal;
   color: transparent;
@@ -85,20 +74,15 @@
   gap: 0.2em;
 }
 
-// Each word gets its own gradient fill. Container-level gradient + opacity
-// on a child creates a stacking context that makes the clipped-text
-// invisible — per-span gradient sidesteps that entirely.
+// Container-level gradient + child opacity creates a stacking context that
+// makes the clipped text invisible; applying the gradient to each span
+// sidesteps that.
 .heroTitlePrimary,
 .heroTitleSecondary {
-  background: linear-gradient(
-    100deg,
-    colors.$gk-orange 0%,
-    colors.$gk-orange-light 100%
-  );
+  background: tokens.$gradient-brand;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent;
 }
 
 .heroTitlePrimary {
@@ -112,9 +96,8 @@
 
 .toolsGrid {
   display: grid;
-  // auto-fill (not auto-fit) keeps each column sized the same even when the
-  // last row has fewer tiles — empty tracks stay empty instead of stretching
-  // the remaining tiles to fill.
+  // auto-fill (vs auto-fit) keeps tiles consistent when the last row has
+  // fewer items — empty tracks stay empty instead of stretching the tiles.
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   grid-auto-rows: 1fr;
   gap: tokens.$space-3;
@@ -143,9 +126,6 @@
     box-shadow 0.2s ease,
     transform 0.2s ease;
 
-  // Gradient top accent — hidden until hover, then slides in from the left.
-  // Echoes the navbar's animated underline move but on card hover instead of
-  // route change.
   &::before {
     content: "";
     position: absolute;
@@ -153,11 +133,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(
-      100deg,
-      colors.$gk-orange 0%,
-      colors.$gk-orange-light 100%
-    );
+    background: tokens.$gradient-brand;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -178,8 +154,6 @@
   }
 }
 
-// Icons carry the navbar gradient at rest — biggest single change. The page
-// now has per-card brand presence instead of neutral grey tiles.
 .toolIcon {
   display: flex;
   justify-content: center;
@@ -188,11 +162,7 @@
   width: 44px;
   height: 44px;
   border-radius: tokens.$radius-sm;
-  background: linear-gradient(
-    100deg,
-    colors.$gk-orange 0%,
-    colors.$gk-orange-light 100%
-  );
+  background: tokens.$gradient-brand;
   color: colors.$white;
   font-size: tokens.$text-lg;
   transition: transform 0.2s ease;

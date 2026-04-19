@@ -2,7 +2,7 @@ export * from "./config";
 export * from "./engine";
 export { default as STRATEGIES } from "./strategies";
 export * from "./constants";
-export { resetRand } from "./utils";
+export { resetRand, getRandCallCount } from "./utils";
 // Legacy-prefixed aliases of the default exports above. Same modules,
 // just handier when both engines are referenced side by side (e.g., in
 // parity-test scripts that import Structured* from gakumas-engine/structured).

@@ -1,0 +1,51 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.scenarioPicker {
+  display: flex;
+  gap: tokens.$space-2;
+}
+
+.scenarioChip {
+  flex: 1;
+  padding: tokens.$space-3 tokens.$space-4;
+  border: 1px solid transparent;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  font-size: tokens.$text-base;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+// Unselected: scenario color on text + border. Selected: gradient fill,
+// white text, soft drop shadow tinted to the scenario hue.
+.hajime {
+  color: tokens.$hajime-color;
+  border-color: tokens.$hajime-color;
+
+  &.selected {
+    background: tokens.$gradient-hajime;
+    color: colors.$white;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(224, 104, 64, 0.28);
+  }
+}
+
+.nia {
+  color: tokens.$nia-color;
+  border-color: tokens.$nia-color;
+
+  &.selected {
+    background: tokens.$gradient-nia;
+    color: colors.$white;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(122, 91, 255, 0.28);
+  }
+}

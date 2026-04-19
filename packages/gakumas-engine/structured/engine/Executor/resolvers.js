@@ -5,6 +5,7 @@
  * applying buffs, multipliers, and other modifiers.
  */
 import { G, S } from "../../constants";
+import { safeCeil } from "../../utils";
 
 /**
  * Check if an AST node contains a specific identifier
@@ -128,7 +129,7 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     score += state[S.enthusiasm];
 
     // Round
-    score = Math.ceil(score);
+    score = safeCeil(score);
 
     // Apply good and perfect condition
     if (state[S.goodConditionTurns]) {
@@ -184,11 +185,11 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     }
 
     // Round
-    score = Math.ceil(score);
+    score = safeCeil(score);
 
     // Turn type multiplier
     score *= getTurnMultiplier(state);
-    score = Math.ceil(score);
+    score = safeCeil(score);
   }
 
   state[S.score] += score;

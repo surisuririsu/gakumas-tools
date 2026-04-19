@@ -3,6 +3,7 @@ import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
+import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
 import Table from "@/components/Table";
 import {
@@ -132,13 +133,14 @@ function HajimeCalculator() {
       />
 
       {!!actualScore && (
-        <>
-          <label>{t("produceRank")}</label>
-          <span>
-            {actualRating.toLocaleString()}{" "}
-            {actualRank ? `(${actualRank})` : null}
-          </span>
-        </>
+        <Panel label={t("produceRank")}>
+          <div className={styles.produceRank}>
+            <span>
+              {actualRating.toLocaleString()}{" "}
+              {actualRank ? `(${actualRank})` : null}
+            </span>
+          </div>
+        </Panel>
       )}
     </>
   );

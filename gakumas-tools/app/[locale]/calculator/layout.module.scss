@@ -1,8 +1,10 @@
+@use "../../../styles/tokens";
+
 .calculator {
-  max-width: 500px;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: tokens.$space-3;
   margin: 0 auto;
-  padding: 0 16px 16px;
+  padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
 }

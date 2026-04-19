@@ -258,7 +258,15 @@ export default class EffectManager extends EngineComponent {
       // Delayed effects from p-items
       if (effect.effects) {
         this.logger.debug("Setting effects", effect.effects);
-        this.setEffects(state, effect.effects, effect.source);
+        // Inherit the parent's group so registered nested effects trigger
+        // in the correct order relative to sibling-grouped effects. Legacy
+        // annotates each effect with an explicit group in the CSV; our
+        // structured DSL puts group on the outer block, so we propagate
+        // it here for grouping parity.
+        const toSet = effect.group != null
+          ? effect.effects.map((e) => (e.group != null ? e : { ...e, group: effect.group }))
+          : effect.effects;
+        this.setEffects(state, toSet, effect.source);
         this.logger.log(state, "setEffect");
       }
 

@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../../styles/colors";
 @use "../../styles/tokens";
 
@@ -8,11 +7,7 @@
   align-items: center;
   padding: 0 tokens.$space-3;
   border-radius: 0 0 20px 20px;
-  background: linear-gradient(
-    100deg,
-    colors.$gk-orange 0%,
-    colors.$gk-orange-light 100%
-  );
+  background: tokens.$gradient-brand;
   color: colors.$white;
 
   &.hasOshi {
@@ -20,8 +15,6 @@
   }
 }
 
-// Two-tone wordmark — Gakumas bold, Tools lighter. Plays the role of a
-// proper logo without needing an image asset.
 .brand {
   display: flex;
   align-items: baseline;
@@ -49,9 +42,6 @@
   display: flex;
 }
 
-// Shared animated underline — slides to whichever link carries the active
-// class. Width and position are computed in JS (Navbar.js) and applied via
-// inline style so we can animate them with a single transition.
 .indicator {
   position: absolute;
   left: 0;

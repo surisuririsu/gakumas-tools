@@ -1,16 +1,34 @@
+@use "../../styles/tokens";
+
 .produceRankCalculator {
-  max-width: 500px;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: tokens.$space-3;
   margin: 0 auto;
-  padding: 16px;
+  padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
 }
 
 .bonus {
   font-size: 0.8em;
+  color: tokens.$surface-ink-muted;
 }
 
 .rankSelect {
   align-self: flex-start;
+}
+
+.produceRank {
+  text-align: center;
+  padding: tokens.$space-2 0;
+
+  span {
+    background: tokens.$gradient-brand;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
 }

@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../../../styles/colors";
 @use "../../../styles/tokens";
 
@@ -23,15 +22,11 @@
 
 .overlay {
   position: absolute;
-  // Small gap from navbar so the menu reads as a floating card, not an
-  // extension of the nav — avoids the rounded-corner-clash at the edge.
   top: 60px;
   right: tokens.$space-3;
   bottom: 0;
   left: 0;
   z-index: 10;
-  // Stays in DOM always so the dropdown inside can animate. Clicks pass
-  // through unless the menu is expanded.
   pointer-events: none;
 
   &.expanded {
@@ -52,9 +47,8 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 
-  // Closed state — invisible, lifted slightly. Visibility is delayed so
-  // it waits for the opacity/transform to finish fading out before going
-  // inert, which keeps transitions running on the way out.
+  // Delayed visibility change keeps the fade-out running before the element
+  // goes inert.
   visibility: hidden;
   opacity: 0;
   transform: translateY(-6px) scale(0.98);
@@ -74,8 +68,6 @@
       visibility 0s;
   }
 
-  // Thin gradient stripe at the top — echoes the navbar, ties the dropdown
-  // to the brand without making it orange-heavy.
   &::before {
     content: "";
     position: absolute;
@@ -83,11 +75,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(
-      100deg,
-      colors.$gk-orange 0%,
-      colors.$gk-orange-light 100%
-    );
+    background: tokens.$gradient-brand;
   }
 
   & > * {
@@ -111,13 +99,9 @@
   }
 }
 
-// Author block breaks out of the dropdown's inner padding to meet the
-// border, creating a clear visual section between interactive rows above
-// and below it.
+// width: auto lets the negative horizontal margins actually widen the
+// element; with inherited width: 100% they'd only shift it left.
 .author {
-  // width: auto lets the negative horizontal margins actually widen the
-  // element to the dropdown border. With width: 100% (inherited from
-  // `.dropdown > *`) the negative margins only shifted the box left-ward.
   width: auto;
   margin: tokens.$space-1 (-(tokens.$space-2));
   padding: tokens.$space-3;

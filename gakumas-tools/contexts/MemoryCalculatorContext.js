@@ -166,14 +166,6 @@ export function MemoryCalculatorContextProvider({ children }) {
     _setAcquiredSkillCardIds([0]);
   }
 
-  function clear() {
-    _setTargetSkillCardIds([0]);
-    _setAlternateSkillCardIds([]);
-    _setTargetNegations([]);
-    _setAcquiredSkillCardIds([0]);
-    setRank("SS+");
-  }
-
   return (
     <MemoryCalculatorContext.Provider
       value={{
@@ -190,7 +182,6 @@ export function MemoryCalculatorContextProvider({ children }) {
         replaceAcquiredCardId,
         clearTargetCardIds,
         clearAcquiredCardIds,
-        clear,
         rank,
         setRank,
       }}

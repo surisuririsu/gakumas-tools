@@ -13,9 +13,15 @@ function mulberry32(a) {
 }
 
 let _getRand = DEBUG ? mulberry32(seed) : Math.random;
+let _getRandCount = 0;
 
 export function getRand() {
+  _getRandCount++;
   return _getRand();
+}
+
+export function getRandCallCount() {
+  return _getRandCount;
 }
 
 // Seed the RNG for deterministic runs. DEBUG only controls the *default*
@@ -23,6 +29,7 @@ export function getRand() {
 // tests rely on this.
 export function resetRand(customSeed) {
   _getRand = mulberry32(customSeed ?? seed);
+  _getRandCount = 0;
 }
 
 export function shuffle(arr) {
@@ -44,6 +51,16 @@ export function shuffle(arr) {
 export function formatDiffField(value) {
   if (isNaN(value)) return value;
   return parseFloat(value.toFixed(2));
+}
+
+// Math.ceil with float-precision correction — snaps results that are within
+// 1e-9 of an integer to that integer before ceiling, so artifacts like
+// `Math.ceil(40 * 0.2 * 3)` rounding 24.000000000000004 up to 25 don't
+// leak into integer-domain score results.
+export function safeCeil(value) {
+  const rounded = Math.round(value);
+  if (Math.abs(value - rounded) < 1e-9) return rounded;
+  return Math.ceil(value);
 }
 
 export function shallowCopy(state) {

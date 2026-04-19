@@ -13,8 +13,7 @@
   padding: tokens.$space-4;
 }
 
-// Label sits on the top border of the panel — the bg-color punches through
-// the border stroke, giving the panel a "tag sewn onto the edge" feel.
+// Label punches through the top border with the panel's bg color.
 .label {
   position: absolute;
   top: -12px;
@@ -29,9 +28,6 @@
   text-transform: uppercase;
 }
 
-// Mirrors the label on the opposite side — floats on the top border with a
-// bg-color patch so the caller's button (or whatever) reads as a panel-level
-// action rather than content.
 .headerAction {
   position: absolute;
   top: -12px;
