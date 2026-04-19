@@ -405,7 +405,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 404,はじけるパッション,,SR,active,anomaly,6,FALSE,FALSE,produce,,FALSE,if:stance!=none,do:cost-=2,"do:score+=8,do:score+=8",1,
 405,はじけるパッション+,"42,47,62",SR,active,anomaly,6,TRUE,FALSE,produce,,FALSE,if:stance!=none,do:cost-=1,"do:score+=10,do:score+=10",1,
 406,汗と成長,,SR,active,anomaly,7,FALSE,FALSE,produce,,FALSE,if:isFullPower,do:cost-=1,do:score+=37,1,
-407,汗と成長+,"42,48,60",SR,active,anomaly,7,TRUE,FALSE,produce,,FALSE,if:isFullPower,do:cost-=1,do:score+=47,1,
+407,汗と成長+,"42,48,60",SR,active,anomaly,7,TRUE,FALSE,produce,,FALSE,if:isFullPower,do:cost-=0,do:score+=47,1,
 408,オープニングアクト,,SR,active,anomaly,29,FALSE,FALSE,produce,,FALSE,,do:cost-=5,"do:setStance(strength),do:score+=10,do:fullPowerCharge+=2",1,
 409,オープニングアクト+,"40,48,63",SR,active,anomaly,29,TRUE,FALSE,produce,,FALSE,,do:cost-=4,"do:setStance(strength),do:score+=14,do:fullPowerCharge+=3",1,
 410,始まりの笑顔,,SR,active,anomaly,34,FALSE,TRUE,produce,,FALSE,,do:fullPowerCharge-=2,"do:setStance(strength),do:score+=6,do:halfCostTurns+=2;at:turn,do:drawCard,limit:1",,

@@ -17,6 +17,10 @@
   position: absolute;
   top: -12px;
   left: tokens.$space-3;
+  max-width: calc(100% - 100px);
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
   padding: tokens.$space-1 tokens.$space-3;
   border-radius: 999px;
   background-color: tokens.$surface-muted;
@@ -26,6 +30,32 @@
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.labelInfo {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  opacity: 0.7;
+  cursor: help;
+}
+
+.tooltip {
+  max-width: 260px;
+  padding: tokens.$space-2 tokens.$space-3 !important;
+  border-radius: tokens.$radius-sm !important;
+  background-color: tokens.$surface-ink !important;
+  color: #fff !important;
+  font-size: tokens.$text-sm !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
 }
 
 .headerAction {

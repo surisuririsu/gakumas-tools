@@ -874,8 +874,10 @@ export default class CardManager extends EngineComponent {
   }
 
   hold(state, card) {
-    // Hold the card
-    if (card != null) {
+    // Hold the card. Idempotent: re-holding a card (e.g. when
+    // doubleCardEffectCards doubles a holdThisCard action) is a no-op
+    // so the same index doesn't end up duplicated across piles.
+    if (card != null && !state[S.heldCards].includes(card)) {
       state[S.heldCards].push(card);
       this.logger.log(state, "holdCard", {
         type: "skillCard",

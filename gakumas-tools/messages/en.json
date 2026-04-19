@@ -150,7 +150,8 @@
   "MemoryCalculator": {
     "note": "Note: Probabilities shown are estimated based on a uniform distribution. The real skill card selection algorithm is not known.",
     "target": "Target skill cards",
-    "acquired": "Acquired skill cards (include pre/post-upgrade)",
+    "acquired": "Acquired skill cards",
+    "acquiredInfo": "Include pre/post-upgrade versions of each card",
     "produceRank": "Produce rank",
     "costRange": "Cost range",
     "success": "Success",

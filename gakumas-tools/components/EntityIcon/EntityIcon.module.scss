@@ -32,8 +32,13 @@
   transition: color 0.2s;
 }
 
+button.entityIcon {
+  outline: 3px solid transparent;
+  transition: outline-color 0.15s ease;
+}
+
 button.entityIcon:hover {
-  outline: 3px solid colors.$gk-orange;
+  outline-color: colors.$gk-orange;
 }
 
 button.entityIcon:hover .emptyPlaceholder,

@@ -150,7 +150,8 @@
   "MemoryCalculator": {
     "note": "注意: 显示的概率是基于均匀分布的估算值，实际的技能卡选择算法尚不明确。",
     "target": "目标技能卡",
-    "acquired": "已获得的技能卡（包括升级前/后）",
+    "acquired": "已获得的技能卡",
+    "acquiredInfo": "请包括每张卡的升级前/后版本",
     "produceRank": "制作评级",
     "costRange": "容量范围",
     "success": "成功",

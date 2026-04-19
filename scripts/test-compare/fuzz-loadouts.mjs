@@ -83,18 +83,23 @@ function buildQuery() {
   const stage = pick(STAGES);
   const plan = stage.plan === "free" ? pick(["sense", "logic", "anomaly"]) : stage.plan;
 
-  // Cards: 6 slots. Plan-compatible.
+  // Cards: 12 slots, arranged as two 6-card groups (real contest layout).
+  // Plan-compatible, picked without replacement across both groups so the
+  // whole deck is unique (matching real loadouts).
   const cardPool = CARDS.filter((c) => stageMatchesPlan(c, plan) && c.id > 0);
-  const cards = pickN(cardPool, 6).map((c) => c.id);
-  while (cards.length < 6) cards.push(0);
+  const picked = pickN(cardPool, 12).map((c) => c.id);
+  while (picked.length < 12) picked.push(0);
+  const cards1 = picked.slice(0, 6);
+  const cards2 = picked.slice(6, 12);
+  const cards = [...cards1, ...cards2];
 
-  // P-items: 4 slots. Plan-compatible.
+  // P-items: 3 slots (matches real contest loadouts). Plan-compatible.
   const itemPool = P_ITEMS.filter((p) => stageMatchesPlan(p, plan));
-  const items = pickN(itemPool, 4).map((p) => p.id);
-  while (items.length < 4) items.push(0);
+  const items = pickN(itemPool, 3).map((p) => p.id);
+  while (items.length < 3) items.push(0);
 
-  // Customizations: 50% chance per card, 1–2 per card.
-  const customizations = cards.map((id) => {
+  // Customizations: 50% chance per card, 1–2 per card. Grouped like cards.
+  const c11ns = cards.map((id) => {
     if (!id || rand() > 0.5) return "";
     const card = SkillCards.getById(id);
     const avail = card?.availableCustomizations || [];
@@ -104,6 +109,8 @@ function buildQuery() {
       .join("e");
     return c11n ? `e${c11n}` : "";
   });
+  const cust1 = c11ns.slice(0, 6).join("-");
+  const cust2 = c11ns.slice(6, 12).join("-");
 
   // Params — spread across vocal/dance/visual with stamina 30–50.
   const total = 3500 + Math.floor(rand() * 2500);
@@ -119,8 +126,8 @@ function buildQuery() {
     `&support_bonus=0.04` +
     `&params=${vocal}-${dance}-${visual}-${stamina}` +
     `&items=${items.join("-")}` +
-    `&cards=${cards.join("-")}` +
-    `&customizations=${customizations.join("-")}`
+    `&cards=${cards1.join("-")}_${cards2.join("-")}` +
+    `&customizations=${cust1}_${cust2}`
   );
 }
 

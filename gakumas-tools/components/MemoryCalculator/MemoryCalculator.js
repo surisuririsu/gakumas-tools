@@ -59,7 +59,7 @@ function MemoryCalculator() {
 
   const possibleMemories = useMemo(
     () => generatePossibleMemories(acquiredSkillCardIds, rank),
-    [acquiredSkillCardIds, rank]
+    [acquiredSkillCardIds, rank],
   );
   const {
     onTargetMemories,
@@ -91,7 +91,7 @@ function MemoryCalculator() {
         // Classify on/off-target
         const memoryIsOnTarget =
           matchingCombinations.some((combo) =>
-            combo.every((id) => cur.skillCardIds.includes(id))
+            combo.every((id) => cur.skillCardIds.includes(id)),
           ) &&
           !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
 
@@ -110,7 +110,7 @@ function MemoryCalculator() {
         offTargetMemories: [],
         onTargetProbability: 0,
         offTargetProbability: 0,
-      }
+      },
     );
   }, [
     possibleMemories,
@@ -140,6 +140,7 @@ function MemoryCalculator() {
 
       <Panel
         label={t("acquired")}
+        info={t("acquiredInfo")}
         headerAction={
           <Button
             style="red-secondary"
@@ -153,18 +154,15 @@ function MemoryCalculator() {
         <AcquiredSkillCards />
       </Panel>
 
-      <Panel>
+      <Panel label={t("produceRank")}>
         <div className={styles.settingsRow}>
+          <IconSelect
+            options={RANK_OPTIONS}
+            selected={rank}
+            onChange={setRank}
+          />
           <div className={styles.settingField}>
-            <div className={styles.settingLabel}>{t("produceRank")}</div>
-            <IconSelect
-              options={RANK_OPTIONS}
-              selected={rank}
-              onChange={setRank}
-            />
-          </div>
-          <div className={styles.settingField}>
-            <div className={styles.settingLabel}>{t("costRange")}</div>
+            <label>{t("costRange")}</label>
             <div className={styles.costRange}>
               {costRange.min} ~ {costRange.max}
             </div>

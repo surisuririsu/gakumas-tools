@@ -13,21 +13,18 @@
 .settingsRow {
   display: flex;
   flex-wrap: wrap;
-  gap: tokens.$space-5;
+  align-items: center;
+  gap: tokens.$space-3;
 }
 
 .settingField {
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-2;
-}
+  gap: tokens.$space-1;
 
-.settingLabel {
-  font-size: tokens.$text-xs;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: tokens.$surface-ink-muted;
+  label {
+    margin-top: 0;
+  }
 }
 
 .costRange {
