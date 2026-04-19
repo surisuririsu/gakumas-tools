@@ -30,7 +30,13 @@
   bottom: 0;
   left: 0;
   z-index: 10;
-  display: none;
+  // Stays in DOM always so the dropdown inside can animate. Clicks pass
+  // through unless the menu is expanded.
+  pointer-events: none;
+
+  &.expanded {
+    pointer-events: auto;
+  }
 }
 
 .dropdown {
@@ -45,7 +51,28 @@
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  display: none;
+
+  // Closed state — invisible, lifted slightly. Visibility is delayed so
+  // it waits for the opacity/transform to finish fading out before going
+  // inert, which keeps transitions running on the way out.
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 0.15s ease,
+    transform 0.18s cubic-bezier(0.2, 0, 0.2, 1),
+    visibility 0s linear 0.18s;
+
+  &.expanded {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition:
+      opacity 0.15s ease,
+      transform 0.18s cubic-bezier(0.2, 0, 0.2, 1),
+      visibility 0s;
+  }
 
   // Thin gradient stripe at the top — echoes the navbar, ties the dropdown
   // to the brand without making it orange-heavy.
@@ -82,10 +109,6 @@
       color: colors.$gk-red-orange;
     }
   }
-}
-
-.expanded {
-  display: block !important;
 }
 
 // Author block breaks out of the dropdown's inner padding to meet the

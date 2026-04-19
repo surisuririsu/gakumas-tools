@@ -321,7 +321,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 320,しゅきしゅきはーと+,SSR,TRUE,sense,stage,pIdol,106,FALSE,"at:afterMentalCardUsed,if:concentration>=13,do:genki+=10,do:drawCard,do:drawCard,do:cardUsesRemaining+=1,limit:1;at:afterMentalCardUsed,if:concentration>=13,limit:1;at:mentalCardUsed,if:cardRarity!=L,do:doubleCardEffectCards+=1,limit:1,ttl:1"
 321,ピークタイムフラッグ,SSR,FALSE,sense,produce,support,,FALSE,
 322,ふっかつのアイス,SR,FALSE,sense,produce,support,,FALSE,
-323,ミラクルヘッド,SSR,FALSE,logic,stage,pIdol,107,FALSE,"at:startOfTurn,do:setMotivationBuff(0.5,3),do:fixedStamina-=2,limit:1;at:startOfTurn,if:turnsElapsed==1,do:genki+=2,limit:1"
+323,ミラクルヘッド,SSR,FALSE,logic,stage,pIdol,107,FALSE,"at:startOfTurn,do:setMotivationBuff(0.5,3),do:fixedStamina-=2,limit:1;at:turn,if:turnsElapsed==1,do:genki+=2,limit:1"
 324,ミラクルヘッド+,SSR,TRUE,logic,stage,pIdol,107,FALSE,"at:startOfTurn,do:setMotivationBuff(0.5,3),limit:1;at:turn,if:turnsElapsed==1,do:genki+=2,limit:1"
 325,体力作りの教材？,SSR,FALSE,logic,produce,support,,FALSE,
 326,落ち葉つかみの型,SR,FALSE,logic,produce,support,,FALSE,
@@ -379,7 +379,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 378,だから、おいで,SSR,FALSE,logic,stage,pIdol,122,FALSE,"at:startOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=10,do:setScoreDebuff(0.6,2),limit:1;at:startOfTurn,if:goodImpressionTurns>=6,limit:1;at:mentalCardUsed,do:motivation+=1,limit:5"
 379,だから、おいで+,SSR,TRUE,logic,stage,pIdol,122,FALSE,"at:startOfTurn,if:goodImpressionTurns>=6,do:goodImpressionTurns+=13,do:setScoreDebuff(0.6,2),limit:1;at:startOfTurn,if:goodImpressionTurns>=6,limit:1;at:mentalCardUsed,do:motivation+=1,limit:5"
 380,ぴったりコレクション,SSR,FALSE,sense,stage,support,,TRUE,"at:activeCardUsed,if:isVisualTurn,if:goodConditionTurns>=3,do:concentration+=2,do:score+=4,limit:1"
-381,憧れのはじまり,SSR,FALSE,anomaly,stage,pIdol,123,FALSE,"at:stanceChanged,if:isFullPower,do:nullifyCostActiveCards+=1,limit:3;at:stanceChanged,if:isFullPower,target:mental,do:g.genki+=4,limit:2"
+381,憧れのはじまり,SSR,FALSE,anomaly,stage,pIdol,123,FALSE,"at:stanceChanged,if:isFullPower,do:nullifyCostActiveCards+=1,limit:2;at:stanceChanged,if:isFullPower,target:mental,do:g.genki+=4,limit:2"
 382,憧れのはじまり+,SSR,TRUE,anomaly,stage,pIdol,123,FALSE,"at:stanceChanged,if:isFullPower,do:nullifyCostActiveCards+=1,limit:3;at:stanceChanged,if:isFullPower,target:mental,do:g.genki+=5,limit:3"
 383,そっくりワンマン,SR,FALSE,anomaly,produce,support,,FALSE,
 384,ひろがる未来へ,SSR,FALSE,sense,stage,pIdol,124,FALSE,"at:buffCostConsumed,if:goodConditionTurns>=3,do:concentration+=2,do:goodConditionTurns-=1;at:buffCostConsumed,if:goodConditionTurns>=3;at:turn,do:drawCard,limit:1;"

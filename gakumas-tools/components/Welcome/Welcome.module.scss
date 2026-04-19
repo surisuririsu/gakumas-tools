@@ -1,44 +1,123 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .welcome {
   max-width: 900px;
   min-height: 100%;
+  margin: auto;
+  padding: tokens.$space-5;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 24px;
-  margin: auto;
-  padding: 32px;
+  gap: tokens.$space-5;
 }
 
 .hero {
+  position: relative;
   text-align: center;
-  padding: 24px 0 16px;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, colors.$gk-orange, colors.$gk-red-orange);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 12px;
-  }
+  padding: tokens.$space-6 0 tokens.$space-4;
 
   p {
-    color: colors.$gray-dark;
-    font-size: 1.1rem;
-    max-width: 600px;
+    position: relative;
+    z-index: 1;
+    max-width: 560px;
     margin: 0 auto;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-base;
     line-height: 1.6;
   }
 }
 
+// Hero wordmark — same two-tone pattern as the navbar brand: primary word
+// heavy, secondary word lighter/dimmer. Layered with a translucent outline
+// "echo" behind for subtle dimension.
+.heroTitle {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto tokens.$space-3;
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  white-space: nowrap;
+
+  // Small gradient dash beneath the wordmark, matches the navbar's
+  // accent vocabulary without re-using the full gradient again.
+  &::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin: tokens.$space-3 auto 0;
+    border-radius: 2px;
+    background: linear-gradient(
+      100deg,
+      colors.$gk-orange 0%,
+      colors.$gk-orange-light 100%
+    );
+  }
+}
+
+// Japanese echo — same meaning, bigger, outline-only, centered behind the
+// main wordmark. Orange so it reads as a brand layer rather than a shadow.
+.heroTitleEcho {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 104px;
+  font-weight: 800;
+  letter-spacing: normal;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color.adjust(colors.$gk-orange, $alpha: -0.6);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+.heroTitleMain {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2em;
+}
+
+// Each word gets its own gradient fill. Container-level gradient + opacity
+// on a child creates a stacking context that makes the clipped-text
+// invisible — per-span gradient sidesteps that entirely.
+.heroTitlePrimary,
+.heroTitleSecondary {
+  background: linear-gradient(
+    100deg,
+    colors.$gk-orange 0%,
+    colors.$gk-orange-light 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.heroTitlePrimary {
+  font-weight: 800;
+}
+
+.heroTitleSecondary {
+  font-weight: 400;
+  opacity: 0.6;
+}
+
 .toolsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+  // auto-fill (not auto-fit) keeps each column sized the same even when the
+  // last row has fewer tiles — empty tracks stay empty instead of stretching
+  // the remaining tiles to fill.
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: tokens.$space-3;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -49,56 +128,90 @@
 }
 
 .toolCard {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
+  gap: tokens.$space-3;
+  padding: tokens.$space-4;
   width: 100%;
-  background: colors.$white;
-  border: 1px solid colors.$gray-extra-light;
-  border-radius: 12px;
-  transition: all 0.2s ease;
+  background: tokens.$surface-panel;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  // Gradient top accent — hidden until hover, then slides in from the left.
+  // Echoes the navbar's animated underline move but on card hover instead of
+  // route change.
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      100deg,
+      colors.$gk-orange 0%,
+      colors.$gk-orange-light 100%
+    );
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   &:hover {
     border-color: colors.$gk-orange-light;
-    box-shadow: 0 4px 20px color.adjust(colors.$gk-orange, $alpha: -0.85);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+
+    &::before {
+      transform: scaleX(1);
+    }
 
     .toolIcon {
-      background: colors.$gk-orange;
-      color: colors.$white;
+      transform: scale(1.05);
     }
   }
 }
 
+// Icons carry the navbar gradient at rest — biggest single change. The page
+// now has per-card brand presence instead of neutral grey tiles.
 .toolIcon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 48px;
-  height: 48px;
   flex-shrink: 0;
-  background: colors.$gk-orange-extra-light;
-  color: colors.$gk-orange;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  transition: all 0.2s ease;
+  width: 44px;
+  height: 44px;
+  border-radius: tokens.$radius-sm;
+  background: linear-gradient(
+    100deg,
+    colors.$gk-orange 0%,
+    colors.$gk-orange-light 100%
+  );
+  color: colors.$white;
+  font-size: tokens.$text-lg;
+  transition: transform 0.2s ease;
 }
 
 .toolInfo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: tokens.$space-1;
 }
 
 .toolTitle {
   font-weight: 600;
-  color: colors.$black;
-  font-size: 1rem;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-base;
 }
 
 .toolDescription {
-  color: colors.$gray-dark;
-  font-size: 0.9rem;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
   line-height: 1.4;
 }

@@ -9,7 +9,15 @@ function Welcome() {
   return (
     <div className={styles.welcome}>
       <div className={styles.hero}>
-        <h2>{t("title")}</h2>
+        <h2 className={styles.heroTitle}>
+          <span className={styles.heroTitleEcho} aria-hidden="true">
+            学マスツール
+          </span>
+          <span className={styles.heroTitleMain}>
+            <span className={styles.heroTitlePrimary}>Gakumas</span>{" "}
+            <span className={styles.heroTitleSecondary}>Tools</span>
+          </span>
+        </h2>
         <p>{t("introduction")}</p>
       </div>
       <ToolsList />
