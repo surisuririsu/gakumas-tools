@@ -79,9 +79,6 @@ button.entityIcon:focus .emptyPlaceholder {
   gap: 2px;
 }
 
-// Compact variant for small icons (e.g., in stats tables where the icon
-// footprint is ~32px and the default 20px badges overflow it). Centered
-// horizontally under the icon.
 .smallCustomizations {
   top: 55%;
   left: 50%;

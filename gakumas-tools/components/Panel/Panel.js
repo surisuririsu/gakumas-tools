@@ -1,7 +1,5 @@
-"use client";
 import { memo } from "react";
 import { FaCircleInfo } from "react-icons/fa6";
-import { Tooltip } from "react-tooltip";
 import c from "@/utils/classNames";
 import styles from "./Panel.module.scss";
 
@@ -22,9 +20,6 @@ function Panel({ label, info, headerAction, children, className, noPadding }) {
             </span>
           )}
         </span>
-      )}
-      {info && (
-        <Tooltip id="panel-info-tooltip" className={styles.tooltip} />
       )}
       {headerAction && (
         <div className={styles.headerAction}>{headerAction}</div>

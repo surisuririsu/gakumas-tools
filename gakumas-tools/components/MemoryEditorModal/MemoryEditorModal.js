@@ -13,10 +13,7 @@ import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import MemoryContext from "@/contexts/MemoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import {
-  calculateContestPowerBreakdown,
-  calculateSkillCardCost,
-} from "@/utils/contestPower";
+import { calculateContestPowerBreakdown } from "@/utils/contestPower";
 import c from "@/utils/classNames";
 import styles from "./MemoryEditorModal.module.scss";
 

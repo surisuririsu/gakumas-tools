@@ -1,0 +1,15 @@
+@use "../../styles/tokens";
+
+.tooltip {
+  max-width: 260px;
+  padding: tokens.$space-2 tokens.$space-3 !important;
+  border-radius: tokens.$radius-sm !important;
+  background-color: tokens.$surface-ink !important;
+  color: #fff !important;
+  font-size: tokens.$text-sm !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18) !important;
+}

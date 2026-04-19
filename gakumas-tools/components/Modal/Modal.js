@@ -9,16 +9,14 @@ function Modal({ children, dismissable = true }) {
   const mouseDownOnOverlayRef = useRef(false);
 
   useEffect(() => {
-    // Focus the modal container or first focusable element
     if (modalRef.current) {
       const focusableElements = modalRef.current.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
-      
+
       if (focusableElements.length > 0) {
         focusableElements[0].focus();
       } else {
-        // If no focusable elements, focus the modal itself
         modalRef.current.focus();
       }
     }
