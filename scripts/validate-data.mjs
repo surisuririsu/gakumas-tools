@@ -60,12 +60,46 @@ function validatePatchField(entity, id, column, src) {
   if (src == null || !String(src).trim()) return;
   try {
     const ast = parsePatches(String(src));
-    report(entity, id, column, src, validatePatchAst(ast));
+    const errors = validatePatchAst(ast);
+    errors.push(...lintLevelForm(String(src)));
+    report(entity, id, column, src, errors);
   } catch (err) {
     totalErrors++;
     console.error(`${entity}#${id} [${column}]: ${JSON.stringify(src)}`);
     console.error(`  - Parse error: ${err.message}`);
   }
+}
+
+// Customization levels must use the outer-wrapper form: `level:N { ... }`.
+// The inner-annotation form (`{ ...; level:N }` inside an at:/target: block,
+// or a bare `level:N` statement trailing a block) parses to the same AST but
+// breaks the "one labeled block per level" reading that makes multi-level
+// customizations easy to scan. This lint operates on the raw source since
+// both forms are indistinguishable after parsing.
+function lintLevelForm(src) {
+  const errors = [];
+  if (!/level:\d/.test(src)) return errors;
+
+  // Walk the source tracking brace depth; any `level:N` not preceded by a
+  // `{` (wrapping form) is an inner annotation.
+  for (let i = 0; i < src.length; i++) {
+    if (!src.startsWith("level:", i)) continue;
+    // Peek back to the nearest non-whitespace: wrapping form has `level:N` at
+    // depth 0 immediately followed by `{`. Inner-annotation form has it at
+    // depth > 0 (inside a block body) or followed by `;`, `}`, or end of input.
+    let j = i + "level:".length;
+    while (j < src.length && /\d/.test(src[j])) j++;
+    let k = j;
+    while (k < src.length && /\s/.test(src[k])) k++;
+    if (src[k] !== "{") {
+      errors.push(
+        `Customization level must use outer-wrapper form: \`level:N { ... }\`. ` +
+          `Saw inner-annotation form near \`${src.slice(i, Math.min(src.length, i + 30))}...\`.`,
+      );
+      return errors; // one complaint per cell is enough
+    }
+  }
+  return errors;
 }
 
 // --- Skill cards ---

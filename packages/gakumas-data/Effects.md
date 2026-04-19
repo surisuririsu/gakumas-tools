@@ -320,14 +320,12 @@ Customization columns use a patch sequence grammar. Each patch is either:
   conditions, limit, ttl, delay, group, filter, etc.); other fields remain.
 
 Patch-level `level:N` indicates at which customization level the patch
-applies. Either form works:
+applies. Use the block form — it scopes each level's contribution into one
+labeled block, matching the "only one level fires at a time" runtime
+semantics. The trailing-modifier form (`@foo score+=10; level:1`) parses to
+the same AST but is rejected by `yarn validate:data`.
 
 ```
-# trailing-modifier form
-@foo score+=10; level:1
-@foo score+=15; level:2
-
-# block form
 level:1 { @foo score+=10 }
 level:2 { @foo score+=15 }
 ```
