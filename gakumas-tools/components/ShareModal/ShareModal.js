@@ -10,21 +10,47 @@ import styles from "./ShareModal.module.scss";
 async function exportImage() {
   const node = document.getElementById("simulator_loadout");
   if (!node) return;
-  // `.exporting` makes [data-export-hide] elements collapse (display: none)
-  // so the real DOM reflows before capture — html-to-image's `filter` skips
-  // cloning but leaves the parent's original height, causing blank space.
   node.classList.add("exporting");
   try {
-    const { toPng } = await import("html-to-image");
-    const dataUrl = await toPng(node, {
+    const { default: html2canvas } = await import("html2canvas");
+    const canvas = await html2canvas(node, {
       backgroundColor: "#ffffff",
-      pixelRatio: 2,
-      cacheBust: true,
+      scale: 2,
+      useCORS: true,
+      logging: false,
     });
+    const blob = await new Promise((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
+    if (!blob) return;
+
+    const file = new File([blob], "gakumas-loadout.png", { type: "image/png" });
+
+    // iOS (Safari/Chrome/WKWebView) ignores programmatic <a download> clicks,
+    // so route through Web Share there. Desktop/Android handle downloads fine.
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (
+      isIOS &&
+      typeof navigator.canShare === "function" &&
+      navigator.canShare({ files: [file] })
+    ) {
+      try {
+        await navigator.share({ files: [file], title: "Gakumas loadout" });
+        return;
+      } catch (err) {
+        if (err?.name === "AbortError") return;
+        // Fall through to anchor download on any other share failure.
+      }
+    }
+
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.download = "gakumas-loadout.png";
-    link.href = dataUrl;
+    link.href = url;
     link.click();
+    URL.revokeObjectURL(url);
   } finally {
     node.classList.remove("exporting");
   }
