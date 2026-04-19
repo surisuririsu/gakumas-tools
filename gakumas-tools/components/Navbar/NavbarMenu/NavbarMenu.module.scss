@@ -1,8 +1,9 @@
 @use "sass:color";
 @use "../../../styles/colors";
+@use "../../../styles/tokens";
 
 .menu {
-  margin: 0 8px;
+  margin: 0 tokens.$space-2;
 }
 
 .avatar {
@@ -12,12 +13,20 @@
   border-radius: 16px;
   font-size: 24px;
   overflow: hidden;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.15s;
+
+  &:hover {
+    color: colors.$white;
+  }
 }
 
 .overlay {
   position: absolute;
-  top: 48px;
-  right: 0;
+  // Small gap from navbar so the menu reads as a floating card, not an
+  // extension of the nav — avoids the rounded-corner-clash at the edge.
+  top: 60px;
+  right: tokens.$space-3;
   bottom: 0;
   left: 0;
   z-index: 10;
@@ -26,32 +35,51 @@
 
 .dropdown {
   float: right;
-  box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.75);
-  clip-path: inset(0px -8px -8px -8px);
-  border-radius: 0 0 8px 8px;
-  padding: 8px 16px;
-  background-color: colors.$white;
-  color: colors.$gk-orange;
+  position: relative;
+  min-width: 220px;
+  padding: tokens.$space-2;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  color: tokens.$surface-ink;
   text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
   display: none;
+
+  // Thin gradient stripe at the top — echoes the navbar, ties the dropdown
+  // to the brand without making it orange-heavy.
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      100deg,
+      colors.$gk-orange 0%,
+      colors.$gk-orange-light 100%
+    );
+  }
 
   & > * {
     width: 100%;
     display: block;
-    border-bottom: 1px solid colors.$gk-orange;
-    padding: 12px 16px;
-    transition: all 0.2s;
-
-    &:nth-last-child(1) {
-      border: none;
-    }
+    padding: tokens.$space-2 tokens.$space-3;
+    border-radius: tokens.$radius-sm;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
   }
 
   & > button,
   & > a {
+    min-height: 40px;
+
     &:hover {
-      color: colors.$gk-red-orange;
       background-color: colors.$gk-orange-extra-light;
+      color: colors.$gk-red-orange;
     }
   }
 }
@@ -60,27 +88,47 @@
   display: block !important;
 }
 
+// Author block breaks out of the dropdown's inner padding to meet the
+// border, creating a clear visual section between interactive rows above
+// and below it.
 .author {
-  color: colors.$black-light;
+  // width: auto lets the negative horizontal margins actually widen the
+  // element to the dropdown border. With width: 100% (inherited from
+  // `.dropdown > *`) the negative margins only shifted the box left-ward.
+  width: auto;
+  margin: tokens.$space-1 (-(tokens.$space-2));
+  padding: tokens.$space-3;
+  border-top: 1px solid tokens.$surface-border;
+  border-bottom: 1px solid tokens.$surface-border;
+  border-radius: 0 !important;
+  background-color: tokens.$surface-alt;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
 }
 
 .socials {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin: 8px auto;
+  gap: tokens.$space-2;
+  margin: tokens.$space-2 auto;
 }
 
 .fine {
   margin: auto;
-  font-size: 12px;
+  font-size: tokens.$text-xs;
   max-width: 220px;
+  opacity: 0.75;
 }
 
 @media only screen and (max-width: 600px) {
+  .overlay {
+    top: 56px;
+    right: 0;
+    padding: 8px 12px;
+  }
   .dropdown {
     width: 100%;
-    height: 100%;
-    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
   }
 }

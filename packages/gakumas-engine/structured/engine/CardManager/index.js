@@ -652,6 +652,7 @@ export default class CardManager extends EngineComponent {
   }
 
   addCardToHand(state, cardId) {
+    if (state[S.handCards].length >= 5) return;
     const skillCard = SkillCards.getById(cardId);
 
     state[S.cardMap].push({

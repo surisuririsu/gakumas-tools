@@ -43,9 +43,27 @@
 }
 
 .links {
+  position: relative;
   flex: 1;
   height: 100%;
   display: flex;
+}
+
+// Shared animated underline — slides to whichever link carries the active
+// class. Width and position are computed in JS (Navbar.js) and applied via
+// inline style so we can animate them with a single transition.
+.indicator {
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: colors.$white;
+  pointer-events: none;
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
 }
 
 .link {
@@ -68,19 +86,6 @@
 
 .active {
   color: colors.$white;
-  position: relative;
-
-  // Small underline anchors the active item without needing a pill bg.
-  &::after {
-    content: "";
-    position: absolute;
-    left: 20%;
-    right: 20%;
-    bottom: 6px;
-    height: 2px;
-    border-radius: 2px;
-    background-color: colors.$white;
-  }
 }
 
 @media only screen and (max-width: 600px) {
