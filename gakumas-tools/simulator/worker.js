@@ -1,4 +1,5 @@
 import { simulate } from ".";
+import { WORKER_MESSAGE } from "./constants";
 
 addEventListener("message", async (e) => {
   const { idolStageConfig, linkConfigs, strategyName, numRuns } = e.data;
@@ -11,8 +12,8 @@ addEventListener("message", async (e) => {
     (completed) => {
       const delta = completed - lastReported;
       lastReported = completed;
-      postMessage({ type: "progress", delta });
+      postMessage({ type: WORKER_MESSAGE.PROGRESS, delta });
     }
   );
-  postMessage({ type: "result", result });
+  postMessage({ type: WORKER_MESSAGE.RESULT, result });
 });

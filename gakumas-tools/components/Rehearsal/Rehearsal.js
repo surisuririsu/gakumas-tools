@@ -19,6 +19,7 @@ import { createWorker } from "tesseract.js";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
+import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table";
 import {
   getScoresFromFile,
@@ -40,7 +41,7 @@ function Rehearsal() {
   const t = useTranslations("Rehearsal");
   const tRes = useTranslations("SimulatorResult");
 
-  const [total, setTotal] = useState("?");
+  const [total, setTotal] = useState(null);
   const [progress, setProgress] = useState(null);
   const [processingStatus, setProcessingStatus] = useState("");
   const [data, setData] = useState([]);
@@ -303,19 +304,11 @@ function Rehearsal() {
         <div className={styles.progress}>
           <div className={styles.progressLabel}>
             <span>
-              {processingStatus ||
-                `Progress: ${progress}/${total}`}
+              {processingStatus || `Progress: ${progress}/${total ?? "?"}`}
             </span>
             {progress === total && !processingStatus && <FaCheck />}
           </div>
-          {typeof total === "number" && total > 0 && (
-            <div
-              className={styles.progressBar}
-              style={{
-                "--progress": `${Math.min(100, (progress / total) * 100)}%`,
-              }}
-            />
-          )}
+          {total > 0 && <ProgressBar value={progress} max={total} />}
         </div>
       )}
 

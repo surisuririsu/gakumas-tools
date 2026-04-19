@@ -26,6 +26,7 @@ import KofiAd from "@/components/KofiAd";
 import Loader from "@/components/Loader";
 import LoadoutEditor from "@/components/LoadoutEditor";
 import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
+import ProgressBar from "@/components/ProgressBar";
 import SimulatorResult from "@/components/SimulatorResult";
 import StageSelect from "@/components/StageSelect";
 import StrategyPicker from "@/components/StrategyPicker";
@@ -33,7 +34,12 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
-import { MAX_WORKERS, DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
+import {
+  MAX_WORKERS,
+  DEFAULT_NUM_RUNS,
+  SYNC,
+  WORKER_MESSAGE,
+} from "@/simulator/constants";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import ManualPlay from "./ManualPlay";
 import SimulatorButtons from "./SimulatorButtons";
@@ -189,9 +195,9 @@ export default function Simulator() {
         promises.push(
           new Promise((resolve) => {
             workersRef.current[i].onmessage = (e) => {
-              if (e.data.type === "progress") {
+              if (e.data.type === WORKER_MESSAGE.PROGRESS) {
                 setProgress((p) => p + e.data.delta);
-              } else if (e.data.type === "result") {
+              } else if (e.data.type === WORKER_MESSAGE.RESULT) {
                 resolve(e.data.result);
               }
             };
@@ -336,12 +342,9 @@ export default function Simulator() {
                 {running ? <Loader /> : t("simulate")}
               </Button>
               {running && numRuns > 0 && (
-                <div
-                  className={styles.progressBar}
-                  style={{
-                    "--progress": `${Math.min(100, (progress / numRuns) * 100)}%`,
-                  }}
-                />
+                <div className={styles.progressBarWrap}>
+                  <ProgressBar value={progress} max={numRuns} />
+                </div>
               )}
             </>
           )}

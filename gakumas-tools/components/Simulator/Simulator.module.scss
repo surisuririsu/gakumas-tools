@@ -181,21 +181,6 @@
   }
 }
 
-.progressBar {
-  position: relative;
-  height: 4px;
+.progressBarWrap {
   margin-top: tokens.$space-1;
-  border-radius: 2px;
-  background-color: tokens.$surface-muted;
-  overflow: hidden;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    width: var(--progress, 0%);
-    background: tokens.$gradient-brand;
-    border-radius: inherit;
-    transition: width 0.15s ease;
-  }
 }

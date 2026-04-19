@@ -49,24 +49,6 @@
   gap: tokens.$space-2;
 }
 
-.progressBar {
-  position: relative;
-  height: 6px;
-  border-radius: 3px;
-  background-color: tokens.$surface-muted;
-  overflow: hidden;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    width: var(--progress, 0%);
-    background: tokens.$gradient-brand;
-    border-radius: inherit;
-    transition: width 0.2s ease;
-  }
-}
-
 .tableWrapper {
   overflow: auto;
 
