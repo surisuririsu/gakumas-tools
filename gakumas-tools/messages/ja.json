@@ -251,7 +251,6 @@
   },
   "SimulatorSubTools": {
     "costRanges": "コスト範囲",
-    "history": "履歴β",
     "defaultCards": "基本カード"
   },
   "CostRanges": {
@@ -262,7 +261,16 @@
   "SimulatorButtons": {
     "confirm": "編成をクリアしますか？",
     "clear": "クリア",
-    "manageLoadouts": "保存・読み込みβ"
+    "manageLoadouts": "保存・読み込みβ",
+    "history": "履歴β",
+    "share": "共有"
+  },
+  "ShareModal": {
+    "title": "共有",
+    "more": "その他…",
+    "x": "Xで共有",
+    "saveImage": "画像として保存",
+    "exporting": "保存中…"
   },
   "ConfirmModal": {
     "cancel": "キャンセル",

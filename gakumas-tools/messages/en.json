@@ -251,7 +251,6 @@
   },
   "SimulatorSubTools": {
     "costRanges": "Cost ranges",
-    "history": "History β",
     "defaultCards": "Default cards"
   },
   "CostRanges": {
@@ -262,7 +261,16 @@
   "SimulatorButtons": {
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear",
-    "manageLoadouts": "Save/Load β"
+    "manageLoadouts": "Save/Load β",
+    "history": "History β",
+    "share": "Share"
+  },
+  "ShareModal": {
+    "title": "Share",
+    "more": "More…",
+    "x": "Share on X",
+    "saveImage": "Save as image",
+    "exporting": "Saving…"
   },
   "ConfirmModal": {
     "cancel": "Cancel",

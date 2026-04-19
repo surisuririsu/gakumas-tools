@@ -2855,6 +2855,7 @@ __metadata:
     gakumas-data-structured: "workspace:*"
     gakumas-engine: "workspace:*"
     gakumas-images: "workspace:*"
+    html-to-image: "npm:^1.11.13"
     mongodb: "npm:^7.1.0"
     next: "npm:^16.1.7"
     next-auth: "npm:^4.24.13"
@@ -3079,6 +3080,13 @@ __metadata:
   dependencies:
     react-is: "npm:^16.7.0"
   checksum: 10c0/fe0889169e845d738b59b64badf5e55fa3cf20454f9203d1eb088df322d49d4318df774828e789898dcb280e8a5521bb59b3203385662ca5e9218a6ca5820e74
+  languageName: node
+  linkType: hard
+
+"html-to-image@npm:^1.11.13":
+  version: 1.11.13
+  resolution: "html-to-image@npm:1.11.13"
+  checksum: 10c0/03bd7192d87b99499e37ff12a8e2b41ddce4cf8e33a93dfadff18df0f213434c7f1ba8328db2158f4805da07b7aec3c90aec3152908281153217e86784218b10
   languageName: node
   linkType: hard
 

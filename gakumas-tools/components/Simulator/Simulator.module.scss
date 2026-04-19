@@ -21,9 +21,15 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2 tokens.$space-4;
   overflow: auto;
+
+  @media (max-width: 480px) {
+    padding: tokens.$space-2;
+    padding-bottom: 0;
+    gap: tokens.$space-1;
+  }
 }
 
 .percentRow {
@@ -78,10 +84,39 @@
   }
 }
 
+// Auto/Manual toggle sits next to the num-runs slider on wide screens;
+// wraps under on narrow screens. Strategy picker shrinks to content so
+// it doesn't hog the row.
+.simControls {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-1 tokens.$space-2;
+  flex-wrap: wrap;
+}
+
+.strategyPicker {
+  flex: 0 0 auto;
+  min-width: 160px;
+
+  // Tighter padding keeps the picker shorter than the default button-group
+  // height — this is a mode toggle, not a primary action.
+  button {
+    padding: tokens.$space-1 tokens.$space-3;
+  }
+
+  // On narrow screens where the row wraps, the picker is alone on its line
+  // and should fill the full width.
+  @media (max-width: 500px) {
+    flex: 1 1 100%;
+  }
+}
+
 .numRunsRow {
   display: flex;
   align-items: center;
   gap: tokens.$space-3;
+  flex: 1;
+  min-width: 220px;
 
   label {
     margin: 0;
@@ -105,18 +140,45 @@
 
 .expanderButtons {
   display: flex;
-  margin-bottom: 4px;
+  flex-wrap: wrap;
+  gap: tokens.$space-1;
 
   button {
-    margin: 0 auto;
-    color: colors.$blue;
-    font-size: 16px;
-    text-align: center;
-  }
+    display: inline-flex;
+    align-items: center;
+    gap: tokens.$space-1;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background-color: tokens.$surface-muted;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-xs;
+    font-weight: 600;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
 
-  .disabled {
-    color: colors.$gray;
-    cursor: default;
+    svg {
+      font-size: 10px;
+      transition: transform 0.15s ease;
+    }
+
+    &:not(.disabled):hover {
+      color: tokens.$surface-ink;
+    }
+
+    &.expanded {
+      background-color: colors.$gk-orange-extra-light;
+      color: colors.$gk-red-orange;
+
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
   }
 }
 
@@ -141,13 +203,16 @@
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
-  gap: 8px;
+  gap: tokens.$space-2;
+}
 
-  button,
-  a {
-    min-width: 60px;
-    padding: 8px;
+// Hide button text on narrow screens so the action toolbar collapses
+// into icons — icons remain to anchor the affordance.
+.buttonText {
+  @media (max-width: 480px) {
+    display: none;
   }
 }
 

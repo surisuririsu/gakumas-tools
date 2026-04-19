@@ -23,16 +23,18 @@ export default function SimulatorResultGraphs({ data, plan }) {
 
   return (
     <div>
-      <ButtonGroup
-        className={styles.graphSelect}
-        options={[
-          { value: "histogram", label: HISTOGRAM },
-          { value: "boxplot", label: BOXPLOT },
-          { value: "area", label: AREA },
-        ]}
-        selected={graphType}
-        onChange={setGraphType}
-      />
+      <div data-export-hide="true">
+        <ButtonGroup
+          className={styles.graphSelect}
+          options={[
+            { value: "histogram", label: HISTOGRAM },
+            { value: "boxplot", label: BOXPLOT },
+            { value: "area", label: AREA },
+          ]}
+          selected={graphType}
+          onChange={setGraphType}
+        />
+      </div>
       {graphType == "histogram" && (
         <DistributionPlot
           label={label}

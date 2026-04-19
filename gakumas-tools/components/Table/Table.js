@@ -1,9 +1,10 @@
 import { memo } from "react";
+import c from "@/utils/classNames";
 import styles from "./Table.module.scss";
 
-function Table({ headers, widths = [], rows }) {
+function Table({ headers, widths = [], rows, className }) {
   return (
-    <table className={styles.table}>
+    <table className={c(styles.table, className)}>
       <thead>
         <tr>
           {headers.map((header, i) => (

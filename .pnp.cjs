@@ -3550,6 +3550,7 @@ const RAW_RUNTIME_STATE =
           ["gakumas-engine", "workspace:packages/gakumas-engine"],\
           ["gakumas-images", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#workspace:packages/gakumas-images"],\
           ["gakumas-tools", "workspace:gakumas-tools"],\
+          ["html-to-image", "npm:1.11.13"],\
           ["mongodb", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:7.1.0"],\
           ["next", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:16.1.7"],\
           ["next-auth", "virtual:c329f4bce9d6cb5068f034092eac2b6609b9c403ea1f3ff7962a577845e8b6141703dd480a23de1313d01b00751563ffb90454072ad3a8400c165217bdf20ec9#npm:4.24.13"],\
@@ -3813,6 +3814,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["hoist-non-react-statics", "npm:3.3.2"],\
           ["react-is", "npm:16.13.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["html-to-image", [\
+      ["npm:1.11.13", {\
+        "packageLocation": "../../../.yarn/berry/cache/html-to-image-npm-1.11.13-86e990604f-10c0.zip/node_modules/html-to-image/",\
+        "packageDependencies": [\
+          ["html-to-image", "npm:1.11.13"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -58,3 +58,7 @@ button {
 textarea {
   font-family: inherit;
 }
+
+.exporting [data-export-hide="true"] {
+  display: none !important;
+}

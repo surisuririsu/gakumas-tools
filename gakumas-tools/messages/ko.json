@@ -251,7 +251,6 @@
   },
   "SimulatorSubTools": {
     "costRanges": "코스트 범위",
-    "history": "내역 β",
     "defaultCards": "기본 카드"
   },
   "CostRanges": {
@@ -262,7 +261,16 @@
   "SimulatorButtons": {
     "confirm": "편성을 초기화할까요?",
     "clear": "초기화",
-    "manageLoadouts": "저장 및 불러오기 β"
+    "manageLoadouts": "저장 및 불러오기 β",
+    "history": "내역 β",
+    "share": "공유"
+  },
+  "ShareModal": {
+    "title": "공유",
+    "more": "더보기…",
+    "x": "X에 공유",
+    "saveImage": "이미지로 저장",
+    "exporting": "저장 중…"
   },
   "ConfirmModal": {
     "cancel": "취소",

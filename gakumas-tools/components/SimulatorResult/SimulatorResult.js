@@ -4,6 +4,7 @@ import { FaCircleArrowUp } from "react-icons/fa6";
 import ButtonGroup from "@/components/ButtonGroup";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
+import Table from "@/components/Table";
 import { logEvent } from "@/utils/logging";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
@@ -40,55 +41,51 @@ function SimulatorResult({ data, idolId, plan }) {
 
   return (
     <div id="simulator_result" className={styles.result}>
-      <table className={styles.stats}>
-        <thead>
-          <tr>
-            <th>{t("min")}</th>
-            <th>{t("average")}</th>
-            <th>{t("median")}</th>
-            <th>{t("max")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{data.minRun.score}</td>
-            <td>{data.averageScore}</td>
-            <td>{data.medianScore}</td>
-            <td>{data.maxRun.score}</td>
-          </tr>
-        </tbody>
-      </table>
+      <Table
+        className={styles.stats}
+        headers={[t("min"), t("average"), t("median"), t("max")]}
+        rows={[
+          [
+            data.minRun.score,
+            data.averageScore,
+            data.medianScore,
+            data.maxRun.score,
+          ],
+        ]}
+      />
 
       <SimulatorResultGraphs data={data} plan={plan} />
 
-      <ButtonGroup
-        options={TABS.map((value) => ({ value, label: t(value) }))}
-        selected={tab}
-        onChange={setTab}
-      />
-
-      {tab === "logs" && (
-        <SimulatorLogs
-          minRun={data.minRun}
-          averageRun={data.averageRun}
-          maxRun={data.maxRun}
-          idolId={idolId}
+      <div className={styles.details} data-export-hide="true">
+        <ButtonGroup
+          options={TABS.map((value) => ({ value, label: t(value) }))}
+          selected={tab}
+          onChange={setTab}
         />
-      )}
 
-      {tab === "stats" && (
-        <SimulatorStats
-          cardUsage={data.cardUsage}
-          scoreStats={data.scoreStats}
-        />
-      )}
+        {tab === "logs" && (
+          <SimulatorLogs
+            minRun={data.minRun}
+            averageRun={data.averageRun}
+            maxRun={data.maxRun}
+            idolId={idolId}
+          />
+        )}
 
-      <div className={styles.footer}>
-        <KofiAd />
-        <a className={styles.toTop} href="#simulator_loadout">
-          Top
-          <FaCircleArrowUp />
-        </a>
+        {tab === "stats" && (
+          <SimulatorStats
+            cardUsage={data.cardUsage}
+            scoreStats={data.scoreStats}
+          />
+        )}
+
+        <div className={styles.footer}>
+          <KofiAd />
+          <a className={styles.toTop} href="#simulator_loadout">
+            Top
+            <FaCircleArrowUp />
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -251,7 +251,6 @@
   },
   "SimulatorSubTools": {
     "costRanges": "容量范围",
-    "history": "历史记录 β",
     "defaultCards": "基本卡组"
   },
   "CostRanges": {
@@ -262,7 +261,16 @@
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
-    "manageLoadouts": "保存/加载 β"
+    "manageLoadouts": "保存/加载 β",
+    "history": "历史记录 β",
+    "share": "分享"
+  },
+  "ShareModal": {
+    "title": "分享",
+    "more": "更多…",
+    "x": "分享到 X",
+    "saveImage": "保存为图片",
+    "exporting": "保存中…"
   },
   "ConfirmModal": {
     "cancel": "取消",

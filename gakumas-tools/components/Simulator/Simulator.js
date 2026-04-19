@@ -57,7 +57,7 @@ export default function Simulator() {
     setCurrentLoadoutIndex,
   } = useContext(LoadoutContext);
   const { pushLoadoutHistory, pushLoadoutsHistory } = useContext(
-    LoadoutHistoryContext
+    LoadoutHistoryContext,
   );
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
@@ -111,7 +111,7 @@ export default function Simulator() {
     workersRef.current = [];
     for (let i = 0; i < numWorkers; i++) {
       workersRef.current.push(
-        new Worker(new URL("../../simulator/worker.js", import.meta.url))
+        new Worker(new URL("../../simulator/worker.js", import.meta.url)),
       );
     }
 
@@ -128,7 +128,7 @@ export default function Simulator() {
       setSimulatorData({ bucketedScores, medianScore, bucketSize, ...result });
       setRunning(false);
     },
-    [setSimulatorData, setRunning]
+    [setSimulatorData, setRunning],
   );
 
   async function startManualPlay() {
@@ -145,7 +145,7 @@ export default function Simulator() {
 
     const wrappedInputCallback = async (decision) => {
       const currentLogs = decision.state[S.logs].map(
-        (logIndex) => engine.logger.logs[logIndex]
+        (logIndex) => engine.logger.logs[logIndex],
       );
       currentLogs[currentLogs.length - 1] = {
         ...currentLogs[currentLogs.length - 1],
@@ -188,7 +188,7 @@ export default function Simulator() {
               strategyName: strategy,
               numRuns: runsPerWorker,
             });
-          })
+          }),
         );
       }
 
@@ -226,7 +226,7 @@ export default function Simulator() {
                 <Input
                   type="number"
                   value={parseFloat(
-                    ((loadout.supportBonus || 0) * 100).toFixed(2)
+                    ((loadout.supportBonus || 0) * 100).toFixed(2),
                   )}
                   onChange={(value) =>
                     setSupportBonus(parseFloat((value / 100).toFixed(4)))
@@ -278,20 +278,23 @@ export default function Simulator() {
           />
         )}
 
-        <SimulatorSubTools defaultCardIds={config.defaultCardIds} />
+        <div data-export-hide="true">
+          <SimulatorSubTools defaultCardIds={config.defaultCardIds} />
+        </div>
 
-        <StrategyPicker
-          strategy={strategy}
-          setStrategy={(value) => {
-            setSimulatorData(null);
-            setPendingDecision(null);
-            setStrategy(value);
-            setRunning(false);
-          }}
-        />
-
-        {strategy === "HeuristicStrategy" && (
-          <>
+        <div className={styles.simControls} data-export-hide="true">
+          <div className={styles.strategyPicker}>
+            <StrategyPicker
+              strategy={strategy}
+              setStrategy={(value) => {
+                setSimulatorData(null);
+                setPendingDecision(null);
+                setStrategy(value);
+                setRunning(false);
+              }}
+            />
+          </div>
+          {strategy === "HeuristicStrategy" && (
             <div className={styles.numRunsRow}>
               <label>{t("numRuns")}</label>
               <span>{numRuns}</span>
@@ -305,24 +308,31 @@ export default function Simulator() {
                 step={200}
               />
             </div>
+          )}
+        </div>
+
+        <div data-export-hide="true">
+          {strategy === "HeuristicStrategy" && (
             <Button
               style="blue"
-              size="lg"
+              fill
               onClick={runSimulation}
               disabled={running}
             >
               {running ? <Loader /> : t("simulate")}
             </Button>
-          </>
-        )}
+          )}
 
-        {strategy === "ManualStrategy" && (
-          <Button style="blue" size="lg" onClick={startManualPlay}>
-            {running ? t("restart") : t("start")}
-          </Button>
-        )}
+          {strategy === "ManualStrategy" && (
+            <Button style="blue" fill onClick={startManualPlay}>
+              {running ? t("restart") : t("start")}
+            </Button>
+          )}
+        </div>
+
         <SimulatorButtons />
-        <div className={styles.subLinks}>
+
+        <div className={styles.subLinks} data-export-hide="true">
           <KofiAd />
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"

@@ -1,13 +1,13 @@
-@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .result {
   flex: 1;
   max-width: Min(100%, 800px);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 4px 16px 16px;
+  gap: tokens.$space-2;
+  padding: tokens.$space-1 tokens.$space-4 tokens.$space-4;
 
   .graphSelect button {
     font-size: 20px;
@@ -15,19 +15,41 @@
   }
 }
 
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+// Min/avg/median/max headline stats. Orange thead + pale-orange tbody
+// gives the result its own brand moment; tighter padding keeps it compact
+// since there's only one data row.
 .stats {
-  text-align: center;
-
   thead {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 20%);
-  }
-
-  tbody {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 40%);
+    background: tokens.$gradient-brand;
   }
 
   th {
-    width: 25%;
+    color: colors.$white;
+  }
+
+  tbody {
+    background-color: colors.$gk-orange-extra-light;
+  }
+
+  tbody tr {
+    border-bottom: 0;
+  }
+
+  td {
+    font-size: tokens.$text-lg;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th,
+  td {
+    padding: tokens.$space-1 tokens.$space-2;
   }
 }
 

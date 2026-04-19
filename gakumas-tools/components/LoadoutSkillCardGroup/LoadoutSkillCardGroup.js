@@ -45,7 +45,7 @@ function LoadoutSkillCardGroup({
     swapSkillCardIdGroups,
   } = useContext(LoadoutContext);
   const { setTargetSkillCardIds, setAcquiredSkillCardIds } = useContext(
-    MemoryCalculatorContext
+    MemoryCalculatorContext,
   );
   const { setModal, closeModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
@@ -64,12 +64,12 @@ function LoadoutSkillCardGroup({
             card,
           };
         }),
-    [skillCardIds]
+    [skillCardIds],
   );
 
   const cost = useMemo(
     () => costBreakdown.reduce((acc, cur) => acc + cur.cost, 0),
-    [costBreakdown]
+    [costBreakdown],
   );
 
   return (
@@ -99,12 +99,13 @@ function LoadoutSkillCardGroup({
         <div
           className={c(styles.buttonGroup, expanded && styles.expanded)}
           onClick={() => setExpanded(false)}
+          data-export-hide="true"
         >
           <button
             className={styles.memoryCalculatorButton}
             onClick={() => {
               const nonPidolSkillCardIds = skillCardIds.filter(
-                (id) => SkillCards.getById(id).sourceType != "pIdol"
+                (id) => SkillCards.getById(id).sourceType != "pIdol",
               );
               setTargetSkillCardIds(() => nonPidolSkillCardIds);
               setAcquiredSkillCardIds(() => nonPidolSkillCardIds);
@@ -133,7 +134,7 @@ function LoadoutSkillCardGroup({
                     setMemory(memories[0], groupIndex);
                     closeModal();
                   }}
-                />
+                />,
               )
             }
           >
@@ -183,7 +184,7 @@ function LoadoutSkillCardGroup({
       </div>
 
       {costExpanded && (
-        <ul className={styles.costBreakdown}>
+        <ul className={styles.costBreakdown} data-export-hide="true">
           {costBreakdown.map((item, i) => (
             <li key={`${i}_${item.id}`}>
               <Image

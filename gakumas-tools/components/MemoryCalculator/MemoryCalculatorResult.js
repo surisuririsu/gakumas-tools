@@ -5,9 +5,9 @@ import Image from "@/components/Image";
 import { calculateSkillCardCost } from "@/utils/contestPower";
 import styles from "./MemoryCalculator.module.scss";
 
-function MemoryCalculatorResult({ skillCardIds, probability, idolId, style }) {
+function MemoryCalculatorResult({ skillCardIds, probability, idolId }) {
   return (
-    <div className={styles.result} style={style}>
+    <div className={styles.result}>
       {skillCardIds.map(SkillCards.getById).map((skillCard) => (
         <div key={skillCard.id} className={styles.card}>
           <Image
