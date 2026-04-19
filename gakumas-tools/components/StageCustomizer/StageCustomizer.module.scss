@@ -1,25 +1,32 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .stageCustomizer {
   max-height: 800px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2;
+
+  // Prevent flex children from compressing vertically when EffectEditor
+  // grows tall — the container should scroll instead.
+  > * {
+    flex-shrink: 0;
+  }
 }
 
 .effects {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: tokens.$space-1;
 
   a {
     color: colors.$blue;
-    font-size: 14px;
+    font-size: tokens.$text-sm;
   }
 }
 
 .apply {
-  margin-top: 16px;
+  margin-top: tokens.$space-3;
 }

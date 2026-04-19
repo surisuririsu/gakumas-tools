@@ -1,6 +1,7 @@
 @use "sass:color";
 @use "../../styles/colors";
 @use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .oshi {
   font-size: 24px;
@@ -27,17 +28,9 @@
 
 .percentRow {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  gap: 4px;
-}
-
-.enterPercentsToggle {
-  display: flex;
-  flex-direction: row-reverse;
   align-items: center;
-  gap: 8px;
-  color: colors.$gk-orange;
+  gap: tokens.$space-3;
+  flex-wrap: wrap;
 }
 
 .loadoutTabs {
@@ -77,12 +70,37 @@
 
 .supportBonusInput {
   display: flex;
-  gap: 8px;
+  gap: tokens.$space-2;
   align-items: baseline;
 
   input {
     width: 80px;
   }
+}
+
+.numRunsRow {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-3;
+
+  label {
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  span {
+    min-width: 42px;
+    color: tokens.$surface-ink;
+    font-size: tokens.$text-base;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+}
+
+.numRunsSlider {
+  flex: 1;
+  min-width: 0;
 }
 
 .expanderButtons {

@@ -203,6 +203,7 @@
     "linkContestNote": "Link Contest 的行为模拟可能不准确。尚未实现不同偶像间 P 道具和技能卡的去重。请在配置编辑器中手动去重并添加基本卡组。",
     "custom": "自定义",
     "simulate": "模拟",
+    "numRuns": "运行次数",
     "provideData": "提供数据",
     "lastUpdated": "最后更新于",
     "start": "开始",

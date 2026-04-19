@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { FaArrowsRotate, FaHashtag, FaPercent } from "react-icons/fa6";
+import { FaHashtag, FaPercent } from "react-icons/fa6";
 import { Tooltip } from "react-tooltip";
 import {
   IdolConfig,
@@ -21,7 +21,7 @@ import {
 } from "gakumas-engine/structured";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
-import IconButton from "@/components/IconButton";
+import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
 import Loader from "@/components/Loader";
@@ -212,14 +212,14 @@ export default function Simulator() {
           <Alert>{t("enterPercents")}</Alert>
         ) : (
           <div className={styles.percentRow}>
-            <div className={styles.enterPercentsToggle}>
-              <IconButton
-                icon={FaArrowsRotate}
-                size="small"
-                onClick={() => setEnterPercents(!enterPercents)}
-              />
-              {enterPercents ? <FaPercent /> : <FaHashtag />}
-            </div>
+            <ButtonGroup
+              selected={enterPercents ? "percent" : "count"}
+              options={[
+                { value: "count", label: <FaHashtag /> },
+                { value: "percent", label: <FaPercent /> },
+              ]}
+              onChange={(v) => setEnterPercents(v === "percent")}
+            />
             {!enterPercents && (
               <div className={styles.supportBonusInput}>
                 <label>{t("supportBonus")}</label>
@@ -292,22 +292,32 @@ export default function Simulator() {
 
         {strategy === "HeuristicStrategy" && (
           <>
-            <input
-              type="range"
-              value={numRuns}
-              onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
-              min={200}
-              max={4000}
-              step={200}
-            />
-            <Button style="blue" onClick={runSimulation} disabled={running}>
-              {running ? <Loader /> : `${t("simulate")} (n=${numRuns})`}
+            <div className={styles.numRunsRow}>
+              <label>{t("numRuns")}</label>
+              <span>{numRuns}</span>
+              <input
+                className={styles.numRunsSlider}
+                type="range"
+                value={numRuns}
+                onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
+                min={200}
+                max={4000}
+                step={200}
+              />
+            </div>
+            <Button
+              style="blue"
+              size="lg"
+              onClick={runSimulation}
+              disabled={running}
+            >
+              {running ? <Loader /> : t("simulate")}
             </Button>
           </>
         )}
 
         {strategy === "ManualStrategy" && (
-          <Button style="blue" onClick={startManualPlay}>
+          <Button style="blue" size="lg" onClick={startManualPlay}>
             {running ? t("restart") : t("start")}
           </Button>
         )}

@@ -24,6 +24,11 @@
   font-size: tokens.$text-base;
 }
 
+.lg {
+  padding: tokens.$space-3 tokens.$space-5;
+  font-size: tokens.$text-lg;
+}
+
 .default {
   background-color: colors.$white;
   color: colors.$black;
@@ -36,12 +41,12 @@
 }
 
 .primary {
-  background-color: colors.$gk-orange;
+  background: tokens.$gradient-brand;
   color: colors.$white;
 
   &:hover,
   &:focus-visible {
-    background-color: colors.$gk-red-orange;
+    background: colors.$gk-red-orange;
   }
 }
 
