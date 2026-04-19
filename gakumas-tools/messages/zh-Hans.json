@@ -282,7 +282,8 @@
     "median": "中位分",
     "max": "最高分",
     "logs": "记录",
-    "stats": "统计"
+    "stats": "统计",
+    "downloadScores": "分数"
   },
   "SimulatorStats": {
     "total": "合计",

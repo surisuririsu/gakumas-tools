@@ -64,3 +64,11 @@
   gap: 4px;
   color: colors.$blue;
 }
+
+.download {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: colors.$blue;
+  font-size: inherit;
+}

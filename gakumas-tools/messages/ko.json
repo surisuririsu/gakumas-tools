@@ -282,7 +282,8 @@
     "median": "중앙값",
     "max": "최댓값",
     "logs": "로그",
-    "stats": "통계"
+    "stats": "통계",
+    "downloadScores": "점수"
   },
   "SimulatorStats": {
     "total": "합계",

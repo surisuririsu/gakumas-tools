@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCircleArrowUp } from "react-icons/fa6";
+import { FaCircleArrowUp, FaDownload } from "react-icons/fa6";
+import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
@@ -39,6 +40,18 @@ function SimulatorResult({ data, idolId, plan }) {
     logEvent("simulator_tab_switch", { tab: value });
   }, []);
 
+  const downloadScores = useCallback(() => {
+    const csv = data.scores.join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "simulator_scores.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    logEvent("simulator_scores_download", { count: data.scores.length });
+  }, [data.scores]);
+
   return (
     <div id="simulator_result" className={styles.result}>
       <Table
@@ -55,6 +68,13 @@ function SimulatorResult({ data, idolId, plan }) {
       />
 
       <SimulatorResultGraphs data={data} plan={plan} />
+
+      <div data-export-hide="true">
+        <Button fill size="sm" onClick={downloadScores}>
+          <FaDownload />
+          {t("downloadScores")}
+        </Button>
+      </div>
 
       <div className={styles.details} data-export-hide="true">
         <ButtonGroup

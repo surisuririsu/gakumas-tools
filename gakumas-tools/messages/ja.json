@@ -282,7 +282,8 @@
     "median": "中央値",
     "max": "最大値",
     "logs": "ログ",
-    "stats": "統計"
+    "stats": "統計",
+    "downloadScores": "スコア"
   },
   "SimulatorStats": {
     "total": "合計",

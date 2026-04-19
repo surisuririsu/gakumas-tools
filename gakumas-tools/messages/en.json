@@ -282,7 +282,8 @@
     "median": "Median",
     "max": "Max",
     "logs": "Logs",
-    "stats": "Stats"
+    "stats": "Stats",
+    "downloadScores": "Scores"
   },
   "SimulatorStats": {
     "total": "Total",
