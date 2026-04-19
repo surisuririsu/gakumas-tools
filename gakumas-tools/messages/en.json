@@ -168,7 +168,11 @@
   "MemoryEditorModal": {
     "name": "Name",
     "contestPower": "Contest power",
-    "cost": "Cost"
+    "cost": "Cost",
+    "parameters": "Parameters",
+    "pItems": "P-items",
+    "skillCards": "Skill cards",
+    "customizations": "Customizations"
   },
   "ParametersInput": {
     "stamina": "Stamina"

@@ -1,11 +1,13 @@
+@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .memories {
   max-width: 560px;
   height: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  margin: -6px auto 0 auto;
   overflow: hidden;
   container-type: inline-size;
 }
@@ -14,16 +16,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 32px;
+  gap: tokens.$space-4;
+  padding: tokens.$space-6;
 }
 
 .header {
   display: flex;
   flex-direction: row;
-  gap: 6px;
-  border-bottom: 2px solid colors.$gray-light;
-  padding: 6px;
+  align-items: center;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2 tokens.$space-3;
+  border-bottom: 1px solid tokens.$surface-border;
 }
 
 .fill {
@@ -31,10 +34,15 @@
 }
 
 .count {
-  align-self: flex-end;
   display: flex;
   align-items: center;
-  color: colors.$gk-orange;
+  gap: tokens.$space-1;
+  padding: tokens.$space-1 tokens.$space-2;
+  border-radius: 999px;
+  background-color: tokens.$surface-muted;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: 600;
 }
 
 .search {
@@ -42,13 +50,15 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: tokens.$space-1;
 }
 
 .delete {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: tokens.$space-2;
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
 }
 
 .list {
@@ -60,16 +70,16 @@
 
 .memoryTile {
   display: flex;
-  border-bottom: 1px solid colors.$gk-orange;
+  border-bottom: 1px solid tokens.$surface-border;
 }
 
 .check {
   display: flex;
-  background-color: colors.$red-extra-light;
+  background-color: color.adjust(colors.$red, $alpha: -0.85);
 
   input {
     width: 16px;
-    margin: 8px;
+    margin: tokens.$space-2;
     accent-color: colors.$red-dark;
     cursor: pointer;
   }

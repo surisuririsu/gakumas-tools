@@ -168,7 +168,11 @@
   "MemoryEditorModal": {
     "name": "命名",
     "contestPower": "总合力",
-    "cost": "容量"
+    "cost": "容量",
+    "parameters": "参数",
+    "pItems": "P道具",
+    "skillCards": "技能卡",
+    "customizations": "定制"
   },
   "ParametersInput": {
     "stamina": "体力"

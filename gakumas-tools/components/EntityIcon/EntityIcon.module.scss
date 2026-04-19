@@ -93,7 +93,7 @@ button.entityIcon:focus .emptyPlaceholder {
   height: 12px;
   font-size: 9px;
 
-  @container (width < 600px) {
+  @container (width < 400px) {
     width: 11px;
     height: 11px;
     font-size: 8px;
@@ -111,7 +111,7 @@ button.entityIcon:focus .emptyPlaceholder {
     box-shadow: 0 0 6px $c11n-color;
   }
 
-  @container (width < 600px) {
+  @container (width < 400px) {
     width: 16px;
     height: 16px;
     font-size: 12px;

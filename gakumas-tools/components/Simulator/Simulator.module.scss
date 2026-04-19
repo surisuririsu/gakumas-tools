@@ -77,6 +77,8 @@
 
 .supportBonusInput {
   display: flex;
+  gap: 8px;
+  align-items: baseline;
 
   input {
     width: 80px;

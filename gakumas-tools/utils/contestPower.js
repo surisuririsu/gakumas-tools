@@ -22,7 +22,7 @@ export const COST_RANGES_BY_RANK = COST_RANGES.reduce((acc, cur) => {
   return acc;
 }, {});
 
-export function calculateContestPower(
+export function calculateContestPowerBreakdown(
   params,
   pItemIds,
   skillCardIds,
@@ -30,18 +30,39 @@ export function calculateContestPower(
 ) {
   const [vocal, dance, visual, stamina] = params.map((p) => p || 0);
   const paramPower = 3 * (vocal + dance + visual) + 24 * stamina;
-  const pItems = pItemIds.filter((p) => !!p).map(PItems.getById);
-  const pItemPower = pItems.reduce((acc, cur) => acc + cur.contestPower, 0);
-  const skillCards = skillCardIds.filter((s) => !!s).map(SkillCards.getById);
-  const skillCardPower = skillCards.reduce(
-    (acc, cur) => acc + cur.contestPower,
-    0
-  );
+  const pItemPower = pItemIds
+    .filter((p) => !!p)
+    .map(PItems.getById)
+    .reduce((acc, cur) => acc + cur.contestPower, 0);
+  const skillCardPower = skillCardIds
+    .filter((s) => !!s)
+    .map(SkillCards.getById)
+    .reduce((acc, cur) => acc + cur.contestPower, 0);
   const customizationPower = (customizations || []).reduce(
     (acc, cur) => acc + countCustomizations(cur) * 36,
     0
   );
-  return paramPower + pItemPower + skillCardPower + customizationPower;
+  return {
+    total: paramPower + pItemPower + skillCardPower + customizationPower,
+    paramPower,
+    pItemPower,
+    skillCardPower,
+    customizationPower,
+  };
+}
+
+export function calculateContestPower(
+  params,
+  pItemIds,
+  skillCardIds,
+  customizations
+) {
+  return calculateContestPowerBreakdown(
+    params,
+    pItemIds,
+    skillCardIds,
+    customizations
+  ).total;
 }
 
 export function calculateSkillCardCost(skillCardIds) {

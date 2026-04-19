@@ -1,17 +1,16 @@
 @use "../../styles/mixins";
-@use "sass:color";
-@use "../../styles/colors";
+@use "../../styles/tokens";
 
 .memorySummary {
   min-width: 0;
   max-width: 100vw;
   flex: 1;
   display: flex;
-  transition: 0.2s all;
+  transition: background-color 0.15s ease;
 
   &:hover,
   &:focus-within {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 30%);
+    background-color: tokens.$surface-muted;
 
     .left .actions {
       opacity: 1;
@@ -31,9 +30,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
   opacity: 0;
-  transition: 0.2s all;
+  transition: opacity 0.15s ease;
 
   button {
     transform: scale(0.6);
@@ -44,14 +43,28 @@
 .details {
   flex: 1;
   min-width: 0;
-  padding: 4px;
+  padding: tokens.$space-1 tokens.$space-2;
 }
 
 .text {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 16px;
+  gap: tokens.$space-2;
+  font-size: tokens.$text-base;
+  font-weight: 600;
+
+  span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span:last-child {
+    flex-shrink: 0;
+    color: tokens.$surface-ink-muted;
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 .row {
@@ -72,8 +85,8 @@
   width: 120px;
   display: flex;
   gap: 1px;
-  margin: 8px 0;
-  border-radius: 4px;
+  margin: tokens.$space-2 0;
+  border-radius: tokens.$radius-sm;
   overflow: hidden;
 
   & > div {

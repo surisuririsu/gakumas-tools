@@ -168,7 +168,11 @@
   "MemoryEditorModal": {
     "name": "이름",
     "contestPower": "종합력",
-    "cost": "코스트"
+    "cost": "코스트",
+    "parameters": "파라미터",
+    "pItems": "P아이템",
+    "skillCards": "스킬 카드",
+    "customizations": "커스터마이즈"
   },
   "ParametersInput": {
     "stamina": "체력"

@@ -70,6 +70,7 @@ function MemoriesHeader({
           )}
           <IconButton
             icon={FaRegTrashCan}
+            tone="danger"
             onClick={() => setAction("delete")}
           />
           <div className={styles.fill} />

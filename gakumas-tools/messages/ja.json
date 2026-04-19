@@ -168,7 +168,11 @@
   "MemoryEditorModal": {
     "name": "名前",
     "contestPower": "総合力",
-    "cost": "コスト"
+    "cost": "コスト",
+    "parameters": "パラメータ",
+    "pItems": "Pアイテム",
+    "skillCards": "スキルカード",
+    "customizations": "カスタマイズ"
   },
   "ParametersInput": {
     "stamina": "体力"

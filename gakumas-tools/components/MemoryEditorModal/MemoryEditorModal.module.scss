@@ -1,17 +1,95 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
 .memoryEditor {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
   overflow: auto;
 }
 
-.power {
+.name {
   display: flex;
-  align-items: center;
-  gap: 8px;
+
+  input {
+    flex: 1;
+    font-size: tokens.$text-lg;
+    text-align: left;
+  }
 }
 
 .params {
   max-width: 400px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+}
+
+// Clickable pill chips — on hover the bg darkens, on open the chip
+// gets a subtle filled treatment so it reads as "expanded".
+.stat {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  padding: tokens.$space-1 tokens.$space-3;
+  border: none;
+  border-radius: 999px;
+  background-color: tokens.$surface-muted;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  label {
+    margin: 0;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-xs;
+    cursor: pointer;
+  }
+
+  span {
+    color: tokens.$surface-ink;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &:hover,
+  &.statOpen {
+    background-color: tokens.$surface-alt;
+  }
+}
+
+.breakdown {
+  list-style: none;
+  padding: tokens.$space-2 tokens.$space-3;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-1;
+  background-color: tokens.$surface-muted;
+  border-radius: tokens.$radius-sm;
+  font-size: tokens.$text-sm;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: tokens.$space-2;
+    color: tokens.$surface-ink;
+
+    span:last-child {
+      margin-left: auto;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+.breakdownName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }

@@ -3,10 +3,18 @@ import { Link } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./IconButton.module.scss";
 
-function IconButton({ icon: Icon, onClick, href, disabled, size = "medium" }) {
+function IconButton({
+  icon: Icon,
+  onClick,
+  href,
+  disabled,
+  size = "medium",
+  tone,
+}) {
   const className = c(
     styles.iconButton,
     styles[size],
+    tone && styles[tone],
     disabled && styles.disabled
   );
 
