@@ -1,19 +1,30 @@
-@use "../../styles/colors";
+@use "../../styles/tokens";
 
 .table {
-  color: colors.$black-dark;
+  width: 100%;
+  color: tokens.$surface-ink;
   text-align: center;
+  border-collapse: collapse;
 
   thead {
-    background-color: colors.$gk-orange-light;
+    background-color: tokens.$surface-muted;
   }
 
-  tbody {
-    background-color: colors.$gk-orange-extra-light;
+  th {
+    color: tokens.$surface-ink-muted;
+    font-weight: 600;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid tokens.$surface-border;
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 
   th,
   td {
-    padding: 4px 8px;
+    padding: tokens.$space-2 tokens.$space-3;
   }
 }

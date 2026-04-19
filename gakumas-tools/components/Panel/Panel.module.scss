@@ -13,18 +13,18 @@
   padding: tokens.$space-4;
 }
 
-// Label punches through the top border with the panel's bg color.
 .label {
   position: absolute;
   top: -12px;
   left: tokens.$space-3;
-  padding: 0 tokens.$space-2;
-  background-color: tokens.$surface-panel;
+  padding: tokens.$space-1 tokens.$space-3;
+  border-radius: 999px;
+  background-color: tokens.$surface-muted;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
   font-weight: 700;
   letter-spacing: 0.04em;
-  line-height: 16px;
+  line-height: 1;
   text-transform: uppercase;
 }
 

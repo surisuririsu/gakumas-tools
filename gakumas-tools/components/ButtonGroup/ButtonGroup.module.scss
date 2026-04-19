@@ -1,27 +1,39 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .buttonGroup {
   display: flex;
-  border: 1px solid colors.$gk-orange;
-  border-radius: 4px;
-  overflow: hidden;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
 
   button {
     flex: 1;
-    padding: 6px;
-    color: colors.$gk-orange;
-    font-size: 14px;
-    line-height: 16px;
-    transition: all 0.2s;
+    min-width: 44px;
+    padding: tokens.$space-2 tokens.$space-3;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-sm;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      background-color 0.15s,
+      color 0.15s;
 
     &.selected {
-      background-color: colors.$gk-orange;
+      background: tokens.$gradient-brand;
       color: colors.$white;
+      font-weight: 700;
     }
 
-    &:hover {
+    &:not(.selected):hover {
       background-color: colors.$gk-orange-extra-light;
       color: colors.$gk-red-orange;
+    }
+
+    & + button {
+      border-left: 1px solid tokens.$surface-border;
     }
   }
 }

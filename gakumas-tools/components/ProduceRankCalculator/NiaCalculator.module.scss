@@ -35,25 +35,25 @@
     }
   }
 
-  th {
+  thead th {
     background-color: colors.$gray;
     color: colors.$white;
     width: 22%;
   }
 
-  th:nth-child(1) {
+  thead th:nth-child(1) {
     width: 34%;
   }
 
-  th:nth-child(2) {
+  thead th:nth-child(2) {
     background-color: colors.$vocal;
   }
 
-  th:nth-child(3) {
+  thead th:nth-child(3) {
     background-color: colors.$dance;
   }
 
-  th:nth-child(4) {
+  thead th:nth-child(4) {
     background-color: colors.$visual;
   }
 

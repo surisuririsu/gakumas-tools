@@ -122,7 +122,7 @@ function HajimeCalculator() {
       />
 
       {!!actualScore && (
-        <Panel label={t("produceRank")}>
+        <Panel label={t("produceRank")} className={styles.resultPanel}>
           <ProduceRankResult rating={actualRating} rank={actualRank} />
         </Panel>
       )}

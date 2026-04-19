@@ -1,10 +1,11 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .iconSelect {
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
-  border: 2px solid colors.$gray-light;
+  border: 1px solid tokens.$surface-border;
   border-radius: 22px;
   padding: 4px;
 }
@@ -12,7 +13,14 @@
 .option {
   border-radius: 16px;
   padding: 4px;
-  transition: all 0.2s;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    background-color: tokens.$surface-muted;
+  }
 
   @container (width < 512px) {
     display: none;
@@ -32,5 +40,6 @@
 }
 
 .selected {
-  box-shadow: 0 0 4px colors.$gray-dark;
+  background-color: colors.$gk-orange-extra-light;
+  box-shadow: 0 0 0 2px colors.$gk-orange;
 }
