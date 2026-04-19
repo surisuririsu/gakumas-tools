@@ -1,14 +1,16 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .results {
   table-layout: fixed;
   width: 100%;
   text-align: center;
+  border-collapse: collapse;
 
   th,
   td {
-    padding: 8px 0;
+    padding: tokens.$space-2 0;
   }
 
   th {
@@ -29,24 +31,24 @@
   }
 
   td {
-    color: colors.$black-dark;
+    color: tokens.$surface-ink;
   }
 
   td:nth-last-child(3n + 1) {
-    background-color: color.scale(colors.$visual, $alpha: -50%);
+    background-color: color.scale(colors.$visual, $alpha: -80%);
   }
 
   td:nth-last-child(3n + 2) {
-    background-color: color.scale(colors.$dance, $alpha: -50%);
+    background-color: color.scale(colors.$dance, $alpha: -80%);
   }
 
   td:nth-last-child(3n + 3) {
-    background-color: color.scale(colors.$vocal, $alpha: -50%);
+    background-color: color.scale(colors.$vocal, $alpha: -80%);
   }
 
   td:nth-child(-n + 2),
   .perfect {
-    background-color: colors.$gray-extra-light !important;
+    background-color: tokens.$surface-muted !important;
   }
 }
 
@@ -56,7 +58,7 @@
 
     th,
     td {
-      padding: 4px 0;
+      padding: tokens.$space-1 0;
       overflow: hidden;
     }
   }

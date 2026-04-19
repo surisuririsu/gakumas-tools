@@ -215,7 +215,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 214,ぜったいいっぱい！,SSR,FALSE,anomaly,produce,support,,FALSE,
 215,いつか見た夢,SSR,FALSE,sense,stage,pIdol,75,FALSE,"at:afterCardUsed,if:usedCardBaseId==28,do:concentration+=1,do:fixedStamina-=3,limit:2;at:afterCardUsed,if:usedCardBaseId==28,limit:2;at:startOfTurn,do:concentration+=3,limit:3"
 216,いつか見た夢+,SSR,TRUE,sense,stage,pIdol,75,FALSE,"at:afterCardUsed,if:usedCardBaseId==28,do:concentration+=1,do:fixedStamina-=1,limit:2;at:afterCardUsed,if:usedCardBaseId==28,limit:2;at:startOfTurn,do:concentration+=3,limit:3"
-217,翼,SSR,FALSE,logic,stage,pIdol,76,FALSE,"at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,do:goodImpressionTurns*=1.5,limit:2;at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,limit:2;at:turn,do:moveCardToHandFromRemoved(490),do:fixedStamina-=2,limit:1"
+217,翼,SSR,FALSE,logic,stage,pIdol,76,FALSE,"at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,do:goodImpressionTurns*=1.5,do:fixedStamina-=2,limit:2;at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,limit:2;at:turn,do:moveCardToHandFromRemoved(490),limit:1"
 218,翼+,SSR,TRUE,logic,stage,pIdol,76,FALSE,"at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,do:goodImpressionTurns*=1.5,limit:2;at:afterCardUsed,if:usedCardBaseId==58,if:genki>=7,limit:2;at:turn,do:moveCardToHandFromRemoved(490),limit:1"
 219,体ほぐしローラー,SR,FALSE,free,produce,support,,FALSE,
 220,うるおいのどケア,SR,FALSE,free,produce,support,,FALSE,
