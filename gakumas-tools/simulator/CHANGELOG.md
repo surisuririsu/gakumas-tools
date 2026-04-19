@@ -3,8 +3,22 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2026-04-19
 
-
+- Rewrite engine with new block-scoped effect language
+- Rewrite customization system (level blocks, anchor-based patches)
+- Simulation runs significantly faster
+- Verify and fix S43 stage effects
+- Add per-entity per-turn score attribution stats
+- Add per-turn card usage stats
+- Show stances on area plot (including fullPower)
+- Add button to download simulation scores as CSV
+- Add button to redistribute params to optimal allocation from sim result
+- Remember stats/logs tab preference
+- Fix effect increase/decrease trigger ordering
+- Fix reserved effects and random card use
+- Fix `group:` modifier handling
+- Fix various skill cards, p-items, customizations, and stages
 
 ## 2026-04-13
 
