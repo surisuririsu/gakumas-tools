@@ -283,7 +283,8 @@
     "max": "最高分",
     "logs": "记录",
     "stats": "统计",
-    "downloadScores": "分数"
+    "downloadScores": "分数",
+    "optimizeParams": "优化参数"
   },
   "SimulatorStats": {
     "total": "合计",

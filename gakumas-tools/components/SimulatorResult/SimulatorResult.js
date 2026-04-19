@@ -1,12 +1,14 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCircleArrowUp, FaDownload } from "react-icons/fa6";
+import { FaCircleArrowUp, FaDownload, FaWandMagicSparkles } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
+import LoadoutContext from "@/contexts/LoadoutContext";
 import { logEvent } from "@/utils/logging";
+import { findOptimalParams } from "@/utils/paramOptimizer";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
@@ -14,8 +16,9 @@ import KofiAd from "../KofiAd";
 const TABS = ["stats", "logs"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
 
-function SimulatorResult({ data, idolId, plan }) {
+function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
+  const { setParams } = useContext(LoadoutContext);
   // Default rendered during SSR / pre-hydration. Hydrated from localStorage
   // in the effect below so the initial markup matches between server and
   // client (avoids hydration mismatch warnings).
@@ -39,6 +42,24 @@ function SimulatorResult({ data, idolId, plan }) {
     }
     logEvent("simulator_tab_switch", { tab: value });
   }, []);
+
+  const optimizeParams = useCallback(() => {
+    const result = findOptimalParams({
+      scoreStats: data.scoreStats,
+      config,
+      enterPercents,
+    });
+    if (!result) return;
+    setParams((cur) => [
+      result.params.vocal,
+      result.params.dance,
+      result.params.visual,
+      cur[3],
+    ]);
+    logEvent("simulator_params_optimize", {
+      gain: Math.round(result.optimalScore - result.baseScore),
+    });
+  }, [data.scoreStats, config, enterPercents, setParams]);
 
   const downloadScores = useCallback(() => {
     const csv = data.scores.join("\n");
@@ -69,10 +90,14 @@ function SimulatorResult({ data, idolId, plan }) {
 
       <SimulatorResultGraphs data={data} plan={plan} />
 
-      <div data-export-hide="true">
+      <div className={styles.actions} data-export-hide="true">
         <Button fill size="sm" onClick={downloadScores}>
           <FaDownload />
           {t("downloadScores")}
+        </Button>
+        <Button fill size="sm" onClick={optimizeParams}>
+          <FaWandMagicSparkles />
+          {t("optimizeParams")}
         </Button>
       </div>
 

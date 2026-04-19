@@ -283,7 +283,8 @@
     "max": "최댓값",
     "logs": "로그",
     "stats": "통계",
-    "downloadScores": "점수"
+    "downloadScores": "점수",
+    "optimizeParams": "파라미터 최적화"
   },
   "SimulatorStats": {
     "total": "합계",

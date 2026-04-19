@@ -283,7 +283,8 @@
     "max": "Max",
     "logs": "Logs",
     "stats": "Stats",
-    "downloadScores": "Scores"
+    "downloadScores": "Scores",
+    "optimizeParams": "Optimize params"
   },
   "SimulatorStats": {
     "total": "Total",

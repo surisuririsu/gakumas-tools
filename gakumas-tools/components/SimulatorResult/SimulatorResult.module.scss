@@ -21,6 +21,17 @@
   gap: tokens.$space-2;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 .stats {
   thead {
     background: tokens.$gradient-brand;

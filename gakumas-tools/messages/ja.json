@@ -283,7 +283,8 @@
     "max": "最大値",
     "logs": "ログ",
     "stats": "統計",
-    "downloadScores": "スコア"
+    "downloadScores": "スコア",
+    "optimizeParams": "パラメータ最適化"
   },
   "SimulatorStats": {
     "total": "合計",

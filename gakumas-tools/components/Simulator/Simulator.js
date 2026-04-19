@@ -381,6 +381,8 @@ export default function Simulator() {
       {strategy === "HeuristicStrategy" && simulatorData && (
         <SimulatorResult
           data={simulatorData}
+          config={config}
+          enterPercents={enterPercents}
           idolId={config.idol.idolId || idolId}
           plan={config.idol.plan || plan}
         />
