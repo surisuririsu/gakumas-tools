@@ -21,21 +21,21 @@ Use the Read tool to view each image in the provided directory or paths.
 ### Step 2: Extract season number
 Look for "コンテストシーズンN" in the announcement header to get the season number.
 
-### Step 3: Analyze criteria bar
-Run the analysis script to get precise color percentages:
-```bash
-python scripts/analyze_criteria_bar.py <image_with_criteria_bar>
-```
-Convert percentages to decimals (e.g., 20% → 0.2).
+### Step 3: Analyze criteria bars (one per stage)
+**As of Season 43**, each stage has its own 審査基準 (criteria) bar, shown in the per-stage header row (`ステージN 審査基準 [bar] プラン [icon]`). Earlier seasons shared a single season-level bar.
 
-### Step 4: Identify plans for each stage
-Look at the icons next to "ステージ" in the header row. The icons are silver/gray:
+Run the analysis script **once per stage** on the image containing that stage's bar:
+```bash
+python scripts/analyze_criteria_bar.py <image_with_stage_N_bar>
+```
+Convert percentages to decimals (e.g., 20% → 0.2). Record each stage's criteria separately — they may differ.
+
+### Step 4: Identify plan for each stage
+The plan icon appears in each stage's header row, to the right of its criteria bar (`プラン [icon]`). Icons are silver/gray:
 - **Sense (センス)**: 8-pointed star with layered petals
 - **Logic (ロジック)**: 3D hexagonal cube
 - **Free (フリー)**: Rectangular badge with "FREE" text
 - **Anomaly (アノマリー)**: Abstract swirling shape with orbital circles
-
-The icons appear in order: Stage 1 → Stage 2 → Stage 3
 
 ### Step 5: Extract stage data from table
 For each stage row, extract:
@@ -63,7 +63,7 @@ Example: criteria=[0.35, 0.4, 0.25] (none >= 0.45)
 Quick reference - check `tail -15 packages/gakumas-data/csv/stages.csv` for recent patterns.
 
 ### Step 8: Translate effects to DSL
-Use the Effect Translation Reference below to convert Japanese effect text to DSL format.
+Use the Structured DSL Reference below to convert Japanese effect text to DSL format.
 
 ### Step 9: Output CSV rows
 Generate one CSV row per stage with this format:
@@ -71,7 +71,24 @@ Generate one CSV row per stage with this format:
 id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effects,linkTurnCounts
 ```
 
-## Effect Translation Reference
+### Step 10: Validate
+Run `yarn validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
+
+## Structured DSL Reference
+
+Effects use a block-scoped DSL. Effects are separated by `;` or whitespace;
+braces group. Bare `name+=n` assignments are actions — no `do:` prefix needed.
+See `packages/gakumas-data/Effects.md` for the full reference.
+
+```
+at:<phase> {
+  if:<condition> {
+    <action>; <action>
+    target:<targetExpr> { <growthAction>; <growthAction> }
+  }
+  limit:<n>
+}
+```
 
 ### Phases (at:)
 | Japanese | DSL |
@@ -80,15 +97,17 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 | ターン開始後 | `at:afterStartOfTurn` |
 | ターン開始前 | `at:beforeStartOfTurn` |
 | ターン終了時 | `at:endOfTurn` |
-| スキルカード使用時 | `at:cardUsed` |
+| スキルカード使用時 | `at:cardUsed` (or filter: `at:cardUsed[active]` / `at:cardUsed[mental]`) |
 | アクティブスキルカード使用時 | `at:activeCardUsed` |
 | メンタルスキルカード使用時 | `at:mentalCardUsed` |
 | スキルカード使用後 | `at:afterCardUsed` |
 | 好印象の効果ターンが増加後 | `at:goodImpressionTurnsIncreased` |
 | 指針が変更した時 | `at:stanceChanged` |
-| 〇ターン目 | `at:startOfTurn,if:turnsElapsed==N` (N = turn - 1, 0-indexed) |
+| 〇ターン目 | `at:startOfTurn { if:turnsElapsed==N { ... } }` (N = turn - 1) |
 
 ### Conditions (if:)
+Multiple conditions may be combined with `&` (and), `|` (or), `!` (not).
+
 | Japanese | DSL |
 |----------|-----|
 | 好調が N 以上の場合 | `if:goodConditionTurns>=N` |
@@ -97,94 +116,117 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 | やる気が N 以上の場合 | `if:motivation>=N` |
 | 元気が N 以上の場合 | `if:genki>=N` |
 | アイドル固有スキルカード | `if:cardSourceType==pIdol` |
-| 好印象効果のスキルカード | `if:cardEffects&goodImpressionTurns` |
-| 集中効果のスキルカード | `if:cardEffects&concentration` |
-| 絶好調効果のスキルカード | `if:cardEffects&perfectConditionTurns` |
-| 直接効果で（指針変更等） | `if:parentPhase==processCard` |
+| 好印象効果のスキルカード | `if:cardHasEffect(goodImpressionTurns)` |
+| 集中効果のスキルカード | `if:cardHasEffect(concentration)` |
+| 絶好調効果のスキルカード | `if:cardHasEffect(perfectConditionTurns)` |
+| 直接効果で（指針変更等） | `if:parentPhase==processCard` (or `if:isDirectEffect`) |
 | 指針が強気 | `if:isStrength` |
 | 指針が温存 | `if:isPreservation` |
 | 指針が全力 | `if:isFullPower` |
 
 ### Actions (do:)
+Actions are bare assignments or function calls — no `do:` prefix.
+
 | Japanese | DSL |
 |----------|-----|
-| スコア+N | `do:score+=N` |
-| 集中+N | `do:concentration+=N` |
-| 好調+N | `do:goodConditionTurns+=N` |
-| 好印象+N | `do:goodImpressionTurns+=N` |
-| やる気+N | `do:motivation+=N` |
-| 元気+N | `do:genki+=N` |
-| スキルカード使用数追加+N | `do:cardUsesRemaining+=N` |
-| 集中 N 倍 | `do:concentration*=N` |
-| 好印象 N 倍 | `do:goodImpressionTurns*=N` |
-| 集中増加量増加+N%（Mターン） | `do:setConcentrationBuff(0.N,M)` |
-| 好印象増加量増加+N%（Mターン） | `do:setGoodImpressionTurnsBuff(0.N,M)` |
-| スコア上昇量増加 N%（Mターン） | `do:setScoreBuff(0.N,M)` |
+| スコア+N | `score+=N` |
+| 集中+N | `concentration+=N` |
+| 好調+N | `goodConditionTurns+=N` |
+| 好印象+N | `goodImpressionTurns+=N` |
+| やる気+N | `motivation+=N` |
+| 元気+N | `genki+=N` |
+| スキルカード使用数追加+N | `cardUsesRemaining+=N` |
+| 集中 N 倍 | `concentration*=N` |
+| 好印象 N 倍 | `goodImpressionTurns*=N` |
+| 集中増加量増加+N%（Mターン） | `setConcentrationBuff(0.N,M)` |
+| 好印象増加量増加+N%（Mターン） | `setGoodImpressionTurnsBuff(0.N,M)` |
+| スコア上昇量増加 N%（Mターン） | `setScoreBuff(0.N,M)` |
+| 指針を変更 | `setStance(preservation)` / `setStance(strength)` / `setStance(fullPower)` |
 
 **Note**: "+" may be misread as "×" in screenshots. When you see "×N", double-check - it's likely "+N".
 
-### Growth Targets (target:)
+### Target rules (target:)
+Target blocks scope growth actions to a set of cards. They nest inside an
+effect body; no need to split into a separate effect.
+
 | Japanese | DSL |
 |----------|-----|
-| アイドル固有スキルカード | `target:sourceType(pIdol)` |
+| アイドル固有スキルカード | `target:pIdol` |
 | アクティブスキルカード | `target:active` |
 | メンタルスキルカード | `target:mental` |
+| このカード | `target:this` |
 
-### Growth Actions (do:g.)
+Compose with `&` / `|` / `!`: e.g. `target:active & !removed`.
+
+### Growth Actions (g.*)
+Inside `target:` blocks, `g.*` names assign persistent growth fields.
+
 | Japanese | DSL |
 |----------|-----|
-| スコア値+N | `do:g.score+=N` |
+| スコア値+N | `g.score+=N` |
+| スコア上昇回数+N | `g.scoreTimes+=N` |
+| コスト-N | `g.cost-=N` |
 
-### Limits
-| Japanese | DSL |
-|----------|-----|
-| ステージ内 N 回 / 試験・ステージ内 N 回 | `limit:N` |
+### Modifiers
+| Modifier | Meaning |
+|----------|---------|
+| `limit:N` | Maximum activations per stage |
+| `ttl:N` | Time-to-live in turns |
+| `delay:N` | Turns to delay before firing |
+
+Place `limit:N` at the scope you want capped — outer effect block for the
+whole effect, or inside a nested `if { }` block to cap only that branch's
+firings (useful for counter patterns).
 
 ### "Every N" Counter Pattern
 When effect triggers "〇回...するごとに" (every N times):
 ```
-at:[phase],if:[condition],do:effectCounter+=1;
-at:[phase],if:[condition],if:effectCounter%N==(N-1),do:[effects],limit:M
+at:<phase> {
+  if:<gate> {
+    effectCounter+=1
+    if:effectCounter%N==(N-1) { <actions>; limit:M }
+  }
+}
 ```
-**Important**: Use `%N==(N-1)` (e.g., `%3==2` for "every 3"). The condition is evaluated before the counter increment applies, so to trigger on the Nth occurrence, check for N-1.
+**Important**: Use `%N==(N-1)` (e.g., `%3==2` for "every 3"). The counter increments before the modulo check.
 
 For stance changes, use built-in counter `stanceChangedTimes` or `stanceChangedByCardTimes`:
 ```
-at:stanceChanged,if:parentPhase==processCard,if:stanceChangedByCardTimes%2==1,do:[effects],limit:N
+at:stanceChanged { if:parentPhase==processCard & stanceChangedByCardTimes%2==1 { <actions> }; limit:N }
 ```
 
 ### Worked Examples
 
 **アイドル固有スキルカード使用時、集中増加量増加+50%（3ターン）（試験・ステージ内4回）**
 ```
-at:cardUsed,if:cardSourceType==pIdol,do:setConcentrationBuff(0.5,3),limit:4
+at:cardUsed { if:cardSourceType==pIdol { setConcentrationBuff(0.5,3) }; limit:4 }
 ```
 
 **アイドル固有スキルカード使用時、元気が30以上の場合、やる気+10 元気+2（試験・ステージ内4回）**
 ```
-at:cardUsed,if:cardSourceType==pIdol,if:genki>=30,do:motivation+=10,do:genki+=2,limit:4
+at:cardUsed { if:cardSourceType==pIdol & genki>=30 { motivation+=10; genki+=2 }; limit:4 }
 ```
 
 **直接効果で指針を2回変更するたび、アイドル固有スキルカードのスコア値増加+25（試験・ステージ内4回）**
 ```
-at:stanceChanged,if:parentPhase==processCard,do:effectCounter+=1;at:stanceChanged,if:parentPhase==processCard,if:effectCounter%2==0,target:sourceType(pIdol),do:g.score+=25,limit:4
+at:stanceChanged { if:parentPhase==processCard { effectCounter+=1; if:effectCounter%2==1 { target:pIdol { g.score+=25 }; limit:4 } } }
 ```
 
 **8ターン目、好印象1.5倍**
 ```
-at:beforeStartOfTurn,if:turnsElapsed==8,do:goodImpressionTurns*=1.5,limit:1
+at:beforeStartOfTurn { if:turnsElapsed==8 { goodImpressionTurns*=1.5 }; limit:1 }
 ```
 
 **指針が強気に変更時（直接効果）、消費体力減少+1、コスト削減+1、スコア上昇量+10%（3回）**
 ```
-at:stanceChanged,if:parentPhase==processCard,if:isStrength,do:halfCostTurns+=1,do:costReduction+=1,do:setScoreBuff(0.1),limit:3
+at:stanceChanged { if:parentPhase==processCard & isStrength { halfCostTurns+=1; costReduction+=1; setScoreBuff(0.1) }; limit:3 }
 ```
 
 **ターン終了時、累計全力値が13以上の場合、温存に変更　アイドル固有スキルカードのスコア値増加+30（2回）**
 ```
-at:endOfTurn,if:cumulativeFullPowerCharge>=13,do:setStance(preservation),limit:2;at:endOfTurn,if:cumulativeFullPowerCharge>=13,target:sourceType(pIdol),do:g.score+=30,limit:2
+at:endOfTurn { if:cumulativeFullPowerCharge>=13 { setStance(preservation); target:pIdol { g.score+=30 } }; limit:2 }
 ```
-**Important**: `target:` marks the entire effect line as a growth effect. Growth effects (`target:`, `do:g.*`) must be separated from non-growth effects with `;`. Each effect needs its own phase, conditions, and `limit:`.
+**Note**: The old DSL required growth and non-growth actions to be in separate effects. In the new DSL, a `target:` block nests inside a regular effect body — no splitting needed.
 
 ## Output Format
 
@@ -201,6 +243,7 @@ Use `[next_id]` for id field - caller will assign actual IDs.
 **Note**: preview=TRUE for the current/active season being added. Only set to FALSE for historical seasons.
 
 ## Reference
+- Full DSL docs: `packages/gakumas-data/Effects.md`
 - Recent stages (for pattern matching): `tail -15 packages/gakumas-data/csv/stages.csv`
-- Full effect docs: `packages/gakumas-data/Effects.md`
 - Plan icons: `gakumas-tools/public/plans/{sense,logic,free,anomaly}.png`
+- Validate: `yarn validate:data`
