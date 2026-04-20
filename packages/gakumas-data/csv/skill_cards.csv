@@ -772,7 +772,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 771,せのびの魔法,,SSR,active,logic,76,FALSE,TRUE,produce,,FALSE,,stamina-=3,at:startOfTurn { genki+=2; limit:3 }; at:turn { score+=genki*1.8; delay:3; limit:1 },1,
 772,せのびの魔法+,"27,22",SSR,active,logic,76,TRUE,TRUE,produce,,FALSE,,stamina-=3,at:startOfTurn { genki+=2; limit:3 }; at:turn { score+=genki*2.8; delay:3; limit:1 },1,
 773,エンターテイナー,,SSR,active,anomaly,77,FALSE,TRUE,produce,,FALSE,,stamina-=5,setStance(strength); score+=10,,at:stanceChanged { if:isDirectEffect & stanceChangedByDirectEffectTimes%3==2 { target:this { g.scoreTimes+=1; g.typedCost+=1 } }; limit:2 }
-774,エンターテイナー+,,SSR,active,anomaly,77,TRUE,TRUE,produce,,FALSE,,stamina-=5,setStance(strength); score+=12,,at:stanceChanged { if:isDirectEffect & stanceChangedByDirectEffectTimes%3==2 { target:this { g.scoreTimes+=1; g.typedCost+=1 } }; limit:3 }
+774,エンターテイナー+,"27,2",SSR,active,anomaly,77,TRUE,TRUE,produce,,FALSE,,stamina-=5,setStance(strength); score+=12,,at:stanceChanged { if:isDirectEffect & stanceChangedByDirectEffectTimes%3==2 { target:this { g.scoreTimes+=1; g.typedCost+=1 } }; limit:3 }
 775,話題沸騰,,SSR,active,sense,78,FALSE,TRUE,produce,,FALSE,if:goodConditionTurns>=8,perfectConditionTurns-=1,"goodConditionTurnsMultiplier=2; score+=37; setScoreBuff(0.3,1)",1,
 776,話題沸騰+,"104,37",SSR,active,sense,78,TRUE,TRUE,produce,,FALSE,if:goodConditionTurns>=8,perfectConditionTurns-=1,"goodConditionTurnsMultiplier=2.5; score+=50; setScoreBuff(0.3,1)",1,
 777,びしっとキメ顔,,SSR,active,logic,79,FALSE,TRUE,produce,,FALSE,if:goodImpressionTurns>=10,cost-=5,"setGoodImpressionTurnsEffectBuff(2,3); at:goodImpressionTurnsIncreased { if:isDirectEffect { score+=goodImpressionTurns }; ttl:3 }",1,
