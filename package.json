@@ -5,6 +5,8 @@
     "dev": "yarn workspace gakumas-tools dev",
     "build": "yarn workspace gakumas-tools build",
     "process": "python -m scripts.process_screenshots_iphone",
+    "train:classifier": "python -m scripts.train_classifier",
+    "train:classifier:fresh": "python -m scripts.train_classifier --fresh",
     "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
     "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
     "test:regression": "node --loader ./scripts/extensionless-loader.mjs ./scripts/regression/run.mjs",

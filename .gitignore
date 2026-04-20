@@ -22,3 +22,5 @@ __pycache__/
 # Custom
 .env
 screenshots/
+.classifier-data/
+scripts/train_classifier/checkpoints/
