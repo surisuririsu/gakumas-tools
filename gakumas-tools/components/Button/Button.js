@@ -14,6 +14,7 @@ function Button({
   disabled,
   ariaLabel,
   fill,
+  pill,
   locale,
 }) {
   const fullClassName = c(
@@ -21,6 +22,7 @@ function Button({
     styles[disabled ? "disabled" : style],
     styles[size],
     fill && styles.fill,
+    pill && styles.pill,
     className
   );
 

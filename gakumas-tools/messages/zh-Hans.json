@@ -163,6 +163,14 @@
   "TargetSkillCards": {
     "acquired": "已获得"
   },
+  "DraftPick": {
+    "label": "抽卡对比",
+    "info": "最多选择 3 张候选卡，比较加入已获得后的成功概率",
+    "show": "展开",
+    "hide": "收起",
+    "clear": "清除",
+    "commit": "选择"
+  },
   "MemorySummaryActionButtons": {
     "edit": "编辑"
   },

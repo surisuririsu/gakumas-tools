@@ -163,3 +163,62 @@ export function generatePossibleMemories(skillCardIds, rank) {
     probability,
   }));
 }
+
+function generateTargetCombinations(slots) {
+  if (slots.length === 0) return [[]];
+  const restCombos = generateTargetCombinations(slots.slice(1));
+  return slots[0].reduce((acc, cur) => {
+    for (let c of restCombos) {
+      if (c.includes(cur)) continue;
+      acc.push(c.concat(cur));
+    }
+    return acc;
+  }, []);
+}
+
+export function classifyMemories(
+  possibleMemories,
+  { targetSkillCardIds, alternateSkillCardIds, targetNegations },
+) {
+  let positiveSlots = [];
+  let negativeSlots = [];
+  for (let i in targetSkillCardIds) {
+    const slot = [targetSkillCardIds[i]]
+      .concat(alternateSkillCardIds[i] || [])
+      .filter((id) => id);
+    if (!slot.length) continue;
+    if (targetNegations[i]) {
+      negativeSlots.push(slot);
+    } else {
+      positiveSlots.push(slot);
+    }
+  }
+  const excludedSkillCardIds = [].concat(...negativeSlots);
+  const matchingCombinations = generateTargetCombinations(positiveSlots);
+
+  return possibleMemories.reduce(
+    (acc, cur) => {
+      const memoryIsOnTarget =
+        matchingCombinations.some((combo) =>
+          combo.every((id) => cur.skillCardIds.includes(id)),
+        ) &&
+        !cur.skillCardIds.some((id) => excludedSkillCardIds.includes(id));
+
+      if (memoryIsOnTarget) {
+        acc.onTargetMemories.push(cur);
+        acc.onTargetProbability += cur.probability;
+      } else {
+        acc.offTargetMemories.push(cur);
+        acc.offTargetProbability += cur.probability;
+      }
+
+      return acc;
+    },
+    {
+      onTargetMemories: [],
+      offTargetMemories: [],
+      onTargetProbability: 0,
+      offTargetProbability: 0,
+    },
+  );
+}

@@ -163,6 +163,14 @@
   "TargetSkillCards": {
     "acquired": "取得済み"
   },
+  "DraftPick": {
+    "label": "ドラフト比較",
+    "info": "最大3枚の候補を選んで、取得済みに加えた場合の成功確率を比較します",
+    "show": "表示",
+    "hide": "非表示",
+    "clear": "クリア",
+    "commit": "選ぶ"
+  },
   "MemorySummaryActionButtons": {
     "edit": "編集"
   },

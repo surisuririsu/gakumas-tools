@@ -7,6 +7,7 @@ import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
+import { NON_PIDOL_FILTER } from "../skillCardFilters";
 import styles from "./TargetSkillCards.module.scss";
 
 function TargetSkillCards({ idolId }) {
@@ -26,9 +27,7 @@ function TargetSkillCards({ idolId }) {
 
   const filters = useMemo(
     () => [
-      {
-        callback: (e) => e.sourceType != "pIdol",
-      },
+      NON_PIDOL_FILTER,
       {
         label: t("acquired"),
         callback: (e) => acquiredSkillCardIds.includes(e.id),

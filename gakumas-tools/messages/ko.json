@@ -163,6 +163,14 @@
   "TargetSkillCards": {
     "acquired": "획득 완료"
   },
+  "DraftPick": {
+    "label": "드래프트 비교",
+    "info": "최대 3장의 후보 카드를 골라, 획득 카드에 추가했을 때의 성공 확률을 비교합니다",
+    "show": "표시",
+    "hide": "숨기기",
+    "clear": "초기화",
+    "commit": "선택"
+  },
   "MemorySummaryActionButtons": {
     "edit": "편집"
   },

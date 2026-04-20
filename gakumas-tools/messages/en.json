@@ -163,6 +163,14 @@
   "TargetSkillCards": {
     "acquired": "Acquired"
   },
+  "DraftPick": {
+    "label": "Draft pick",
+    "info": "Pick up to 3 candidate cards to compare success probability if added to acquired",
+    "show": "Show",
+    "hide": "Hide",
+    "clear": "Clear",
+    "commit": "Pick"
+  },
   "MemorySummaryActionButtons": {
     "edit": "Edit"
   },

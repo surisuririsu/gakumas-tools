@@ -5,7 +5,10 @@ import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import ModalContext from "@/contexts/ModalContext";
 import { EntityTypes } from "@/utils/entities";
+import { NON_PIDOL_FILTER } from "../skillCardFilters";
 import styles from "./AcquiredSkillCards.module.scss";
+
+const FILTERS = [NON_PIDOL_FILTER];
 
 function AcquiredSkillCards() {
   const { acquiredSkillCardIds, replaceAcquiredCardId } = useContext(
@@ -26,11 +29,7 @@ function AcquiredSkillCards() {
               <EntityPickerModal
                 type={EntityTypes.SKILL_CARD}
                 onPick={(card) => replaceAcquiredCardId(index, card.id)}
-                filters={[
-                  {
-                    callback: (e) => e.sourceType != "pIdol",
-                  },
-                ]}
+                filters={FILTERS}
               />
             )
           }
