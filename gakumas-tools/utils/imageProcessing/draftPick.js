@@ -10,9 +10,19 @@ const PANEL_COL_WHITE_FRAC = 0.2;
 const PANEL_ROW_GAP_TOLERANCE = 150;
 
 const SATURATION_THRESHOLD = 40;
-const CARD_ROW_SAT_FRAC = 0.08;
+// Card rows saturate 15%+ of panel width; text rows above/below the cards
+// only reach ~12% so a 0.15 threshold cleanly separates them.
+const CARD_ROW_SAT_FRAC = 0.15;
 const CARD_ROW_GAP_TOLERANCE = 15;
-const CARD_COL_SAT_FRAC = 0.2;
+// Require a column to be saturated across most of the card row height; this
+// rejects decorative corner brackets that only touch the top + bottom of a
+// card and pull the outer bounds wider than the card body.
+const CARD_COL_SAT_FRAC = 0.5;
+
+// Inter-card gaps: columns within the card row whose pixels are mostly white.
+const GAP_WHITE_FRAC = 0.75;
+const MIN_GAP_WIDTH = 5;
+const GAP_MERGE_TOLERANCE = 3;
 
 export async function getDraftPickFromFile(file) {
   const img = await loadImageFromFile(file);
@@ -24,7 +34,7 @@ export async function getDraftPickFromFile(file) {
   const cardRow = detectCardRow(imageData, panel);
   if (!cardRow) throw new Error("Could not locate card row in screenshot");
 
-  const boxes = splitIntoThreeCards(cardRow);
+  const boxes = splitIntoThreeCards(imageData, cardRow);
 
   if (DEBUG) debugOverlay(img, panel, cardRow, boxes);
 
@@ -159,18 +169,59 @@ function detectCardRow({ data, width }, panel) {
   return { x: xLeft, y: yTop, width: xRight - xLeft + 1, height: rowHeight };
 }
 
-function splitIntoThreeCards(row) {
-  const cardWidth = row.width / 3;
+function splitIntoThreeCards(imageData, row) {
+  const boundaries = findSplitBoundaries(imageData, row);
   const boxes = [];
   for (let i = 0; i < 3; i++) {
-    boxes.push({
-      x: Math.round(row.x + i * cardWidth),
-      y: row.y,
-      width: Math.round(cardWidth),
-      height: row.height,
-    });
+    const x = Math.round(boundaries[i]);
+    const x1 = Math.round(boundaries[i + 1]);
+    boxes.push({ x, y: row.y, width: x1 - x, height: row.height });
   }
   return boxes;
+}
+
+// Find the two column positions that split the card row into 3 cards.
+// Prefer detected inter-card gaps (mostly-white columns); fall back to
+// mirroring a single gap through the row center; otherwise divide equally.
+function findSplitBoundaries({ data, width }, row) {
+  const xStart = row.x;
+  const xEnd = row.x + row.width - 1;
+  const yEnd = row.y + row.height - 1;
+  const whiteFracThreshold = GAP_WHITE_FRAC * row.height;
+
+  const gapCols = [];
+  for (let x = xStart; x <= xEnd; x++) {
+    let whiteCount = 0;
+    for (let y = row.y; y <= yEnd; y++) {
+      if (isWhite(data, (y * width + x) * 4)) whiteCount++;
+    }
+    if (whiteCount > whiteFracThreshold) gapCols.push(x);
+  }
+  const gaps = groupContiguous(gapCols, GAP_MERGE_TOLERANCE).filter(
+    ([a, b]) => b - a >= MIN_GAP_WIDTH,
+  );
+
+  const center = (xStart + xEnd) / 2;
+
+  if (gaps.length >= 2) {
+    const [g0, g1] = gaps
+      .slice()
+      .sort((a, b) => b[1] - b[0] - (a[1] - a[0]))
+      .slice(0, 2)
+      .sort((a, b) => a[0] - b[0]);
+    return [xStart, (g0[0] + g0[1]) / 2, (g1[0] + g1[1]) / 2, xEnd + 1];
+  }
+
+  if (gaps.length === 1) {
+    const g = gaps[0];
+    const gCenter = (g[0] + g[1]) / 2;
+    const mirrored = 2 * center - gCenter;
+    const [a, b] = [gCenter, mirrored].sort((x, y) => x - y);
+    return [xStart, a, b, xEnd + 1];
+  }
+
+  const step = row.width / 3;
+  return [xStart, xStart + step, xStart + 2 * step, xEnd + 1];
 }
 
 function debugOverlay(img, panel, cardRow, boxes) {

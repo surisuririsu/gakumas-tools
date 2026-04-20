@@ -37,6 +37,11 @@ export async function getMemoryFromFile(
   );
   const paramsLine = blackLines[paramsLineIndex];
   const pItemsLabelLine = blackLines[paramsLineIndex + 1];
+  if (!paramsLine || !pItemsLabelLine) {
+    throw new Error(
+      "Could not locate the Vo/Da/Vi/stamina parameter line. Is this a memory screenshot?",
+    );
+  }
 
   const contentWidth = paramsLine.bbox.x1 - pItemsLabelLine.bbox.x0;
   const anchorPoint = {
