@@ -3,10 +3,13 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
-import * as ort from "onnxruntime-web";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
+import {
+  loadPItemModel,
+  loadSkillCardModel,
+} from "@/utils/imageProcessing/models";
 import { logEvent } from "@/utils/logging";
 import styles from "./MemoryImporterModal.module.scss";
 
@@ -49,19 +52,10 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
 
     console.time("All memories parsed");
 
-    const pItemSession = await ort.InferenceSession.create(
-      "/p_item_model.onnx"
-    );
-    const pItemClasses = await fetch("/p_item_classes.json").then((r) =>
-      r.json()
-    );
-
-    const skillCardSession = await ort.InferenceSession.create(
-      "/skill_card_model.onnx"
-    );
-    const skillCardClasses = await fetch("/skill_card_classes.json").then((r) =>
-      r.json()
-    );
+    const [
+      { session: pItemSession, classes: pItemClasses },
+      { session: skillCardSession, classes: skillCardClasses },
+    ] = await Promise.all([loadPItemModel(), loadSkillCardModel()]);
 
     let results = [];
     const batchSize = engWorkersRef.current.length;

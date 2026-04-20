@@ -38,7 +38,7 @@ function DraftPick({ idolId }) {
     setModal(
       <DraftPickImporterModal
         onSuccess={(ids) => {
-          setCandidateCardIds([ids[0] || 0, ids[1] || 0, ids[2] || 0]);
+          setCandidateCardIds(EMPTY_SLOTS.map((_, i) => ids[i] || 0));
           closeModal();
         }}
       />,

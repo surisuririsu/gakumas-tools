@@ -1,17 +1,12 @@
 import { SkillCards } from "gakumas-data";
 import { DEBUG, loadImageFromFile } from "./common";
 import { extractEntities } from "./memory";
-
-// Detection heuristic:
-// 1. Find the white modal panel (contiguous rows with majority-white pixels,
-//    tolerating card-row interruptions of up to ~150px).
-// 2. Within the panel, find the tallest contiguous band with saturated
-//    content — that's the 3-card row.
-// 3. Find the horizontal extent of that band, then divide into 3 equal cells.
+import { loadSkillCardModel } from "./models";
 
 const WHITE_THRESHOLD = 240;
 const PANEL_ROW_WHITE_FRAC = 0.3;
 const PANEL_COL_WHITE_FRAC = 0.2;
+// Allow for the card row to interrupt the white panel up to this many rows.
 const PANEL_ROW_GAP_TOLERANCE = 150;
 
 const SATURATION_THRESHOLD = 40;
@@ -19,23 +14,21 @@ const CARD_ROW_SAT_FRAC = 0.08;
 const CARD_ROW_GAP_TOLERANCE = 15;
 const CARD_COL_SAT_FRAC = 0.2;
 
-export async function getDraftPickFromFile(file, session, classes) {
+export async function getDraftPickFromFile(file) {
   const img = await loadImageFromFile(file);
-  const { width, height } = img;
   const imageData = getImageData(img);
 
-  const panel = detectPanel(imageData, width, height);
+  const panel = detectPanel(imageData);
   if (!panel) throw new Error("Could not locate modal panel in screenshot");
 
-  const cardRow = detectCardRow(imageData, width, panel);
+  const cardRow = detectCardRow(imageData, panel);
   if (!cardRow) throw new Error("Could not locate card row in screenshot");
 
   const boxes = splitIntoThreeCards(cardRow);
 
-  if (DEBUG) {
-    debugOverlay(img, panel, cardRow, boxes);
-  }
+  if (DEBUG) debugOverlay(img, panel, cardRow, boxes);
 
+  const { session, classes } = await loadSkillCardModel();
   const ids = await extractEntities(img, boxes, session, classes);
   console.log(
     "Extracted draft pick cards:",
@@ -50,23 +43,22 @@ function getImageData(img) {
   canvas.height = img.height;
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
   ctx.drawImage(img, 0, 0);
-  return ctx.getImageData(0, 0, img.width, img.height).data;
+  return ctx.getImageData(0, 0, img.width, img.height);
 }
 
-function rowWhiteCount(data, width, y) {
-  let count = 0;
-  const rowStart = y * width * 4;
-  for (let x = 0; x < width; x++) {
-    const i = rowStart + x * 4;
-    if (
-      data[i] > WHITE_THRESHOLD &&
-      data[i + 1] > WHITE_THRESHOLD &&
-      data[i + 2] > WHITE_THRESHOLD
-    ) {
-      count++;
-    }
-  }
-  return count;
+function isWhite(data, i) {
+  return (
+    data[i] > WHITE_THRESHOLD &&
+    data[i + 1] > WHITE_THRESHOLD &&
+    data[i + 2] > WHITE_THRESHOLD
+  );
+}
+
+function saturation(data, i) {
+  const r = data[i];
+  const g = data[i + 1];
+  const b = data[i + 2];
+  return Math.max(r, g, b) - Math.min(r, g, b);
 }
 
 function groupContiguous(indices, gapTolerance) {
@@ -85,80 +77,77 @@ function groupContiguous(indices, gapTolerance) {
   return groups;
 }
 
-function detectPanel(data, width, height) {
-  const panelRowThreshold = width * PANEL_ROW_WHITE_FRAC;
+function largestGroup(groups) {
+  return groups.reduce((best, cur) =>
+    cur[1] - cur[0] > best[1] - best[0] ? cur : best,
+  );
+}
+
+function detectPanel({ data, width, height }) {
+  const rowThreshold = width * PANEL_ROW_WHITE_FRAC;
   const rows = [];
   for (let y = 0; y < height; y++) {
-    if (rowWhiteCount(data, width, y) > panelRowThreshold) rows.push(y);
+    let count = 0;
+    const rowStart = y * width * 4;
+    for (let x = 0; x < width; x++) {
+      if (isWhite(data, rowStart + x * 4)) count++;
+    }
+    if (count > rowThreshold) rows.push(y);
   }
   if (!rows.length) return null;
 
-  const groups = groupContiguous(rows, PANEL_ROW_GAP_TOLERANCE);
-  const [yTop, yBottom] = groups.reduce((best, cur) =>
-    cur[1] - cur[0] > best[1] - best[0] ? cur : best,
+  const [yTop, yBottom] = largestGroup(
+    groupContiguous(rows, PANEL_ROW_GAP_TOLERANCE),
   );
-
   const panelHeight = yBottom - yTop + 1;
   const colThreshold = panelHeight * PANEL_COL_WHITE_FRAC;
-  const cols = [];
+
+  let xLeft = -1;
+  let xRight = -1;
   for (let x = 0; x < width; x++) {
-    let c = 0;
+    let count = 0;
     for (let y = yTop; y <= yBottom; y++) {
-      const i = (y * width + x) * 4;
-      if (
-        data[i] > WHITE_THRESHOLD &&
-        data[i + 1] > WHITE_THRESHOLD &&
-        data[i + 2] > WHITE_THRESHOLD
-      ) {
-        c++;
-      }
+      if (isWhite(data, (y * width + x) * 4)) count++;
     }
-    if (c > colThreshold) cols.push(x);
+    if (count > colThreshold) {
+      if (xLeft === -1) xLeft = x;
+      xRight = x;
+    }
   }
-  if (!cols.length) return null;
+  if (xLeft === -1) return null;
 
   return {
-    x: cols[0],
+    x: xLeft,
     y: yTop,
-    width: cols[cols.length - 1] - cols[0] + 1,
+    width: xRight - xLeft + 1,
     height: panelHeight,
   };
 }
 
-function detectCardRow(data, width, panel) {
-  const satRowThreshold = panel.width * CARD_ROW_SAT_FRAC;
+function detectCardRow({ data, width }, panel) {
+  const rowThreshold = panel.width * CARD_ROW_SAT_FRAC;
   const rows = [];
   for (let y = panel.y; y < panel.y + panel.height; y++) {
     let count = 0;
     for (let x = panel.x; x < panel.x + panel.width; x++) {
-      const i = (y * width + x) * 4;
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      const sat = Math.max(r, g, b) - Math.min(r, g, b);
-      if (sat > SATURATION_THRESHOLD) count++;
+      if (saturation(data, (y * width + x) * 4) > SATURATION_THRESHOLD) count++;
     }
-    if (count > satRowThreshold) rows.push(y);
+    if (count > rowThreshold) rows.push(y);
   }
   if (!rows.length) return null;
 
-  const groups = groupContiguous(rows, CARD_ROW_GAP_TOLERANCE);
-  const [yTop, yBottom] = groups.reduce((best, cur) =>
-    cur[1] - cur[0] > best[1] - best[0] ? cur : best,
+  const [yTop, yBottom] = largestGroup(
+    groupContiguous(rows, CARD_ROW_GAP_TOLERANCE),
   );
-
   const rowHeight = yBottom - yTop + 1;
   const colThreshold = rowHeight * CARD_COL_SAT_FRAC;
+
   let xLeft = -1;
   let xRight = -1;
   for (let x = panel.x; x < panel.x + panel.width; x++) {
     let count = 0;
     for (let y = yTop; y <= yBottom; y++) {
-      const i = (y * width + x) * 4;
-      const sat =
-        Math.max(data[i], data[i + 1], data[i + 2]) -
-        Math.min(data[i], data[i + 1], data[i + 2]);
-      if (sat > SATURATION_THRESHOLD) count++;
+      if (saturation(data, (y * width + x) * 4) > SATURATION_THRESHOLD) count++;
     }
     if (count > colThreshold) {
       if (xLeft === -1) xLeft = x;

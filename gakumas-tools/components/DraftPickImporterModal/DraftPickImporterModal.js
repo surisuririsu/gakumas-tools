@@ -1,35 +1,29 @@
 "use client";
-import { memo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
-import * as ort from "onnxruntime-web";
 import Modal from "@/components/Modal";
 import { getDraftPickFromFile } from "@/utils/imageProcessing/draftPick";
 import styles from "./DraftPickImporterModal.module.scss";
 
 function DraftPickImporterModal({ onSuccess }) {
   const t = useTranslations("DraftPickImporterModal");
-  const [status, setStatus] = useState("idle");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleFile = useCallback(
     async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      setStatus("processing");
+      setLoading(true);
       setError(null);
       try {
-        const session = await ort.InferenceSession.create(
-          "/skill_card_model.onnx",
-        );
-        const classes = await fetch("/skill_card_classes.json").then((r) =>
-          r.json(),
-        );
-        const ids = await getDraftPickFromFile(file, session, classes);
+        const ids = await getDraftPickFromFile(file);
         onSuccess(ids);
       } catch (err) {
         console.error(err);
         setError(err.message || String(err));
-        setStatus("error");
+      } finally {
+        setLoading(false);
       }
     },
     [onSuccess],
@@ -45,13 +39,11 @@ function DraftPickImporterModal({ onSuccess }) {
         type="file"
         accept="image/*"
         onChange={handleFile}
-        disabled={status === "processing"}
+        disabled={loading}
       />
 
-      {status === "processing" && (
-        <div className={styles.status}>{t("processing")}</div>
-      )}
-      {status === "error" && (
+      {loading && <div className={styles.status}>{t("processing")}</div>}
+      {error && (
         <div className={styles.error}>
           {t("error")}: {error}
         </div>
@@ -60,4 +52,4 @@ function DraftPickImporterModal({ onSuccess }) {
   );
 }
 
-export default memo(DraftPickImporterModal);
+export default DraftPickImporterModal;
