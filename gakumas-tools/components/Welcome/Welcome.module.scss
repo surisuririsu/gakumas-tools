@@ -29,9 +29,9 @@
   }
 }
 
-.disclaimer {
-  margin-top: tokens.$space-3 !important;
-  font-size: tokens.$text-sm !important;
+.hero p.disclaimer {
+  margin-top: tokens.$space-3;
+  font-size: tokens.$text-sm;
   opacity: 0.7;
 }
 
