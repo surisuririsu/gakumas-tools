@@ -1,7 +1,8 @@
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { FaChevronDown, FaChevronUp, FaFileImport } from "react-icons/fa6";
 import Button from "@/components/Button";
+import DraftPickImporterModal from "@/components/DraftPickImporterModal";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
 import Panel from "@/components/Panel";
@@ -29,9 +30,19 @@ function DraftPick({ idolId }) {
     alternateSkillCardIds,
     targetNegations,
   } = useContext(MemoryCalculatorContext);
-  const { setModal } = useContext(ModalContext);
+  const { setModal, closeModal } = useContext(ModalContext);
   const [open, setOpen] = useState(false);
   const [candidateCardIds, setCandidateCardIds] = useState(EMPTY_SLOTS);
+
+  const openImporter = () =>
+    setModal(
+      <DraftPickImporterModal
+        onSuccess={(ids) => {
+          setCandidateCardIds([ids[0] || 0, ids[1] || 0, ids[2] || 0]);
+          closeModal();
+        }}
+      />,
+    );
 
   const replaceCandidate = (index, id) => {
     setCandidateCardIds((cur) => {
@@ -82,6 +93,12 @@ function DraftPick({ idolId }) {
       info={t("info")}
       headerAction={
         <div className={styles.headerActions}>
+          {open && (
+            <Button style="secondary" size="sm" pill onClick={openImporter}>
+              <FaFileImport />
+              {t("import")}
+            </Button>
+          )}
           {open && hasAnyCandidate && (
             <Button style="red-secondary" size="sm" pill onClick={clear}>
               {t("clear")}

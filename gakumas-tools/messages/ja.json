@@ -169,7 +169,14 @@
     "show": "表示",
     "hide": "非表示",
     "clear": "クリア",
-    "commit": "選ぶ"
+    "commit": "選ぶ",
+    "import": "読み込み"
+  },
+  "DraftPickImporterModal": {
+    "title": "スクリーンショットから読み込み",
+    "instructions": "スキルカード取得画面のスクリーンショットをアップロードしてください。3枚のカードを自動で検出して読み込みます。",
+    "processing": "処理中...",
+    "error": "読み込みに失敗しました"
   },
   "MemorySummaryActionButtons": {
     "edit": "編集"

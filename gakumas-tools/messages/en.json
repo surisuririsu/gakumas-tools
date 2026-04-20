@@ -169,7 +169,14 @@
     "show": "Show",
     "hide": "Hide",
     "clear": "Clear",
-    "commit": "Pick"
+    "commit": "Pick",
+    "import": "Import"
+  },
+  "DraftPickImporterModal": {
+    "title": "Import draft pick from screenshot",
+    "instructions": "Upload a screenshot of the in-game skill card draft screen. The 3 cards shown will be auto-detected and loaded.",
+    "processing": "Processing screenshot...",
+    "error": "Failed to import"
   },
   "MemorySummaryActionButtons": {
     "edit": "Edit"

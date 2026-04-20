@@ -183,7 +183,7 @@ export function extractParams(line) {
 
 const ICON_SIZE = 64;
 
-async function extractEntities(img, boxes, session, classes) {
+export async function extractEntities(img, boxes, session, classes) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 

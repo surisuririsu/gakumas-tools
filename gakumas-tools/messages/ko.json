@@ -169,7 +169,14 @@
     "show": "표시",
     "hide": "숨기기",
     "clear": "초기화",
-    "commit": "선택"
+    "commit": "선택",
+    "import": "가져오기"
+  },
+  "DraftPickImporterModal": {
+    "title": "스크린샷에서 가져오기",
+    "instructions": "스킬 카드 획득 화면의 스크린샷을 업로드하세요. 3장의 카드를 자동으로 감지하여 불러옵니다.",
+    "processing": "처리 중...",
+    "error": "가져오기에 실패했습니다"
   },
   "MemorySummaryActionButtons": {
     "edit": "편집"

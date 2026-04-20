@@ -169,7 +169,14 @@
     "show": "展开",
     "hide": "收起",
     "clear": "清除",
-    "commit": "选择"
+    "commit": "选择",
+    "import": "导入"
+  },
+  "DraftPickImporterModal": {
+    "title": "从截图导入",
+    "instructions": "请上传技能卡抽取界面的截图。将自动识别 3 张卡并载入。",
+    "processing": "处理中...",
+    "error": "导入失败"
   },
   "MemorySummaryActionButtons": {
     "edit": "编辑"
