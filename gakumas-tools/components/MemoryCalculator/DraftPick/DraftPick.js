@@ -13,11 +13,11 @@ import {
   classifyMemories,
   generatePossibleMemories,
 } from "@/utils/skillCardLottery";
-import { NON_PIDOL_FILTER } from "../skillCardFilters";
+import { PRODUCE_ONLY_FILTER } from "../skillCardFilters";
 import styles from "./DraftPick.module.scss";
 
 const EMPTY_SLOTS = [0, 0, 0];
-const FILTERS = [NON_PIDOL_FILTER];
+const FILTERS = [PRODUCE_ONLY_FILTER];
 
 function DraftPick({ idolId }) {
   const t = useTranslations("DraftPick");
