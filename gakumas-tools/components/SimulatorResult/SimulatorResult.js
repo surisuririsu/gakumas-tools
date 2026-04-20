@@ -7,6 +7,7 @@ import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
@@ -62,14 +63,8 @@ function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
   }, [data.scoreStats, config, enterPercents, setParams]);
 
   const downloadScores = useCallback(() => {
-    const csv = data.scores.join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "simulator_scores.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    const blob = new Blob([data.scores.join("\n")], { type: "text/csv" });
+    downloadBlob(blob, "simulator_scores.csv");
     logEvent("simulator_scores_download", { count: data.scores.length });
   }, [data.scores]);
 

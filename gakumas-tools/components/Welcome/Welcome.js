@@ -19,6 +19,7 @@ function Welcome() {
           </span>
         </h2>
         <p>{t("introduction")}</p>
+        <p className={styles.disclaimer}>{t("disclaimer")}</p>
       </div>
       <ToolsList />
     </div>

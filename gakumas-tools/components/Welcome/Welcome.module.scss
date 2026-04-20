@@ -29,6 +29,12 @@
   }
 }
 
+.disclaimer {
+  margin-top: tokens.$space-3 !important;
+  font-size: tokens.$text-sm !important;
+  opacity: 0.7;
+}
+
 .heroTitle {
   position: relative;
   display: inline-block;

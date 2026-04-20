@@ -21,6 +21,7 @@ import Button from "@/components/Button";
 import Image from "@/components/Image";
 import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table";
+import { downloadBlob } from "@/utils/download";
 import {
   getScoresFromFile,
   getScoresFromImage,
@@ -213,15 +214,11 @@ function Rehearsal() {
   }, []);
 
   function download() {
-    let csvData = data
+    const csvData = data
       .map((row) => row.map((stage) => stage.join(",")).join(","))
       .join("\n");
     const blob = new Blob([csvData], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "rehearsal_data.csv";
-    a.click();
+    downloadBlob(blob, "rehearsal_data.csv");
   }
 
   const boxPlotData = useMemo(
