@@ -83,6 +83,7 @@ function MemoryCalculator() {
           <Button
             style="red-secondary"
             size="sm"
+            pill
             onClick={() => confirmClear(clearTargetCardIds)}
           >
             {t("clear")}
@@ -99,6 +100,7 @@ function MemoryCalculator() {
           <Button
             style="red-secondary"
             size="sm"
+            pill
             onClick={() => confirmClear(clearAcquiredCardIds)}
           >
             {t("clear")}
