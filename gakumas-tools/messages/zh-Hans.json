@@ -417,7 +417,14 @@
     "addScreenshots": "添加竞技场配队结果的屏幕截图以解析分数。",
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
     "stage": "舞台 {n}",
-    "score": "分数"
+    "score": "分数",
+    "progress": "进度: {progress}/{total}",
+    "analyzingVideo": "正在分析视频并检测竞技场结果...",
+    "foundCandidates": "找到 {count} 个潜在的竞技场结果，正在读取分数...",
+    "readingScores": "正在读取分数 ({start}-{end}/{total})...",
+    "videoComplete": "完成！找到 {count} 个竞技场结果。",
+    "videoError": "处理视频时出错: {message}",
+    "imageError": "{count} 张截图无法解析，已跳过。"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

@@ -1,5 +1,5 @@
 "use client";
-import React, {
+import {
   memo,
   useCallback,
   useEffect,
@@ -64,154 +64,151 @@ function Rehearsal() {
       workersRef.current?.forEach(async (worker) => (await worker).terminate());
   }, []);
 
-  const handleFiles = useCallback(async (e) => {
-    // Get files and reset progress
-    const files = Array.from(e.target.files);
-    setProgress(null);
-    setProcessingStatus("");
-    if (!files.length) return;
-    setData([]);
-    setTotal(files.length);
-    setProgress(0);
-
-    const csvFiles = files.filter(
-      (f) => f.type === "text/csv" || f.name.endsWith(".csv")
-    );
-    const videoFiles = files.filter(
-      (f) =>
-        f.type.startsWith("video/") || /\.(mp4|mov|avi|mkv|webm)$/i.test(f.name)
-    );
-    const imageFiles = files.filter(
-      (f) => !csvFiles.includes(f) && !videoFiles.includes(f)
-    );
-
-    let results = [];
-
-    if (csvFiles.length) {
-      for (const file of csvFiles) {
-        const text = await file.text();
-        const rows = text
-          .trim()
-          .split("\n")
-          .map((line) => line.split(",").map(Number));
-        const parsed = rows.map((row) => [
-          row.slice(0, 3),
-          row.slice(3, 6),
-          row.slice(6, 9),
-        ]);
-        results = results.concat(parsed);
-      }
-      setData(results);
-      setProgress(csvFiles.length);
-      return;
-    }
-
-    if (!imageFiles.length && !videoFiles.length) return;
-    console.time("All results parsed");
-
-    if (videoFiles.length) {
-      for (const videoFile of videoFiles) {
-        try {
-          console.log(`Processing video: ${videoFile.name}`);
-          setProcessingStatus(
-            `Analyzing video and detecting rehearsal results...`
-          );
-
-          // Extract only candidate frames (just before brightness transitions)
-          const candidateFrames = await extractCandidateFrames(
-            videoFile,
-            200,
-            180
-          );
-          console.log(`Found ${candidateFrames.length} candidate frames`);
-
-          setProcessingStatus(
-            `Found ${candidateFrames.length} potential rehearsal results. Reading scores...`
-          );
-
-          const batchSize = workersRef.current.length;
-          let processedCount = 0;
-
-          for (
-            let batchStart = 0;
-            batchStart < candidateFrames.length;
-            batchStart += batchSize
-          ) {
-            const batchEnd = Math.min(
-              batchStart + batchSize,
-              candidateFrames.length
-            );
-            const batch = candidateFrames.slice(batchStart, batchEnd);
-
-            setProcessingStatus(
-              `Reading scores (${processedCount + 1}-${
-                processedCount + batch.length
-              }/${candidateFrames.length})...`
-            );
-
-            const batchPromises = batch.map(async (canvas, j) => {
-              const worker = await workersRef.current[
-                j % workersRef.current.length
-              ];
-
-              const img = await canvasToImage(canvas);
-              const scores = await getScoresFromImage(img, worker);
-
-              if (scores && scores.length === 3) {
-                console.log(
-                  `Candidate frame ${
-                    batchStart + j
-                  }: Found valid result: ${scores.flat().join(",")}`
-                );
-                return scores;
-              }
-              return null;
-            });
-
-            const batchResults = await Promise.all(batchPromises);
-
-            for (const scores of batchResults) {
-              if (scores && scores.length === 3) {
-                results.push(scores);
-              }
-            }
-
-            processedCount += batch.length;
-          }
-
-          console.log(`Found ${results.length} rehearsal results in video`);
-          setProcessingStatus(
-            `Completed! Found ${results.length} rehearsal results.`
-          );
-        } catch (error) {
-          console.error(`Error processing video ${videoFile.name}:`, error);
-          setProcessingStatus(`Error processing video: ${error.message}`);
-        }
-        setProgress((p) => p + 1);
-      }
-    }
-
-    // Process image files
-    if (imageFiles.length) {
-      const batchSize = workersRef.current.length;
-      for (let i = 0; i < imageFiles.length; i += batchSize) {
-        const batch = imageFiles.slice(i, i + batchSize);
-        const promises = batch.map(async (file, j) => {
-          const worker = await workersRef.current[
-            j % workersRef.current.length
-          ];
-          const scores = await getScoresFromFile(file, worker);
-          setProgress((p) => p + 1);
-          return scores;
-        });
-        const res = await Promise.all(promises);
-        results = results.concat(res);
-      }
-    }
-
-    console.timeEnd("All results parsed");
-    setData(results);
+  const parseCsvFile = useCallback(async (file) => {
+    const text = await file.text();
+    return text
+      .trim()
+      .split("\n")
+      .map((line) => {
+        const row = line.split(",").map(Number);
+        return [row.slice(0, 3), row.slice(3, 6), row.slice(6, 9)];
+      });
   }, []);
+
+  const processVideo = useCallback(
+    async (videoFile) => {
+      setProcessingStatus(t("analyzingVideo"));
+      const candidateFrames = await extractCandidateFrames(videoFile, 200, 180);
+      setProcessingStatus(
+        t("foundCandidates", { count: candidateFrames.length })
+      );
+
+      const workers = workersRef.current;
+      const batchSize = workers.length;
+      const results = [];
+      for (let start = 0; start < candidateFrames.length; start += batchSize) {
+        const batch = candidateFrames.slice(start, start + batchSize);
+        setProcessingStatus(
+          t("readingScores", {
+            start: start + 1,
+            end: start + batch.length,
+            total: candidateFrames.length,
+          })
+        );
+        const batchResults = await Promise.all(
+          batch.map(async (canvas, j) => {
+            const worker = await workers[j % workers.length];
+            const img = await canvasToImage(canvas);
+            const scores = await getScoresFromImage(img, worker);
+            return scores && scores.length === 3 ? scores : null;
+          })
+        );
+        for (const scores of batchResults) {
+          if (scores) results.push(scores);
+        }
+      }
+      setProcessingStatus(t("videoComplete", { count: results.length }));
+      return results;
+    },
+    [t]
+  );
+
+  const processImages = useCallback(async (imageFiles) => {
+    const workers = workersRef.current;
+    const batchSize = workers.length;
+    const results = [];
+    let failures = 0;
+    for (let i = 0; i < imageFiles.length; i += batchSize) {
+      const batch = imageFiles.slice(i, i + batchSize);
+      const batchResults = await Promise.all(
+        batch.map(async (file, j) => {
+          const worker = await workers[j % workers.length];
+          try {
+            return await getScoresFromFile(file, worker);
+          } catch (err) {
+            console.error(`Error parsing ${file.name}:`, err);
+            return null;
+          } finally {
+            setProgress((p) => p + 1);
+          }
+        })
+      );
+      for (const scores of batchResults) {
+        if (scores) results.push(scores);
+        else failures++;
+      }
+    }
+    return { results, failures };
+  }, []);
+
+  const handleFiles = useCallback(
+    async (e) => {
+      const files = Array.from(e.target.files);
+      setProgress(null);
+      setProcessingStatus("");
+      if (!files.length) return;
+      setData([]);
+      setTotal(files.length);
+      setProgress(0);
+
+      const csvFiles = [];
+      const videoFiles = [];
+      const imageFiles = [];
+      for (const f of files) {
+        if (f.type === "text/csv" || f.name.endsWith(".csv")) {
+          csvFiles.push(f);
+        } else if (
+          f.type.startsWith("video/") ||
+          /\.(mp4|mov|avi|mkv|webm)$/i.test(f.name)
+        ) {
+          videoFiles.push(f);
+        } else {
+          imageFiles.push(f);
+        }
+      }
+
+      console.time("All results parsed");
+      const results = [];
+
+      // CSVs are parsed synchronously and don't use the OCR worker pool, so
+      // run them alongside the video/image OCR work.
+      const csvPromise = Promise.all(csvFiles.map(parseCsvFile)).then(
+        (perFile) => {
+          for (const rows of perFile) results.push(...rows);
+          setProgress((p) => p + csvFiles.length);
+        }
+      );
+
+      // Videos and images share the OCR worker pool, so they must run
+      // sequentially to avoid contention on the same workers.
+      const ocrPromise = (async () => {
+        for (const videoFile of videoFiles) {
+          try {
+            const videoResults = await processVideo(videoFile);
+            results.push(...videoResults);
+          } catch (err) {
+            console.error(`Error processing ${videoFile.name}:`, err);
+            setProcessingStatus(t("videoError", { message: err.message }));
+          }
+          setProgress((p) => p + 1);
+        }
+        if (imageFiles.length) {
+          const { results: imgResults, failures } = await processImages(
+            imageFiles
+          );
+          results.push(...imgResults);
+          if (failures) {
+            setProcessingStatus(t("imageError", { count: failures }));
+          }
+        }
+      })();
+
+      await Promise.all([csvPromise, ocrPromise]);
+      console.timeEnd("All results parsed");
+      setData(results);
+    },
+    [parseCsvFile, processVideo, processImages, t]
+  );
 
   function download() {
     const csvData = data
@@ -301,9 +298,10 @@ function Rehearsal() {
         <div className={styles.progress}>
           <div className={styles.progressLabel}>
             <span>
-              {processingStatus || `Progress: ${progress}/${total ?? "?"}`}
+              {processingStatus ||
+                t("progress", { progress, total: total ?? "?" })}
             </span>
-            {progress === total && !processingStatus && <FaCheck />}
+            {progress === total && <FaCheck />}
           </div>
           {total > 0 && <ProgressBar value={progress} max={total} />}
         </div>
