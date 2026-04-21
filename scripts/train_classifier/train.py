@@ -125,17 +125,17 @@ def train_entity(entity_type, fresh, epochs, loss_threshold, device):
         _load_surgery_state(
             model, checkpoint_path, old_classes, dataset.class_to_idx
         )
-        # Only fine-tune the classifier head; conv + embedding weights are kept.
-        for name, param in model.named_parameters():
-            param.requires_grad = name.startswith("classifier")
+        # Leave all layers trainable: a frozen encoder leaves the classifier
+        # separating new classes in a fixed embedding space, which converges
+        # very slowly when the new art differs from anything the encoder saw.
+        # The surgery-transferred weights still provide a warm start; training
+        # on all classes together prevents catastrophic forgetting.
     elif not fresh:
         print(
             f"  no checkpoint at {checkpoint_path}; training from scratch"
         )
 
-    optimizer = torch.optim.Adam(
-        filter(lambda p: p.requires_grad, model.parameters()), lr=0.001
-    )
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     while True:
         loss = _train_loop(model, dataloader, optimizer, device, epochs)

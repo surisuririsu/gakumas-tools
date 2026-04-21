@@ -2,6 +2,8 @@ import json
 import os
 import shutil
 
+from PIL import Image
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 DATA_ROOT = os.path.join(REPO_ROOT, ".classifier-data")
@@ -10,13 +12,20 @@ GAKUMAS_DATA_JSON = os.path.join(
     REPO_ROOT, "packages", "gakumas-data", "json"
 )
 
+# Class "0" is the empty-slot placeholder. It has no entry in gakumas-data and
+# no icon in gk-img, so prepare seeds a neutral gray icon and preserves any
+# user-collected training images in the folder.
+EMPTY_CLASS_ID = "0"
+EMPTY_ICON_SIZE = 64
+EMPTY_ICON_COLOR = (200, 200, 200)
+
 
 ENTITY_CONFIG = {
     "p_item": {
         "json_filename": "p_items.json",
         "icon_dir": os.path.join(GK_IMG_ROOT, "p_items", "icons"),
         "data_dir": os.path.join(DATA_ROOT, "p_items"),
-        "filter": lambda entity: entity.get("mode") == "stage",
+        "filter": lambda entity: entity.get("sourceType") != "produce",
     },
     "skill_card": {
         "json_filename": "skill_cards.json",
@@ -35,10 +44,21 @@ def load_allowed_ids(entity_type):
     return {str(e["id"]) for e in entities if config["filter"](e)}
 
 
+def ensure_empty_class(data_dir):
+    class_dir = os.path.join(data_dir, EMPTY_CLASS_ID)
+    os.makedirs(class_dir, exist_ok=True)
+    icon_path = os.path.join(class_dir, "icon.webp")
+    if not os.path.exists(icon_path):
+        Image.new(
+            "RGB", (EMPTY_ICON_SIZE, EMPTY_ICON_SIZE), EMPTY_ICON_COLOR
+        ).save(icon_path, "WEBP")
+
+
 def prepare_entity(entity_type):
     config = ENTITY_CONFIG[entity_type]
-    allowed_ids = load_allowed_ids(entity_type)
+    allowed_ids = load_allowed_ids(entity_type) | {EMPTY_CLASS_ID}
     os.makedirs(config["data_dir"], exist_ok=True)
+    ensure_empty_class(config["data_dir"])
 
     copied = 0
     skipped = 0
