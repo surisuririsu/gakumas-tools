@@ -47,6 +47,7 @@
   align-items: center;
   justify-content: space-between;
   gap: tokens.$space-2;
+  font-variant-numeric: tabular-nums;
 }
 
 .tableWrapper {

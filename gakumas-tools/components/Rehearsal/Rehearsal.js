@@ -27,10 +27,7 @@ import {
   getScoresFromFile,
   getScoresFromImage,
 } from "@/utils/imageProcessing/rehearsal";
-import {
-  extractCandidateFrames,
-  canvasToImage,
-} from "@/utils/imageProcessing/videoFrameExtractor";
+import { streamCandidateFrames } from "@/utils/imageProcessing/videoFrameExtractor";
 import { bucketScores } from "@/utils/simulator";
 import { runBatched } from "@/utils/workerPool";
 import KofiAd from "../KofiAd";
@@ -75,31 +72,43 @@ function Rehearsal() {
   const processVideo = useCallback(
     async (videoFile) => {
       setProcessingStatus(t("analyzingVideo"));
-      const frames = await extractCandidateFrames(
-        videoFile,
-        FRAME_INTERVAL_MS,
-        BRIGHTNESS_THRESHOLD,
-      );
-      setProcessingStatus(t("foundCandidates", { count: frames.length }));
-
-      const workers = workersRef.current;
-      const scored = await runBatched(frames, workers, async (canvas, worker, idx) => {
-        if (idx % workers.length === 0) {
+      // Single worker is enough: seeking dominates runtime, OCR is fast, and
+      // one-frame-at-a-time streaming keeps peak memory flat (one canvas
+      // instead of N candidates on mobile).
+      const worker = await workersRef.current[0];
+      const results = [];
+      let scanStarted = false;
+      let lastStatusAt = 0;
+      for await (const canvas of streamCandidateFrames(videoFile, {
+        intervalMs: FRAME_INTERVAL_MS,
+        brightnessThreshold: BRIGHTNESS_THRESHOLD,
+        onProgress: (analyzed, frameTotal) => {
+          if (!scanStarted) {
+            scanStarted = true;
+            // The video was initially allocated 1 unit in the total; expand
+            // that to `frameTotal` so the progress bar tracks per-frame.
+            setTotal((cur) => cur + frameTotal - 1);
+          }
+          setProgress((p) => p + 1);
+          // Throttle status updates to ~4/sec — seeking can fire every
+          // ~50ms on desktop.
+          const now = performance.now();
+          if (now - lastStatusAt < 250 && analyzed !== frameTotal) return;
+          lastStatusAt = now;
           setProcessingStatus(
-            t("readingScores", {
-              start: idx + 1,
-              end: Math.min(idx + workers.length, frames.length),
-              total: frames.length,
+            t("scanningVideo", {
+              analyzed,
+              total: frameTotal,
+              found: results.length,
             }),
           );
-        }
-        const img = await canvasToImage(canvas);
-        const scores = await getScoresFromImage(img, worker);
-        return scores && scores.length === 3 ? scores : null;
-      });
-      const results = scored.filter(Boolean);
+        },
+      })) {
+        const scores = await getScoresFromImage(canvas, worker);
+        if (scores && scores.length === 3) results.push(scores);
+      }
       setProcessingStatus(t("videoComplete", { count: results.length }));
-      return results;
+      return { results, scanStarted };
     },
     [t],
   );
@@ -150,13 +159,19 @@ function Rehearsal() {
       // Videos and images share the OCR worker pool, so they run sequentially.
       const ocrPromise = (async () => {
         for (const videoFile of videos) {
+          let scanStarted = false;
           try {
-            results.push(...(await processVideo(videoFile)));
+            const res = await processVideo(videoFile);
+            results.push(...res.results);
+            scanStarted = res.scanStarted;
           } catch (err) {
             console.error(`Error processing ${videoFile.name}:`, err);
             setProcessingStatus(t("videoError", { message: err.message }));
           }
-          setProgress((p) => p + 1);
+          // If the scan never started (loadVideo error), close out the
+          // video's 1-unit allocation here. Otherwise per-frame ticking
+          // already covered it.
+          if (!scanStarted) setProgress((p) => p + 1);
         }
         if (images.length) {
           const { results: imgResults, failures } = await processImages(images);

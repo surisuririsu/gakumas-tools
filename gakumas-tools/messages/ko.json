@@ -419,9 +419,8 @@
     "stage": "스테이지 {n}",
     "score": "스코어",
     "progress": "진행: {progress}/{total}",
-    "analyzingVideo": "동영상을 분석하고 리허설 결과를 감지하는 중...",
-    "foundCandidates": "{count}개의 리허설 결과 후보를 찾았습니다. 스코어를 읽는 중...",
-    "readingScores": "스코어 읽는 중 ({start}-{end}/{total})...",
+    "analyzingVideo": "동영상 분석 중...",
+    "scanningVideo": "프레임 {analyzed}/{total} 분석 중 · 지금까지 {found}개의 결과",
     "videoComplete": "완료! {count}개의 리허설 결과를 찾았습니다.",
     "videoError": "동영상 처리 중 오류: {message}",
     "imageError": "{count}개의 스크린샷을 분석하지 못해 건너뛰었습니다."

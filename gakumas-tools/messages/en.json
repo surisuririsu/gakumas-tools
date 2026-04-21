@@ -419,9 +419,8 @@
     "stage": "Stage {n}",
     "score": "Score",
     "progress": "Progress: {progress}/{total}",
-    "analyzingVideo": "Analyzing video and detecting rehearsal results...",
-    "foundCandidates": "Found {count} potential rehearsal results. Reading scores...",
-    "readingScores": "Reading scores ({start}-{end}/{total})...",
+    "analyzingVideo": "Analyzing video...",
+    "scanningVideo": "Analyzing frame {analyzed}/{total} · {found} result(s) found so far",
     "videoComplete": "Completed! Found {count} rehearsal results.",
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped."

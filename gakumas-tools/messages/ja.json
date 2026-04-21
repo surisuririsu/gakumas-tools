@@ -419,9 +419,8 @@
     "stage": "ステージ{n}",
     "score": "スコア",
     "progress": "進捗: {progress}/{total}",
-    "analyzingVideo": "動画を解析してリハーサル結果を検出しています...",
-    "foundCandidates": "{count}件のリハーサル結果の候補が見つかりました。スコアを読み取っています...",
-    "readingScores": "スコアを読み取り中 ({start}-{end}/{total})...",
+    "analyzingVideo": "動画を解析中...",
+    "scanningVideo": "フレーム {analyzed}/{total} を解析中・これまでに{found}件の結果を検出",
     "videoComplete": "完了！{count}件のリハーサル結果が見つかりました。",
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。"

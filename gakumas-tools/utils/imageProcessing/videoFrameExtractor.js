@@ -2,46 +2,79 @@ import { DEBUG } from "./common";
 
 const LOAD_TIMEOUT_MS = 300_000;
 const SEEK_TIMEOUT_MS = 10_000;
+// A 64×64 average is plenty for a brightness check and ~500× cheaper than
+// drawing and reading a full-size frame.
+const BRIGHTNESS_SAMPLE_SIZE = 64;
 
-export async function extractCandidateFrames(
+// Stream candidate frames — the dark frame immediately before each
+// dark→bright brightness transition. Emits each frame as it's found in a
+// single pass through the video, plus one extra re-seek per detected
+// transition to capture the previous frame at full resolution.
+//
+// The same canvas is reused across yields, so consumers must finish with a
+// frame (synchronously read its pixels, or pass it to an async API that
+// captures the data synchronously) before resuming iteration.
+//
+// `onProgress(analyzed, total)` fires after each analyzed sample.
+export async function* streamCandidateFrames(
   videoFile,
-  intervalMs = 500,
-  brightnessThreshold = 180,
+  {
+    intervalMs = 500,
+    brightnessThreshold = 180,
+    onProgress,
+  } = {},
 ) {
   const { video, blobURL } = await loadVideo(videoFile);
   try {
     const frameCount = Math.floor((video.duration * 1000) / intervalMs);
     const timeOf = (frame) => (frame * intervalMs) / 1000;
 
-    // First pass: measure brightness at each interval using one reusable canvas.
-    const tempCanvas = createCanvas(video.videoWidth, video.videoHeight);
-    const tempCtx = tempCanvas.getContext("2d");
-    const brightnesses = [];
+    const sampleCanvas = createCanvas(
+      BRIGHTNESS_SAMPLE_SIZE,
+      BRIGHTNESS_SAMPLE_SIZE,
+    );
+    const sampleCtx = sampleCanvas.getContext("2d", {
+      willReadFrequently: true,
+    });
+    const frameCanvas = createCanvas(video.videoWidth, video.videoHeight);
+    const frameCtx = frameCanvas.getContext("2d");
+
+    // Start above the threshold so the first sample isn't treated as a
+    // transition even if the video opens on a bright frame.
+    let prevBrightness = 255;
+    let found = 0;
+
     for (let i = 0; i < frameCount; i++) {
       await seekTo(video, timeOf(i));
-      tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-      brightnesses.push(getAverageBrightness(tempCanvas));
+      sampleCtx.drawImage(
+        video,
+        0,
+        0,
+        BRIGHTNESS_SAMPLE_SIZE,
+        BRIGHTNESS_SAMPLE_SIZE,
+      );
+      const brightness = getAverageBrightness(sampleCanvas);
+      onProgress?.(i + 1, frameCount);
+
+      if (
+        prevBrightness < brightnessThreshold &&
+        brightness >= brightnessThreshold
+      ) {
+        // The rehearsal result screen is the DARK frame before the flash,
+        // not the bright one. Re-seek back one interval to capture it.
+        await seekTo(video, timeOf(i - 1));
+        frameCtx.drawImage(video, 0, 0, frameCanvas.width, frameCanvas.height);
+        found++;
+        yield frameCanvas;
+      }
+      prevBrightness = brightness;
     }
 
-    const transitions = findDarkToBrightTransitions(
-      brightnesses,
-      brightnessThreshold,
-    );
     if (DEBUG) {
       console.log(
-        `videoFrameExtractor: ${transitions.length} transitions in ${frameCount} frames`,
+        `videoFrameExtractor: ${found} transitions in ${frameCount} frames`,
       );
     }
-
-    // Second pass: capture each transition frame to its own canvas.
-    const frames = [];
-    for (const frameIndex of transitions) {
-      await seekTo(video, timeOf(frameIndex));
-      const canvas = createCanvas(video.videoWidth, video.videoHeight);
-      canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
-      frames.push(canvas);
-    }
-    return frames;
   } finally {
     URL.revokeObjectURL(blobURL);
   }
@@ -124,41 +157,7 @@ function createCanvas(width, height) {
   return canvas;
 }
 
-function findDarkToBrightTransitions(brightnesses, threshold) {
-  const transitions = [];
-  for (let i = 0; i < brightnesses.length - 1; i++) {
-    if (brightnesses[i] < threshold && brightnesses[i + 1] > threshold) {
-      transitions.push(i);
-    }
-  }
-  return transitions;
-}
-
-export function canvasToImage(canvas) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    let objectURL = null;
-    img.onload = () => {
-      if (objectURL) URL.revokeObjectURL(objectURL);
-      resolve(img);
-    };
-    img.onerror = (err) => {
-      if (objectURL) URL.revokeObjectURL(objectURL);
-      reject(err);
-    };
-    // OffscreenCanvas → convertToBlob; regular canvas → toDataURL.
-    if (canvas.convertToBlob) {
-      canvas.convertToBlob().then((blob) => {
-        objectURL = URL.createObjectURL(blob);
-        img.src = objectURL;
-      }, reject);
-    } else {
-      img.src = canvas.toDataURL();
-    }
-  });
-}
-
-export function getAverageBrightness(canvas) {
+function getAverageBrightness(canvas) {
   const ctx = canvas.getContext("2d");
   const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
   let sum = 0;
