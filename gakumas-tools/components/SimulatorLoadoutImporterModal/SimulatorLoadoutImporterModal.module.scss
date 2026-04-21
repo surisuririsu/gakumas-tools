@@ -1,0 +1,28 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.instructions {
+  margin: tokens.$space-2 0;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  line-height: 1.5;
+}
+
+.file {
+  display: flex;
+  margin-top: tokens.$space-3;
+  padding: tokens.$space-3;
+  border-radius: tokens.$radius-sm;
+  background-color: colors.$gk-orange-extra-light;
+}
+
+.status {
+  margin-top: tokens.$space-2;
+  color: colors.$gk-orange;
+}
+
+.error {
+  margin-top: tokens.$space-2;
+  color: colors.$red-dark;
+  font-size: tokens.$text-sm;
+}

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import {
   FaCheck,
   FaClockRotateLeft,
+  FaFileImport,
   FaFloppyDisk,
   FaRegCopy,
   FaRegTrashCan,
@@ -15,6 +16,7 @@ import LoadoutHistory from "@/components/LoadoutHistory";
 import LoadoutManagerModal from "@/components/LoadoutManagerModal";
 import Modal from "@/components/Modal";
 import ShareModal from "@/components/ShareModal";
+import SimulatorLoadoutImporterModal from "@/components/SimulatorLoadoutImporterModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -31,9 +33,10 @@ function HistoryModal() {
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
-  const { clear, simulatorUrl, stage } = useContext(LoadoutContext);
+  const { clear, loadout, setLoadout, simulatorUrl, stage } =
+    useContext(LoadoutContext);
   const { loadoutHistory } = useContext(LoadoutHistoryContext);
-  const { setModal } = useContext(ModalContext);
+  const { setModal, closeModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
   const copiedTimerRef = useRef(null);
 
@@ -41,7 +44,7 @@ function SimulatorButtons() {
     () => () => {
       if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
     },
-    []
+    [],
   );
 
   return (
@@ -71,6 +74,31 @@ function SimulatorButtons() {
       <Button
         style="blue-secondary"
         size="sm"
+        onClick={() =>
+          setModal(
+            <SimulatorLoadoutImporterModal
+              onSuccess={({ pItemIds, skillCardIdGroups }) => {
+                setLoadout({
+                  ...loadout,
+                  pItemIds,
+                  skillCardIdGroups,
+                  customizationGroups: skillCardIdGroups.map((g) =>
+                    g.map(() => ({})),
+                  ),
+                });
+                closeModal();
+              }}
+            />,
+          )
+        }
+      >
+        <FaFileImport />
+        <span className={styles.buttonText}>{t("import")}</span>
+      </Button>
+
+      <Button
+        style="blue-secondary"
+        size="sm"
         disabled={!loadoutHistory.length}
         onClick={() => setModal(<HistoryModal />)}
       >
@@ -91,7 +119,7 @@ function SimulatorButtons() {
               }
               copiedTimerRef.current = setTimeout(
                 () => setLinkCopied(false),
-                3000
+                3000,
               );
             }}
           >

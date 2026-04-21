@@ -279,7 +279,14 @@
     "clear": "清除",
     "manageLoadouts": "保存/加载 β",
     "history": "历史记录 β",
-    "share": "分享"
+    "share": "分享",
+    "import": "导入 β"
+  },
+  "SimulatorLoadoutImporterModal": {
+    "title": "从截图导入编组",
+    "instructions": "请上传游戏内选秀编组画面的截图。P道具和技能卡将被自动检测并加载。由于分类器未针对此图标样式进行训练，识别准确率可能较低。",
+    "processing": "正在处理截图...",
+    "error": "导入失败"
   },
   "ShareModal": {
     "title": "分享",

@@ -279,7 +279,14 @@
     "clear": "クリア",
     "manageLoadouts": "保存・読み込みβ",
     "history": "履歴β",
-    "share": "共有"
+    "share": "共有",
+    "import": "読み込みβ"
+  },
+  "SimulatorLoadoutImporterModal": {
+    "title": "スクリーンショットから編成を読み込み",
+    "instructions": "コンテスト編成画面のスクリーンショットをアップロードしてください。Pアイテムとスキルカードを自動で検出します。この画面のアイコンスタイルでは分類器の学習データに含まれていないため、認識精度は低い可能性があります。",
+    "processing": "処理中...",
+    "error": "読み込みに失敗しました"
   },
   "ShareModal": {
     "title": "共有",

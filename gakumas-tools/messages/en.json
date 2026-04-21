@@ -279,7 +279,14 @@
     "clear": "Clear",
     "manageLoadouts": "Save/Load β",
     "history": "History β",
-    "share": "Share"
+    "share": "Share",
+    "import": "Import β"
+  },
+  "SimulatorLoadoutImporterModal": {
+    "title": "Import loadout from screenshot",
+    "instructions": "Upload a screenshot of the in-game contest loadout screen. P-items and skill cards will be auto-detected and loaded. Classification may be inaccurate since the classifier was not trained on this icon style.",
+    "processing": "Processing screenshot...",
+    "error": "Failed to import"
   },
   "ShareModal": {
     "title": "Share",

@@ -279,7 +279,14 @@
     "clear": "초기화",
     "manageLoadouts": "저장 및 불러오기 β",
     "history": "내역 β",
-    "share": "공유"
+    "share": "공유",
+    "import": "불러오기 β"
+  },
+  "SimulatorLoadoutImporterModal": {
+    "title": "스크린샷에서 편성 불러오기",
+    "instructions": "콘테스트 편성 화면의 스크린샷을 업로드하세요. P-아이템과 스킬 카드를 자동으로 감지합니다. 이 화면의 아이콘 스타일은 분류기 학습 데이터에 포함되어 있지 않아 인식 정확도가 낮을 수 있습니다.",
+    "processing": "처리 중...",
+    "error": "불러오기에 실패했습니다"
   },
   "ShareModal": {
     "title": "공유",
