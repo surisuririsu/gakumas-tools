@@ -10,8 +10,8 @@ import Tooltips from "@/components/Tooltips";
 import { DataContextProvider } from "@/contexts/DataContext";
 import { LoadoutApiContextProvider } from "@/contexts/LoadoutApiContext";
 import { LoadoutContextProvider } from "@/contexts/LoadoutContext";
-import { LoadoutHistoryContextProvider } from "@/contexts/LoadoutHistoryContext";
 import { LoadoutUrlContextProvider } from "@/contexts/LoadoutUrlContext";
+import { SimulationRunsContextProvider } from "@/contexts/SimulationRunsContext";
 import { MemoryCalculatorContextProvider } from "@/contexts/MemoryCalculatorContext";
 import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { ModalContextProvider } from "@/contexts/ModalContext";
@@ -65,7 +65,7 @@ export default async function RootLayout({ params, children }) {
                         <LoadoutUrlContextProvider>
                           <LoadoutContextProvider>
                             <LoadoutApiContextProvider>
-                              <LoadoutHistoryContextProvider>
+                              <SimulationRunsContextProvider>
                                 <ModalContextProvider>
                                   <div className={styles.tools}>
                                     <PinnedTools />
@@ -73,7 +73,7 @@ export default async function RootLayout({ params, children }) {
                                   </div>
                                   <Tooltips />
                                 </ModalContextProvider>
-                              </LoadoutHistoryContextProvider>
+                              </SimulationRunsContextProvider>
                             </LoadoutApiContextProvider>
                           </LoadoutContextProvider>
                         </LoadoutUrlContextProvider>

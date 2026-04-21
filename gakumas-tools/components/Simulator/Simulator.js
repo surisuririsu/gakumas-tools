@@ -31,7 +31,7 @@ import SimulatorResult from "@/components/SimulatorResult";
 import StageSelect from "@/components/StageSelect";
 import StrategyPicker from "@/components/StrategyPicker";
 import LoadoutContext from "@/contexts/LoadoutContext";
-import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
+import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import {
@@ -61,9 +61,7 @@ export default function Simulator() {
     currentLoadoutIndex,
     setCurrentLoadoutIndex,
   } = useContext(LoadoutContext);
-  const { pushLoadoutHistory, pushLoadoutsHistory } = useContext(
-    LoadoutHistoryContext,
-  );
+  const { pushRun } = useContext(SimulationRunsContext);
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
@@ -133,8 +131,14 @@ export default function Simulator() {
 
       setSimulatorData({ bucketedScores, medianScore, bucketSize, ...result });
       setRunning(false);
+
+      pushRun({
+        loadout,
+        loadouts: stage.type === "linkContest" ? loadouts : null,
+        scores: result.scores,
+      });
     },
-    [setSimulatorData, setRunning],
+    [setSimulatorData, setRunning, pushRun, loadout, loadouts, stage],
   );
 
   async function startManualPlay() {
@@ -142,10 +146,11 @@ export default function Simulator() {
     setSimulatorData(null);
     setPendingDecision(null);
 
-    pushLoadoutHistory();
-    if (stage.type === "linkContest") {
-      pushLoadoutsHistory();
-    }
+    pushRun({
+      loadout,
+      loadouts: stage.type === "linkContest" ? loadouts : null,
+      scores: null,
+    });
 
     const engine = new StageEngine(config, linkConfigs);
 
@@ -214,10 +219,6 @@ export default function Simulator() {
       Promise.all(promises).then((results) => {
         const mergedResults = mergeResults(results);
         setResult(mergedResults);
-        pushLoadoutHistory();
-        if (stage.type === "linkContest") {
-          pushLoadoutsHistory();
-        }
       });
     }
   }

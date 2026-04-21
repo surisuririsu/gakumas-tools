@@ -18,8 +18,8 @@ import Modal from "@/components/Modal";
 import ShareModal from "@/components/ShareModal";
 import SimulatorLoadoutImporterModal from "@/components/SimulatorLoadoutImporterModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
-import LoadoutHistoryContext from "@/contexts/LoadoutHistoryContext";
 import ModalContext from "@/contexts/ModalContext";
+import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import styles from "./Simulator.module.scss";
 
 function HistoryModal() {
@@ -35,7 +35,7 @@ function SimulatorButtons() {
 
   const { clear, loadout, setLoadout, simulatorUrl, stage } =
     useContext(LoadoutContext);
-  const { loadoutHistory } = useContext(LoadoutHistoryContext);
+  const { history } = useContext(SimulationRunsContext);
   const { setModal, closeModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
   const copiedTimerRef = useRef(null);
@@ -99,7 +99,7 @@ function SimulatorButtons() {
       <Button
         style="blue-secondary"
         size="sm"
-        disabled={!loadoutHistory.length}
+        disabled={!history.length}
         onClick={() => setModal(<HistoryModal />)}
       >
         <FaClockRotateLeft />

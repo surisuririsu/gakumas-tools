@@ -3,10 +3,12 @@ import { useTranslations } from "next-intl";
 import { FaCircleArrowUp, FaDownload, FaWandMagicSparkles } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
+import CompareTab from "@/components/SimulationRuns";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
 import LoadoutContext from "@/contexts/LoadoutContext";
+import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
@@ -14,12 +16,14 @@ import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
-const TABS = ["stats", "logs"];
+const TABS = ["stats", "logs", "compare"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
 
 function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
   const t = useTranslations("SimulatorResult");
   const { setParams } = useContext(LoadoutContext);
+  const { history } = useContext(SimulationRunsContext);
+  const currentRun = history[0] || null;
   // Default rendered during SSR / pre-hydration. Hydrated from localStorage
   // in the effect below so the initial markup matches between server and
   // client (avoids hydration mismatch warnings).
@@ -118,6 +122,8 @@ function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
             scoreStats={data.scoreStats}
           />
         )}
+
+        {tab === "compare" && <CompareTab currentRun={currentRun} />}
 
         <div className={styles.footer}>
           <KofiAd />

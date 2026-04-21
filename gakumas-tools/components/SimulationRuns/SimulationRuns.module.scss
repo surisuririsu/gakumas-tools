@@ -1,0 +1,431 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.compare {
+  display: grid;
+  grid-template-columns:
+    44px
+    minmax(80px, 1fr)
+    minmax(140px, 2fr)
+    minmax(90px, max-content)
+    max-content;
+  column-gap: tokens.$space-2;
+  row-gap: tokens.$space-1;
+  align-items: center;
+  padding: 0 tokens.$space-2;
+
+  @media (max-width: 640px) {
+    grid-template-columns:
+      32px
+      minmax(60px, 1fr)
+      minmax(100px, 2fr)
+      max-content;
+    column-gap: 4px;
+    padding: 0 4px;
+  }
+}
+
+.subTabs {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: tokens.$space-2;
+  flex-wrap: wrap;
+  margin-bottom: tokens.$space-1;
+}
+
+.filters {
+  display: flex;
+  gap: tokens.$space-2;
+  flex-wrap: wrap;
+}
+
+.filter {
+  font-size: tokens.$text-sm;
+  padding: 4px 8px;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$surface-panel;
+}
+
+.fullRow {
+  grid-column: 1 / -1;
+}
+
+.axisRow {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: tokens.$surface-panel;
+}
+
+.axisPlot {
+  position: relative;
+  height: 16px;
+}
+
+.axisLabel {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink-muted;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.fifoNote {
+  grid-column: 1 / -1;
+  padding: tokens.$space-1 tokens.$space-2;
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink-muted;
+  text-align: center;
+  border-top: 1px dashed tokens.$surface-border;
+  margin-top: tokens.$space-1;
+}
+
+.fifoNoteWarn {
+  color: colors.$gk-orange;
+  border-top-color: colors.$gk-orange;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: tokens.$space-4;
+  text-align: center;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+}
+
+.row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  padding: tokens.$space-1 0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    background: tokens.$surface-alt;
+  }
+}
+
+.rowCurrent {
+  position: sticky;
+  top: 16px;
+  z-index: 1;
+  background: tokens.$surface-panel;
+  border-top-color: tokens.$surface-border;
+  border-bottom-color: tokens.$surface-border;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.cardCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+
+  img {
+    width: 36px;
+    height: 36px;
+  }
+
+  @media (max-width: 640px) {
+    width: 32px;
+    height: 32px;
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+.cardPlaceholder {
+  width: 36px;
+  height: 36px;
+  border-radius: tokens.$radius-xs;
+  background: tokens.$surface-muted;
+
+  @media (max-width: 640px) {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.stageCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-1;
+}
+
+.tag {
+  font-size: tokens.$text-xs;
+  font-weight: 600;
+  color: colors.$gk-orange;
+  text-transform: uppercase;
+}
+
+.time {
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink-muted;
+}
+
+.runName {
+  font-size: tokens.$text-sm;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runNameRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.runNameEditable {
+  font-size: tokens.$text-sm;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: text;
+
+  &:hover {
+    text-decoration: underline dotted;
+  }
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 0;
+  font-size: tokens.$text-sm;
+  padding: 3px 6px;
+  border: 1px solid tokens.$surface-border-strong;
+  border-radius: tokens.$radius-xs;
+  background: tokens.$surface-panel;
+}
+
+.stageName {
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plotCell {
+  min-width: 0;
+}
+
+.boxPlotWrap {
+  position: relative;
+  width: 100%;
+  height: 28px;
+  cursor: default;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: tokens.$surface-ink;
+  color: #fff;
+  padding: tokens.$space-1 tokens.$space-2;
+  border-radius: tokens.$radius-sm;
+  font-size: tokens.$text-xs;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 10;
+  pointer-events: none;
+  min-width: 130px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    gap: tokens.$space-2;
+  }
+}
+
+.tipLabel {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.boxPlot {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gridLine {
+  stroke: tokens.$surface-border;
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+
+.whisker {
+  stroke: colors.$gk-orange;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.box {
+  fill: rgba(255, 118, 0, 0.25);
+  stroke: colors.$gk-orange;
+  stroke-width: 1.5;
+}
+
+.median {
+  stroke: colors.$gk-orange;
+  stroke-width: 2;
+}
+
+.mean {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: tokens.$surface-panel;
+  border: 1.5px solid colors.$gk-orange;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.boxPlotCurrent {
+  .whisker,
+  .box,
+  .median {
+    stroke: tokens.$hajime-color;
+  }
+
+  .box {
+    fill: rgba(224, 104, 64, 0.28);
+  }
+
+  .mean {
+    border-color: tokens.$hajime-color;
+  }
+}
+
+.emptyPlot,
+.noScores {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+}
+
+.numbersCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: tokens.$text-sm;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
+}
+
+.label {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  margin-right: 2px;
+}
+
+.actionsCell {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.actionsInline {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
+}
+
+.actionsMenu {
+  display: none;
+  position: relative;
+
+  @media (max-width: 640px) {
+    display: block;
+  }
+}
+
+.menuPopover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 2px);
+  z-index: 10;
+  background: tokens.$surface-panel;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink;
+  border-radius: tokens.$radius-xs;
+  cursor: pointer;
+
+  &:hover {
+    background: tokens.$surface-alt;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.menuItemDanger {
+  color: #c0392b;
+}
