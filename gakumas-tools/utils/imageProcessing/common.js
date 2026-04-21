@@ -1,11 +1,18 @@
-export const DEBUG = true;
+export const DEBUG = false;
 
 export function loadImageFromFile(file) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const blobURL = URL.createObjectURL(file);
     const img = new Image();
     img.src = blobURL;
-    img.onload = () => resolve(img);
+    img.onload = () => {
+      URL.revokeObjectURL(blobURL);
+      resolve(img);
+    };
+    img.onerror = (err) => {
+      URL.revokeObjectURL(blobURL);
+      reject(err);
+    };
   });
 }
 

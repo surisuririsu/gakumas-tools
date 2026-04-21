@@ -71,7 +71,7 @@ function SimulatorButtons() {
         </Button>
       )}
 
-      <Button
+      {/* <Button
         style="blue-secondary"
         size="sm"
         onClick={() =>
@@ -94,7 +94,7 @@ function SimulatorButtons() {
       >
         <FaFileImport />
         <span className={styles.buttonText}>{t("import")}</span>
-      </Button>
+      </Button> */}
 
       <Button
         style="blue-secondary"

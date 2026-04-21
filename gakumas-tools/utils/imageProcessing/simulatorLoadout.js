@@ -55,12 +55,6 @@ export async function getSimulatorLoadoutFromFile(file) {
 
   const bands = detectIconBands(imageData);
   const gridBands = bands.filter((b) => hasIconGridPattern(imageData, b));
-  console.log(
-    "bands:",
-    bands.map((b) => `y=${b.yTop}-${b.yBottom} h=${b.height}`),
-    "gridBands:",
-    gridBands.map((b) => `y=${b.yTop}-${b.yBottom} h=${b.height}`),
-  );
   if (!gridBands.length) {
     throw new Error(
       "Could not locate any icon rows. Is this a simulator loadout screenshot?",
@@ -125,23 +119,15 @@ export async function getSimulatorLoadoutFromFile(file) {
   if (!pItemsBand) {
     throw new Error("Could not locate p-items row above skill cards");
   }
-  const pItemsBoundsRough = bandHorizontalBounds(imageData, pItemsBand);
-  if (!pItemsBoundsRough) {
-    throw new Error("Could not locate p-items row bounds");
-  }
+  const pItemsBounds = bandHorizontalBounds(imageData, pItemsBand);
+  if (!pItemsBounds) throw new Error("Could not locate p-items row bounds");
   // Tighten the p-items y range: the inferred band may extend above or below
   // the actual icons (when no gap run was found during scan). Re-scan for
   // saturated rows within the detected x bounds to get the real icon height.
-  const tightY = tightVerticalBounds(
-    imageData,
-    pItemsBand,
-    pItemsBoundsRough,
-  );
-  if (tightY) {
-    pItemsBand = tightY;
-  }
-  const pItemsBounds = bandHorizontalBounds(imageData, pItemsBand);
-  if (!pItemsBounds) throw new Error("Could not locate p-items row bounds");
+  // Horizontal bounds are unaffected by y-tightening since icon columns are
+  // uniform top-to-bottom, so the same pItemsBounds is reused for splitting.
+  const tightY = tightVerticalBounds(imageData, pItemsBand, pItemsBounds);
+  if (tightY) pItemsBand = tightY;
 
   const mainBoxes = splitBandBySlots(
     imageData,
@@ -189,18 +175,20 @@ export async function getSimulatorLoadoutFromFile(file) {
   const mainIds = skillCardIds.slice(0, mainBoxes.length);
   const subIds = skillCardIds.slice(mainBoxes.length);
 
-  console.log(
-    "Extracted p-items:",
-    pItemIds.map((id) => PItems.getById(id)?.name || id),
-  );
-  console.log(
-    "Extracted main skill cards:",
-    mainIds.map((id) => SkillCards.getById(id)?.name || id),
-  );
-  console.log(
-    "Extracted sub skill cards:",
-    subIds.map((id) => SkillCards.getById(id)?.name || id),
-  );
+  if (DEBUG) {
+    console.log(
+      "Extracted p-items:",
+      pItemIds.map((id) => PItems.getById(id)?.name || id),
+    );
+    console.log(
+      "Extracted main skill cards:",
+      mainIds.map((id) => SkillCards.getById(id)?.name || id),
+    );
+    console.log(
+      "Extracted sub skill cards:",
+      subIds.map((id) => SkillCards.getById(id)?.name || id),
+    );
+  }
 
   return {
     pItemIds,
@@ -252,14 +240,17 @@ function hasIconGridPattern(imageData, band) {
 // to find the p-items row bounds. P-items are more pastel than skill cards
 // and the row has internal saturation dips, so we use a permissive content
 // threshold and only treat a sustained run of empty rows as the true top.
+// Count saturated pixels in row y across the image (excluding the EDGE_MARGIN
+// columns on each side, which are polluted by app-chrome artifacts).
+function rowSaturationCount(data, width, y) {
+  let sat = 0;
+  for (let x = EDGE_MARGIN; x < width - EDGE_MARGIN; x++) {
+    if (saturation(data, (y * width + x) * 4) > SATURATION_THRESHOLD) sat++;
+  }
+  return sat;
+}
+
 function inferPItemsBand({ data, width }, mainYTop, singleRowHeight) {
-  const rowSatAt = (y) => {
-    let sat = 0;
-    for (let x = EDGE_MARGIN; x < width - EDGE_MARGIN; x++) {
-      if (saturation(data, (y * width + x) * 4) > SATURATION_THRESHOLD) sat++;
-    }
-    return sat;
-  };
   const gapThreshold = width * PITEM_GAP_SAT_FRAC;
   const contentThreshold = width * PITEM_CONTENT_SAT_FRAC;
 
@@ -268,7 +259,7 @@ function inferPItemsBand({ data, width }, mainYTop, singleRowHeight) {
   let pItemsBottom = -1;
   const scanLimit = Math.max(0, mainYTop - INFER_MAX_GAP);
   for (let y = mainYTop - 1; y >= scanLimit; y--) {
-    const sat = rowSatAt(y);
+    const sat = rowSaturationCount(data, width, y);
     if (sat < gapThreshold) {
       gapFound = true;
     } else if (gapFound && sat > contentThreshold) {
@@ -283,7 +274,7 @@ function inferPItemsBand({ data, width }, mainYTop, singleRowHeight) {
   let pItemsTop = Math.max(0, pItemsBottom - singleRowHeight + 1);
   let gapRun = 0;
   for (let y = pItemsBottom - 1; y >= scanLimit; y--) {
-    if (rowSatAt(y) < gapThreshold) {
+    if (rowSaturationCount(data, width, y) < gapThreshold) {
       gapRun++;
       if (gapRun >= PITEM_TOP_GAP_RUN) {
         pItemsTop = y + PITEM_TOP_GAP_RUN;
@@ -307,23 +298,16 @@ function findHorizontalSplit({ data, width }, band) {
   const margin = Math.floor(band.height * 0.3);
   const scanStart = band.yTop + margin;
   const scanEnd = band.yBottom - margin;
-  const rowSat = (y) => {
-    let sat = 0;
-    for (let x = EDGE_MARGIN; x < width - EDGE_MARGIN; x++) {
-      if (saturation(data, (y * width + x) * 4) > SATURATION_THRESHOLD) sat++;
-    }
-    return sat;
-  };
   let minSat = Infinity;
   for (let y = scanStart; y <= scanEnd; y++) {
-    const s = rowSat(y);
+    const s = rowSaturationCount(data, width, y);
     if (s < minSat) minSat = s;
   }
   const tolerance = Math.max(2, Math.floor(width * 0.01));
   let runStart = -1;
   let runEnd = -1;
   for (let y = scanStart; y <= scanEnd; y++) {
-    if (rowSat(y) <= minSat + tolerance) {
+    if (rowSaturationCount(data, width, y) <= minSat + tolerance) {
       if (runStart === -1) runStart = y;
       runEnd = y;
     } else if (runStart !== -1) {
