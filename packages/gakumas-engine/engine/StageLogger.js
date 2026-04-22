@@ -1,5 +1,13 @@
 import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
-import { deepCopy } from "../utils";
+import { CLONE_SHARE, deepCopy } from "../utils";
+
+function freshGraphData() {
+  const g = { [CLONE_SHARE]: true };
+  for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+    g[GRAPHED_FIELDS[i]] = [];
+  }
+  return g;
+}
 
 const LOGGED_BUFFS_FIELDS = [
   S.scoreBuffs,
@@ -21,10 +29,7 @@ export default class StageLogger {
 
   initializeState(state) {
     state[S.logs] = [];
-    state[S.graphData] = {};
-    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-      state[S.graphData][GRAPHED_FIELDS[i]] = [];
-    }
+    state[S.graphData] = freshGraphData();
   }
 
   reset() {
@@ -61,9 +66,19 @@ export default class StageLogger {
 
   pushGraphData(state) {
     if (this.disabled) return;
+    // graphData is shared across states via the CLONE_SHARE marker, so
+    // mutating in place would bleed into sibling states (HeuristicStrategy
+    // speculation branches). Produce a fresh graphData with appended
+    // values and swap it in.
+    const curr = state[S.graphData];
+    const next = { [CLONE_SHARE]: true };
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-      state[S.graphData][GRAPHED_FIELDS[i]].push(state[GRAPHED_FIELDS[i]]);
+      const f = GRAPHED_FIELDS[i];
+      const arr = curr[f].slice();
+      arr.push(state[f]);
+      next[f] = arr;
     }
+    state[S.graphData] = next;
   }
 
   getHandStateForLogging(state) {
@@ -78,7 +93,10 @@ export default class StageLogger {
 
     for (let field of LOGGED_BUFFS_FIELDS) {
       if (state[field]?.length) {
-        res[field] = deepCopy(state[field]);
+        // Shallow-slice suffices: buffs are treated as immutable (all
+        // mutations go through BuffManager which replaces entries
+        // rather than mutating them).
+        res[field] = state[field].slice();
       }
     }
 

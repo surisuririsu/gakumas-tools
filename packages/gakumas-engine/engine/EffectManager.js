@@ -114,11 +114,15 @@ export default class EffectManager extends EngineComponent {
     state[S.parentPhase] = state[S.phase];
     state[S.phase] = phase;
 
-    // Filter and group effects
-    let effectsByGroup = {};
+    // Filter and group effects. Pair each matched effect ref with its
+    // index via parallel arrays so we can pass refs straight to
+    // triggerEffects — skipping the per-match `{...effect, phase: null,
+    // index: i}` spread, which was a substantial allocation hot spot.
+    let effectsByGroup = null;
+    let indicesByGroup = null;
     for (let i = 0; i < effectList.length; i++) {
       const effect = effectList[i];
-      if (effect.phase != phase) continue;
+      if (effect.phase !== phase) continue;
       // Phase target filter: at:phase[rule] — fires only when the source
       // card (state.usedCard) matches the target rule.
       if (effect.filter) {
@@ -132,23 +136,40 @@ export default class EffectManager extends EngineComponent {
         if (!matching.has(sourceCard)) continue;
       }
       const group = effect.group || 0;
-      if (!effectsByGroup[group]) effectsByGroup[group] = [];
-      effectsByGroup[group].push({ ...effect, phase: null, index: i });
+      if (!effectsByGroup) {
+        effectsByGroup = {};
+        indicesByGroup = {};
+      }
+      let ge = effectsByGroup[group];
+      if (!ge) {
+        ge = [];
+        effectsByGroup[group] = ge;
+        indicesByGroup[group] = [];
+      }
+      ge.push(effect);
+      indicesByGroup[group].push(i);
     }
 
     // Trigger effects
-    const groupKeys = Object.keys(effectsByGroup);
-    this.logger.debug(phase, effectsByGroup);
-    for (let i = 0; i < groupKeys.length; i++) {
-      const triggeredEffects = this.triggerEffects(
-        state,
-        effectsByGroup[groupKeys[i]],
-        conditionState
-      );
-      for (let j = 0; j < triggeredEffects.length; j++) {
-        const effectIndex = triggeredEffects[j];
-        if (state[S.effects][effectIndex].limit) {
-          state[S.effects][effectIndex].limit--;
+    if (effectsByGroup) {
+      this.logger.debug(phase, effectsByGroup);
+      for (const gKey in effectsByGroup) {
+        const triggered = this.triggerEffects(
+          state,
+          effectsByGroup[gKey],
+          conditionState,
+          null,
+          false,
+          indicesByGroup[gKey],
+        );
+        for (let j = 0; j < triggered.length; j++) {
+          const idx = triggered[j];
+          const eff = effectList[idx];
+          if (eff.limit) {
+            // Replace the effect with a decremented copy; effects are
+            // shared across states via cloneValue's ref-share fast path.
+            effectList[idx] = { ...eff, limit: eff.limit - 1 };
+          }
         }
       }
     }
@@ -156,7 +177,7 @@ export default class EffectManager extends EngineComponent {
     state[S.phase] = state[S.parentPhase];
   }
 
-  triggerEffects(state, effects, cndState, card, skipConditions) {
+  triggerEffects(state, effects, cndState, card, skipConditions, indices) {
     const conditionState = cndState || shallowCopy(state);
 
     // Deep copy effectCounters so condition checks see pre-modification values
@@ -171,11 +192,17 @@ export default class EffectManager extends EngineComponent {
 
     this.logger.debug(effects);
 
+    // When `indices` is provided (callers: triggerEffectsForPhase, which
+    // has already matched `effect.phase === phase`), we execute the
+    // effects now and skip the "re-register as delayed" branch. That lets
+    // the caller pass effect refs directly instead of spread copies.
+    const fromPhase = indices !== undefined && indices !== null;
+
     for (let i = 0; i < effects.length; i++) {
       const effect = effects[i];
 
       // Delayed effects (nested phase blocks)
-      if (effect.phase) {
+      if (!fromPhase && effect.phase) {
         this.logger.debug("Setting delayed effect", effect);
         this.setEffects(
           state,
@@ -304,26 +331,31 @@ export default class EffectManager extends EngineComponent {
       // Restore previous effect instance ID
       state[S.currentEffectInstanceId] = prevInstanceId;
 
-      // Track triggered effects
-      triggeredEffects.push(effect.index);
+      // Track triggered effects — if called with indices, the caller's
+      // parallel indices array tells us the effect's position in
+      // state[S.effects]; otherwise fall back to effect.index set by
+      // legacy spread callers.
+      triggeredEffects.push(fromPhase ? indices[i] : effect.index);
     }
 
     return triggeredEffects;
   }
 
   decrementTtl(state) {
-    for (let i = 0; i < state[S.effects].length; i++) {
-      if (state[S.effects][i].ttl == null || state[S.effects][i].ttl == -1)
-        continue;
-      state[S.effects][i].ttl--;
+    const effects = state[S.effects];
+    for (let i = 0; i < effects.length; i++) {
+      const eff = effects[i];
+      if (eff.ttl == null || eff.ttl == -1) continue;
+      effects[i] = { ...eff, ttl: eff.ttl - 1 };
     }
   }
 
   decrementDelay(state) {
-    for (let i = 0; i < state[S.effects].length; i++) {
-      if (state[S.effects][i].delay == null || state[S.effects][i].delay == -1)
-        continue;
-      state[S.effects][i].delay--;
+    const effects = state[S.effects];
+    for (let i = 0; i < effects.length; i++) {
+      const eff = effects[i];
+      if (eff.delay == null || eff.delay == -1) continue;
+      effects[i] = { ...eff, delay: eff.delay - 1 };
     }
   }
 }

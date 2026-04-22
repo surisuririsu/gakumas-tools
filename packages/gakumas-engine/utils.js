@@ -68,8 +68,16 @@ export function safeCeil(value) {
 }
 
 export function shallowCopy(state) {
-  return [...state];
+  // `.slice()` is meaningfully faster than `[...state]` for a 90-slot
+  // array in V8 (native memcpy vs. iterator-protocol spread).
+  return state.slice();
 }
+
+// Marker for objects that cloneValue should share by reference instead of
+// deep-cloning. Used by append-only structures whose "mutation" sites
+// replace the whole container with a fresh one (copy-on-write), so no
+// two states ever witness a mid-mutation view of the same object.
+export const CLONE_SHARE = Symbol("cloneShare");
 
 // Recursive clone specialized for engine state. Much faster than
 // JSON.parse(JSON.stringify) on a typical mid-run state. Three
@@ -89,25 +97,25 @@ export function shallowCopy(state) {
 // full independent copy.
 function cloneValue(v) {
   if (v === null || typeof v !== "object") return v;
-  if (Array.isArray(v)) {
-    const n = v.length;
-    if (n === 0) return [];
-    const first = v[0];
-    if (first === null || typeof first !== "object") return v.slice();
-    const out = new Array(n);
-    for (let i = 0; i < n; i++) out[i] = cloneValue(v[i]);
-    return out;
-  }
-  if (v.effectInstanceId !== undefined) {
-    return { ...v };
-  }
-  // cardMap entries: shallow-clone the entry; nested `growth` and `c11n`
-  // are shared by reference. Mutation sites (CardManager.grow, .upgrade)
-  // replace the entry (and its growth) with fresh objects before writing,
-  // so sharing here is safe. c11n is read-only after init.
-  if (v.baseId !== undefined) {
-    return { ...v };
-  }
+  // All array-valued state slots carry a copy-on-write invariant:
+  //   - primitive arrays (card piles, logs, turn types, graphData
+  //     columns) are append/pop/splice in place, but a shallow slice
+  //     gives each state its own array instance so those in-place
+  //     mutations don't leak across states.
+  //   - object arrays (effects, cardMap, buff arrays) never mutate
+  //     their entries in place — every mutation site replaces the
+  //     entry with a fresh object — so a shallow slice is also safe
+  //     here (the entries are shared by reference).
+  if (Array.isArray(v)) return v.slice();
+  // Effects: mutable fields (limit, ttl, delay) are decremented at
+  // known sites in EffectManager which clone the effect first.
+  if (v.effectInstanceId !== undefined) return v;
+  // cardMap entries: only mutations (CardManager.grow, .upgrade)
+  // replace the entry with a fresh object.
+  if (v.baseId !== undefined) return v;
+  // COW marker: the container's mutation sites replace the whole
+  // object with a fresh one.
+  if (v[CLONE_SHARE]) return v;
   const out = {};
   for (const k in v) {
     const val = v[k];
@@ -122,9 +130,16 @@ function cloneValue(v) {
 
 export function deepCopy(state) {
   if (!Array.isArray(state)) return cloneValue(state);
-  const n = state.length;
-  const out = new Array(n);
-  for (let i = 0; i < n; i++) out[i] = cloneValue(state[i]);
+  // Shallow slice first (native, packed-array fast path), then walk and
+  // deep-clone only the object-valued slots. Primitive slots (most of
+  // the state array) are already correctly copied by the slice.
+  const out = state.slice();
+  for (let i = 0; i < out.length; i++) {
+    const v = out[i];
+    if (v !== null && typeof v === "object") {
+      out[i] = cloneValue(v);
+    }
+  }
   return out;
 }
 

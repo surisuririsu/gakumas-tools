@@ -151,11 +151,16 @@ export default class BuffManager extends EngineComponent {
   }
 
   setBuff(state, field, amount, turns, logLabel) {
-    const buffIndex = state[field].findIndex((b) => b.turns == turns);
+    // Buffs are shared by reference across states via cloneValue's
+    // shallow-slice array path, so instead of mutating an existing
+    // buff's amount we replace the entry with a fresh object.
+    const arr = state[field];
+    const buffIndex = arr.findIndex((b) => b.turns == turns);
     if (buffIndex != -1) {
-      state[field][buffIndex].amount += amount;
+      const old = arr[buffIndex];
+      arr[buffIndex] = { ...old, amount: old.amount + amount };
     } else {
-      state[field].push({
+      arr.push({
         amount,
         turns,
         fresh: !UNFRESH_PHASES.includes(state[S.phase]),
@@ -193,17 +198,19 @@ export default class BuffManager extends EngineComponent {
 
     for (const { field } of BUFF_TYPES) {
       const buffs = state[field];
-      state[field] = [];
+      const next = [];
       for (let i = 0; i < buffs.length; i++) {
-        if (buffs[i].fresh) {
-          buffs[i].fresh = false;
-        } else if (buffs[i].turns) {
-          buffs[i].turns--;
-        }
-        if (buffs[i].turns != 0) {
-          state[field].push(buffs[i]);
-        }
+        const b = buffs[i];
+        // Replace the entry with a decremented copy — buffs are shared
+        // by reference across states via cloneValue's shallow-slice
+        // array path.
+        let nb;
+        if (b.fresh) nb = { ...b, fresh: false };
+        else if (b.turns) nb = { ...b, turns: b.turns - 1 };
+        else nb = b;
+        if (nb.turns != 0) next.push(nb);
       }
+      state[field] = next;
     }
   }
 

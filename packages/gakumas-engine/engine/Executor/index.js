@@ -105,11 +105,11 @@ export default class Executor extends EngineComponent {
   }
 
   executeActions(state, actions, card) {
-    // Record previous state for diffing
-    let prev = {};
-    for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
-      prev[FIELDS_TO_DIFF[i]] = state[FIELDS_TO_DIFF[i]];
-    }
+    // Snapshot the whole state array for diffing. A single native
+    // `slice()` is much faster than building an object keyed by
+    // FIELDS_TO_DIFF; the extra slots cost nothing (diff sites only
+    // read the fields they care about).
+    const prev = state.slice();
 
     // Set modifiers
     const prevGoodConditionTurnsMultiplier =
@@ -137,13 +137,7 @@ export default class Executor extends EngineComponent {
       const phase = state[S.phase];
       const needsChangeTrigger =
         phase === "processCard" || phase === "processCost";
-      let actionPrev = null;
-      if (needsChangeTrigger) {
-        actionPrev = {};
-        for (let k = 0; k < FIELDS_TO_DIFF.length; k++) {
-          actionPrev[FIELDS_TO_DIFF[k]] = state[FIELDS_TO_DIFF[k]];
-        }
-      }
+      const actionPrev = needsChangeTrigger ? state.slice() : null;
       const prevGenki = state[S.genki];
 
       this.executeAction(state, actions[i], card);
