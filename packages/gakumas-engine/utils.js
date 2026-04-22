@@ -50,6 +50,10 @@ export function shuffle(arr) {
 
 export function formatDiffField(value) {
   if (isNaN(value)) return value;
+  // Most diffed fields are integer-valued. toFixed+parseFloat is a string
+  // round-trip we want to skip for those; only non-integer numerics need
+  // the 2-decimal truncation.
+  if (Number.isInteger(value)) return value;
   return parseFloat(value.toFixed(2));
 }
 
@@ -67,32 +71,52 @@ export function shallowCopy(state) {
   return [...state];
 }
 
-// Recursive clone specialized for engine state. ~4x faster than
-// JSON.parse(JSON.stringify) on a typical mid-run state. Two specializations:
-// (1) effect objects — identified by `effectInstanceId` — are shallow-cloned
+// Recursive clone specialized for engine state. Much faster than
+// JSON.parse(JSON.stringify) on a typical mid-run state. Three
+// specializations:
+// (1) arrays of primitives — detected by peeking at the first element —
+// use native slice(), avoiding a per-element function call. The engine's
+// primitive arrays (card piles, logs, turn types, graphData columns) have
+// homogeneous element types, so the peek is reliable in practice.
+// (2) effect objects — identified by `effectInstanceId` — are shallow-cloned
 // so their AST-valued fields (conditions/actions/effects/targets/filter/
 // source) are shared by reference across copies. Those fields come from the
 // DSL parser and are never mutated after setEffects spreads them in, so the
 // shared refs remain safe; skipping them avoids recursing through the
 // entire per-card/per-p-item AST on every useCard/endTurn.
-// (2) primitives and arrays follow the standard recursive path so every
-// other mutable field (piles, cardMap entries with `growth`, effectCounters,
-// buff arrays, graphData) gets a full independent copy.
+// (3) everything else follows the recursive path so mutable nested state
+// (cardMap entries with `growth`, effectCounters, buff records) gets a
+// full independent copy.
 function cloneValue(v) {
   if (v === null || typeof v !== "object") return v;
   if (Array.isArray(v)) {
     const n = v.length;
+    if (n === 0) return [];
+    const first = v[0];
+    if (first === null || typeof first !== "object") return v.slice();
     const out = new Array(n);
     for (let i = 0; i < n; i++) out[i] = cloneValue(v[i]);
     return out;
   }
-  if ("effectInstanceId" in v) {
-    const out = {};
-    for (const k in v) out[k] = v[k];
-    return out;
+  if (v.effectInstanceId !== undefined) {
+    return { ...v };
+  }
+  // cardMap entries: shallow-clone the entry; nested `growth` and `c11n`
+  // are shared by reference. Mutation sites (CardManager.grow, .upgrade)
+  // replace the entry (and its growth) with fresh objects before writing,
+  // so sharing here is safe. c11n is read-only after init.
+  if (v.baseId !== undefined) {
+    return { ...v };
   }
   const out = {};
-  for (const k in v) out[k] = cloneValue(v[k]);
+  for (const k in v) {
+    const val = v[k];
+    if (val === null || typeof val !== "object") {
+      out[k] = val;
+    } else {
+      out[k] = cloneValue(val);
+    }
+  }
   return out;
 }
 

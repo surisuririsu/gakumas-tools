@@ -356,11 +356,13 @@ export default class Executor extends EngineComponent {
       state[S[lhs]] = intermediate;
     }
 
-    // Round whole fields
+    // Round whole fields — skip ones already integer to avoid the
+    // string round-trip through toFixed, which dominates the hot path.
     for (let i = 0; i < WHOLE_FIELDS.length; i++) {
-      if (WHOLE_FIELDS[i] in state) {
-        state[WHOLE_FIELDS[i]] = Math.ceil(state[WHOLE_FIELDS[i]].toFixed(2));
-      }
+      const field = WHOLE_FIELDS[i];
+      const v = state[field];
+      if (v === undefined || Number.isInteger(v)) continue;
+      state[field] = Math.ceil(v.toFixed(2));
     }
   }
 

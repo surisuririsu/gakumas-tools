@@ -504,8 +504,12 @@ export default class CardManager extends EngineComponent {
 
   grow(state, cards, actions) {
     for (let i = 0; i < cards.length; i++) {
-      const card = state[S.cardMap][cards[i]];
-      if (!card.growth) card.growth = {};
+      // Replace the entry + growth with fresh objects before mutating so
+      // a parent state that shares the entry via shallow clone is not
+      // affected (cardMap entries are shallow-cloned in cloneValue).
+      const orig = state[S.cardMap][cards[i]];
+      const card = { ...orig, growth: { ...orig.growth } };
+      state[S.cardMap][cards[i]] = card;
       this.engine.executor.executeGrowthActions(card.growth, actions);
       this.logger.log(state, "growth", { type: "skillCard", id: card.id });
     }
@@ -555,7 +559,11 @@ export default class CardManager extends EngineComponent {
   }
 
   upgrade(state, card) {
-    state[S.cardMap][card].id++;
+    // Replace the entry rather than mutating — cardMap entries are
+    // shared-by-reference with parent states via cloneValue's shallow
+    // clone.
+    const orig = state[S.cardMap][card];
+    state[S.cardMap][card] = { ...orig, id: orig.id + 1 };
     state[S.turnCardsUpgraded]++;
   }
 
