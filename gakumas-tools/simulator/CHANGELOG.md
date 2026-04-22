@@ -3,6 +3,14 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2026-04-22
+
+- Improve simulator performance by 3x
+
+## 2026-04-21
+
+- Combine loadout history/save features into compare tab in simulator results
+
 ## 2026-04-19
 
 - Rewrite engine with new block-scoped effect language
