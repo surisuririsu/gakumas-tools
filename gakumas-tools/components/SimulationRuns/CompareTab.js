@@ -2,73 +2,21 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { Stages } from "gakumas-data";
 import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
 import ModalContext from "@/contexts/ModalContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
-import { getIdolName, MAX_HISTORY } from "@/utils/simulationRun";
+import {
+  computeRange,
+  computeTicks,
+  getIdolName,
+  MAX_HISTORY,
+  stageKeyOf,
+  stageLabelOf,
+} from "@/utils/simulationRun";
 import AxisRow from "./AxisRow";
 import CompareRow from "./CompareRow";
 import styles from "./SimulationRuns.module.scss";
-
-const PAD_RATIO = 0.05;
-const TARGET_TICKS = 5;
-
-function computeRange(runs) {
-  let min = Infinity;
-  let max = -Infinity;
-  for (const run of runs) {
-    if (!run?.stats) continue;
-    if (run.stats.min < min) min = run.stats.min;
-    if (run.stats.max > max) max = run.stats.max;
-  }
-  if (!isFinite(min) || !isFinite(max)) {
-    return { min: 0, max: 1 };
-  }
-  if (min === max) {
-    return { min: min - 1, max: max + 1 };
-  }
-  const span = max - min;
-  const pad = span * PAD_RATIO;
-  return { min: min - pad, max: max + pad };
-}
-
-function computeTicks(min, max) {
-  const range = max - min;
-  if (range <= 0) return [];
-  const rawStep = range / TARGET_TICKS;
-  const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
-  const normalized = rawStep / magnitude;
-  let niceStep;
-  if (normalized < 1.5) niceStep = magnitude;
-  else if (normalized < 3) niceStep = 2 * magnitude;
-  else if (normalized < 7) niceStep = 5 * magnitude;
-  else niceStep = 10 * magnitude;
-  const start = Math.ceil(min / niceStep) * niceStep;
-  const ticks = [];
-  for (let v = start; v <= max; v += niceStep) {
-    ticks.push(v);
-  }
-  return ticks;
-}
-
-function stageKeyOf(run) {
-  const id = run?.loadout?.stageId;
-  if (id == null || id === "") return null;
-  return String(id);
-}
-
-function stageLabelOf(run) {
-  const id = run?.loadout?.stageId;
-  if (id == null) return null;
-  if (id === "custom") return "Custom";
-  const s = Stages.getById(id);
-  if (s?.season != null && s?.stage != null) {
-    return `S${s.season}-${s.stage}`;
-  }
-  return run.derived?.stageName || String(id);
-}
 
 export default function CompareTab({ currentRun }) {
   const t = useTranslations("CompareTab");
@@ -192,6 +140,7 @@ export default function CompareTab({ currentRun }) {
   }
 
   async function handleRename(run, name) {
+    if (run.name === name) return;
     await renameSaved(run._id || run.id, name);
   }
 

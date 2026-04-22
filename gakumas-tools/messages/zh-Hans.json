@@ -277,10 +277,7 @@
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
-    "manageLoadouts": "保存/加载 β",
-    "history": "历史记录 β",
-    "share": "分享",
-    "import": "导入 β"
+    "share": "分享"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "从截图导入编组",

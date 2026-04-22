@@ -277,10 +277,7 @@
   "SimulatorButtons": {
     "confirm": "編成をクリアしますか？",
     "clear": "クリア",
-    "manageLoadouts": "保存・読み込みβ",
-    "history": "履歴β",
-    "share": "共有",
-    "import": "読み込みβ"
+    "share": "共有"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "スクリーンショットから編成を読み込み",
@@ -323,7 +320,6 @@
     "cancel": "キャンセル",
     "delete": "削除",
     "confirmDelete": "削除しますか？",
-    "signInToSave": "保存するにはサインイン",
     "signInPrompt": "保存するにはサインインが必要です。Discordへ進みますか？",
     "signInToView": "保存済み編成を見るにはサインインしてください。",
     "savePrompt": "名前",
@@ -333,11 +329,9 @@
     "fifoHint": "{count} / {max} — 古い履歴は自動的に削除されます",
     "fifoAtLimit": "{max}件上限 — 古い履歴は置き換えられます。保存して残してください。",
     "season": "シーズン",
-    "idol": "アイドル",
     "allSeasons": "全シーズン",
     "allIdols": "全アイドル",
-    "allStages": "全ステージ",
-    "stage": "ステージ"
+    "allStages": "全ステージ"
   },
   "SimulatorStats": {
     "total": "合計",

@@ -1,10 +1,4 @@
-import {
-  memo,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
@@ -16,28 +10,14 @@ import {
 } from "react-icons/fa6";
 import { SkillCards, Stages } from "gakumas-data";
 import gkImg from "gakumas-images";
-import IconButton from "@/components/IconButton";
 import Image from "@/components/Image";
 import { FALLBACK_STAGE } from "@/simulator/constants";
+import { formatRelative } from "@/utils/simulationRun";
 import { formatStageName } from "@/utils/stages";
+import ActionIconList from "./ActionIconList";
 import ActionsCell from "./ActionsCell";
 import MiniBoxPlot from "./MiniBoxPlot";
 import styles from "./SimulationRuns.module.scss";
-
-const MIN = 60 * 1000;
-const HOUR = 60 * MIN;
-const DAY = 24 * HOUR;
-
-function formatRelative(iso) {
-  if (!iso) return null;
-  const ts = new Date(iso).getTime();
-  if (!isFinite(ts)) return null;
-  const diff = Date.now() - ts;
-  if (diff < MIN) return "just now";
-  if (diff < HOUR) return `${Math.floor(diff / MIN)}m ago`;
-  if (diff < DAY) return `${Math.floor(diff / HOUR)}h ago`;
-  return `${Math.floor(diff / DAY)}d ago`;
-}
 
 function CompareRow({
   run,
@@ -97,13 +77,11 @@ function CompareRow({
   function startSave() {
     setDraft(name || derived?.stageName || "");
     setEditMode("save");
-    setMenuOpen(false);
   }
 
   function startRename() {
     setDraft(name || "");
     setEditMode("rename");
-    setMenuOpen(false);
   }
 
   function cancelEdit() {
@@ -113,16 +91,14 @@ function CompareRow({
 
   async function confirmEdit() {
     const trimmed = draft.trim();
-    if (!trimmed) {
-      cancelEdit();
-      return;
-    }
-    if (editMode === "save" && onSave) {
+    const mode = editMode;
+    cancelEdit();
+    if (!trimmed) return;
+    if (mode === "save" && onSave) {
       await onSave(run, trimmed);
-    } else if (editMode === "rename" && onRename) {
+    } else if (mode === "rename" && onRename) {
       await onRename(run, trimmed);
     }
-    cancelEdit();
   }
 
   function handleKeyDown(e) {
@@ -135,64 +111,52 @@ function CompareRow({
     }
   }
 
-  const wrap = (fn) => () => {
+  const closeMenuAfter = (fn) => () => {
     fn();
     setMenuOpen(false);
   };
 
-  const items = useMemo(() => {
-    if (editMode) {
-      return [
-        {
-          key: "confirm",
-          icon: FaCheck,
-          label: t("save"),
-          onClick: confirmEdit,
-        },
-        {
-          key: "cancel",
-          icon: FaXmark,
-          label: t("cancel"),
-          onClick: cancelEdit,
-        },
-      ];
-    }
-    const list = [];
+  let items;
+  if (editMode) {
+    items = [
+      { key: "confirm", icon: FaCheck, label: t("save"), onClick: confirmEdit },
+      { key: "cancel", icon: FaXmark, label: t("cancel"), onClick: cancelEdit },
+    ];
+  } else {
+    items = [];
     if (onLoad) {
-      list.push({
+      items.push({
         key: "load",
         icon: FaUpload,
         label: t("load"),
-        onClick: wrap(() => onLoad(run)),
+        onClick: closeMenuAfter(() => onLoad(run)),
       });
     }
     if (onRename && name) {
-      list.push({
+      items.push({
         key: "rename",
         icon: FaPenToSquare,
         label: t("edit"),
-        onClick: wrap(startRename),
+        onClick: closeMenuAfter(startRename),
       });
     }
     if (onSave) {
-      list.push({
+      items.push({
         key: "save",
         icon: FaRegFloppyDisk,
         label: t("save"),
-        onClick: wrap(startSave),
+        onClick: closeMenuAfter(startSave),
       });
     }
     if (onDelete) {
-      list.push({
+      items.push({
         key: "delete",
         icon: FaRegTrashCan,
         label: t("delete"),
-        onClick: wrap(() => onDelete(run)),
+        onClick: closeMenuAfter(() => onDelete(run)),
       });
     }
-    return list;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editMode, name, onLoad, onRename, onSave, onDelete, run, draft]);
+  }
 
   const relative = showTime && !editMode ? formatRelative(createdAt) : null;
 
@@ -261,11 +225,7 @@ function CompareRow({
           <div className={styles.noScores}>{t("noScores")}</div>
         )}
         <div className={styles.mobileActionsInline} aria-hidden={!menuOpen}>
-          {items.map((a) => (
-            <span key={a.key} title={a.label}>
-              <IconButton icon={a.icon} onClick={a.onClick} />
-            </span>
-          ))}
+          <ActionIconList items={items} />
         </div>
       </div>
 

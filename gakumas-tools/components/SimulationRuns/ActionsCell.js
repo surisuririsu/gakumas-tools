@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { FaEllipsisVertical, FaXmark } from "react-icons/fa6";
 import IconButton from "@/components/IconButton";
+import ActionIconList from "./ActionIconList";
 import styles from "./SimulationRuns.module.scss";
 
 function ActionsCell({ items, menuOpen, onToggle, editMode }) {
@@ -11,11 +12,7 @@ function ActionsCell({ items, menuOpen, onToggle, editMode }) {
           editMode ? styles.actionsInlineForce : ""
         }`}
       >
-        {items.map((a) => (
-          <span key={a.key} title={a.label}>
-            <IconButton icon={a.icon} onClick={a.onClick} />
-          </span>
-        ))}
+        <ActionIconList items={items} />
       </div>
       {!editMode && items.length > 0 && (
         <div className={styles.actionsTrigger}>

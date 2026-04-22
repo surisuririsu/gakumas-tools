@@ -277,10 +277,7 @@
   "SimulatorButtons": {
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear",
-    "manageLoadouts": "Save/Load β",
-    "history": "History β",
-    "share": "Share",
-    "import": "Import β"
+    "share": "Share"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "Import loadout from screenshot",
@@ -323,7 +320,6 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "confirmDelete": "Delete this run?",
-    "signInToSave": "Sign in to save",
     "signInPrompt": "Saving requires sign-in. Continue to Discord?",
     "signInToView": "Sign in to view your saved loadouts.",
     "savePrompt": "Name",
@@ -333,11 +329,9 @@
     "fifoHint": "{count} / {max} — save to keep older runs",
     "fifoAtLimit": "At {max} — oldest runs are replaced. Save to keep.",
     "season": "Season",
-    "idol": "Idol",
     "allSeasons": "All seasons",
     "allIdols": "All idols",
-    "allStages": "All stages",
-    "stage": "Stage"
+    "allStages": "All stages"
   },
   "SimulatorStats": {
     "total": "Total",

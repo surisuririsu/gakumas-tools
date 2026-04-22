@@ -4,6 +4,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -12,93 +13,16 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import {
   deriveRunMeta,
+  extractLoadoutFields,
+  loadHistoryFromStorage,
   MAX_HISTORY,
+  newRunId,
   normalizeSavedRun,
+  saveHistoryToStorage,
   summarizeScores,
 } from "@/utils/simulationRun";
 
-const HISTORY_KEY = "gakumas-tools.simulation-runs.history";
-const LEGACY_LOADOUT_HISTORY_KEY = "gakumas-tools.loadout-history";
-const LEGACY_LOADOUTS_HISTORY_KEY = "gakumas-tools.loadouts-history";
-
 const SimulationRunsContext = createContext();
-
-function newId() {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-}
-
-function extractLoadoutFields(loadout) {
-  const {
-    stageId,
-    customStage,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-    customizationGroups,
-  } = loadout;
-  return {
-    stageId,
-    customStage,
-    supportBonus,
-    params,
-    pItemIds,
-    skillCardIdGroups,
-    customizationGroups,
-  };
-}
-
-function legacyEntryToRun(entry) {
-  if (!entry || !entry.skillCardIdGroups) return null;
-  const loadout = extractLoadoutFields(entry);
-  const linkLoadouts = Array.isArray(entry.loadouts)
-    ? entry.loadouts.map(extractLoadoutFields)
-    : null;
-  return {
-    id: newId(),
-    createdAt: null,
-    loadout,
-    linkLoadouts,
-    stats: null,
-    derived: deriveRunMeta(loadout),
-  };
-}
-
-function migrateLegacyHistory() {
-  const runs = [];
-  try {
-    const s1 = localStorage.getItem(LEGACY_LOADOUT_HISTORY_KEY);
-    if (s1) {
-      const arr = JSON.parse(s1);
-      if (Array.isArray(arr)) {
-        for (const entry of arr) {
-          const run = legacyEntryToRun(entry);
-          if (run) runs.push(run);
-        }
-      }
-    }
-  } catch {}
-  try {
-    const s2 = localStorage.getItem(LEGACY_LOADOUTS_HISTORY_KEY);
-    if (s2) {
-      const arr = JSON.parse(s2);
-      if (Array.isArray(arr)) {
-        for (const loadouts of arr) {
-          if (!Array.isArray(loadouts) || !loadouts.length) continue;
-          const run = legacyEntryToRun({
-            ...loadouts[0],
-            loadouts,
-          });
-          if (run) runs.push(run);
-        }
-      }
-    }
-  } catch {}
-  return runs.slice(0, MAX_HISTORY);
-}
 
 export function SimulationRunsContextProvider({ children }) {
   const { status } = useSession();
@@ -111,34 +35,13 @@ export function SimulationRunsContextProvider({ children }) {
   const [savedLoading, setSavedLoading] = useState(true);
   const didInitRef = useRef(false);
 
-  // Load/migrate history from localStorage once on mount.
   useEffect(() => {
     if (didInitRef.current) return;
     didInitRef.current = true;
 
-    let runs = [];
-    try {
-      const raw = localStorage.getItem(HISTORY_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) runs = parsed;
-      }
-    } catch {}
-
-    if (!runs.length) {
-      runs = migrateLegacyHistory();
-      if (runs.length) {
-        try {
-          localStorage.setItem(HISTORY_KEY, JSON.stringify(runs));
-          localStorage.removeItem(LEGACY_LOADOUT_HISTORY_KEY);
-          localStorage.removeItem(LEGACY_LOADOUTS_HISTORY_KEY);
-        } catch {}
-      }
-    }
-
+    const runs = loadHistoryFromStorage();
     setHistory(runs);
 
-    // Restore most recent run into the editor unless URL provides a loadout.
     const urlHasData =
       loadoutFromUrl?.hasDataFromParams || loadoutsFromUrl?.length;
     if (!urlHasData && runs.length) {
@@ -152,12 +55,9 @@ export function SimulationRunsContextProvider({ children }) {
     setLoaded(true);
   }, [loadoutFromUrl, loadoutsFromUrl, setLoadout, setLoadouts]);
 
-  // Persist history on change.
   useEffect(() => {
     if (!loaded) return;
-    try {
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-    } catch {}
+    saveHistoryToStorage(history);
   }, [history, loaded]);
 
   const fetchSaved = useCallback(async () => {
@@ -186,25 +86,29 @@ export function SimulationRunsContextProvider({ children }) {
     }
   }, [status, fetchSaved]);
 
-  const pushRun = useCallback(
-    ({ loadout, loadouts, scores }) => {
-      const base = extractLoadoutFields(loadout);
-      const linkLoadouts = Array.isArray(loadouts)
-        ? loadouts.map(extractLoadoutFields)
-        : null;
-      const run = {
-        id: newId(),
-        createdAt: new Date().toISOString(),
-        loadout: base,
-        linkLoadouts,
-        stats: scores ? summarizeScores(scores) : null,
-        derived: deriveRunMeta(base),
-      };
-      setHistory((cur) => [run, ...cur].slice(0, MAX_HISTORY));
-      return run;
-    },
-    [],
-  );
+  const pushRun = useCallback(({ loadout, loadouts, scores }) => {
+    const base = extractLoadoutFields(loadout);
+    const linkLoadouts = Array.isArray(loadouts)
+      ? loadouts.map(extractLoadoutFields)
+      : null;
+    const stats = scores ? summarizeScores(scores) : null;
+    const run = {
+      id: newRunId(),
+      createdAt: new Date().toISOString(),
+      loadout: base,
+      linkLoadouts,
+      stats,
+      derived: deriveRunMeta(base),
+    };
+    setHistory((cur) => {
+      const prev = cur[0];
+      if (prev && JSON.stringify(prev.loadout) === JSON.stringify(base)) {
+        return [run, ...cur.slice(1)];
+      }
+      return [run, ...cur].slice(0, MAX_HISTORY);
+    });
+    return run;
+  }, []);
 
   const deleteHistoryRun = useCallback((id) => {
     setHistory((cur) => cur.filter((r) => r.id !== id));
@@ -270,22 +174,37 @@ export function SimulationRunsContextProvider({ children }) {
     [setLoadout, setLoadouts],
   );
 
+  const value = useMemo(
+    () => ({
+      history,
+      savedRuns,
+      savedLoading,
+      pushRun,
+      deleteHistoryRun,
+      clearHistory,
+      saveRun,
+      deleteSaved,
+      renameSaved,
+      loadRun,
+      refetchSaved: fetchSaved,
+    }),
+    [
+      history,
+      savedRuns,
+      savedLoading,
+      pushRun,
+      deleteHistoryRun,
+      clearHistory,
+      saveRun,
+      deleteSaved,
+      renameSaved,
+      loadRun,
+      fetchSaved,
+    ],
+  );
+
   return (
-    <SimulationRunsContext.Provider
-      value={{
-        history,
-        savedRuns,
-        savedLoading,
-        pushRun,
-        deleteHistoryRun,
-        clearHistory,
-        saveRun,
-        deleteSaved,
-        renameSaved,
-        loadRun,
-        refetchSaved: fetchSaved,
-      }}
-    >
+    <SimulationRunsContext.Provider value={value}>
       {children}
     </SimulationRunsContext.Provider>
   );

@@ -277,10 +277,7 @@
   "SimulatorButtons": {
     "confirm": "편성을 초기화할까요?",
     "clear": "초기화",
-    "manageLoadouts": "저장 및 불러오기 β",
-    "history": "내역 β",
-    "share": "공유",
-    "import": "불러오기 β"
+    "share": "공유"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "스크린샷에서 편성 불러오기",
