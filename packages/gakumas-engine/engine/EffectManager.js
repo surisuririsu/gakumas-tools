@@ -21,7 +21,10 @@ export default class EffectManager extends EngineComponent {
 
     // Set stage effects
     this.logger.debug("Setting stage effects", config.stage.effects);
-    this.setEffects(state, config.stage.effects, { type: "stage" });
+    this.setEffects(state, config.stage.effects, {
+      type: "stage",
+      primary: true,
+    });
 
     // Set p-item effects
     let configs = [config];
@@ -37,6 +40,7 @@ export default class EffectManager extends EngineComponent {
         this.setEffects(state, pItem.effects, {
           type: "pItem",
           id: pItemIds[i],
+          primary: true,
         });
       }
     }
@@ -57,6 +61,7 @@ export default class EffectManager extends EngineComponent {
           type: "skillCard",
           id: skillCardId,
           idx: i,
+          primary: true,
         });
       }
     }
@@ -266,7 +271,16 @@ export default class EffectManager extends EngineComponent {
         const toSet = effect.group != null
           ? effect.effects.map((e) => (e.group != null ? e : { ...e, group: effect.group }))
           : effect.effects;
-        this.setEffects(state, toSet, effect.source);
+        // Sub-effects inherit the entity source (so their score still folds
+        // under the registering p-item/card) but not the `primary` marker —
+        // these are registered at runtime and shouldn't count as fresh
+        // activations for stats purposes.
+        let inheritedSource = effect.source;
+        if (inheritedSource?.primary) {
+          const { primary, ...rest } = inheritedSource;
+          inheritedSource = rest;
+        }
+        this.setEffects(state, toSet, inheritedSource);
         this.logger.log(state, "setEffect");
       }
 

@@ -309,7 +309,7 @@
   "SimulatorStats": {
     "total": "합계",
     "turn": "{turn}턴",
-    "card": "카드",
+    "card": "항목",
     "uses": "사용",
     "usePct": "사용률",
     "score": "스코어"

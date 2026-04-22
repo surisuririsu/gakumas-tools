@@ -339,7 +339,7 @@
   "SimulatorStats": {
     "total": "Total",
     "turn": "Turn {turn}",
-    "card": "Card",
+    "card": "Card / Item",
     "uses": "Uses",
     "usePct": "Use %",
     "score": "Score"

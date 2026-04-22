@@ -1,20 +1,26 @@
-import { SkillCards } from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
+import { addScoreByType } from "@/utils/simulator";
 
-// Fold cardUsage (keyed by {id, c}) and scoreStats (keyed by type:id,
-// skillCard entries only) into a single per-turn byCard map.
+// Fold cardUsage (keyed by {id, c}) and scoreStats (keyed by type:id) into
+// a single per-turn byCard map.
 //
-// Keys preserve the (id, c) tuple so a loadout with two of the same card —
-// one customized, one not — shows as two rows. Score from scoreStats is
-// only tracked by id (the engine's entityStart log doesn't carry c), so we
-// split each id's total score across its variants proportionally to their
-// use counts. Same for scoreByType.
+// Rows are keyed by (type, id, c) so a loadout with two of the same card
+// — one customized, one not — shows as two rows, and p-items share the
+// keyspace without colliding with skill-card ids. `draw` is undefined for
+// p-items (no hand concept); UI shows "—" for usePct on those rows.
+//
+// Score from scoreStats is only tracked by id (the engine's entityStart
+// log doesn't carry c), so a skill card's total score is split across its
+// c-variants proportionally to their use counts. Same for scoreByType.
+// P-items carry their own `uses` straight from the engine attribution.
 export function combineTurn(usageTurn, scoreTurn) {
   const byCard = {};
 
-  const ensure = (id, c) => {
-    const key = `${id}|${JSON.stringify(c || null)}`;
+  const ensure = (type, id, c) => {
+    const key = `${type}|${id}|${JSON.stringify(c || null)}`;
     if (!byCard[key]) {
       byCard[key] = {
+        type,
         id,
         c: c || null,
         use: 0,
@@ -26,44 +32,51 @@ export function combineTurn(usageTurn, scoreTurn) {
     return byCard[key];
   };
 
-  // Collect usage first so we know the total per id for score splitting.
+  // Collect skill-card hand usage first so we know the total per id for
+  // splitting score across c-variants.
   for (const key in usageTurn) {
     const e = usageTurn[key];
     if (e.id === 0) continue; // synthetic SKIP row
-    const row = ensure(e.id, e.c);
+    const row = ensure("skillCard", e.id, e.c);
     row.use += e.use;
     row.draw += e.draw;
   }
 
-  const useById = {};
+  const skillCardUseById = {};
   for (const key in byCard) {
     const r = byCard[key];
-    useById[r.id] = (useById[r.id] || 0) + r.use;
+    if (r.type !== "skillCard") continue;
+    skillCardUseById[r.id] = (skillCardUseById[r.id] || 0) + r.use;
   }
 
   for (const key in scoreTurn?.byEntity || {}) {
     const e = scoreTurn.byEntity[key];
-    if (e.type !== "skillCard") continue;
-    const totalUse = useById[e.id] || 0;
-    if (totalUse === 0) {
-      // Card was scored but never "used" per the hand log (e.g. free use
-      // triggered outside a hand decision). Attribute to a single row
-      // keyed by (id, null) so the score still surfaces.
-      const row = ensure(e.id, null);
+
+    if (e.type === "pItem") {
+      const row = ensure("pItem", e.id, null);
+      row.use += e.uses || 0;
       row.score += e.score;
-      row.scoreByType.vocal += e.scoreByType.vocal;
-      row.scoreByType.dance += e.scoreByType.dance;
-      row.scoreByType.visual += e.scoreByType.visual;
+      addScoreByType(row.scoreByType, e.scoreByType);
+      continue;
+    }
+
+    if (e.type !== "skillCard") continue;
+    const totalUse = skillCardUseById[e.id] || 0;
+    if (totalUse === 0) {
+      // Card produced score but was never hand-used (e.g. the score came
+      // from its passive/delayed effect firing). Attribute to a single
+      // (id, null) row so the score still surfaces.
+      const row = ensure("skillCard", e.id, null);
+      row.score += e.score;
+      addScoreByType(row.scoreByType, e.scoreByType);
       continue;
     }
     for (const k in byCard) {
       const r = byCard[k];
-      if (r.id !== e.id) continue;
+      if (r.type !== "skillCard" || r.id !== e.id) continue;
       const share = r.use / totalUse;
       r.score += e.score * share;
-      r.scoreByType.vocal += e.scoreByType.vocal * share;
-      r.scoreByType.dance += e.scoreByType.dance * share;
-      r.scoreByType.visual += e.scoreByType.visual * share;
+      addScoreByType(r.scoreByType, e.scoreByType, share);
     }
   }
   return byCard;
@@ -78,6 +91,7 @@ export function combineTotal(perTurn) {
       const src = turn.byCard[key];
       if (!byCard[key]) {
         byCard[key] = {
+          type: src.type,
           id: src.id,
           c: src.c,
           use: 0,
@@ -89,9 +103,7 @@ export function combineTotal(perTurn) {
       byCard[key].use += src.use;
       byCard[key].draw += src.draw;
       byCard[key].score += src.score;
-      byCard[key].scoreByType.vocal += src.scoreByType.vocal;
-      byCard[key].scoreByType.dance += src.scoreByType.dance;
-      byCard[key].scoreByType.visual += src.scoreByType.visual;
+      addScoreByType(byCard[key].scoreByType, src.scoreByType);
     }
   }
   return byCard;
@@ -122,6 +134,7 @@ export function formatScore(score) {
 
 function extractSortValue(row, by) {
   if (by === "card") {
+    if (row.type === "pItem") return PItems.getById(row.id)?.name || "";
     return SkillCards.getById(row.id)?.name || "";
   }
   if (by === "use") return row.use;

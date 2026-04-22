@@ -166,6 +166,12 @@ export function formatRun(run) {
   };
 }
 
+export function addScoreByType(dst, src, multiplier = 1) {
+  dst.vocal += src.vocal * multiplier;
+  dst.dance += src.dance * multiplier;
+  dst.visual += src.visual * multiplier;
+}
+
 export function mergeResults(results) {
   let scores = [];
   for (let result of results) {
@@ -249,10 +255,10 @@ export function mergeResults(results) {
             scoreByType: { ...src.scoreByType },
           };
         } else {
+          into.byEntity[key].uses =
+            (into.byEntity[key].uses || 0) + (src.uses || 0);
           into.byEntity[key].score += src.score;
-          into.byEntity[key].scoreByType.vocal += src.scoreByType.vocal;
-          into.byEntity[key].scoreByType.dance += src.scoreByType.dance;
-          into.byEntity[key].scoreByType.visual += src.scoreByType.visual;
+          addScoreByType(into.byEntity[key].scoreByType, src.scoreByType);
         }
       }
     }
@@ -334,9 +340,24 @@ export function accumulateCardUsage(logs, cardUsage) {
  *
  * Attribution: entityStart/entityEnd logs bracket an entity's window. We
  * maintain a stack; each score `diff` log is credited only to the INNERMOST
- * entity on the stack. Example — a card that produces score, then triggers
- * a p-item that also produces score: the card's direct score lands on the
- * card, the p-item's score lands on the p-item. Parents don't double-count.
+ * entity on the stack. A few normalizations reshape the raw stack into the
+ * attribution the UI wants:
+ *
+ *   - `skillCardEffect` (delayed effects registered by a card, e.g. "next
+ *     turn do X") folds into the card that registered it — they share the
+ *     skill-card id, so a card still "owns" the score it set up.
+ *   - `stage` is transparent: its score bubbles up to the enclosing entity
+ *     so a card that triggered a stage effect gets credit. When a stage
+ *     effect fires with no parent (turn-boundary phases), its score is
+ *     dropped from byEntity (it still contributes to the turn total).
+ *   - `pItem` tracks a `uses` count in addition to score. Only "primary"
+ *     activations (effects registered at init, flagged by the engine via
+ *     source.primary) count toward uses — delayed/registered sub-effects
+ *     contribute their score to the same p-item but don't tick the
+ *     counter. Within primary activations we also require at least one
+ *     observable log; if the only action was `effectCounter += N` (no log
+ *     emitted), the activation is still skipped so counter-bookkeeping
+ *     p-items don't inflate usage stats.
  *
  * scoreByType buckets each credit by the turn-type rolled that run, so the
  * UI can show "this card produced X on dance turns."
@@ -355,32 +376,91 @@ export function accumulateScoreStats(logs, scoreStats) {
       turnType = log.data.type;
       const turn = ensureScoreTurn(scoreStats.turns, turnIndex);
       turn.turnTypeCounts[turnType] = (turn.turnTypeCounts[turnType] || 0) + 1;
-    } else if (log.logType === "entityStart") {
+      continue;
+    }
+
+    if (log.logType === "entityStart") {
       groupStack.push({
         entity: log.data,
         ownScore: 0,
+        hasActivity: false,
         startTurn: turnIndex,
         startTurnType: turnType,
       });
-    } else if (log.logType === "entityEnd") {
+      continue;
+    }
+
+    if (log.logType === "entityEnd") {
       const group = groupStack.pop();
-      if (!group || group.ownScore === 0 || group.startTurn < 0) continue;
+      if (!group) continue;
+
+      // Bubble activity to the parent so ancestors reflect any work done
+      // in descendant frames — required for a primary p-item whose work
+      // happens inside a nested stage/sub-effect frame.
+      const parent = groupStack.length
+        ? groupStack[groupStack.length - 1]
+        : null;
+      if (parent && group.hasActivity) parent.hasActivity = true;
+
+      const entityType = group.entity.type;
+
+      // Stage: transparent. Hand ownScore to the parent; never create a
+      // stage row in byEntity. A stage effect fired outside any entity
+      // (turn-boundary) just vanishes from byEntity.
+      if (entityType === "stage") {
+        if (parent) parent.ownScore += group.ownScore;
+        continue;
+      }
+
+      if (group.startTurn < 0) continue;
+
+      // Fold skillCardEffect → skillCard so a card's delayed effects
+      // aggregate under the card.
+      const keyType =
+        entityType === "skillCardEffect" ? "skillCard" : entityType;
+
+      // A primary p-item activation with any observable work counts as a
+      // fresh "use." Derived (runtime-registered) p-item effects still
+      // contribute their score to the same row but do not tick the
+      // counter.
+      const countsAsUse =
+        keyType === "pItem" && !!group.entity.primary && group.hasActivity;
+
+      // Record a row if there's either score to attribute or a new
+      // activation to count.
+      const shouldRecord = countsAsUse || group.ownScore !== 0;
+      if (!shouldRecord) continue;
+
       const turn = ensureScoreTurn(scoreStats.turns, group.startTurn);
-      const { type, id } = group.entity;
-      const key = `${type}:${id}`;
+      const key = `${keyType}:${group.entity.id}`;
       if (!turn.byEntity[key]) {
         turn.byEntity[key] = {
-          type,
-          id,
+          type: keyType,
+          id: group.entity.id,
+          uses: 0,
           score: 0,
           scoreByType: { vocal: 0, dance: 0, visual: 0 },
         };
+      }
+      if (countsAsUse) {
+        turn.byEntity[key].uses += 1;
       }
       turn.byEntity[key].score += group.ownScore;
       if (group.startTurnType) {
         turn.byEntity[key].scoreByType[group.startTurnType] += group.ownScore;
       }
-    } else if (log.logType === "diff" && log.data.field === S.score) {
+      continue;
+    }
+
+    // Any non-frame log marks the innermost frame as "active"; activity
+    // bubbles to ancestors on each entityEnd. Critical for p-items: a
+    // counter-only effect emits no log, so its frame ends with
+    // hasActivity=false and the activation is skipped.
+    if (groupStack.length) {
+      groupStack[groupStack.length - 1].hasActivity = true;
+    }
+
+    if (log.logType === "diff" && log.data.field === S.score) {
       const delta = parseFloat(log.data.next) - parseFloat(log.data.prev);
       if (groupStack.length) {
         // Innermost only — ancestors aren't credited for a child's delta.
