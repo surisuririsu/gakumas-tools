@@ -13,8 +13,6 @@ function AxisRow({ ticks, xMin, xMax }) {
 
   return (
     <div className={styles.axisRow} aria-hidden>
-      <div />
-      <div />
       <div className={styles.axisPlot}>
         {ticks.map((v, i) => {
           const x = pct(v);
@@ -30,8 +28,6 @@ function AxisRow({ ticks, xMin, xMax }) {
           );
         })}
       </div>
-      <div />
-      <div />
     </div>
   );
 }

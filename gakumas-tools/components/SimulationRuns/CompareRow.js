@@ -1,7 +1,22 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
+import {
+  FaCheck,
+  FaPenToSquare,
+  FaRegFloppyDisk,
+  FaRegTrashCan,
+  FaUpload,
+  FaXmark,
+} from "react-icons/fa6";
 import { SkillCards, Stages } from "gakumas-data";
 import gkImg from "gakumas-images";
+import IconButton from "@/components/IconButton";
 import Image from "@/components/Image";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { formatStageName } from "@/utils/stages";
@@ -41,9 +56,11 @@ function CompareRow({
 
   const { loadout, derived, stats, name, createdAt } = run;
 
-  const [editMode, setEditMode] = useState(null); // "save" | "rename" | null
+  const [editMode, setEditMode] = useState(null);
   const [draft, setDraft] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const inputRef = useRef(null);
+  const rowRef = useRef(null);
 
   useEffect(() => {
     if (editMode && inputRef.current) {
@@ -51,6 +68,17 @@ function CompareRow({
       inputRef.current.select();
     }
   }, [editMode]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handle(e) {
+      if (rowRef.current && !rowRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", handle);
+    return () => document.removeEventListener("pointerdown", handle);
+  }, [menuOpen]);
 
   const stage = useMemo(() => {
     if (loadout.stageId === "custom") {
@@ -69,11 +97,13 @@ function CompareRow({
   function startSave() {
     setDraft(name || derived?.stageName || "");
     setEditMode("save");
+    setMenuOpen(false);
   }
 
   function startRename() {
     setDraft(name || "");
     setEditMode("rename");
+    setMenuOpen(false);
   }
 
   function cancelEdit() {
@@ -105,11 +135,73 @@ function CompareRow({
     }
   }
 
+  const wrap = (fn) => () => {
+    fn();
+    setMenuOpen(false);
+  };
+
+  const items = useMemo(() => {
+    if (editMode) {
+      return [
+        {
+          key: "confirm",
+          icon: FaCheck,
+          label: t("save"),
+          onClick: confirmEdit,
+        },
+        {
+          key: "cancel",
+          icon: FaXmark,
+          label: t("cancel"),
+          onClick: cancelEdit,
+        },
+      ];
+    }
+    const list = [];
+    if (onLoad) {
+      list.push({
+        key: "load",
+        icon: FaUpload,
+        label: t("load"),
+        onClick: wrap(() => onLoad(run)),
+      });
+    }
+    if (onRename && name) {
+      list.push({
+        key: "rename",
+        icon: FaPenToSquare,
+        label: t("edit"),
+        onClick: wrap(startRename),
+      });
+    }
+    if (onSave) {
+      list.push({
+        key: "save",
+        icon: FaRegFloppyDisk,
+        label: t("save"),
+        onClick: wrap(startSave),
+      });
+    }
+    if (onDelete) {
+      list.push({
+        key: "delete",
+        icon: FaRegTrashCan,
+        label: t("delete"),
+        onClick: wrap(() => onDelete(run)),
+      });
+    }
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode, name, onLoad, onRename, onSave, onDelete, run, draft]);
+
   const relative = showTime && !editMode ? formatRelative(createdAt) : null;
 
   return (
     <div
-      className={`${styles.row} ${current ? styles.rowCurrent : ""}`}
+      ref={rowRef}
+      className={`${styles.row} ${current ? styles.rowCurrent : ""} ${
+        menuOpen ? styles.rowMenuOpen : ""
+      }`}
       data-run-id={run.id}
     >
       <div className={styles.cardCell}>
@@ -168,6 +260,13 @@ function CompareRow({
         ) : (
           <div className={styles.noScores}>{t("noScores")}</div>
         )}
+        <div className={styles.mobileActionsInline} aria-hidden={!menuOpen}>
+          {items.map((a) => (
+            <span key={a.key} title={a.label}>
+              <IconButton icon={a.icon} onClick={a.onClick} />
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className={styles.numbersCell}>
@@ -188,15 +287,10 @@ function CompareRow({
       </div>
 
       <ActionsCell
-        editMode={editMode}
-        onConfirm={confirmEdit}
-        onCancel={cancelEdit}
-        onLoad={onLoad ? () => onLoad(run) : undefined}
-        onSave={onSave ? startSave : undefined}
-        onRename={onRename ? startRename : undefined}
-        onDelete={onDelete ? () => onDelete(run) : undefined}
-        canRename={!!name}
-        t={t}
+        items={items}
+        menuOpen={menuOpen}
+        onToggle={() => setMenuOpen((v) => !v)}
+        editMode={!!editMode}
       />
     </div>
   );

@@ -49,6 +49,12 @@
   background: tokens.$surface-panel;
 }
 
+.filterActive {
+  border-color: colors.$gk-orange;
+  color: colors.$gk-orange;
+  background: rgba(255, 118, 0, 0.06);
+}
+
 .fullRow {
   grid-column: 1 / -1;
 }
@@ -60,13 +66,15 @@
   align-items: end;
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 1;
   background: tokens.$surface-panel;
+  padding-top: 2px;
 }
 
 .axisPlot {
+  grid-column: 3 / 4;
   position: relative;
-  height: 16px;
+  height: 18px;
 }
 
 .axisLabel {
@@ -82,17 +90,20 @@
 
 .fifoNote {
   grid-column: 1 / -1;
-  padding: tokens.$space-1 tokens.$space-2;
-  font-size: tokens.$text-xs;
+  padding: tokens.$space-2 tokens.$space-2;
+  font-size: tokens.$text-sm;
   color: tokens.$surface-ink-muted;
   text-align: center;
-  border-top: 1px dashed tokens.$surface-border;
-  margin-top: tokens.$space-1;
+  background: tokens.$surface-alt;
+  border: 1px dashed tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
 }
 
 .fifoNoteWarn {
   color: colors.$gk-orange;
-  border-top-color: colors.$gk-orange;
+  background: rgba(255, 118, 0, 0.08);
+  border-color: colors.$gk-orange;
+  font-weight: 600;
 }
 
 .empty {
@@ -119,8 +130,8 @@
 
 .rowCurrent {
   position: sticky;
-  top: 16px;
-  z-index: 1;
+  top: 20px;
+  z-index: 3;
   background: tokens.$surface-panel;
   border-top-color: tokens.$surface-border;
   border-bottom-color: tokens.$surface-border;
@@ -235,6 +246,7 @@
 }
 
 .plotCell {
+  position: relative;
   min-width: 0;
 }
 
@@ -242,7 +254,8 @@
   position: relative;
   width: 100%;
   height: 28px;
-  cursor: default;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tooltip {
@@ -380,52 +393,42 @@
   }
 }
 
-.actionsMenu {
+.actionsInlineForce {
+  display: flex;
+}
+
+.actionsTrigger {
   display: none;
-  position: relative;
 
   @media (max-width: 640px) {
     display: block;
   }
 }
 
-.menuPopover {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 2px);
-  z-index: 10;
-  background: tokens.$surface-panel;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
-  min-width: 140px;
-}
+.mobileActionsInline {
+  display: none;
 
-.menuItem {
-  display: flex;
-  align-items: center;
-  gap: tokens.$space-2;
-  padding: 8px 10px;
-  border: 0;
-  background: transparent;
-  text-align: left;
-  font-size: tokens.$text-sm;
-  color: tokens.$surface-ink;
-  border-radius: tokens.$radius-xs;
-  cursor: pointer;
-
-  &:hover {
-    background: tokens.$surface-alt;
-  }
-
-  svg {
-    flex-shrink: 0;
+  @media (max-width: 640px) {
+    display: flex;
+    position: absolute;
+    inset: 0;
+    gap: 2px;
+    align-items: center;
+    justify-content: flex-end;
+    background: tokens.$surface-panel;
+    opacity: 0;
+    transform: translateX(12px);
+    pointer-events: none;
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
   }
 }
 
-.menuItemDanger {
-  color: #c0392b;
+.rowMenuOpen .mobileActionsInline {
+  @media (max-width: 640px) {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
 }

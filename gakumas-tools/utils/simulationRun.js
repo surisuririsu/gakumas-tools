@@ -1,5 +1,7 @@
 import { Idols, PIdols, SkillCards, Stages } from "gakumas-data";
 
+export const MAX_HISTORY = 20;
+
 const NUM_BUCKETS = 40;
 
 export function summarizeScores(scores) {

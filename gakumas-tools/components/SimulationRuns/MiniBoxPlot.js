@@ -1,10 +1,22 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import styles from "./SimulationRuns.module.scss";
 
 function MiniBoxPlot({ stats, xMin, xMax, highlight, ticks }) {
   const t = useTranslations("BoxPlot");
   const [tipOpen, setTipOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!tipOpen) return;
+    function handle(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setTipOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", handle);
+    return () => document.removeEventListener("pointerdown", handle);
+  }, [tipOpen]);
 
   if (!stats || xMax <= xMin) {
     return <div className={styles.emptyPlot} />;
@@ -24,9 +36,14 @@ function MiniBoxPlot({ stats, xMin, xMax, highlight, ticks }) {
 
   return (
     <div
+      ref={ref}
       className={`${styles.boxPlotWrap} ${highlight ? styles.boxPlotCurrent : ""}`}
-      onPointerEnter={() => setTipOpen(true)}
-      onPointerLeave={() => setTipOpen(false)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") setTipOpen(true);
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType === "mouse") setTipOpen(false);
+      }}
       onClick={() => setTipOpen((v) => !v)}
     >
       <svg

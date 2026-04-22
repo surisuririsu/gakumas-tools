@@ -12,6 +12,7 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import {
   deriveRunMeta,
+  MAX_HISTORY,
   normalizeSavedRun,
   summarizeScores,
 } from "@/utils/simulationRun";
@@ -19,7 +20,6 @@ import {
 const HISTORY_KEY = "gakumas-tools.simulation-runs.history";
 const LEGACY_LOADOUT_HISTORY_KEY = "gakumas-tools.loadout-history";
 const LEGACY_LOADOUTS_HISTORY_KEY = "gakumas-tools.loadouts-history";
-export const MAX_HISTORY = 20;
 
 const SimulationRunsContext = createContext();
 

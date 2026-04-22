@@ -1,15 +1,13 @@
 "use client";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import Button from "@/components/Button";
+import { Stages } from "gakumas-data";
 import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
 import ModalContext from "@/contexts/ModalContext";
-import SimulationRunsContext, {
-  MAX_HISTORY,
-} from "@/contexts/SimulationRunsContext";
-import { getIdolName } from "@/utils/simulationRun";
+import SimulationRunsContext from "@/contexts/SimulationRunsContext";
+import { getIdolName, MAX_HISTORY } from "@/utils/simulationRun";
 import AxisRow from "./AxisRow";
 import CompareRow from "./CompareRow";
 import styles from "./SimulationRuns.module.scss";
@@ -55,6 +53,23 @@ function computeTicks(min, max) {
   return ticks;
 }
 
+function stageKeyOf(run) {
+  const id = run?.loadout?.stageId;
+  if (id == null || id === "") return null;
+  return String(id);
+}
+
+function stageLabelOf(run) {
+  const id = run?.loadout?.stageId;
+  if (id == null) return null;
+  if (id === "custom") return "Custom";
+  const s = Stages.getById(id);
+  if (s?.season != null && s?.stage != null) {
+    return `S${s.season}-${s.stage}`;
+  }
+  return run.derived?.stageName || String(id);
+}
+
 export default function CompareTab({ currentRun }) {
   const t = useTranslations("CompareTab");
   const { status } = useSession();
@@ -71,16 +86,28 @@ export default function CompareTab({ currentRun }) {
   } = useContext(SimulationRunsContext);
 
   const [subTab, setSubTab] = useState("history");
+  const [stageFilter, setStageFilter] = useState("all");
+  const [stageFilterTouched, setStageFilterTouched] = useState(false);
   const [seasonFilter, setSeasonFilter] = useState("all");
   const [idolFilter, setIdolFilter] = useState("all");
+
+  // Default stage filter to current run's stage, until user changes it.
+  useEffect(() => {
+    if (stageFilterTouched) return;
+    const key = stageKeyOf(currentRun);
+    if (key) setStageFilter(key);
+  }, [currentRun, stageFilterTouched]);
 
   const historyRuns = useMemo(() => {
     if (!currentRun) return history;
     return history.filter((r) => r.id !== currentRun.id);
   }, [history, currentRun]);
 
-  const filteredSaved = useMemo(() => {
-    return savedRuns.filter((r) => {
+  const applyFilters = (runs) =>
+    runs.filter((r) => {
+      if (stageFilter !== "all") {
+        if (stageKeyOf(r) !== stageFilter) return false;
+      }
       if (seasonFilter !== "all") {
         if (String(r.derived?.season || "") !== seasonFilter) return false;
       }
@@ -89,9 +116,17 @@ export default function CompareTab({ currentRun }) {
       }
       return true;
     });
-  }, [savedRuns, seasonFilter, idolFilter]);
 
-  const visibleRuns = subTab === "saved" ? filteredSaved : historyRuns;
+  const filteredHistory = useMemo(
+    () => applyFilters(historyRuns),
+    [historyRuns, stageFilter, seasonFilter, idolFilter],
+  );
+  const filteredSaved = useMemo(
+    () => applyFilters(savedRuns),
+    [savedRuns, stageFilter, seasonFilter, idolFilter],
+  );
+
+  const visibleRuns = subTab === "saved" ? filteredSaved : filteredHistory;
 
   const range = useMemo(() => {
     const all = [];
@@ -105,28 +140,52 @@ export default function CompareTab({ currentRun }) {
     [range],
   );
 
+  const allPools = useMemo(
+    () => [...history, ...savedRuns, ...(currentRun ? [currentRun] : [])],
+    [history, savedRuns, currentRun],
+  );
+
+  const stageOptions = useMemo(() => {
+    const map = new Map();
+    for (const r of allPools) {
+      const key = stageKeyOf(r);
+      if (!key || map.has(key)) continue;
+      map.set(key, stageLabelOf(r) || key);
+    }
+    return [...map.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [allPools]);
+
   const seasonOptions = useMemo(() => {
     const seasons = new Set();
-    for (const r of savedRuns) {
+    for (const r of allPools) {
       if (r.derived?.season) seasons.add(r.derived.season);
     }
     return [...seasons].sort((a, b) => a - b);
-  }, [savedRuns]);
+  }, [allPools]);
 
   const idolOptions = useMemo(() => {
     const idols = new Map();
-    for (const r of savedRuns) {
+    for (const r of allPools) {
       const id = r.derived?.idolId;
       if (id && !idols.has(id)) {
         idols.set(id, getIdolName(id) || String(id));
       }
     }
     return [...idols.entries()];
-  }, [savedRuns]);
+  }, [allPools]);
+
+  function promptSignIn() {
+    setModal(
+      <ConfirmModal
+        message={t("signInPrompt")}
+        onConfirm={() => signIn("discord")}
+      />,
+    );
+  }
 
   async function handleSave(run, name) {
     if (status !== "authenticated") {
-      signIn("discord");
+      promptSignIn();
       return;
     }
     await saveRun(run, name);
@@ -150,6 +209,11 @@ export default function CompareTab({ currentRun }) {
     confirmDelete(() => deleteSaved([run._id || run.id]));
   }
 
+  const filterCls = (v) =>
+    `${styles.filter} ${v !== "all" ? styles.filterActive : ""}`;
+
+  const showFifoNote = subTab === "history" && history.length > 0;
+
   return (
     <div className={styles.compare}>
       <div className={styles.subTabs}>
@@ -161,34 +225,47 @@ export default function CompareTab({ currentRun }) {
           ]}
           onChange={setSubTab}
         />
-        {subTab === "saved" && (
-          <div className={styles.filters}>
-            <select
-              className={styles.filter}
-              value={seasonFilter}
-              onChange={(e) => setSeasonFilter(e.target.value)}
-            >
-              <option value="all">{t("allSeasons")}</option>
-              {seasonOptions.map((s) => (
-                <option key={s} value={String(s)}>
-                  {t("season")} {s}
-                </option>
-              ))}
-            </select>
-            <select
-              className={styles.filter}
-              value={idolFilter}
-              onChange={(e) => setIdolFilter(e.target.value)}
-            >
-              <option value="all">{t("allIdols")}</option>
-              {idolOptions.map(([id, name]) => (
-                <option key={id} value={String(id)}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className={styles.filters}>
+          <select
+            className={filterCls(stageFilter)}
+            value={stageFilter}
+            onChange={(e) => {
+              setStageFilter(e.target.value);
+              setStageFilterTouched(true);
+            }}
+          >
+            <option value="all">{t("allStages")}</option>
+            {stageOptions.map(([key, label]) => (
+              <option key={key} value={key}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <select
+            className={filterCls(seasonFilter)}
+            value={seasonFilter}
+            onChange={(e) => setSeasonFilter(e.target.value)}
+          >
+            <option value="all">{t("allSeasons")}</option>
+            {seasonOptions.map((s) => (
+              <option key={s} value={String(s)}>
+                {t("season")} {s}
+              </option>
+            ))}
+          </select>
+          <select
+            className={filterCls(idolFilter)}
+            value={idolFilter}
+            onChange={(e) => setIdolFilter(e.target.value)}
+          >
+            <option value="all">{t("allIdols")}</option>
+            {idolOptions.map(([id, name]) => (
+              <option key={id} value={String(id)}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {(currentRun || visibleRuns.length > 0) && (
@@ -206,7 +283,7 @@ export default function CompareTab({ currentRun }) {
         />
       )}
 
-      {subTab === "history" && historyRuns.length + (currentRun ? 1 : 0) > 0 && (
+      {showFifoNote && (
         <div
           className={`${styles.fifoNote} ${
             history.length >= MAX_HISTORY ? styles.fifoNoteWarn : ""
@@ -219,11 +296,7 @@ export default function CompareTab({ currentRun }) {
       )}
 
       {subTab === "saved" && status === "unauthenticated" ? (
-        <div className={styles.empty}>
-          <Button style="primary" onClick={() => signIn("discord")}>
-            {t("signInToSave")}
-          </Button>
-        </div>
+        <div className={styles.empty}>{t("signInToView")}</div>
       ) : subTab === "saved" &&
         (status === "loading" || savedLoading) ? (
         <div className={styles.empty}>{t("loading")}</div>
