@@ -277,7 +277,8 @@
   "SimulatorButtons": {
     "confirm": "編成をクリアしますか？",
     "clear": "クリア",
-    "share": "共有"
+    "share": "共有",
+    "openLoadouts": "編成"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "スクリーンショットから編成を読み込み",
@@ -331,6 +332,8 @@
     "hiddenByFilters": "フィルターで{count}件非表示",
     "allHiddenByFilters": "フィルターで全{count}件非表示",
     "clearFilters": "フィルターをクリア",
+    "showDetails": "詳細を表示",
+    "hideDetails": "詳細を隠す",
     "season": "シーズン",
     "allSeasons": "全シーズン",
     "allIdols": "全アイドル",

@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
@@ -14,11 +14,12 @@ import {
   stageKeyOf,
   stageLabelOf,
 } from "@/utils/simulationRun";
+import usePersistedState from "@/utils/usePersistedState";
 import AxisRow from "./AxisRow";
 import CompareRow from "./CompareRow";
 import styles from "./SimulationRuns.module.scss";
 
-export default function CompareTab({ currentRun }) {
+export default function CompareTab({ currentRun, onAfterLoad }) {
   const t = useTranslations("CompareTab");
   const { status } = useSession();
   const { setModal } = useContext(ModalContext);
@@ -33,11 +34,26 @@ export default function CompareTab({ currentRun }) {
     loadRun,
   } = useContext(SimulationRunsContext);
 
-  const [subTab, setSubTab] = useState("history");
-  const [stageFilter, setStageFilter] = useState("all");
-  const [stageFilterTouched, setStageFilterTouched] = useState(false);
-  const [seasonFilter, setSeasonFilter] = useState("all");
-  const [idolFilter, setIdolFilter] = useState("all");
+  const [subTab, setSubTab] = usePersistedState(
+    "gakumas-tools.compare.subTab",
+    "history",
+  );
+  const [stageFilter, setStageFilter] = usePersistedState(
+    "gakumas-tools.compare.stageFilter",
+    "all",
+  );
+  const [stageFilterTouched, setStageFilterTouched] = usePersistedState(
+    "gakumas-tools.compare.stageFilterTouched",
+    false,
+  );
+  const [seasonFilter, setSeasonFilter] = usePersistedState(
+    "gakumas-tools.compare.seasonFilter",
+    "all",
+  );
+  const [idolFilter, setIdolFilter] = usePersistedState(
+    "gakumas-tools.compare.idolFilter",
+    "all",
+  );
 
   // Default stage filter to current run's stage, until user changes it.
   useEffect(() => {
@@ -142,6 +158,11 @@ export default function CompareTab({ currentRun }) {
   async function handleRename(run, name) {
     if (run.name === name) return;
     await renameSaved(run._id || run.id, name);
+  }
+
+  function handleLoad(run) {
+    loadRun(run);
+    if (onAfterLoad) onAfterLoad();
   }
 
   function confirmDelete(onConfirm) {
@@ -289,7 +310,7 @@ export default function CompareTab({ currentRun }) {
               xMax={range.max}
               ticks={ticks}
               showTime={subTab === "history"}
-              onLoad={loadRun}
+              onLoad={handleLoad}
               onSave={subTab === "history" ? handleSave : undefined}
               onRename={subTab === "saved" ? handleRename : undefined}
               onDelete={

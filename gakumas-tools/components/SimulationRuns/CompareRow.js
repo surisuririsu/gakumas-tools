@@ -1,6 +1,8 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+  FaChevronDown,
+  FaChevronUp,
   FaCheck,
   FaPenToSquare,
   FaRegFloppyDisk,
@@ -11,6 +13,7 @@ import {
 import { SkillCards, Stages } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
+import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { formatRelative } from "@/utils/simulationRun";
 import { formatStageName } from "@/utils/stages";
@@ -18,6 +21,8 @@ import ActionIconList from "./ActionIconList";
 import ActionsCell from "./ActionsCell";
 import MiniBoxPlot from "./MiniBoxPlot";
 import styles from "./SimulationRuns.module.scss";
+
+const LINK_PHASES = ["OP", "MID", "ED"];
 
 function CompareRow({
   run,
@@ -39,6 +44,7 @@ function CompareRow({
   const [editMode, setEditMode] = useState(null);
   const [draft, setDraft] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const inputRef = useRef(null);
   const rowRef = useRef(null);
 
@@ -161,6 +167,7 @@ function CompareRow({
   const relative = showTime && !editMode ? formatRelative(createdAt) : null;
 
   return (
+    <Fragment>
     <div
       ref={rowRef}
       className={`${styles.row} ${current ? styles.rowCurrent : ""} ${
@@ -168,6 +175,18 @@ function CompareRow({
       }`}
       data-run-id={run.id}
     >
+      <div className={styles.expandCell}>
+        <button
+          type="button"
+          className={styles.expandBtn}
+          onClick={() => setExpanded((v) => !v)}
+          title={expanded ? t("hideDetails") : t("showDetails")}
+          aria-expanded={expanded}
+        >
+          {expanded ? <FaChevronUp /> : <FaChevronDown />}
+        </button>
+      </div>
+
       <div className={styles.cardCell}>
         {signatureCard ? (
           <Image
@@ -253,6 +272,23 @@ function CompareRow({
         editMode={!!editMode}
       />
     </div>
+    {expanded && (
+      <div className={styles.expandedDetails}>
+        {run.linkLoadouts?.length ? (
+          run.linkLoadouts.map((ld, i) => (
+            <div key={i} className={styles.expandedLinkLoadout}>
+              <div className={styles.expandedLinkLabel}>
+                {LINK_PHASES[i] || `#${i + 1}`}
+              </div>
+              <LoadoutSummary loadout={ld} showStage={i === 0} />
+            </div>
+          ))
+        ) : (
+          <LoadoutSummary loadout={run.loadout} />
+        )}
+      </div>
+    )}
+    </Fragment>
   );
 }
 

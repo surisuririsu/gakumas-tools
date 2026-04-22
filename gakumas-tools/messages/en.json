@@ -277,7 +277,8 @@
   "SimulatorButtons": {
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear",
-    "share": "Share"
+    "share": "Share",
+    "openLoadouts": "Loadouts"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "Import loadout from screenshot",
@@ -331,6 +332,8 @@
     "hiddenByFilters": "{count} hidden by filters",
     "allHiddenByFilters": "All {count} hidden by filters",
     "clearFilters": "Clear filters",
+    "showDetails": "Show details",
+    "hideDetails": "Hide details",
     "season": "Season",
     "allSeasons": "All seasons",
     "allIdols": "All idols",

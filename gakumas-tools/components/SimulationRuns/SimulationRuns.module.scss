@@ -4,6 +4,7 @@
 .compare {
   display: grid;
   grid-template-columns:
+    20px
     44px
     minmax(80px, 1fr)
     minmax(140px, 2fr)
@@ -16,6 +17,7 @@
 
   @media (max-width: 640px) {
     grid-template-columns:
+      20px
       32px
       minmax(60px, 1fr)
       minmax(100px, 2fr)
@@ -72,7 +74,7 @@
 }
 
 .axisPlot {
-  grid-column: 3 / 4;
+  grid-column: 4 / 5;
   position: relative;
   height: 18px;
 }
@@ -116,6 +118,30 @@
   flex-direction: column;
   align-items: center;
   gap: tokens.$space-1;
+}
+
+.expandedDetails {
+  grid-column: 1 / -1;
+  padding: tokens.$space-2;
+  background: tokens.$surface-alt;
+  border-radius: tokens.$radius-sm;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  margin-bottom: tokens.$space-1;
+}
+
+.expandedLinkLoadout {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-1;
+}
+
+.expandedLinkLabel {
+  font-size: tokens.$text-xs;
+  font-weight: 600;
+  color: tokens.$surface-ink-muted;
+  text-transform: uppercase;
 }
 
 .hiddenNote {
@@ -167,6 +193,33 @@
   border-top-color: tokens.$surface-border;
   border-bottom-color: tokens.$surface-border;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.expandCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expandBtn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: tokens.$surface-ink-muted;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: tokens.$radius-xs;
+  font-size: 10px;
+  line-height: 1;
+
+  &:hover {
+    background: tokens.$surface-muted;
+    color: tokens.$surface-ink;
+  }
 }
 
 .cardCell {

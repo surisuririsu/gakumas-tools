@@ -4,11 +4,13 @@ import { useTranslations } from "next-intl";
 import {
   FaCheck,
   FaRegCopy,
+  FaRegFloppyDisk,
   FaRegTrashCan,
   FaShareNodes,
 } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
+import LoadoutsModal from "@/components/SimulationRuns/LoadoutsModal";
 import ShareModal from "@/components/ShareModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -40,6 +42,15 @@ function SimulatorButtons() {
       >
         <FaRegTrashCan />
         <span className={styles.buttonText}>{t("clear")}</span>
+      </Button>
+
+      <Button
+        style="blue-secondary"
+        size="sm"
+        onClick={() => setModal(<LoadoutsModal />)}
+      >
+        <FaRegFloppyDisk />
+        <span className={styles.buttonText}>{t("openLoadouts")}</span>
       </Button>
 
       {!!simulatorUrl && (
