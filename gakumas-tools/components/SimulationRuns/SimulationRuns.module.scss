@@ -1,6 +1,19 @@
 @use "../../styles/colors";
 @use "../../styles/tokens";
 
+.modalScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0 calc(#{tokens.$space-5} * -1);
+  padding: 0 tokens.$space-5;
+
+  @media only screen and (max-width: 600px) {
+    margin: 0 calc(#{tokens.$space-3} * -1);
+    padding: 0 tokens.$space-3;
+  }
+}
+
 .compare {
   display: grid;
   grid-template-columns:
