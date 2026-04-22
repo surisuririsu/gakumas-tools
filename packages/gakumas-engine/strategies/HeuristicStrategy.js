@@ -4,12 +4,86 @@ import BaseStrategy from "./BaseStrategy";
 
 const MAX_DEPTH = 3;
 
+// Shared "sum amount × (turns || turnsRemaining)" for the buff-weighting
+// used across getStateScore. A tight for-loop is notably faster than
+// `Array.reduce` with an arrow closure in hot paths (dozens of calls per
+// getStateScore, called thousands of times per run).
+function sumBuffWeight(buffs, turnsRemaining) {
+  let total = 0;
+  for (let i = 0; i < buffs.length; i++) {
+    const b = buffs[i];
+    total += b.amount * (b.turns || turnsRemaining);
+  }
+  return total;
+}
+
+const GROWTH_SCORE_MULTIPLIERS = {
+  [G["g.score"]]: 2,
+  [G["g.scoreTimes"]]: 20,
+  [G["g.cost"]]: 1,
+  [G["g.typedCost"]]: 1,
+  [G["g.genki"]]: 1,
+  [G["g.goodConditionTurns"]]: 1,
+  [G["g.perfectConditionTurns"]]: 1,
+  [G["g.concentration"]]: 2,
+  [G["g.goodImpressionTurns"]]: 1,
+  [G["g.motivation"]]: 1,
+  [G["g.fullPowerCharge"]]: 1,
+  [G["g.halfCostTurns"]]: 1,
+  [G["g.scoreByGoodImpressionTurns"]]: 20,
+  [G["g.scoreByMotivation"]]: 20,
+  [G["g.scoreByGenki"]]: 20,
+  [G["g.stanceLevel"]]: 2,
+};
+
 export default class HeuristicStrategy extends BaseStrategy {
   constructor(engine) {
     super(engine);
 
     this.depth = 0;
     this.rootEffectCount = 0;
+    // Per-linkPhase cache of config-derived scoring constants so
+    // getStateScore doesn't rebuild them on every call (it fires several
+    // times per useCard speculation, thousands of times per run).
+    this._configCache = new Map();
+  }
+
+  _getScoringConfig(state) {
+    const linkPhase = state[S.linkPhase] || 0;
+    let cache = this._configCache.get(linkPhase);
+    if (cache) return cache;
+
+    const config = this.engine.getConfig(state);
+    const { recommendedEffect, pIdolId, plan } = config.idol;
+
+    let goodConditionTurnsMultiplier =
+      recommendedEffect == "goodConditionTurns" ? 1.75 : 1;
+    if (pIdolId == 114) goodConditionTurnsMultiplier = 8;
+
+    // Average type multiplier: weighted by each turn type's share of the
+    // stage's turn count. Pure function of config.
+    const { typeMultipliers, stage } = config;
+    let averageTypeMultiplier = 0;
+    for (const type in typeMultipliers) {
+      averageTypeMultiplier +=
+        (typeMultipliers[type] * stage.turnCounts[type]) / stage.turnCount;
+    }
+
+    cache = {
+      config,
+      recommendedEffect,
+      pIdolId,
+      plan,
+      goodConditionTurnsMultiplier,
+      concentrationMultiplier: recommendedEffect == "concentration" ? 3 : 1,
+      goodImpressionTurnsMultiplier:
+        recommendedEffect == "goodImpressionTurns" ? 3.5 : 1,
+      motivationMultiplier: recommendedEffect == "motivation" ? 5.5 : 1,
+      fullPowerMultiplier: recommendedEffect == "fullPower" ? 5 : 1,
+      averageTypeMultiplier,
+    };
+    this._configCache.set(linkPhase, cache);
+    return cache;
   }
 
   evaluate(state) {
@@ -117,14 +191,7 @@ export default class HeuristicStrategy extends BaseStrategy {
   }
 
   getAverageTypeMultiplier(state) {
-    const config = this.engine.getConfig(state);
-    return Object.keys(config.typeMultipliers).reduce(
-      (acc, cur) =>
-        acc +
-        (config.typeMultipliers[cur] * config.stage.turnCounts[cur]) /
-        config.stage.turnCount,
-      0
-    );
+    return this._getScoringConfig(state).averageTypeMultiplier;
   }
 
   scaleScore(score, state) {
@@ -132,21 +199,17 @@ export default class HeuristicStrategy extends BaseStrategy {
   }
 
   getStateScore(state) {
-    // Initialize multipliers
-    const config = this.engine.getConfig(state);
-    this.goodConditionTurnsMultiplier =
-      config.idol.recommendedEffect == "goodConditionTurns" ? 1.75 : 1;
-    if (config.idol.pIdolId == 114) {
-      this.goodConditionTurnsMultiplier = 8;
-    }
-    this.concentrationMultiplier =
-      config.idol.recommendedEffect == "concentration" ? 3 : 1;
-    this.goodImpressionTurnsMultiplier =
-      config.idol.recommendedEffect == "goodImpressionTurns" ? 3.5 : 1;
-    this.motivationMultiplier =
-      config.idol.recommendedEffect == "motivation" ? 5.5 : 1;
-    this.fullPowerMultiplier =
-      config.idol.recommendedEffect == "fullPower" ? 5 : 1;
+    const sc = this._getScoringConfig(state);
+    // Mirror multipliers on `this` so call-sites that read them (including
+    // `getFuture`'s scoring adjustments) keep working unchanged.
+    this.goodConditionTurnsMultiplier = sc.goodConditionTurnsMultiplier;
+    this.concentrationMultiplier = sc.concentrationMultiplier;
+    this.goodImpressionTurnsMultiplier = sc.goodImpressionTurnsMultiplier;
+    this.motivationMultiplier = sc.motivationMultiplier;
+    this.fullPowerMultiplier = sc.fullPowerMultiplier;
+
+    const turnsRemaining = state[S.turnsRemaining];
+    const goodConditionTurns = state[S.goodConditionTurns];
 
     // Calc score
 
@@ -159,109 +222,91 @@ export default class HeuristicStrategy extends BaseStrategy {
     score += state[S.cardsUsed] * 8;
 
     // Stamina
-    score += state[S.stamina] * state[S.turnsRemaining] * 0.05;
+    score += state[S.stamina] * turnsRemaining * 0.05;
 
     // Genki
     score +=
       state[S.genki] *
-      Math.tanh(state[S.turnsRemaining] / 3) *
+      Math.tanh(turnsRemaining / 3) *
       0.7 *
-      this.motivationMultiplier;
+      sc.motivationMultiplier;
 
     // Good condition turns
-    if (config.idol.pIdolId == 114) {
-      if (state[S.turnsRemaining] > 0) {
-        score +=
-          state[S.goodConditionTurns] * 3 * this.goodConditionTurnsMultiplier;
+    if (sc.pIdolId == 114) {
+      if (turnsRemaining > 0) {
+        score += goodConditionTurns * 3 * sc.goodConditionTurnsMultiplier;
       }
     } else {
       score +=
-        Math.min(state[S.goodConditionTurns], state[S.turnsRemaining]) *
+        Math.min(goodConditionTurns, turnsRemaining) *
         1.6 *
-        this.goodConditionTurnsMultiplier;
+        sc.goodConditionTurnsMultiplier;
     }
 
     // Perfect condition turns
     score +=
-      Math.min(state[S.perfectConditionTurns], state[S.turnsRemaining]) *
-      state[S.goodConditionTurns] *
-      this.goodConditionTurnsMultiplier *
+      Math.min(state[S.perfectConditionTurns], turnsRemaining) *
+      goodConditionTurns *
+      sc.goodConditionTurnsMultiplier *
       1.5;
 
     // Concentration
     score +=
-      state[S.concentration] *
-      state[S.turnsRemaining] *
-      this.concentrationMultiplier;
+      state[S.concentration] * turnsRemaining * sc.concentrationMultiplier;
 
     // Stance
     if (
-      config.idol.plan == "anomaly" &&
-      (state[S.turnsRemaining] || state[S.cardUsesRemaining])
+      sc.plan == "anomaly" &&
+      (turnsRemaining || state[S.cardUsesRemaining])
     ) {
       score += state[S.strengthTimes] * 40;
       score += state[S.preservationTimes] * 80;
       score += state[S.leisureTimes] * 80;
-      score += state[S.fullPowerTimes] * 80 * this.fullPowerMultiplier;
+      score += state[S.fullPowerTimes] * 80 * sc.fullPowerMultiplier;
 
       //Enthusiasm
       score += state[S.enthusiasm] * 5;
 
       // Full power charge
       score +=
-        state[S.cumulativeFullPowerCharge] * 3 * this.fullPowerMultiplier;
+        state[S.cumulativeFullPowerCharge] * 3 * sc.fullPowerMultiplier;
 
       // Enthusiasm buffs
-      score +=
-        state[S.enthusiasmBuffs].reduce(
-          (acc, cur) =>
-            acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-          0
-        ) * 5;
+      score += sumBuffWeight(state[S.enthusiasmBuffs], turnsRemaining) * 5;
 
       // Full power charge buffs
       score +=
-        state[S.fullPowerChargeBuffs].reduce(
-          (acc, cur) =>
-            acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-          0
-        ) * this.fullPowerMultiplier;
+        sumBuffWeight(state[S.fullPowerChargeBuffs], turnsRemaining) *
+        sc.fullPowerMultiplier;
 
       // Growth
-      score += this.getGrowthScore(state) * 0.2 * state[S.turnsRemaining];
+      score += this.getGrowthScore(state) * 0.2 * turnsRemaining;
     }
 
     // Good impression turns
     score +=
       state[S.goodImpressionTurns] *
-      state[S.turnsRemaining] *
-      this.goodImpressionTurnsMultiplier;
+      turnsRemaining *
+      sc.goodImpressionTurnsMultiplier;
 
     // Motivation
     score +=
-      state[S.motivation] *
-      state[S.turnsRemaining] *
-      0.45 *
-      this.motivationMultiplier;
+      state[S.motivation] * turnsRemaining * 0.45 * sc.motivationMultiplier;
 
     // Pride turns
-    score += state[S.prideTurns] * state[S.turnsRemaining] * 0.2;
+    score += state[S.prideTurns] * turnsRemaining * 0.2;
 
     // Score buffs
-    score +=
-      state[S.scoreBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) * 8;
+    score += sumBuffWeight(state[S.scoreBuffs], turnsRemaining) * 8;
 
     // Half cost turns
-    score += Math.min(state[S.halfCostTurns], state[S.turnsRemaining]) * 6;
+    score += Math.min(state[S.halfCostTurns], turnsRemaining) * 6;
 
     // Double cost turns
-    score += Math.min(state[S.doubleCostTurns], state[S.turnsRemaining]) * -6;
+    score += Math.min(state[S.doubleCostTurns], turnsRemaining) * -6;
 
     // Cost reduction
-    score += state[S.costReduction] * state[S.turnsRemaining] * 0.5;
+    score += state[S.costReduction] * turnsRemaining * 0.5;
 
     // Double card effect cards
     score += state[S.doubleCardEffectCards] * 50;
@@ -271,44 +316,31 @@ export default class HeuristicStrategy extends BaseStrategy {
 
     // Good impression turns buffs
     score +=
-      state[S.goodImpressionTurnsBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) *
+      sumBuffWeight(state[S.goodImpressionTurnsBuffs], turnsRemaining) *
       10 *
-      this.goodImpressionTurnsMultiplier;
+      sc.goodImpressionTurnsMultiplier;
 
     // Good impression turns effects buffs
     score +=
-      state[S.goodImpressionTurnsEffectBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) *
+      sumBuffWeight(state[S.goodImpressionTurnsEffectBuffs], turnsRemaining) *
       state[S.goodImpressionTurns] *
-      this.goodImpressionTurnsMultiplier;
+      sc.goodImpressionTurnsMultiplier;
 
     // Good impression turns times buffs
     score +=
-      state[S.goodImpressionTurnsTimesBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) *
+      sumBuffWeight(state[S.goodImpressionTurnsTimesBuffs], turnsRemaining) *
       state[S.goodImpressionTurns] *
-      this.goodImpressionTurnsMultiplier;
+      sc.goodImpressionTurnsMultiplier;
 
     // Good condition turns buffs
     score +=
-      state[S.goodConditionTurnsBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) * this.goodConditionTurnsMultiplier;
+      sumBuffWeight(state[S.goodConditionTurnsBuffs], turnsRemaining) *
+      sc.goodConditionTurnsMultiplier;
 
     // Concentration buffs
     score +=
-      state[S.concentrationBuffs].reduce(
-        (acc, cur) => acc + cur.amount * (cur.turns || state[S.turnsRemaining]),
-        0
-      ) * this.concentrationMultiplier;
+      sumBuffWeight(state[S.concentrationBuffs], turnsRemaining) *
+      sc.concentrationMultiplier;
 
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
@@ -317,9 +349,9 @@ export default class HeuristicStrategy extends BaseStrategy {
     score += state[S.turnCardsUpgraded] * 20;
 
     // Scale score
-    score = this.scaleScore(score, state);
+    score = Math.ceil(score * sc.averageTypeMultiplier);
 
-    const { recommendedEffect } = config.idol;
+    const recommendedEffect = sc.recommendedEffect;
     if (recommendedEffect == "goodConditionTurns") {
       score += state[S.score] * 0.4;
     } else if (recommendedEffect == "concentration") {
@@ -343,28 +375,12 @@ export default class HeuristicStrategy extends BaseStrategy {
 
   getGrowthScore(state) {
     let growthScore = 0;
-    const multipliers = {
-      [G["g.score"]]: 2,
-      [G["g.scoreTimes"]]: 20,
-      [G["g.cost"]]: 1,
-      [G["g.typedCost"]]: 1,
-      [G["g.genki"]]: 1,
-      [G["g.goodConditionTurns"]]: 1,
-      [G["g.perfectConditionTurns"]]: 1,
-      [G["g.concentration"]]: 2,
-      [G["g.goodImpressionTurns"]]: 1,
-      [G["g.motivation"]]: 1,
-      [G["g.fullPowerCharge"]]: 1,
-      [G["g.halfCostTurns"]]: 1,
-      [G["g.scoreByGoodImpressionTurns"]]: 20,
-      [G["g.scoreByMotivation"]]: 20,
-      [G["g.scoreByGenki"]]: 20,
-      [G["g.stanceLevel"]]: 2,
-    };
-    for (let { growth } of state[S.cardMap]) {
+    const cardMap = state[S.cardMap];
+    for (let i = 0; i < cardMap.length; i++) {
+      const growth = cardMap[i].growth;
       if (!growth) continue;
       for (let key in growth) {
-        growthScore += growth[key] * (multipliers[key] || 1);
+        growthScore += growth[key] * (GROWTH_SCORE_MULTIPLIERS[key] || 1);
       }
     }
     return growthScore;

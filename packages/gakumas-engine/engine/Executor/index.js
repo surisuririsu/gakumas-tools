@@ -20,6 +20,23 @@ import EngineComponent from "../EngineComponent";
 import { formatDiffField } from "../../utils";
 import * as resolvers from "./resolvers";
 
+// Precomputed delta-field indices and phase strings for the change-trigger
+// fields, so `triggerChangeEffects` can index by position instead of
+// rebuilding `${fieldName}Delta` / `${fieldName}Increased` strings on each
+// iteration.
+const INCREASE_DELTA_FIELDS = INCREASE_TRIGGER_FIELDS.map(
+  (f) => S[`${ALL_FIELDS[f]}Delta`],
+);
+const INCREASE_PHASES = INCREASE_TRIGGER_FIELDS.map(
+  (f) => `${ALL_FIELDS[f]}Increased`,
+);
+const DECREASE_DELTA_FIELDS = DECREASE_TRIGGER_FIELDS.map(
+  (f) => S[`${ALL_FIELDS[f]}Delta`],
+);
+const DECREASE_PHASES = DECREASE_TRIGGER_FIELDS.map(
+  (f) => `${ALL_FIELDS[f]}Decreased`,
+);
+
 export default class Executor extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -112,11 +129,22 @@ export default class Executor extends EngineComponent {
     // Execute actions, triggering increase/decrease effects per-action
     // (matching actual game behavior where p-items trigger between actions)
     for (let i = 0; i < actions.length; i++) {
-      // Snapshot state before this action for per-action triggers
-      let actionPrev = {};
-      for (let k = 0; k < FIELDS_TO_DIFF.length; k++) {
-        actionPrev[FIELDS_TO_DIFF[k]] = state[FIELDS_TO_DIFF[k]];
+      // Only snapshot the full change-trigger field set when the current
+      // phase actually fires change triggers. Most effect-action paths
+      // (e.g. `cardUsed` phase) don't, so the ~30-field capture is wasted
+      // work. Genki is captured unconditionally for the consumed-genki
+      // accounting below.
+      const phase = state[S.phase];
+      const needsChangeTrigger =
+        phase === "processCard" || phase === "processCost";
+      let actionPrev = null;
+      if (needsChangeTrigger) {
+        actionPrev = {};
+        for (let k = 0; k < FIELDS_TO_DIFF.length; k++) {
+          actionPrev[FIELDS_TO_DIFF[k]] = state[FIELDS_TO_DIFF[k]];
+        }
       }
+      const prevGenki = state[S.genki];
 
       this.executeAction(state, actions[i], card);
 
@@ -146,13 +174,13 @@ export default class Executor extends EngineComponent {
       }
 
       // Fire increase/decrease triggers after each action
-      if (CHANGE_TRIGGER_PHASES.includes(state[S.phase])) {
+      if (needsChangeTrigger) {
         this.triggerChangeEffects(state, actionPrev);
       }
 
       // Consumed genki
-      if (state[S.genki] < actionPrev[S.genki]) {
-        state[S.consumedGenki] += actionPrev[S.genki] - state[S.genki];
+      if (state[S.genki] < prevGenki) {
+        state[S.consumedGenki] += prevGenki - state[S.genki];
       }
     }
 
@@ -185,22 +213,11 @@ export default class Executor extends EngineComponent {
   }
 
   triggerChangeEffects(state, prev) {
-    // Calculate diff
-    let increasedFields = new Set();
-    let decreasedFields = new Set();
-    for (let i = 0; i < FIELDS_TO_DIFF.length; i++) {
-      let diff = state[FIELDS_TO_DIFF[i]] - prev[FIELDS_TO_DIFF[i]];
-      if (diff > 0) {
-        increasedFields.add(FIELDS_TO_DIFF[i]);
-      } else if (diff < 0) {
-        decreasedFields.add(FIELDS_TO_DIFF[i]);
-      }
-    }
-
     // Cost consumed effects
     if (state[S.phase] == "processCost") {
       for (let i = 0; i < BUFF_FIELDS.length; i++) {
-        if (decreasedFields.has(BUFF_FIELDS[i])) {
+        const f = BUFF_FIELDS[i];
+        if (state[f] < prev[f]) {
           this.engine.effectManager.triggerEffectsForPhase(
             state,
             "buffCostConsumed"
@@ -213,28 +230,28 @@ export default class Executor extends EngineComponent {
     // Trigger increase effects
     for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
       const field = INCREASE_TRIGGER_FIELDS[i];
-      if (increasedFields.has(field)) {
-        const fieldName = ALL_FIELDS[field];
-        state[S[`${fieldName}Delta`]] = state[field] - prev[field];
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${fieldName}Increased`
-        );
-        state[S[`${fieldName}Delta`]] = 0;
+      const curr = state[field];
+      const prior = prev[field];
+      if (curr > prior) {
+        const deltaField = INCREASE_DELTA_FIELDS[i];
+        const phase = INCREASE_PHASES[i];
+        state[deltaField] = curr - prior;
+        this.engine.effectManager.triggerEffectsForPhase(state, phase);
+        state[deltaField] = 0;
       }
     }
 
     // Trigger decrease effects
     for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
       const field = DECREASE_TRIGGER_FIELDS[i];
-      if (decreasedFields.has(field)) {
-        const fieldName = ALL_FIELDS[field];
-        state[S[`${fieldName}Delta`]] = state[field] - prev[field];
-        this.engine.effectManager.triggerEffectsForPhase(
-          state,
-          `${fieldName}Decreased`
-        );
-        state[S[`${fieldName}Delta`]] = 0;
+      const curr = state[field];
+      const prior = prev[field];
+      if (curr < prior) {
+        const deltaField = DECREASE_DELTA_FIELDS[i];
+        const phase = DECREASE_PHASES[i];
+        state[deltaField] = curr - prior;
+        this.engine.effectManager.triggerEffectsForPhase(state, phase);
+        state[deltaField] = 0;
       }
     }
   }

@@ -101,13 +101,23 @@ export default class EffectManager extends EngineComponent {
   }
 
   triggerEffectsForPhase(state, phase, conditionState) {
+    // Fast path: no active effect matches this phase. Empirically ~79%
+    // of triggerEffectsForPhase calls hit this — skip the phase
+    // save/restore dance and the effectsByGroup allocation entirely.
+    const effectList = state[S.effects];
+    let anyMatch = false;
+    for (let i = 0; i < effectList.length; i++) {
+      if (effectList[i].phase === phase) { anyMatch = true; break; }
+    }
+    if (!anyMatch) return;
+
     state[S.parentPhase] = state[S.phase];
     state[S.phase] = phase;
 
     // Filter and group effects
     let effectsByGroup = {};
-    for (let i = 0; i < state[S.effects].length; i++) {
-      const effect = state[S.effects][i];
+    for (let i = 0; i < effectList.length; i++) {
+      const effect = effectList[i];
       if (effect.phase != phase) continue;
       // Phase target filter: at:phase[rule] — fires only when the source
       // card (state.usedCard) matches the target rule.
