@@ -161,6 +161,19 @@ export default function CompareTab({ currentRun }) {
   const filterCls = (v) =>
     `${styles.filter} ${v !== "all" ? styles.filterActive : ""}`;
 
+  const hasActiveFilters =
+    stageFilter !== "all" || seasonFilter !== "all" || idolFilter !== "all";
+
+  function clearFilters() {
+    setStageFilter("all");
+    setStageFilterTouched(true);
+    setSeasonFilter("all");
+    setIdolFilter("all");
+  }
+
+  const totalRuns = subTab === "saved" ? savedRuns.length : historyRuns.length;
+  const hiddenCount = totalRuns - visibleRuns.length;
+
   const showFifoNote = subTab === "history" && history.length > 0;
 
   return (
@@ -251,25 +264,51 @@ export default function CompareTab({ currentRun }) {
         <div className={styles.empty}>{t("loading")}</div>
       ) : visibleRuns.length === 0 ? (
         <div className={styles.empty}>
-          {subTab === "saved" ? t("emptySaved") : t("emptyHistory")}
+          {totalRuns > 0 ? (
+            <>
+              <div>
+                {t("allHiddenByFilters", { count: totalRuns })}
+              </div>
+              <button className={styles.clearFiltersLink} onClick={clearFilters}>
+                {t("clearFilters")}
+              </button>
+            </>
+          ) : subTab === "saved" ? (
+            t("emptySaved")
+          ) : (
+            t("emptyHistory")
+          )}
         </div>
       ) : (
-        visibleRuns.map((run) => (
-          <CompareRow
-            key={run.id}
-            run={run}
-            xMin={range.min}
-            xMax={range.max}
-            ticks={ticks}
-            showTime={subTab === "history"}
-            onLoad={loadRun}
-            onSave={subTab === "history" ? handleSave : undefined}
-            onRename={subTab === "saved" ? handleRename : undefined}
-            onDelete={
-              subTab === "saved" ? handleDeleteSaved : handleDeleteHistory
-            }
-          />
-        ))
+        <>
+          {visibleRuns.map((run) => (
+            <CompareRow
+              key={run.id}
+              run={run}
+              xMin={range.min}
+              xMax={range.max}
+              ticks={ticks}
+              showTime={subTab === "history"}
+              onLoad={loadRun}
+              onSave={subTab === "history" ? handleSave : undefined}
+              onRename={subTab === "saved" ? handleRename : undefined}
+              onDelete={
+                subTab === "saved" ? handleDeleteSaved : handleDeleteHistory
+              }
+            />
+          ))}
+          {hasActiveFilters && hiddenCount > 0 && (
+            <div className={styles.hiddenNote}>
+              {t("hiddenByFilters", { count: hiddenCount })}
+              <button
+                className={styles.clearFiltersLink}
+                onClick={clearFilters}
+              >
+                {t("clearFilters")}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
