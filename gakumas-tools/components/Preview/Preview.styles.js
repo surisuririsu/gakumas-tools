@@ -4,7 +4,7 @@ const styles = {
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    gap: "16px",
+    gap: "8px",
     padding: "16px",
     backgroundColor: "#f6f6f6",
   },
@@ -78,7 +78,23 @@ const styles = {
     border: "1px solid #49d8ff",
     boxShadow: "0 0 6px #00b1e2",
   },
-  cardCost: { display: "flex", height: "8px", color: "#444" },
+  cardCost: {
+    display: "flex",
+    alignItems: "center",
+    height: "22px",
+    marginTop: "4px",
+  },
+  costPill: {
+    display: "flex",
+    alignItems: "center",
+    padding: "2px 10px",
+    borderRadius: "10px",
+    backgroundColor: "#fff",
+    border: "1px solid #ddd",
+    color: "#333",
+    fontSize: "13px",
+    fontWeight: 600,
+  },
 };
 
 export default styles;

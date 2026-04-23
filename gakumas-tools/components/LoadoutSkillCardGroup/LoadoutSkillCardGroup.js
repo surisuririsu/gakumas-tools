@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import {
@@ -14,8 +15,12 @@ import {
 import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
-import MemoryImporterModal from "@/components/MemoryImporterModal";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
+
+const MemoryImporterModal = dynamic(
+  () => import("@/components/MemoryImporterModal"),
+  { ssr: false }
+);
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";

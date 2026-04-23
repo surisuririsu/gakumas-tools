@@ -1,23 +1,20 @@
 import { Customizations } from "gakumas-data";
 import gkImg from "gakumas-images";
 import { countCustomizations } from "@/utils/customizations";
+import { iconSrc } from "./iconSrc";
 import styles from "./Preview.styles";
 
 export default function PreviewSkillCard({
   card,
   customizations,
   idolId,
-  baseUrl,
+  imageMap,
 }) {
+  const icon = card && gkImg(card, idolId || 6).icon;
+  const src = iconSrc(icon, imageMap);
   return (
     <div style={styles.card}>
-      {card && (
-        <img
-          src={`${baseUrl}${gkImg(card, idolId || 6)._icon.src}`}
-          width={68}
-          height={68}
-        />
-      )}
+      {src && <img src={src} width={68} height={68} />}
       {!!countCustomizations(customizations) && (
         <div style={styles.customizations}>
           {Object.keys(customizations)

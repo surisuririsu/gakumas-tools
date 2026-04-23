@@ -6,8 +6,8 @@ export default function PreviewSkillCardGroup({
   cards,
   customizationGroup,
   idolId,
-  baseUrl,
   isEmpty,
+  imageMap,
 }) {
   return (
     <div style={styles.cardGroup}>
@@ -21,22 +21,24 @@ export default function PreviewSkillCardGroup({
               card={card}
               customizations={customizationGroup?.[index]}
               idolId={idolId}
-              baseUrl={baseUrl}
+              imageMap={imageMap}
             />
           ))}
       </div>
       {!isEmpty && (
         <div style={styles.cardCost}>
-          Cost:{" "}
-          {cards
-            .slice(0, 6)
-            .filter((id) => id)
-            .map(SkillCards.getById)
-            .reduce(
-              (acc, cur) =>
-                acc + (cur.sourceType == "pIdol" ? 0 : cur.contestPower),
-              0
-            )}
+          <span style={styles.costPill}>
+            Cost:{" "}
+            {cards
+              .slice(0, 6)
+              .filter((id) => id)
+              .map(SkillCards.getById)
+              .reduce(
+                (acc, cur) =>
+                  acc + (cur.sourceType == "pIdol" ? 0 : cur.contestPower),
+                0
+              )}
+          </span>
         </div>
       )}
     </div>

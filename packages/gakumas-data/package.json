@@ -2,6 +2,7 @@
   "name": "gakumas-data",
   "version": "0.1.0",
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "generate": "python -m scripts.csv_to_json"
   }

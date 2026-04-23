@@ -1,13 +1,18 @@
 import { memo, useContext } from "react";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { FaPen } from "react-icons/fa6";
 import Button from "@/components/Button";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
-import MemoryImporterModal from "@/components/MemoryImporterModal";
 import DataContext from "@/contexts/DataContext";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Memories.module.scss";
+
+const MemoryImporterModal = dynamic(
+  () => import("@/components/MemoryImporterModal"),
+  { ssr: false }
+);
 
 function MemoriesNudge() {
   const t = useTranslations("MemoriesNudge");

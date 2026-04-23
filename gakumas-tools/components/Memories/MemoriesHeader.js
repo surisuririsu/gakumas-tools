@@ -1,4 +1,5 @@
 import { memo, useContext, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import {
@@ -12,7 +13,6 @@ import {
 import Button from "@/components/Button";
 import IconButton from "@/components/IconButton";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
-import MemoryImporterModal from "@/components/MemoryImporterModal";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import DataContext from "@/contexts/DataContext";
@@ -20,6 +20,11 @@ import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import SearchContext from "@/contexts/SearchContext";
 import styles from "./Memories.module.scss";
+
+const MemoryImporterModal = dynamic(
+  () => import("@/components/MemoryImporterModal"),
+  { ssr: false }
+);
 
 function MemoriesHeader({
   numMemories,
