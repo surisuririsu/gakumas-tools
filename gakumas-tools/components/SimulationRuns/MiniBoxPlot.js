@@ -1,21 +1,41 @@
 import { memo, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import styles from "./SimulationRuns.module.scss";
 
 function MiniBoxPlot({ stats, xMin, xMax, highlight, ticks }) {
   const t = useTranslations("BoxPlot");
   const [tipOpen, setTipOpen] = useState(false);
+  const [tipPos, setTipPos] = useState(null);
   const ref = useRef(null);
+
+  function openTip() {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    setTipPos({ x: r.left + r.width / 2, y: r.top });
+    setTipOpen(true);
+  }
+
+  function closeTip() {
+    setTipOpen(false);
+  }
 
   useEffect(() => {
     if (!tipOpen) return;
-    function handle(e) {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setTipOpen(false);
-      }
+    function handleOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) closeTip();
     }
-    document.addEventListener("pointerdown", handle);
-    return () => document.removeEventListener("pointerdown", handle);
+    function handleScrollOrResize() {
+      closeTip();
+    }
+    document.addEventListener("pointerdown", handleOutside);
+    window.addEventListener("scroll", handleScrollOrResize, true);
+    window.addEventListener("resize", handleScrollOrResize);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutside);
+      window.removeEventListener("scroll", handleScrollOrResize, true);
+      window.removeEventListener("resize", handleScrollOrResize);
+    };
   }, [tipOpen]);
 
   if (!stats || xMax <= xMin) {
@@ -34,17 +54,60 @@ function MiniBoxPlot({ stats, xMin, xMax, highlight, ticks }) {
 
   const fmt = (v) => Math.round(v).toLocaleString();
 
+  const tooltip =
+    tipOpen && tipPos && typeof document !== "undefined" ? (
+      createPortal(
+        <div
+          className={styles.tooltip}
+          role="tooltip"
+          style={{
+            position: "fixed",
+            left: tipPos.x,
+            top: tipPos.y,
+            bottom: "auto",
+            transform: "translate(-50%, calc(-100% - 6px))",
+          }}
+        >
+          <div>
+            <span className={styles.tipLabel}>{t("max")}</span>
+            <span>{fmt(stats.max)}</span>
+          </div>
+          <div>
+            <span className={styles.tipLabel}>{t("q3")}</span>
+            <span>{fmt(stats.q3)}</span>
+          </div>
+          <div>
+            <span className={styles.tipLabel}>{t("mean")}</span>
+            <span>{fmt(stats.mean)}</span>
+          </div>
+          <div>
+            <span className={styles.tipLabel}>{t("median")}</span>
+            <span>{fmt(stats.median)}</span>
+          </div>
+          <div>
+            <span className={styles.tipLabel}>{t("q1")}</span>
+            <span>{fmt(stats.q1)}</span>
+          </div>
+          <div>
+            <span className={styles.tipLabel}>{t("min")}</span>
+            <span>{fmt(stats.min)}</span>
+          </div>
+        </div>,
+        document.body,
+      )
+    ) : null;
+
   return (
     <div
       ref={ref}
       className={`${styles.boxPlotWrap} ${highlight ? styles.boxPlotCurrent : ""}`}
       onPointerEnter={(e) => {
-        if (e.pointerType === "mouse") setTipOpen(true);
+        if (e.pointerType === "mouse") openTip();
       }}
       onPointerLeave={(e) => {
-        if (e.pointerType === "mouse") setTipOpen(false);
+        if (e.pointerType === "mouse") closeTip();
       }}
-      onClick={() => setTipOpen((v) => !v)}
+      onClick={() => (tipOpen ? closeTip() : openTip())}
     >
       <svg
         className={styles.boxPlot}
@@ -113,34 +176,7 @@ function MiniBoxPlot({ stats, xMin, xMax, highlight, ticks }) {
         style={{ left: `${meanX}%` }}
         aria-hidden
       />
-      {tipOpen && (
-        <div className={styles.tooltip} role="tooltip">
-          <div>
-            <span className={styles.tipLabel}>{t("max")}</span>
-            <span>{fmt(stats.max)}</span>
-          </div>
-          <div>
-            <span className={styles.tipLabel}>{t("q3")}</span>
-            <span>{fmt(stats.q3)}</span>
-          </div>
-          <div>
-            <span className={styles.tipLabel}>{t("mean")}</span>
-            <span>{fmt(stats.mean)}</span>
-          </div>
-          <div>
-            <span className={styles.tipLabel}>{t("median")}</span>
-            <span>{fmt(stats.median)}</span>
-          </div>
-          <div>
-            <span className={styles.tipLabel}>{t("q1")}</span>
-            <span>{fmt(stats.q1)}</span>
-          </div>
-          <div>
-            <span className={styles.tipLabel}>{t("min")}</span>
-            <span>{fmt(stats.min)}</span>
-          </div>
-        </div>
-      )}
+      {tooltip}
     </div>
   );
 }

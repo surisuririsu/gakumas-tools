@@ -10,33 +10,33 @@
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
-    "@next/third-parties": "^16.1.7",
+    "@next/third-parties": "^16.2.4",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
     "gakumas-data": "workspace:*",
     "gakumas-engine": "workspace:*",
     "gakumas-images": "workspace:*",
     "html2canvas": "^1.4.1",
-    "mongodb": "^7.1.0",
-    "next": "^16.1.7",
-    "next-auth": "^4.24.13",
-    "next-intl": "^4.8.3",
+    "mongodb": "^7.2.0",
+    "next": "^16.2.4",
+    "next-auth": "^4.24.14",
+    "next-intl": "^4.9.1",
     "onnxruntime-web": "^1.24.3",
     "re-resizable": "^6.11.2",
-    "react": "^19.2.4",
+    "react": "^19.2.5",
     "react-chartjs-2": "^5.3.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^19.2.4",
+    "react-dom": "^19.2.5",
     "react-icons": "^5.6.0",
-    "react-tooltip": "^5.30.0",
+    "react-tooltip": "^5.30.1",
     "react-window": "^2.2.7",
-    "sass": "^1.98.0",
+    "sass": "^1.99.0",
     "sharp": "^0.34.5",
-    "tesseract.js": "^6.0.1"
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
-    "eslint": "^10.0.3",
-    "eslint-config-next": "^16.1.7"
+    "eslint": "^10.2.1",
+    "eslint-config-next": "^16.2.4"
   }
 }
