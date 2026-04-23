@@ -1,23 +1,16 @@
 "use client";
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import ButtonGroup from "@/components/ButtonGroup";
+import DifficultyPicker from "@/components/DifficultyPicker";
 import Input from "@/components/Input";
 import ParametersInput from "@/components/ParametersInput";
 import { LESSONS_BY_DIFFICULTY } from "@/utils/lessons";
 import styles from "./LessonCalculator.module.scss";
 
+const DIFFICULTIES = ["regular", "pro", "master"];
+
 function LessonCalculator() {
   const t = useTranslations("LessonCalculator");
-
-  const DIFFICULTY_OPTIONS = useMemo(
-    () =>
-      ["regular", "pro", "master"].map((difficulty) => ({
-        value: difficulty,
-        label: t(`difficulties.${difficulty}`),
-      })),
-    [t]
-  );
 
   const [difficulty, setDifficulty] = useState("master");
   const [paramRates, setParamRates] = useState([null, null, null]);
@@ -32,8 +25,8 @@ function LessonCalculator() {
   return (
     <>
       <label>{t("difficulty")}</label>
-      <ButtonGroup
-        options={DIFFICULTY_OPTIONS}
+      <DifficultyPicker
+        difficulties={DIFFICULTIES}
         selected={difficulty}
         onChange={setDifficulty}
       />
