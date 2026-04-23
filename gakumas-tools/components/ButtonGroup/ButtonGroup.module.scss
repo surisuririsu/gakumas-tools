@@ -22,9 +22,10 @@
       color 0.15s;
 
     &.selected {
-      background: tokens.$gradient-brand;
-      color: colors.$white;
+      background-color: rgba(255, 118, 0, 0.12);
+      color: colors.$gk-red-orange;
       font-weight: 700;
+      box-shadow: inset 0 -2px 0 colors.$gk-red-orange;
     }
 
     &:not(.selected):hover {
