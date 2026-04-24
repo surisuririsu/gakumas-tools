@@ -1,8 +1,8 @@
 import { memo, useContext, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { FaChevronDown, FaChevronUp, FaFileImport } from "react-icons/fa6";
 import Button from "@/components/Button";
-import DraftPickImporterModal from "@/components/DraftPickImporterModal";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
 import Panel from "@/components/Panel";
@@ -16,6 +16,11 @@ import {
 } from "@/utils/skillCardLottery";
 import { PRODUCE_ONLY_FILTER } from "../skillCardFilters";
 import styles from "./DraftPick.module.scss";
+
+const DraftPickImporterModal = dynamic(
+  () => import("@/components/DraftPickImporterModal"),
+  { ssr: false }
+);
 
 const EMPTY_SLOTS = [0, 0, 0];
 const FILTERS = [PRODUCE_ONLY_FILTER];
