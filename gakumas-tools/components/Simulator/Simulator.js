@@ -41,12 +41,14 @@ import {
   WORKER_MESSAGE,
 } from "@/simulator/constants";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
+import usePersistedState from "@/utils/usePersistedState";
 import ManualPlay from "./ManualPlay";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
 
 const LINK_PHASES = ["OP", "MID", "ED"];
+const NUM_RUNS_KEY = "gakumas-tools.simulator.numRuns";
 
 export default function Simulator() {
   const t = useTranslations("Simulator");
@@ -66,7 +68,10 @@ export default function Simulator() {
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
-  const [numRuns, setNumRuns] = useState(DEFAULT_NUM_RUNS);
+  const [numRuns, setNumRuns] = usePersistedState(
+    NUM_RUNS_KEY,
+    DEFAULT_NUM_RUNS,
+  );
   const [enterPercents, setEnterPercents] = useState(false);
   const workersRef = useRef();
 
@@ -110,7 +115,10 @@ export default function Simulator() {
     if (navigator.hardwareConcurrency) {
       numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
     }
-    setNumRuns(Math.floor((numWorkers * 250) / 200) * 200);
+    // Seed a hardware-scaled default only when the user has no saved value.
+    if (localStorage.getItem(NUM_RUNS_KEY) == null) {
+      setNumRuns(Math.round(Math.min(numWorkers, MAX_WORKERS) / 2) * 1000);
+    }
 
     workersRef.current = [];
     for (let i = 0; i < numWorkers; i++) {
@@ -323,9 +331,9 @@ export default function Simulator() {
                 type="range"
                 value={numRuns}
                 onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
-                min={200}
-                max={4000}
-                step={200}
+                min={1000}
+                max={10000}
+                step={1000}
               />
             </div>
           )}

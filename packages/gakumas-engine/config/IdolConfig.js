@@ -1,9 +1,4 @@
-import {
-  Customizations,
-  PIdols,
-  PItems,
-  SkillCards,
-} from "gakumas-data";
+import { Customizations, PIdols, PItems, SkillCards } from "gakumas-data";
 import { getBaseId } from "../utils";
 
 export default class IdolConfig {
@@ -70,13 +65,13 @@ export default class IdolConfig {
 
   inferPIdolId(pItemIds, skillCardIds) {
     const signatureSkillCardId = skillCardIds.find(
-      (id) => SkillCards.getById(id)?.sourceType == "pIdol"
+      (id) => SkillCards.getById(id)?.sourceType == "pIdol",
     );
     if (signatureSkillCardId)
       return SkillCards.getById(signatureSkillCardId).pIdolId;
 
     const signaturePItemId = pItemIds.find(
-      (id) => PItems.getById(id)?.sourceType == "pIdol"
+      (id) => PItems.getById(id)?.sourceType == "pIdol",
     );
     if (signaturePItemId) return PItems.getById(signaturePItemId).pIdolId;
 
@@ -108,7 +103,7 @@ export default class IdolConfig {
         b.id +
         (b.customizations ? this.countCustomizations(b.customizations) : 0) -
         a.id -
-        (a.customizations ? this.countCustomizations(a.customizations) : 0)
+        (a.customizations ? this.countCustomizations(a.customizations) : 0),
     );
 
     let dedupedCards = [];
