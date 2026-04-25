@@ -9,11 +9,10 @@ export const OSHI_PROPS = {
   text: (
     <div>
       朗読劇『結びの言葉』チケット発売中！伊藤舞音さんは5/13と5/14の①②③に出演されます！
-      <IdolIcon idolId={6} />
     </div>
   ),
   initiallyExpanded: true,
-  url: "https://x.com/bigbridge_com/status/2044753238659158203",
+  url: "http://x.com/bigbridge_com/status/2048024840683368950",
 };
 
 export default function Oshi({

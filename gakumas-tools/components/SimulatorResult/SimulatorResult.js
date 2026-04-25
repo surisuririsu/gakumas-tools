@@ -1,6 +1,10 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCircleArrowUp, FaDownload, FaWandMagicSparkles } from "react-icons/fa6";
+import {
+  FaCircleArrowUp,
+  FaDownload,
+  FaWandMagicSparkles,
+} from "react-icons/fa6";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import CompareTab from "@/components/SimulationRuns";
@@ -27,7 +31,7 @@ function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
   // Default rendered during SSR / pre-hydration. Hydrated from localStorage
   // in the effect below so the initial markup matches between server and
   // client (avoids hydration mismatch warnings).
-  const [tab, setTabState] = useState("stats");
+  const [tab, setTabState] = useState("logs");
 
   useEffect(() => {
     try {
