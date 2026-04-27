@@ -290,37 +290,60 @@ export function accumulateCardUsage(logs, cardUsage) {
   if (!cardUsage.turns) cardUsage.turns = [];
 
   let turnIndex = -1;
-  let drawnThisTurn = null;
+  let drawCountThisTurn = null;
 
   for (const log of logs) {
     if (log.logType === "startTurn") {
       turnIndex++;
       if (!cardUsage.turns[turnIndex]) cardUsage.turns[turnIndex] = {};
-      drawnThisTurn = new Set();
+      drawCountThisTurn = new Map();
       continue;
     }
     if (log.logType !== "hand") continue;
-    if (turnIndex < 0 || !drawnThisTurn) continue;
+    if (turnIndex < 0 || !drawCountThisTurn) continue;
 
     const turnData = cardUsage.turns[turnIndex];
     const { handCards, selectedIndex } = log.data;
 
+    // Count occurrences of each (id, c) in the current hand. If this hand
+    // shows more copies of a key than any prior hand this turn, the extras
+    // are fresh draws. This way, a deck with two copies of the same card
+    // counts both as drawn — but a moveToHand re-presenting the same card
+    // doesn't double-count.
+    const handCounts = {};
     for (let i = 0; i < handCards.length; i++) {
       const { id, c } = handCards[i];
       const key = JSON.stringify({ id, c: c || null });
-      // Count a card as "drawn" once per turn even if it appears in
-      // multiple hand presentations (e.g., after a moveToHand).
-      if (!drawnThisTurn.has(key)) {
-        drawnThisTurn.add(key);
+      handCounts[key] = (handCounts[key] || 0) + 1;
+    }
+    for (const key in handCounts) {
+      const count = handCounts[key];
+      const prev = drawCountThisTurn.get(key) || 0;
+      if (count > prev) {
+        const sample = handCards.find(
+          (h) => JSON.stringify({ id: h.id, c: h.c || null }) === key,
+        );
         if (!turnData[key]) {
-          turnData[key] = { id, c: c || null, use: 0, draw: 1 };
+          turnData[key] = {
+            id: sample.id,
+            c: sample.c || null,
+            use: 0,
+            draw: count,
+          };
         } else {
-          turnData[key].draw++;
+          turnData[key].draw += count - prev;
         }
+        drawCountThisTurn.set(key, count);
       }
-      if (i === selectedIndex) {
-        turnData[key].use++;
+    }
+
+    if (selectedIndex != null && handCards[selectedIndex]) {
+      const { id, c } = handCards[selectedIndex];
+      const key = JSON.stringify({ id, c: c || null });
+      if (!turnData[key]) {
+        turnData[key] = { id, c: c || null, use: 0, draw: 0 };
       }
+      turnData[key].use++;
     }
 
     if (selectedIndex == null) {
