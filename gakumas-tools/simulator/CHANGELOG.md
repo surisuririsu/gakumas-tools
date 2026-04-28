@@ -7,6 +7,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-04-28
 
 - Add preview of S44
+- Add preview of VEIL Misuzu
 
 ## 2026-04-22
 
