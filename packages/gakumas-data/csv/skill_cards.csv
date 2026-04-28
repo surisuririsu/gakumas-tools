@@ -801,3 +801,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 800,あたしがいるよ+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,136,FALSE,,cost-=5,genki+=2; motivation+=3; at:startOfTurn { if:genki==0 { genki+=consumedGenki*0.8 }; limit:3 },1,
 801,頭上に注意！,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,if:turnsElapsed>=2,cost-=4,"motivation+=3; setMotivationBuff(0.5,3); costReduction+=1",1,
 802,頭上に注意！+,"21,39",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,if:turnsElapsed>=2,cost-=1,"motivation+=3; setMotivationBuff(0.5,3); costReduction+=1",1,
+803,t,,SSR,active,sense,1,FALSE,TRUE,pIdol,137,FALSE,,,,1,
+804,t+,,SSR,active,sense,1,TRUE,TRUE,pIdol,137,FALSE,,,,1,

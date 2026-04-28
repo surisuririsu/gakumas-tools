@@ -3,6 +3,11 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+
+## 2026-04-28
+
+- Add preview of S44
+
 ## 2026-04-22
 
 - Improve simulator performance by 3x

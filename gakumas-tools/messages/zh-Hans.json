@@ -277,7 +277,8 @@
   "SimulatorButtons": {
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
-    "share": "分享"
+    "share": "分享",
+    "openLoadouts": "编组"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "从截图导入编组",
