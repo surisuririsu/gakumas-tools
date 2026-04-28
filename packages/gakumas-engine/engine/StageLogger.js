@@ -18,6 +18,7 @@ const LOGGED_BUFFS_FIELDS = [
   S.goodConditionTurnsBuffs,
   S.concentrationBuffs,
   S.enthusiasmBuffs,
+  S.enthusiasmBonusBuffs,
   S.fullPowerChargeBuffs,
 ];
 

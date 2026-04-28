@@ -518,3 +518,4 @@
 {"id":"sweep-c11n-88","query":"stage=1&support_bonus=0.04&params=1500-1500-1000-40&items=5-6-11&cards=521-1-2-3-4-9_10-11-12-13-14-19&customizations=e88x1-----_-----","score":4606,"note":"sweep: customization 88 via card 521"}
 {"id":"sweep-c11n-94","query":"stage=1&support_bonus=0.04&params=1500-1500-1000-40&items=3-4-7&cards=219-1-2-3-4-5_6-7-8-13-14-15&customizations=e94x1-----_-----","score":5533,"note":"sweep: customization 94 via card 219"}
 {"id":"sweep-c11n-104","query":"stage=1&support_bonus=0.04&params=1500-1500-1000-40&items=3-4-7&cards=776-1-2-3-4-5_6-7-8-13-14-15&customizations=e104x1-----_-----","score":4820,"note":"sweep: customization 104 via card 776"}
+{"id":"reg-20260428-1","query":"stage=156&support_bonus=0.04&params=700-2500-1500-52&items=420-79-71-0&cards=804-770-0-421-519-160_804-455-383-421-441-439&customizations=-103x1----_-82x1-65x3---","score":50615,"note":"distinct pre-stage effect counters"}

@@ -285,7 +285,10 @@ export function resolveStamina(state, stamina) {
 }
 
 export function resolveEnthusiasm(state, enthusiasm) {
-  enthusiasm += state[S.enthusiasmBonus];
+  enthusiasm += state[S.enthusiasmBonusBuffs].reduce(
+    (acc, cur) => acc + cur.amount,
+    0,
+  );
   enthusiasm *= state[S.enthusiasmBuffs].reduce(
     (acc, cur) => acc + cur.amount,
     1,

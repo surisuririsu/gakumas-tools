@@ -1,7 +1,4 @@
-import {
-  PItems,
-  SkillCards,
-} from "gakumas-data";
+import { PItems, SkillCards } from "gakumas-data";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
@@ -15,6 +12,12 @@ export default class EffectManager extends EngineComponent {
     state[S.effectCounters] = {};
     state[S.currentEffectInstanceId] = null;
 
+    // Each entity (default-effects bundle, stage, each p-item, each card's
+    // effects column) gets its own effectInstanceId so that `effectCounter`
+    // patterns are scoped per-entity. Without bumping between entities,
+    // they all share id=0 and any two entities with `effectCounter+=1` on
+    // the same phase collide on each trigger.
+
     // Set default effects
     this.logger.debug("Setting default effects", DEFAULT_EFFECTS);
     this.setEffects(state, DEFAULT_EFFECTS);
@@ -25,6 +28,7 @@ export default class EffectManager extends EngineComponent {
       type: "stage",
       primary: true,
     });
+    state[S.effectInstanceId]++;
 
     // Set p-item effects
     let configs = [config];
@@ -42,6 +46,7 @@ export default class EffectManager extends EngineComponent {
           id: pItemIds[i],
           primary: true,
         });
+        state[S.effectInstanceId]++;
       }
     }
 
@@ -63,6 +68,7 @@ export default class EffectManager extends EngineComponent {
           idx: i,
           primary: true,
         });
+        state[S.effectInstanceId]++;
       }
     }
   }
@@ -88,7 +94,7 @@ export default class EffectManager extends EngineComponent {
 
   clearPrestageEffects(state) {
     state[S.effects] = state[S.effects].filter(
-      (effect) => effect.phase != "prestage"
+      (effect) => effect.phase != "prestage",
     );
   }
 
@@ -107,7 +113,10 @@ export default class EffectManager extends EngineComponent {
     const effectList = state[S.effects];
     let anyMatch = false;
     for (let i = 0; i < effectList.length; i++) {
-      if (effectList[i].phase === phase) { anyMatch = true; break; }
+      if (effectList[i].phase === phase) {
+        anyMatch = true;
+        break;
+      }
     }
     if (!anyMatch) return;
 
@@ -184,7 +193,9 @@ export default class EffectManager extends EngineComponent {
     if (state[S.effectCounters]) {
       conditionState[S.effectCounters] = {};
       for (let id in state[S.effectCounters]) {
-        conditionState[S.effectCounters][id] = { ...state[S.effectCounters][id] };
+        conditionState[S.effectCounters][id] = {
+          ...state[S.effectCounters][id],
+        };
       }
     }
 
@@ -213,7 +224,7 @@ export default class EffectManager extends EngineComponent {
                 id: state[S.cardMap][card].id,
                 idx: card,
               }
-            : null
+            : null,
         );
         this.logger.log(state, "setEffect");
         continue;
@@ -281,7 +292,7 @@ export default class EffectManager extends EngineComponent {
           const targetRuleCards = this.engine.cardManager.getTargetRuleCards(
             state,
             effect.targets[j],
-            effect.source
+            effect.source,
           );
           for (let card of targetRuleCards) {
             growthCards.add(card);
@@ -305,9 +316,12 @@ export default class EffectManager extends EngineComponent {
         // annotates each effect with an explicit group in the CSV; our
         // structured DSL puts group on the outer block, so we propagate
         // it here for grouping parity.
-        const toSet = effect.group != null
-          ? effect.effects.map((e) => (e.group != null ? e : { ...e, group: effect.group }))
-          : effect.effects;
+        const toSet =
+          effect.group != null
+            ? effect.effects.map((e) =>
+                e.group != null ? e : { ...e, group: effect.group },
+              )
+            : effect.effects;
         // Sub-effects inherit the entity source (so their score still folds
         // under the registering p-item/card) but not the `primary` marker —
         // these are registered at runtime and shouldn't count as fresh

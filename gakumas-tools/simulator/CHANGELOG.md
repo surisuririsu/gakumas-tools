@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 
 - Add preview of S44
 - Add preview of VEIL Misuzu
+- Add preview of supports and fix effectCounter
 
 ## 2026-04-22
 

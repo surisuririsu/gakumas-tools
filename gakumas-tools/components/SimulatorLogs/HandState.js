@@ -13,8 +13,11 @@ const BUFFS_MAP = {
   [S.goodConditionTurnsBuffs]: "goodConditionTurnsBuff",
   [S.concentrationBuffs]: "concentrationBuff",
   [S.enthusiasmBuffs]: "enthusiasmBuff",
+  [S.enthusiasmBonusBuffs]: "enthusiasmBonus",
   [S.fullPowerChargeBuffs]: "fullPowerChargeBuff",
 };
+
+const FLAT_BUFFS = { [S.enthusiasmBonusBuffs]: true };
 
 function HandStateLine({ k, state }) {
   const t = useTranslations("stage");
@@ -22,10 +25,13 @@ function HandStateLine({ k, state }) {
   const buffKey = BUFFS_MAP[k];
 
   if (buffKey) {
+    const flat = FLAT_BUFFS[k];
     return state[k].map(({ amount, turns }) => (
       <div key={turns}>
         {t(buffKey)}{" "}
-        <span className={styles.blue}>{Math.round(amount * 100)}%</span>{" "}
+        <span className={styles.blue}>
+          {flat ? amount : `${Math.round(amount * 100)}%`}
+        </span>{" "}
         {turns ? `(${t("numTurns", { num: turns })})` : ""}
       </div>
     ));

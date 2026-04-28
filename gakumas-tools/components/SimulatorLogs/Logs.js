@@ -21,8 +21,11 @@ const BUFF_LOG_TYPES = {
   setConcentrationBuff: "concentrationBuff",
   setConcentrationEffectBuff: "concentrationEffectBuff",
   setEnthusiasmBuff: "enthusiasmBuff",
+  setEnthusiasmBonus: "enthusiasmBonus",
   setFullPowerChargeBuff: "fullPowerChargeBuff",
 };
+
+const FLAT_BUFF_LOG_TYPES = new Set(["setEnthusiasmBonus"]);
 
 const TILE_LOG_TYPES = {
   setEffect: "setEffect",
@@ -89,7 +92,13 @@ function Log({ line, idolId, pendingDecision, onDecision }) {
   }
 
   if (BUFF_LOG_TYPES[line.logType]) {
-    return <SetBuff label={t(BUFF_LOG_TYPES[line.logType])} {...line.data} />;
+    return (
+      <SetBuff
+        label={t(BUFF_LOG_TYPES[line.logType])}
+        flat={FLAT_BUFF_LOG_TYPES.has(line.logType)}
+        {...line.data}
+      />
+    );
   }
 
   if (TILE_LOG_TYPES[line.logType]) {
