@@ -4,6 +4,11 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+## 2026-04-29
+
+- Update VEIL Misuzu gacha
+
 ## 2026-04-28
 
 - Add preview of S44
