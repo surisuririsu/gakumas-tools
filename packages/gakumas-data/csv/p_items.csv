@@ -417,6 +417,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 416,夢を創るステッキ,SSR,FALSE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.1; genki=0; at:turn { drawCard; limit:1 } }; limit:3 }
 417,夢を創るステッキ+,SSR,TRUE,logic,stage,pIdol,136,FALSE,at:endOfTurn { if:turnsElapsed%3==2 { score+=genki*1.3; genki=0; at:turn { drawCard(2); limit:1 } }; limit:3 }
 418,もぐもぐ定食,SR,FALSE,logic,produce,support,,FALSE,
-419,夜空に従える花,SSR,FALSE,anomaly,stage,pIdol,137,FALSE,"at:afterCardUsed { if:prevStance!=none & cardHasEffect(strength) { effectCounter+=1 } }; at:afterCardUsed { if:prevStance!=none & cardHasEffect(strength) & effectCounter%3==2 { setStance(leisure); setEnthusiasmBuff(0.4,1); genki+=3 }; limit:5 }"
+419,夜空に従える花,SSR,FALSE,anomaly,stage,pIdol,137,FALSE,"at:afterCardUsed { if:prevStance!=none & cardHasEffect(strength) { effectCounter+=1; if:effectCounter%3==2 { setStance(leisure); setEnthusiasmBuff(0.4,1); genki+=3; limit:5 } } }"
 420,夜空に従える花+,SSR,TRUE,anomaly,stage,pIdol,137,FALSE,"at:afterCardUsed { if:prevStance!=none & cardHasEffect(strength) { effectCounter+=1; if:effectCounter%3==2 { setStance(leisure); setEnthusiasmBuff(0.4,1); genki+=3 } } }"
 421,のんびりアフタヌーン,SR,FALSE,anomaly,stage,support,,FALSE,at:fullPowerChargeIncreased { if:isVisualTurn & isDirectEffect & isFullPower { fullPowerCharge+=6 }; limit:1 }
