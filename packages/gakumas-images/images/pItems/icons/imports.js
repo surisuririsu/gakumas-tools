@@ -416,6 +416,7 @@ import image_415 from "./415.png";
 import image_416 from "./416.png";
 import image_417 from "./417.png";
 import image_418 from "./418.png";
+import image_419 from "./419.png";
 import image_420 from "./420.png";
 import image_421 from "./421.png";
 
@@ -838,6 +839,7 @@ const IMAGES = {
   '416': image_416,
   '417': image_417,
   '418': image_418,
+  '419': image_419,
   '420': image_420,
   '421': image_421,
 };

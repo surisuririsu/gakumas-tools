@@ -799,8 +799,10 @@ import image_799 from "./799.png";
 import image_800 from "./800.png";
 import image_801 from "./801.png";
 import image_802 from "./802.png";
+import image_803 from "./803.png";
 import image_804 from "./804.png";
 import image_805 from "./805.png";
+import image_806 from "./806.png";
 
 const IMAGES = {
   '1': image_1,
@@ -1604,8 +1606,10 @@ const IMAGES = {
   '800': image_800,
   '801': image_801,
   '802': image_802,
+  '803': image_803,
   '804': image_804,
   '805': image_805,
+  '806': image_806,
 };
 
 export default IMAGES;
