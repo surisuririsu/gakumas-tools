@@ -365,10 +365,8 @@ export default function Simulator() {
           )}
         </div>
 
-        <SimulatorButtons />
-
         <div className={styles.subLinks} data-export-hide="true">
-          <KofiAd />
+          <SimulatorButtons />
           <a
             href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"

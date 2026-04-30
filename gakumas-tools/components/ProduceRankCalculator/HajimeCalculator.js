@@ -48,12 +48,12 @@ function HajimeCalculator() {
     params,
     maxParams,
     midtermScore,
-    difficulty
+    difficulty,
   );
 
   const targetScoreRows = calculateTargetScores(
     ratingExExamScore,
-    difficulty
+    difficulty,
   ).map(({ rank, score }) => [
     `${rank} (${TARGET_RATING_BY_RANK[rank].toLocaleString()})`,
     score.toLocaleString(),
@@ -61,7 +61,7 @@ function HajimeCalculator() {
   const actualRating = calculateActualRating(
     actualScore,
     ratingExExamScore,
-    difficulty
+    difficulty,
   );
   const actualRank = getRank(actualRating);
 
@@ -108,9 +108,6 @@ function HajimeCalculator() {
         onChange={setParams}
       />
 
-      <label>{t("targetScores")}</label>
-      <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
-
       <label>{t("score")}</label>
       <Input
         type="number"
@@ -121,11 +118,12 @@ function HajimeCalculator() {
         max={10000000}
       />
 
-      {!!actualScore && (
-        <Panel label={t("produceRank")} className={styles.resultPanel}>
-          <ProduceRankResult rating={actualRating} rank={actualRank} />
-        </Panel>
-      )}
+      <Panel label={t("produceRank")} className={styles.resultPanel}>
+        <ProduceRankResult rating={actualRating} rank={actualRank} />
+
+        <label>{t("targetScores")}</label>
+        <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
+      </Panel>
     </>
   );
 }
