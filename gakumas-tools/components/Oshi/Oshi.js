@@ -5,15 +5,7 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = {
-  text: (
-    <div>
-      朗読劇『結びの言葉』チケット発売中！伊藤舞音さんは5/13と5/14の①②③に出演されます！
-    </div>
-  ),
-  initiallyExpanded: true,
-  url: "http://x.com/bigbridge_com/status/2048024840683368950",
-};
+export const OSHI_PROPS = null;
 
 export default function Oshi({
   text,
