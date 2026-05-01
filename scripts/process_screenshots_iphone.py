@@ -9,7 +9,9 @@ for filename in os.listdir("screenshots/p_idols"):
         image = im.crop((40, 59, 40 + 128, 59 + 170)).resize((96, 128))
 
         # Save the cropped image
-        image.save(os.path.join("packages/gakumas-images/images/pIdols", filename.lower()))
+        image.save(
+            os.path.join("packages/gakumas-images/images/pIdols", filename.lower())
+        )
         os.remove(os.path.join("screenshots/p_idols", filename.lower()))
 
 for filename in os.listdir("screenshots/p_items"):
@@ -21,9 +23,15 @@ for filename in os.listdir("screenshots/p_items"):
         description = im.crop((33, 383, 33 + 1140, 383 + 491)).resize((348, 150))
 
         # Save the cropped images
-        icon.save(os.path.join("packages/gakumas-images/images/pItems/icons", filename.lower()))
+        icon.save(
+            os.path.join(
+                "packages/gakumas-images/images/pItems/icons", filename.lower()
+            )
+        )
         description.save(
-            os.path.join("packages/gakumas-images/images/pItems/details", filename.lower())
+            os.path.join(
+                "packages/gakumas-images/images/pItems/details", filename.lower()
+            )
         )
         os.remove(os.path.join("screenshots/p_items", filename))
 
@@ -37,10 +45,14 @@ for filename in os.listdir("screenshots/skill_cards"):
 
         # Save the cropped images
         icon.save(
-            os.path.join("packages/gakumas-images/images/skillCards/icons", filename.lower())
+            os.path.join(
+                "packages/gakumas-images/images/skillCards/icons", filename.lower()
+            )
         )
         description.save(
-            os.path.join("packages/gakumas-images/images/skillCards/details", filename.lower())
+            os.path.join(
+                "packages/gakumas-images/images/skillCards/details", filename.lower()
+            )
         )
         os.remove(os.path.join("screenshots/skill_cards", filename))
 
@@ -54,9 +66,13 @@ for filename in os.listdir("screenshots/p_drinks"):
 
         # Save the cropped images
         icon.save(
-            os.path.join("packages/gakumas-images/images/pDrinks/icons", filename.lower())
+            os.path.join(
+                "packages/gakumas-images/images/pDrinks/icons", filename.lower()
+            )
         )
         description.save(
-            os.path.join("packages/gakumas-images/images/pDrinks/details", filename.lower())
+            os.path.join(
+                "packages/gakumas-images/images/pDrinks/details", filename.lower()
+            )
         )
         os.remove(os.path.join("screenshots/p_drinks", filename))
