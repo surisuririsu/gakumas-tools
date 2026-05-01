@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
 import Image from "@/components/Image";
-import { formatStageName } from "@/utils/stages";
+import { formatStageName, isLatestSeason } from "@/utils/stages";
 import styles from "./StageSelect.module.scss";
 
 function StageSummary({ stage }) {
@@ -11,7 +11,16 @@ function StageSummary({ stage }) {
   return (
     <>
       <div className={styles.namePlan}>
-        {formatStageName(stage, t)}
+        <span className={styles.nameWithIndicator}>
+          {isLatestSeason(stage) && (
+            <span
+              className={styles.activeDot}
+              title={t("activeSeason")}
+              aria-label={t("activeSeason")}
+            />
+          )}
+          {formatStageName(stage, t)}
+        </span>
         <Image src={`/plans/${stage.plan}.png`} width={20} height={20} alt="" />
       </div>
       {criteria.every((c) => c) && (

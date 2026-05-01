@@ -1,4 +1,11 @@
+import { Stages } from "gakumas-data";
 import { FaLink } from "react-icons/fa6";
+
+const latestSeason = Math.max(...Stages.getAll().map((s) => s.season));
+
+export function isLatestSeason(stage) {
+  return stage.season === latestSeason;
+}
 
 export function formatStageName(stage, t) {
   let stageName = "";

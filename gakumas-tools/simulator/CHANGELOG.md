@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-05-01
+
+- Add indicator for latest season, add some idol-specific card icons
+
 ## 2026-04-29
 
 - Update VEIL Misuzu gacha

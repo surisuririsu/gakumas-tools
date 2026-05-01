@@ -42,6 +42,20 @@ button.stageSelect {
   padding: 0 4px;
 }
 
+.nameWithIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: colors.$custom-green;
+  flex-shrink: 0;
+}
+
 .status {
   min-height: 3px;
   display: flex;
