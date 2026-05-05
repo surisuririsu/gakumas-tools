@@ -293,21 +293,6 @@
   }
 }
 
-.tileAttributes {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  align-items: flex-start;
-
-  img {
-    object-fit: contain;
-    object-position: left;
-  }
-}
-
 .checkBadge {
   position: absolute;
   top: 2px;
@@ -329,6 +314,7 @@
   gap: 1px;
   height: 38px;
   padding: 2px;
+  align-self: flex-start;
 }
 
 .tileIdolName {

@@ -8,16 +8,15 @@ import Image from "@/components/Image";
 import IconSelect from "@/components/IconSelect";
 import { SITE_URL, localePath } from "@/utils/localeUrls";
 import { PLANS } from "@/utils/plans";
+import { comparePIdols } from "@/utils/sort";
 import usePersistedState from "@/utils/usePersistedState";
 import BreakdownGroup from "./BreakdownGroup";
 import PIdolTile from "./PIdolTile";
 import RaritySelect from "./RaritySelect";
+import { pct } from "./utils";
 import styles from "./PIdolCollection.module.scss";
 
 const RARITIES = ["R", "SR", "SSR"];
-
-const RARITY_ORDER = { SSR: 0, SR: 1, R: 2 };
-const PLAN_ORDER = { sense: 0, logic: 1, anomaly: 2 };
 
 // Excluded idol IDs — these p-idols can't actually be obtained.
 // 14 = 根緒 亜紗里 (April Fools idol)
@@ -25,19 +24,10 @@ const EXCLUDED_IDOL_IDS = new Set([14]);
 
 const ALL_P_IDOLS = PIdols.getAll()
   .filter((p) => !EXCLUDED_IDOL_IDS.has(p.idolId))
-  .sort((a, b) => {
-    const r = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
-    if (r !== 0) return r;
-    const p = PLAN_ORDER[a.plan] - PLAN_ORDER[b.plan];
-    if (p !== 0) return p;
-    return a.idolId - b.idolId;
-  });
+  .sort(comparePIdols);
 
-const SIGNATURE_CARD_BY_PIDOL = ALL_P_IDOLS.reduce((acc, pIdol) => {
-  const card = SkillCards.getFiltered({ pIdolIds: [pIdol.id] }).find(
-    (sc) => !sc.upgraded,
-  );
-  acc[pIdol.id] = card || null;
+const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
+  if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
   return acc;
 }, {});
 
@@ -57,10 +47,41 @@ const idolOptions = ALL_IDOLS.map((idol) => ({
   alt: idol.name,
 }));
 
-function pct(num, denom) {
-  if (!denom) return "0.0";
-  return ((num / denom) * 100).toFixed(1);
-}
+const BREAKDOWNS = [
+  {
+    filterKey: "rarity",
+    statsKey: "byRarity",
+    labelKey: "byRarity",
+    iconFor: (row) => ({
+      src: `/rarities/${row.value}.png`,
+      width: 54,
+      height: 18,
+      alt: row.value,
+    }),
+  },
+  {
+    filterKey: "plan",
+    statsKey: "byPlan",
+    labelKey: "byPlan",
+    iconFor: (row) => ({
+      src: `/plans/${row.value}.png`,
+      width: 18,
+      height: 18,
+      alt: row.value,
+    }),
+  },
+  {
+    filterKey: "idolId",
+    statsKey: "byIdol",
+    labelKey: "byIdol",
+    iconFor: (row) => ({
+      src: gkImg(row.idol).icon,
+      width: 18,
+      height: 18,
+      alt: row.idol.name,
+    }),
+  },
+];
 
 function buildShareScopeKey(filters) {
   const parts = [];
@@ -146,9 +167,6 @@ function PIdolCollection() {
 
   const overallPct = pct(stats.have, stats.total);
 
-  const allCollectedInFilter = stats.total > 0 && stats.have === stats.total;
-  const noneCollectedInFilter = stats.have === 0;
-
   const selectAllInFilter = useCallback(() => {
     setCollected((prev) => {
       const next = { ...prev };
@@ -232,14 +250,14 @@ function PIdolCollection() {
             <button
               type="button"
               onClick={selectAllInFilter}
-              disabled={allCollectedInFilter}
+              disabled={stats.total > 0 && stats.have === stats.total}
             >
               {t("markAll")}
             </button>
             <button
               type="button"
               onClick={clearAllInFilter}
-              disabled={noneCollectedInFilter}
+              disabled={stats.have === 0}
             >
               {t("clearAll")}
             </button>
@@ -255,69 +273,27 @@ function PIdolCollection() {
         </div>
 
         <div className={styles.breakdowns}>
-          <BreakdownGroup
-            label={t("byRarity")}
-            rows={stats.byRarity.map((row) => ({
-              key: row.value,
-              icon: (
-                <Image
-                  src={`/rarities/${row.value}.png`}
-                  width={54}
-                  height={18}
-                  alt={row.value}
-                />
-              ),
-              have: row.have,
-              total: row.total,
-              active: filters.rarity === row.value,
-              onClick: () =>
-                setFilter(
-                  "rarity",
-                  filters.rarity === row.value ? null : row.value,
-                ),
-            }))}
-          />
-          <BreakdownGroup
-            label={t("byPlan")}
-            rows={stats.byPlan.map((row) => ({
-              key: row.value,
-              icon: (
-                <Image
-                  src={`/plans/${row.value}.png`}
-                  width={18}
-                  height={18}
-                  alt={row.value}
-                />
-              ),
-              have: row.have,
-              total: row.total,
-              active: filters.plan === row.value,
-              onClick: () =>
-                setFilter("plan", filters.plan === row.value ? null : row.value),
-            }))}
-          />
-          <BreakdownGroup
-            label={t("byIdol")}
-            rows={stats.byIdol.map((row) => ({
-              key: row.value,
-              icon: (
-                <Image
-                  src={gkImg(row.idol).icon}
-                  width={18}
-                  height={18}
-                  alt={row.idol.name}
-                />
-              ),
-              have: row.have,
-              total: row.total,
-              active: filters.idolId === row.value,
-              onClick: () =>
-                setFilter(
-                  "idolId",
-                  filters.idolId === row.value ? null : row.value,
-                ),
-            }))}
-          />
+          {BREAKDOWNS.map(({ filterKey, statsKey, labelKey, iconFor }) => (
+            <BreakdownGroup
+              key={filterKey}
+              label={t(labelKey)}
+              rows={stats[statsKey].map((row) => {
+                const { src, width, height, alt } = iconFor(row);
+                const active = filters[filterKey] === row.value;
+                return {
+                  key: row.value,
+                  icon: (
+                    <Image src={src} width={width} height={height} alt={alt} />
+                  ),
+                  have: row.have,
+                  total: row.total,
+                  active,
+                  onClick: () =>
+                    setFilter(filterKey, active ? null : row.value),
+                };
+              })}
+            />
+          ))}
         </div>
       </div>
 

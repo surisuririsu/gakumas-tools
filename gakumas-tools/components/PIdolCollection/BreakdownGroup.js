@@ -1,11 +1,7 @@
 import { memo } from "react";
 import c from "@/utils/classNames";
 import styles from "./PIdolCollection.module.scss";
-
-function pct(num, denom) {
-  if (!denom) return "0.0";
-  return ((num / denom) * 100).toFixed(1);
-}
+import { pct } from "./utils";
 
 function BreakdownGroup({ label, rows }) {
   return (

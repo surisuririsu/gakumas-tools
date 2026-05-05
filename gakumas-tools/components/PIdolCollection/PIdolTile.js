@@ -7,7 +7,9 @@ import c from "@/utils/classNames";
 import styles from "./PIdolCollection.module.scss";
 
 function PIdolTile({ pIdol, signatureCard, collected, onToggle }) {
-  const cardIcon = signatureCard ? gkImg(signatureCard, pIdol.idolId).icon : null;
+  const cardIcon = signatureCard
+    ? gkImg(signatureCard, pIdol.idolId).icon
+    : null;
   const idol = Idols.getById(pIdol.idolId);
 
   return (
@@ -22,20 +24,6 @@ function PIdolTile({ pIdol, signatureCard, collected, onToggle }) {
         {cardIcon && (
           <Image src={cardIcon} alt="" fill sizes="80px" draggable={false} />
         )}
-        <div className={styles.tileAttributes}>
-          <Image
-            src={`/rarities/${pIdol.rarity}.png`}
-            height={12}
-            width={36}
-            alt={pIdol.rarity}
-          />
-          <Image
-            src={`/plans/${pIdol.plan}.png`}
-            width={12}
-            height={12}
-            alt={pIdol.plan}
-          />
-        </div>
         {collected && (
           <span className={styles.checkBadge} aria-hidden="true">
             <FaCheck />
