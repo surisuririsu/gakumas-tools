@@ -25,14 +25,14 @@ function PIdolTile({ pIdol, signatureCard, collected, onToggle }) {
         <div className={styles.tileAttributes}>
           <Image
             src={`/rarities/${pIdol.rarity}.png`}
-            height={14}
-            width={42}
+            height={12}
+            width={36}
             alt={pIdol.rarity}
           />
           <Image
             src={`/plans/${pIdol.plan}.png`}
-            width={14}
-            height={14}
+            width={12}
+            height={12}
             alt={pIdol.plan}
           />
         </div>

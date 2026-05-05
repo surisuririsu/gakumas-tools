@@ -1,6 +1,8 @@
-import { setRequestLocale } from "next-intl/server";
-import Dex from "@/components/Dex";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import { FaBook, FaListCheck } from "react-icons/fa6";
+import { Link } from "@/i18n/routing";
 import { generateMetadataForTool } from "@/utils/metadata";
+import styles from "./page.module.scss";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -8,9 +10,41 @@ export async function generateMetadata({ params }) {
   return await generateMetadataForTool("dex", locale);
 }
 
-export default async function DexPage({ params }) {
+const CATEGORIES = [
+  {
+    key: "reference",
+    href: "/dex/reference/skill-cards",
+    icon: <FaBook />,
+  },
+  {
+    key: "collection",
+    href: "/dex/collection/p-idols",
+    icon: <FaListCheck />,
+  },
+];
+
+export default async function DexHubPage({ params }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "Dex" });
 
-  return <Dex />;
+  return (
+    <ul className={styles.hub}>
+      {CATEGORIES.map(({ key, href, icon }) => (
+        <li key={key}>
+          <Link href={href} className={styles.card}>
+            <span className={styles.icon}>{icon}</span>
+            <div className={styles.text}>
+              <span className={styles.title}>
+                {t(`categories.${key}.title`)}
+              </span>
+              <span className={styles.description}>
+                {t(`categories.${key}.description`)}
+              </span>
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 }

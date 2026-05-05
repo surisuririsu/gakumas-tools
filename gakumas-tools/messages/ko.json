@@ -24,10 +24,6 @@
       "title": "P 도감",
       "description": "P 아이템과 스킬 카드 정보 보기"
     },
-    "collection": {
-      "title": "컬렉션",
-      "description": "획득한 P아이돌과 서포트 카드를 기록하기"
-    },
     "memoryCalculator": {
       "title": "메모리 생성 확률 계산기",
       "description": "원하는 메모리의 생성 확률 계산"
@@ -131,17 +127,28 @@
     "score": "스코어"
   },
   "Dex": {
-    "skillCards": "스킬 카드",
-    "pItems": "P 아이템",
-    "pDrinks": "P 드링크",
-    "maxTimes": "최대 {n}회"
-  },
-  "Collection": {
+    "maxTimes": "최대 {n}회",
     "tabs": {
+      "skill-cards": "스킬 카드",
+      "p-items": "P 아이템",
+      "p-drinks": "P 드링크",
       "p-idols": "P아이돌",
       "support-cards": "서포트 카드"
     },
-    "comingSoon": "준비 중"
+    "categories": {
+      "reference": {
+        "title": "도감",
+        "description": "스킬 카드・P 아이템・P 드링크 정보 보기"
+      },
+      "collection": {
+        "title": "컬렉션",
+        "description": "획득한 P아이돌을 기록하기"
+      },
+      "tierlist": {
+        "title": "티어리스트",
+        "description": "준비 중"
+      }
+    }
   },
   "PIdolCollection": {
     "collected": "획득",

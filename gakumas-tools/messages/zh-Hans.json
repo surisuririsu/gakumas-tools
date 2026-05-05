@@ -24,10 +24,6 @@
       "title": "制作人图鉴",
       "description": "查看 P 道具与技能卡信息"
     },
-    "collection": {
-      "title": "收集册",
-      "description": "记录已获得的 P 偶像与支援卡"
-    },
     "memoryCalculator": {
       "title": "回忆计算器",
       "description": "计算回忆卡中获得目标技能卡组合的概率"
@@ -131,17 +127,28 @@
     "score": "分数"
   },
   "Dex": {
-    "skillCards": "技能卡",
-    "pItems": "P 道具",
-    "pDrinks": "P 饮料",
-    "maxTimes": "最大{n}回合"
-  },
-  "Collection": {
+    "maxTimes": "最大{n}回合",
     "tabs": {
-      "p-idols": "P偶像",
+      "skill-cards": "技能卡",
+      "p-items": "P 道具",
+      "p-drinks": "P 饮料",
+      "p-idols": "P 偶像",
       "support-cards": "支援卡"
     },
-    "comingSoon": "敬请期待"
+    "categories": {
+      "reference": {
+        "title": "图鉴",
+        "description": "查看技能卡、P 道具与 P 饮料信息"
+      },
+      "collection": {
+        "title": "收集册",
+        "description": "记录已获得的 P 偶像"
+      },
+      "tierlist": {
+        "title": "梯队表",
+        "description": "敬请期待"
+      }
+    }
   },
   "PIdolCollection": {
     "collected": "已获得",

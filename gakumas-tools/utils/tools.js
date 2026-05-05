@@ -3,7 +3,6 @@ import {
   FaCalculator,
   FaChartSimple,
   FaFilm,
-  FaListCheck,
   FaPercent,
   FaTrophy,
 } from "react-icons/fa6";
@@ -23,11 +22,6 @@ export const TOOLS = {
     icon: <FaBook />,
     path: "/dex",
     pinnable: true,
-  },
-  collection: {
-    icon: <FaListCheck />,
-    path: "/collection",
-    pinnable: false,
   },
   memories: {
     icon: <FaFilm />,

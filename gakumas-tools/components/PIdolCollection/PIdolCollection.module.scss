@@ -242,8 +242,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: tokens.$space-2;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: tokens.$space-1;
 }
 
 .tile {
@@ -312,36 +312,36 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background-color: colors.$gk-orange;
   color: colors.$white;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .tileText {
   display: flex;
   flex-direction: column;
   gap: 1px;
-  height: 44px;
-  padding: 2px 4px;
+  height: 38px;
+  padding: 2px;
 }
 
 .tileIdolName {
-  font-size: 10px;
+  font-size: 9px;
   color: tokens.$surface-ink-muted;
   line-height: 1.2;
 }
 
 .tileTitle {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: tokens.$surface-ink;
-  line-height: 1.25;
+  line-height: 1.2;
   text-wrap: balance;
   display: -webkit-box;
   -webkit-line-clamp: 2;

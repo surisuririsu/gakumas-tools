@@ -1,0 +1,67 @@
+@use "../../../styles/colors";
+@use "../../../styles/tokens";
+
+.hub {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: tokens.$space-3;
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: tokens.$space-2;
+  list-style: none;
+}
+
+.hub > li {
+  display: flex;
+}
+
+.card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  color: tokens.$surface-ink;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: colors.$gk-orange;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$surface-muted;
+  color: colors.$gk-orange;
+  font-size: 20px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: tokens.$text-base;
+  font-weight: 600;
+}
+
+.description {
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
+}

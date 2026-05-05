@@ -1,6 +1,6 @@
 @use "../../styles/tokens";
 
-.dex {
+.layout {
   width: 100%;
   max-width: 560px;
   height: 100%;
@@ -11,6 +11,19 @@
   gap: tokens.$space-2;
 }
 
+.wide {
+  max-width: 960px;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
 .tabs {
+  flex-shrink: 0;
   padding: tokens.$space-1;
 }

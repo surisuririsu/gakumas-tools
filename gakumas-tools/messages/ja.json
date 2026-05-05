@@ -24,10 +24,6 @@
       "title": "P図鑑",
       "description": "Pアイテムとスキルカード情報を表示する"
     },
-    "collection": {
-      "title": "コレクション",
-      "description": "獲得済みのPアイドルやサポートカードを記録する"
-    },
     "memoryCalculator": {
       "title": "メモリー生成確率計算機",
       "description": "欲しいメモリーの生成確率を計算する"
@@ -131,17 +127,28 @@
     "score": "スコア"
   },
   "Dex": {
-    "skillCards": "スキルカード",
-    "pItems": "Pアイテム",
-    "pDrinks": "Pドリンク",
-    "maxTimes": "最大{n}回"
-  },
-  "Collection": {
+    "maxTimes": "最大{n}回",
     "tabs": {
+      "skill-cards": "スキルカード",
+      "p-items": "Pアイテム",
+      "p-drinks": "Pドリンク",
       "p-idols": "Pアイドル",
       "support-cards": "サポートカード"
     },
-    "comingSoon": "近日公開"
+    "categories": {
+      "reference": {
+        "title": "図鑑",
+        "description": "スキルカード・Pアイテム・Pドリンクの情報を表示する"
+      },
+      "collection": {
+        "title": "コレクション",
+        "description": "獲得済みのPアイドルを記録する"
+      },
+      "tierlist": {
+        "title": "ティア表",
+        "description": "近日公開"
+      }
+    }
   },
   "PIdolCollection": {
     "collected": "獲得済み",

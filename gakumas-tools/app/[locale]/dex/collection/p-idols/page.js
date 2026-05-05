@@ -5,7 +5,11 @@ import { generateMetadataForTool } from "@/utils/metadata";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("collection", locale, "/collection/p-idols");
+  return await generateMetadataForTool(
+    "dex",
+    locale,
+    "/dex/collection/p-idols",
+  );
 }
 
 export default async function PIdolsCollectionPage({ params }) {

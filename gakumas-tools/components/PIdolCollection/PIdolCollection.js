@@ -16,13 +16,22 @@ import styles from "./PIdolCollection.module.scss";
 
 const RARITIES = ["R", "SR", "SSR"];
 
+const RARITY_ORDER = { SSR: 0, SR: 1, R: 2 };
+const PLAN_ORDER = { sense: 0, logic: 1, anomaly: 2 };
+
 // Excluded idol IDs — these p-idols can't actually be obtained.
 // 14 = 根緒 亜紗里 (April Fools idol)
 const EXCLUDED_IDOL_IDS = new Set([14]);
 
-const ALL_P_IDOLS = PIdols.getAll().filter(
-  (p) => !EXCLUDED_IDOL_IDS.has(p.idolId),
-);
+const ALL_P_IDOLS = PIdols.getAll()
+  .filter((p) => !EXCLUDED_IDOL_IDS.has(p.idolId))
+  .sort((a, b) => {
+    const r = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
+    if (r !== 0) return r;
+    const p = PLAN_ORDER[a.plan] - PLAN_ORDER[b.plan];
+    if (p !== 0) return p;
+    return a.idolId - b.idolId;
+  });
 
 const SIGNATURE_CARD_BY_PIDOL = ALL_P_IDOLS.reduce((acc, pIdol) => {
   const card = SkillCards.getFiltered({ pIdolIds: [pIdol.id] }).find(
@@ -174,7 +183,7 @@ function PIdolCollection() {
       percent: overallPct,
       scope,
     });
-    const url = `${SITE_URL}${localePath(locale, "/collection/p-idols")}`;
+    const url = `${SITE_URL}${localePath(locale, "/dex/collection/p-idols")}`;
     const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       text,
     )}&url=${encodeURIComponent(url)}`;
