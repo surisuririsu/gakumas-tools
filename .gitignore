@@ -24,4 +24,5 @@ __pycache__/
 screenshots/
 .classifier-data/
 scripts/train_classifier/checkpoints/
-scripts/regression/overlays/
+tests/overlays/
+tests/.tesseract-cache/

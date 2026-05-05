@@ -1,0 +1,8 @@
+{"file":"tests/fixtures/draft/01.jpg","note":"User-reported regression: row detection picked the orange 受け取る button instead of the cards row above it","cards":[773,438,558],"boxes":[{"x":240,"y":1476,"width":201,"height":201},{"x":441,"y":1476,"width":200,"height":201},{"x":641,"y":1476,"width":201,"height":201}]}
+{"file":"tests/fixtures/draft/02.jpeg","cards":[397,391,699],"boxes":[{"x":169,"y":854,"width":129,"height":132},{"x":307,"y":854,"width":136,"height":132},{"x":452,"y":854,"width":131,"height":132}]}
+{"file":"tests/fixtures/draft/03.jpeg","cards":[417,391,409],"boxes":[{"x":167,"y":854,"width":131,"height":133},{"x":307,"y":854,"width":136,"height":133},{"x":452,"y":854,"width":132,"height":133}]}
+{"file":"tests/fixtures/draft/04.jpeg","cards":[555,746,750],"boxes":[{"x":166,"y":854,"width":132,"height":133},{"x":307,"y":854,"width":136,"height":133},{"x":452,"y":854,"width":132,"height":133}]}
+{"file":"tests/fixtures/draft/05.jpeg","cards":[397,383,591],"boxes":[{"x":169,"y":854,"width":129,"height":132},{"x":307,"y":854,"width":136,"height":132},{"x":452,"y":854,"width":131,"height":132}]}
+{"file":"tests/fixtures/draft/06.png","cards":[720,293,706],"boxes":[{"x":262,"y":1602,"width":218,"height":218},{"x":480,"y":1602,"width":219,"height":218},{"x":699,"y":1602,"width":218,"height":218}]}
+{"file":"tests/fixtures/draft/07.png","cards":[600,632,755],"boxes":[{"x":262,"y":1601,"width":219,"height":219},{"x":481,"y":1601,"width":219,"height":219},{"x":700,"y":1601,"width":219,"height":219}]}
+{"file":"tests/fixtures/draft/08.png","cards":[393,422,390],"boxes":[{"x":121,"y":646,"width":94,"height":95},{"x":223,"y":646,"width":96,"height":95},{"x":327,"y":646,"width":94,"height":95}]}

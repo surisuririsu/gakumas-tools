@@ -52,7 +52,8 @@ const RAW_RUNTIME_STATE =
           ["gakumas-engine", "workspace:packages/gakumas-engine"],\
           ["gakumas-tools-monorepo", "workspace:."],\
           ["onnxruntime-node", "npm:1.24.3"],\
-          ["sharp", "npm:0.34.5"]\
+          ["sharp", "npm:0.34.5"],\
+          ["tesseract.js", "npm:7.0.0"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -3622,7 +3623,8 @@ const RAW_RUNTIME_STATE =
           ["gakumas-engine", "workspace:packages/gakumas-engine"],\
           ["gakumas-tools-monorepo", "workspace:."],\
           ["onnxruntime-node", "npm:1.24.3"],\
-          ["sharp", "npm:0.34.5"]\
+          ["sharp", "npm:0.34.5"],\
+          ["tesseract.js", "npm:7.0.0"]\
         ],\
         "linkType": "SOFT"\
       }]\

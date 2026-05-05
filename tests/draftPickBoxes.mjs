@@ -11,11 +11,11 @@
  * Usage:
  *   yarn test:draft            # compare; non-zero exit on mismatch
  *   yarn test:draft:update     # rewrite the fixture with current outputs
- *   yarn test:draft:visualize  # also write overlays to scripts/regression/overlays/draft/
+ *   yarn test:draft:visualize  # also write overlays to tests/overlays/draft/
  *
- * Fixture screenshots live in scripts/regression/fixtures/draft/ so they're
- * tracked alongside the harness. Overlay PNGs go to a sibling overlays/ dir
- * which is gitignored — they're cheap to regenerate.
+ * Fixture screenshots live in tests/fixtures/draft/ so they're tracked
+ * alongside the harness. Overlay PNGs go to a sibling overlays/ dir which
+ * is gitignored — they're cheap to regenerate.
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -23,10 +23,10 @@ import { dirname, resolve, join, basename, parse } from "node:path";
 import sharp from "sharp";
 import * as ort from "onnxruntime-node";
 import { SkillCards } from "gakumas-data";
-import { detectDraftPickBoxes } from "../../gakumas-tools/utils/imageProcessing/draftPickGeometry.js";
+import { detectDraftPickBoxes } from "../gakumas-tools/utils/imageProcessing/draftPickGeometry.js";
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(HARNESS_DIR, "..", "..");
+const REPO_ROOT = resolve(HARNESS_DIR, "..");
 const FIXTURE_PATH = join(HARNESS_DIR, "draftPickBoxes.jsonl");
 const OVERLAY_DIR = join(HARNESS_DIR, "overlays", "draft");
 const MODEL_PATH = join(REPO_ROOT, "gakumas-tools/public/skill_card_model.onnx");

@@ -1,5 +1,5 @@
 /**
- * One-shot bootstrap for scripts/regression/suite.jsonl.
+ * One-shot bootstrap for tests/suite.jsonl.
  *
  * Two phases:
  *   1. Random — N seeded 12-card contest loadouts for broad sampling.

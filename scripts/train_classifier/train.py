@@ -14,9 +14,7 @@ BATCH_SIZE = 64
 DEFAULT_EPOCHS_PER_ROUND = 10
 DEFAULT_LOSS_THRESHOLD = 0.15
 
-CHECKPOINTS_DIR = os.path.join(
-    REPO_ROOT, "scripts", "train_classifier", "checkpoints"
-)
+CHECKPOINTS_DIR = os.path.join(REPO_ROOT, "scripts", "train_classifier", "checkpoints")
 PUBLIC_DIR = os.path.join(REPO_ROOT, "gakumas-tools", "public")
 
 
@@ -72,9 +70,7 @@ def _load_surgery_state(model, checkpoint_path, old_classes, new_class_to_idx):
         new_w[new_idx] = old_w[old_idx]
         new_b[new_idx] = old_b[old_idx]
         matched += 1
-    print(
-        f"  surgery: reused weights for {matched}/{len(old_classes)} old classes"
-    )
+    print(f"  surgery: reused weights for {matched}/{len(old_classes)} old classes")
 
     new_state["classifier.weight"] = new_w
     new_state["classifier.bias"] = new_b
@@ -115,25 +111,19 @@ def train_entity(entity_type, fresh, epochs, loss_threshold, device):
     classes_path = _classes_path(entity_type)
 
     use_surgery = (
-        not fresh
-        and os.path.exists(checkpoint_path)
-        and os.path.exists(classes_path)
+        not fresh and os.path.exists(checkpoint_path) and os.path.exists(classes_path)
     )
     if use_surgery:
         with open(classes_path) as f:
             old_classes = json.load(f)
-        _load_surgery_state(
-            model, checkpoint_path, old_classes, dataset.class_to_idx
-        )
+        _load_surgery_state(model, checkpoint_path, old_classes, dataset.class_to_idx)
         # Leave all layers trainable: a frozen encoder leaves the classifier
         # separating new classes in a fixed embedding space, which converges
         # very slowly when the new art differs from anything the encoder saw.
         # The surgery-transferred weights still provide a warm start; training
         # on all classes together prevents catastrophic forgetting.
     elif not fresh:
-        print(
-            f"  no checkpoint at {checkpoint_path}; training from scratch"
-        )
+        print(f"  no checkpoint at {checkpoint_path}; training from scratch")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 

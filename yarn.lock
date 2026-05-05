@@ -2879,6 +2879,7 @@ __metadata:
     gakumas-engine: "workspace:*"
     onnxruntime-node: "npm:1.24"
     sharp: "npm:^0.34.5"
+    tesseract.js: "npm:^7.0.0"
   languageName: unknown
   linkType: soft
 

@@ -2,7 +2,7 @@
  * Shared utilities for the regression harness.
  *
  * The harness runs the structured engine against a frozen suite of loadouts
- * (scripts/regression/suite.jsonl) and flags any score drift. The suite
+ * (tests/suite.jsonl) and flags any score drift. The suite
  * itself is a plain JSONL file — one loadout per line — so it diffs cleanly
  * in git and loadouts can be appended by hand or with `regression:add`.
  */
