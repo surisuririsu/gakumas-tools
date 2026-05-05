@@ -24,6 +24,10 @@
       "title": "P図鑑",
       "description": "Pアイテムとスキルカード情報を表示する"
     },
+    "pIdolCollection": {
+      "title": "Pアイドル所持率",
+      "description": "獲得済みのPアイドルを記録して、レアリティ・プラン・アイドル別の所持率を確認できます"
+    },
     "memoryCalculator": {
       "title": "メモリー生成確率計算機",
       "description": "欲しいメモリーの生成確率を計算する"

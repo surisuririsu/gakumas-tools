@@ -24,6 +24,10 @@
       "title": "制作人图鉴",
       "description": "查看 P 道具与技能卡信息"
     },
+    "pIdolCollection": {
+      "title": "P 偶像收集册",
+      "description": "记录已获得的 P 偶像，按稀有度、计划与偶像查看收集率"
+    },
     "memoryCalculator": {
       "title": "回忆计算器",
       "description": "计算回忆卡中获得目标技能卡组合的概率"

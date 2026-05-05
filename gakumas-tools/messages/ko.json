@@ -24,6 +24,10 @@
       "title": "P 도감",
       "description": "P 아이템과 스킬 카드 정보 보기"
     },
+    "pIdolCollection": {
+      "title": "P아이돌 도감",
+      "description": "획득한 P아이돌을 기록하고, 레어도・플랜・아이돌별 획득률을 확인하기"
+    },
     "memoryCalculator": {
       "title": "메모리 생성 확률 계산기",
       "description": "원하는 메모리의 생성 확률 계산"

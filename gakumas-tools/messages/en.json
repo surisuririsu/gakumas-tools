@@ -24,6 +24,10 @@
       "title": "P-Index",
       "description": "Filter and view p-item and skill card information"
     },
+    "pIdolCollection": {
+      "title": "P-Idol Collection",
+      "description": "Track which p-idols you've collected, with progress breakdowns by rarity, plan, and idol"
+    },
     "memoryCalculator": {
       "title": "Memory Calculator",
       "description": "Calculate probability of getting desired skill card combinations in memories"

@@ -6,7 +6,7 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
 
   return await generateMetadataForTool(
-    "dex",
+    "pIdolCollection",
     locale,
     "/dex/collection/p-idols",
   );
