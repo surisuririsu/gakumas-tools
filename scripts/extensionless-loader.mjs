@@ -76,5 +76,14 @@ export async function load(url, context, nextLoad) {
     };
   }
 
+  // The gakumas-tools workspace uses ESM syntax in .js files but its
+  // package.json does not declare "type": "module" (Next.js handles that via
+  // webpack). Force the imageProcessing files to load as ESM in plain Node
+  // so the regression harness can import them directly.
+  if (url.includes("/utils/imageProcessing/") && url.endsWith(".js")) {
+    const source = await readFile(fileURLToPath(url), "utf8");
+    return { format: "module", source, shortCircuit: true };
+  }
+
   return nextLoad(url, context);
 }
