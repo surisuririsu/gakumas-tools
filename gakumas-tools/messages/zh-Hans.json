@@ -24,6 +24,10 @@
       "title": "制作人图鉴",
       "description": "查看 P 道具与技能卡信息"
     },
+    "collection": {
+      "title": "收集册",
+      "description": "记录已获得的 P 偶像与支援卡"
+    },
     "memoryCalculator": {
       "title": "回忆计算器",
       "description": "计算回忆卡中获得目标技能卡组合的概率"
@@ -131,6 +135,39 @@
     "pItems": "P 道具",
     "pDrinks": "P 饮料",
     "maxTimes": "最大{n}回合"
+  },
+  "Collection": {
+    "tabs": {
+      "p-idols": "P偶像",
+      "support-cards": "支援卡"
+    },
+    "comingSoon": "敬请期待"
+  },
+  "PIdolCollection": {
+    "collected": "已获得",
+    "byRarity": "按稀有度",
+    "byPlan": "按计划",
+    "byIdol": "按偶像",
+    "markAll": "全部标记",
+    "clearAll": "清除",
+    "share": "分享",
+    "emptyResults": "没有符合条件的 P 偶像",
+    "plans": {
+      "sense": "感性",
+      "logic": "理性",
+      "anomaly": "异常"
+    },
+    "shareText": "学マス P偶像收集册\n我已获得{scope}的 {have}/{total}（{percent}%）！你收集了多少？",
+    "shareScope": {
+      "all": "{idol}的{rarity} {plan} P偶像",
+      "rarity_plan": "{rarity} {plan} P偶像",
+      "rarity_idol": "{idol}的{rarity} P偶像",
+      "plan_idol": "{idol}的{plan} P偶像",
+      "rarity": "{rarity} P偶像",
+      "plan": "{plan} P偶像",
+      "idol": "{idol}的 P偶像",
+      "none": "P偶像"
+    }
   },
   "EntityBank": {
     "filter": "筛选"

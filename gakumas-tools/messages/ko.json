@@ -24,6 +24,10 @@
       "title": "P 도감",
       "description": "P 아이템과 스킬 카드 정보 보기"
     },
+    "collection": {
+      "title": "컬렉션",
+      "description": "획득한 P아이돌과 서포트 카드를 기록하기"
+    },
     "memoryCalculator": {
       "title": "메모리 생성 확률 계산기",
       "description": "원하는 메모리의 생성 확률 계산"
@@ -131,6 +135,39 @@
     "pItems": "P 아이템",
     "pDrinks": "P 드링크",
     "maxTimes": "최대 {n}회"
+  },
+  "Collection": {
+    "tabs": {
+      "p-idols": "P아이돌",
+      "support-cards": "서포트 카드"
+    },
+    "comingSoon": "준비 중"
+  },
+  "PIdolCollection": {
+    "collected": "획득",
+    "byRarity": "레어도별",
+    "byPlan": "플랜별",
+    "byIdol": "아이돌별",
+    "markAll": "전부 획득",
+    "clearAll": "초기화",
+    "share": "공유",
+    "emptyResults": "조건에 맞는 P아이돌이 없습니다",
+    "plans": {
+      "sense": "센스",
+      "logic": "로직",
+      "anomaly": "어노말리"
+    },
+    "shareText": "학마스(学マス) P아이돌 컬렉션\n{scope}을(를) {have}/{total} ({percent}%) 획득했습니다! 여러분은 얼마나 모았나요?",
+    "shareScope": {
+      "all": "{idol}의 {rarity} {plan} P아이돌",
+      "rarity_plan": "{rarity} {plan} P아이돌",
+      "rarity_idol": "{idol}의 {rarity} P아이돌",
+      "plan_idol": "{idol}의 {plan} P아이돌",
+      "rarity": "{rarity} P아이돌",
+      "plan": "{plan} P아이돌",
+      "idol": "{idol}의 P아이돌",
+      "none": "P아이돌"
+    }
   },
   "EntityBank": {
     "filter": "필터"

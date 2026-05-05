@@ -1,0 +1,358 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.collection {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: tokens.$space-3;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+  container-type: inline-size;
+}
+
+.raritySelect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border: 1px solid tokens.$surface-border;
+  border-radius: 22px;
+  padding: 4px;
+}
+
+.rarityOption {
+  height: 32px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &:hover {
+    background-color: tokens.$surface-muted;
+  }
+}
+
+.rarityAll {
+  padding: 4px;
+}
+
+.raritySelected {
+  background-color: colors.$gk-orange-extra-light;
+  box-shadow: 0 0 0 2px colors.$gk-orange;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+}
+
+.overall {
+  flex: 1 1 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+.overallLabel {
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overallNumbers {
+  display: flex;
+  align-items: baseline;
+  gap: tokens.$space-1;
+}
+
+.have {
+  font-size: 32px;
+  font-weight: 700;
+  color: colors.$gk-orange;
+}
+
+.slash {
+  font-size: 24px;
+  color: tokens.$surface-ink-muted;
+}
+
+.total {
+  font-size: 24px;
+  font-weight: 600;
+  color: tokens.$surface-ink;
+}
+
+.percent {
+  margin-left: auto;
+  font-size: tokens.$text-lg;
+  font-weight: 600;
+  color: colors.$gk-orange;
+}
+
+.bar {
+  width: 100%;
+  height: 8px;
+  background-color: tokens.$surface-muted;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: tokens.$gradient-brand;
+  transition: width 0.2s ease;
+}
+
+.bulkActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: tokens.$space-1 tokens.$space-2;
+    font-size: tokens.$text-xs;
+    border: 1px solid tokens.$surface-border;
+    border-radius: tokens.$radius-sm;
+    background-color: tokens.$surface-bg;
+    color: tokens.$surface-ink;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background-color: tokens.$surface-muted;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .shareButton {
+    margin-left: auto;
+    background-color: colors.$black-medium;
+    color: colors.$white;
+    border-color: colors.$black-medium;
+
+    &:hover:not(:disabled) {
+      background-color: colors.$black;
+    }
+  }
+}
+
+.breakdowns {
+  flex: 2 1 360px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+.breakdownGroup {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-1;
+}
+
+.breakdownLabel {
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.breakdownRows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-1;
+}
+
+.breakdownRow {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  padding: 2px tokens.$space-2;
+  min-height: 32px;
+  background-color: tokens.$surface-bg;
+  border: 1px solid tokens.$surface-border;
+  border-radius: 999px;
+  font-size: tokens.$text-xs;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background-color: tokens.$surface-muted;
+  }
+}
+
+.breakdownIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+
+  img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.breakdownActive {
+  background-color: colors.$gk-orange-extra-light;
+  border-color: colors.$gk-orange;
+}
+
+.breakdownCount {
+  font-weight: 600;
+  color: tokens.$surface-ink;
+  font-variant-numeric: tabular-nums;
+}
+
+.breakdownPct {
+  color: tokens.$surface-ink-muted;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: tokens.$space-2;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-1;
+  padding: tokens.$space-1;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$surface-bg;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    border-color: colors.$gk-orange;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.tileCollected {
+  border-color: colors.$gk-orange;
+  background-color: colors.$gk-orange-extra-light;
+  box-shadow: 0 0 0 1px colors.$gk-orange inset;
+}
+
+.tile:not(.tileCollected) .tileIcon {
+  filter: grayscale(0.6) opacity(0.65);
+}
+
+.tileIcon {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: tokens.$radius-xs;
+  background-color: colors.$gray-extra-light;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.tileAttributes {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+
+  img {
+    object-fit: contain;
+    object-position: left;
+  }
+}
+
+.checkBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: colors.$gk-orange;
+  color: colors.$white;
+  font-size: 10px;
+}
+
+.tileText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  height: 44px;
+  padding: 2px 4px;
+}
+
+.tileIdolName {
+  font-size: 10px;
+  color: tokens.$surface-ink-muted;
+  line-height: 1.2;
+}
+
+.tileTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: tokens.$surface-ink;
+  line-height: 1.25;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: tokens.$space-5;
+  text-align: center;
+  color: tokens.$surface-ink-muted;
+}

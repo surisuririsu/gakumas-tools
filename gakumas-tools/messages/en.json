@@ -24,6 +24,10 @@
       "title": "P-Index",
       "description": "Filter and view p-item and skill card information"
     },
+    "collection": {
+      "title": "Collection",
+      "description": "Track which p-idols and support cards you've collected"
+    },
     "memoryCalculator": {
       "title": "Memory Calculator",
       "description": "Calculate probability of getting desired skill card combinations in memories"
@@ -131,6 +135,39 @@
     "pItems": "P-items",
     "pDrinks": "P-drinks",
     "maxTimes": "Max {n}"
+  },
+  "Collection": {
+    "tabs": {
+      "p-idols": "P-Idols",
+      "support-cards": "Support Cards"
+    },
+    "comingSoon": "Coming soon"
+  },
+  "PIdolCollection": {
+    "collected": "Collected",
+    "byRarity": "By rarity",
+    "byPlan": "By plan",
+    "byIdol": "By idol",
+    "markAll": "Mark all",
+    "clearAll": "Clear",
+    "share": "Share",
+    "emptyResults": "No p-idols match the current filter",
+    "plans": {
+      "sense": "Sense",
+      "logic": "Logic",
+      "anomaly": "Anomaly"
+    },
+    "shareText": "学マス P-Idol Collection Tracker\nI collected {have}/{total} ({percent}%) of {scope}. How many did you collect?",
+    "shareScope": {
+      "all": "{rarity} {plan} P-idols of {idol}",
+      "rarity_plan": "{rarity} {plan} P-idols",
+      "rarity_idol": "{rarity} P-idols of {idol}",
+      "plan_idol": "{plan} P-idols of {idol}",
+      "rarity": "{rarity} P-idols",
+      "plan": "{plan} P-idols",
+      "idol": "P-idols of {idol}",
+      "none": "P-idols"
+    }
   },
   "EntityBank": {
     "filter": "Filter"
