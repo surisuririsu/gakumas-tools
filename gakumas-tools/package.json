@@ -10,7 +10,7 @@
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
-    "@next/third-parties": "^16.2.4",
+    "@next/third-parties": "^16.2.5",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
     "gakumas-data": "workspace:*",
@@ -18,9 +18,9 @@
     "gakumas-images": "workspace:*",
     "html2canvas": "^1.4.1",
     "mongodb": "^7.2.0",
-    "next": "^16.2.4",
+    "next": "^16.2.5",
     "next-auth": "^4.24.14",
-    "next-intl": "^4.9.1",
+    "next-intl": "^4.11.0",
     "onnxruntime-web": "^1.24.3",
     "re-resizable": "^6.11.2",
     "react": "^19.2.5",
@@ -37,6 +37,6 @@
   },
   "devDependencies": {
     "eslint": "^10.2.1",
-    "eslint-config-next": "^16.2.4"
+    "eslint-config-next": "^16.2.5"
   }
 }
