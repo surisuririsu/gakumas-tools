@@ -14,8 +14,8 @@ import {
 } from "@/utils/entities";
 import styles from "./EntityBank.module.scss";
 
-const HIDDEN_ITEM_IDS = [];
-const HIDDEN_CARD_IDS = [];
+const HIDDEN_ITEM_IDS = [422, 424];
+const HIDDEN_CARD_IDS = [807, 809, 811, 813];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const t = useTranslations("EntityBank");

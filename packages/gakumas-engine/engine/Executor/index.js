@@ -294,6 +294,8 @@ export default class Executor extends EngineComponent {
 
       if (op === "+=") {
         state[S.effectCounters][id][name] += rhsValue;
+      } else if (op === "=") {
+        state[S.effectCounters][id][name] = rhsValue;
       } else {
         console.warn(`Unsupported effectCounter operation: ${op}`);
       }
