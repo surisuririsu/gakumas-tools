@@ -424,3 +424,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 423,太陽を超える輝き+,SSR,TRUE,logic,stage,pIdol,138,FALSE,at:startOfTurn { if:turnsRemaining==1 { genki+=consumedGenki*0.75; drawCard(2); fixedStamina-=1 }; limit:1 }
 424,憧れ続けた輝き,SSR,FALSE,sense,stage,pIdol,139,FALSE,
 425,憧れ続けた輝き+,SSR,TRUE,sense,stage,pIdol,139,FALSE,at:cardUsed { if:goodConditionTurns>=6 & cardHasEffect(goodConditionTurns) { effectCounter+=1; if:effectCounter%4==3 { perfectConditionTurns+=1; cardUsesRemaining+=1; drawCard; limit:5 } } }
+426,想定外のチケット,SSR,FALSE,sense,stage,support,,FALSE,at:afterStartOfTurn { if:isVisualTurn & goodConditionTurns>=10 { goodConditionTurns+=3; moveRandomToHand[pIdol & (deck | discarded)]; cardUsesRemaining+=1 }; limit:1 }
