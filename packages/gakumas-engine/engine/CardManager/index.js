@@ -444,6 +444,27 @@ export default class CardManager extends EngineComponent {
     }
 
     conditionState = shallowCopy(state);
+
+    if (state[S.thisCardHeld]) {
+      state[S.thisCardHeld] = false;
+    } else if (!skillCard.limit) {
+      state[S.discardedCards].push(card);
+    } else if (
+      c11n &&
+      Object.keys(c11n)
+        .map(Customizations.getById)
+        .some((c) => c11n[c.id] && c?.limit === 0)
+    ) {
+      state[S.discardedCards].push(card);
+    } else {
+      state[S.removedCards].push(card);
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "cardRemoved",
+        conditionState,
+      );
+    }
+
     this.engine.effectManager.triggerEffectsForPhase(
       state,
       "afterCardUsed",
@@ -470,26 +491,6 @@ export default class CardManager extends EngineComponent {
       type: "skillCard",
       id: skillCard.id,
     });
-
-    if (state[S.thisCardHeld]) {
-      state[S.thisCardHeld] = false;
-    } else if (!skillCard.limit) {
-      state[S.discardedCards].push(card);
-    } else if (
-      c11n &&
-      Object.keys(c11n)
-        .map(Customizations.getById)
-        .some((c) => c11n[c.id] && c?.limit === 0)
-    ) {
-      state[S.discardedCards].push(card);
-    } else {
-      state[S.removedCards].push(card);
-      this.engine.effectManager.triggerEffectsForPhase(
-        state,
-        "cardRemoved",
-        conditionState,
-      );
-    }
 
     // Free uses don't consume cardUsesRemaining, so they can't end the
     // turn — mirror legacy to keep parity across free-use chains (e.g.

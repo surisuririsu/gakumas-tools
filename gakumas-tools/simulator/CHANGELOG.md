@@ -6,6 +6,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-05-09
+
+- Added preview of garakuta road temari and rinami, changed order of card discard/removal vs afterCardUsed effect activation
+
 ## 2026-05-01
 
 - Add indicator for latest season, add some idol-specific card icons
