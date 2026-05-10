@@ -30,54 +30,19 @@ import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import NavigationGuardContext from "@/contexts/NavigationGuardContext";
 import c from "@/utils/classNames";
+import {
+  EMPTY_LIST,
+  decodeList,
+  encodeList,
+  isDefaultList,
+} from "@/utils/tierList";
 import TierListPickerModal from "./TierListPickerModal";
 import TierRow from "./TierRow";
 import TierShareModal from "./TierShareModal";
 import { AVAILABLE_RANKS, sortRanks } from "./ranks";
 import styles from "./TierList.module.scss";
 
-const DEFAULT_RANKS = ["S4", "SSS", "SS", "S", "A", "B"];
 const TRASH_ID = "trash:bottom";
-
-const EMPTY_LIST = {
-  tiers: DEFAULT_RANKS,
-  items: DEFAULT_RANKS.reduce((acc, k) => {
-    acc[k] = [];
-    return acc;
-  }, {}),
-};
-
-function encodeList(list) {
-  return list.tiers
-    .map((rank) => `${rank}=${(list.items[rank] || []).join(".")}`)
-    .join("_");
-}
-
-function decodeList(str) {
-  if (!str) return null;
-  const tiers = [];
-  const items = {};
-  for (const seg of str.split("_")) {
-    const eq = seg.indexOf("=");
-    const rank = eq >= 0 ? seg.slice(0, eq) : seg;
-    const idsStr = eq >= 0 ? seg.slice(eq + 1) : "";
-    if (!rank) continue;
-    tiers.push(rank);
-    items[rank] = idsStr
-      ? idsStr.split(".").map(Number).filter(Number.isFinite)
-      : [];
-  }
-  if (!tiers.length) return null;
-  return { tiers: sortRanks(tiers), items };
-}
-
-function isDefaultList(list) {
-  if (list.tiers.length !== DEFAULT_RANKS.length) return false;
-  for (let i = 0; i < DEFAULT_RANKS.length; i++) {
-    if (list.tiers[i] !== DEFAULT_RANKS[i]) return false;
-  }
-  return Object.values(list.items).every((arr) => arr.length === 0);
-}
 
 function findContainer(list, pickedById, id) {
   if (typeof id === "string" && list.tiers.includes(id)) return id;
@@ -141,8 +106,6 @@ function TierList({ type }) {
   const [shareOpen, setShareOpen] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const [overId, setOverId] = useState(null);
-
-  const tierRowsRef = useRef(null);
 
   const pickedById = useMemo(() => {
     const m = {};
@@ -493,7 +456,7 @@ function TierList({ type }) {
         </div>
 
         <div className={styles.tiers}>
-          <div ref={tierRowsRef} className={styles.tierRows}>
+          <div className={styles.tierRows}>
             {list.tiers.map((tierKey) => {
               const idx = AVAILABLE_RANKS.indexOf(tierKey);
               const aboveRank =
@@ -543,7 +506,6 @@ function TierList({ type }) {
         {shareOpen && (
           <TierShareModal
             type={type}
-            getImageNode={() => tierRowsRef.current}
             onClose={() => setShareOpen(false)}
           />
         )}

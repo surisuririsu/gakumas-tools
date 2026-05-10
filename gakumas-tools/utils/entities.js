@@ -1,4 +1,5 @@
 import { PDrinks, PIdols, PItems, SkillCards } from "gakumas-data";
+import gkImg from "gakumas-images";
 import {
   comparePDrinks,
   comparePIdols,
@@ -33,3 +34,19 @@ export const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
   if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
   return acc;
 }, {});
+
+// Resolve a renderable icon for an entity. P-idols without their own portrait
+// fall back to their signature skill card.
+export function resolveEntityIcon(entity, idolId) {
+  if (!entity) return null;
+  let imageEntity = entity;
+  let imageIdolId = idolId;
+  if (entity._type === "pIdol") {
+    const sigCard = SIGNATURE_CARD_BY_PIDOL[entity.id];
+    if (sigCard) {
+      imageEntity = sigCard;
+      imageIdolId = entity.idolId;
+    }
+  }
+  return gkImg(imageEntity, imageIdolId).icon;
+}

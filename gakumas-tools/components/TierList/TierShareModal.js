@@ -12,7 +12,7 @@ const SLUG_BY_TYPE = {
   [EntityTypes.P_IDOL]: "p-idols",
 };
 
-function TierShareModal({ type, getImageNode, onClose }) {
+function TierShareModal({ type, onClose }) {
   const t = useTranslations("TierList");
   const tDex = useTranslations("Dex");
   const [shareUrl, setShareUrl] = useState("");
@@ -39,23 +39,14 @@ function TierShareModal({ type, getImageNode, onClose }) {
   }, [shareUrl, t]);
 
   const downloadImage = useCallback(async () => {
-    const node = getImageNode?.();
-    if (!node) return;
     setDownloading(true);
     setError(null);
     try {
-      const { default: html2canvas } = await import("html2canvas");
-      const canvas = await html2canvas(node, {
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        scale: window.devicePixelRatio > 1 ? 2 : 1,
-        ignoreElements: (el) =>
-          el?.dataset?.exportIgnore === "true",
-      });
-      const blob = await new Promise((resolve) =>
-        canvas.toBlob(resolve, "image/png"),
-      );
-      if (!blob) throw new Error("Failed to render image");
+      const params = new URLSearchParams(window.location.search);
+      params.set("type", type);
+      const res = await fetch(`/api/tier-list-preview?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -70,7 +61,7 @@ function TierShareModal({ type, getImageNode, onClose }) {
     } finally {
       setDownloading(false);
     }
-  }, [getImageNode, type, t]);
+  }, [type, t]);
 
   const shareToX = useCallback(() => {
     const slug = SLUG_BY_TYPE[type];

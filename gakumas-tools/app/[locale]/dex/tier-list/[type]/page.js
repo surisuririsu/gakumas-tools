@@ -18,14 +18,23 @@ export function generateStaticParams() {
   );
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params, searchParams }) {
   const { locale, type } = await params;
+  const entityType = TYPE_BY_SLUG[type];
 
-  return await generateMetadataForTool(
+  const metadata = await generateMetadataForTool(
     "tierList",
     locale,
     `/dex/tier-list/${type}`,
   );
+
+  if (entityType) {
+    const query = new URLSearchParams(await searchParams);
+    query.set("type", entityType);
+    metadata.openGraph.images = [`/api/tier-list-preview/?${query.toString()}`];
+  }
+
+  return metadata;
 }
 
 export default async function TierListPage({ params }) {

@@ -1,13 +1,12 @@
 import { memo } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Idols } from "gakumas-data";
-import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import {
   ENTITY_DATA_BY_TYPE,
   EntityTypes,
-  SIGNATURE_CARD_BY_PIDOL,
+  resolveEntityIcon,
 } from "@/utils/entities";
 import { useDrag, useDrop } from "@/utils/safeDnd";
 import CustomizationCounts from "./CustomizationCounts";
@@ -29,16 +28,7 @@ function EntityIcon({
   showEmptyPlaceholder,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
-  let imageEntity = entity;
-  let imageIdolId = idolId;
-  if (entity?._type === "pIdol") {
-    const sigCard = SIGNATURE_CARD_BY_PIDOL[entity.id];
-    if (sigCard) {
-      imageEntity = sigCard;
-      imageIdolId = entity.idolId;
-    }
-  }
-  const { icon } = gkImg(imageEntity, imageIdolId);
+  const icon = resolveEntityIcon(entity, idolId);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: "ENTITY_ICON",
