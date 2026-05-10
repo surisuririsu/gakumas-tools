@@ -3,9 +3,10 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2026-05-10
 
-
-
+- Skill cards used via free-use wrappers (e.g. useAllCardsFree) now skip their actions when their conditions aren't met
+- Score formula now multiplies concentrationMultiplier with the concentration buff sum instead of adding them
 
 ## 2026-05-09
 
