@@ -26,3 +26,10 @@ export const COMPARE_FN_BY_TYPE = {
   [EntityTypes.P_DRINK]: comparePDrinks,
   [EntityTypes.P_IDOL]: comparePIdols,
 };
+
+// First non-upgraded signature skill card per p-idol id; used as a fallback
+// icon when a p-idol has no portrait of its own.
+export const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
+  if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
+  return acc;
+}, {});

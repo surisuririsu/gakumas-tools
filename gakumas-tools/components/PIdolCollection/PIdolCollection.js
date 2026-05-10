@@ -2,10 +2,11 @@
 import { memo, useCallback, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { FaXTwitter } from "react-icons/fa6";
-import { Idols, PIdols, SkillCards } from "gakumas-data";
+import { Idols, PIdols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import IconSelect from "@/components/IconSelect";
+import { SIGNATURE_CARD_BY_PIDOL } from "@/utils/entities";
 import { SITE_URL, localePath } from "@/utils/localeUrls";
 import { PLANS } from "@/utils/plans";
 import { comparePIdols } from "@/utils/sort";
@@ -25,11 +26,6 @@ const EXCLUDED_IDOL_IDS = new Set([14]);
 const ALL_P_IDOLS = PIdols.getAll()
   .filter((p) => !EXCLUDED_IDOL_IDS.has(p.idolId))
   .sort(comparePIdols);
-
-const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
-  if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
-  return acc;
-}, {});
 
 const ALL_IDOLS = Idols.getAll().filter(
   (idol) => !EXCLUDED_IDOL_IDS.has(idol.id),

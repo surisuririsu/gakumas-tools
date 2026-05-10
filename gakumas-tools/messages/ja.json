@@ -161,11 +161,8 @@
   "TierList": {
     "addItem": "追加",
     "removeItem": "ここにドロップして削除",
-    "remove": "削除",
     "clearAll": "全てクリア",
     "confirmClear": "このティア表をクリアしますか？",
-    "addTier": "ティアを追加",
-    "removeTier": "ティアを削除",
     "addRankTier": "{rank} を追加",
     "removeRankTier": "{rank} を削除",
     "confirmRemoveTier": "ティア {rank} と {count} 件のアイテムを削除しますか？",

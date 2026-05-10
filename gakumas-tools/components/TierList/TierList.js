@@ -79,14 +79,9 @@ function isDefaultList(list) {
   return Object.values(list.items).every((arr) => arr.length === 0);
 }
 
-// dnd-kit IDs are strings or numbers. Items use their numeric id; tier
-// containers use the rank string (e.g., "SS"); trash zones are prefixed.
-function findContainer(list, id) {
+function findContainer(list, pickedById, id) {
   if (typeof id === "string" && list.tiers.includes(id)) return id;
-  for (const tier of list.tiers) {
-    if ((list.items[tier] || []).includes(id)) return tier;
-  }
-  return null;
+  return pickedById[id] ?? null;
 }
 
 function BottomTrashZone({ isDragActive, isOverTrash }) {
@@ -163,7 +158,6 @@ function TierList({ type }) {
     [pickedById],
   );
 
-  // Picker-side helpers (still uses index-based placement; not via dnd-kit).
   const placeItem = useCallback((targetKey, targetIndex, id) => {
     setList((prev) => {
       if (!prev.tiers.includes(targetKey)) return prev;
@@ -230,6 +224,8 @@ function TierList({ type }) {
     });
   }, []);
 
+  // Read via ref so togglePickerItem can stay stable across list updates,
+  // letting memoized PickerEntity rows skip re-rendering.
   const pickedByIdRef = useRef(pickedById);
   pickedByIdRef.current = pickedById;
 
@@ -261,7 +257,8 @@ function TierList({ type }) {
 
   const removeTier = useCallback(
     (rank) => {
-      if (!list.tiers.includes(rank) || list.tiers.length <= 1) return;
+      const cur = listRef.current;
+      if (!cur.tiers.includes(rank) || cur.tiers.length <= 1) return;
       const apply = () =>
         setList((prev) => {
           if (prev.tiers.length <= 1) return prev;
@@ -270,7 +267,7 @@ function TierList({ type }) {
           delete nextItems[rank];
           return { tiers: nextTiers, items: nextItems };
         });
-      const itemCount = (list.items[rank] || []).length;
+      const itemCount = (cur.items[rank] || []).length;
       if (itemCount > 0) {
         setModal(
           <ConfirmModal
@@ -282,7 +279,7 @@ function TierList({ type }) {
         apply();
       }
     },
-    [list, setModal, t],
+    [setModal, t],
   );
 
   const clearAll = useCallback(() => {
@@ -370,7 +367,8 @@ function TierList({ type }) {
 
   const handleDragOver = useCallback((event) => {
     const { active, over } = event;
-    setOverId(over?.id ?? null);
+    const nextOver = over?.id ?? null;
+    setOverId((prev) => (prev === nextOver ? prev : nextOver));
     if (!over) return;
     const activeId = active.id;
     const overIdNow = over.id;
@@ -378,8 +376,9 @@ function TierList({ type }) {
     if (overIdNow === TRASH_ID) return;
 
     const cur = listRef.current;
-    const activeContainer = findContainer(cur, activeId);
-    const overContainer = findContainer(cur, overIdNow);
+    const picked = pickedByIdRef.current;
+    const activeContainer = findContainer(cur, picked, activeId);
+    const overContainer = findContainer(cur, picked, overIdNow);
     if (!activeContainer || !overContainer) return;
     if (activeContainer === overContainer) return;
 
@@ -433,8 +432,9 @@ function TierList({ type }) {
       }
 
       const cur = listRef.current;
-      const activeContainer = findContainer(cur, activeId);
-      const overContainer = findContainer(cur, dropId);
+      const picked = pickedByIdRef.current;
+      const activeContainer = findContainer(cur, picked, activeId);
+      const overContainer = findContainer(cur, picked, dropId);
       if (!activeContainer || !overContainer) return;
       if (activeContainer !== overContainer) return;
 
@@ -517,9 +517,9 @@ function TierList({ type }) {
                   addBelow={belowRank}
                   isDragActive={activeId != null}
                   isOverTrash={isOverTrash}
-                  onAdd={() => setPickerTier(tierKey)}
+                  onAdd={setPickerTier}
                   onAddTier={addTier}
-                  onDeleteTier={() => removeTier(tierKey)}
+                  onDeleteTier={removeTier}
                 />
               );
             })}

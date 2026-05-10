@@ -2,20 +2,14 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaCopy, FaDownload, FaXTwitter } from "react-icons/fa6";
 import Modal from "@/components/Modal";
+import { EntityTypes } from "@/utils/entities";
 import styles from "./TierShareModal.module.scss";
 
-const TYPE_FILE_PREFIX = {
-  P_ITEM: "p-items",
-  SKILL_CARD: "skill-cards",
-  P_DRINK: "p-drinks",
-  P_IDOL: "p-idols",
-};
-
-const TAB_KEY_BY_TYPE = {
-  P_ITEM: "p-items",
-  SKILL_CARD: "skill-cards",
-  P_DRINK: "p-drinks",
-  P_IDOL: "p-idols",
+const SLUG_BY_TYPE = {
+  [EntityTypes.P_ITEM]: "p-items",
+  [EntityTypes.SKILL_CARD]: "skill-cards",
+  [EntityTypes.P_DRINK]: "p-drinks",
+  [EntityTypes.P_IDOL]: "p-idols",
 };
 
 function TierShareModal({ type, getImageNode, onClose }) {
@@ -65,7 +59,7 @@ function TierShareModal({ type, getImageNode, onClose }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `tier-list-${TYPE_FILE_PREFIX[type] || "list"}.png`;
+      a.download = `tier-list-${SLUG_BY_TYPE[type] || "list"}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -79,8 +73,8 @@ function TierShareModal({ type, getImageNode, onClose }) {
   }, [getImageNode, type, t]);
 
   const shareToX = useCallback(() => {
-    const tabKey = TAB_KEY_BY_TYPE[type];
-    const entityName = tabKey ? tDex(`tabs.${tabKey}`) : "";
+    const slug = SLUG_BY_TYPE[type];
+    const entityName = slug ? tDex(`tabs.${slug}`) : "";
     const text = t("shareTweetText", { type: entityName });
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       text,

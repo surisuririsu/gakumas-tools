@@ -161,11 +161,8 @@
   "TierList": {
     "addItem": "Add item",
     "removeItem": "Drop here to remove",
-    "remove": "Remove",
     "clearAll": "Clear all",
     "confirmClear": "Clear this tier list?",
-    "addTier": "Add tier",
-    "removeTier": "Remove tier",
     "addRankTier": "Add {rank}",
     "removeRankTier": "Remove {rank}",
     "confirmRemoveTier": "Remove tier {rank} and its {count, plural, one {# item} other {# items}}?",

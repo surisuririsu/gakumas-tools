@@ -161,11 +161,8 @@
   "TierList": {
     "addItem": "添加",
     "removeItem": "拖放到此处删除",
-    "remove": "删除",
     "clearAll": "全部清空",
     "confirmClear": "确认清空此梯队表？",
-    "addTier": "添加梯队",
-    "removeTier": "删除梯队",
     "addRankTier": "添加 {rank}",
     "removeRankTier": "删除 {rank}",
     "confirmRemoveTier": "删除梯队 {rank} 及其 {count} 个项目？",

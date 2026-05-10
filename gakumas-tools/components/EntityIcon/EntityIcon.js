@@ -1,22 +1,19 @@
 import { memo } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { Idols, SkillCards } from "gakumas-data";
+import { Idols } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
-import { ENTITY_DATA_BY_TYPE, EntityTypes } from "@/utils/entities";
+import {
+  ENTITY_DATA_BY_TYPE,
+  EntityTypes,
+  SIGNATURE_CARD_BY_PIDOL,
+} from "@/utils/entities";
 import { useDrag, useDrop } from "@/utils/safeDnd";
 import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
-
-// Not every p-idol has its own icon asset, so render its signature skill
-// card icon instead (matches the p-idol collection page).
-const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
-  if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
-  return acc;
-}, {});
 
 function EntityIcon({
   type,

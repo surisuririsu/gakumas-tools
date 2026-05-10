@@ -89,7 +89,7 @@ function TierRow({
           <button
             type="button"
             className={styles.tierDeleteBtn}
-            onClick={onDeleteTier}
+            onClick={() => onDeleteTier(tierKey)}
             aria-label={t("removeRankTier", { rank: tierKey })}
             data-export-ignore="true"
           >
@@ -135,7 +135,7 @@ function TierRow({
           type="button"
           className={styles.addButton}
           aria-label={t("addItem")}
-          onClick={onAdd}
+          onClick={() => onAdd(tierKey)}
           data-export-ignore="true"
         >
           <FaPlus />
