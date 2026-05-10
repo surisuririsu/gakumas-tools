@@ -28,6 +28,10 @@
       "title": "Pアイドル所持率",
       "description": "獲得済みのPアイドルを記録して、レアリティ・プラン・アイドル別の所持率を確認できます"
     },
+    "tierList": {
+      "title": "ティア表",
+      "description": "スキルカード・Pアイテム・Pドリンク・Pアイドルのティア表を作成する"
+    },
     "memoryCalculator": {
       "title": "メモリー生成確率計算機",
       "description": "欲しいメモリーの生成確率を計算する"
@@ -150,9 +154,32 @@
       },
       "tierlist": {
         "title": "ティア表",
-        "description": "近日公開"
+        "description": "スキルカード・Pアイテム・Pドリンク・Pアイドルをティア別に並べる"
       }
     }
+  },
+  "TierList": {
+    "addItem": "追加",
+    "removeItem": "ここにドロップして削除",
+    "remove": "削除",
+    "clearAll": "全てクリア",
+    "confirmClear": "このティア表をクリアしますか？",
+    "addTier": "ティアを追加",
+    "removeTier": "ティアを削除",
+    "addRankTier": "{rank} を追加",
+    "removeRankTier": "{rank} を削除",
+    "confirmRemoveTier": "ティア {rank} と {count} 件のアイテムを削除しますか？",
+    "share": "共有",
+    "shareHelp": "このリンクを開くと、ティア表のコピーをインポートできます。",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "copyFailed": "クリップボードへのコピーに失敗しました。",
+    "downloadImage": "画像として保存",
+    "preparingImage": "画像を準備中…",
+    "exportFailed": "画像の書き出しに失敗しました。",
+    "shareToX": "Xで共有",
+    "shareTweetText": "学マス {type} ティア表",
+    "confirmLeave": "タブを切り替えると現在のティア表は失われます。続けますか？"
   },
   "PIdolCollection": {
     "collected": "獲得済み",

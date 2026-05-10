@@ -3,8 +3,14 @@ import { FaXmark } from "react-icons/fa6";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Modal.module.scss";
 
-function Modal({ children, dismissable = true }) {
-  const { closeModal } = useContext(ModalContext);
+function Modal({ children, dismissable = true, onClose }) {
+  const { closeModal: contextClose, getModalStackDepth } =
+    useContext(ModalContext);
+  const close = onClose || contextClose;
+  // When `onClose` is provided, the modal is rendered inline by a parent
+  // rather than pushed onto the global stack. If a stacked modal is currently
+  // on top, defer ESC to it instead of closing ourselves alongside it.
+  const isInline = !!onClose;
   const modalRef = useRef(null);
   const mouseDownOnOverlayRef = useRef(false);
 
@@ -23,8 +29,9 @@ function Modal({ children, dismissable = true }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && dismissable) {
+        if (isInline && getModalStackDepth() > 0) return;
         e.preventDefault();
-        closeModal();
+        close();
         return;
       }
 
@@ -54,7 +61,7 @@ function Modal({ children, dismissable = true }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [dismissable, closeModal]);
+  }, [dismissable, close, isInline, getModalStackDepth]);
 
   const handleOverlayMouseDown = (e) => {
     mouseDownOnOverlayRef.current = e.target === e.currentTarget;
@@ -70,7 +77,7 @@ function Modal({ children, dismissable = true }) {
       mouseDownOnOverlayRef.current &&
       e.target === e.currentTarget;
     mouseDownOnOverlayRef.current = false;
-    if (dismiss) closeModal();
+    if (dismiss) close();
   };
 
   return (
@@ -86,7 +93,7 @@ function Modal({ children, dismissable = true }) {
         tabIndex={-1}
       >
         {dismissable && (
-          <button className={styles.close} onClick={closeModal}>
+          <button className={styles.close} onClick={close}>
             <FaXmark />
           </button>
         )}

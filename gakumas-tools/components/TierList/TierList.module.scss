@@ -1,0 +1,269 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.tierList {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  gap: tokens.$space-2;
+}
+
+.headerButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: tokens.$space-1 tokens.$space-2;
+  font-size: tokens.$text-xs;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$surface-bg;
+  color: tokens.$surface-ink;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background-color: tokens.$surface-muted;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.tiers {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-panel;
+  overflow: hidden;
+}
+
+.tierRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.tierAddTop,
+.tierAddBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: tokens.$surface-ink-muted;
+  font-size: 9px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  svg {
+    font-size: 8px;
+  }
+
+  &:hover {
+    background-color: colors.$gk-orange-extra-light;
+    color: colors.$gk-orange;
+  }
+}
+
+.tierAddTop {
+  top: 0;
+}
+
+.tierAddBottom {
+  bottom: 0;
+}
+
+.tierLabel:hover .tierAddTop,
+.tierLabel:hover .tierAddBottom,
+.tierLabel:focus-within .tierAddTop,
+.tierLabel:focus-within .tierAddBottom {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid tokens.$surface-border;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.tierLabel {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: tokens.$space-2;
+  background-color: tokens.$surface-muted;
+  border-right: 1px solid tokens.$surface-border;
+
+  img {
+    width: auto;
+    height: 48px;
+    object-fit: contain;
+  }
+}
+
+.tierDeleteBtn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: tokens.$surface-ink-muted;
+  font-size: 9px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background-color: colors.$red-extra-light;
+    color: colors.$red;
+  }
+}
+
+.tierLabel:hover .tierDeleteBtn,
+.tierLabel:focus-within .tierDeleteBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.items {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: tokens.$space-1;
+  padding: tokens.$space-2;
+  min-height: 80px;
+  transition: background-color 0.15s ease;
+}
+
+.itemsCanDrop {
+  background-color: rgba(243, 152, 0, 0.05);
+}
+
+.itemsDropOver {
+  background-color: colors.$gk-orange-extra-light;
+}
+
+.item {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.itemPlaceholder {
+  opacity: 0.25;
+  outline: 2px dashed colors.$gk-orange;
+  outline-offset: -2px;
+  border-radius: 8%;
+}
+
+.bottomTrash {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: tokens.$space-2;
+  height: 0;
+  overflow: hidden;
+  border-top: 0 solid transparent;
+  background-color: tokens.$surface-bg;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: 500;
+  transition:
+    height 0.18s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  svg {
+    font-size: 18px;
+  }
+}
+
+.bottomTrashActive {
+  height: 64px;
+  border-top: 2px dashed colors.$red-light;
+  background-color: colors.$red-extra-light;
+  color: colors.$red;
+}
+
+.bottomTrashOver {
+  background-color: colors.$red;
+  border-top-color: colors.$red;
+  color: colors.$white;
+}
+
+.itemHidden {
+  display: none;
+}
+
+.addButton {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed tokens.$surface-border-strong;
+  border-radius: 8%;
+  background-color: tokens.$surface-bg;
+  color: tokens.$surface-ink-muted;
+  font-size: 20px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    border-color: colors.$gk-orange;
+    color: colors.$gk-orange;
+    background-color: colors.$gk-orange-extra-light;
+  }
+}

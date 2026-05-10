@@ -1,5 +1,5 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { FaBook, FaListCheck } from "react-icons/fa6";
+import { FaBook, FaListCheck, FaTableList } from "react-icons/fa6";
 import { Link } from "@/i18n/routing";
 import { generateMetadataForTool } from "@/utils/metadata";
 import styles from "./page.module.scss";
@@ -20,6 +20,11 @@ const CATEGORIES = [
     key: "collection",
     href: "/dex/collection/p-idols",
     icon: <FaListCheck />,
+  },
+  {
+    key: "tierlist",
+    href: "/dex/tier-list/skill-cards",
+    icon: <FaTableList />,
   },
 ];
 

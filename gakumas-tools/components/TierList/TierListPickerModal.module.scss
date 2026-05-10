@@ -1,0 +1,51 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.entities {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: tokens.$space-2;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: tokens.$space-1;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  transition: filter 0.15s ease;
+}
+
+.picked {
+  filter: grayscale(0.5) brightness(0.75);
+}
+
+.current {
+  filter: none;
+  outline: 2px solid colors.$gk-orange;
+  outline-offset: 2px;
+  border-radius: 8%;
+}
+
+.tierBadge {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+
+  img {
+    width: auto;
+    height: 22px;
+    object-fit: contain;
+  }
+}

@@ -28,6 +28,10 @@
       "title": "P 偶像收集册",
       "description": "记录已获得的 P 偶像，按稀有度、计划与偶像查看收集率"
     },
+    "tierList": {
+      "title": "梯队表",
+      "description": "为技能卡、P 道具、P 饮料或 P 偶像创建梯队表"
+    },
     "memoryCalculator": {
       "title": "回忆计算器",
       "description": "计算回忆卡中获得目标技能卡组合的概率"
@@ -150,9 +154,32 @@
       },
       "tierlist": {
         "title": "梯队表",
-        "description": "敬请期待"
+        "description": "为技能卡、P 道具、P 饮料或 P 偶像分梯队"
       }
     }
+  },
+  "TierList": {
+    "addItem": "添加",
+    "removeItem": "拖放到此处删除",
+    "remove": "删除",
+    "clearAll": "全部清空",
+    "confirmClear": "确认清空此梯队表？",
+    "addTier": "添加梯队",
+    "removeTier": "删除梯队",
+    "addRankTier": "添加 {rank}",
+    "removeRankTier": "删除 {rank}",
+    "confirmRemoveTier": "删除梯队 {rank} 及其 {count} 个项目？",
+    "share": "分享",
+    "shareHelp": "拥有此链接的人可以导入此梯队表的副本。",
+    "copy": "复制",
+    "copied": "已复制",
+    "copyFailed": "无法复制到剪贴板。",
+    "downloadImage": "下载为图片",
+    "preparingImage": "正在准备图片…",
+    "exportFailed": "导出图片失败。",
+    "shareToX": "分享到 X",
+    "shareTweetText": "学马斯 {type} 梯队表",
+    "confirmLeave": "切换标签将丢失当前的梯队表。继续？"
   },
   "PIdolCollection": {
     "collected": "已获得",

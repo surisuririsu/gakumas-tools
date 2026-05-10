@@ -28,6 +28,10 @@
       "title": "P-Idol Collection",
       "description": "Track which p-idols you've collected, with progress breakdowns by rarity, plan, and idol"
     },
+    "tierList": {
+      "title": "Tier Lists",
+      "description": "Create tier lists of skill cards, p-items, p-drinks, or p-idols"
+    },
     "memoryCalculator": {
       "title": "Memory Calculator",
       "description": "Calculate probability of getting desired skill card combinations in memories"
@@ -150,9 +154,32 @@
       },
       "tierlist": {
         "title": "Tier Lists",
-        "description": "Coming soon"
+        "description": "Rank skill cards, p-items, p-drinks, or p-idols by tier"
       }
     }
+  },
+  "TierList": {
+    "addItem": "Add item",
+    "removeItem": "Drop here to remove",
+    "remove": "Remove",
+    "clearAll": "Clear all",
+    "confirmClear": "Clear this tier list?",
+    "addTier": "Add tier",
+    "removeTier": "Remove tier",
+    "addRankTier": "Add {rank}",
+    "removeRankTier": "Remove {rank}",
+    "confirmRemoveTier": "Remove tier {rank} and its {count, plural, one {# item} other {# items}}?",
+    "share": "Share",
+    "shareHelp": "Anyone with this link can import a copy of this tier list.",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyFailed": "Couldn't copy to clipboard.",
+    "downloadImage": "Download as image",
+    "preparingImage": "Preparing image…",
+    "exportFailed": "Couldn't export image.",
+    "shareToX": "Share to X",
+    "shareTweetText": "My Gakumas {type} tier list",
+    "confirmLeave": "You'll lose this tier list if you switch tabs. Continue?"
   },
   "PIdolCollection": {
     "collected": "Collected",

@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { Idols, SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
@@ -9,6 +10,13 @@ import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
+
+// Not every p-idol has its own icon asset, so render its signature skill
+// card icon instead (matches the p-idol collection page).
+const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
+  if (sc.pIdolId && !sc.upgraded && !acc[sc.pIdolId]) acc[sc.pIdolId] = sc;
+  return acc;
+}, {});
 
 function EntityIcon({
   type,
@@ -24,7 +32,16 @@ function EntityIcon({
   showEmptyPlaceholder,
 }) {
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
-  const { icon } = gkImg(entity, idolId);
+  let imageEntity = entity;
+  let imageIdolId = idolId;
+  if (entity?._type === "pIdol") {
+    const sigCard = SIGNATURE_CARD_BY_PIDOL[entity.id];
+    if (sigCard) {
+      imageEntity = sigCard;
+      imageIdolId = entity.idolId;
+    }
+  }
+  const { icon } = gkImg(imageEntity, imageIdolId);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: "ENTITY_ICON",
@@ -43,14 +60,20 @@ function EntityIcon({
     },
   });
 
+  let displayName = entity?.name;
+  if (entity?._type === "pIdol") {
+    const idol = Idols.getById(entity.idolId);
+    displayName = `${idol?.name || ""} ${entity.title || ""}`.trim();
+  }
+
   let unwrappedElement = null;
   if (entity) {
     unwrappedElement = (
       <>
         <Image
           src={icon}
-          alt={entity.name}
-          title={entity.name}
+          alt={displayName}
+          title={displayName}
           fill
           sizes="64px"
           draggable={false}

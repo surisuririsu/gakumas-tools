@@ -1,0 +1,73 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.help {
+  margin-bottom: tokens.$space-3;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+}
+
+.urlRow {
+  display: flex;
+  gap: tokens.$space-2;
+  margin-bottom: tokens.$space-3;
+}
+
+.urlInput {
+  flex: 1;
+  min-width: 0;
+  padding: tokens.$space-2;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$surface-bg;
+  font-family: monospace;
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink;
+}
+
+.copyBtn,
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: tokens.$space-1;
+  padding: tokens.$space-2 tokens.$space-3;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$surface-bg;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-sm;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: colors.$gk-orange;
+    background-color: colors.$gk-orange-extra-light;
+    color: colors.$gk-orange;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2;
+
+  .actionBtn {
+    flex: 1 1 200px;
+  }
+}
+
+.error {
+  margin-top: tokens.$space-2;
+  color: colors.$red;
+  font-size: tokens.$text-sm;
+}

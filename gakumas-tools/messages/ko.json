@@ -28,6 +28,10 @@
       "title": "P아이돌 도감",
       "description": "획득한 P아이돌을 기록하고, 레어도・플랜・아이돌별 획득률을 확인하기"
     },
+    "tierList": {
+      "title": "티어리스트",
+      "description": "스킬 카드・P 아이템・P 드링크・P아이돌의 티어리스트 만들기"
+    },
     "memoryCalculator": {
       "title": "메모리 생성 확률 계산기",
       "description": "원하는 메모리의 생성 확률 계산"
@@ -150,9 +154,32 @@
       },
       "tierlist": {
         "title": "티어리스트",
-        "description": "준비 중"
+        "description": "스킬 카드・P 아이템・P 드링크・P아이돌을 티어별로 정리하기"
       }
     }
+  },
+  "TierList": {
+    "addItem": "추가",
+    "removeItem": "여기에 드롭하여 삭제",
+    "remove": "삭제",
+    "clearAll": "전체 삭제",
+    "confirmClear": "이 티어리스트를 비우시겠습니까?",
+    "addTier": "티어 추가",
+    "removeTier": "티어 삭제",
+    "addRankTier": "{rank} 추가",
+    "removeRankTier": "{rank} 삭제",
+    "confirmRemoveTier": "티어 {rank}와(과) {count}개의 항목을 삭제하시겠습니까?",
+    "share": "공유",
+    "shareHelp": "이 링크를 열면 티어리스트 사본을 가져올 수 있습니다.",
+    "copy": "복사",
+    "copied": "복사됨",
+    "copyFailed": "클립보드에 복사하지 못했습니다.",
+    "downloadImage": "이미지로 저장",
+    "preparingImage": "이미지 준비 중…",
+    "exportFailed": "이미지 내보내기에 실패했습니다.",
+    "shareToX": "X에 공유",
+    "shareTweetText": "학원 아이돌 마스터 {type} 티어리스트",
+    "confirmLeave": "탭을 전환하면 현재 티어리스트가 사라집니다. 계속하시겠습니까?"
   },
   "PIdolCollection": {
     "collected": "획득",
