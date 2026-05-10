@@ -1,6 +1,6 @@
 import { PItems, SkillCards } from "gakumas-data";
 
-const RARITY_VALUES = {
+export const RARITY_VALUES = {
   N: 0,
   T: 1,
   R: 2,

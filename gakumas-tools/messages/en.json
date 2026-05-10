@@ -161,6 +161,11 @@
   "TierList": {
     "addItem": "Add item",
     "removeItem": "Drop here to remove",
+    "filterAll": "All",
+    "filterBase": "Base",
+    "filterUpgraded": "Upgraded",
+    "poolEmpty": "All items placed",
+    "swipeHint": "← swipe to scroll →",
     "clearAll": "Clear all",
     "confirmClear": "Clear this tier list?",
     "addRankTier": "Add {rank}",

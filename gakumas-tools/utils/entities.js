@@ -35,6 +35,16 @@ export const SIGNATURE_CARD_BY_PIDOL = SkillCards.getAll().reduce((acc, sc) => {
   return acc;
 }, {});
 
+// Entities that should be hidden from any user-facing browser/picker.
+export const HIDDEN_ITEM_IDS = new Set([422, 424]);
+export const HIDDEN_CARD_IDS = new Set([807, 809, 811, 813]);
+
+export function isEntityHidden(type, id) {
+  if (type === EntityTypes.SKILL_CARD) return HIDDEN_CARD_IDS.has(id);
+  if (type === EntityTypes.P_ITEM) return HIDDEN_ITEM_IDS.has(id);
+  return false;
+}
+
 // Resolve a renderable icon for an entity. P-idols without their own portrait
 // fall back to their signature skill card.
 export function resolveEntityIcon(entity, idolId) {

@@ -161,6 +161,11 @@
   "TierList": {
     "addItem": "追加",
     "removeItem": "ここにドロップして削除",
+    "filterAll": "全て",
+    "filterBase": "通常",
+    "filterUpgraded": "強化",
+    "poolEmpty": "すべて配置済み",
+    "swipeHint": "← スワイプしてスクロール →",
     "clearAll": "全てクリア",
     "confirmClear": "このティア表をクリアしますか？",
     "addRankTier": "{rank} を追加",

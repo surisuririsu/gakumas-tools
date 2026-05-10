@@ -18,58 +18,31 @@ import {
   closestCenter,
   pointerWithin,
   rectIntersection,
-  useDroppable,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { FaTrash } from "react-icons/fa6";
 import { arrayMove } from "@dnd-kit/sortable";
 import { FaShareNodes } from "react-icons/fa6";
 import ConfirmModal from "@/components/ConfirmModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
 import NavigationGuardContext from "@/contexts/NavigationGuardContext";
-import c from "@/utils/classNames";
 import {
   EMPTY_LIST,
   decodeList,
   encodeList,
   isDefaultList,
 } from "@/utils/tierList";
+import EntityPool, { POOL_ID } from "./EntityPool";
 import TierListPickerModal from "./TierListPickerModal";
 import TierRow from "./TierRow";
 import TierShareModal from "./TierShareModal";
 import { AVAILABLE_RANKS, sortRanks } from "./ranks";
 import styles from "./TierList.module.scss";
 
-const TRASH_ID = "trash:bottom";
-
 function findContainer(list, pickedById, id) {
-  if (typeof id === "string" && list.tiers.includes(id)) return id;
-  return pickedById[id] ?? null;
-}
-
-function BottomTrashZone({ isDragActive, isOverTrash }) {
-  const t = useTranslations("TierList");
-  const { setNodeRef } = useDroppable({
-    id: TRASH_ID,
-    disabled: !isDragActive,
-  });
-  return (
-    <div
-      ref={setNodeRef}
-      className={c(
-        styles.bottomTrash,
-        isDragActive && styles.bottomTrashActive,
-        isOverTrash && styles.bottomTrashOver,
-      )}
-      aria-label={isDragActive ? t("removeItem") : undefined}
-      data-export-ignore="true"
-    >
-      <FaTrash />
-      <span>{t("removeItem")}</span>
-    </div>
-  );
+  if (list.tiers.includes(id)) return id;
+  return pickedById[id] ?? POOL_ID;
 }
 
 function TierList({ type }) {
@@ -92,7 +65,14 @@ function TierList({ type }) {
   const listRef = useRef(list);
   listRef.current = list;
 
+  const [pickerTier, setPickerTier] = useState(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [activeId, setActiveId] = useState(null);
+
+  // Defer URL sync until a drag finishes — hover-driven mid-drag list mutations
+  // would otherwise rewrite the URL on every frame.
   useEffect(() => {
+    if (activeId != null) return;
     const url = new URL(window.location.href);
     if (isDefaultList(list)) {
       url.searchParams.delete("d");
@@ -100,12 +80,7 @@ function TierList({ type }) {
       url.searchParams.set("d", encodeList(list));
     }
     window.history.replaceState(null, "", url);
-  }, [list]);
-
-  const [pickerTier, setPickerTier] = useState(null);
-  const [shareOpen, setShareOpen] = useState(false);
-  const [activeId, setActiveId] = useState(null);
-  const [overId, setOverId] = useState(null);
+  }, [list, activeId]);
 
   const pickedById = useMemo(() => {
     const m = {};
@@ -165,26 +140,6 @@ function TierList({ type }) {
         [tierKey]: (prev.items[tierKey] || []).filter((x) => x !== id),
       },
     }));
-  }, []);
-
-  const removeAnywhere = useCallback((id) => {
-    setList((prev) => {
-      let foundTier = null;
-      for (const k of prev.tiers) {
-        if ((prev.items[k] || []).includes(id)) {
-          foundTier = k;
-          break;
-        }
-      }
-      if (!foundTier) return prev;
-      return {
-        ...prev,
-        items: {
-          ...prev.items,
-          [foundTier]: prev.items[foundTier].filter((x) => x !== id),
-        },
-      };
-    });
   }, []);
 
   // Read via ref so togglePickerItem can stay stable across list updates,
@@ -282,29 +237,41 @@ function TierList({ type }) {
     return () => setGuard(null);
   }, [allIdsCount, setGuard, setModal, t]);
 
-  const tiersSet = useMemo(() => new Set(list.tiers), [list.tiers]);
   const canDeleteTier = list.tiers.length > 1;
+
+  // After a cross-container hover-move, freeze `over` for one frame so a
+  // mid-frame layout shift doesn't ping-pong the active item between
+  // containers and blow React's update budget.
+  const recentlyMovedRef = useRef(false);
+  const lastOverIdRef = useRef(null);
+  const markMoved = () => {
+    recentlyMovedRef.current = true;
+    requestAnimationFrame(() => {
+      recentlyMovedRef.current = false;
+    });
+  };
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 200, tolerance: 6 },
+      activationConstraint: { distance: 8 },
     }),
   );
 
-  // Custom collision detection (multiple-container pattern):
-  //   - trash takes precedence when pointer is inside it
-  //   - cursor over a tier with items → closest item inside that tier
-  //   - cursor over empty tier → the tier container itself
-  //   - cursor outside everything → rectIntersection fallback
   const collisionDetection = useCallback((args) => {
+    if (recentlyMovedRef.current && lastOverIdRef.current != null) {
+      return [{ id: lastOverIdRef.current }];
+    }
+
     const pointerHits = pointerWithin(args);
-    const trashHit = pointerHits.find((c) => c.id === TRASH_ID);
-    if (trashHit) return [trashHit];
 
     const intersections =
       pointerHits.length > 0 ? pointerHits : rectIntersection(args);
-    if (intersections.length === 0) return [];
+    if (intersections.length === 0) {
+      return lastOverIdRef.current != null
+        ? [{ id: lastOverIdRef.current }]
+        : [];
+    }
 
     const cur = listRef.current;
     let firstId = intersections[0].id;
@@ -316,27 +283,29 @@ function TierList({ type }) {
           containerItems.includes(c.id),
         );
         const closer = closestCenter({ ...args, droppableContainers: inside });
-        if (closer.length > 0) return closer;
+        if (closer.length > 0) {
+          lastOverIdRef.current = closer[0].id;
+          return closer;
+        }
       }
     }
 
+    lastOverIdRef.current = firstId;
     return [{ id: firstId }];
   }, []);
 
   const handleDragStart = useCallback((event) => {
     setActiveId(event.active.id);
-    setOverId(null);
+    lastOverIdRef.current = null;
+    recentlyMovedRef.current = false;
   }, []);
 
   const handleDragOver = useCallback((event) => {
     const { active, over } = event;
-    const nextOver = over?.id ?? null;
-    setOverId((prev) => (prev === nextOver ? prev : nextOver));
     if (!over) return;
     const activeId = active.id;
     const overIdNow = over.id;
     if (activeId === overIdNow) return;
-    if (overIdNow === TRASH_ID) return;
 
     const cur = listRef.current;
     const picked = pickedByIdRef.current;
@@ -345,18 +314,34 @@ function TierList({ type }) {
     if (!activeContainer || !overContainer) return;
     if (activeContainer === overContainer) return;
 
+    if (overContainer === POOL_ID) {
+      markMoved();
+      setList((prev) => {
+        const arr = prev.items[activeContainer] || [];
+        if (!arr.includes(activeId)) return prev;
+        return {
+          ...prev,
+          items: {
+            ...prev.items,
+            [activeContainer]: arr.filter((id) => id !== activeId),
+          },
+        };
+      });
+      return;
+    }
+
+    markMoved();
     setList((prev) => {
-      const activeItems = prev.items[activeContainer] || [];
       const overItems = prev.items[overContainer] || [];
-      if (!activeItems.includes(activeId)) return prev;
+      const fromTier = activeContainer !== POOL_ID;
+      const activeItems = fromTier ? prev.items[activeContainer] || [] : null;
+      if (fromTier && !activeItems.includes(activeId)) return prev;
 
       let newIndex;
       if (overIdNow === overContainer) {
         newIndex = overItems.length;
       } else {
         const overIdx = overItems.indexOf(overIdNow);
-        // Insert above the over item; dnd-kit handles half-detection visually
-        // through its drag-over mechanism with pointer position.
         const isBelowOver =
           over.rect &&
           active.rect.current.translated &&
@@ -365,18 +350,16 @@ function TierList({ type }) {
         newIndex = overIdx >= 0 ? overIdx + (isBelowOver ? 1 : 0) : overItems.length;
       }
 
-      return {
-        ...prev,
-        items: {
-          ...prev.items,
-          [activeContainer]: activeItems.filter((id) => id !== activeId),
-          [overContainer]: [
-            ...overItems.slice(0, newIndex),
-            activeId,
-            ...overItems.slice(newIndex),
-          ],
-        },
-      };
+      const nextItems = { ...prev.items };
+      if (fromTier) {
+        nextItems[activeContainer] = activeItems.filter((id) => id !== activeId);
+      }
+      nextItems[overContainer] = [
+        ...overItems.slice(0, newIndex),
+        activeId,
+        ...overItems.slice(newIndex),
+      ];
+      return { ...prev, items: nextItems };
     });
   }, []);
 
@@ -384,15 +367,11 @@ function TierList({ type }) {
     (event) => {
       const { active, over } = event;
       setActiveId(null);
-      setOverId(null);
+      lastOverIdRef.current = null;
+      recentlyMovedRef.current = false;
       if (!over) return;
       const activeId = active.id;
       const dropId = over.id;
-
-      if (dropId === TRASH_ID) {
-        removeAnywhere(activeId);
-        return;
-      }
 
       const cur = listRef.current;
       const picked = pickedByIdRef.current;
@@ -400,6 +379,7 @@ function TierList({ type }) {
       const overContainer = findContainer(cur, picked, dropId);
       if (!activeContainer || !overContainer) return;
       if (activeContainer !== overContainer) return;
+      if (activeContainer === POOL_ID) return;
 
       const items = cur.items[activeContainer] || [];
       const oldIndex = items.indexOf(activeId);
@@ -415,15 +395,14 @@ function TierList({ type }) {
         },
       }));
     },
-    [removeAnywhere],
+    [],
   );
 
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
-    setOverId(null);
+    lastOverIdRef.current = null;
+    recentlyMovedRef.current = false;
   }, []);
-
-  const isOverTrash = overId === TRASH_ID;
 
   return (
     <DndContext
@@ -460,13 +439,13 @@ function TierList({ type }) {
             {list.tiers.map((tierKey) => {
               const idx = AVAILABLE_RANKS.indexOf(tierKey);
               const aboveRank =
-                idx > 0 && !tiersSet.has(AVAILABLE_RANKS[idx - 1])
+                idx > 0 && !list.tiers.includes(AVAILABLE_RANKS[idx - 1])
                   ? AVAILABLE_RANKS[idx - 1]
                   : null;
               const belowRank =
                 idx >= 0 &&
                 idx < AVAILABLE_RANKS.length - 1 &&
-                !tiersSet.has(AVAILABLE_RANKS[idx + 1])
+                !list.tiers.includes(AVAILABLE_RANKS[idx + 1])
                   ? AVAILABLE_RANKS[idx + 1]
                   : null;
               return (
@@ -479,7 +458,6 @@ function TierList({ type }) {
                   addAbove={aboveRank}
                   addBelow={belowRank}
                   isDragActive={activeId != null}
-                  isOverTrash={isOverTrash}
                   onAdd={setPickerTier}
                   onAddTier={addTier}
                   onDeleteTier={removeTier}
@@ -487,11 +465,9 @@ function TierList({ type }) {
               );
             })}
           </div>
-          <BottomTrashZone
-            isDragActive={activeId != null}
-            isOverTrash={isOverTrash}
-          />
         </div>
+
+        <EntityPool type={type} list={list} />
 
         {pickerTier != null && list.tiers.includes(pickerTier) && (
           <TierListPickerModal

@@ -161,6 +161,11 @@
   "TierList": {
     "addItem": "添加",
     "removeItem": "拖放到此处删除",
+    "filterAll": "全部",
+    "filterBase": "基础",
+    "filterUpgraded": "强化",
+    "poolEmpty": "所有项目已放置",
+    "swipeHint": "← 滑动以滚动 →",
     "clearAll": "全部清空",
     "confirmClear": "确认清空此梯队表？",
     "addRankTier": "添加 {rank}",

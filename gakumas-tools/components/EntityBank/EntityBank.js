@@ -11,11 +11,9 @@ import {
   COMPARE_FN_BY_TYPE,
   ENTITY_DATA_BY_TYPE,
   EntityTypes,
+  isEntityHidden,
 } from "@/utils/entities";
 import styles from "./EntityBank.module.scss";
-
-const HIDDEN_ITEM_IDS = [422, 424];
-const HIDDEN_CARD_IDS = [807, 809, 811, 813];
 
 function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   const t = useTranslations("EntityBank");
@@ -57,12 +55,7 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
     entities = Entities.getAll().sort(compareFn);
   }
 
-  // Hide unreleased entities
-  if (type == EntityTypes.SKILL_CARD) {
-    entities = entities.filter((e) => !HIDDEN_CARD_IDS.includes(e.id));
-  } else if (type == EntityTypes.P_ITEM) {
-    entities = entities.filter((e) => !HIDDEN_ITEM_IDS.includes(e.id));
-  }
+  entities = entities.filter((e) => !isEntityHidden(type, e.id));
 
   for (let customFilter of filters) {
     if (!customFilter.label || enabledCustomFilters[customFilter.label]) {

@@ -1,0 +1,176 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.pool {
+  display: flex;
+  flex-direction: column;
+  background-color: tokens.$surface-bg;
+  border-top: 1px solid tokens.$surface-border;
+  transition:
+    background-color 0.15s ease,
+    border-top-color 0.15s ease;
+}
+
+.poolOver {
+  background-color: colors.$gk-orange-extra-light;
+  border-top: 2px dashed colors.$gk-orange;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: tokens.$space-1;
+  align-items: center;
+  padding: 6px 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid tokens.$surface-border;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border: 1px solid tokens.$surface-border;
+  border-radius: 999px;
+  background-color: tokens.$surface-bg;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    border-color: colors.$gk-orange;
+    color: colors.$gk-orange;
+  }
+}
+
+.chipActive {
+  border-color: colors.$gk-orange;
+  background-color: colors.$gk-orange;
+  color: colors.$white;
+
+  &:hover {
+    border-color: colors.$gk-orange;
+    color: colors.$white;
+  }
+}
+
+.filterDivider {
+  flex-shrink: 0;
+  width: 1px;
+  align-self: stretch;
+  margin: 2px 4px;
+  background-color: tokens.$surface-border;
+}
+
+.scrollArea {
+  padding: 8px;
+}
+
+.scrollContent {
+  display: contents;
+}
+
+.dragHandle {
+  display: none;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-1;
+  align-items: center;
+  min-height: 56px;
+}
+
+.item {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.itemDragging {
+  opacity: 0.25;
+  outline: 2px dashed colors.$gk-orange;
+  outline-offset: -2px;
+  border-radius: 8%;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
+  padding: tokens.$space-2;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .pool {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .scrollArea {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0;
+  }
+
+  .scrollContent {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 100%;
+  }
+
+  .dragHandle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    padding-left: 50vw;
+    gap: 50vw;
+    background-color: tokens.$surface-muted;
+    border-top: 1px solid tokens.$surface-border;
+    border-bottom: 1px solid tokens.$surface-border;
+    cursor: ew-resize;
+    touch-action: pan-x;
+    overflow: hidden;
+  }
+
+  .dragHandleHint {
+    flex-shrink: 0;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 500;
+    color: tokens.$surface-ink-muted;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .items {
+    flex-wrap: nowrap;
+    padding: 32px 8px 8px;
+    min-height: 88px;
+  }
+}

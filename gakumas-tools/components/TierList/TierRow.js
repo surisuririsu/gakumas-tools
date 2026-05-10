@@ -13,7 +13,7 @@ import Image from "@/components/Image";
 import c from "@/utils/classNames";
 import styles from "./TierList.module.scss";
 
-function SortableItem({ type, id, hidePlaceholder }) {
+function SortableItem({ type, id }) {
   const {
     attributes,
     listeners,
@@ -34,11 +34,7 @@ function SortableItem({ type, id, hidePlaceholder }) {
       style={style}
       {...attributes}
       {...listeners}
-      className={c(
-        styles.item,
-        isDragging && !hidePlaceholder && styles.itemPlaceholder,
-        isDragging && hidePlaceholder && styles.itemHidden,
-      )}
+      className={c(styles.item, isDragging && styles.itemPlaceholder)}
     >
       <EntityIcon type={type} id={id} size="fill" />
     </div>
@@ -53,7 +49,6 @@ function TierRow({
   addAbove,
   addBelow,
   isDragActive,
-  isOverTrash,
   onAdd,
   onAddTier,
   onDeleteTier,
@@ -114,7 +109,7 @@ function TierRow({
         className={c(
           styles.items,
           isDragActive && styles.itemsCanDrop,
-          isContainerOver && isDragActive && !isOverTrash && styles.itemsDropOver,
+          isContainerOver && isDragActive && styles.itemsDropOver,
         )}
       >
         <SortableContext
@@ -123,12 +118,7 @@ function TierRow({
           strategy={rectSortingStrategy}
         >
           {ids.map((id) => (
-            <SortableItem
-              key={id}
-              type={type}
-              id={id}
-              hidePlaceholder={isOverTrash}
-            />
+            <SortableItem key={id} type={type} id={id} />
           ))}
         </SortableContext>
         <button

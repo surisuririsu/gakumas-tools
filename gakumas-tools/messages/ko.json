@@ -161,6 +161,11 @@
   "TierList": {
     "addItem": "추가",
     "removeItem": "여기에 드롭하여 삭제",
+    "filterAll": "전체",
+    "filterBase": "기본",
+    "filterUpgraded": "강화",
+    "poolEmpty": "모든 항목 배치 완료",
+    "swipeHint": "← 스와이프하여 스크롤 →",
     "clearAll": "전체 삭제",
     "confirmClear": "이 티어리스트를 비우시겠습니까?",
     "addRankTier": "{rank} 추가",
