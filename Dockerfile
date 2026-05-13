@@ -1,30 +1,32 @@
 FROM node:20-alpine AS base
 
+# Enable corepack so the pinned packageManager in package.json (pnpm) is used.
 RUN corepack enable
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Copy source files
+# Copy workspace manifests and lockfile first for better layer caching.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY gakumas-tools/package.json ./gakumas-tools/package.json
+COPY packages/gakumas-data/package.json ./packages/gakumas-data/package.json
+COPY packages/gakumas-engine/package.json ./packages/gakumas-engine/package.json
+COPY packages/gakumas-images/package.json ./packages/gakumas-images/package.json
+
+# Install with frozen lockfile. Security settings (minimum release age,
+# build-script allowlist) are read from pnpm-workspace.yaml / .npmrc.
+RUN pnpm install --frozen-lockfile
+
+# Now copy the rest of the source.
 COPY ./gakumas-tools ./gakumas-tools
 COPY ./packages ./packages
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN echo 'nodeLinker: "node-modules"' > ./.yarnrc.yml
-RUN \
-  if [ -f yarn.lock ]; then yarn install; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
 
 # Development image, run the development server
 FROM base AS dev
 
 ENV NODE_ENV=development
-CMD ["yarn", "dev"]
+CMD ["pnpm", "dev"]
 
 # Install dependencies only when needed
 FROM base AS builder
@@ -37,13 +39,7 @@ WORKDIR /app
 
 ENV NEXT_PUBLIC_GK_IMG_BASE_URL="https://gkimg.ris.moe"
 
-# Build the application
-RUN \
-  if [ -f yarn.lock ]; then yarn build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner

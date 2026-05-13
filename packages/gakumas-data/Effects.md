@@ -324,7 +324,7 @@ Patch-level `level:N` indicates at which customization level the patch
 applies. Use the block form — it scopes each level's contribution into one
 labeled block, matching the "only one level fires at a time" runtime
 semantics. The trailing-modifier form (`@foo score+=10; level:1`) parses to
-the same AST but is rejected by `yarn validate:data`.
+the same AST but is rejected by `pnpm validate:data`.
 
 ```
 level:1 { @foo score+=10 }
@@ -452,7 +452,7 @@ Every DSL field across all data files is validated at build time against
 this reference. Run:
 
 ```
-yarn validate:data
+pnpm validate:data
 ```
 
 Unknown phases, variables, actions, or target identifiers will fail the

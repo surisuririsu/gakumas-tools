@@ -4,7 +4,7 @@
  * Use this when a user reports a regression — add the failing query as a
  * pinned test so a future refactor can't re-break the same case.
  *
- *   yarn regression:add "<query>" --id=<id> [--note="<text>"]
+ *   pnpm regression:add "<query>" --id=<id> [--note="<text>"]
  */
 import { loadSuite, runQuery, writeSuite, silenceConsole, SUITE_PATH } from "./lib.mjs";
 
@@ -17,7 +17,7 @@ const note = noteArg ? noteArg.slice("--note=".length) : "";
 
 if (!query || !id) {
   console.error(
-    'Usage: yarn regression:add "<query>" --id=<id> [--note="<text>"]',
+    'Usage: pnpm regression:add "<query>" --id=<id> [--note="<text>"]',
   );
   process.exit(2);
 }

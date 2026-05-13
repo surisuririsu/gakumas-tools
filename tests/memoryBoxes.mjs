@@ -11,9 +11,9 @@
  *   5. Compare IDs + parsed stat params against the pinned baseline.
  *
  * Usage:
- *   yarn test:memory            # compare; non-zero exit on mismatch
- *   yarn test:memory:update     # rewrite the fixture with current outputs
- *   yarn test:memory:visualize  # also write overlays to tests/overlays/memory/
+ *   pnpm test:memory            # compare; non-zero exit on mismatch
+ *   pnpm test:memory:update     # rewrite the fixture with current outputs
+ *   pnpm test:memory:visualize  # also write overlays to tests/overlays/memory/
  *
  * Tesseract auto-downloads its English language model on first run; the
  * harness directs that download into tests/.tesseract-cache/ (gitignored)
@@ -243,7 +243,7 @@ async function main() {
   if (fixture.length === 0) {
     console.error(
       `Fixture is empty: ${FIXTURE_PATH}\n` +
-        `Add entries with: yarn test:memory:update`,
+        `Add entries with: pnpm test:memory:update`,
     );
     process.exit(2);
   }

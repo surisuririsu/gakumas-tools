@@ -72,7 +72,7 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 ```
 
 ### Step 10: Validate
-Run `yarn validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
+Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
 ## Structured DSL Reference
 
@@ -246,4 +246,4 @@ Use `[next_id]` for id field - caller will assign actual IDs.
 - Full DSL docs: `packages/gakumas-data/Effects.md`
 - Recent stages (for pattern matching): `tail -15 packages/gakumas-data/csv/stages.csv`
 - Plan icons: `gakumas-tools/public/plans/{sense,logic,free,anomaly}.png`
-- Validate: `yarn validate:data`
+- Validate: `pnpm validate:data`

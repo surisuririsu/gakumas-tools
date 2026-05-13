@@ -2,13 +2,13 @@
   "name": "gakumas-tools-monorepo",
   "version": "0.1.0",
   "scripts": {
-    "dev": "yarn workspace gakumas-tools dev",
-    "build": "yarn workspace gakumas-tools build",
+    "dev": "pnpm --filter gakumas-tools dev",
+    "build": "pnpm --filter gakumas-tools build",
     "process": "python -m scripts.process_screenshots_iphone",
     "train:classifier": "python -m scripts.train_classifier",
     "train:classifier:fresh": "python -m scripts.train_classifier --fresh",
-    "generate": "./scripts/pull_gkdata.sh && yarn workspace gakumas-data generate && yarn workspace gakumas-images generate && python -m scripts.generate",
-    "regenerate": "rm -rf gk-img/docs/*s && yarn generate",
+    "generate": "./scripts/pull_gkdata.sh && pnpm --filter gakumas-data generate && pnpm --filter gakumas-images generate && python -m scripts.generate",
+    "regenerate": "rm -rf gk-img/docs/*s && pnpm generate",
     "test:regression": "node --loader ./scripts/extensionless-loader.mjs ./tests/run.mjs",
     "test:regression:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/run.mjs --update",
     "test:draft": "node --loader ./scripts/extensionless-loader.mjs ./tests/draftPickBoxes.mjs",
@@ -24,7 +24,7 @@
     "bench:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/bench.mjs --update",
     "validate:data": "node --loader ./scripts/extensionless-loader.mjs ./scripts/validate-data.mjs",
     "changelog": "node ./scripts/changelog.js",
-    "backup-db": "yarn workspace gakumas-tools backup-db"
+    "backup-db": "pnpm --filter gakumas-tools backup-db"
   },
   "dependencies": {
     "gakumas-data": "workspace:*",
@@ -35,9 +35,5 @@
     "sharp": "^0.34.5",
     "tesseract.js": "^7.0.0"
   },
-  "workspaces": [
-    "gakumas-tools",
-    "packages/*"
-  ],
-  "packageManager": "yarn@4.14.1"
+  "packageManager": "pnpm@11.0.6"
 }

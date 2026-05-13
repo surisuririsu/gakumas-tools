@@ -89,7 +89,7 @@ Add the unupgraded pIdol item and card IDs to hide them (since we only have upgr
 
 ### Step 8: Validate
 
-Run `yarn validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
+Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
 ## Structured DSL Reference
 
@@ -253,4 +253,4 @@ const HIDDEN_CARD_IDS = [783];
 - Full DSL docs: `packages/gakumas-data/Effects.md`
 - Recent entries: `tail -5 packages/gakumas-data/csv/{p_idols,p_items,skill_cards}.csv`
 - EntityBank: `gakumas-tools/components/EntityBank/EntityBank.js`
-- Validate: `yarn validate:data`
+- Validate: `pnpm validate:data`

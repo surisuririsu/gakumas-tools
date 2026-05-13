@@ -1,8 +1,8 @@
 /**
  * Run the regression suite.
  *
- *   yarn test:regression              # compare current engine to stored scores
- *   yarn test:regression:update       # rewrite stored scores (use after
+ *   pnpm test:regression              # compare current engine to stored scores
+ *   pnpm test:regression:update       # rewrite stored scores (use after
  *                                     # an intentional scoring change)
  *
  * Exit 0 on full match, 1 on any mismatch (unless --update is passed).
@@ -14,7 +14,7 @@ const UPDATE = process.argv.includes("--update");
 const suite = loadSuite();
 if (!suite.length) {
   console.error(
-    `Suite is empty. Run \`yarn regression:bootstrap\` to seed ${SUITE_PATH}.`,
+    `Suite is empty. Run \`pnpm regression:bootstrap\` to seed ${SUITE_PATH}.`,
   );
   process.exit(2);
 }

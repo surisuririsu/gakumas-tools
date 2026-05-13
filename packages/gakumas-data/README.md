@@ -33,7 +33,7 @@ Every DSL field is validated against a schema of known phases, variables,
 actions, and target identifiers:
 
 ```
-yarn validate:data
+pnpm validate:data
 ```
 
 Unknown references fail with a precise error pointing at the entity and

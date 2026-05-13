@@ -1,8 +1,8 @@
 /**
  * Perf benchmark for the structured engine against the committed baseline.
  *
- *   yarn bench           # measure and compare to perf-baseline.json
- *   yarn bench:update    # rewrite perf-baseline.json with current numbers
+ *   pnpm bench           # measure and compare to perf-baseline.json
+ *   pnpm bench:update    # rewrite perf-baseline.json with current numbers
  *
  * Methodology:
  *   - Runs every query in suite.jsonl.
@@ -34,7 +34,7 @@ function fmtMs(x) {
 
 const suite = loadSuite();
 if (!suite.length) {
-  console.error("Suite is empty — bootstrap it first (`yarn regression:bootstrap`).");
+  console.error("Suite is empty — bootstrap it first (`pnpm regression:bootstrap`).");
   process.exit(2);
 }
 
@@ -85,7 +85,7 @@ if (baseline) {
     process.exit(1);
   }
 } else if (!UPDATE) {
-  console.log("\nNo baseline yet — run `yarn bench:update` to capture one.");
+  console.log("\nNo baseline yet — run `pnpm bench:update` to capture one.");
   process.exit(1);
 }
 

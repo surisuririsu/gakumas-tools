@@ -1,0 +1,46 @@
+packages:
+  - gakumas-tools
+  - packages/*
+
+# Security: refuse to install package versions younger than 7 days.
+# Mitigates supply-chain attacks where a fresh malicious release is pushed.
+minimumReleaseAge: 10080
+
+# Security: do not run install scripts for any dependency by default.
+# Each candidate must be explicitly approved below. This blocks "exotic"
+# subdependencies from running arbitrary code during `pnpm install`.
+# Keep the allow-list as small as possible — only enable packages whose
+# postinstall is genuinely required at runtime.
+dangerouslyAllowAllBuilds: false
+allowBuilds:
+  # Native libvips bindings — required for image processing.
+  sharp: true
+  # Native ONNX runtime — required for ML inference.
+  onnxruntime-node: true
+  # Native filesystem watcher used by some dev tooling. Falls back to
+  # polling without its postinstall. Not worth the script surface.
+  '@parcel/watcher': false
+  # Next.js bundles its own SWC; the standalone postinstall is unneeded.
+  '@swc/core': false
+  # Postinstall only generates a stub index file. Library works without it.
+  protobufjs: false
+  # Postinstall only generates type defs. Not needed at runtime.
+  tesseract.js: false
+  # Native resolver used by some eslint configs. Has a JS fallback.
+  unrs-resolver: false
+
+# Security: refuse a package version if its publishing trust signals
+# (provenance attestations, registry signatures, trusted-publisher status)
+# are weaker than any earlier release. Catches the typical account-takeover
+# pattern where a hijacker can't reproduce the legitimate publishing
+# pipeline's attestation.
+trustPolicy: no-downgrade
+
+# Older packages predate sigstore/provenance entirely. Only enforce the
+# policy on releases published in the last ~2 years (value is in minutes:
+# 60 * 24 * 730 = 1051200).
+trustPolicyIgnoreAfter: 1051200
+
+# Per-version exemptions for legitimate downgrades. Start empty;
+# populate only with a concrete justification per entry.
+trustPolicyExclude: []

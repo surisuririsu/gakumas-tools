@@ -3,7 +3,7 @@
  * unknown phase, identifier, function, or field name.
  *
  * Run via:
- *   yarn validate:data
+ *   pnpm validate:data
  *
  * Exit code is non-zero if any validation errors were found.
  *
