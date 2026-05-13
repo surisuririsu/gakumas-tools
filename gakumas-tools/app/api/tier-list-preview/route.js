@@ -1,3 +1,5 @@
+import { readFile } from "fs/promises";
+import path from "path";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
 import TierListPreview from "@/components/TierListPreview";
@@ -51,6 +53,29 @@ function iconToFetchUrl(icon, origin) {
   return `${origin}${icon.src}`;
 }
 
+async function loadRankPng(rank) {
+  const cacheKey = `rank:${rank}`;
+  const cached = pngCache.get(cacheKey);
+  if (cached !== undefined) {
+    pngCache.delete(cacheKey);
+    pngCache.set(cacheKey, cached);
+    return cached;
+  }
+  let dataUrl = null;
+  try {
+    const file = path.join(process.cwd(), "public", "ranks", `${rank}.png`);
+    const buf = await readFile(file);
+    dataUrl = `data:image/png;base64,${buf.toString("base64")}`;
+  } catch (err) {
+    console.warn(`tier-list-preview: rank ${rank}:`, err?.message || err);
+  }
+  pngCache.set(cacheKey, dataUrl);
+  if (pngCache.size > PNG_CACHE_LIMIT) {
+    pngCache.delete(pngCache.keys().next().value);
+  }
+  return dataUrl;
+}
+
 function iconKey(icon) {
   if (!icon) return null;
   return typeof icon === "string" ? icon : icon.src;
@@ -81,11 +106,6 @@ export async function GET(request) {
 
   const list = decodeList(url.searchParams.get("d")) || EMPTY_LIST;
 
-  const rankUrls = list.tiers.map((rank) => [
-    rank,
-    `${url.origin}/ranks/${rank}.png`,
-  ]);
-
   const itemEntries = [];
   for (const rank of list.tiers) {
     for (const id of list.items[rank] || []) {
@@ -98,10 +118,11 @@ export async function GET(request) {
     }
   }
 
-  const [rankSrc, iconCache] = await Promise.all([
-    fetchAll(rankUrls),
+  const [rankPairs, iconCache] = await Promise.all([
+    Promise.all(list.tiers.map(async (r) => [r, await loadRankPng(r)])),
     fetchAll(itemEntries.map(([, key, fetchUrl]) => [key, fetchUrl])),
   ]);
+  const rankSrc = Object.fromEntries(rankPairs.filter(([, v]) => v));
 
   const itemSrc = {};
   for (const [id, key] of itemEntries) {
