@@ -5,7 +5,7 @@ import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
 const MIN = 0;
-const MAX = 2800;
+const MAX = 3000;
 
 function ParametersInput({
   parameters,
@@ -18,7 +18,7 @@ function ParametersInput({
 
   const parameterNames = useMemo(
     () => PARAMETER_NAMES.concat(withStamina ? [t("stamina")] : []),
-    [withStamina, t]
+    [withStamina, t],
   );
 
   function handleChange(value, index) {

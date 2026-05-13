@@ -2,7 +2,7 @@ export const MAX_PARAMS_BY_DIFFICULTY = {
   regular: 1000,
   pro: 1500,
   master: 1800,
-  legend: 2800,
+  legend: 3000,
 };
 
 export const PARAM_BONUS_BY_PLACE = {
@@ -79,7 +79,7 @@ export function calculateRatingExExamScore(
   params,
   maxParams,
   midtermScore,
-  difficulty
+  difficulty,
 ) {
   const PARAM_RATING_MULTIPLIER_USED =
     difficulty === "legend"
@@ -94,8 +94,8 @@ export function calculateRatingExExamScore(
   const paramRating = Math.floor(
     params.reduce(
       (acc, cur) => acc + Math.min(cur + placeParamBonus, maxParams),
-      0
-    ) * PARAM_RATING_MULTIPLIER_USED
+      0,
+    ) * PARAM_RATING_MULTIPLIER_USED,
   );
   let midtermRating = 0;
   if (difficulty == "legend") {
@@ -131,7 +131,7 @@ export function calculateTargetScores(ratingExExamScore, difficulty) {
 export function calculateActualRating(
   actualScore,
   ratingExExamScore,
-  difficulty
+  difficulty,
 ) {
   const REVERSE_RATING_REGIMES_USED =
     difficulty === "legend"
