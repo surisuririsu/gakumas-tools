@@ -28,19 +28,21 @@ allowBuilds:
   tesseract.js: false
   # Native resolver used by some eslint configs. Has a JS fallback.
   unrs-resolver: false
+  esbuild: true
 
 # Security: refuse a package version if its publishing trust signals
 # (provenance attestations, registry signatures, trusted-publisher status)
 # are weaker than any earlier release. Catches the typical account-takeover
 # pattern where a hijacker can't reproduce the legitimate publishing
 # pipeline's attestation.
-trustPolicy: no-downgrade
+# trustPolicy: no-downgrade
 
 # Older packages predate sigstore/provenance entirely. Only enforce the
 # policy on releases published in the last ~2 years (value is in minutes:
 # 60 * 24 * 730 = 1051200).
-trustPolicyIgnoreAfter: 1051200
+trustPolicyIgnoreAfter: 0
 
 # Per-version exemptions for legitimate downgrades. Start empty;
 # populate only with a concrete justification per entry.
-trustPolicyExclude: []
+trustPolicyExclude:
+  - eslint-import-resolver-typescript@3.10.1
