@@ -25,7 +25,7 @@ export async function runScript(scriptName: string, args: string[], options: Run
     const stdioMode = captureOutput ? ['inherit', 'pipe', 'inherit'] :
         (isCapturing ? ['inherit', 'pipe', 'inherit'] : 'inherit');
 
-    const child = spawn('node', ['--loader', './scripts/extensionless-loader.mjs', scriptPath, ...args], {
+    const child = spawn('node', ['--no-warnings', '--loader', './scripts/extensionless-loader.mjs', scriptPath, ...args], {
         cwd,
         stdio: stdioMode as any, // Cast to any to satisfy TS for simple array
         env: { ...process.env }
