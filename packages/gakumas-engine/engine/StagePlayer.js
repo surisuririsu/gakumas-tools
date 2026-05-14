@@ -4,6 +4,7 @@ export default class StagePlayer {
   constructor(engine, strategy) {
     this.engine = engine;
     this.strategy = strategy;
+    this.engine.strategy = strategy;
   }
 
   async play() {

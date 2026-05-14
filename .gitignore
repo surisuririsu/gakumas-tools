@@ -12,8 +12,11 @@ __pycache__/
 
 # Custom
 .env
+.env*.local
 screenshots/
 .classifier-data/
 scripts/train_classifier/checkpoints/
 tests/overlays/
 tests/.tesseract-cache/
+AGENTS.md
+packages/cli/.gitignore

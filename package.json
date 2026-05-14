@@ -24,7 +24,8 @@
     "bench:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/bench.mjs --update",
     "validate:data": "node --loader ./scripts/extensionless-loader.mjs ./scripts/validate-data.mjs",
     "changelog": "node ./scripts/changelog.js",
-    "backup-db": "pnpm --filter gakumas-tools backup-db"
+    "backup-db": "pnpm --filter gakumas-tools backup-db",
+    "cli": "pnpm --filter gakumas-cli start"
   },
   "dependencies": {
     "gakumas-data": "workspace:*",
