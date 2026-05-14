@@ -155,3 +155,6 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 154,シーズン44 ステージ1,contest,FALSE,44,1,,sense,"0.2,0.45,0.35","2,4,2","0,1,0","at:cardUsed { if:turnsRemaining<=3 & cardRarity==SSR { setScoreBuff(0.25,3) }; limit:3 }",
 155,シーズン44 ステージ2,contest,FALSE,44,2,,logic,"0.35,0.45,0.2","3,5,2","0,1,0",at:endOfTurn { if:turnsRemaining<=3 { score+=consumedGenki*0.9 }; limit:3 },
 156,シーズン44 ステージ3,contest,FALSE,44,3,,anomaly,"0.45,0.2,0.35","6,2,4","1,0,0",at:afterCardUsed { if:prevStance!=none & cardHasEffect(strength) { effectCounter+=1; if:effectCounter%3==2 { setEnthusiasmBonus(8); doubleCostTurns+=1 } } },
+157,シーズン45 ステージ1,contest,TRUE,45,1,,sense,"0.2,0.35,0.45","2,4,6","0,0,1",at:cardUsed { if:cardSourceType==pIdol & goodConditionTurns>=10 { goodConditionTurns+=4; fixedStamina+=maxStamina*0.05 }; limit:5 },
+158,シーズン45 ステージ2,contest,TRUE,45,2,,sense,"0.45,0.35,0.2","6,4,2","1,0,0",at:startOfTurn { setConcentrationEffectBuff(0.15); limit:1 },
+159,シーズン45 ステージ3,contest,TRUE,45,3,,logic,"0.45,0.35,0.2","6,4,2","1,0,0",at:cardUsed { if:cardSourceType==pIdol & motivation>=12  { motivation+=5; genki+=2 }; limit:3 },
