@@ -6,14 +6,13 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
     "backup-db": "scripts/create_db_backup.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@next/third-parties": "^16.2.4",
+    "@next/third-parties": "^16.2.5",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.5",
     "chart.js": "^4.5.1",
     "gakumas-data": "workspace:*",
@@ -21,7 +20,7 @@
     "gakumas-images": "workspace:*",
     "html2canvas": "^1.4.1",
     "mongodb": "^7.2.0",
-    "next": "^16.2.4",
+    "next": "^16.2.5",
     "next-auth": "^4.24.14",
     "next-intl": "^4.9.1",
     "onnxruntime-web": "^1.24.3",
@@ -37,9 +36,5 @@
     "sass": "^1.99.0",
     "sharp": "^0.34.5",
     "tesseract.js": "^7.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^10.2.1",
-    "eslint-config-next": "^16.2.4"
   }
 }
