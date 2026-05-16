@@ -1,6 +1,8 @@
 // Available rank labels, ordered from highest to lowest. These map directly
 // to icons in /public/ranks/ and define the canonical display order for tiers.
 export const AVAILABLE_RANKS = [
+  "S5",
+  "S4+",
   "S4",
   "SSS+",
   "SSS",

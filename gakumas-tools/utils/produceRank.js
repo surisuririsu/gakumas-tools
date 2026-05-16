@@ -27,6 +27,8 @@ export const RATING_BY_PLACE = {
 };
 
 export const TARGET_RATING_BY_RANK = {
+  S5: 35000,
+  "S4+": 30000,
   S4: 26000,
   "SSS+": 23000,
   SSS: 20000,
