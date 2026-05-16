@@ -3336,9 +3336,13 @@ import image_803 from "./803.png";
 import image_804 from "./804.png";
 import image_805 from "./805.png";
 import image_806 from "./806.png";
+import image_807 from "./807.png";
 import image_808 from "./808.png";
+import image_809 from "./809.png";
 import image_810 from "./810.png";
+import image_811 from "./811.png";
 import image_812 from "./812.png";
+import image_813 from "./813.png";
 import image_814 from "./814.png";
 
 const IMAGES = {
@@ -6680,9 +6684,13 @@ const IMAGES = {
   '804': image_804,
   '805': image_805,
   '806': image_806,
+  '807': image_807,
   '808': image_808,
+  '809': image_809,
   '810': image_810,
+  '811': image_811,
   '812': image_812,
+  '813': image_813,
   '814': image_814,
 };
 

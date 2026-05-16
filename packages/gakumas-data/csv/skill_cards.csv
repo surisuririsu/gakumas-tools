@@ -805,11 +805,11 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 804,教えてあげる+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,137,FALSE,,cost-=0,"setStance(strength); score+=6; setEnthusiasmBonus(2,2); at:turn { drawCard(2); limit:1 }",,
 805,ガタゴトすやすや,,SSR,active,anomaly,1,FALSE,TRUE,support,,FALSE,if:isPreservation,cost-=1,setStance(strength); score+=11; exchangeHand,1,
 806,ガタゴトすやすや+,"40,42",SSR,active,anomaly,1,TRUE,TRUE,support,,FALSE,if:isPreservation,cost-=1,setStance(strength); score+=16; exchangeHand,1,
-807,クールすぎるアイドル,,SSR,mental,logic,1,FALSE,TRUE,pIdol,138,FALSE,,,,1,
+807,クールすぎるアイドル,,SSR,mental,logic,1,FALSE,TRUE,pIdol,138,FALSE,,cost-=3,motivation+=4; moveRandomToTopOfDeck[baseId(809)]; doubleCostTurns+=1,1,at:afterCardUsed { if:usedCardBaseId == 809 & effectCounter==0 & countCards[baseId(807) & removed] > 0 { effectCounter+=1; useRandomCardFree[baseId(807)] }; limit:2 }; at:beforeStartOfTurn { effectCounter=0 }
 808,クールすぎるアイドル+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,138,FALSE,,cost-=3,motivation+=5; moveRandomToTopOfDeck[baseId(809)]; doubleCostTurns+=1,1,at:afterCardUsed { if:usedCardBaseId == 809 & effectCounter==0 & countCards[baseId(807) & removed] > 0 { effectCounter+=1; useRandomCardFree[baseId(807)] }; limit:2 }; at:beforeStartOfTurn { effectCounter=0 }
-809,燃え盛る青い炎,,SSR,active,logic,1,FALSE,TRUE,pIdol,138,FALSE,,,,1,
+809,燃え盛る青い炎,,SSR,active,logic,1,FALSE,TRUE,pIdol,138,FALSE,,cost-=10,genki+=15; motivation+=5; at:endOfTurn { if:turnsRemaining==1 { score+=genki*1.5 }; limit:1 },1,
 810,燃え盛る青い炎+,,SSR,active,logic,1,TRUE,TRUE,pIdol,138,FALSE,,cost-=10,genki+=27; motivation+=5; at:endOfTurn { if:turnsRemaining==1 { score+=genki*1.5 }; limit:1 },1,
-811,お姉さんの感覚,,SSR,mental,sense,1,FALSE,TRUE,pIdol,139,FALSE,,,,1,
+811,お姉さんの感覚,,SSR,mental,sense,1,FALSE,TRUE,pIdol,139,FALSE,if:goodConditionTurns>=4,stamina-=6,goodConditionTurns+=4; fixedStamina+=maxStamina*0.1,1,at:afterCardUsed { if:countCards[baseId(813) & hand]>=1 & effectCounter==0 & countCards[baseId(811) & removed] > 0 { effectCounter+=1; useRandomCardFree[baseId(811)] }; limit:4 }; at:beforeStartOfTurn { effectCounter=0 }
 812,お姉さんの感覚+,,SSR,mental,sense,1,TRUE,TRUE,pIdol,139,FALSE,if:goodConditionTurns>=4,stamina-=6,goodConditionTurns+=6; fixedStamina+=maxStamina*0.1,1,at:afterCardUsed { if:countCards[baseId(813) & hand]>=1 & effectCounter==0 & countCards[baseId(811) & removed] > 0 { effectCounter+=1; useRandomCardFree[baseId(811)] }; limit:4 }; at:beforeStartOfTurn { effectCounter=0 }
-813,自然体の魅力,,SSR,active,sense,1,FALSE,TRUE,pIdol,139,FALSE,,,,1,
+813,自然体の魅力,,SSR,active,sense,1,FALSE,TRUE,pIdol,139,FALSE,if:goodConditionTurns>=12,concentration-=5,fixedStamina+=maxStamina*0.1; score+=stamina*8; score+=2+cardsUsed*9,1,
 814,自然体の魅力+,,SSR,active,sense,1,TRUE,TRUE,pIdol,139,FALSE,if:goodConditionTurns>=12,concentration-=5,fixedStamina+=maxStamina*0.2; score+=stamina*10; score+=2+cardsUsed*14,1,
