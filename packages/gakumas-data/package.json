@@ -4,6 +4,6 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "generate": "python -m scripts.csv_to_json"
+    "generate": "python3 -m scripts.csv_to_json"
   }
 }
