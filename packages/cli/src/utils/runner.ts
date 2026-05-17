@@ -17,9 +17,11 @@ export async function runScript(scriptName: string, args: string[], options: Run
     const scriptPath = path.join(LOCAL_SCRIPTS_DIR, scriptName);
 
     // Only log if not capturing output to avoid polluting stdout if we want to pipe it later
+    /*
     if (!captureOutput) {
         console.error(`Executing: node ${scriptPath} ${args.join(' ')}`);
     }
+    */
 
     const isCapturing = GlobalCapture.isCapturing();
     const stdioMode = captureOutput ? ['inherit', 'pipe', 'inherit'] :

@@ -25,7 +25,7 @@
     "validate:data": "node --no-warnings --loader ./scripts/extensionless-loader.mjs ./scripts/validate-data.mjs",
     "changelog": "node ./scripts/changelog.js",
     "backup-db": "pnpm --filter gakumas-tools backup-db",
-    "cli": "pnpm --filter gakumas-cli start"
+    "cli": "pnpm -s --filter gakumas-cli start"
   },
   "dependencies": {
     "gakumas-data": "workspace:*",
