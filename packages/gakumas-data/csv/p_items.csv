@@ -425,3 +425,16 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 424,憧れ続けた輝き,SSR,FALSE,sense,stage,pIdol,139,FALSE,at:cardUsed { if:goodConditionTurns>=8 & cardHasEffect(goodConditionTurns) { effectCounter+=1; if:effectCounter%4==3 { perfectConditionTurns+=1; cardUsesRemaining+=1; drawCard; fixedStamina-=1; limit:5 } } }
 425,憧れ続けた輝き+,SSR,TRUE,sense,stage,pIdol,139,FALSE,at:cardUsed { if:goodConditionTurns>=6 & cardHasEffect(goodConditionTurns) { effectCounter+=1; if:effectCounter%4==3 { perfectConditionTurns+=1; cardUsesRemaining+=1; drawCard; limit:5 } } }
 426,想定外のチケット,SSR,FALSE,sense,stage,support,,FALSE,at:afterStartOfTurn { if:isVisualTurn & goodConditionTurns>=10 { goodConditionTurns+=3; moveRandomToHand[pIdol & (deck | discarded)]; cardUsesRemaining+=1 }; limit:1 }
+427,H.I.F応援棒（紫）,SSR,FALSE,sense,stage,produce,,FALSE,
+428,H.I.F応援棒（緑）,SSR,FALSE,sense,stage,produce,,FALSE,
+429,H.I.F応援棒（黄）,SSR,FALSE,logic,stage,produce,,FALSE,
+430,H.I.F応援棒（赤）,SSR,FALSE,logic,stage,produce,,FALSE,
+431,ポーチ（赤）,SSR,FALSE,sense,produce,produce,,FALSE,
+432,ポーチ（緑）,SSR,FALSE,sense,produce,produce,,FALSE,
+433,ポーチ（黄）,SSR,FALSE,sense,produce,produce,,FALSE,
+434,ポーチ（赤）,SSR,FALSE,logic,produce,produce,,FALSE,
+435,ポーチ（緑）,SSR,FALSE,logic,produce,produce,,FALSE,
+436,ポーチ（黄）,SSR,FALSE,logic,produce,produce,,FALSE,
+437,ポーチ（赤）,SSR,FALSE,anomaly,produce,produce,,FALSE,
+438,ポーチ（緑）,SSR,FALSE,anomaly,produce,produce,,FALSE,
+439,ポーチ（黄）,SSR,FALSE,anomaly,produce,produce,,FALSE,
