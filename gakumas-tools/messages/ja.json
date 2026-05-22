@@ -16,6 +16,10 @@
       "title": "N.I.A計算機",
       "description": "N.I.Aのオーディションボーナスとプロデュース評価を計算する"
     },
+    "hifCalculator": {
+      "title": "H.I.F計算機",
+      "description": "H.I.Fのプロデュース評価を計算する"
+    },
     "lessonCalculator": {
       "title": "レッスンパラメータ計算機",
       "description": "レッスンによるパラメータ上昇量を計算する"
@@ -65,7 +69,8 @@
   "Calculator": {
     "scenarios": {
       "hajime": "初",
-      "nia": "N.I.A"
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "calculator": "計算機",
     "calculators": {
@@ -115,7 +120,22 @@
     "bonusParams": "パラメータボーナス",
     "paramsPostAudition": "パラメータ (オーディション後)",
     "gainedVotes": "ファン投票数上昇",
-    "votesPostAudition": "ファン投票数 (オーディション後)"
+    "votesPostAudition": "ファン投票数 (オーディション後)",
+    "total": "合計",
+    "preRound2": "ラウンド2前",
+    "star": "スター性",
+    "examScore": "試験スコア",
+    "hifScoreModes": {
+      "total": "合計",
+      "split": "分割"
+    },
+    "hifTotalScore": "合計スコア",
+    "hifRound1Score": "ラウンド1スコア",
+    "hifRound2Score": "ラウンド2スコア",
+    "hifDerivedRound1": "ラウンド1 = {value}",
+    "hifDerivedTotal": "合計 = {value}",
+    "hifRound2StarGain": "スター性 +{value}",
+    "hifTargetRound2Scores": "目標ランク別 必要ラウンド2スコア"
   },
   "LessonCalculator": {
     "difficulties": {

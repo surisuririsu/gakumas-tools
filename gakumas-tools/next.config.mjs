@@ -6,9 +6,9 @@ const require = createRequire(import.meta.url);
 const withNextIntl = createNextIntlPlugin();
 
 const LEGACY_REDIRECTS = [
-  ["/produce-rank-calculator", "/calculator/nia"],
+  ["/produce-rank-calculator", "/calculator/hif"],
   ["/lesson-calculator", "/calculator/hajime/lesson"],
-  ["/calculator", "/calculator/hajime/produce-rank"],
+  ["/calculator", "/calculator/hif"],
   ["/calculator/hajime", "/calculator/hajime/produce-rank"],
 ];
 

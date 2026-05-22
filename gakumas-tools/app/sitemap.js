@@ -6,6 +6,7 @@ const PATHS = [
   "/calculator/hajime/produce-rank",
   "/calculator/hajime/lesson",
   "/calculator/nia",
+  "/calculator/hif",
   "/memory-calculator",
   "/dex",
   "/memories",
