@@ -1,1 +1,1 @@
-export const SCENARIOS = ["hajime", "nia"];
+export const SCENARIOS = ["hajime", "nia", "hif"];

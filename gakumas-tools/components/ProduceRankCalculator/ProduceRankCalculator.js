@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import ScenarioPicker from "@/components/ScenarioPicker";
 import HajimeCalculator from "./HajimeCalculator";
+import HifCalculator from "./HifCalculator";
 import NiaCalculator from "./NiaCalculator";
 import LessonCalculator from "../LessonCalculator";
 import styles from "./ProduceRankCalculator.module.scss";
@@ -16,7 +17,7 @@ function ProduceRankCalculator() {
     label: t(`calculators.${calculator}`),
   }));
 
-  const [scenario, setScenario] = useState("nia");
+  const [scenario, setScenario] = useState("hif");
   const [calculator, setCalculator] = useState("produce-rank");
 
   return (
@@ -35,6 +36,8 @@ function ProduceRankCalculator() {
       )}
       {scenario === "nia" ? (
         <NiaCalculator />
+      ) : scenario === "hif" ? (
+        <HifCalculator />
       ) : calculator === "produce-rank" ? (
         <HajimeCalculator />
       ) : (

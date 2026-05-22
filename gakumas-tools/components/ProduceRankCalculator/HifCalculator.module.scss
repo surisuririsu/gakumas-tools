@@ -1,0 +1,54 @@
+@use "../../styles/tokens";
+
+.hif {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-5;
+  margin-top: tokens.$space-3;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+}
+
+.hint {
+  font-size: tokens.$text-xs;
+  color: tokens.$surface-ink-muted;
+  line-height: 1.4;
+}
+
+.modeRow {
+  display: flex;
+  margin-bottom: tokens.$space-3;
+
+  > * {
+    flex: 0 0 auto;
+  }
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  column-gap: tokens.$space-4;
+}
+
+@container (width < 460px) {
+  .scoreGrid {
+    grid-template-columns: 1fr;
+    row-gap: tokens.$space-3;
+  }
+}
+
+.resultPanel {
+  margin-top: tokens.$space-2;
+}
