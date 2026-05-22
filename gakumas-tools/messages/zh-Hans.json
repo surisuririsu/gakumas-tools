@@ -16,6 +16,10 @@
       "title": "N.I.A 计算器",
       "description": "计算 N.I.A 的试镜加成和培育评级"
     },
+    "hifCalculator": {
+      "title": "H.I.F 计算器",
+      "description": "计算 H.I.F 的培育评级"
+    },
     "lessonCalculator": {
       "title": "训练计算器",
       "description": "计算训练属性提升量"
@@ -65,7 +69,8 @@
   "Calculator": {
     "scenarios": {
       "hajime": "初",
-      "nia": "N.I.A"
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "calculator": "计算器",
     "calculators": {
@@ -115,7 +120,22 @@
     "bonusParams": "属性加成",
     "paramsPostAudition": "属性（试镜后）",
     "gainedVotes": "获得票数",
-    "votesPostAudition": "票数（试镜后）"
+    "votesPostAudition": "票数（试镜后）",
+    "total": "合计",
+    "preRound2": "Round 2 前",
+    "star": "闪耀值",
+    "examScore": "考试分数",
+    "hifScoreModes": {
+      "total": "合计",
+      "split": "分开"
+    },
+    "hifTotalScore": "合计分数",
+    "hifRound1Score": "Round 1 分数",
+    "hifRound2Score": "Round 2 分数",
+    "hifDerivedRound1": "Round 1 = {value}",
+    "hifDerivedTotal": "合计 = {value}",
+    "hifRound2StarGain": "闪耀值 +{value}",
+    "hifTargetRound2Scores": "各目标排名所需 Round 2 分数"
   },
   "LessonCalculator": {
     "difficulties": {

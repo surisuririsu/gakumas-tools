@@ -16,6 +16,10 @@
       "title": "N.I.A 계산기",
       "description": "N.I.A 오디션 보너스와 프로듀스 평가 계산하기"
     },
+    "hifCalculator": {
+      "title": "H.I.F 계산기",
+      "description": "H.I.F의 프로듀스 평가 계산하기"
+    },
     "lessonCalculator": {
       "title": "레슨 패러미터 계산기",
       "description": "레슨에 의한 패러미터 상승량 계산하기"
@@ -65,7 +69,8 @@
   "Calculator": {
     "scenarios": {
       "hajime": "하지메",
-      "nia": "N.I.A"
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "calculator": "계산기",
     "calculators": {
@@ -115,7 +120,22 @@
     "bonusParams": "패러미터 보너스",
     "paramsPostAudition": "패러미터 (오디션 후)",
     "gainedVotes": "팬 득표수 상한",
-    "votesPostAudition": "팬 득표수 (오디션 후)"
+    "votesPostAudition": "팬 득표수 (오디션 후)",
+    "total": "합계",
+    "preRound2": "라운드 2 전",
+    "star": "스타성",
+    "examScore": "시험 점수",
+    "hifScoreModes": {
+      "total": "합계",
+      "split": "분할"
+    },
+    "hifTotalScore": "합계 점수",
+    "hifRound1Score": "라운드 1 점수",
+    "hifRound2Score": "라운드 2 점수",
+    "hifDerivedRound1": "라운드 1 = {value}",
+    "hifDerivedTotal": "합계 = {value}",
+    "hifRound2StarGain": "스타성 +{value}",
+    "hifTargetRound2Scores": "목표 랭크별 필요 라운드 2 점수"
   },
   "LessonCalculator": {
     "difficulties": {

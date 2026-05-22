@@ -47,3 +47,15 @@
     box-shadow: tokens.$shadow-nia;
   }
 }
+
+.hif {
+  color: tokens.$hif-color;
+  border-color: tokens.$hif-color;
+
+  &.selected {
+    background: tokens.$gradient-hif;
+    color: colors.$white;
+    border-color: transparent;
+    box-shadow: tokens.$shadow-hif;
+  }
+}

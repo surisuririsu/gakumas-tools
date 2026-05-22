@@ -16,6 +16,10 @@
       "title": "N.I.A Calculator",
       "description": "Calculate audition bonus and produce rank for N.I.A"
     },
+    "hifCalculator": {
+      "title": "H.I.F Calculator",
+      "description": "Calculate produce rank for H.I.F"
+    },
     "lessonCalculator": {
       "title": "Lesson Calculator",
       "description": "Calculate parameters gained from lessons"
@@ -65,7 +69,8 @@
   "Calculator": {
     "scenarios": {
       "hajime": "Hajime",
-      "nia": "N.I.A"
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "calculator": "Calculator",
     "calculators": {
@@ -115,7 +120,22 @@
     "bonusParams": "Bonus params",
     "paramsPostAudition": "Params (post-audition)",
     "gainedVotes": "Gained votes",
-    "votesPostAudition": "Votes (post-audition)"
+    "votesPostAudition": "Votes (post-audition)",
+    "total": "Total",
+    "preRound2": "Pre-Round 2",
+    "star": "Star",
+    "examScore": "Exam score",
+    "hifScoreModes": {
+      "total": "Total",
+      "split": "Split"
+    },
+    "hifTotalScore": "Total score",
+    "hifRound1Score": "Round 1 score",
+    "hifRound2Score": "Round 2 score",
+    "hifDerivedRound1": "Round 1 = {value}",
+    "hifDerivedTotal": "Total = {value}",
+    "hifRound2StarGain": "Star gained: +{value}",
+    "hifTargetRound2Scores": "Target Round 2 scores"
   },
   "LessonCalculator": {
     "difficulties": {

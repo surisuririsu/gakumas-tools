@@ -38,12 +38,15 @@ $gradient-brand: linear-gradient(
 
 $gradient-hajime: linear-gradient(100deg, #ff9870 0%, #ffbca3 100%);
 $gradient-nia: linear-gradient(100deg, #5a8bff 0%, #b56bff 100%);
+$gradient-hif: linear-gradient(100deg, #6357bb 0%, #4a8cd0 50%, #4ec0d8 100%);
 
 $hajime-color: #e06840;
 $nia-color: #7a5bff;
+$hif-color: #4a6db8;
 
 $shadow-hajime: 0 4px 14px rgba(224, 104, 64, 0.28);
 $shadow-nia: 0 4px 14px rgba(122, 91, 255, 0.28);
+$shadow-hif: 0 4px 14px rgba(74, 109, 184, 0.32);
 
 // Difficulty palette — matches the in-game produce pill gradients.
 $gradient-regular: linear-gradient(100deg, #ffa563 0%, #ffb0c0 100%);
