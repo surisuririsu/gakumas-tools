@@ -172,7 +172,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 171,みんなの憧れ+,SR,TRUE,anomaly,stage,pIdol,60,FALSE,at:cardUsed { if:isFullPower { score+=18; genki+=9 }; limit:1 }
 172,新しい、私,SSR,FALSE,anomaly,stage,pIdol,61,FALSE,at:afterCardUsed[active] { if:isStrength { score+=8; fixedStamina+=4 }; limit:1 }
 173,新しい、私+,SSR,TRUE,anomaly,stage,pIdol,61,FALSE,at:afterCardUsed[active] { if:isStrength { score+=12; fixedStamina+=6 }; limit:1 }
-174,アイドルパワー測定器,SSR,FALSE,anomaly,stage,support,,TRUE,at:startOfTurn { if:isDanceTurn & isPreservation { fixedStamina+=5 }; limit:1 }
+174,アイドルパワー測定機,SSR,FALSE,anomaly,stage,support,,TRUE,at:startOfTurn { if:isDanceTurn & isPreservation { fixedStamina+=5 }; limit:1 }
 175,費用0円愛情MAX,SSR,FALSE,logic,stage,pIdol,62,FALSE,at:startOfTurn { if:motivation>=5 { genki+=4 }; limit:2 }
 176,費用0円愛情MAX+,SSR,TRUE,logic,stage,pIdol,62,FALSE,at:startOfTurn { if:motivation>=5 { genki+=6 }; limit:2 }
 177,めりくりライオン,SSR,FALSE,sense,stage,pIdol,63,FALSE,at:startOfTurn { if:turnsRemaining<=2 { score+=goodConditionTurns*0.7; fixedStamina-=1 }; limit:2 }
@@ -308,7 +308,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 307,原点へのチケット,SSR,FALSE,anomaly,stage,pIdol,102,FALSE,at:staminaDecreased { if:parentPhase==processCost { setEnthusiasmBuff(0.4) }; limit:3 }
 308,原点へのチケット+,SSR,TRUE,anomaly,stage,pIdol,102,FALSE,at:staminaDecreased { if:parentPhase==processCost { setEnthusiasmBuff(0.6) }; limit:3 }
 309,面白くて心配な子,SSR,FALSE,anomaly,produce,support,,FALSE,
-310,ビシッビシッ竹刀,SR,FALSE,anomaly,produce,support,,FALSE,
+310,ビシッバシッ竹刀,SR,FALSE,anomaly,produce,support,,FALSE,
 311,咲き誇る星,SSR,FALSE,logic,stage,pIdol,103,FALSE,at:afterCardUsed[mental] { if:genki>=30 { goodImpressionTurns+=genki*0.5; goodImpressionTurns+=2 }; limit:1 }
 312,咲き誇る星+,SSR,TRUE,logic,stage,pIdol,103,FALSE,at:afterCardUsed[mental] { if:genki>=30 { goodImpressionTurns+=genki*0.5; goodImpressionTurns+=5 }; limit:1 }
 313,夜闇の星,SSR,FALSE,sense,stage,pIdol,104,FALSE,"at:startOfTurn { if:turnsElapsed==3 { setGoodConditionTurnsBuff(0.5,4) }; limit:1 }"
@@ -378,15 +378,15 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 377,ガラスはつみ (黒),SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[!(N | T)]>=21 { target:effect(fullPowerCharge) { g.score+=10 }; removeRandom[basic & (deck | discarded | hand)] } }
 378,だから、おいで,SSR,FALSE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=10; setScoreDebuff(0.6, 2); at:cardUsed[mental] { motivation+=1; limit:5 } } limit:1 }"
 379,だから、おいで+,SSR,TRUE,logic,stage,pIdol,122,FALSE,"at:startOfTurn { if:goodImpressionTurns>=6 { goodImpressionTurns+=13; setScoreDebuff(0.6, 2); at:cardUsed[mental] { motivation+=1; limit:5 } } limit:1 }"
-380,ぴったりコレクション,SSR,FALSE,sense,stage,support,,TRUE,at:cardUsed[active] { if:isVisualTurn & goodConditionTurns>=3 { concentration+=2; score+=4 }; limit:1 }
+380,ぴったしコレクション,SSR,FALSE,sense,stage,support,,TRUE,at:cardUsed[active] { if:isVisualTurn & goodConditionTurns>=3 { concentration+=2; score+=4 }; limit:1 }
 381,憧れのはじまり,SSR,FALSE,anomaly,stage,pIdol,123,FALSE,at:stanceChanged { if:isFullPower { nullifyCostActiveCards+=1; target:mental { g.genki+=4 } } limit:2 }
 382,憧れのはじまり+,SSR,TRUE,anomaly,stage,pIdol,123,FALSE,at:stanceChanged { if:isFullPower { nullifyCostActiveCards+=1; target:mental { g.genki+=5 } } limit:3 }
-383,そっくりワンマン,SR,FALSE,anomaly,produce,support,,FALSE,
+383,そっくりワンワン,SR,FALSE,anomaly,produce,support,,FALSE,
 384,ひろがる未来へ,SSR,FALSE,sense,stage,pIdol,124,FALSE,at:buffCostConsumed { if:goodConditionTurns>=3 { concentration+=2; goodConditionTurns-=1; at:turn { drawCard; limit:1 } } }
 385,ひろがる未来へ+,SSR,TRUE,sense,stage,pIdol,124,FALSE,at:buffCostConsumed { if:goodConditionTurns>=3 { concentration+=2; goodConditionTurns-=1; at:turn { drawCard(2); limit:1 } } }
 386,みちなるシグナル,SSR,FALSE,logic,stage,pIdol,125,FALSE,at:startOfStage { genki+=7; motivation+=4; fixedStamina-=maxStamina*0.8; limit:1 }; at:buffCostConsumed { fixedStamina+=maxStamina*0.2; setGoodImpressionTurnsEffectBuff(0.1) }
 387,みちなるシグナル+,SSR,TRUE,logic,stage,pIdol,125,FALSE,at:startOfStage { genki+=8; motivation+=5; fixedStamina-=maxStamina*0.8; limit:1 }; at:buffCostConsumed { fixedStamina+=maxStamina*0.2; setGoodImpressionTurnsEffectBuff(0.1) }
-388,はじめてのけんか?,SSR,FALSE,sense,produce,support,,FALSE,
+388,はじめてのけんか？,SSR,FALSE,sense,produce,support,,FALSE,
 389,迷子のゆくえ,SSR,FALSE,logic,stage,support,,FALSE,at:startOfTurn { if:isVocalTurn & stamina<=maxStamina*0.5 { motivation+=2; halfCostTurns+=2 }; limit:1 }
 390,最初の鳥,SSR,FALSE,logic,stage,pIdol,126,FALSE,at:turn { if:turnsElapsed%2==1 & genki>=30 { fixedStamina+=1; score+=genki*0.2*countCards[removed & 757] } }
 391,最初の鳥+,SSR,TRUE,logic,stage,pIdol,126,FALSE,at:turn { if:turnsElapsed%2==1 & genki>=30 { fixedStamina+=2; score+=genki*0.25*countCards[removed & 757] } }
