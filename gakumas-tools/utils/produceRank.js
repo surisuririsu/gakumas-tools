@@ -14,8 +14,8 @@ export const PARAM_BONUS_BY_PLACE = {
 
 export const PARAM_BONUS_BY_PLACE_LEGEND = {
   1: 160,
-  2: 60,
-  3: 30,
+  2: 80,
+  3: 40,
   4: 0,
 };
 
