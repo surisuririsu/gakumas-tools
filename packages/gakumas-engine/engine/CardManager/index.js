@@ -80,6 +80,8 @@ export default class CardManager extends EngineComponent {
         this.addRandomUpgradedCardToHand(state),
       addRandomUpgradedSSRCardToHand: (state) =>
         this.addRandomUpgradedCardToHand(state, ["SSR"]),
+      addRandomBasicCardToDeckAtRandom: (state, num) =>
+        this.addRandomBasicCardToDeckAtRandom(state, parseInt(num, 10)),
       addCardToTopOfDeck: (state, cardId) =>
         this.addCardToTopOfDeck(state, cardId),
       addCardToDeck: (state, cardId) => this.addCardToDeck(state, cardId),
@@ -642,6 +644,16 @@ export default class CardManager extends EngineComponent {
       type: "skillCard",
       id: skillCard.id,
     });
+  }
+
+  addRandomBasicCardToDeckAtRandom(state, num) {
+    const validSkillCards = [...new Set(this.getConfig(state).defaultCardIds)];
+    if (!validSkillCards.length) return;
+    for (let i = 0; i < num; i++) {
+      const cardId =
+        validSkillCards[Math.floor(getRand() * validSkillCards.length)];
+      this.addCardToDeck(state, cardId);
+    }
   }
 
   addCardToTopOfDeck(state, cardId) {

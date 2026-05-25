@@ -342,6 +342,11 @@ export default class HeuristicStrategy extends BaseStrategy {
       sumBuffWeight(state[S.concentrationBuffs], turnsRemaining) *
       sc.concentrationMultiplier;
 
+    // Concentration addition buffs
+    score +=
+      sumBuffWeight(state[S.concentrationAdditionBuffs], turnsRemaining) *
+      sc.concentrationMultiplier;
+
     // Nullify genki turns
     score += state[S.nullifyGenkiTurns] * -9;
 

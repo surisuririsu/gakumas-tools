@@ -3,6 +3,11 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+
+## 2026-05-25
+
+- Add preview of garakutaroad hiro
+
 ## 2026-05-10
 
 - Skill cards used via free-use wrappers (e.g. useAllCardsFree) now skip their actions when their conditions aren't met

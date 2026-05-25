@@ -19,13 +19,18 @@ const BUFF_LOG_TYPES = {
   setMotivationBuff: "motivationBuff",
   setGoodConditionTurnsBuff: "goodConditionTurnsBuff",
   setConcentrationBuff: "concentrationBuff",
+  setConcentrationAdditionBuff: "concentrationAdditionBuff",
   setConcentrationEffectBuff: "concentrationEffectBuff",
   setEnthusiasmBuff: "enthusiasmBuff",
   setEnthusiasmBonus: "enthusiasmBonus",
   setFullPowerChargeBuff: "fullPowerChargeBuff",
 };
 
-const FLAT_BUFF_LOG_TYPES = new Set(["setEnthusiasmBonus"]);
+const FLAT_BUFF_LOG_TYPES = new Set([
+  "setEnthusiasmBonus",
+  "setGoodImpressionTurnsTimesBuff",
+  "setConcentrationAdditionBuff",
+]);
 
 const TILE_LOG_TYPES = {
   setEffect: "setEffect",
