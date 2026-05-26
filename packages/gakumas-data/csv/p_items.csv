@@ -440,6 +440,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 439,ポーチ（黄）,SSR,FALSE,anomaly,produce,produce,,FALSE,
 440,H.I.F応援棒（青）,SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[deck]<22 { addRandomBasicCardToDeckAtRandom(22-countCards[deck]) }}
 441,H.I.F応援棒（桃）,SSR,FALSE,anomaly,stage,produce,,FALSE,at:startOfStage { if:countCards[deck]<22 { addRandomBasicCardToDeckAtRandom(22-countCards[deck]) }}
-442,すべてを賭けた輝き,SSR,FALSE,sense,stage,pIdol,140,FALSE,at:afterCardUsed { if:cardSourceType==pIdol & stamina>=maxStamina*0.8 { costReduction+=1; genki+=1; cardUsesRemaining+=1; fixedStamina-=1 }; limit:3 }
+442,すべてを賭けた輝き,SSR,FALSE,sense,stage,pIdol,140,FALSE,at:afterCardUsed { if:cardSourceType==pIdol & stamina>=maxStamina*0.8 { costReduction+=1; cardUsesRemaining+=1; fixedStamina-=2 }; limit:3 }
 443,すべてを賭けた輝き+,SSR,TRUE,sense,stage,pIdol,140,FALSE,at:afterCardUsed { if:cardSourceType==pIdol & stamina>=maxStamina*0.8 { costReduction+=1; genki+=1; cardUsesRemaining+=1; fixedStamina-=1 }; limit:3 }
 444,夢の手助け,SSR,FALSE,free,produce,support,,FALSE,
