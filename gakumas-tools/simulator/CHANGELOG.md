@@ -4,6 +4,11 @@ All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
 
+
+## 2026-05-29
+
+- Add S46 preview
+
 ## 2026-05-25
 
 - Add preview of garakutaroad hiro

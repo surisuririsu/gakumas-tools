@@ -52,6 +52,8 @@ export default class CardManager extends EngineComponent {
     this.variableResolvers = {
       cardHasEffect: (state, effectName) =>
         this.getCardEffects(state, state[S.usedCard]).has(effectName),
+      cardHasCost: (state, costName) =>
+        this.getCardCosts(state, state[S.usedCard]).has(costName),
       cardSourceType: (state) =>
         this.getCardSourceType(state, state[S.usedCard]),
       cardRarity: (state) => this.getCardRarity(state, state[S.usedCard]),
@@ -158,6 +160,7 @@ export default class CardManager extends EngineComponent {
       targetRule,
       source,
       (s, k) => this.getCardEffects(s, k),
+      (s, k) => this.getCardCosts(s, k),
       (s, k) => this.getCardRarity(s, k),
     );
   }
@@ -314,6 +317,25 @@ export default class CardManager extends EngineComponent {
     };
     walk(lines);
     return cardEffects;
+  }
+
+  getCardCosts(state, card) {
+    let cardCosts = new Set();
+    if (card == null) return cardCosts;
+    const lines = this.getLines(state, card, "cost");
+
+    // Walk every action in every cost, recursing into nested `costs`
+    const walk = (costs) => {
+      for (const cost of costs || []) {
+        for (const action of cost.actions || []) {
+          const name = actionEffectName(action);
+          if (name) cardCosts.add(name);
+        }
+        if (cost.costs) walk(cost.costs);
+      }
+    };
+    walk(lines);
+    return cardCosts;
   }
 
   getCardSourceType(state, card) {
