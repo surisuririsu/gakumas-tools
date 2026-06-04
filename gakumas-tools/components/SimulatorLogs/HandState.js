@@ -10,6 +10,7 @@ const BUFFS_MAP = {
   [S.goodImpressionTurnsEffectBuffs]: "goodImpressionTurnsEffectBuff",
   [S.goodImpressionTurnsTimesBuffs]: "goodImpressionTurnsTimesBuff",
   [S.motivationBuffs]: "motivationBuff",
+  [S.motivationAdditionBuffs]: "motivationAdditionBuff",
   [S.goodConditionTurnsBuffs]: "goodConditionTurnsBuff",
   [S.concentrationBuffs]: "concentrationBuff",
   [S.concentrationAdditionBuffs]: "concentrationAdditionBuff",

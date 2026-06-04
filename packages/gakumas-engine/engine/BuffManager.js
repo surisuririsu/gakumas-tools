@@ -20,6 +20,7 @@ const BUFF_TYPES = [
     field: S.goodImpressionTurnsTimesBuffs,
   },
   { action: "setMotivationBuff", field: S.motivationBuffs },
+  { action: "setMotivationAdditionBuff", field: S.motivationAdditionBuffs },
   { action: "setGoodConditionTurnsBuff", field: S.goodConditionTurnsBuffs },
   { action: "setConcentrationBuff", field: S.concentrationBuffs },
   { action: "setConcentrationAdditionBuff", field: S.concentrationAdditionBuffs },
@@ -106,6 +107,7 @@ export default class BuffManager extends EngineComponent {
     state[S.goodImpressionTurnsEffectBuffs] = [];
     state[S.goodImpressionTurnsTimesBuffs] = [];
     state[S.motivationBuffs] = [];
+    state[S.motivationAdditionBuffs] = [];
     state[S.goodConditionTurnsBuffs] = [];
     state[S.concentrationBuffs] = [];
     state[S.concentrationAdditionBuffs] = [];

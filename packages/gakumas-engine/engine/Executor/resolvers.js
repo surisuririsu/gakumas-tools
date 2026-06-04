@@ -209,6 +209,11 @@ export function resolveGoodImpressionTurns(state, goodImpressionTurns) {
 }
 
 export function resolveMotivation(state, motivation) {
+  // Apply motivation addition buffs
+  motivation += state[S.motivationAdditionBuffs].reduce(
+    (acc, cur) => acc + cur.amount,
+    0,
+  );
   // Apply motivation buffs
   motivation *= state[S.motivationBuffs].reduce(
     (acc, cur) => acc + cur.amount,

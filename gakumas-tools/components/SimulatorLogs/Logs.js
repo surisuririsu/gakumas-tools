@@ -17,6 +17,7 @@ const BUFF_LOG_TYPES = {
   setGoodImpressionTurnsEffectBuff: "goodImpressionTurnsEffectBuff",
   setGoodImpressionTurnsTimesBuff: "goodImpressionTurnsTimesBuff",
   setMotivationBuff: "motivationBuff",
+  setMotivationAdditionBuff: "motivationAdditionBuff",
   setGoodConditionTurnsBuff: "goodConditionTurnsBuff",
   setConcentrationBuff: "concentrationBuff",
   setConcentrationAdditionBuff: "concentrationAdditionBuff",
@@ -30,6 +31,7 @@ const FLAT_BUFF_LOG_TYPES = new Set([
   "setEnthusiasmBonus",
   "setGoodImpressionTurnsTimesBuff",
   "setConcentrationAdditionBuff",
+  "setMotivationAdditionBuff",
 ]);
 
 const TILE_LOG_TYPES = {
