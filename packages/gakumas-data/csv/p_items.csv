@@ -443,5 +443,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 442,すべてを賭けた輝き,SSR,FALSE,sense,stage,pIdol,140,FALSE,at:afterCardUsed { if:cardSourceType==pIdol & stamina>=maxStamina*0.8 { costReduction+=1; cardUsesRemaining+=1; fixedStamina-=2 }; limit:3 }
 443,すべてを賭けた輝き+,SSR,TRUE,sense,stage,pIdol,140,FALSE,at:afterCardUsed { if:cardSourceType==pIdol & stamina>=maxStamina*0.8 { costReduction+=1; genki+=1; cardUsesRemaining+=1; fixedStamina-=1 }; limit:3 }
 444,夢の手助け,SSR,FALSE,free,produce,support,,FALSE,
-445,強い意志の輝き,SSR,TRUE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=15; limit:2 } } }
-446,強い意志の輝き+,SSR,FALSE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=15; limit:2 } } }
+445,強い意志の輝き,SSR,FALSE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=15; limit:2 } } }
+446,強い意志の輝き+,SSR,TRUE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=15; limit:2 } } }
