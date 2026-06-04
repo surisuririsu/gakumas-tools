@@ -137,6 +137,8 @@ export default class Executor extends EngineComponent {
       const needsChangeTrigger =
         phase === "processCard" ||
         phase === "processCost" ||
+        phase === "cardMovedToHand" ||
+        phase === "cardMovedToHeld" ||
         (state[S.triggeredEffect]?.type === "reservation" &&
           state[S.triggeredEffect]?.source?.type === "skillCardEffect");
       const actionPrev = needsChangeTrigger ? state.slice() : null;

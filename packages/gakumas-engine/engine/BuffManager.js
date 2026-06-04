@@ -38,10 +38,12 @@ export default class BuffManager extends EngineComponent {
       isPreservation: (state) =>
         state[S.stance].startsWith("pre") || state[S.stance] === "leisure",
       isStrength: (state) => state[S.stance].startsWith("str"),
-      isFullPower: (state) => state[S.stance] == "fullPower",
+      isFullPower: (state) => state[S.stance] === "fullPower",
       isDirectEffect: (state) =>
         state[S.parentPhase] === "processCard" ||
         state[S.parentPhase] === "processCost" ||
+        state[S.parentPhase] === "cardMovedToHand" ||
+        state[S.parentPhase] === "cardMovedToHeld" ||
         (state[S.triggeredEffect]?.type === "reservation" &&
           state[S.triggeredEffect]?.source?.type === "skillCardEffect") ||
         (state[S.phase] == "stanceChanged" &&
@@ -262,10 +264,13 @@ export default class BuffManager extends EngineComponent {
         state[S.leisureTimes]++;
       }
       // Mirror the isDirectEffect resolver's definition of "direct":
-      // card actions, card cost, or a scheduled card-sourced reservation.
+      // card actions, card cost, a card moved to hand/held, or a scheduled
+      // card-sourced reservation.
       if (
         state[S.phase] == "processCard" ||
         state[S.phase] == "processCost" ||
+        state[S.phase] == "cardMovedToHand" ||
+        state[S.phase] == "cardMovedToHeld" ||
         (state[S.triggeredEffect]?.type === "reservation" &&
           state[S.triggeredEffect]?.source?.type === "skillCardEffect")
       ) {
