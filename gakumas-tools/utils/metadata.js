@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { SITE_URL, alternateLanguages, localePath } from "@/utils/localeUrls";
 
 const SITE_NAME = "Gakumas Tools";
@@ -14,40 +14,49 @@ export async function generateDefaultMetadata(locale) {
   });
 }
 
-export async function generateMetadataForTool(tool, locale, path = "") {
+export async function generateMetadataForTool(tool, locale, path) {
   const t_meta = await getTranslations({ locale, namespace: "metadata" });
   const t_tools = await getTranslations({ locale, namespace: "tools" });
+  // Optional SEO-specific strings; fall back to the UI title/description.
+  const messages = await getMessages({ locale });
+  const { metaTitle, metaDescription } = messages.tools?.[tool] ?? {};
   return buildMetadata({
     locale,
     path,
-    title: `${t_tools(`${tool}.title`)} - ${t_meta("title")}`,
-    description: `${t_tools(`${tool}.description`)} - ${t_meta("description")}`,
-    ogDescription: t_tools(`${tool}.description`),
+    title: `${metaTitle ?? t_tools(`${tool}.title`)} - ${t_meta("title")}`,
+    description:
+      metaDescription ??
+      `${t_tools(`${tool}.description`)} - ${t_meta("description")}`,
+    ogDescription: metaDescription ?? t_tools(`${tool}.description`),
     twitterCard: "summary_large_image",
   });
 }
 
 function buildMetadata({
   locale,
-  path = "",
+  path,
   title,
   description,
   ogDescription,
   twitterCard,
 }) {
-  const url = localePath(locale, path || "/", { absolute: true });
+  // Only emit canonical/hreflang/og:url when the page's path is known.
+  const url =
+    path != null ? localePath(locale, path, { absolute: true }) : undefined;
   return {
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    alternates: {
-      canonical: url,
-      languages: alternateLanguages(path || "/"),
-    },
+    ...(url && {
+      alternates: {
+        canonical: url,
+        languages: alternateLanguages(path),
+      },
+    }),
     openGraph: {
       title,
       description: ogDescription,
-      url,
+      ...(url && { url }),
       siteName: SITE_NAME,
       locale,
       type: "website",

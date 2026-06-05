@@ -116,7 +116,7 @@ function HifCalculator() {
         </div>
       </Panel>
 
-      <Panel label={t("examScore")}>
+      <Panel label={t("examScore")} info={t("hifScoreBonusNote")}>
         <div className={styles.modeRow}>
           <ButtonGroup
             options={SCORE_MODE_OPTIONS}

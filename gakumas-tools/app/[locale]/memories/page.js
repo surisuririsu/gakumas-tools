@@ -5,7 +5,7 @@ import { generateMetadataForTool } from "@/utils/metadata";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("memories", locale);
+  return await generateMetadataForTool("memories", locale, "/memories");
 }
 
 export default async function MemoriesPage({ params }) {

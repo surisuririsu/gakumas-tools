@@ -135,6 +135,7 @@
     "hifDerivedRound1": "Round 1 = {value}",
     "hifDerivedTotal": "Total = {value}",
     "hifRound2StarGain": "Star gained: +{value}",
+    "hifScoreBonusNote": "Enter scores as shown on the placement screen (round 1 includes the ×1.2 1st place bonus). The calculator adjusts for it automatically.",
     "hifTargetRound2Scores": "Target Round 2 scores"
   },
   "LessonCalculator": {
@@ -558,5 +559,73 @@
   },
   "KofiAd": {
     "prompt": "Support this project"
+  },
+  "CalculatorGuide": {
+    "howToTitle": "How to use",
+    "ranksTitle": "Required rating by produce rank",
+    "rankHeader": "Rank",
+    "ratingHeader": "Required rating",
+    "formulaTitle": "How produce rating is calculated",
+    "faqTitle": "FAQ",
+    "produceRankCalculator": {
+      "h1": "Gakumas Produce Rank Calculator (Hajime / Legend)",
+      "intro": "Produce rank (rating) calculator for Gakuen Idolmaster's Hajime scenario. Calculate your rating and produce rank from parameters and final exam score, and see the final exam score required for each target rank such as S or A+.",
+      "howToBody": "Select the difficulty (Regular, Pro, Master, or Legend) and your final exam placement, then enter your Vo/Da/Vi parameters at the start of the exam to see the final exam score required for each rank. On Legend, also enter your midterm exam score. Enter your actual final exam score to see your resulting rating and produce rank.",
+      "formulaBody": "Produce rating is the sum of placement rating, parameter rating, and exam score rating. Placement rating is 1,700 for 1st, 900 for 2nd, and 500 for 3rd. Parameter rating is your Vo/Da/Vi total — including the placement bonus (+30/+20/+10, or +160/+80/+40 on Legend) — multiplied by 2.3 (2.1 on Legend). Exam score converts to rating at decreasing rates: 0.3 per point up to 5,000, then 0.15 to 10,000, 0.08 to 20,000, 0.04 to 30,000, 0.02 to 40,000, and 0.01 beyond. On Legend, the midterm exam score also contributes, and the final exam uses a different conversion that caps at a score of 2,000,000.",
+      "faq": [
+        {
+          "q": "What is produce rating?",
+          "a": "The overall evaluation score calculated at the end of a produce run. It is determined by your parameters, final exam placement, and exam scores, and your produce rank (F through S5) is assigned based on the total."
+        },
+        {
+          "q": "What rating is required for S rank?",
+          "a": "S requires 13,000, S+ 14,500, SS 16,000, SSS+ 23,000, S4 26,000, and S5 35,000. The exam score needed depends on your parameters and placement — use the calculator to check."
+        },
+        {
+          "q": "What's different about Legend difficulty?",
+          "a": "The parameter cap rises to 3,000, the parameter multiplier is 2.1, and the 1st place parameter bonus is +160. The midterm exam score also counts toward your rating."
+        }
+      ]
+    },
+    "niaCalculator": {
+      "h1": "Gakumas N.I.A Produce Rank Calculator",
+      "intro": "Rating (produce rank) calculator for Gakuen Idolmaster's N.I.A scenario. Calculate gained parameters and fan votes from your audition scores, and see your rating along with recommended scores for each target rank.",
+      "howToBody": "Choose your idol and parameter bonus %, then enter your pre-audition parameters and fan votes. Enter your Vo/Da/Vi audition scores to see gained parameters, post-audition fan votes, and your produce rating. For FINALE and QUARTET, recommended scores for each target rank are also shown.",
+      "formulaBody": "Rating is calculated as your post-audition Vo/Da/Vi total multiplied by 2.3, plus a fan vote rating. The fan vote rating uses a base value and conversion rate that depend on your vote rank (A through SSS) — for example, SSS gives a base of 5,200 plus 0.03 per vote. Parameters gained from audition scores have diminishing returns, so use the recommended scores to find an efficient score split.",
+      "faq": [
+        {
+          "q": "How is N.I.A rating determined?",
+          "a": "It is the sum of your post-audition parameter total multiplied by 2.3 and the rating from your fan vote count."
+        },
+        {
+          "q": "What is the audition bonus?",
+          "a": "Parameters gained based on your Vo/Da/Vi audition scores. Higher scores grant more parameters, but gains diminish past certain thresholds."
+        },
+        {
+          "q": "Which difficulties and stages are supported?",
+          "a": "Pro (MeloBang!, GALAXY, QUARTET, FINALE) and Master (QUARTET, FINALE)."
+        }
+      ]
+    },
+    "hifCalculator": {
+      "h1": "Gakumas H.I.F Produce Rank Calculator",
+      "intro": "Rating (produce rank) calculator for Gakuen Idolmaster's H.I.F scenario. Calculate your rating from parameters, star quality, and exam scores (round 1 / round 2), and see the round 2 score required for each target rank.",
+      "howToBody": "Enter your Vo/Da/Vi parameters and star quality before round 2, then enter your exam scores either as a total or split by round. Your rating, produce rank, and the round 2 score required for each target rank are shown automatically.",
+      "formulaBody": "Rating is calculated as parameter total × 2 + star quality × 7.5 + round 1 score rating + round 2 score rating − 2,000. Enter the round 1 score as shown on the placement screen (including the ×1.2 1st place bonus); it is divided by 1.2 before conversion. Score ratings increase at diminishing rates, up to 5,500 for round 1 and 7,400 for round 2. Round 2 score also grants star quality (up to 225 including the 1.5× boost), which counts toward the star quality rating.",
+      "faq": [
+        {
+          "q": "What is the H.I.F rating formula?",
+          "a": "Parameter total × 2 + star quality × 7.5 + round 1 and round 2 score ratings − 2,000."
+        },
+        {
+          "q": "How is the round 1 1st place bonus handled?",
+          "a": "Finishing round 1 in 1st place multiplies your score by 1.2. Enter the score exactly as shown on the placement screen (bonus included) — the calculator divides by 1.2 automatically when computing your rating."
+        },
+        {
+          "q": "What rating is required for S4+?",
+          "a": "S4+ requires 30,000. S4 requires 26,000, SSS+ 23,000, and S5 35,000. Use the calculator to see the round 2 score you need."
+        }
+      ]
+    }
   }
 }

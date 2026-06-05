@@ -8,6 +8,10 @@
 
 .scenarioChip {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: tokens.$space-3 tokens.$space-4;
   border: 1px solid transparent;
   border-radius: tokens.$radius-md;

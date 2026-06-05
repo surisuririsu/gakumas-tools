@@ -70,6 +70,10 @@ const nextConfig = {
     return config;
   },
   output: "standalone",
+  // Fonts read at runtime by the opengraph-image routes (utils/og.js).
+  outputFileTracingIncludes: {
+    "/**": ["./assets/fonts/*"],
+  },
 };
 
 export default withNextIntl(nextConfig);

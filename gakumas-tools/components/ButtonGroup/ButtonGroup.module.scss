@@ -9,9 +9,12 @@
   overflow-y: hidden;
   scrollbar-width: thin;
 
-  button {
+  :is(button, a) {
     flex: 1;
     min-width: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: tokens.$space-2 tokens.$space-3;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-sm;
@@ -33,7 +36,7 @@
       color: colors.$gk-red-orange;
     }
 
-    & + button {
+    & + :is(button, a) {
       border-left: 1px solid tokens.$surface-border;
     }
   }

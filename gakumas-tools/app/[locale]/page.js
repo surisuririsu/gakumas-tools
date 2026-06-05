@@ -13,7 +13,7 @@ const JSON_LD = {
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("home", locale);
+  return await generateMetadataForTool("home", locale, "/");
 }
 
 export default async function WelcomePage({ params }) {

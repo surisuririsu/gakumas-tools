@@ -1,0 +1,56 @@
+@use "../../styles/tokens";
+
+.guide {
+  margin-top: tokens.$space-5;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  font-size: tokens.$text-sm;
+  color: tokens.$surface-ink-muted;
+
+  details {
+    border: 1px solid tokens.$surface-border;
+    border-radius: tokens.$radius-sm;
+    background-color: tokens.$surface-panel;
+    padding: tokens.$space-2 tokens.$space-3;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .title {
+    font-size: tokens.$text-sm;
+    font-weight: 600;
+    line-height: 1.4;
+    color: tokens.$surface-ink;
+  }
+
+  .about {
+    margin-top: 0;
+    font-size: tokens.$text-xs;
+    line-height: 1.5;
+  }
+
+  p {
+    margin-top: tokens.$space-2;
+    line-height: 1.6;
+  }
+
+  table {
+    margin-top: tokens.$space-2;
+  }
+}
+
+.faqItem {
+  &:not(:last-child) {
+    margin-bottom: tokens.$space-3;
+  }
+}
+
+.question {
+  font-weight: 600;
+  color: tokens.$surface-ink;
+}

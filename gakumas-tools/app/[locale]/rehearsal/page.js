@@ -5,7 +5,7 @@ import { generateMetadataForTool } from "@/utils/metadata";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("rehearsal", locale);
+  return await generateMetadataForTool("rehearsal", locale, "/rehearsal");
 }
 
 export default async function RehearsalPage({ params }) {

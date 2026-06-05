@@ -7,7 +7,7 @@ import styles from "./page.module.scss";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("dex", locale);
+  return await generateMetadataForTool("dex", locale, "/dex");
 }
 
 const CATEGORIES = [

@@ -2,11 +2,10 @@
 import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
-import { useRouter, usePathname } from "@/i18n/routing";
+import { usePathname } from "@/i18n/routing";
 
 export default function HajimeCalculatorLayout({ children }) {
   const pathname = usePathname();
-  const router = useRouter();
   const t = useTranslations("Calculator");
 
   let currentMode = null;
@@ -21,6 +20,7 @@ export default function HajimeCalculatorLayout({ children }) {
       ["produce-rank", "lesson"].map((calculator) => ({
         value: calculator,
         label: t(`calculators.${calculator}`),
+        href: `/calculator/hajime/${calculator}`,
       })),
     [t]
   );
@@ -30,11 +30,7 @@ export default function HajimeCalculatorLayout({ children }) {
       {currentMode && (
         <>
           <label>{t("calculator")}</label>
-          <ButtonGroup
-            options={CALCULATOR_OPTIONS}
-            selected={currentMode}
-            onChange={(val) => router.push(`/calculator/hajime/${val}`)}
-          />
+          <ButtonGroup options={CALCULATOR_OPTIONS} selected={currentMode} />
         </>
       )}
       {children}

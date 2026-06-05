@@ -5,7 +5,7 @@ import { generateMetadataForTool } from "@/utils/metadata";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
-  return await generateMetadataForTool("memoryCalculator", locale);
+  return await generateMetadataForTool("memoryCalculator", locale, "/memory-calculator");
 }
 
 export default async function MemoryCalculatorPage({ params }) {
