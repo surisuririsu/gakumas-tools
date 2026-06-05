@@ -822,4 +822,4 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 821,理想に手が届く日まで,,SSR,mental,logic,1,FALSE,TRUE,pIdol,141,FALSE,,cost-=4,motivation+=1; cardUsesRemaining+=1,,at:cardMovedToHand { if:movedCardBaseId==821 { motivation+=3 } }
 822,理想に手が届く日まで+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,141,FALSE,,cost-=3,motivation+=3; cardUsesRemaining+=1,,at:cardMovedToHand { if:movedCardBaseId==821 { motivation+=3 } }
 823,お手並み拝見,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,,cost-=6,motivation+=4; exchangeHand; drawCard; cardUsesRemaining+=1,1,
-824,お手並み拝見+,,SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,cost-=4,motivation+=5; exchangeHand; drawCard; cardUsesRemaining+=1,1,
+824,お手並み拝見+,"29,21",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,cost-=4,motivation+=5; exchangeHand; drawCard; cardUsesRemaining+=1,1,

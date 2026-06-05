@@ -13,7 +13,9 @@ import {
 } from "./memoryGeometry";
 import { calculateContestPower } from "../contestPower";
 
-const PARAMS_REGEXP = new RegExp(/^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/gm);
+// No `g` flag: a global regex keeps lastIndex between .test() calls, which
+// makes matching stateful across lines/files and intermittently fail.
+const PARAMS_REGEXP = /^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/;
 
 export async function getMemoryFromFile(
   file,
@@ -141,13 +143,8 @@ export function extractPower(result) {
 }
 
 // Read Vo, Da, Vi, stamina from line
-const WS_REGEXP = new RegExp(/\s+/);
 export function extractParams(line) {
-  const params = line.text
-    .trim()
-    .split(WS_REGEXP)
-    .map((t) => parseInt(t, 10));
-  return params;
+  return (line.text.match(/\d+/g) || []).map((t) => parseInt(t, 10));
 }
 
 const ICON_SIZE = 64;

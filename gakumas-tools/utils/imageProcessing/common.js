@@ -45,13 +45,27 @@ function getPreprocessedCanvas(img, textColorFn, scale = 1) {
 
 // Black or entity edge color
 export function getBlackCanvas(img) {
-  return getPreprocessedCanvas(img, (r, g, b) => {
+  const canvas = getPreprocessedCanvas(img, (r, g, b) => {
     const average = (r + g + b) / 3;
     return (
       [r, g, b].every((v) => Math.abs(v - average) < 8 && v < 185) ||
       (r > 70 && r < 120 && g > 70 && g < 120 && b > 90 && b < 130)
     );
   });
+
+  // Desktop window captures include dark frame edges that binarize to black
+  // and get OCR'd as stray glyphs glued onto real lines (e.g. "|" prefixing
+  // the params line), breaking both matching and bbox-anchored geometry.
+  // Wipe a thin margin so frame pixels never reach OCR.
+  const ctx = canvas.getContext("2d");
+  const margin = Math.ceil(canvas.width * 0.012);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, margin);
+  ctx.fillRect(0, canvas.height - margin, canvas.width, margin);
+  ctx.fillRect(0, 0, margin, canvas.height);
+  ctx.fillRect(canvas.width - margin, 0, margin, canvas.height);
+
+  return canvas;
 }
 
 // White (contest power text)

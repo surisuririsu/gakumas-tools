@@ -117,6 +117,23 @@ function binarizeForOcr(image) {
     out[o + 1] = v;
     out[o + 2] = v;
   }
+  // Mirror getBlackCanvas: wipe a thin margin so dark window-frame edges in
+  // desktop captures don't OCR as stray glyphs glued onto real lines.
+  const margin = Math.ceil(width * 0.012);
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (
+        x >= margin &&
+        x < width - margin &&
+        y >= margin &&
+        y < height - margin
+      ) {
+        continue;
+      }
+      const o = (y * width + x) * 3;
+      out[o] = out[o + 1] = out[o + 2] = 255;
+    }
+  }
   return sharp(out, { raw: { width, height, channels: 3 } }).png().toBuffer();
 }
 
@@ -168,7 +185,7 @@ async function detectMemory(image, ocrWorker) {
   const contentWidth = paramsLine.bbox.x1 - pItemsLabelLine.bbox.x0;
   const anchor = { x: pItemsLabelLine.bbox.x0, y: pItemsLabelLine.bbox.y1 };
   return {
-    params: paramsLine.text.trim().split(/\s+/).map((n) => parseInt(n, 10)),
+    params: (paramsLine.text.match(/\d+/g) || []).map((n) => parseInt(n, 10)),
     pItemBoxes: getPItemBoundingBoxes(anchor, contentWidth),
     skillCardBoxes: getSkillCardBoundingBoxes(anchor, contentWidth),
     paramsBbox: paramsLine.bbox,

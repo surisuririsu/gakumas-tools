@@ -445,3 +445,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 444,夢の手助け,SSR,FALSE,free,produce,support,,FALSE,
 445,強い意志の輝き,SSR,FALSE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=10; fixedStamina-=1; limit:2 } } }
 446,強い意志の輝き+,SSR,TRUE,logic,stage,pIdol,141,FALSE,at:motivationIncreased { if:isDirectEffect { effectCounter+=1; if:effectCounter%5==4 { motivationMultiplier=2; genki+=15; limit:2 } } }
+447,H.I.Fワッペン,SSR,FALSE,free,produce,produce,,FALSE,
