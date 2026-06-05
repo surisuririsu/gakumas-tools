@@ -514,6 +514,7 @@
   "Rehearsal": {
     "addScreenshots": "添加竞技场配队结果的屏幕截图以解析分数。",
     "accuracyNotGuaranteed": "准确性无法保证，建议与您的截图自行对比验证结果。",
+    "dropFiles": "点击选择，或将截图、视频或 CSV 拖放到此处",
     "stage": "舞台 {n}",
     "score": "分数",
     "progress": "进度: {progress}/{total}",

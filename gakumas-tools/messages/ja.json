@@ -546,6 +546,7 @@
   "Rehearsal": {
     "addScreenshots": "リハーサル結果画面のスクリーンショットからスコアを読み取ります。",
     "accuracyNotGuaranteed": "精度は保証できません。スクリーンショットと比較して、結果を確認することをお勧めします。",
+    "dropFiles": "タップして選択、またはスクリーンショット・動画・CSVをここにドロップ",
     "stage": "ステージ{n}",
     "score": "スコア",
     "progress": "進捗: {progress}/{total}",

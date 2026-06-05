@@ -14,24 +14,49 @@
   display: flex;
   align-items: center;
   gap: tokens.$space-4;
+
+  img {
+    flex-shrink: 0;
+  }
 }
 
-.uploadLabel {
-  display: inline-flex;
-  justify-content: center;
-  gap: tokens.$space-2;
+.uploadCard {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-4;
   border: 2px dashed colors.$gk-orange;
   border-radius: tokens.$radius-md;
   padding: tokens.$space-4;
-  background-color: colors.$gk-orange-extra-light;
-  color: colors.$gk-orange;
   cursor: pointer;
-  font-size: 32px;
   transition: background-color 0.2s;
 
-  &:hover {
-    background-color: colors.$white-dark;
+  &:hover,
+  &.dragOver {
+    background-color: colors.$gk-orange-extra-light;
   }
+}
+
+.uploadPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: tokens.$space-2;
+  border-radius: tokens.$radius-md;
+  padding: tokens.$space-3;
+  background-color: colors.$gk-orange-extra-light;
+  color: colors.$gk-orange;
+  font-weight: 600;
+  text-align: center;
+
+  .dragOver & {
+    background-color: transparent;
+  }
+}
+
+.uploadIcons {
+  display: flex;
+  gap: tokens.$space-2;
+  font-size: 32px;
 }
 
 .progress {
@@ -69,6 +94,14 @@
 
   th,
   td {
+    // Horizontal padding kept tight: 9 columns of 7-digit scores have to
+    // fit in the 768px content width without side-scrolling.
+    padding: tokens.$space-2 tokens.$space-1;
+  }
+
+  // Both action cells (delete left, image preview right) get even padding
+  // rather than relying on neighboring columns for their width.
+  td.action {
     padding: tokens.$space-2;
   }
 }
@@ -89,14 +122,21 @@
     transition: all 0.2s;
 
     &.selected {
-      background: tokens.$gradient-brand;
-      color: colors.$white;
+      background-color: colors.$gk-orange-extra-light;
+      color: colors.$gk-orange;
+      box-shadow: inset 0 -2px 0 colors.$gk-orange;
     }
 
     &:hover:not(.selected) {
       color: colors.$gk-red-orange;
     }
   }
+}
+
+// Vertical rules separating the three stage groups. Drawn with an inset
+// shadow instead of a border so they don't add to the table's width.
+.stageStart {
+  box-shadow: inset 2px 0 0 tokens.$surface-border;
 }
 
 .statsWrapper {
@@ -137,7 +177,33 @@
   }
 }
 
-.delete button {
+.score {
+  cursor: text;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+
+  // The input takes over the cell's padding so it fills the cell exactly,
+  // with an inset ring marking the edit state.
+  &.editing {
+    padding: 0;
+  }
+
+  input {
+    width: 100%;
+    min-width: 5ch;
+    border: none;
+    padding: tokens.$space-2 tokens.$space-1;
+    margin: 0;
+    background-color: colors.$white;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    outline: none;
+    box-shadow: inset 0 0 0 2px colors.$gk-orange;
+  }
+}
+
+.action button {
   margin: auto;
   color: tokens.$surface-ink-muted;
   transition: color 0.2s;
@@ -145,6 +211,32 @@
   &:hover {
     color: colors.$gk-red-orange;
   }
+
+  &.active {
+    color: colors.$gk-orange;
+  }
+}
+
+.previewRow td {
+  padding: tokens.$space-2;
+  background-color: tokens.$surface-muted;
+
+  div {
+    overflow: auto;
+    max-height: 60vh;
+  }
+
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    border-radius: tokens.$radius-sm;
+  }
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .ad {

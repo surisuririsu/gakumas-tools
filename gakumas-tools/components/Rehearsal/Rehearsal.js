@@ -16,6 +16,7 @@ import {
   FaVideo,
 } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
+import c from "@/utils/classNames";
 import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
 import Image from "@/components/Image";
@@ -33,7 +34,12 @@ import { runBatched } from "@/utils/workerPool";
 import KofiAd from "../KofiAd";
 import DistributionPlot from "../DistributionPlot";
 import RehearsalTable from "./RehearsalTable";
-import { bucketFiles, parseCsvFile } from "./rehearsalFiles";
+import {
+  bucketFiles,
+  canvasToObjectURL,
+  parseCsvFile,
+  revokeRowSources,
+} from "./rehearsalFiles";
 import {
   buildBoxPlotData,
   computeStats,
@@ -54,6 +60,7 @@ function Rehearsal() {
   const [processingStatus, setProcessingStatus] = useState("");
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
   const workersRef = useRef();
 
   useEffect(() => {
@@ -105,7 +112,9 @@ function Rehearsal() {
         },
       })) {
         const scores = await getScoresFromImage(canvas, worker);
-        if (scores && scores.length === 3) results.push(scores);
+        if (scores && scores.length === 3) {
+          results.push({ scores, src: await canvasToObjectURL(canvas) });
+        }
       }
       setProcessingStatus(t("videoComplete", { count: results.length }));
       return { results, scanStarted };
@@ -117,7 +126,8 @@ function Rehearsal() {
     const workers = workersRef.current;
     const scored = await runBatched(imageFiles, workers, async (file, worker) => {
       try {
-        return await getScoresFromFile(file, worker);
+        const scores = await getScoresFromFile(file, worker);
+        return scores && { scores, src: URL.createObjectURL(file) };
       } catch (err) {
         console.error(`Error parsing ${file.name}:`, err);
         return null;
@@ -130,12 +140,15 @@ function Rehearsal() {
   }, []);
 
   const handleFiles = useCallback(
-    async (e) => {
-      const files = Array.from(e.target.files);
+    async (fileList) => {
+      const files = Array.from(fileList);
       setProgress(null);
       setProcessingStatus("");
       if (!files.length) return;
-      setData([]);
+      setData((d) => {
+        revokeRowSources(d);
+        return [];
+      });
       setTotal(files.length);
       setProgress(0);
 
@@ -191,12 +204,19 @@ function Rehearsal() {
 
   const download = useCallback(() => {
     const csv = data
-      .map((row) => row.map((stage) => stage.join(",")).join(","))
+      .map((row) => row.scores.map((stage) => stage.join(",")).join(","))
       .join("\n");
     downloadBlob(new Blob([csv], { type: "text/csv" }), "rehearsal_data.csv");
   }, [data]);
 
   const boxPlotData = useMemo(() => buildBoxPlotData(data), [data]);
+  // Stable identity so BoxPlot's memo holds and the chart doesn't re-animate
+  // on unrelated re-renders.
+  const boxPlotLabels = useMemo(
+    () =>
+      [0, 1, 2].map((i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`),
+    [t, data.length],
+  );
 
   const selectedData = useMemo(() => {
     if (selected == null) return null;
@@ -212,30 +232,90 @@ function Rehearsal() {
     [],
   );
   const handleRowDelete = useCallback(
-    (i) => setData((d) => d.filter((_, j) => j !== i)),
+    (i) =>
+      setData((d) => {
+        if (d[i]?.src) URL.revokeObjectURL(d[i].src);
+        return d.filter((_, j) => j !== i);
+      }),
+    [],
+  );
+  const handleCellEdit = useCallback(
+    (i, j, k, value) =>
+      setData((d) =>
+        d.map((row, ri) =>
+          ri === i
+            ? {
+                ...row,
+                scores: row.scores.map((stage, sj) =>
+                  sj === j
+                    ? stage.map((s, sk) => (sk === k ? value : s))
+                    : stage,
+                ),
+              }
+            : row,
+        ),
+      ),
     [],
   );
 
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    setDragOver(true);
+  }, []);
+  const handleDragLeave = useCallback((e) => {
+    // Ignore dragleave events fired when moving over child elements.
+    if (e.currentTarget.contains(e.relatedTarget)) return;
+    setDragOver(false);
+  }, []);
+  const handleDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      setDragOver(false);
+      if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+    },
+    [handleFiles],
+  );
+
+  // Allow pasting screenshots directly from the clipboard.
+  useEffect(() => {
+    const onPaste = (e) => {
+      if (e.clipboardData?.files.length) handleFiles(e.clipboardData.files);
+    };
+    window.addEventListener("paste", onPaste);
+    return () => window.removeEventListener("paste", onPaste);
+  }, [handleFiles]);
+
   return (
     <div className={styles.rehearsal}>
-      <div className={styles.help}>
-        <Image
-          src="/rehearsal_parser_reference.png"
-          width={120}
-          height={120}
-          alt=""
-        />
-        <p>
-          {t("addScreenshots")}
-          <br />
-          <br />
-          {t("accuracyNotGuaranteed")}
-        </p>
-      </div>
-      <label htmlFor="input" className={styles.uploadLabel}>
-        <FaFileImage />
-        <FaVideo />
-        <FaFileCsv />
+      <label
+        htmlFor="input"
+        className={c(styles.uploadCard, dragOver && styles.dragOver)}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <div className={styles.help}>
+          <Image
+            src="/rehearsal_parser_reference.png"
+            width={120}
+            height={120}
+            alt=""
+          />
+          <p>
+            {t("addScreenshots")}
+            <br />
+            <br />
+            {t("accuracyNotGuaranteed")}
+          </p>
+        </div>
+        <div className={styles.uploadPrompt}>
+          <span className={styles.uploadIcons}>
+            <FaFileImage />
+            <FaVideo />
+            <FaFileCsv />
+          </span>
+          <span>{t("dropFiles")}</span>
+        </div>
       </label>
       <input
         className={styles.files}
@@ -243,7 +323,7 @@ function Rehearsal() {
         id="input"
         multiple
         accept="image/*,video/*,.csv,text/csv"
-        onChange={handleFiles}
+        onChange={(e) => handleFiles(e.target.files)}
         style={{ display: "none" }}
       />
 
@@ -262,14 +342,14 @@ function Rehearsal() {
 
       {!!data.length && (
         <>
-          <Button style="blue" onClick={download}>
-            <FaDownload /> CSV
-          </Button>
+          <div className={styles.toolbar}>
+            <Button style="default" size="sm" onClick={download}>
+              <FaDownload /> CSV
+            </Button>
+          </div>
 
           <BoxPlot
-            labels={[0, 1, 2].map(
-              (i) => t("stage", { n: i + 1 }) + ` (n=${data.length})`,
-            )}
+            labels={boxPlotLabels}
             data={boxPlotData}
             showLegend={false}
           />
@@ -307,6 +387,7 @@ function Rehearsal() {
               selected={selected}
               onChartClick={handleChartClick}
               onRowDelete={handleRowDelete}
+              onCellEdit={handleCellEdit}
             />
           </div>
         </>

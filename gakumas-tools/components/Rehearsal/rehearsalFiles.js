@@ -20,6 +20,28 @@ export async function parseCsvFile(file) {
     .split("\n")
     .map((line) => {
       const row = line.split(",").map(Number);
-      return [row.slice(0, 3), row.slice(3, 6), row.slice(6, 9)];
+      return {
+        scores: [row.slice(0, 3), row.slice(3, 6), row.slice(6, 9)],
+        src: null,
+      };
     });
+}
+
+// Snapshot a canvas (or OffscreenCanvas) to an object URL so the source
+// frame can be shown to the user after the canvas is reused.
+export async function canvasToObjectURL(canvas) {
+  try {
+    const blob = canvas.convertToBlob
+      ? await canvas.convertToBlob({ type: "image/jpeg", quality: 0.8 })
+      : await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.8));
+    return blob ? URL.createObjectURL(blob) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function revokeRowSources(rows) {
+  for (const row of rows) {
+    if (row.src) URL.revokeObjectURL(row.src);
+  }
 }

@@ -8,7 +8,7 @@ export function buildBoxPlotData(data) {
   return data.reduce((acc, cur) => {
     for (let stage = 0; stage < NUM_STAGES; stage++) {
       for (let param = 0; param < NUM_PARAMS; param++) {
-        const v = cur[stage]?.[param];
+        const v = cur.scores[stage]?.[param];
         if (v) acc[param].data[stage].push(v);
       }
     }

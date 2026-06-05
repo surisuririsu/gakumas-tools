@@ -514,6 +514,7 @@
   "Rehearsal": {
     "addScreenshots": "리허설 결과 스크린샷으로부터 스코어를 불러옵니다.",
     "accuracyNotGuaranteed": "정확도는 보장되지 않습니다. 스크린샷과 비교하여 결과를 확인하는 것을 권장합니다.",
+    "dropFiles": "탭하여 선택하거나 스크린샷·동영상·CSV를 여기에 드롭하세요",
     "stage": "스테이지 {n}",
     "score": "스코어",
     "progress": "진행: {progress}/{total}",
