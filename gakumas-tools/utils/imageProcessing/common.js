@@ -16,10 +16,10 @@ export function loadImageFromFile(file) {
   });
 }
 
-// Get a canvas with image black/white filtered
-function getPreprocessedCanvas(img, textColorFn) {
-  const width = img.width;
-  const height = img.height;
+// Get a canvas with image black/white filtered, optionally upscaled
+function getPreprocessedCanvas(img, textColorFn, scale = 1) {
+  const width = img.width * scale;
+  const height = img.height * scale;
   let canvas;
   if (DEBUG) {
     canvas = document.createElement("canvas");
@@ -29,7 +29,7 @@ function getPreprocessedCanvas(img, textColorFn) {
     canvas = new OffscreenCanvas(width, height);
   }
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
+  ctx.drawImage(img, 0, 0, width, height);
   let d = ctx.getImageData(0, 0, width, height);
   for (var i = 0; i < d.data.length; i += 4) {
     if (textColorFn(d.data[i], d.data[i + 1], d.data[i + 2])) {
@@ -55,9 +55,11 @@ export function getBlackCanvas(img) {
 }
 
 // White (contest power text)
-export function getWhiteCanvas(img, threshold = 252) {
-  return getPreprocessedCanvas(img, (r, g, b) =>
-    [r, g, b].every((v) => v > threshold),
+export function getWhiteCanvas(img, threshold = 252, scale = 1) {
+  return getPreprocessedCanvas(
+    img,
+    (r, g, b) => [r, g, b].every((v) => v > threshold),
+    scale,
   );
 }
 

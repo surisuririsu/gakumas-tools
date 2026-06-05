@@ -17,6 +17,8 @@
     "test:memory": "node --loader ./scripts/extensionless-loader.mjs ./tests/memoryBoxes.mjs",
     "test:memory:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/memoryBoxes.mjs --update",
     "test:memory:visualize": "node --loader ./scripts/extensionless-loader.mjs ./tests/memoryBoxes.mjs --visualize",
+    "test:rehearsal": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs",
+    "test:rehearsal:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs --update",
     "regression:add": "node --loader ./scripts/extensionless-loader.mjs ./tests/add.mjs",
     "regression:bootstrap": "node --loader ./scripts/extensionless-loader.mjs ./tests/generate-suite.mjs",
     "regression:coverage": "node --loader ./scripts/extensionless-loader.mjs ./tests/coverage.mjs",

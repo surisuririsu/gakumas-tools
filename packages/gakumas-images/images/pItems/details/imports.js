@@ -442,6 +442,8 @@ import image_441 from "./441.png";
 import image_442 from "./442.png";
 import image_443 from "./443.png";
 import image_444 from "./444.png";
+import image_445 from "./445.png";
+import image_446 from "./446.png";
 
 const IMAGES = {
   '1': image_1,
@@ -888,6 +890,8 @@ const IMAGES = {
   '442': image_442,
   '443': image_443,
   '444': image_444,
+  '445': image_445,
+  '446': image_446,
 };
 
 export default IMAGES;
