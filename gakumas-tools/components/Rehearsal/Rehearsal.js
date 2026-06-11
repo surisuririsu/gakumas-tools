@@ -1,18 +1,12 @@
 "use client";
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
   FaDownload,
   FaFileCsv,
   FaFileImage,
+  FaPlus,
   FaVideo,
 } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
@@ -124,17 +118,21 @@ function Rehearsal() {
 
   const processImages = useCallback(async (imageFiles) => {
     const workers = workersRef.current;
-    const scored = await runBatched(imageFiles, workers, async (file, worker) => {
-      try {
-        const scores = await getScoresFromFile(file, worker);
-        return scores && { scores, src: URL.createObjectURL(file) };
-      } catch (err) {
-        console.error(`Error parsing ${file.name}:`, err);
-        return null;
-      } finally {
-        setProgress((p) => p + 1);
-      }
-    });
+    const scored = await runBatched(
+      imageFiles,
+      workers,
+      async (file, worker) => {
+        try {
+          const scores = await getScoresFromFile(file, worker);
+          return scores && { scores, src: URL.createObjectURL(file) };
+        } catch (err) {
+          console.error(`Error parsing ${file.name}:`, err);
+          return null;
+        } finally {
+          setProgress((p) => p + 1);
+        }
+      },
+    );
     const results = scored.filter(Boolean);
     return { results, failures: scored.length - results.length };
   }, []);
@@ -389,6 +387,24 @@ function Rehearsal() {
               onRowDelete={handleRowDelete}
               onCellEdit={handleCellEdit}
             />
+            <Button
+              className={styles.addButton}
+              fill
+              onClick={() =>
+                setData((d) => [
+                  ...d,
+                  {
+                    scores: [
+                      [0, 0, 0],
+                      [0, 0, 0],
+                      [0, 0, 0],
+                    ],
+                  },
+                ])
+              }
+            >
+              <FaPlus />
+            </Button>
           </div>
         </>
       )}

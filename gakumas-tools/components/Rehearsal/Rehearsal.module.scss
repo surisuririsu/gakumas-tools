@@ -242,3 +242,9 @@
 .ad {
   margin-top: tokens.$space-4;
 }
+
+.addButton {
+  border-radius: 0;
+  font-size: 20px;
+  color: colors.$gray;
+}
