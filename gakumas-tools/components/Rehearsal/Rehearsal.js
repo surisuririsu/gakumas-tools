@@ -338,76 +338,68 @@ function Rehearsal() {
         </div>
       )}
 
-      {!!data.length && (
-        <>
-          <div className={styles.toolbar}>
-            <Button style="default" size="sm" onClick={download}>
-              <FaDownload /> CSV
-            </Button>
-          </div>
+      <div className={styles.toolbar}>
+        <Button style="default" size="sm" onClick={download}>
+          <FaDownload /> CSV
+        </Button>
+      </div>
 
-          <BoxPlot
-            labels={boxPlotLabels}
-            data={boxPlotData}
-            showLegend={false}
+      <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
+
+      {selectedData && (
+        <div className={styles.statsWrapper}>
+          <Table
+            className={styles.stats}
+            headers={[
+              tRes("min"),
+              tRes("average"),
+              tRes("median"),
+              tRes("max"),
+            ]}
+            rows={[
+              [
+                selectedData.min,
+                selectedData.average,
+                selectedData.median,
+                selectedData.max,
+              ],
+            ]}
           />
-
-          {selectedData && (
-            <div className={styles.statsWrapper}>
-              <Table
-                className={styles.stats}
-                headers={[
-                  tRes("min"),
-                  tRes("average"),
-                  tRes("median"),
-                  tRes("max"),
-                ]}
-                rows={[
-                  [
-                    selectedData.min,
-                    selectedData.average,
-                    selectedData.median,
-                    selectedData.max,
-                  ],
-                ]}
-              />
-              <DistributionPlot
-                label={`${t("score")} (n=${selectedData.scores.length})`}
-                data={selectedData.bucketedScores}
-                bucketSize={selectedData.bucketSize}
-                color="rgba(68, 187, 255, 0.75)"
-              />
-            </div>
-          )}
-          <div className={styles.tableWrapper}>
-            <RehearsalTable
-              data={data}
-              selected={selected}
-              onChartClick={handleChartClick}
-              onRowDelete={handleRowDelete}
-              onCellEdit={handleCellEdit}
-            />
-            <Button
-              className={styles.addButton}
-              fill
-              onClick={() =>
-                setData((d) => [
-                  ...d,
-                  {
-                    scores: [
-                      [0, 0, 0],
-                      [0, 0, 0],
-                      [0, 0, 0],
-                    ],
-                  },
-                ])
-              }
-            >
-              <FaPlus />
-            </Button>
-          </div>
-        </>
+          <DistributionPlot
+            label={`${t("score")} (n=${selectedData.scores.length})`}
+            data={selectedData.bucketedScores}
+            bucketSize={selectedData.bucketSize}
+            color="rgba(68, 187, 255, 0.75)"
+          />
+        </div>
       )}
+      <div className={styles.tableWrapper}>
+        <RehearsalTable
+          data={data}
+          selected={selected}
+          onChartClick={handleChartClick}
+          onRowDelete={handleRowDelete}
+          onCellEdit={handleCellEdit}
+        />
+        <Button
+          className={styles.addButton}
+          fill
+          onClick={() =>
+            setData((d) => [
+              ...d,
+              {
+                scores: [
+                  [0, 0, 0],
+                  [0, 0, 0],
+                  [0, 0, 0],
+                ],
+              },
+            ])
+          }
+        >
+          <FaPlus />
+        </Button>
+      </div>
 
       <div className={styles.ad}>
         <KofiAd />

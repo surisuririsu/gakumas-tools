@@ -15,6 +15,10 @@ export default function RehearsalTable({
   const [editing, setEditing] = useState(null);
   const [previewRow, setPreviewRow] = useState(null);
   const inputRef = useRef(null);
+  // Set while moving focus from one cell to another via Tab. The old input
+  // unmounts and fires a blur we must ignore, since the new cell's autoFocus
+  // is taking over rather than focus leaving the table.
+  const navigatingRef = useRef(false);
 
   const commitEdit = () => {
     if (!editing || !inputRef.current) return;
@@ -26,13 +30,33 @@ export default function RehearsalTable({
     }
   };
 
+  const moveTo = ([i, j, k]) => {
+    setEditing([i, j, k]);
+    setPreviewRow(data[i].src ? i : null);
+  };
+
   // Cell switching happens on mousedown with preventDefault, so the active
   // input never blurs when moving between cells. A real blur therefore means
   // focus left the cells entirely — commit and close the preview.
   const startEditing = (i, j, k) => {
     commitEdit();
-    setEditing([i, j, k]);
-    setPreviewRow(data[i].src ? i : null);
+    moveTo([i, j, k]);
+  };
+
+  // The cell one step forward (or back) in row-major order across the whole
+  // table, or null at the very first/last cell.
+  const adjacentCell = (i, j, k, back) => {
+    const flat = j * 3 + k + (back ? -1 : 1);
+    const row = i + Math.floor(flat / 9);
+    if (row < 0 || row >= data.length) return null;
+    const cell = ((flat % 9) + 9) % 9;
+    return [row, Math.floor(cell / 3), cell % 3];
+  };
+
+  const tabTo = (next) => {
+    commitEdit();
+    navigatingRef.current = true;
+    moveTo(next);
   };
 
   // Drop edit/preview state without committing. Nulling the ref also keeps a
@@ -44,6 +68,9 @@ export default function RehearsalTable({
   };
 
   const stopEditing = () => {
+    // A blur fired while Tab-navigating belongs to the old, unmounting input;
+    // the new cell's autoFocus will reset the flag. Ignore it.
+    if (navigatingRef.current) return;
     commitEdit();
     cancelEditing();
   };
@@ -155,11 +182,20 @@ export default function RehearsalTable({
                               size={1}
                               defaultValue={score}
                               autoFocus
-                              onFocus={(e) => e.target.select()}
+                              onFocus={(e) => {
+                                navigatingRef.current = false;
+                                e.target.select();
+                              }}
                               onBlur={stopEditing}
                               onKeyDown={(e) => {
                                 if (e.key === "Enter") e.target.blur();
                                 if (e.key === "Escape") cancelEditing();
+                                if (e.key === "Tab") {
+                                  const next = adjacentCell(i, j, k, e.shiftKey);
+                                  if (!next) return; // let focus leave the table
+                                  e.preventDefault();
+                                  tabTo(next);
+                                }
                               }}
                             />
                           ) : (
