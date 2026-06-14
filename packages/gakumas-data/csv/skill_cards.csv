@@ -823,3 +823,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 822,理想に手が届く日まで+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,141,FALSE,,cost-=3,motivation+=3; cardUsesRemaining+=1,,at:cardMovedToHand { if:movedCardBaseId==821 { motivation+=3 } }
 823,お手並み拝見,,SSR,mental,logic,1,FALSE,TRUE,support,,FALSE,,cost-=6,motivation+=4; exchangeHand; drawCard; cardUsesRemaining+=1,1,
 824,お手並み拝見+,"29,21",SSR,mental,logic,1,TRUE,TRUE,support,,FALSE,,cost-=4,motivation+=5; exchangeHand; drawCard; cardUsesRemaining+=1,1,
+825,奪われる心,,SSR,active,sense,1,FALSE,TRUE,pIdol,142,FALSE,,cost-=3,at:afterCardUsed[active] { effectCounter+=1; if:effectCounter%2==1 { score+=goodConditionTurns*2; limit:3 } },1,
+826,奪われる心+,,SSR,active,sense,1,TRUE,TRUE,pIdol,142,FALSE,,cost-=3,at:afterCardUsed[active] { effectCounter+=1; if:effectCounter%2==1 { score+=goodConditionTurns*2; limit:3 } },1,
+827,甘く溶ける心,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,143,FALSE,,cost-=2,setStance(strength); drawCard; at:afterCardUsed[active] { if:stance==strength2 { setStance(preservation2); limit:3 } },1,
+828,甘く溶ける心+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,143,FALSE,,cost-=2,setStance(strength); drawCard; at:afterCardUsed[active] { if:stance==strength2 { setStance(preservation2); limit:3 } },1,
