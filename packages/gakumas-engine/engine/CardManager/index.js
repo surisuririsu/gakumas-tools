@@ -139,6 +139,8 @@ export default class CardManager extends EngineComponent {
       holdThis: (state) => this.holdThisCard(state),
       useRandomFree: (state, targetRule) =>
         this.useRandomCardFree(state, targetRule),
+      useSelected: (state, targetRule, num = 1) =>
+        this.useSelectedCard(state, targetRule, parseInt(num, 10)),
       useSelectedFree: (state, targetRule, num = 1) =>
         this.useSelectedCardFree(state, targetRule, parseInt(num, 10)),
       useAllFree: (state, targetRule) =>
@@ -390,6 +392,7 @@ export default class CardManager extends EngineComponent {
 
   useCard(state, card, pile = S.handCards) {
     const usingFree = state[S.freeCardUses] > 0;
+    const usingPaid = state[S.paidCardUses] > 0;
     const pileIndex = state[pile].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
     const c11n = state[S.cardMap][card].c11n;
@@ -402,6 +405,11 @@ export default class CardManager extends EngineComponent {
     this.logger.debug("Using card", skillCard.id, skillCard.name);
 
     state[S.usedCard] = card;
+
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "beforeCardUsed",
+    );
 
     let conditionState = shallowCopy(state);
     this.logger.debug("Applying cost", skillCard.cost);
@@ -442,7 +450,7 @@ export default class CardManager extends EngineComponent {
     }
 
     state[pile].splice(pileIndex, 1);
-    if (!usingFree) {
+    if (!usingFree && !usingPaid) {
       state[S.cardUsesRemaining]--;
     }
 
@@ -537,7 +545,7 @@ export default class CardManager extends EngineComponent {
     // turn — mirror legacy to keep parity across free-use chains (e.g.
     // `useAllFree[held]` triggered from a card's own actions while
     // cardUsesRemaining is already 0).
-    if (!usingFree && state[S.cardUsesRemaining] < 1) {
+    if (!usingFree && !usingPaid && state[S.cardUsesRemaining] < 1) {
       this.engine.turnManager.endTurn(state);
     }
   }
@@ -979,6 +987,37 @@ export default class CardManager extends EngineComponent {
         state[S.freeCardUses]++;
         this.useCard(state, card, pile);
         state[S.freeCardUses]--;
+      }
+    }
+  }
+
+  useSelectedCard(state, targetRule, num = 1) {
+    if (state[S.nullifySelect]) return;
+
+    const targetCards = this.getTargetRuleCards(state, targetRule);
+    const cards = [...targetCards];
+    if (!cards.length) return;
+
+    const indicesToUse = this.engine.strategy.pickCardsToUseFree(
+      state,
+      cards,
+      num,
+    );
+    if (!indicesToUse || indicesToUse.length === 0) return;
+
+    for (let j = 0; j < indicesToUse.length; j++) {
+      const card = cards[indicesToUse[j]];
+      const pile = this.findCardPile(state, card);
+      if (pile) {
+        if (this.isCardUsable(state, card)) {
+          state[S.paidCardUses]++;
+          this.useCard(state, card, pile);
+          state[S.paidCardUses]--;
+        } else {
+          const pileIndex = state[pile].indexOf(card);
+          state[pile].splice(pileIndex, 1);
+          state[S.discardedCards].push(card);
+        }
       }
     }
   }

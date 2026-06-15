@@ -1,4 +1,9 @@
-import { FULL_POWER_EFFECTS, GOOD_IMPRESSION_EFFECTS, S } from "../constants";
+import {
+  FULL_POWER_EFFECTS,
+  FULL_POWER_CHANGED_EFFECTS,
+  GOOD_IMPRESSION_EFFECTS,
+  S,
+} from "../constants";
 import EngineComponent from "./EngineComponent";
 import { getRand, shuffle } from "../utils";
 
@@ -85,6 +90,7 @@ export default class TurnManager extends EngineComponent {
     for (let i = 0; i < 3; i++) {
       this.engine.cardManager.drawCard(state);
     }
+    this.engine.effectManager.triggerEffects(state, FULL_POWER_CHANGED_EFFECTS);
 
     // Add forced initial hand cards
     if (state[S.turnsElapsed] == 0 || forceInitialHand) {
