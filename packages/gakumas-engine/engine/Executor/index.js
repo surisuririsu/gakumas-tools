@@ -12,7 +12,6 @@ import {
   LOGGED_FIELDS,
   NON_NEGATIVE_FIELDS,
   S,
-  UNFRESH_PHASES,
   WHOLE_FIELDS,
   ALL_FIELDS,
 } from "../../constants";
@@ -200,7 +199,7 @@ export default class Executor extends EngineComponent {
     }
 
     // Protect fresh stats from decrement
-    if (!UNFRESH_PHASES.includes(state[S.phase])) {
+    if (!state[S.unfreshPhase]) {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
         if (state[field] > 0 && prev[field] == 0) {

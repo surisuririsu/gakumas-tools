@@ -3,7 +3,6 @@ import {
   EOT_DECREMENT_FIELDS,
   S,
   STANCE_CHANGED_EFFECTS,
-  UNFRESH_PHASES,
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
@@ -171,7 +170,7 @@ export default class BuffManager extends EngineComponent {
       arr.push({
         amount,
         turns,
-        fresh: !UNFRESH_PHASES.includes(state[S.phase]),
+        fresh: !state[S.unfreshPhase],
       });
     }
     this.logger.log(state, logLabel, {
