@@ -3,9 +3,14 @@
 All notable changes to the contest simulator will be documented in this file.
 Dates are based on Eastern Time Zone.
 
+## 2026-06-15
 
+- Add p-idol legend cards
+- Add season 47 preview
 
+## 2026-06-14
 
+- Add sugar flavor preview
 
 ## 2026-06-05
 
