@@ -3354,6 +3354,20 @@ import image_821 from "./821.png";
 import image_822 from "./822.png";
 import image_823 from "./823.png";
 import image_824 from "./824.png";
+import image_825 from "./825.png";
+import image_826 from "./826.png";
+import image_827 from "./827.png";
+import image_828 from "./828.png";
+import image_829 from "./829.png";
+import image_830 from "./830.png";
+import image_831 from "./831.png";
+import image_832 from "./832.png";
+import image_833 from "./833.png";
+import image_834 from "./834.png";
+import image_835 from "./835.png";
+import image_836 from "./836.png";
+import image_837 from "./837.png";
+import image_838 from "./838.png";
 
 const IMAGES = {
   '1': image_1,
@@ -6712,6 +6726,20 @@ const IMAGES = {
   '822': image_822,
   '823': image_823,
   '824': image_824,
+  '825': image_825,
+  '826': image_826,
+  '827': image_827,
+  '828': image_828,
+  '829': image_829,
+  '830': image_830,
+  '831': image_831,
+  '832': image_832,
+  '833': image_833,
+  '834': image_834,
+  '835': image_835,
+  '836': image_836,
+  '837': image_837,
+  '838': image_838,
 };
 
 export default IMAGES;
