@@ -106,7 +106,7 @@ function Rehearsal() {
         },
       })) {
         const scores = await getScoresFromImage(canvas, worker);
-        if (scores && scores.length === 3) {
+        if (scores && scores.some((stage) => stage.some((v) => v))) {
           results.push({ scores, src: await canvasToObjectURL(canvas) });
         }
       }

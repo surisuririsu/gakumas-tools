@@ -1,1 +1,6 @@
 {"file":"tests/fixtures/rehearsal/01.png","note":"377px-wide window capture; stage 2 has a 7-figure score — regression for OCR upscaling + strict comma grouping","scores":[[401700,300453,227018],[381923,194542,1085807],[453703,300022,415209]]}
+{"file":"tests/fixtures/rehearsal/02.png","note":"three full stages including an overlapping 7-figure stage 2","scores":[[355021,372492,177357],[1257318,1247613,1075803],[372900,217420,55739]]}
+{"file":"tests/fixtures/rehearsal/03.png","note":"three full stages including an overlapping 7-figure stage 2","scores":[[551591,320280,352451],[1144771,1385592,820469],[519130,105372,121051]]}
+{"file":"tests/fixtures/rehearsal/04.png","note":"three full stages","scores":[[666796,98487,643082],[172466,47507,412101],[411659,335828,479994]]}
+{"file":"tests/fixtures/rehearsal/05.png","note":"three stages of two idols each","scores":[[801866,152372,0],[125788,122988,0],[539212,249992,0]]}
+{"file":"tests/fixtures/rehearsal/06.png","note":"three full stages","scores":[[297325,177602,336596],[637060,671958,246341],[32874,112772,86995]]}

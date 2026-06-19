@@ -2,11 +2,8 @@ import { extractLines, getWhiteCanvas, loadImageFromFile } from "./common";
 import {
   allTokens,
   parseScoreToken,
-  reconcileStage,
-  reconstructFromDigits,
   pairTotalLine,
-  lineNumber,
-  totalIsReliable,
+  recoverStage,
 } from "./rehearsalRecovery";
 
 const NUMERIC_LINE_REGEX = /^[\d\s,.—-]+$/;
@@ -81,40 +78,7 @@ export function extractScores(result) {
   const scores = [];
   for (const { line, raw, cleanThree } of stageRows) {
     const totalLine = pairTotalLine(line, lines, chosen);
-    const total = totalLine ? lineNumber(totalLine.text) : null;
-    let [fixed, recovery] = reconcileStage(raw, total, null);
-    if (recovery === "flagged" && total != null) {
-      const digits = line.text.replace(/[^\d]/g, "");
-      const alt = reconstructFromDigits(digits, total, null);
-      if (alt && alt[1] !== "flagged") {
-        fixed = alt[0];
-        recovery = alt[1];
-      }
-    }
-
-    // Did a usable stage total take part in the checksum? (Mirrors reconcileStage
-    // step 0.) Only a *reliable* total (clean grouping == digit concatenation) is
-    // trusted enough to overrule an otherwise-clean read.
-    const usableTotal =
-      total != null &&
-      total > 0 &&
-      total <= 9_999_999 &&
-      total >= Math.max(raw[0], raw[1], raw[2]);
-    const reliableTotal =
-      totalLine != null && usableTotal && totalIsReliable(totalLine.text);
-
-    if (recovery !== "flagged") {
-      // Verified by the total, or a clean read the total did not contradict.
-      scores.push(fixed.slice());
-    } else if (cleanThree && !reliableTotal) {
-      // Clean three-number read that no reliable total disproves: trust it.
-      scores.push(fixed.slice());
-    } else {
-      // Unreadable / disproved by a reliable total (the OCR lost digits, e.g.
-      // "1,231,145" -> "1,231,14"): emit zeros so the user fixes the stage in the
-      // table, rather than storing fragments or dropping the stage out of place.
-      scores.push([0, 0, 0]);
-    }
+    scores.push(recoverStage(line.text, raw, cleanThree, totalLine));
   }
 
   // Always return three aligned stages, padding any not found with zeros.
