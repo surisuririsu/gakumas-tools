@@ -444,6 +444,23 @@ function totalUsable(total, raw) {
   );
 }
 
+// Is a row's reading confirmed by a usable stage total (i.e. the checksum holds)?
+// Used to admit a SINGLE-number row as a one-character stage and to rank
+// candidates, telling a genuine breakdown row apart from the total / 総合力
+// look-alikes that share its single-number shape. A one-character stage's total is
+// c1 + floor(c1/5), a relationship those look-alikes do not satisfy, so they are
+// rejected; a real one-character row passes.
+export function stageVerified(rowText, raw, totalLine) {
+  const total = totalLine ? numberOf(totalLine) : null;
+  if (!totalUsable(total, raw)) return false;
+  let [, recovery] = reconcileStage(raw, total, null);
+  if (recovery === "flagged") {
+    const alt = reconstructFromDigits(rowText.replace(/[^\d]/g, ""), total, null);
+    if (alt) recovery = alt[1];
+  }
+  return recovery !== "flagged";
+}
+
 // Recover one stage's [c1, c2, c3] from its OCR row text + raw tokens + paired
 // stage-total line (or null). Owns the full per-stage policy: checksum reconcile,
 // the digit-stream fallback for the two-collision case, and the decision to trust
