@@ -155,7 +155,10 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
     } else if (state[S.stance] == "preservation2") {
       score *= 0.25;
     } else if (state[S.stance] == "fullPower") {
-      score *= 3;
+      score *= state[S.fullPowerEffectBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        3,
+      );
     } else if (state[S.stance] == "leisure") {
       score *= 0;
     }

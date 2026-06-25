@@ -279,6 +279,11 @@ export default class HeuristicStrategy extends BaseStrategy {
         sumBuffWeight(state[S.fullPowerChargeBuffs], turnsRemaining) *
         sc.fullPowerMultiplier;
 
+      // Full power effect buffs
+      score +=
+        sumBuffWeight(state[S.fullPowerEffectBuffs], turnsRemaining) *
+        sc.fullPowerMultiplier;
+
       // Growth
       score += this.getGrowthScore(state) * 0.2 * turnsRemaining;
     }

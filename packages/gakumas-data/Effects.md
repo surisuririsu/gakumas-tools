@@ -178,6 +178,7 @@ Assignment operators: `=`, `+=`, `-=`, `*=`, `/=`, `%=`.
 | 熱気増加量増加                            | `setEnthusiasmBuff(amount, turns?)`                                      |
 | 熱気ボーナス                              | `setEnthusiasmBonus(amount, turns?)`                                     |
 | 全力値増加量増加                          | `setFullPowerChargeBuff(amount, turns?)`                                 |
+| 全力強化                                 | `setFullPowerEffectBuff(amount, turns?)`                                 |
 
 ## Target rules
 

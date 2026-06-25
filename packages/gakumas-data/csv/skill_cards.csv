@@ -837,3 +837,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 836,奇跡を起こした一番星,,L,mental,anomaly,1,FALSE,TRUE,produce,102,FALSE,,cost-=0,at:beforeCardUsed { if:usedCardBaseId==576 { nullifyCostCards+=1 }; limit:5 }; cardUsesRemaining+=1; target:effect(strength) { g.score+=11 },1,
 837,背中を押す一番星,,L,mental,sense,1,FALSE,TRUE,produce,97,TRUE,,cost-=0,setConcentrationBuff(0.1); cardUsesRemaining+=1; at:turn { concentration+=4; limit:1 },1,
 838,勇気を届ける一番星,,L,active,anomaly,1,FALSE,TRUE,produce,120,FALSE,,fullPowerCharge-=5,score+=20+cumulativeFullPowerCharge*6.5; cardUsesRemaining+=1,1,
+839,弱気じゃいられない！,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,144,FALSE, ,cost-=6,cardUsesRemaining+=1; at:beforeStartOfTurn { if:prevStance==fullPower & stance==none { fullPowerCharge+=10; limit:2 } },1,
+840,弱気じゃいられない！+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,144,FALSE,,cost-=6,cardUsesRemaining+=1; at:beforeStartOfTurn { if:prevStance==fullPower & stance==none { fullPowerCharge+=10; limit:2 } },1,
+841,あつあつはふはふ,,SSR,active,anomaly,1,FALSE,TRUE,support,,FALSE,,cost-=6,fullPowerCharge+=1; at:endOfTurn { if:isFullPower { score+=3+cumulativeFullPowerCharge*1.5; limit:4 } };,1,
+842,あつあつはふはふ+,,SSR,active,anomaly,1,TRUE,TRUE,support,,FALSE,,cost-=6,fullPowerCharge+=1; at:endOfTurn { if:isFullPower { score+=3+cumulativeFullPowerCharge*1.5; limit:4 } };,1,

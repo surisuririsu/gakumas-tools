@@ -27,6 +27,7 @@ const BUFF_TYPES = [
   { action: "setEnthusiasmBuff", field: S.enthusiasmBuffs },
   { action: "setEnthusiasmBonus", field: S.enthusiasmBonusBuffs },
   { action: "setFullPowerChargeBuff", field: S.fullPowerChargeBuffs },
+  { action: "setFullPowerEffectBuff", field: S.fullPowerEffectBuffs },
 ];
 
 export default class BuffManager extends EngineComponent {
@@ -116,6 +117,7 @@ export default class BuffManager extends EngineComponent {
     state[S.enthusiasmBuffs] = [];
     state[S.enthusiasmBonusBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
+    state[S.fullPowerEffectBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;

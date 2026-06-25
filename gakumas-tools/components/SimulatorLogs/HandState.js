@@ -17,6 +17,7 @@ const BUFFS_MAP = {
   [S.enthusiasmBuffs]: "enthusiasmBuff",
   [S.enthusiasmBonusBuffs]: "enthusiasmBonus",
   [S.fullPowerChargeBuffs]: "fullPowerChargeBuff",
+  [S.fullPowerEffectBuffs]: "fullPowerEffectBuff",
 };
 
 const FLAT_BUFFS = { [S.enthusiasmBonusBuffs]: true };

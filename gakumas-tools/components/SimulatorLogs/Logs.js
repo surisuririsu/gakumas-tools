@@ -25,6 +25,7 @@ const BUFF_LOG_TYPES = {
   setEnthusiasmBuff: "enthusiasmBuff",
   setEnthusiasmBonus: "enthusiasmBonus",
   setFullPowerChargeBuff: "fullPowerChargeBuff",
+  setFullPowerEffectBuff: "fullPowerEffectBuff",
 };
 
 const FLAT_BUFF_LOG_TYPES = new Set([

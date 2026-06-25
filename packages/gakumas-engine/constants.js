@@ -178,6 +178,7 @@ export const ALL_FIELDS = [
   "lockStanceTurns",
   "fullPowerCharge",
   "fullPowerChargeBuffs",
+  "fullPowerEffectBuffs",
   "cumulativeFullPowerCharge",
   "enthusiasm",
   "enthusiasmBonusBuffs",

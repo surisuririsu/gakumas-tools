@@ -452,3 +452,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 451,揺れ動く想い+,SSR,TRUE,anomaly,stage,pIdol,143,FALSE,"at:cardUsed[active] { if:strengthTimes>=3 { setStance(strength); setEnthusiasmBonus(3,1) } }"
 452,恋心のゆくえ,SSR,FALSE,anomaly,stage,support,,FALSE,at:startOfTurn { if:isVisualTurn & isPreservation { genki+=3; moveRandomToHand[effect(strength) & (deck | discarded)]; limit:3 } }
 453,懐かしパーティー論争,SR,FALSE,sense,produce,support,,FALSE,
+454,あこがれチャージャー,SSR,FALSE,anomaly,stage,pIdol,144,FALSE,at:stanceChanged { if:isFullPower { setFullPowerEffectBuff(0.35); limit:4 } }
+455,あこがれチャージャー+,SSR,TRUE,anomaly,stage,pIdol,144,FALSE,at:stanceChanged { if:isFullPower { setFullPowerEffectBuff(0.35); limit:4 } }
+456,居眠り注意！,SR,FALSE,anomaly,produce,support,,FALSE,
