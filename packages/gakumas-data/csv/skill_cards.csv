@@ -841,3 +841,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 840,弱気じゃいられない！+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,144,FALSE,,cost-=6,cardUsesRemaining+=1; at:beforeStartOfTurn { if:prevStance==fullPower & stance==none { fullPowerCharge+=10; limit:2 } },1,
 841,あつあつはふはふ,,SSR,active,anomaly,1,FALSE,TRUE,support,,FALSE,,cost-=6,fullPowerCharge+=1; at:endOfTurn { if:isFullPower { score+=3+cumulativeFullPowerCharge*1.5; limit:4 } };,1,
 842,あつあつはふはふ+,"29,103",SSR,active,anomaly,1,TRUE,TRUE,support,,FALSE,,cost-=6,fullPowerCharge+=1; at:endOfTurn { if:isFullPower { score+=6+cumulativeFullPowerCharge*2; limit:4 } };,1,
+843,伝説への挑戦,,SSR,active,sense,1,FALSE,TRUE,pIdol,145,FALSE,,cost-=5,score+=4; if:perfectConditionTurns>=1 { goodConditionTurnsMultiplier=3; score+=10 },1,
+844,伝説への挑戦+,,SSR,active,sense,1,TRUE,TRUE,pIdol,145,FALSE,,cost-=5,score+=8; if:perfectConditionTurns>=1 { goodConditionTurnsMultiplier=3; score+=20 },1,

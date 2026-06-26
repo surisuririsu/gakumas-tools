@@ -455,3 +455,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 454,あこがれチャージャー,SSR,FALSE,anomaly,stage,pIdol,144,FALSE,at:stanceChanged { if:isFullPower { setFullPowerEffectBuff(0.25); limit:4 } }
 455,あこがれチャージャー+,SSR,TRUE,anomaly,stage,pIdol,144,FALSE,at:stanceChanged { if:isFullPower { setFullPowerEffectBuff(0.35); limit:4 } }
 456,居眠り注意！,SR,FALSE,anomaly,produce,support,,FALSE,
+457,ふらいとライオン,SSR,FALSE,sense,stage,pIdol,145,FALSE,at:startOfTurn { if:goodConditionTurns>=6 { perfectConditionTurns+=3; halfCostTurns+=2 }; limit:1 }
+458,ふらいとライオン+,SSR,TRUE,sense,stage,pIdol,145,FALSE,at:startOfTurn { if:goodConditionTurns>=6 { perfectConditionTurns+=4; halfCostTurns+=3 }; limit:1 }

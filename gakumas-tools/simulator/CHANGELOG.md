@@ -8,6 +8,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-06-26
 
 - Update GO MY WAY!! Kotone
+- Add GO MY WAY!! Saki
 
 ## 2026-06-25
 
