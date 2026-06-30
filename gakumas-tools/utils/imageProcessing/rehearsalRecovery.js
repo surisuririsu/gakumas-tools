@@ -705,13 +705,15 @@ export function stageVerified(rowText, raw, totalLine) {
   return recovery !== "flagged";
 }
 
-// Recover one stage's [c1, c2, c3] from its OCR row text + raw tokens + paired
-// stage-total line (or null). Owns the full per-stage policy: checksum reconcile,
-// the digit-stream fallback for the two-collision case, and the decision to trust
-// a clean read versus blank it. Returns three scores, using [0, 0, 0] when the row
-// is unreadable and a reliable total disproves it (so the user fixes it in the
-// table) rather than storing fragments or dropping the stage out of place.
-export function recoverStage(rowText, raw, cleanThree, totalLine) {
+// Recover one stage's scores from its OCR row text + raw tokens + paired stage-
+// total line (or null). Owns the full per-stage policy: checksum reconcile, the
+// digit-stream fallback for the two-collision case, and the decision to trust a
+// clean read versus flag it for review. Returns `{ scores, recovery }` where
+// recovery is "ok" | "repaired" | "flagged". It NEVER force-zeros a row that has
+// values — an unverifiable read is kept as best-effort and flagged so the user can
+// review it in the table (mirroring gakumas-screenshot), rather than silently
+// dropping correct data.
+export function recoverStage(rowText, raw, cleanThree, totalLine, rowConfidence) {
   const total = totalLine ? numberOf(totalLine) : null;
   let [fixed, recovery] = reconcileStage(raw, total, null);
   if (recovery === "flagged" && total != null) {
@@ -721,15 +723,28 @@ export function recoverStage(rowText, raw, cleanThree, totalLine) {
   }
 
   // Verified by the total, or a clean read the total did not contradict.
-  if (recovery !== "flagged") return fixed.slice();
+  if (recovery !== "flagged") return { scores: fixed.slice(), recovery };
 
-  // Only a *reliable* total (clean grouping == digit concatenation) is trusted
-  // enough to overrule an otherwise-clean three-number read.
+  // A total is trusted to overrule a clean read only when it is reliable (clean
+  // grouping == digit concatenation) AND read at no-lower confidence than the row.
+  // The confidence gate is the portable analog of gakumas-screenshot's
+  // multi-threshold total re-OCR (commit 3be5b78): on real data a substituted
+  // total digit (e.g. 1,358,696 -> 1,558,696) OCRs at very low confidence while
+  // the clean row OCRs high, so a lower-confidence total must not condemn it.
   const reliableTotal =
     totalLine != null &&
     totalUsable(total, raw) &&
-    totalIsReliable(totalLine.text, total);
-  if (cleanThree && !reliableTotal) return fixed.slice();
+    totalIsReliable(totalLine.text, total) &&
+    totalLine.confidence >= (rowConfidence ?? 0);
 
-  return [0, 0, 0];
+  // A clean three-number read: keep it. Trust it as "ok" when the only thing
+  // against it is a low-confidence/garbage total; flag it for review when a
+  // genuinely reliable total disproves it (likely lost digits) — but still keep
+  // the best-effort values, never zero them.
+  if (cleanThree) {
+    return { scores: fixed.slice(), recovery: reliableTotal ? "flagged" : "ok" };
+  }
+
+  // A degraded/fragmentary row we could not verify: keep best-effort, flagged.
+  return { scores: fixed.slice(), recovery: "flagged" };
 }

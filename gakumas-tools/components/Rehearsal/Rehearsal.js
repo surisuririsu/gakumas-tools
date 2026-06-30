@@ -105,9 +105,9 @@ function Rehearsal() {
           );
         },
       })) {
-        const scores = await getScoresFromImage(canvas, worker);
+        const { scores, flags } = await getScoresFromImage(canvas, worker);
         if (scores && scores.some((stage) => stage.some((v) => v))) {
-          results.push({ scores, src: await canvasToObjectURL(canvas) });
+          results.push({ scores, flags, src: await canvasToObjectURL(canvas) });
         }
       }
       setProcessingStatus(t("videoComplete", { count: results.length }));
@@ -123,8 +123,8 @@ function Rehearsal() {
       workers,
       async (file, worker) => {
         try {
-          const scores = await getScoresFromFile(file, worker);
-          return scores && { scores, src: URL.createObjectURL(file) };
+          const { scores, flags } = await getScoresFromFile(file, worker);
+          return scores && { scores, flags, src: URL.createObjectURL(file) };
         } catch (err) {
           console.error(`Error parsing ${file.name}:`, err);
           return null;
@@ -393,6 +393,7 @@ function Rehearsal() {
                   [0, 0, 0],
                   [0, 0, 0],
                 ],
+                flags: ["ok", "ok", "ok"],
               },
             ])
           }
