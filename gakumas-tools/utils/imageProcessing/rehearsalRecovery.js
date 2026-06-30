@@ -473,19 +473,54 @@ function splitByLengths(stream, lengths) {
   return parts;
 }
 
-// The values one digit-stream part could represent: its literal reading, plus —
-// for a non-first 6-digit part that may have lost a leading "1,"/"2," — each
-// leading-digit restoration below MAX_SCORE. Each option carries a `restored`
-// flag. Empty when even the literal reading is out of range.
-function partOptions(partDigits, isFirstPart) {
+// The values one digit-stream part could represent: its literal reading, plus the
+// collision-victim repairs for the part's length. A leading digit is corrupted
+// only at a junction, whose left operand is >= 1M (enforced by the caller's
+// restore-validity guard for multi-part stages); a single-part stage (k == 1) is a
+// lone-glyph fix with no junction, so those repairs are offered with no neighbour
+// constraint. Each option carries a `restored` flag. Empty when nothing is in range.
+//   - non-first 6-digit: lost its leading "1,"/"2," -> d,XXX,XXX (d in 1..9).
+//   - non-first / single 7-digit impossible (>= MAX_SCORE): leading digit was
+//     SUBSTITUTED (e.g. "0"+"1" overlap misread as "4") -> replace it with 1 or 2.
+//   - non-first 8-digit with equal first two digits: leading "1" was DUPLICATED ->
+//     drop one (collapse to 7). single 8-digit: a spurious leading digit -> drop it.
+function partOptions(partDigits, index, partCount) {
   const literal = parseInt(partDigits, 10);
+  const len = partDigits.length;
+  const isFirst = index === 0;
+  const single = partCount === 1;
   const options = [];
   if (literal < MAX_SCORE) options.push({ value: literal, restored: false });
-  if (!isFirstPart && partDigits.length === 6) {
-    for (let leadingDigit = 1; leadingDigit <= 9; leadingDigit++) {
-      const restoredValue = leadingDigit * 1_000_000 + literal;
-      if (restoredValue >= MAX_SCORE) break;
-      options.push({ value: restoredValue, restored: true });
+
+  if (!isFirst && len === 6) {
+    for (let d = 1; d <= 9; d++) {
+      const rv = d * 1_000_000 + literal;
+      if (rv >= MAX_SCORE) break;
+      options.push({ value: rv, restored: true });
+    }
+  }
+  if (!isFirst && len === 7 && literal >= MAX_SCORE) {
+    const tail = literal % 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const rv = d * 1_000_000 + tail;
+      if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
+    }
+  }
+  if (!isFirst && len === 8 && partDigits[0] === partDigits[1]) {
+    const rv = parseInt(partDigits.slice(1), 10);
+    if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
+  }
+
+  if (single && len === 8) {
+    const rv = parseInt(partDigits.slice(1), 10);
+    if (rv >= 1_000_000 && rv < MAX_SCORE)
+      options.push({ value: rv, restored: true });
+  }
+  if (single && len === 7 && literal >= MAX_SCORE) {
+    const tail = literal % 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const rv = d * 1_000_000 + tail;
+      if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
     }
   }
   return options;
@@ -536,10 +571,14 @@ export function reconstructFromDigits(digits, total, bonus) {
   const solutions = [];
   const maxParts = Math.min(3, stream.length);
   for (let partCount = 1; partCount <= maxParts; partCount++) {
-    const splits = compositions(stream.length, partCount, 1, MAX_SCORE_DIGITS);
+    // Parts may be up to 8 digits: a colliding leading "1" is sometimes DUPLICATED
+    // by OCR (read as "11") rather than dropped, inflating one part to 8 digits.
+    const splits = compositions(stream.length, partCount, 1, 8);
     for (const lengths of splits) {
       const parts = splitByLengths(stream, lengths);
-      const optionsPerPart = parts.map((part, i) => partOptions(part, i === 0));
+      const optionsPerPart = parts.map((part, i) =>
+        partOptions(part, i, partCount),
+      );
       if (optionsPerPart.some((opts) => opts.length === 0)) continue;
 
       for (const choice of cartesian(optionsPerPart)) {
@@ -549,7 +588,10 @@ export function reconstructFromDigits(digits, total, bonus) {
           scores[i] = opt.value;
           restored[i] = opt.restored;
         });
-        if (!restoreValid(restored, scores)) continue;
+        // A restored part needs a >= 1M left neighbour (a collision partner). This
+        // junction rule does not apply to a single-part stage (k == 1): its repair
+        // is a lone-glyph fix, not a junction, so the guard is skipped there.
+        if (partCount > 1 && !restoreValid(restored, scores)) continue;
 
         recordUnitsVariants(scores, restored, total, bonusOk, solutions);
       }
