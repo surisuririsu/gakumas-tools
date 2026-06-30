@@ -22,6 +22,8 @@ export async function parseCsvFile(file) {
       const row = line.split(",").map(Number);
       return {
         scores: [row.slice(0, 3), row.slice(3, 6), row.slice(6, 9)],
+        // Hand-authored CSV data is trusted (not OCR'd), so every stage is "ok".
+        flags: ["ok", "ok", "ok"],
         src: null,
       };
     });

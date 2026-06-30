@@ -556,7 +556,8 @@
     "scanningVideo": "Analyzing frame {analyzed}/{total} · {found} result(s) found so far",
     "videoComplete": "Completed! Found {count} rehearsal results.",
     "videoError": "Error processing video: {message}",
-    "imageError": "{count} screenshot(s) could not be parsed and were skipped."
+    "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
+    "needsChecking": "{count} row(s) need checking"
   },
   "KofiAd": {
     "prompt": "Support this project"

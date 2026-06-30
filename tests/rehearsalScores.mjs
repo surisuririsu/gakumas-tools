@@ -75,7 +75,8 @@ async function binarizeForOcr(absPath) {
 async function detectScores(absPath, ocrWorker) {
   const ocrInput = await binarizeForOcr(absPath);
   const result = await ocrWorker.recognize(ocrInput, {}, { blocks: true });
-  return extractScores(result);
+  // extractScores returns { scores, flags }; the harness baselines scores only.
+  return extractScores(result).scores;
 }
 
 function loadFixture() {
