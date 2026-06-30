@@ -210,8 +210,16 @@
   }
 }
 
+// Center the cell's action button(s); a flagged row's trailing cell holds two
+// (verify + image preview), so keep them inline with a small gap.
+.action {
+  text-align: center;
+  white-space: nowrap;
+}
+
 .action button {
-  margin: auto;
+  display: inline-flex;
+  margin: 0 tokens.$space-1;
   color: tokens.$surface-ink-muted;
   transition: color 0.2s;
 
@@ -221,6 +229,15 @@
 
   &.active {
     color: colors.$gk-orange;
+  }
+
+  // The ✓ confirm-row button (shown only when a row has a flagged stage).
+  &.verify {
+    color: colors.$gk-orange;
+
+    &:hover {
+      color: colors.$gk-red-orange;
+    }
   }
 }
 

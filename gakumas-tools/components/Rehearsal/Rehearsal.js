@@ -259,7 +259,24 @@ function Rehearsal() {
                     ? stage.map((s, sk) => (sk === k ? value : s))
                     : stage,
                 ),
+                // Editing a value in a flagged stage resolves it: the user has
+                // reviewed it, so clear that stage's flag (it rejoins the stats).
+                flags: row.flags?.map((f, fj) => (fj === j ? "ok" : f)),
               }
+            : row,
+        ),
+      ),
+    [],
+  );
+
+  // Confirm a correct-but-flagged row as-is (no edit needed): clear all its
+  // flagged stages, folding the values back into the stats.
+  const handleVerifyRow = useCallback(
+    (i) =>
+      setData((d) =>
+        d.map((row, ri) =>
+          ri === i
+            ? { ...row, flags: row.flags?.map((f) => (f === "flagged" ? "ok" : f)) }
             : row,
         ),
       ),
@@ -395,6 +412,7 @@ function Rehearsal() {
           onChartClick={handleChartClick}
           onRowDelete={handleRowDelete}
           onCellEdit={handleCellEdit}
+          onVerifyRow={handleVerifyRow}
         />
         <Button
           className={styles.addButton}
