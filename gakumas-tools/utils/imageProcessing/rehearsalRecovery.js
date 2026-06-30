@@ -128,60 +128,81 @@ function pickBest(solutions, bonusOk) {
   return [chosen, recovery];
 }
 
-// Every value one OCR slot could really be. A dash slot (0) is only ever 0.
-// Otherwise: the raw reading, plus — if it could be a sub-million victim of a
-// dropped leading digit — each leading-digit restoration below MAX_SCORE, and for
-// every base >= 100,000 the ten units-digit variants (the units may be misread).
+// A candidate value for one slot, tagged with its provenance (`kind`) and whether
+// its units digit was changed relative to the raw reading (`unitsEdited`). This
+// mirrors the Rust `struct Cand { value, kind, units_edited }` / `enum BaseKind`,
+// and is the seam that lets `cost` and `physicallyValid` agree on what kind of
+// edit each candidate represents:
+//   "raw"     — the raw OCR value, high-order digits unchanged.
+//   "million" — a dropped leading "1,"/"2," restored AT A JUNCTION (raw + d*1e6);
+//               physically valid only when the left neighbour is >= 1,000,000.
+//   "prepend" — a dropped/substituted leading digit restored at the number's own
+//               next decimal place (52,517 -> 852,517) or an impossible/substituted
+//               leading glyph corrected (4,177,174 -> 1,177,174, 2,396,184 ->
+//               1,396,184); a plain OCR edit, position-independent (no neighbour rule).
+//
+// Every slot offers the raw reading, optionally one or more restoration bases, and
+// for every base >= 100,000 the ten units-digit variants (the units may be misread).
 export function candidates(value) {
-  if (value === 0) return [0];
+  if (value === 0) return [{ value: 0, kind: "raw", unitsEdited: false }];
+  const rawUnits = value % 10;
 
-  const bases = [value];
+  const bases = [{ value, kind: "raw" }];
   if (value >= 1000 && value < 1_000_000) {
-    for (let leadingDigit = 1; leadingDigit <= 9; leadingDigit++) {
-      const restored = value + leadingDigit * 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const restored = value + d * 1_000_000;
       if (restored >= MAX_SCORE) break;
-      bases.push(restored);
+      bases.push({ value: restored, kind: "million" });
     }
   }
 
-  // The Set dedups: a duplicate candidate would create a duplicate min-cost
-  // solution and spuriously flag a tie. Order does not matter (ties break on
-  // whole solutions, not slots).
-  const out = new Set([value]);
-  for (const base of bases) {
-    if (base < MAX_SCORE) out.add(base);
+  // Dedup on (value, kind): the same number can arise as different kinds and they
+  // cost differently, so they must not collapse (a collapse would also hide a real
+  // min-cost tie). Order is irrelevant — ties break on whole solutions, not slots.
+  const out = [];
+  const seen = new Set();
+  const push = (v, kind) => {
+    if (v >= MAX_SCORE) return;
+    const key = v + ":" + kind;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({ value: v, kind, unitsEdited: v % 10 !== rawUnits });
+  };
+  for (const { value: base, kind } of bases) {
+    push(base, kind);
     if (base >= 100_000) {
       const tens = Math.floor(base / 10) * 10;
-      for (let unitsDigit = 0; unitsDigit <= 9; unitsDigit++) {
-        if (tens + unitsDigit < MAX_SCORE) out.add(tens + unitsDigit);
-      }
+      for (let d = 0; d <= 9; d++) push(tens + d, kind);
     }
   }
-  return [...out];
+  return out;
 }
 
-// Reject physically-impossible reconstructions. A slot is "restored" if raw < 1M
-// but combo >= 1M; a restore requires a >= 1M LEFT neighbour and is never the
-// leftmost slot (invariants 2-3). This eliminates spurious million-trades.
-function physicallyValid(combo, raw) {
-  const restored = combo.map((v, i) => raw[i] < 1_000_000 && v >= 1_000_000);
-  return restoreValid(restored, combo);
+// Reject physically-impossible reconstructions. A "million" restore (a dropped
+// leading "1,"/"2," at a junction) is valid only when its left neighbour is
+// >= 1,000,000 and it is not the leftmost slot (invariants 2-3). A "prepend"
+// restore is a plain leading-digit drop/substitution, not a junction artifact, so
+// it carries no neighbour constraint. `kinds` are the chosen candidates' kinds.
+function physicallyValid(combo, kinds) {
+  for (let i = 0; i < 3; i++)
+    if (kinds[i] === "million" && (i === 0 || combo[i - 1] < 1_000_000))
+      return false;
+  return true;
 }
 
-// Corruption-aware cost. NOT a plain edit count: +1 per restored slot; a units
-// change costs +1 only when the slot is immediately LEFT of a restored slot (the
-// expected victim), else +3. This breaks unit-trade ties toward the physically
-// correct reconstruction.
-function cost(chosen, raw) {
-  const restored = [0, 1, 2].map(
-    (i) => raw[i] < 1_000_000 && chosen[i] >= 1_000_000,
-  );
+// Corruption-aware cost. NOT a plain edit count: +1 per restored slot (any
+// non-"raw" kind); a units change costs +1 only when the slot is immediately LEFT
+// of a "million" restore (the expected junction victim), else +3. This breaks
+// unit-trade ties toward the physically correct reconstruction. `kinds` and
+// `unitsEdited` come from the chosen candidates (not reconstructed from magnitudes,
+// so a millions-digit edit like a 2M->1M swap is charged faithfully).
+function cost(kinds, unitsEdited) {
   let c = 0;
   for (let i = 0; i < 3; i++) {
-    if (restored[i]) c += 1;
-    if (chosen[i] % 10 !== raw[i] % 10) {
-      const leftOfRestored = i + 1 < 3 && restored[i + 1];
-      c += leftOfRestored ? 1 : 3;
+    if (kinds[i] !== "raw") c += 1;
+    if (unitsEdited[i]) {
+      const leftOfJunction = i + 1 < 3 && kinds[i + 1] === "million";
+      c += leftOfJunction ? 1 : 3;
     }
   }
   return c;
@@ -228,9 +249,13 @@ export function reconcileStage(ocrScores, total, bonus) {
   for (const a of cand[0])
     for (const b of cand[1])
       for (const c of cand[2]) {
-        const combo = [a, b, c];
-        if (physicallyValid(combo, ocrScores) && checksumOk(combo, totalOk))
-          solutions.push([combo, cost(combo, ocrScores)]);
+        const combo = [a.value, b.value, c.value];
+        const kinds = [a.kind, b.kind, c.kind];
+        if (physicallyValid(combo, kinds) && checksumOk(combo, totalOk))
+          solutions.push([
+            combo,
+            cost(kinds, [a.unitsEdited, b.unitsEdited, c.unitsEdited]),
+          ]);
       }
 
   return pickBest(solutions, bonusOk) ?? [ocrScores.slice(), "flagged"];
