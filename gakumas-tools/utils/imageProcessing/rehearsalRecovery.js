@@ -155,6 +155,30 @@ export function candidates(value) {
       bases.push({ value: restored, kind: "million" });
     }
   }
+  // Prepend: a dropped leading non-million digit restored at the number's own next
+  // decimal place, e.g. 52,517 -> 852,517 (a plain OCR drop, no junction needed).
+  if (value >= 1000 && value < 100_000) {
+    const place = 10 ** String(value).length;
+    for (let d = 1; d <= 9; d++) {
+      const restored = d * place + value;
+      if (restored >= MAX_SCORE) break;
+      bases.push({ value: restored, kind: "prepend" });
+    }
+  }
+  // Impossible >= 3,000,000 raw (a leading "1," misread as another glyph, e.g.
+  // 4,177,174 for a true 1,177,174 / 2,177,174): restore the plausible million.
+  if (value >= MAX_SCORE && value < 10_000_000) {
+    const tail = value % 1_000_000;
+    bases.push({ value: 1_000_000 + tail, kind: "prepend" });
+    bases.push({ value: 2_000_000 + tail, kind: "prepend" });
+  }
+  // A valid-looking 2,XXX,XXX whose leading "1" was misread as "2" (2,396,184 for
+  // a true 1,396,184). Offer the 1,XXX,XXX reading; the exact total disambiguates —
+  // a genuine 2M score keeps its raw value at cost 0, so the swap only wins when
+  // the checksum demands it.
+  if (value >= 2_000_000 && value < MAX_SCORE) {
+    bases.push({ value: 1_000_000 + (value % 1_000_000), kind: "prepend" });
+  }
 
   // Dedup on (value, kind): the same number can arise as different kinds and they
   // cost differently, so they must not collapse (a collapse would also hide a real
