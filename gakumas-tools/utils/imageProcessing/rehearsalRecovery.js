@@ -106,8 +106,14 @@ function cartesian(lists) {
 // Pick the lowest-cost solution from [[combo, cost], ...] and label the recovery,
 // or null if there are none. When several tie at min cost, an optional bonus value
 // disambiguates (callers that already filtered by bonus pass null); an unresolved
-// tie is "flagged", a zero-cost win is "ok", any repair is "repaired".
-function pickBest(solutions, bonusOk) {
+// tie or a bonus disagreement is "flagged".
+//
+// `rawScores`, when supplied (reconcileStage), classifies by whether the scores
+// actually CHANGED rather than by raw cost: a clean score that the checksum
+// confirms only under a comma-deleted total carries a non-zero selection penalty
+// but was not edited, so it is "ok", not "repaired". The digit-stream caller omits
+// it and falls back to the cost rule (cost 0 == a clean read == "ok").
+function pickBest(solutions, bonusOk, rawScores) {
   if (solutions.length === 0) return null;
   const minCost = solutions.reduce((m, s) => Math.min(m, s[1]), Infinity);
   let best = solutions.filter((s) => s[1] === minCost).map((s) => s[0]);
@@ -119,10 +125,11 @@ function pickBest(solutions, bonusOk) {
   best = best.filter((c, i) => i === 0 || comboCompare(c, best[i - 1]) !== 0);
   const chosen = best[0];
   const bonusDisagrees = bonusOk != null && derivedBonus(chosen) !== bonusOk;
+  const unchanged = rawScores != null && comboCompare(chosen, rawScores) === 0;
   const recovery =
     best.length > 1 || bonusDisagrees
       ? "flagged"
-      : minCost === 0
+      : unchanged || minCost === 0
         ? "ok"
         : "repaired";
   return [chosen, recovery];
@@ -248,11 +255,41 @@ function structuralOnly(ocrScores, totalProvided, bonusOk) {
   return [ocrScores.slice(), recovery];
 }
 
+// A raw slot's plausible magnitude. An impossible value (>= MAX_SCORE — a leading
+// glyph misread like 4,177,174) is treated as its 1,XXX,XXX repair so it does not
+// over-bound the total used to validate it; everything else is itself.
+function plausibleFloor(value) {
+  return value < MAX_SCORE ? value : 1_000_000 + (value % 1_000_000);
+}
+
+// Plausible totals to test against the checksum: the literal total (penalty 0)
+// plus every one-digit deletion of its decimal string (penalty 1, so the literal
+// wins genuine ties). A deletion models the stage total's thousands comma being
+// OCR'd as a spurious digit (e.g. "393,454" -> "3935454"). Deletions <= 0,
+// > MAX_TOTAL, below `floor`, or equal to the literal are dropped.
+function totalCandidates(total, floor) {
+  const out = [[total, 0]];
+  const s = String(total);
+  if (s.length > 1) {
+    const seen = new Set();
+    for (let skip = 0; skip < s.length; skip++) {
+      const v = parseInt(s.slice(0, skip) + s.slice(skip + 1), 10);
+      if (v > 0 && v <= MAX_TOTAL && v >= floor && v !== total && !seen.has(v)) {
+        seen.add(v);
+        out.push([v, 1]);
+      }
+    }
+  }
+  return out;
+}
+
 // Reconstruct one stage from raw OCR scores + optional total/bonus.
 // Returns [ [a, b, c], "ok" | "repaired" | "flagged" ].
 export function reconcileStage(ocrScores, total, bonus) {
   const totalProvided = total != null;
-  const maxRaw = Math.max(ocrScores[0], ocrScores[1], ocrScores[2]);
+  // Floor the total must clear is the largest PLAUSIBLE magnitude, so an impossible
+  // raw (e.g. 4,177,174) does not reject its true smaller total.
+  const maxRaw = Math.max(...ocrScores.map(plausibleFloor));
   const totalOk =
     total != null && total <= MAX_TOTAL && total >= maxRaw && total > 0
       ? total
@@ -269,20 +306,25 @@ export function reconcileStage(ocrScores, total, bonus) {
     candidates(ocrScores[1]),
     candidates(ocrScores[2]),
   ];
+  // The OCR'd total may carry one spuriously-inserted digit (a comma read as a
+  // digit), so search every plausible total; a deletion-derived total carries a
+  // small penalty so the literal always wins a genuine tie.
+  const totalSet = totalCandidates(totalOk, maxRaw);
   const solutions = [];
-  for (const a of cand[0])
-    for (const b of cand[1])
-      for (const c of cand[2]) {
-        const combo = [a.value, b.value, c.value];
-        const kinds = [a.kind, b.kind, c.kind];
-        if (physicallyValid(combo, kinds) && checksumOk(combo, totalOk))
-          solutions.push([
-            combo,
-            cost(kinds, [a.unitsEdited, b.unitsEdited, c.unitsEdited]),
-          ]);
-      }
+  for (const [t, penalty] of totalSet)
+    for (const a of cand[0])
+      for (const b of cand[1])
+        for (const c of cand[2]) {
+          const combo = [a.value, b.value, c.value];
+          const kinds = [a.kind, b.kind, c.kind];
+          if (physicallyValid(combo, kinds) && checksumOk(combo, t))
+            solutions.push([
+              combo,
+              cost(kinds, [a.unitsEdited, b.unitsEdited, c.unitsEdited]) + penalty,
+            ]);
+        }
 
-  return pickBest(solutions, bonusOk) ?? [ocrScores.slice(), "flagged"];
+  return pickBest(solutions, bonusOk, ocrScores) ?? [ocrScores.slice(), "flagged"];
 }
 
 const DIGITS_0_9 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
