@@ -523,7 +523,8 @@
     "scanningVideo": "正在分析第 {analyzed}/{total} 帧 · 已找到 {found} 个结果",
     "videoComplete": "完成！找到 {count} 个竞技场结果。",
     "videoError": "处理视频时出错: {message}",
-    "imageError": "{count} 张截图无法解析，已跳过。"
+    "imageError": "{count} 张截图无法解析，已跳过。",
+    "needsChecking": "{count} 行需要检查"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

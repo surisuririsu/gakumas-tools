@@ -164,6 +164,7 @@ export default function RehearsalTable({
                             styles.score,
                             k === 0 && styles.stageStart,
                             isEditing && styles.editing,
+                            row.flags?.[j] === "flagged" && styles.flagged,
                           )}
                           style={getCellColor(score)}
                           onMouseDown={(e) => {

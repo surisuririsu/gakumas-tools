@@ -7,6 +7,7 @@ import {
   FaFileCsv,
   FaFileImage,
   FaPlus,
+  FaTriangleExclamation,
   FaVideo,
 } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
@@ -207,6 +208,15 @@ function Rehearsal() {
     downloadBlob(new Blob([csv], { type: "text/csv" }), "rehearsal_data.csv");
   }, [data]);
 
+  // Rows with at least one stage the OCR could not verify against the screen's
+  // own stage-total checksum. Their values are kept and shown (never zeroed) but
+  // highlighted in the table and excluded from the stats until the user reviews
+  // them (edits a cell, or confirms the row with the ✓).
+  const flaggedCount = useMemo(
+    () => data.filter((r) => r.flags?.some((f) => f === "flagged")).length,
+    [data],
+  );
+
   const boxPlotData = useMemo(() => buildBoxPlotData(data), [data]);
   // Stable identity so BoxPlot's memo holds and the chart doesn't re-animate
   // on unrelated re-renders.
@@ -342,6 +352,11 @@ function Rehearsal() {
         <Button style="default" size="sm" onClick={download}>
           <FaDownload /> CSV
         </Button>
+        {flaggedCount > 0 && (
+          <span className={styles.flaggedNotice}>
+            <FaTriangleExclamation /> {t("needsChecking", { count: flaggedCount })}
+          </span>
+        )}
       </div>
 
       <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />

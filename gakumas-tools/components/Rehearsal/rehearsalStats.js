@@ -7,6 +7,10 @@ export function buildBoxPlotData(data) {
   }));
   return data.reduce((acc, cur) => {
     for (let stage = 0; stage < NUM_STAGES; stage++) {
+      // A flagged (unverified) stage is excluded from the distribution until the
+      // user verifies it (by editing a cell or confirming the row); its values are
+      // still shown and highlighted in the table, never dropped.
+      if (cur.flags?.[stage] === "flagged") continue;
       for (let param = 0; param < NUM_PARAMS; param++) {
         const v = cur.scores[stage]?.[param];
         if (v) acc[param].data[stage].push(v);

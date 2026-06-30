@@ -563,7 +563,8 @@
     "scanningVideo": "フレーム {analyzed}/{total} を解析中・これまでに{found}件の結果を検出",
     "videoComplete": "完了！{count}件のリハーサル結果が見つかりました。",
     "videoError": "動画の処理中にエラーが発生しました: {message}",
-    "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。"
+    "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
+    "needsChecking": "{count}件の行を確認してください"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"
