@@ -283,9 +283,105 @@ function totalCandidates(total, floor) {
   return out;
 }
 
+// The unique per-character score `c` with `c + floor(c/5) == total`, if any.
+// `c + c/5` is monotonic in `c`, so a tiny window around floor(total*5/6) suffices.
+function solveSingle(total) {
+  const approx = Math.floor((total * 5) / 6);
+  for (let c = Math.max(0, approx - 3); c <= approx + 3; c++) {
+    if (c + Math.floor(c / 5) === total) return c;
+  }
+  return null;
+}
+
+// Is `c` a plausible reading of the raw single-character score — the raw itself,
+// or the raw with a dropped leading digit restored (so the raw is c's low-order
+// suffix, e.g. 55,172 -> 855,172)? Guards the single-character total-solve: unlike
+// Rust (which crops each stage's total positionally), this app pairs totals by
+// geometry, so a one-character row can be mis-paired with a NEIGHBOURING stage's
+// total whose inverse checksum is an unrelated value (e.g. raw 206,256 paired with
+// total 2,744,700 inverts to 2,287,250). Requiring `c` to actually read `raw`
+// rejects that, keeping the solve to its purpose (recovering a dropped digit).
+function isLeadingDigitReading(c, raw) {
+  if (c === raw) return true;
+  const place = 10 ** String(raw).length;
+  return c > raw && c % place === raw;
+}
+
+// Best-effort repair driven by the bonus when the exact-total checksum found no
+// solution (the total mis-OCR'd). The bonus equals floor(max/5), so if exactly one
+// physically-valid junction million-restore (a sub-million non-leftmost slot whose
+// left neighbour is >= 1M) makes the restored slot the maximum with floor(max/5)
+// == bonus, apply it (leaving the other slots raw). Returns the combo or null if
+// zero or several qualify. Always best-effort — the caller marks it "flagged".
+function bonusDrivenRepair(raw, bonusOk) {
+  if (bonusOk == null) return null;
+  let hit = null;
+  for (let i = 0; i < 3; i++) {
+    if (i === 0 || !(raw[i] >= 1000 && raw[i] < 1_000_000) || raw[i - 1] < 1_000_000)
+      continue;
+    for (let d = 1; d <= 2; d++) {
+      const restored = raw[i] + d * 1_000_000;
+      if (restored >= MAX_SCORE) break;
+      const combo = raw.slice();
+      combo[i] = restored;
+      const max = Math.max(combo[0], combo[1], combo[2]);
+      if (max === restored && Math.floor(max / 5) === bonusOk) {
+        if (hit != null && comboCompare(hit, combo) !== 0) return null; // ambiguous
+        hit = combo;
+      }
+    }
+  }
+  return hit;
+}
+
+// Fallback ladder when the checksum search found no satisfying combination.
+// A collision-prone stage (a >= 1M plausible slot and >= 2 non-zero slots) is
+// flagged (the digit-stream fallback handles those). A single-character stage
+// total-solves a dropped leading digit straight from the (comma-tolerant) total,
+// corroborated by the bonus. A multi-score stage that reaches here had a usable
+// total it could not satisfy, so digits were lost — flag, never silently accept.
+// A lone (or empty) stage leans on the bonus: Ok when it corroborates (or is
+// absent), else Flagged.
+function resolveWithoutChecksum(ocrScores, totalSet, bonusOk) {
+  const nonzero = ocrScores.filter((s) => s > 0).length;
+  const hasMillion = ocrScores.some((s) => plausibleFloor(s) >= 1_000_000);
+  if (hasMillion && nonzero >= 2) return [ocrScores.slice(), "flagged"];
+
+  const idxs = [0, 1, 2].filter((i) => ocrScores[i] > 0);
+  if (idxs.length === 1) {
+    const idx = idxs[0];
+    for (const [t] of totalSet.slice().sort((a, b) => a[1] - b[1])) {
+      const c = solveSingle(t);
+      if (
+        c != null &&
+        c < MAX_SCORE &&
+        isLeadingDigitReading(c, ocrScores[idx]) &&
+        (bonusOk == null || Math.floor(c / 5) === bonusOk)
+      ) {
+        const out = ocrScores.slice();
+        out[idx] = c;
+        return [out, c === ocrScores[idx] ? "ok" : "repaired"];
+      }
+    }
+  }
+
+  if (nonzero >= 2) return [ocrScores.slice(), "flagged"];
+
+  const maxPlausible = Math.max(...ocrScores.map(plausibleFloor));
+  if (bonusOk == null) return [ocrScores.slice(), "ok"];
+  return Math.floor(maxPlausible / 5) === bonusOk
+    ? [ocrScores.slice(), "ok"]
+    : [ocrScores.slice(), "flagged"];
+}
+
 // Reconstruct one stage from raw OCR scores + optional total/bonus.
 // Returns [ [a, b, c], "ok" | "repaired" | "flagged" ].
-export function reconcileStage(ocrScores, total, bonus) {
+//
+// `strict` (used by stageVerified for row CLASSIFICATION, not recovery) skips the
+// no-checksum fallback ladder: a row is verified only by an exact-checksum
+// solution, so a stage total or 総合力 look-alike — which the lenient fallbacks
+// would otherwise resolve to a best-effort "ok" — stays "flagged" and is rejected.
+export function reconcileStage(ocrScores, total, bonus, strict = false) {
   const totalProvided = total != null;
   // Floor the total must clear is the largest PLAUSIBLE magnitude, so an impossible
   // raw (e.g. 4,177,174) does not reject its true smaller total.
@@ -299,7 +395,13 @@ export function reconcileStage(ocrScores, total, bonus) {
       ? bonus
       : null;
 
-  if (totalOk == null) return structuralOnly(ocrScores, totalProvided, bonusOk);
+  if (totalOk == null) {
+    // No usable total. Try a bonus-driven repair (a unique leading-"1" restore the
+    // bonus corroborates) before the conservative structural pass.
+    const rep = bonusDrivenRepair(ocrScores, bonusOk);
+    if (rep) return [rep, "flagged"];
+    return structuralOnly(ocrScores, totalProvided, bonusOk);
+  }
 
   const cand = [
     candidates(ocrScores[0]),
@@ -324,7 +426,16 @@ export function reconcileStage(ocrScores, total, bonus) {
             ]);
         }
 
-  return pickBest(solutions, bonusOk, ocrScores) ?? [ocrScores.slice(), "flagged"];
+  const result = pickBest(solutions, bonusOk, ocrScores);
+  if (result) return result;
+
+  // No combination satisfied any plausible total. For classification (strict) this
+  // is a definitive non-match. For recovery, try a bonus-driven repair, then the
+  // no-checksum fallback ladder (single-character solve, multi-score flag).
+  if (strict) return [ocrScores.slice(), "flagged"];
+  const rep = bonusDrivenRepair(ocrScores, bonusOk);
+  if (rep) return [rep, "flagged"];
+  return resolveWithoutChecksum(ocrScores, totalSet, bonusOk);
 }
 
 const DIGITS_0_9 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -544,7 +655,7 @@ function totalUsable(total, raw) {
 export function stageVerified(rowText, raw, totalLine) {
   const total = totalLine ? numberOf(totalLine) : null;
   if (!totalUsable(total, raw)) return false;
-  let [, recovery] = reconcileStage(raw, total, null);
+  let [, recovery] = reconcileStage(raw, total, null, true);
   if (recovery === "flagged") {
     const alt = reconstructFromDigits(rowText.replace(/[^\d]/g, ""), total, null);
     if (alt) recovery = alt[1];
