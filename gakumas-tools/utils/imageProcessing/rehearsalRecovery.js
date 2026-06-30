@@ -106,8 +106,14 @@ function cartesian(lists) {
 // Pick the lowest-cost solution from [[combo, cost], ...] and label the recovery,
 // or null if there are none. When several tie at min cost, an optional bonus value
 // disambiguates (callers that already filtered by bonus pass null); an unresolved
-// tie is "flagged", a zero-cost win is "ok", any repair is "repaired".
-function pickBest(solutions, bonusOk) {
+// tie or a bonus disagreement is "flagged".
+//
+// `rawScores`, when supplied (reconcileStage), classifies by whether the scores
+// actually CHANGED rather than by raw cost: a clean score that the checksum
+// confirms only under a comma-deleted total carries a non-zero selection penalty
+// but was not edited, so it is "ok", not "repaired". The digit-stream caller omits
+// it and falls back to the cost rule (cost 0 == a clean read == "ok").
+function pickBest(solutions, bonusOk, rawScores) {
   if (solutions.length === 0) return null;
   const minCost = solutions.reduce((m, s) => Math.min(m, s[1]), Infinity);
   let best = solutions.filter((s) => s[1] === minCost).map((s) => s[0]);
@@ -119,69 +125,115 @@ function pickBest(solutions, bonusOk) {
   best = best.filter((c, i) => i === 0 || comboCompare(c, best[i - 1]) !== 0);
   const chosen = best[0];
   const bonusDisagrees = bonusOk != null && derivedBonus(chosen) !== bonusOk;
+  const unchanged = rawScores != null && comboCompare(chosen, rawScores) === 0;
   const recovery =
     best.length > 1 || bonusDisagrees
       ? "flagged"
-      : minCost === 0
+      : unchanged || minCost === 0
         ? "ok"
         : "repaired";
   return [chosen, recovery];
 }
 
-// Every value one OCR slot could really be. A dash slot (0) is only ever 0.
-// Otherwise: the raw reading, plus — if it could be a sub-million victim of a
-// dropped leading digit — each leading-digit restoration below MAX_SCORE, and for
-// every base >= 100,000 the ten units-digit variants (the units may be misread).
-function candidates(value) {
-  if (value === 0) return [0];
+// A candidate value for one slot, tagged with its provenance (`kind`) and whether
+// its units digit was changed relative to the raw reading (`unitsEdited`). This
+// mirrors the Rust `struct Cand { value, kind, units_edited }` / `enum BaseKind`,
+// and is the seam that lets `cost` and `physicallyValid` agree on what kind of
+// edit each candidate represents:
+//   "raw"     — the raw OCR value, high-order digits unchanged.
+//   "million" — a dropped leading "1,"/"2," restored AT A JUNCTION (raw + d*1e6);
+//               physically valid only when the left neighbour is >= 1,000,000.
+//   "prepend" — a dropped/substituted leading digit restored at the number's own
+//               next decimal place (52,517 -> 852,517) or an impossible/substituted
+//               leading glyph corrected (4,177,174 -> 1,177,174, 2,396,184 ->
+//               1,396,184); a plain OCR edit, position-independent (no neighbour rule).
+//
+// Every slot offers the raw reading, optionally one or more restoration bases, and
+// for every base >= 100,000 the ten units-digit variants (the units may be misread).
+export function candidates(value) {
+  if (value === 0) return [{ value: 0, kind: "raw", unitsEdited: false }];
+  const rawUnits = value % 10;
 
-  const bases = [value];
+  const bases = [{ value, kind: "raw" }];
   if (value >= 1000 && value < 1_000_000) {
-    for (let leadingDigit = 1; leadingDigit <= 9; leadingDigit++) {
-      const restored = value + leadingDigit * 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const restored = value + d * 1_000_000;
       if (restored >= MAX_SCORE) break;
-      bases.push(restored);
+      bases.push({ value: restored, kind: "million" });
     }
   }
+  // Prepend: a dropped leading non-million digit restored at the number's own next
+  // decimal place, e.g. 52,517 -> 852,517 (a plain OCR drop, no junction needed).
+  if (value >= 1000 && value < 100_000) {
+    const place = 10 ** String(value).length;
+    for (let d = 1; d <= 9; d++) {
+      const restored = d * place + value;
+      if (restored >= MAX_SCORE) break;
+      bases.push({ value: restored, kind: "prepend" });
+    }
+  }
+  // Impossible >= 3,000,000 raw (a leading "1," misread as another glyph, e.g.
+  // 4,177,174 for a true 1,177,174 / 2,177,174): restore the plausible million.
+  if (value >= MAX_SCORE && value < 10_000_000) {
+    const tail = value % 1_000_000;
+    bases.push({ value: 1_000_000 + tail, kind: "prepend" });
+    bases.push({ value: 2_000_000 + tail, kind: "prepend" });
+  }
+  // A valid-looking 2,XXX,XXX whose leading "1" was misread as "2" (2,396,184 for
+  // a true 1,396,184). Offer the 1,XXX,XXX reading; the exact total disambiguates —
+  // a genuine 2M score keeps its raw value at cost 0, so the swap only wins when
+  // the checksum demands it.
+  if (value >= 2_000_000 && value < MAX_SCORE) {
+    bases.push({ value: 1_000_000 + (value % 1_000_000), kind: "prepend" });
+  }
 
-  // The Set dedups: a duplicate candidate would create a duplicate min-cost
-  // solution and spuriously flag a tie. Order does not matter (ties break on
-  // whole solutions, not slots).
-  const out = new Set([value]);
-  for (const base of bases) {
-    if (base < MAX_SCORE) out.add(base);
+  // Dedup on (value, kind): the same number can arise as different kinds and they
+  // cost differently, so they must not collapse (a collapse would also hide a real
+  // min-cost tie). Order is irrelevant — ties break on whole solutions, not slots.
+  const out = [];
+  const seen = new Set();
+  const push = (v, kind) => {
+    if (v >= MAX_SCORE) return;
+    const key = v + ":" + kind;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({ value: v, kind, unitsEdited: v % 10 !== rawUnits });
+  };
+  for (const { value: base, kind } of bases) {
+    push(base, kind);
     if (base >= 100_000) {
       const tens = Math.floor(base / 10) * 10;
-      for (let unitsDigit = 0; unitsDigit <= 9; unitsDigit++) {
-        if (tens + unitsDigit < MAX_SCORE) out.add(tens + unitsDigit);
-      }
+      for (let d = 0; d <= 9; d++) push(tens + d, kind);
     }
   }
-  return [...out];
+  return out;
 }
 
-// Reject physically-impossible reconstructions. A slot is "restored" if raw < 1M
-// but combo >= 1M; a restore requires a >= 1M LEFT neighbour and is never the
-// leftmost slot (invariants 2-3). This eliminates spurious million-trades.
-function physicallyValid(combo, raw) {
-  const restored = combo.map((v, i) => raw[i] < 1_000_000 && v >= 1_000_000);
-  return restoreValid(restored, combo);
+// Reject physically-impossible reconstructions. A "million" restore (a dropped
+// leading "1,"/"2," at a junction) is valid only when its left neighbour is
+// >= 1,000,000 and it is not the leftmost slot (invariants 2-3). A "prepend"
+// restore is a plain leading-digit drop/substitution, not a junction artifact, so
+// it carries no neighbour constraint. `kinds` are the chosen candidates' kinds.
+function physicallyValid(combo, kinds) {
+  for (let i = 0; i < 3; i++)
+    if (kinds[i] === "million" && (i === 0 || combo[i - 1] < 1_000_000))
+      return false;
+  return true;
 }
 
-// Corruption-aware cost. NOT a plain edit count: +1 per restored slot; a units
-// change costs +1 only when the slot is immediately LEFT of a restored slot (the
-// expected victim), else +3. This breaks unit-trade ties toward the physically
-// correct reconstruction.
-function cost(chosen, raw) {
-  const restored = [0, 1, 2].map(
-    (i) => raw[i] < 1_000_000 && chosen[i] >= 1_000_000,
-  );
+// Corruption-aware cost. NOT a plain edit count: +1 per restored slot (any
+// non-"raw" kind); a units change costs +1 only when the slot is immediately LEFT
+// of a "million" restore (the expected junction victim), else +3. This breaks
+// unit-trade ties toward the physically correct reconstruction. `kinds` and
+// `unitsEdited` come from the chosen candidates (not reconstructed from magnitudes,
+// so a millions-digit edit like a 2M->1M swap is charged faithfully).
+function cost(kinds, unitsEdited) {
   let c = 0;
   for (let i = 0; i < 3; i++) {
-    if (restored[i]) c += 1;
-    if (chosen[i] % 10 !== raw[i] % 10) {
-      const leftOfRestored = i + 1 < 3 && restored[i + 1];
-      c += leftOfRestored ? 1 : 3;
+    if (kinds[i] !== "raw") c += 1;
+    if (unitsEdited[i]) {
+      const leftOfJunction = i + 1 < 3 && kinds[i + 1] === "million";
+      c += leftOfJunction ? 1 : 3;
     }
   }
   return c;
@@ -203,11 +255,137 @@ function structuralOnly(ocrScores, totalProvided, bonusOk) {
   return [ocrScores.slice(), recovery];
 }
 
+// A raw slot's plausible magnitude. An impossible value (>= MAX_SCORE — a leading
+// glyph misread like 4,177,174) is treated as its 1,XXX,XXX repair so it does not
+// over-bound the total used to validate it; everything else is itself.
+function plausibleFloor(value) {
+  return value < MAX_SCORE ? value : 1_000_000 + (value % 1_000_000);
+}
+
+// Plausible totals to test against the checksum: the literal total (penalty 0)
+// plus every one-digit deletion of its decimal string (penalty 1, so the literal
+// wins genuine ties). A deletion models the stage total's thousands comma being
+// OCR'd as a spurious digit (e.g. "393,454" -> "3935454"). Deletions <= 0,
+// > MAX_TOTAL, below `floor`, or equal to the literal are dropped.
+function totalCandidates(total, floor) {
+  const out = [[total, 0]];
+  const s = String(total);
+  if (s.length > 1) {
+    const seen = new Set();
+    for (let skip = 0; skip < s.length; skip++) {
+      const v = parseInt(s.slice(0, skip) + s.slice(skip + 1), 10);
+      if (v > 0 && v <= MAX_TOTAL && v >= floor && v !== total && !seen.has(v)) {
+        seen.add(v);
+        out.push([v, 1]);
+      }
+    }
+  }
+  return out;
+}
+
+// The unique per-character score `c` with `c + floor(c/5) == total`, if any.
+// `c + c/5` is monotonic in `c`, so a tiny window around floor(total*5/6) suffices.
+function solveSingle(total) {
+  const approx = Math.floor((total * 5) / 6);
+  for (let c = Math.max(0, approx - 3); c <= approx + 3; c++) {
+    if (c + Math.floor(c / 5) === total) return c;
+  }
+  return null;
+}
+
+// Is `c` a plausible reading of the raw single-character score — the raw itself,
+// or the raw with a dropped leading digit restored (so the raw is c's low-order
+// suffix, e.g. 55,172 -> 855,172)? Guards the single-character total-solve: unlike
+// Rust (which crops each stage's total positionally), this app pairs totals by
+// geometry, so a one-character row can be mis-paired with a NEIGHBOURING stage's
+// total whose inverse checksum is an unrelated value (e.g. raw 206,256 paired with
+// total 2,744,700 inverts to 2,287,250). Requiring `c` to actually read `raw`
+// rejects that, keeping the solve to its purpose (recovering a dropped digit).
+function isLeadingDigitReading(c, raw) {
+  if (c === raw) return true;
+  const place = 10 ** String(raw).length;
+  return c > raw && c % place === raw;
+}
+
+// Best-effort repair driven by the bonus when the exact-total checksum found no
+// solution (the total mis-OCR'd). The bonus equals floor(max/5), so if exactly one
+// physically-valid junction million-restore (a sub-million non-leftmost slot whose
+// left neighbour is >= 1M) makes the restored slot the maximum with floor(max/5)
+// == bonus, apply it (leaving the other slots raw). Returns the combo or null if
+// zero or several qualify. Always best-effort — the caller marks it "flagged".
+function bonusDrivenRepair(raw, bonusOk) {
+  if (bonusOk == null) return null;
+  let hit = null;
+  for (let i = 0; i < 3; i++) {
+    if (i === 0 || !(raw[i] >= 1000 && raw[i] < 1_000_000) || raw[i - 1] < 1_000_000)
+      continue;
+    for (let d = 1; d <= 2; d++) {
+      const restored = raw[i] + d * 1_000_000;
+      if (restored >= MAX_SCORE) break;
+      const combo = raw.slice();
+      combo[i] = restored;
+      const max = Math.max(combo[0], combo[1], combo[2]);
+      if (max === restored && Math.floor(max / 5) === bonusOk) {
+        if (hit != null && comboCompare(hit, combo) !== 0) return null; // ambiguous
+        hit = combo;
+      }
+    }
+  }
+  return hit;
+}
+
+// Fallback ladder when the checksum search found no satisfying combination.
+// A collision-prone stage (a >= 1M plausible slot and >= 2 non-zero slots) is
+// flagged (the digit-stream fallback handles those). A single-character stage
+// total-solves a dropped leading digit straight from the (comma-tolerant) total,
+// corroborated by the bonus. A multi-score stage that reaches here had a usable
+// total it could not satisfy, so digits were lost — flag, never silently accept.
+// A lone (or empty) stage leans on the bonus: Ok when it corroborates (or is
+// absent), else Flagged.
+function resolveWithoutChecksum(ocrScores, totalSet, bonusOk) {
+  const nonzero = ocrScores.filter((s) => s > 0).length;
+  const hasMillion = ocrScores.some((s) => plausibleFloor(s) >= 1_000_000);
+  if (hasMillion && nonzero >= 2) return [ocrScores.slice(), "flagged"];
+
+  const idxs = [0, 1, 2].filter((i) => ocrScores[i] > 0);
+  if (idxs.length === 1) {
+    const idx = idxs[0];
+    for (const [t] of totalSet.slice().sort((a, b) => a[1] - b[1])) {
+      const c = solveSingle(t);
+      if (
+        c != null &&
+        c < MAX_SCORE &&
+        isLeadingDigitReading(c, ocrScores[idx]) &&
+        (bonusOk == null || Math.floor(c / 5) === bonusOk)
+      ) {
+        const out = ocrScores.slice();
+        out[idx] = c;
+        return [out, c === ocrScores[idx] ? "ok" : "repaired"];
+      }
+    }
+  }
+
+  if (nonzero >= 2) return [ocrScores.slice(), "flagged"];
+
+  const maxPlausible = Math.max(...ocrScores.map(plausibleFloor));
+  if (bonusOk == null) return [ocrScores.slice(), "ok"];
+  return Math.floor(maxPlausible / 5) === bonusOk
+    ? [ocrScores.slice(), "ok"]
+    : [ocrScores.slice(), "flagged"];
+}
+
 // Reconstruct one stage from raw OCR scores + optional total/bonus.
 // Returns [ [a, b, c], "ok" | "repaired" | "flagged" ].
-function reconcileStage(ocrScores, total, bonus) {
+//
+// `strict` (used by stageVerified for row CLASSIFICATION, not recovery) skips the
+// no-checksum fallback ladder: a row is verified only by an exact-checksum
+// solution, so a stage total or 総合力 look-alike — which the lenient fallbacks
+// would otherwise resolve to a best-effort "ok" — stays "flagged" and is rejected.
+export function reconcileStage(ocrScores, total, bonus, strict = false) {
   const totalProvided = total != null;
-  const maxRaw = Math.max(ocrScores[0], ocrScores[1], ocrScores[2]);
+  // Floor the total must clear is the largest PLAUSIBLE magnitude, so an impossible
+  // raw (e.g. 4,177,174) does not reject its true smaller total.
+  const maxRaw = Math.max(...ocrScores.map(plausibleFloor));
   const totalOk =
     total != null && total <= MAX_TOTAL && total >= maxRaw && total > 0
       ? total
@@ -217,23 +395,47 @@ function reconcileStage(ocrScores, total, bonus) {
       ? bonus
       : null;
 
-  if (totalOk == null) return structuralOnly(ocrScores, totalProvided, bonusOk);
+  if (totalOk == null) {
+    // No usable total. Try a bonus-driven repair (a unique leading-"1" restore the
+    // bonus corroborates) before the conservative structural pass.
+    const rep = bonusDrivenRepair(ocrScores, bonusOk);
+    if (rep) return [rep, "flagged"];
+    return structuralOnly(ocrScores, totalProvided, bonusOk);
+  }
 
   const cand = [
     candidates(ocrScores[0]),
     candidates(ocrScores[1]),
     candidates(ocrScores[2]),
   ];
+  // The OCR'd total may carry one spuriously-inserted digit (a comma read as a
+  // digit), so search every plausible total; a deletion-derived total carries a
+  // small penalty so the literal always wins a genuine tie.
+  const totalSet = totalCandidates(totalOk, maxRaw);
   const solutions = [];
-  for (const a of cand[0])
-    for (const b of cand[1])
-      for (const c of cand[2]) {
-        const combo = [a, b, c];
-        if (physicallyValid(combo, ocrScores) && checksumOk(combo, totalOk))
-          solutions.push([combo, cost(combo, ocrScores)]);
-      }
+  for (const [t, penalty] of totalSet)
+    for (const a of cand[0])
+      for (const b of cand[1])
+        for (const c of cand[2]) {
+          const combo = [a.value, b.value, c.value];
+          const kinds = [a.kind, b.kind, c.kind];
+          if (physicallyValid(combo, kinds) && checksumOk(combo, t))
+            solutions.push([
+              combo,
+              cost(kinds, [a.unitsEdited, b.unitsEdited, c.unitsEdited]) + penalty,
+            ]);
+        }
 
-  return pickBest(solutions, bonusOk) ?? [ocrScores.slice(), "flagged"];
+  const result = pickBest(solutions, bonusOk, ocrScores);
+  if (result) return result;
+
+  // No combination satisfied any plausible total. For classification (strict) this
+  // is a definitive non-match. For recovery, try a bonus-driven repair, then the
+  // no-checksum fallback ladder (single-character solve, multi-score flag).
+  if (strict) return [ocrScores.slice(), "flagged"];
+  const rep = bonusDrivenRepair(ocrScores, bonusOk);
+  if (rep) return [rep, "flagged"];
+  return resolveWithoutChecksum(ocrScores, totalSet, bonusOk);
 }
 
 const DIGITS_0_9 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -271,19 +473,54 @@ function splitByLengths(stream, lengths) {
   return parts;
 }
 
-// The values one digit-stream part could represent: its literal reading, plus —
-// for a non-first 6-digit part that may have lost a leading "1,"/"2," — each
-// leading-digit restoration below MAX_SCORE. Each option carries a `restored`
-// flag. Empty when even the literal reading is out of range.
-function partOptions(partDigits, isFirstPart) {
+// The values one digit-stream part could represent: its literal reading, plus the
+// collision-victim repairs for the part's length. A leading digit is corrupted
+// only at a junction, whose left operand is >= 1M (enforced by the caller's
+// restore-validity guard for multi-part stages); a single-part stage (k == 1) is a
+// lone-glyph fix with no junction, so those repairs are offered with no neighbour
+// constraint. Each option carries a `restored` flag. Empty when nothing is in range.
+//   - non-first 6-digit: lost its leading "1,"/"2," -> d,XXX,XXX (d in 1..9).
+//   - non-first / single 7-digit impossible (>= MAX_SCORE): leading digit was
+//     SUBSTITUTED (e.g. "0"+"1" overlap misread as "4") -> replace it with 1 or 2.
+//   - non-first 8-digit with equal first two digits: leading "1" was DUPLICATED ->
+//     drop one (collapse to 7). single 8-digit: a spurious leading digit -> drop it.
+function partOptions(partDigits, index, partCount) {
   const literal = parseInt(partDigits, 10);
+  const len = partDigits.length;
+  const isFirst = index === 0;
+  const single = partCount === 1;
   const options = [];
   if (literal < MAX_SCORE) options.push({ value: literal, restored: false });
-  if (!isFirstPart && partDigits.length === 6) {
-    for (let leadingDigit = 1; leadingDigit <= 9; leadingDigit++) {
-      const restoredValue = leadingDigit * 1_000_000 + literal;
-      if (restoredValue >= MAX_SCORE) break;
-      options.push({ value: restoredValue, restored: true });
+
+  if (!isFirst && len === 6) {
+    for (let d = 1; d <= 9; d++) {
+      const rv = d * 1_000_000 + literal;
+      if (rv >= MAX_SCORE) break;
+      options.push({ value: rv, restored: true });
+    }
+  }
+  if (!isFirst && len === 7 && literal >= MAX_SCORE) {
+    const tail = literal % 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const rv = d * 1_000_000 + tail;
+      if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
+    }
+  }
+  if (!isFirst && len === 8 && partDigits[0] === partDigits[1]) {
+    const rv = parseInt(partDigits.slice(1), 10);
+    if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
+  }
+
+  if (single && len === 8) {
+    const rv = parseInt(partDigits.slice(1), 10);
+    if (rv >= 1_000_000 && rv < MAX_SCORE)
+      options.push({ value: rv, restored: true });
+  }
+  if (single && len === 7 && literal >= MAX_SCORE) {
+    const tail = literal % 1_000_000;
+    for (let d = 1; d <= 2; d++) {
+      const rv = d * 1_000_000 + tail;
+      if (rv < MAX_SCORE) options.push({ value: rv, restored: true });
     }
   }
   return options;
@@ -324,7 +561,7 @@ function recordUnitsVariants(scores, restored, total, bonusOk, solutions) {
 // collision junction's left-neighbour units, keeping only splits that satisfy the
 // exact total (and bonus). Returns [ [c1, c2, c3], recovery ] or null. Requires a
 // usable total.
-function reconstructFromDigits(digits, total, bonus) {
+export function reconstructFromDigits(digits, total, bonus) {
   if (total == null || total < 1 || total > MAX_TOTAL) return null;
   const stream = String(digits).replace(/\D/g, "");
   if (stream.length === 0 || stream.length > MAX_STREAM_DIGITS) return null;
@@ -334,10 +571,14 @@ function reconstructFromDigits(digits, total, bonus) {
   const solutions = [];
   const maxParts = Math.min(3, stream.length);
   for (let partCount = 1; partCount <= maxParts; partCount++) {
-    const splits = compositions(stream.length, partCount, 1, MAX_SCORE_DIGITS);
+    // Parts may be up to 8 digits: a colliding leading "1" is sometimes DUPLICATED
+    // by OCR (read as "11") rather than dropped, inflating one part to 8 digits.
+    const splits = compositions(stream.length, partCount, 1, 8);
     for (const lengths of splits) {
       const parts = splitByLengths(stream, lengths);
-      const optionsPerPart = parts.map((part, i) => partOptions(part, i === 0));
+      const optionsPerPart = parts.map((part, i) =>
+        partOptions(part, i, partCount),
+      );
       if (optionsPerPart.some((opts) => opts.length === 0)) continue;
 
       for (const choice of cartesian(optionsPerPart)) {
@@ -347,7 +588,10 @@ function reconstructFromDigits(digits, total, bonus) {
           scores[i] = opt.value;
           restored[i] = opt.restored;
         });
-        if (!restoreValid(restored, scores)) continue;
+        // A restored part needs a >= 1M left neighbour (a collision partner). This
+        // junction rule does not apply to a single-part stage (k == 1): its repair
+        // is a lone-glyph fix, not a junction, so the guard is skipped there.
+        if (partCount > 1 && !restoreValid(restored, scores)) continue;
 
         recordUnitsVariants(scores, restored, total, bonusOk, solutions);
       }
@@ -442,6 +686,23 @@ function totalUsable(total, raw) {
     total <= MAX_TOTAL &&
     total >= Math.max(raw[0], raw[1], raw[2])
   );
+}
+
+// Is a row's reading confirmed by a usable stage total (i.e. the checksum holds)?
+// Used to admit a SINGLE-number row as a one-character stage and to rank
+// candidates, telling a genuine breakdown row apart from the total / 総合力
+// look-alikes that share its single-number shape. A one-character stage's total is
+// c1 + floor(c1/5), a relationship those look-alikes do not satisfy, so they are
+// rejected; a real one-character row passes.
+export function stageVerified(rowText, raw, totalLine) {
+  const total = totalLine ? numberOf(totalLine) : null;
+  if (!totalUsable(total, raw)) return false;
+  let [, recovery] = reconcileStage(raw, total, null, true);
+  if (recovery === "flagged") {
+    const alt = reconstructFromDigits(rowText.replace(/[^\d]/g, ""), total, null);
+    if (alt) recovery = alt[1];
+  }
+  return recovery !== "flagged";
 }
 
 // Recover one stage's [c1, c2, c3] from its OCR row text + raw tokens + paired
