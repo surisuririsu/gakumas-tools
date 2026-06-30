@@ -132,7 +132,7 @@ function pickBest(solutions, bonusOk) {
 // Otherwise: the raw reading, plus — if it could be a sub-million victim of a
 // dropped leading digit — each leading-digit restoration below MAX_SCORE, and for
 // every base >= 100,000 the ten units-digit variants (the units may be misread).
-function candidates(value) {
+export function candidates(value) {
   if (value === 0) return [0];
 
   const bases = [value];
@@ -205,7 +205,7 @@ function structuralOnly(ocrScores, totalProvided, bonusOk) {
 
 // Reconstruct one stage from raw OCR scores + optional total/bonus.
 // Returns [ [a, b, c], "ok" | "repaired" | "flagged" ].
-function reconcileStage(ocrScores, total, bonus) {
+export function reconcileStage(ocrScores, total, bonus) {
   const totalProvided = total != null;
   const maxRaw = Math.max(ocrScores[0], ocrScores[1], ocrScores[2]);
   const totalOk =
@@ -324,7 +324,7 @@ function recordUnitsVariants(scores, restored, total, bonusOk, solutions) {
 // collision junction's left-neighbour units, keeping only splits that satisfy the
 // exact total (and bonus). Returns [ [c1, c2, c3], recovery ] or null. Requires a
 // usable total.
-function reconstructFromDigits(digits, total, bonus) {
+export function reconstructFromDigits(digits, total, bonus) {
   if (total == null || total < 1 || total > MAX_TOTAL) return null;
   const stream = String(digits).replace(/\D/g, "");
   if (stream.length === 0 || stream.length > MAX_STREAM_DIGITS) return null;
