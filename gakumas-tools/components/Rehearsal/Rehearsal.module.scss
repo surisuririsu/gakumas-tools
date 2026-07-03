@@ -201,10 +201,25 @@
     outline: none;
     box-shadow: inset 0 0 0 2px colors.$gk-orange;
   }
+
+  // A stage the OCR could not verify: kept and shown, but ringed so the user
+  // reviews it. Layered over the value heat-map (which is an inline background).
+  &.flagged {
+    box-shadow: inset 0 0 0 2px colors.$gk-orange;
+    font-weight: 700;
+  }
+}
+
+// Center the cell's action button(s); a flagged row's trailing cell holds two
+// (verify + image preview), so keep them inline with a small gap.
+.action {
+  text-align: center;
+  white-space: nowrap;
 }
 
 .action button {
-  margin: auto;
+  display: inline-flex;
+  margin: 0 tokens.$space-1;
   color: tokens.$surface-ink-muted;
   transition: color 0.2s;
 
@@ -214,6 +229,15 @@
 
   &.active {
     color: colors.$gk-orange;
+  }
+
+  // The ✓ confirm-row button (shown only when a row has a flagged stage).
+  &.verify {
+    color: colors.$gk-orange;
+
+    &:hover {
+      color: colors.$gk-red-orange;
+    }
   }
 }
 
@@ -237,6 +261,19 @@
 .toolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: tokens.$space-3;
+}
+
+// "N rows need checking" — sits beside the CSV button when any row is flagged.
+.flaggedNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  margin-right: auto; // push to the left, CSV stays right
+  color: colors.$gk-orange;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .ad {

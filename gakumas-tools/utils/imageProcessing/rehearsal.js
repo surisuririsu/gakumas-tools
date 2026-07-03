@@ -18,15 +18,13 @@ export async function getScoresFromFile(file, worker) {
   const img = await loadImageFromFile(file);
   const whiteCanvas = getWhiteCanvas(img, 190, getOcrScale(img));
   const engWhitePromise = worker.recognize(whiteCanvas, {}, { blocks: true });
-  const scores = extractScores(await engWhitePromise);
-  return scores;
+  return extractScores(await engWhitePromise); // { scores, flags }
 }
 
 export async function getScoresFromImage(img, worker) {
   const whiteCanvas = getWhiteCanvas(img, 160, getOcrScale(img));
   const result = await worker.recognize(whiteCanvas, {}, { blocks: true });
-  const scores = extractScores(result);
-  return scores;
+  return extractScores(result); // { scores, flags }
 }
 
 // The rehearsal result screen always has exactly three stages. extractScores
@@ -87,12 +85,25 @@ export function extractScores(result) {
   const chosen = new Set(stageRows.map((s) => s.line));
 
   const scores = [];
+  const flags = [];
   for (const { line, raw, cleanThree } of stageRows) {
     const totalLine = pairTotalLine(line, lines, chosen);
-    scores.push(recoverStage(line.text, raw, cleanThree, totalLine));
+    const { scores: stageScores, recovery } = recoverStage(
+      line.text,
+      raw,
+      cleanThree,
+      totalLine,
+      line.confidence,
+    );
+    scores.push(stageScores);
+    flags.push(recovery);
   }
 
-  // Always return three aligned stages, padding any not found with zeros.
-  while (scores.length < NUM_STAGES) scores.push([0, 0, 0]);
-  return scores;
+  // Always return three aligned stages, padding any not found with zeros. A padded
+  // (never-found) stage is "ok" — it is an empty read, not an unverified value.
+  while (scores.length < NUM_STAGES) {
+    scores.push([0, 0, 0]);
+    flags.push("ok");
+  }
+  return { scores, flags };
 }

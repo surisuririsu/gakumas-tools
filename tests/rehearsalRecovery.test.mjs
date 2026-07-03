@@ -15,6 +15,7 @@ import assert from "node:assert/strict";
 import {
   reconcileStage,
   reconstructFromDigits,
+  recoverStage,
   candidates,
   allTokens,
   parseScoreToken,
@@ -195,4 +196,62 @@ test("M5: single-char split with spurious leading digit (iter400)", () => {
     [1110707, 0, 0],
     "repaired",
   ]);
+});
+
+// --- recoverStage: keep-and-flag, never zero; total-confidence guard. ---
+
+const totalLine = (text, confidence) => ({ text, confidence });
+
+test("recoverStage: a clean row stands when only a LOW-confidence total contradicts it (iter44/iter53 fix)", () => {
+  // Row OCRs cleanly at conf 96; its total OCR'd 1,558,696 (true 1,358,696) at
+  // conf 0. The low-confidence total must not condemn the clean row -> kept, "ok".
+  const r = recoverStage(
+    "583,951 303,196 354,759",
+    [583951, 303196, 354759],
+    true,
+    totalLine("1,558,696", 0),
+    96,
+  );
+  assert.deepEqual(r, { scores: [583951, 303196, 354759], recovery: "ok" });
+});
+
+test("recoverStage: a verified clean row is ok", () => {
+  // total = 100000*3 + floor(100000/5) = 320000.
+  const r = recoverStage(
+    "100,000 100,000 100,000",
+    [100000, 100000, 100000],
+    true,
+    totalLine("320,000", 80),
+    70,
+  );
+  assert.deepEqual(r, { scores: [100000, 100000, 100000], recovery: "ok" });
+});
+
+test("recoverStage: an unverifiable degraded row is KEPT (best-effort) and flagged, never zeroed", () => {
+  const raw = [1231, 14, 105126];
+  const r = recoverStage(
+    "1,231,14 105126",
+    raw,
+    false, // not a clean three-number read
+    totalLine("3,542,572", 85),
+    55,
+  );
+  assert.equal(r.recovery, "flagged");
+  assert.notDeepEqual(r.scores, [0, 0, 0]); // the regression: must not zero
+  assert.deepEqual(r.scores, raw);
+});
+
+test("recoverStage: a clean row a RELIABLE high-confidence total disproves is flagged (still kept, not zeroed)", () => {
+  // raw sums (with bonus) to 320000 but the reliable, high-confidence total says
+  // 900000 -> unverifiable -> flagged, but the values are kept for review.
+  const raw = [100000, 100000, 100000];
+  const r = recoverStage(
+    "100,000 100,000 100,000",
+    raw,
+    true,
+    totalLine("900,000", 90),
+    70,
+  );
+  assert.equal(r.recovery, "flagged");
+  assert.notDeepEqual(r.scores, [0, 0, 0]);
 });
