@@ -594,9 +594,22 @@ export class Parser {
     }
 
     // Function call: identifier(args) or identifier[target](args)
+    // or a named-counter assignment target: effectCounter(name)
+    let lhsName = null;
     if (this.match(TokenType.LPAREN)) {
-      const args = this.parseArgumentList();
-      return { type: "call", name: idToken.value, target, args };
+      if (idToken.value === "effectCounter") {
+        if (!this.check(TokenType.IDENTIFIER)) {
+          throw new Error(
+            `Expected counter name at line ${this.peek().line}, col ${this.peek().col}`
+          );
+        }
+        const nameToken = this.advance();
+        this.expect(TokenType.RPAREN, "Expected ')' after counter name");
+        lhsName = nameToken.value;
+      } else {
+        const args = this.parseArgumentList();
+        return { type: "call", name: idToken.value, target, args };
+      }
     }
 
     // If we have a target but no parens, it's still a call (e.g., countCards[hand])
@@ -611,6 +624,7 @@ export class Parser {
       return {
         type: "assignment",
         lhs: idToken.value,
+        ...(lhsName && { lhsName }),
         op: ASSIGNMENT_OP_MAP[opToken.type],
         rhs,
       };

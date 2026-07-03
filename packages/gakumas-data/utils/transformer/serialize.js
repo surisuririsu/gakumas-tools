@@ -71,6 +71,9 @@ export function serializeExpr(node, parentPrecedence = 0) {
       return `${serializeExpr(node.left, 0)}${node.op}${serializeExpr(node.right, 0)}`;
 
     case "assignment":
+      if (node.lhsName) {
+        return `${node.lhs}(${node.lhsName})${node.op}${serializeExpr(node.rhs, 0)}`;
+      }
       return `${node.lhs}${node.op}${serializeExpr(node.rhs, 0)}`;
 
     default:

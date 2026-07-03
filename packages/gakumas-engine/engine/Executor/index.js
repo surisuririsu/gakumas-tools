@@ -278,12 +278,12 @@ export default class Executor extends EngineComponent {
   }
 
   executeAssignment(state, action, growth) {
-    const { lhs, op, rhs } = action;
+    const { lhs, lhsName, op, rhs } = action;
 
     // Handle effectCounter assignments
     if (lhs === "effectCounter") {
       const id = state[S.currentEffectInstanceId];
-      const name = "main";
+      const name = lhsName || "main";
       const rhsValue = this.engine.evaluator.evaluateExpression(state, rhs);
 
       if (!state[S.effectCounters][id]) {
