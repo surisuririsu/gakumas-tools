@@ -565,7 +565,8 @@
     "videoComplete": "完了！{count}件のリハーサル結果が見つかりました。",
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
-    "needsChecking": "{count}件の行を確認してください"
+    "needsChecking": "{count}件の行を確認してください",
+    "confirmRow": "この行の値が正しいことを確認"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

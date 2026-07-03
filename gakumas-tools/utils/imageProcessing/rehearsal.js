@@ -35,6 +35,10 @@ const NUM_STAGES = 3;
 
 export function extractScores(result) {
   const lines = extractLines(result);
+  // Shares the checksum search between a row's discovery-time strict pass
+  // (stageVerified) and its final lenient pass (recoverStage) when both reconcile
+  // the same (raw, total) pair — see searchChecksum in rehearsalRecovery.js.
+  const reconcileCache = new Map();
 
   // Identify the breakdown rows WITHOUT any score-magnitude assumption (a
   // per-character score may be anywhere in [0, 3,000,000)). A stage may have one,
@@ -60,7 +64,12 @@ export function extractScores(result) {
 
     const raw = [0, 0, 0];
     for (let i = 0; i < Math.min(3, nums.length); i++) raw[i] = nums[i];
-    const verified = stageVerified(line.text, raw, pairTotalLine(line, lines, null));
+    const verified = stageVerified(
+      line.text,
+      raw,
+      pairTotalLine(line, lines, null),
+      reconcileCache,
+    );
     // A single-number row must be checksum-verified to count as a stage; a
     // multi-number row is a stage by structure (repaired or zero-filled later).
     if (numericCount < 2 && !verified) continue;
@@ -94,6 +103,7 @@ export function extractScores(result) {
       cleanThree,
       totalLine,
       line.confidence,
+      reconcileCache,
     );
     scores.push(stageScores);
     flags.push(recovery);

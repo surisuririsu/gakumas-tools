@@ -557,7 +557,8 @@
     "videoComplete": "Completed! Found {count} rehearsal results.",
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
-    "needsChecking": "{count} row(s) need checking"
+    "needsChecking": "{count} row(s) need checking",
+    "confirmRow": "Confirm this row's values are correct"
   },
   "KofiAd": {
     "prompt": "Support this project"

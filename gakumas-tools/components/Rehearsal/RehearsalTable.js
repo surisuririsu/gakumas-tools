@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { AiOutlineBarChart, AiOutlineBoxPlot } from "react-icons/ai";
 import { FaCheck, FaRegCircleXmark, FaRegImage } from "react-icons/fa6";
 import c from "@/utils/classNames";
@@ -12,6 +13,7 @@ export default function RehearsalTable({
   onCellEdit,
   onVerifyRow,
 }) {
+  const t = useTranslations("Rehearsal");
   // [rowIndex, stageIndex, scoreIndex] of the cell being edited, or null.
   const [editing, setEditing] = useState(null);
   const [previewRow, setPreviewRow] = useState(null);
@@ -216,7 +218,7 @@ export default function RehearsalTable({
                   {rowFlagged && (
                     <button
                       className={styles.verify}
-                      title="Confirm this row's values are correct"
+                      title={t("confirmRow")}
                       onClick={() => onVerifyRow(i)}
                     >
                       <FaCheck />

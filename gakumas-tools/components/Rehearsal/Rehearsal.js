@@ -276,7 +276,10 @@ function Rehearsal() {
       setData((d) =>
         d.map((row, ri) =>
           ri === i
-            ? { ...row, flags: row.flags?.map((f) => (f === "flagged" ? "ok" : f)) }
+            ? {
+                ...row,
+                flags: row.flags?.map((f) => (f === "flagged" ? "ok" : f)),
+              }
             : row,
         ),
       ),
@@ -371,7 +374,8 @@ function Rehearsal() {
         </Button>
         {flaggedCount > 0 && (
           <span className={styles.flaggedNotice}>
-            <FaTriangleExclamation /> {t("needsChecking", { count: flaggedCount })}
+            <FaTriangleExclamation />{" "}
+            {t("needsChecking", { count: flaggedCount })}
           </span>
         )}
       </div>
