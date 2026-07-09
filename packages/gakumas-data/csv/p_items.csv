@@ -457,7 +457,7 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 456,居眠り注意！,SR,FALSE,anomaly,produce,support,,FALSE,
 457,ふらいとライオン,SSR,FALSE,sense,stage,pIdol,145,FALSE,at:startOfTurn { if:goodConditionTurns>=6 { perfectConditionTurns+=3; halfCostTurns+=2 }; limit:1 }
 458,ふらいとライオン+,SSR,TRUE,sense,stage,pIdol,145,FALSE,at:startOfTurn { if:goodConditionTurns>=6 { perfectConditionTurns+=4; halfCostTurns+=3 }; limit:1 }
-459,アイドル博士の必需品,SSR,FALSE,logic,stage,pIdol,146,FALSE,"at:activeCardUsed { if:goodImpressionTurns>=10 { effectCounter+=1; if:effectCounter%2==1 { goodImpressionTurns+=6; at:turn { drawCard; limit:1 }; limit:3 } } }"
-460,アイドル博士の必需品+,SSR,TRUE,logic,stage,pIdol,146,FALSE,"at:activeCardUsed { if:goodImpressionTurns>=10 { effectCounter+=1; if:effectCounter%2==1 { goodImpressionTurns+=6; at:turn { drawCard; limit:1 }; limit:3 } } }"
+459,アイドル博士の必需品,SSR,FALSE,logic,stage,pIdol,146,FALSE,at:activeCardUsed { if:goodImpressionTurns>=10 { effectCounter+=1; if:effectCounter%2==1 { goodImpressionTurns+=6; at:turn { drawCard; limit:1 }; limit:2 } } }
+460,アイドル博士の必需品+,SSR,TRUE,logic,stage,pIdol,146,FALSE,at:activeCardUsed { if:goodImpressionTurns>=10 { effectCounter+=1; if:effectCounter%2==1 { goodImpressionTurns+=6; at:turn { drawCard; limit:1 }; limit:3 } } }
 461,全力おうえんうちわ,SSR,FALSE,logic,stage,support,,FALSE,"at:cardUsed[active] { if:isVocalTurn & genki<=30 { goodImpressionTurns+=3; setScoreBuff(0.1,5) }; limit:1 }"
 462,ドキドキ目隠し,SR,FALSE,logic,produce,support,,FALSE,
