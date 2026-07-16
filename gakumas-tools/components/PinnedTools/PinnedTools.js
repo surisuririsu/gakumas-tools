@@ -6,16 +6,27 @@ import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { TOOLS } from "@/utils/tools";
 import styles from "./PinnedTools.module.scss";
 
+// ssr: false keeps these heavy tools (ONNX, Tesseract) off the server render.
+// The container around each one is a fixed 350px and stretches to the row
+// height, so it reserves the right box server-side and the tool fills in on
+// hydration without moving <main>.
 const TOOL_COMPONENTS = {
-  dex: dynamic(() => import("@/components/Dex")),
-  lessonCalculator: dynamic(() => import("@/components/LessonCalculator")),
-  memoryCalculator: dynamic(() => import("@/components/MemoryCalculator")),
-  memories: dynamic(() => import("@/components/Memories")),
-  produceRankCalculator: dynamic(() =>
-    import("@/components/ProduceRankCalculator")
+  dex: dynamic(() => import("@/components/Dex"), { ssr: false }),
+  lessonCalculator: dynamic(() => import("@/components/LessonCalculator"), {
+    ssr: false,
+  }),
+  memoryCalculator: dynamic(() => import("@/components/MemoryCalculator"), {
+    ssr: false,
+  }),
+  memories: dynamic(() => import("@/components/Memories"), { ssr: false }),
+  produceRankCalculator: dynamic(
+    () => import("@/components/ProduceRankCalculator"),
+    { ssr: false }
   ),
-  rehearsal: dynamic(() => import("@/components/Rehearsal")),
-  simulator: dynamic(() => import("@/components/Simulator/Simulator")),
+  rehearsal: dynamic(() => import("@/components/Rehearsal"), { ssr: false }),
+  simulator: dynamic(() => import("@/components/Simulator/Simulator"), {
+    ssr: false,
+  }),
 };
 
 function PinnedTools() {

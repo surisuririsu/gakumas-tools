@@ -1,35 +1,51 @@
 "use client";
-import { createContext, useCallback, useEffect, useState } from "react";
-
-const WORKSPACE_STORAGE_KEY = "gakumas-tools.workspace";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import {
+  DEFAULT_WORKSPACE,
+  parseWorkspace,
+  WORKSPACE_STORAGE_KEY,
+  writeWorkspaceCookie,
+} from "@/utils/workspace";
 
 const WorkspaceContext = createContext();
 
-export function WorkspaceContextProvider({ children }) {
-  const [loaded, setLoaded] = useState(false);
-  const [filter, setFilter] = useState(true);
-  const [plan, setPlan] = useState("sense");
-  const [idolId, setIdolId] = useState(6);
-  const [pinnedTools, setPinnedTools] = useState([]);
+// initialWorkspace comes from the request cookie, so the server renders the
+// same workspace the client hydrates with. It is null for visitors who have no
+// cookie yet, which is what triggers the one-time localStorage migration.
+export function WorkspaceContextProvider({ initialWorkspace, children }) {
+  const initial = initialWorkspace || DEFAULT_WORKSPACE;
+  const [filter, setFilter] = useState(initial.filter);
+  const [plan, setPlan] = useState(initial.plan);
+  const [idolId, setIdolId] = useState(initial.idolId);
+  const [pinnedTools, setPinnedTools] = useState(initial.pinnedTools);
 
   useEffect(() => {
-    const workspaceString = localStorage.getItem(WORKSPACE_STORAGE_KEY);
-    if (workspaceString) {
-      const data = JSON.parse(workspaceString);
-      if (data.filter) setFilter(data.filter);
-      if (data.plan) setPlan(data.plan);
-      if (data.idolId) setIdolId(data.idolId);
-      if (data.pinnedTools) setPinnedTools(data.pinnedTools);
+    if (initialWorkspace) return;
+
+    let stored;
+    try {
+      stored = localStorage.getItem(WORKSPACE_STORAGE_KEY);
+    } catch {
+      // localStorage unavailable (e.g. privacy mode) — nothing to migrate.
+      return;
     }
-    setLoaded(true);
+    if (!stored) return;
+
+    const workspace = parseWorkspace(stored);
+    setFilter(workspace.filter);
+    setPlan(workspace.plan);
+    setIdolId(workspace.idolId);
+    setPinnedTools(workspace.pinnedTools);
   }, []);
 
+  const persisted = useRef(false);
   useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem(
-      WORKSPACE_STORAGE_KEY,
-      JSON.stringify({ filter, plan, idolId, pinnedTools })
-    );
+    // Skip the first run: state still matches what the server rendered.
+    if (!persisted.current) {
+      persisted.current = true;
+      return;
+    }
+    writeWorkspaceCookie({ filter, plan, idolId, pinnedTools });
   }, [filter, plan, idolId, pinnedTools]);
 
   const pin = useCallback(
