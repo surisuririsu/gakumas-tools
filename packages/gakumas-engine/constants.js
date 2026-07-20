@@ -181,6 +181,7 @@ export const ALL_FIELDS = [
   "fullPowerEffectBuffs",
   "cumulativeFullPowerCharge",
   "enthusiasm",
+  "enthusiasmMultiplier",
   "enthusiasmBonusBuffs",
   "enthusiasmBuffs",
   "strengthTimes",

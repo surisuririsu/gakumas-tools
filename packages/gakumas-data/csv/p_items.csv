@@ -463,3 +463,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 462,ドキドキ目隠し,SR,FALSE,logic,produce,support,,FALSE,
 463,火花散るナイトキラー,SSR,FALSE,anomaly,stage,pIdol,147,FALSE,at:stanceChanged { if:isFullPower & fullPowerCharge>=10 { genki+=6; fullPowerCharge+=6; target:all { g.score+=3 }; limit:3 } }
 464,火花散るナイトキラー+,SSR,TRUE,anomaly,stage,pIdol,147,FALSE,at:stanceChanged { if:isFullPower & fullPowerCharge>=10 { genki+=6; fullPowerCharge+=6; target:all { g.score+=3 }; limit:3 } }
+465,不屈の輝き,SSR,FALSE,anomaly,stage,pIdol,148,FALSE,at:afterCardUsed[baseId(849)] { if:preservationTimes>=2 { target:849 { g.score+=100 }; at:turn { drawCard; limit:1 } }; limit:2 }
+466,不屈の輝き+,SSR,TRUE,anomaly,stage,pIdol,148,FALSE,at:afterCardUsed[baseId(849)] { if:preservationTimes>=2 { target:849 { g.score+=100 }; at:turn { drawCard; limit:1 } }; limit:2 }
+467,注目インタビュー！,SSR,FALSE,anomaly,stage,support,,FALSE,at:startOfTurn { if:isVisualTurn & preservationTimes>=4 { target:active { g.score+=22 }; limit:1 } }

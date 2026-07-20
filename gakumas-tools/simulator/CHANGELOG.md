@@ -10,6 +10,7 @@ Dates are based on Eastern Time Zone.
 ## 2026-07-20
 
 - Add preview of kuraiai
+- Add preview of garakutaroad saki and s49
 
 ## 2026-07-07
 

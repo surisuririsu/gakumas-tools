@@ -113,10 +113,12 @@ export default class Executor extends EngineComponent {
     const prevGoodConditionTurnsMultiplier =
       state[S.goodConditionTurnsMultiplier];
     const prevConcentrationMultiplier = state[S.concentrationMultiplier];
+    const prevEnthusiasmMultiplier = state[S.enthusiasmMultiplier];
     const prevMotivationMultiplier = state[S.motivationMultiplier];
     const prevScoreTimes = state[S.scoreTimes];
     state[S.goodConditionTurnsMultiplier] = 1;
     state[S.concentrationMultiplier] = 1;
+    state[S.enthusiasmMultiplier] = 1;
     state[S.motivationMultiplier] = 1;
     // Seed scoreTimes from the card's g.scoreTimes growth so legacy
     // growth-driven repeats still fire. Actions may also write to
@@ -184,6 +186,7 @@ export default class Executor extends EngineComponent {
     // Reset modifiers
     state[S.goodConditionTurnsMultiplier] = prevGoodConditionTurnsMultiplier;
     state[S.concentrationMultiplier] = prevConcentrationMultiplier;
+    state[S.enthusiasmMultiplier] = prevEnthusiasmMultiplier;
     state[S.motivationMultiplier] = prevMotivationMultiplier;
     state[S.scoreTimes] = prevScoreTimes;
 

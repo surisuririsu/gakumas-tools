@@ -394,6 +394,7 @@ They are also valid as assignment LHS unless marked read-only.
 | 不調                           | `poorConditionTurns`           |
 | 不安                           | `uneaseTurns`                  |
 | 集中適用倍数                   | `concentrationMultiplier`      |
+| 熱気適用倍数                   | `enthusiasmMultiplier`         |
 | やる気適用倍数                 | `motivationMultiplier`         |
 | 好調効果適用倍数               | `goodConditionTurnsMultiplier` |
 | 親フェーズ                     | `parentPhase`                  |
