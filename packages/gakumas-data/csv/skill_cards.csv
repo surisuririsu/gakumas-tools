@@ -845,3 +845,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 844,伝説への挑戦+,,SSR,active,sense,1,TRUE,TRUE,pIdol,145,FALSE,,cost-=5,score+=8; if:perfectConditionTurns>=1 { goodConditionTurnsMultiplier=3; score+=20 },1,
 845,これぞアイドル！,,SSR,active,logic,1,FALSE,TRUE,pIdol,146,FALSE,,cost-=11,goodImpressionTurns+=2; if:goodImpressionTurns>=10 { at:turn { score+=goodImpressionTurns*3; limit:1 } }; if:goodImpressionTurns>=15 { at:turn { score+=goodImpressionTurns*5; limit:1; delay:1 } },1,
 846,これぞアイドル！+,,SSR,active,logic,1,TRUE,TRUE,pIdol,146,FALSE,,cost-=10,goodImpressionTurns+=2; if:goodImpressionTurns>=10 { at:turn { score+=goodImpressionTurns*4.4; limit:1 } }; if:goodImpressionTurns>=15 { at:turn { score+=goodImpressionTurns*5.5; limit:1; delay:1 } },1,
+847,星を散らせ,,SSR,mental,anomaly,1,FALSE,TRUE,pIdol,147,FALSE,,cost-=2,holdSelected[deck | discarded]; at:cardUsed { if:isFullPower { fullPowerCharge+=5 }; limit:3 },1,
+848,星を散らせ+,,SSR,mental,anomaly,1,TRUE,TRUE,pIdol,147,FALSE,,cost-=2,holdSelected[deck | discarded]; at:cardUsed { if:isFullPower { fullPowerCharge+=5 }; limit:3 },1,
