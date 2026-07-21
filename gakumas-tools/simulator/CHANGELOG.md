@@ -7,6 +7,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-07-21
+
+- Update garakutaroad saki and itemize action effect logs
+
 ## 2026-07-20
 
 - Add preview of kuraiai

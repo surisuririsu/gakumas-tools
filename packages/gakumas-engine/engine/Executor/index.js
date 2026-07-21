@@ -5,7 +5,6 @@ import {
   DEBUFF_SPECIAL_ACTIONS,
   DECREASE_TRIGGER_FIELDS,
   EOT_DECREMENT_FIELDS,
-  FIELDS_TO_DIFF,
   G,
   GROWABLE_FIELDS,
   INCREASE_TRIGGER_FIELDS,
@@ -39,6 +38,17 @@ const DECREASE_PHASES = DECREASE_TRIGGER_FIELDS.map(
 export default class Executor extends EngineComponent {
   constructor(engine) {
     super(engine);
+
+    // Stack of {state, snap} frames — one per active executeActions call —
+    // used for per-action diff logging (see executeActions/logDiffs).
+    // Frames carry the state they were captured from because nested
+    // executions don't always share it: strategy hooks (pickCardsToHold /
+    // pickCardsToUseFree) simulate candidate cards on fresh preview states
+    // in the middle of a real action, and their diffs must never patch the
+    // real run's baselines. Frame objects are pooled by depth — push/pop
+    // is strictly LIFO.
+    this.diffSnapshots = [];
+    this.snapshotPool = [];
 
     this.specialActions = {
       ...this.engine.cardManager.specialActions,
@@ -103,11 +113,12 @@ export default class Executor extends EngineComponent {
   }
 
   executeActions(state, actions, card) {
-    // Snapshot the whole state array for diffing. A single native
-    // `slice()` is much faster than building an object keyed by
-    // FIELDS_TO_DIFF; the extra slots cost nothing (diff sites only
-    // read the fields they care about).
-    const prev = state.slice();
+    // Pre-list values of the end-of-turn-decrement fields for the
+    // fresh-buff bookkeeping at the bottom.
+    const eotPrev = new Array(EOT_DECREMENT_FIELDS.length);
+    for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
+      eotPrev[i] = state[EOT_DECREMENT_FIELDS[i]];
+    }
 
     // Set modifiers
     const prevGoodConditionTurnsMultiplier =
@@ -126,61 +137,80 @@ export default class Executor extends EngineComponent {
     state[S.scoreTimes] =
       state[S.cardMap][card]?.growth?.[G["g.scoreTimes"]] || 0;
 
-    // Execute actions, triggering increase/decrease effects per-action
-    // (matching actual game behavior where p-items trigger between actions)
-    for (let i = 0; i < actions.length; i++) {
-      // Only snapshot the full change-trigger field set when the current
-      // phase actually fires change triggers. Most effect-action paths
-      // (e.g. `cardUsed` phase) don't, so the ~30-field capture is wasted
-      // work. Genki is captured unconditionally for the consumed-genki
-      // accounting below.
-      const phase = state[S.phase];
-      const needsChangeTrigger =
-        phase === "processCard" ||
-        phase === "processCost" ||
-        phase === "cardMovedToHand" ||
-        phase === "cardMovedToHeld" ||
-        (state[S.triggeredEffect]?.type === "reservation" &&
-          state[S.triggeredEffect]?.source?.type === "skillCardEffect");
-      const actionPrev = needsChangeTrigger ? state.slice() : null;
-      const prevGenki = state[S.genki];
+    // Diffs are logged per action (and per scoreTimes repeat), before the
+    // action's change triggers fire, so each logged delta belongs to
+    // exactly the action that produced it. One snapshot covers the whole
+    // list: logDiffs re-baselines it after every logged change. Nested
+    // executions on this same state (free-use chains, stance-transition
+    // effects) log in their own frames and patch this frame's baselines,
+    // so an enclosing action never re-reports a nested delta.
+    const logging = !this.logger.disabled;
+    const snapshotDepth = this.diffSnapshots.length;
+    const diffSnap = logging ? this.pushDiffSnapshot(state) : null;
 
-      this.executeAction(state, actions[i], card);
+    try {
+      // Execute actions, triggering increase/decrease effects per-action
+      // (matching actual game behavior where p-items trigger between actions)
+      for (let i = 0; i < actions.length; i++) {
+        // Only snapshot the full change-trigger field set when the current
+        // phase actually fires change triggers. Most effect-action paths
+        // (e.g. `cardUsed` phase) don't, so the ~30-field capture is wasted
+        // work. Genki is captured unconditionally for the consumed-genki
+        // accounting below.
+        const phase = state[S.phase];
+        const needsChangeTrigger =
+          phase === "processCard" ||
+          phase === "processCost" ||
+          phase === "cardMovedToHand" ||
+          phase === "cardMovedToHeld" ||
+          (state[S.triggeredEffect]?.type === "reservation" &&
+            state[S.triggeredEffect]?.source?.type === "skillCardEffect");
+        const actionPrev = needsChangeTrigger ? state.slice() : null;
+        const prevGenki = state[S.genki];
 
-      // Apply scoreTimes to the first score action we see, then consume it.
-      // `state[S.scoreTimes]` is seeded from g.scoreTimes above but may also
-      // be written by a preceding action.
-      if (state[S.scoreTimes]) {
-        const action = actions[i];
-        if (action.type === "assignment" && action.lhs === "score") {
-          const times = state[S.scoreTimes];
-          state[S.scoreTimes] = 0;
-          for (let j = 0; j < times; j++) {
-            this.executeAction(state, actions[i], card);
+        this.executeAction(state, actions[i], card);
+
+        // Apply scoreTimes to the first score action we see, then consume
+        // it. `state[S.scoreTimes]` is seeded from g.scoreTimes above but
+        // may also be written by a preceding action.
+        let repeats = 0;
+        if (state[S.scoreTimes]) {
+          const action = actions[i];
+          if (action.type === "assignment" && action.lhs === "score") {
+            repeats = state[S.scoreTimes];
+            state[S.scoreTimes] = 0;
           }
         }
-      }
 
-      // Clamp values
-      const config = this.getConfig(state);
-      if (state[S.stamina] > config.idol.params.stamina) {
-        state[S.stamina] = config.idol.params.stamina;
-      }
-      for (let i = 0; i < NON_NEGATIVE_FIELDS.length; i++) {
-        if (state[NON_NEGATIVE_FIELDS[i]] < 0) {
-          state[NON_NEGATIVE_FIELDS[i]] = 0;
+        this.clampFields(state);
+        if (logging) this.logDiffs(state, diffSnap);
+
+        // Each repeat is executed and logged as its own hit — parity with
+        // the game's separate score popups. Repeats only touch score, so
+        // clamping between them is equivalent to the single trailing clamp.
+        for (let j = 0; j < repeats; j++) {
+          this.executeAction(state, actions[i], card);
+          this.clampFields(state);
+          if (logging) this.logDiffs(state, diffSnap);
+        }
+
+        // Fire increase/decrease triggers after each action
+        if (needsChangeTrigger) {
+          this.triggerChangeEffects(state, actionPrev);
+        }
+
+        // Consumed genki
+        if (state[S.genki] < prevGenki) {
+          state[S.consumedGenki] += prevGenki - state[S.genki];
         }
       }
-
-      // Fire increase/decrease triggers after each action
-      if (needsChangeTrigger) {
-        this.triggerChangeEffects(state, actionPrev);
+    } finally {
+      // Release frames (pool retains the arrays; drop state refs so dead
+      // preview states aren't held alive between reuses).
+      for (let d = snapshotDepth; d < this.diffSnapshots.length; d++) {
+        this.diffSnapshots[d].state = null;
       }
-
-      // Consumed genki
-      if (state[S.genki] < prevGenki) {
-        state[S.consumedGenki] += prevGenki - state[S.genki];
-      }
+      this.diffSnapshots.length = snapshotDepth;
     }
 
     // Reset modifiers
@@ -190,24 +220,74 @@ export default class Executor extends EngineComponent {
     state[S.motivationMultiplier] = prevMotivationMultiplier;
     state[S.scoreTimes] = prevScoreTimes;
 
-    // Log changed fields
-    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
-      const field = LOGGED_FIELDS[i];
-      if (state[field] == prev[field]) continue;
-      this.logger.log(state, "diff", {
-        field,
-        prev: formatDiffField(prev[field]),
-        next: formatDiffField(state[field]),
-      });
-    }
-
     // Protect fresh stats from decrement
     if (!state[S.unfreshPhase]) {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
-        if (state[field] > 0 && prev[field] == 0) {
+        if (state[field] > 0 && eotPrev[i] == 0) {
           state[S.freshBuffs][field] = true;
         }
+      }
+    }
+  }
+
+  pushDiffSnapshot(state) {
+    const depth = this.diffSnapshots.length;
+    let frame = this.snapshotPool[depth];
+    if (!frame) {
+      frame = this.snapshotPool[depth] = {
+        state: null,
+        snap: new Array(LOGGED_FIELDS.length),
+      };
+    }
+    frame.state = state;
+    const snap = frame.snap;
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      snap[i] = state[LOGGED_FIELDS[i]];
+    }
+    this.diffSnapshots.push(frame);
+    return snap;
+  }
+
+  // Log a diff for every logged field that changed since `snap`, then
+  // patch the changed fields into every same-state snapshot on the stack
+  // (including `snap` itself, re-baselining it for the caller's next
+  // action). Patching keeps a delta from being reported twice: a nested
+  // execution (free-use chain, stance-transition effect) logs it in its
+  // own frame, and the enclosing action's later diff sees the patched
+  // value as its baseline. Frames whose state differs are speculative
+  // preview runs (strategy hold/free-use evaluation on fresh states) —
+  // patching across states would corrupt the real run's baselines.
+  // Known limitation: an action that both writes a field directly and
+  // nested-triggers a change to the same field would under-report its own
+  // share; no current action does both.
+  logDiffs(state, snap) {
+    const stack = this.diffSnapshots;
+    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
+      const field = LOGGED_FIELDS[i];
+      const curr = state[field];
+      if (curr == snap[i]) continue;
+      this.logger.log(state, "diff", {
+        field,
+        prev: formatDiffField(snap[i]),
+        next: formatDiffField(curr),
+      });
+      for (let d = 0; d < stack.length; d++) {
+        if (stack[d].state === state) {
+          stack[d].snap[i] = curr;
+        }
+      }
+    }
+  }
+
+  clampFields(state) {
+    const config = this.getConfig(state);
+    if (state[S.stamina] > config.idol.params.stamina) {
+      state[S.stamina] = config.idol.params.stamina;
+    }
+    for (let i = 0; i < NON_NEGATIVE_FIELDS.length; i++) {
+      if (state[NON_NEGATIVE_FIELDS[i]] < 0) {
+        state[NON_NEGATIVE_FIELDS[i]] = 0;
       }
     }
   }

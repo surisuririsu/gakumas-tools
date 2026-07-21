@@ -179,6 +179,9 @@ function validateExpr(expr, errors) {
         errors.push(`Unknown function call: ${expr.name}`);
       }
       if (expr.target) validateTargetExpr(expr.target, errors);
+      // effectCounter's arg is a free-form counter name created on first
+      // use (Evaluator defaults it to "main"), not a readable identifier.
+      if (expr.name === "effectCounter") return;
       for (const arg of expr.args || []) validateArg(arg, errors);
       return;
     case "binary":

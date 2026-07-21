@@ -132,7 +132,7 @@ export const TARGET_IDENTIFIERS = new Set([
 ]);
 
 // Target-expression function calls (appear inside `target:` / `[...]`).
-export const TARGET_FUNCTIONS = new Set(["effect", "baseId", "id"]);
+export const TARGET_FUNCTIONS = new Set(["effect", "cost", "baseId", "id"]);
 
 // Filter identifiers on `at:phase[...]` phase filters — reuse target ids.
 // (The engine evaluates phase filters via getTargetRuleCards.)
