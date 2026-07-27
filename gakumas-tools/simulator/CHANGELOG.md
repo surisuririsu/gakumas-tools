@@ -8,6 +8,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-07-27
+
+- Add primastella saki and ume
+
 ## 2026-07-21
 
 - Update garakutaroad saki and itemize action effect logs

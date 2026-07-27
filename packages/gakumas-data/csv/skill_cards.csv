@@ -851,3 +851,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 850,手を伸ばした先に+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,148,FALSE,if:preservationTimes>=2,cost-=5,enthusiasmMultiplier=2; score+=1; genki+=1; if:isStrength { setStance(preservation2) },1,at:endOfTurn { if:countCards[baseId(849) & removed] > 0 & turnsRemaining<=3 { useRandomCardFree[baseId(849)]; limit:3 } }
 851,わたしの人生を込めて,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,148,FALSE,,cost-=7,setStance(strength); target:849 { g.genki+=5; g.scoreTimes+=2 }; at:turn { setStance(preservation); limit:1 },1,
 852,わたしの人生を込めて+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,148,FALSE,,cost-=4,setStance(strength); target:849 { g.genki+=5; g.scoreTimes+=2 }; at:turn { setStance(preservation); limit:1 },1,
+853,先陣を切る一番星,,L,mental,logic,1,FALSE,TRUE,produce,130,FALSE,,cost-=0,goodImpressionTurns+=5; setGoodImpressionTurnsEffectBuff(0.3); cardUsesRemaining+=1,1,
+854,証明し続ける一番星,,L,mental,logic,1,FALSE,TRUE,produce,136,TRUE,,cost-=0,cardUsesRemaining+=1; at:motivationIncreased { if:isDirectEffect { moveRandomToTopOfDeck[mental & (deck | discarded)] }; ttl:5 },1,
