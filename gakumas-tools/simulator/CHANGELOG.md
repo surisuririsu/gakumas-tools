@@ -9,6 +9,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-07-31
+
+- Fix full power effect activation order
+
 ## 2026-07-27
 
 - Add primastella saki and ume

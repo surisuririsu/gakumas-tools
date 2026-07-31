@@ -37,7 +37,7 @@ export const FULL_POWER_EFFECTS = [
     id: "全力",
   }),
   ...parseEffect(
-    "if:lockStanceTurns==0 & fullPowerCharge>=10 { do:setStance(fullPower); do:fullPowerCharge-=10 }",
+    "if:lockStanceTurns==0 & fullPowerCharge>=10 { do:fullPowerCharge-=10; do:setStance(fullPower) }",
     { type: "default", id: "全力" },
   ),
 ];
