@@ -10,6 +10,10 @@ Dates are based on Eastern Time Zone.
 
 
 
+## 2026-08-01
+
+- Update kuraiai tsubame
+
 ## 2026-07-31
 
 - Fix full power effect activation order
