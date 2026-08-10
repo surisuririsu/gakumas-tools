@@ -10,6 +10,10 @@ Dates are based on Eastern Time Zone.
 
 
 
+## 2026-08-10
+
+- Add contest season 50 preview
+
 ## 2026-08-01
 
 - Update kuraiai tsubame
