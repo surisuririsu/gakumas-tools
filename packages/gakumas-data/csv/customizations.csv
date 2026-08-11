@@ -43,9 +43,13 @@ id,alias,name,type,price,max,forceInitialHand,conditions,cost,actions,limit,effe
 92,kyorikanEffect1,効果変更,effect,100,1,,,,@base at:startOfTurn { if:stamina>=maxStamina*0.5 { concentration+=2 } },,
 102,onigiriEffect1,効果変更,effect,100,1,,,,@base at:cardUsed[active] { effectCounter+=1 }; + at:cardUsed[active] { if:effectCounter%3==2 { genki+=12*cardsUsed+2 }; limit:2 },,
 91,seisouEffect1,効果変更,effect,100,1,,,,@base do { goodConditionTurnsMultiplier=2; score+=18 }; @bonus do { concentrationMultiplier=3; score+=20 },,
+108,hirusagariEffect1,効果変更,effect,100,1,,,,@base at:motivationIncreased { if:isDirectEffect { motivation+=3 }; limit:5 },,
+110,ramuneEffect1,効果変更,effect,100,1,,,,@base do { goodConditionTurnsMultiplier=3; score+=12 }; do { score+=goodConditionTurns*3 },,
+111,senkouhanabiEffect1,効果変更,effect,100,1,,,,@base at:afterCardUsed { if:cardHasEffect(genki) { goodImpressionTurns+=2 } },,
 96,goodImpressionTurnsEffectBuffAdd1_50_5,効果追加,effect,100,1,,,,"setGoodImpressionTurnsEffectBuff(0.5,5)",,
 95,lsmEffectAdd1,効果追加,effect,100,1,,,,at:endOfTurn { score+=5; fixedStamina-=1; limit:4 },,
 94,turnAdd1,効果追加,effect,100,1,,,,turnsRemaining+=1,,
+109,nyuudougumoAdd1,効果追加,effect,100,1,,,,moveRandomToTopOfDeck[SSR & (deck | discarded)](3);,,
 40,strength1,強気+,effect,70,1,,,,,,at:prestage { target:this { g.stanceLevel+=1 } }
 93,strengthAdd1,強気追加,effect,70,1,,,,setStance(strength),,
 107,ichibanTakaiHoshiGrowth1,成長変更,effect,100,1,,,,,,@grow at:afterCardUsed { if:cardHasEffect(strength) { target:this { g.score+=15; g.scoreTimes+=1 } }; limit:2 }
