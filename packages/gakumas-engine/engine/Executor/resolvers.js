@@ -147,9 +147,15 @@ export function resolveScore(state, score, growth, rhsNode, getTurnMultiplier) {
 
     // Apply stance
     if (state[S.stance] == "strength") {
-      score *= 2;
+      score *= state[S.strengthEffectBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        2,
+      );
     } else if (state[S.stance] == "strength2") {
-      score *= 2.5;
+      score *= state[S.strengthEffectBuffs].reduce(
+        (acc, cur) => acc + cur.amount,
+        2.5,
+      );
     } else if (state[S.stance] == "preservation") {
       score *= 0.5;
     } else if (state[S.stance] == "preservation2") {

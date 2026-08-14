@@ -80,11 +80,11 @@ For each support card shown:
 - mode: stage (for サポートイベント items) or produce
 - No pIdolId
 
-### Step 7: Update EntityBank hidden IDs
+### Step 7: Update hidden entity IDs
 
 Add the unupgraded pIdol item and card IDs to hide them (since we only have upgraded effect text):
 
-- `gakumas-tools/components/EntityBank/EntityBank.js`
+- `gakumas-tools/utils/entities.js`
 - Add to HIDDEN_ITEM_IDS and HIDDEN_CARD_IDS arrays
 
 ### Step 8: Validate
@@ -172,6 +172,12 @@ itself (not just the actions) capped.
 
 ## Output Format
 
+The CSVs use CRLF line endings and have no trailing newline at EOF. When
+appending rows, first add a CRLF to the current last line, join new rows
+with CRLF, and leave the final row unterminated — otherwise the whole-file
+diff explodes. After editing, regenerate JSON with
+`pnpm --filter gakumas-data generate` and run `pnpm validate:data`.
+
 ### p_idols.csv
 
 ```csv
@@ -200,11 +206,11 @@ Support items:
 [id],[name],[rarity],FALSE,[plan],stage,support,,FALSE,"[effects]"
 ```
 
-### EntityBank.js updates
+### utils/entities.js updates
 
 ```javascript
-const HIDDEN_ITEM_IDS = [...existing, [unupgraded_pIdol_item_id]];
-const HIDDEN_CARD_IDS = [...existing, [unupgraded_pIdol_card_id]];
+export const HIDDEN_ITEM_IDS = new Set([...existing, [unupgraded_pIdol_item_id]]);
+export const HIDDEN_CARD_IDS = new Set([...existing, [unupgraded_pIdol_card_id]]);
 ```
 
 ## Worked Example: Wildest Flower Gacha
@@ -241,16 +247,16 @@ p_items.csv:
 405,演技のたしなみ,SR,FALSE,logic,stage,support,,FALSE,"at:staminaDecreased { if:parentPhase==processCost & isVisualTurn { goodImpressionTurns+=2; halfCostTurns+=2 }; limit:1 }"
 ```
 
-EntityBank.js:
+utils/entities.js:
 
 ```javascript
-const HIDDEN_ITEM_IDS = [402];
-const HIDDEN_CARD_IDS = [783];
+export const HIDDEN_ITEM_IDS = new Set([402]);
+export const HIDDEN_CARD_IDS = new Set([783]);
 ```
 
 ## Reference
 
 - Full DSL docs: `packages/gakumas-data/Effects.md`
 - Recent entries: `tail -5 packages/gakumas-data/csv/{p_idols,p_items,skill_cards}.csv`
-- EntityBank: `gakumas-tools/components/EntityBank/EntityBank.js`
+- Hidden entity IDs: `gakumas-tools/utils/entities.js`
 - Validate: `pnpm validate:data`

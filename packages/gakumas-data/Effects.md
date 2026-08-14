@@ -80,6 +80,7 @@ at:startOfTurn { genki+=2 }
 | スキルカードが除外された時               | `cardRemoved`                  |
 | スキルカードコストで強化状態を消費した時 | `buffCostConsumed`             |
 | 指針が変更した時                         | `stanceChanged`                |
+| 指針の値が変更した時（段階上昇を含む）   | `stanceValueChanged`           |
 | 体力が減少後                             | `staminaDecreased`             |
 | 元気が増加後                             | `genkiIncreased`               |
 | 好調の効果ターンが増加後                 | `goodConditionTurnsIncreased`  |
@@ -179,6 +180,7 @@ Assignment operators: `=`, `+=`, `-=`, `*=`, `/=`, `%=`.
 | 熱気ボーナス                              | `setEnthusiasmBonus(amount, turns?)`                                     |
 | 全力値増加量増加                          | `setFullPowerChargeBuff(amount, turns?)`                                 |
 | 全力強化                                 | `setFullPowerEffectBuff(amount, turns?)`                                 |
+| 強気強化                                 | `setStrengthEffectBuff(amount, turns?)`                                  |
 
 ## Target rules
 

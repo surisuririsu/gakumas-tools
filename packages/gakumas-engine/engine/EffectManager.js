@@ -331,6 +331,17 @@ export default class EffectManager extends EngineComponent {
           const { primary, ...rest } = inheritedSource;
           inheritedSource = rest;
         }
+        // Card actions reach here when a phase block is nested inside a
+        // conditional wrapper; mirror the top-level delayed-effect branch
+        // so card-scheduled reservations still count as direct effects
+        // when they fire.
+        if (!inheritedSource && card != null) {
+          inheritedSource = {
+            type: "skillCardEffect",
+            id: state[S.cardMap][card].id,
+            idx: card,
+          };
+        }
         this.setEffects(state, toSet, inheritedSource);
         this.logger.log(state, "setEffect");
       }

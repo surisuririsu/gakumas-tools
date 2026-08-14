@@ -28,6 +28,7 @@ const BUFF_TYPES = [
   { action: "setEnthusiasmBonus", field: S.enthusiasmBonusBuffs },
   { action: "setFullPowerChargeBuff", field: S.fullPowerChargeBuffs },
   { action: "setFullPowerEffectBuff", field: S.fullPowerEffectBuffs },
+  { action: "setStrengthEffectBuff", field: S.strengthEffectBuffs },
 ];
 
 export default class BuffManager extends EngineComponent {
@@ -118,6 +119,7 @@ export default class BuffManager extends EngineComponent {
     state[S.enthusiasmBonusBuffs] = [];
     state[S.fullPowerChargeBuffs] = [];
     state[S.fullPowerEffectBuffs] = [];
+    state[S.strengthEffectBuffs] = [];
 
     // Sense
     state[S.goodConditionTurns] = 0;
@@ -278,6 +280,16 @@ export default class BuffManager extends EngineComponent {
       ) {
         state[S.stanceChangedByDirectEffectTimes]++;
       }
+    }
+
+    // Unlike stanceChanged, this also fires on same-stance upgrades
+    // (e.g. strength -> strength2), which don't count as stance changes
+    // in game.
+    if (state[S.stance] != state[S.prevStance]) {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "stanceValueChanged",
+      );
     }
   }
 
