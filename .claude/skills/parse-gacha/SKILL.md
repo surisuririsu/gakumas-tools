@@ -62,6 +62,12 @@ The announcement shows the **upgraded version only**. Create both unupgraded and
 - pIdolId: the new pIdol's ID
 - unique: TRUE for pIdol cards
 
+**Card type (active vs mental)** — read it off the card icon, not the
+effects: the letter at the center bottom of the icon is **A** (active) or
+**M** (mental), and the frame around that letter is a **hexagon** (active)
+or **circle** (mental). "Gives score → active, buffs only → mental" is a
+tendency, not a rule — e.g. 夏風の通り道 grants no score but is active.
+
 ### Step 5: Extract pIdol p-item
 
 Same as skill card - create both unupgraded and upgraded rows.
