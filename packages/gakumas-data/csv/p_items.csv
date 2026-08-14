@@ -471,3 +471,5 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 470,夏を編んだ影+,SSR,TRUE,anomaly,stage,pIdol,149,FALSE,at:cardUsed { if:cardHasEffect(strength) & stance==strength2 { setStrengthEffectBuff(0.6); at:turn { setStance(preservation); limit:1 } }; limit:2 }
 471,大満足レポート♪,SSR,FALSE,anomaly,produce,support,,FALSE,
 472,ほっぺたぺたり,SR,FALSE,anomaly,produce,support,,FALSE,
+473,溶けてゆく夏,SSR,FALSE,sense,stage,pIdol,150,FALSE,at:everyTurn { if:turnsElapsed%3==2 { genki+=5; concentration+=3 }; limit:2 }
+474,溶けてゆく夏+,SSR,TRUE,sense,stage,pIdol,150,FALSE,at:everyTurn { if:turnsElapsed%3==2 { genki+=5; concentration+=3 }; limit:2 }
