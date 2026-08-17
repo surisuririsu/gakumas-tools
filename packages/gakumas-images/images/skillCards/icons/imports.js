@@ -3386,6 +3386,10 @@ import image_853 from "./853.png";
 import image_854 from "./854.png";
 import image_855 from "./855.png";
 import image_856 from "./856.png";
+import image_857 from "./857.png";
+import image_858 from "./858.png";
+import image_859 from "./859.png";
+import image_860 from "./860.png";
 
 const IMAGES = {
   '1': image_1,
@@ -6776,6 +6780,10 @@ const IMAGES = {
   '854': image_854,
   '855': image_855,
   '856': image_856,
+  '857': image_857,
+  '858': image_858,
+  '859': image_859,
+  '860': image_860,
 };
 
 export default IMAGES;

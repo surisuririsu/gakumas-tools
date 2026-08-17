@@ -466,6 +466,12 @@ import image_465 from "./465.png";
 import image_466 from "./466.png";
 import image_467 from "./467.png";
 import image_468 from "./468.png";
+import image_469 from "./469.png";
+import image_470 from "./470.png";
+import image_471 from "./471.png";
+import image_472 from "./472.png";
+import image_473 from "./473.png";
+import image_474 from "./474.png";
 
 const IMAGES = {
   '1': image_1,
@@ -936,6 +942,12 @@ const IMAGES = {
   '466': image_466,
   '467': image_467,
   '468': image_468,
+  '469': image_469,
+  '470': image_470,
+  '471': image_471,
+  '472': image_472,
+  '473': image_473,
+  '474': image_474,
 };
 
 export default IMAGES;

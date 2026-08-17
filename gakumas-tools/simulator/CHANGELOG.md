@@ -11,6 +11,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-08-17
+
+- Update neeyucchauyo temari and sena
+
 ## 2026-08-14
 
 - Add preview of neeyucchauyo temari
