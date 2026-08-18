@@ -44,3 +44,23 @@ trustPolicyIgnoreAfter: 1051200
 # Per-version exemptions for legitimate downgrades. Start empty;
 # populate only with a concrete justification per entry.
 trustPolicyExclude: []
+
+# Security: force patched versions of transitive dependencies whose parents
+# pin vulnerable ranges (Dependabot alerts). Remove each entry once the
+# parent's own range includes the patched version.
+overrides:
+  # next pins postcss 8.4.31 exactly; GHSA sourceMappingURL file disclosure.
+  postcss: '^8.5.23'
+  # via postcss; infinite-loop advisories. Kept on 3.x — postcss expects
+  # CJS nanoid; 4+ is ESM-only.
+  nanoid: '^3.3.18'
+  # next-auth pins ^8.3.2; buffer bounds advisory patched in 11.1.1.
+  # Kept on 11.x — still dual CJS/ESM with the named exports next-auth uses.
+  uuid: '^11.1.1'
+  # onnxruntime-node pins ^0.5; 4GB allocation advisory patched in 0.6.0.
+  adm-zip: '^0.6.0'
+  # via sass; DoS advisories patched in 5.1.8.
+  immutable: '^5.1.8'
+  # via onnxruntime-web; DoS advisories patched in 7.6.5. Kept on 7.x to
+  # match onnxruntime-web's expected major.
+  protobufjs: '^7.6.5'
