@@ -514,6 +514,14 @@ export default class CardManager extends EngineComponent {
       );
     }
 
+    if (state[S.buffCostConsumed]) {
+      this.engine.effectManager.triggerEffectsForPhase(
+        state,
+        "buffCostConsumed",
+      );
+      state[S.buffCostConsumed] = false;
+    }
+
     this.engine.effectManager.triggerEffectsForPhase(
       state,
       "afterCardUsed",

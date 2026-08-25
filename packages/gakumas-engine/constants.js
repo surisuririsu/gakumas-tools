@@ -225,6 +225,7 @@ export const ALL_FIELDS = [
   "freeCardUses",
   "paidCardUses",
   "unfreshPhase",
+  "buffCostConsumed",
 
   // Delta
   "goodImpressionTurnsDelta",

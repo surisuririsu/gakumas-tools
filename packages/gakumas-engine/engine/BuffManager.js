@@ -159,6 +159,7 @@ export default class BuffManager extends EngineComponent {
     state[S.freeCardUses] = 0;
     state[S.paidCardUses] = 0;
     state[S.scoreTimes] = 0;
+    state[S.buffCostConsumed] = false;
   }
 
   setBuff(state, field, amount, turns, logLabel) {
