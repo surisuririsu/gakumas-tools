@@ -38,3 +38,16 @@ pnpm validate:data
 
 Unknown references fail with a precise error pointing at the entity and
 column.
+
+## Stamina metadata
+
+P-idol base/progression stamina and idol relationship/True End bonuses can be
+refreshed from a pinned `vertesan/gakumasu-diff` snapshot:
+
+```sh
+python3 scripts/update_stamina_data.py --ref <commit>
+python3 -m scripts.csv_to_json
+```
+
+The updater preserves CRLF CSV formatting and leaves unmatched preview rows
+blank until their in-game master data is available.

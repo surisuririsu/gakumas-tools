@@ -20,6 +20,7 @@
     "test:rehearsal": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs",
     "test:rehearsal:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs --update",
     "test:rehearsal:unit": "node --test tests/rehearsalRecovery.test.mjs",
+    "test:stamina": "node --loader ./scripts/extensionless-loader.mjs --test tests/stamina.test.mjs",
     "regression:add": "node --loader ./scripts/extensionless-loader.mjs ./tests/add.mjs",
     "regression:bootstrap": "node --loader ./scripts/extensionless-loader.mjs ./tests/generate-suite.mjs",
     "regression:coverage": "node --loader ./scripts/extensionless-loader.mjs ./tests/coverage.mjs",
