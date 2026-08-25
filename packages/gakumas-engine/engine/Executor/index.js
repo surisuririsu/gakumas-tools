@@ -298,10 +298,7 @@ export default class Executor extends EngineComponent {
       for (let i = 0; i < BUFF_FIELDS.length; i++) {
         const f = BUFF_FIELDS[i];
         if (state[f] < prev[f]) {
-          this.engine.effectManager.triggerEffectsForPhase(
-            state,
-            "buffCostConsumed",
-          );
+          state[S.buffCostConsumed] = true;
           break;
         }
       }
