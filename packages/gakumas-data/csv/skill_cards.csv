@@ -859,3 +859,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 858,夏風の通り道+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,149,FALSE,,cost-=5,if:isStrength { at:turn { setStance(strength2); limit:1 } }; setStance(preservation); genki+=13; at:stanceValueChanged { if:isDirectEffect & stance==strength2 { nullifyCostCards+=1 }; limit:2 },1,
 859,見惚れる横顔,,SSR,active,sense,1,FALSE,TRUE,pIdol,150,FALSE,,cost-=1,"concentration+=1; setConcentrationEffectBuff(0.15,3); if:concentration>=3 { concentrationMultiplier=1.5; score+=13 }",1,
 860,見惚れる横顔+,,SSR,active,sense,1,TRUE,TRUE,pIdol,150,FALSE,,cost-=1,"concentration+=3; setConcentrationEffectBuff(0.15,3); if:concentration>=3 { concentrationMultiplier=1.5; score+=13 }",1,
+861,波間に揺れる光,,SSR,active,sense,1,FALSE,TRUE,pIdol,151,FALSE,,concentration-=1,"concentrationMultiplier=2; score+=7; setConcentrationAdditionBuff(1,4); at:turn { drawCard(2); limit:1 }",,
+862,波間に揺れる光+,,SSR,active,sense,1,TRUE,TRUE,pIdol,151,FALSE,,concentration-=1,"concentrationMultiplier=2; score+=7; setConcentrationAdditionBuff(1,4); at:turn { drawCard(2); limit:1 }",,
+863,のんびりすやすや,,SR,mental,sense,1,FALSE,TRUE,support,,FALSE,,cost-=3,at:endOfTurn { concentration+=2; ttl:3 },1,
+864,のんびりすやすや+,,SR,mental,sense,1,TRUE,TRUE,support,,FALSE,,cost-=3,at:endOfTurn { concentration+=2; ttl:3 },1,
