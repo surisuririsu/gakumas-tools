@@ -1,5 +1,5 @@
-// Verified against vertesan/gakumasu-diff@1866b84c and the in-game values
-// transcribed by the Gakumas contest wiki. Each Sensei copy applies separately.
+// Transcribed from the player-visible support-card level table. Each Sensei
+// copy applies separately.
 const SENSEI_STAMINA_BONUSES = [
   { rank: 1, stamina: 4 },
   { rank: 25, stamina: 5 },

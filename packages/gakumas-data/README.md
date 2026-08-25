@@ -41,13 +41,19 @@ column.
 
 ## Stamina metadata
 
-P-idol base/progression stamina and idol relationship/True End bonuses can be
-refreshed from a pinned `vertesan/gakumasu-diff` snapshot:
+Stamina values must come from player-visible in-game screens: each P-idol's
+status/upgrade panels, idol relationship and achievement bonuses, and the
+support-card level table. Public transcriptions are useful cross-checks:
+
+- [P-idol status and progression](https://seesaawiki.jp/gakumasu/d/%A5%D7%A5%ED%A5%C7%A5%E5%A1%BC%A5%B9%A5%A2%A5%A4%A5%C9%A5%EB)
+- [relationship and True End achievements](https://seesaawiki.jp/gakumasu/d/%A5%A2%A5%C1%A1%BC%A5%D6%A5%E1%A5%F3%A5%C8)
+- [Sensei support-card level table](https://seesaawiki.jp/gakumasu/d/%A4%AD%A4%DF%A4%CF%A1%A2%BC%AB%CB%FD%A4%CE%C0%B8%C5%CC%A4%C7%A4%B9)
+
+After editing the CSV columns, regenerate JSON:
 
 ```sh
-python3 scripts/update_stamina_data.py --ref <commit>
 python3 -m scripts.csv_to_json
 ```
 
-The updater preserves CRLF CSV formatting and leaves unmatched preview rows
-blank until their in-game master data is available.
+Leave preview rows blank until their values are visible in game. Preserve CRLF
+CSV formatting and no trailing newline.
