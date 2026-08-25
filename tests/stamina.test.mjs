@@ -43,7 +43,7 @@ test("Hiro real-data vector totals 47 stamina", () => {
 });
 
 test("progression milestones apply with cumulative and replacement semantics", () => {
-  const pIdol = PIdols.getById(19); // Fighting My Way 花海 咲季
+  const pIdol = PIdols.getById(24); // Wonder Scale 倉本 千奈
   const idol = Idols.getById(pIdol.idolId);
   assert.equal(
     calculateMemoryStamina({
@@ -52,10 +52,10 @@ test("progression milestones apply with cumulative and replacement semantics", (
       trainingRank: 5,
       potentialRank: 4,
       dearnessLevel: 25,
-      trueEndScenario: "hatsuboshiIdolFestival",
+      trueEndScenario: "nextIdolAudition",
       senseiLevels: [55],
     }),
-    50
+    44
   );
 });
 
