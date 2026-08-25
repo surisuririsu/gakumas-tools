@@ -120,7 +120,7 @@
 {"id":"seed1-120","query":"stage=24&support_bonus=0.04&params=1698-3198-1025-45&items=140-396-40&cards=71-426-578-485-197-263_40-782-399-139-756-215&customizations=-----e3x1_-----","score":10501,"note":"random"}
 {"id":"seed1-121","query":"stage=124&support_bonus=0.04&params=138-3127-308-34&items=92-217-301&cards=50-160-69-508-304-48_520-609-100-677-778-11&customizations=-----_----e105x1e106x1-","score":1406,"note":"random"}
 {"id":"seed1-122","query":"stage=98&support_bonus=0.04&params=1739-1121-1871-41&items=381-317-207&cards=262-50-386-779-554-425_375-638-663-438-436-561&customizations=-----e44x1_-----","score":5624,"note":"random"}
-{"id":"seed1-123","query":"stage=136&support_bonus=0.04&params=662-2697-2417-38&items=394-138-384&cards=5-764-141-537-2-786_452-292-109-312-624-260&customizations=-----_-----","score":20201,"note":"random"}
+{"id":"seed1-123","query":"stage=136&support_bonus=0.04&params=662-2697-2417-38&items=394-138-384&cards=5-764-141-537-2-786_452-292-109-312-624-260&customizations=-----_-----","score":20135,"note":"random"}
 {"id":"seed1-124","query":"stage=6&support_bonus=0.04&params=1505-219-2981-38&items=402-159-306&cards=315-337-771-321-51-71_12-173-725-124-322-747&customizations=-----e4x1_-----","score":11140,"note":"random"}
 {"id":"seed1-125","query":"stage=54&support_bonus=0.04&params=1639-1905-1827-47&items=53-81-82&cards=614-21-520-617-41-12_680-45-273-251-4-426&customizations=----e27x1e72x1-_-----","score":9721,"note":"random"}
 {"id":"seed1-126","query":"stage=2&support_bonus=0.04&params=1973-2680-916-40&items=349-7-31&cards=790-73-362-786-795-112_331-649-669-328-16-690&customizations=-e14x1e48x1----_-----","score":11500,"note":"random"}
@@ -161,7 +161,7 @@
 {"id":"seed1-161","query":"stage=137&support_bonus=0.04&params=1570-1524-451-48&items=175-180-147&cards=601-652-802-242-695-38_179-714-210-187-131-325&customizations=--e21x1---_e21x1e19x1----e56x1-","score":5919,"note":"random"}
 {"id":"seed1-162","query":"stage=149&support_bonus=0.04&params=2425-1050-389-35&items=180-158-116&cards=695-747-92-365-71-179_51-338-502-266-627-153&customizations=----e47x1-e19x1_e36x1-----e30x1e11x1","score":9998,"note":"random"}
 {"id":"seed1-163","query":"stage=19&support_bonus=0.04&params=227-2459-2383-48&items=73-207-415&cards=448-425-530-402-718-2_719-445-373-541-396-414&customizations=-e45x1----_e28x1e43x1-----","score":13787,"note":"random"}
-{"id":"seed1-164","query":"stage=138&support_bonus=0.04&params=1331-1925-529-30&items=40-98-232&cards=458-263-95-9-243-427_730-68-277-63-247-177&customizations=-e3x1-e59x1e49x1---e30x1_--e26x1e3x1-e22x1e20x1--","score":8289,"note":"random"}
+{"id":"seed1-164","query":"stage=138&support_bonus=0.04&params=1331-1925-529-30&items=40-98-232&cards=458-263-95-9-243-427_730-68-277-63-247-177&customizations=-e3x1-e59x1e49x1---e30x1_--e26x1e3x1-e22x1e20x1--","score":8798,"note":"random"}
 {"id":"seed1-165","query":"stage=140&support_bonus=0.04&params=1678-147-2073-31&items=250-391-335&cards=335-170-458-336-651-95_587-564-96-573-249-173&customizations=-----e20x1e49x1_----e27x1-e19x1","score":9570,"note":"random"}
 {"id":"seed1-166","query":"stage=26&support_bonus=0.04&params=1596-3025-486-45&items=138-249-15&cards=742-214-585-247-276-791_232-744-650-244-697-573&customizations=--e83x1-e27x1e3x1--_----e20x1e72x1-","score":13298,"note":"random"}
 {"id":"seed1-167","query":"stage=73&support_bonus=0.04&params=1079-1325-1562-34&items=50-71-20&cards=308-72-220-263-566-593_194-262-166-352-238-597&customizations=---e26x1e3x1--e28x1_-----","score":8806,"note":"random"}
@@ -432,7 +432,7 @@
 {"id":"seed1-432","query":"stage=8&support_bonus=0.04&params=2664-2786-203-37&items=302-132-180&cards=154-173-568-47-237-122_48-571-287-66-483-196&customizations=---e29x1--_-----","score":9290,"note":"random"}
 {"id":"seed1-433","query":"stage=108&support_bonus=0.04&params=489-2122-2325-41&items=400-77-381&cards=794-656-549-498-702-376_514-375-414-556-432-515&customizations=--e40x1e60x1---_-----","score":7172,"note":"random"}
 {"id":"seed1-434","query":"stage=72&support_bonus=0.04&params=683-1938-2992-32&items=311-239-301&cards=250-244-307-237-23-62_586-759-232-233-491-802&customizations=---e59x1e47x1--_-----","score":14305,"note":"random"}
-{"id":"seed1-435","query":"stage=89&support_bonus=0.04&params=1880-2587-5-39&items=231-416-333&cards=253-268-205-507-134-573_632-153-241-131-355-760&customizations=e27x1-----_-e11x1-e48x1e27x1---","score":14728,"note":"random"}
+{"id":"seed1-435","query":"stage=89&support_bonus=0.04&params=1880-2587-5-39&items=231-416-333&cards=253-268-205-507-134-573_632-153-241-131-355-760&customizations=e27x1-----_-e11x1-e48x1e27x1---","score":14632,"note":"random"}
 {"id":"seed1-436","query":"stage=15&support_bonus=0.04&params=1113-1187-1703-44&items=181-327-146&cards=324-533-617-122-459-248_360-509-747-674-62-472&customizations=-----_-e19x1e7x1----","score":14281,"note":"random"}
 {"id":"seed1-437","query":"stage=114&support_bonus=0.04&params=1837-1468-1347-33&items=170-92-174&cards=513-389-657-487-702-98_396-492-456-386-553-263&customizations=-e76x1----_----e57x1-","score":10537,"note":"random"}
 {"id":"seed1-438","query":"stage=8&support_bonus=0.04&params=852-3026-278-38&items=311-112-145&cards=500-1-734-356-98-714_47-124-68-136-181-13&customizations=-----_e9x1e29x1-----","score":4714,"note":"random"}
