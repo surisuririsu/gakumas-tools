@@ -8,8 +8,8 @@ import {
   getMemoryStaminaBreakdown,
 } from "gakumas-data";
 import Button from "@/components/Button";
-import Input from "@/components/Input";
 import Modal from "@/components/Modal";
+import c from "@/utils/classNames";
 import styles from "./StaminaCalculator.module.scss";
 
 const TRUE_END_SCENARIOS = [
@@ -18,27 +18,55 @@ const TRUE_END_SCENARIOS = [
   "hatsuboshiIdolFestival",
 ];
 
-function maxMilestone(bonuses) {
-  return bonuses?.reduce(
-    (max, milestone) => Math.max(max, milestone.rank),
-    0,
+const TRUE_END_FIELDS = {
+  firstStar: "trueEndStaminaFirstStar",
+  nextIdolAudition: "trueEndStaminaNextIdolAudition",
+  hatsuboshiIdolFestival: "trueEndStaminaHatsuboshiIdolFestival",
+};
+
+const TRAINING_RANKS = Array.from({ length: 8 }, (_, rank) => rank);
+const POTENTIAL_RANKS = Array.from({ length: 5 }, (_, rank) => rank);
+const SENSEI_LEVELS = [
+  { value: 0, min: 0, max: 0, stamina: 0 },
+  { value: 1, min: 1, max: 24, stamina: 4 },
+  { value: 25, min: 25, max: 39, stamina: 5 },
+  { value: 40, min: 40, max: 44, stamina: 6 },
+  { value: 45, min: 45, max: 49, stamina: 7 },
+  { value: 50, min: 50, max: 54, stamina: 8 },
+  { value: 60, min: 55, max: 60, stamina: 9 },
+];
+
+function ChoiceButtons({ label, value, values, onChange }) {
+  return (
+    <div className={styles.choices} role="group" aria-label={label}>
+      {values.map((option) => (
+        <button
+          type="button"
+          key={option}
+          className={c(option === value && styles.selected)}
+          aria-pressed={option === value}
+          onClick={() => onChange(option)}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
   );
 }
 
 function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
   const t = useTranslations("StaminaCalculator");
   const idol = Idols.getById(pIdol.idolId);
-  const [trainingRank, setTrainingRank] = useState(
-    maxMilestone(pIdol.trainingStaminaBonuses),
+  const confirmedTrueEndScenarios = TRUE_END_SCENARIOS.filter((scenario) =>
+    Number.isInteger(idol?.[TRUE_END_FIELDS[scenario]]),
   );
-  const [potentialRank, setPotentialRank] = useState(
-    maxMilestone(pIdol.potentialStaminaBonuses),
+  const [trainingRank, setTrainingRank] = useState(7);
+  const [potentialRank, setPotentialRank] = useState(4);
+  const [affectionLevel, setAffectionLevel] = useState(37);
+  const [trueEndScenarios, setTrueEndScenarios] = useState(
+    confirmedTrueEndScenarios,
   );
-  const [affectionLevel, setAffectionLevel] = useState(
-    maxMilestone(idol?.affectionStaminaBonuses),
-  );
-  const [trueEndScenario, setTrueEndScenario] = useState("");
-  const [senseiLevels, setSenseiLevels] = useState([0, 0]);
+  const [senseiLevels, setSenseiLevels] = useState([60, 0]);
 
   const breakdown = useMemo(
     () =>
@@ -48,7 +76,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
         trainingRank,
         potentialRank,
         affectionLevel,
-        trueEndScenario: trueEndScenario || null,
+        trueEndScenarios,
         senseiLevels,
       }),
     [
@@ -57,7 +85,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
       trainingRank,
       potentialRank,
       affectionLevel,
-      trueEndScenario,
+      trueEndScenarios,
       senseiLevels,
     ],
   );
@@ -68,6 +96,14 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
       next[index] = level || 0;
       return next;
     });
+  }
+
+  function toggleTrueEndScenario(scenario) {
+    setTrueEndScenarios((current) =>
+      current.includes(scenario)
+        ? current.filter((value) => value !== scenario)
+        : [...current, scenario],
+    );
   }
 
   return (
@@ -82,67 +118,102 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
 
         {breakdown ? (
           <>
+            <p className={styles.intro}>{t("defaultsHelp")}</p>
+
             <div className={styles.fields}>
-              <label>
-                <span>{t("trainingRank")}</span>
-                <Input
-                  type="number"
-                  round
-                  min={0}
-                  max={10}
+              <section className={styles.field}>
+                <div className={styles.fieldLabel}>{t("trainingRank")}</div>
+                <ChoiceButtons
+                  label={t("trainingRank")}
                   value={trainingRank}
-                  onChange={(value) => setTrainingRank(value || 0)}
+                  values={TRAINING_RANKS}
+                  onChange={setTrainingRank}
                 />
-              </label>
-              <label>
-                <span>{t("potentialRank")}</span>
-                <Input
-                  type="number"
-                  round
-                  min={0}
-                  max={10}
+              </section>
+
+              <section className={styles.field}>
+                <div className={styles.fieldLabel}>{t("potentialRank")}</div>
+                <ChoiceButtons
+                  label={t("potentialRank")}
                   value={potentialRank}
-                  onChange={(value) => setPotentialRank(value || 0)}
+                  values={POTENTIAL_RANKS}
+                  onChange={setPotentialRank}
                 />
-              </label>
-              <label>
-                <span>{t("affectionLevel")}</span>
-                <Input
-                  type="number"
-                  round
+              </section>
+
+              <section className={styles.field}>
+                <div className={styles.fieldLabel}>
+                  <span>{t("affectionLevel")}</span>
+                  <strong>{affectionLevel}</strong>
+                </div>
+                <input
+                  className={styles.range}
+                  type="range"
+                  aria-label={t("affectionLevel")}
                   min={0}
-                  max={100}
+                  max={37}
                   value={affectionLevel}
-                  onChange={(value) => setAffectionLevel(value || 0)}
+                  onChange={(event) =>
+                    setAffectionLevel(Number(event.target.value))
+                  }
                 />
-              </label>
-              <label>
-                <span>{t("trueEndScenario")}</span>
-                <select
-                  value={trueEndScenario}
-                  onChange={(event) => setTrueEndScenario(event.target.value)}
+              </section>
+
+              <section className={styles.field}>
+                <div className={styles.fieldLabel}>
+                  {t("trueEndAchievements")}
+                </div>
+                <div
+                  className={styles.trueEnds}
+                  role="group"
+                  aria-label={t("trueEndAchievements")}
                 >
-                  <option value="">{t("none")}</option>
-                  {TRUE_END_SCENARIOS.map((scenario) => (
-                    <option key={scenario} value={scenario}>
-                      {t(`scenarios.${scenario}`)}
-                    </option>
+                  {TRUE_END_SCENARIOS.map((scenario) => {
+                    const confirmed =
+                      confirmedTrueEndScenarios.includes(scenario);
+                    const selected = trueEndScenarios.includes(scenario);
+                    return (
+                      <button
+                        type="button"
+                        key={scenario}
+                        disabled={!confirmed}
+                        className={c(selected && styles.selected)}
+                        aria-pressed={selected}
+                        onClick={() => toggleTrueEndScenario(scenario)}
+                      >
+                        {t(`scenarios.${scenario}`)}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className={styles.help}>{t("trueEndHelp")}</p>
+              </section>
+
+              <section className={styles.field}>
+                <div className={styles.fieldLabel}>{t("senseiCards")}</div>
+                <div className={styles.senseiCards}>
+                  {senseiLevels.map((level, index) => (
+                    <label key={index}>
+                      <span>{t("senseiCard", { number: index + 1 })}</span>
+                      <select
+                        value={level}
+                        onChange={(event) =>
+                          setSenseiLevel(index, Number(event.target.value))
+                        }
+                      >
+                        {SENSEI_LEVELS.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.value === 0
+                              ? t("notUsed")
+                              : t("senseiLevelRange", option)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                   ))}
-                </select>
-              </label>
-              {senseiLevels.map((level, index) => (
-                <label key={index}>
-                  <span>{t("senseiLevel", { number: index + 1 })}</span>
-                  <Input
-                    type="number"
-                    round
-                    min={0}
-                    max={60}
-                    value={level}
-                    onChange={(value) => setSenseiLevel(index, value)}
-                  />
-                </label>
-              ))}
+                </div>
+                <p className={styles.help}>{t("senseiHelp")}</p>
+              </section>
             </div>
 
             <div className={styles.result}>
@@ -204,6 +275,7 @@ export default function StaminaCalculator({ pIdolId, onApply }) {
         onClick={() => setOpen(true)}
       >
         <FaCalculator />
+        <span>{t("openShort")}</span>
       </button>
       {open && pIdol && (
         <StaminaCalculatorModal

@@ -11,7 +11,6 @@ function ParametersInput({
   parameters,
   onChange,
   withStamina,
-  staminaAction,
   max = MAX,
   round = true,
 }) {
@@ -30,24 +29,19 @@ function ParametersInput({
 
   return (
     <div className={styles.parameters}>
-      {parameterNames.map((name, i) => {
-        const isStamina = withStamina && i === parameterNames.length - 1;
-        return (
-          <div className={styles.parameter} key={name}>
-            <Input
-              type="number"
-              name={name}
-              placeholder={name}
-              round={round}
-              min={MIN}
-              max={max}
-              value={parameters[i]}
-              onChange={(val) => handleChange(val, i)}
-            />
-            {isStamina && staminaAction}
-          </div>
-        );
-      })}
+      {parameterNames.map((name, i) => (
+        <Input
+          key={name}
+          type="number"
+          name={name}
+          placeholder={name}
+          round={round}
+          min={MIN}
+          max={max}
+          value={parameters[i]}
+          onChange={(val) => handleChange(val, i)}
+        />
+      ))}
     </div>
   );
 }

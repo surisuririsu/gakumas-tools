@@ -2,26 +2,33 @@
 @use "../../styles/tokens";
 
 .open {
-  flex: 0 0 34px;
+  width: 100%;
+  min-height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: tokens.$space-1;
+  padding: 2px tokens.$space-1;
   border: 1px solid tokens.$surface-border;
   border-radius: tokens.$radius-xs;
   background: tokens.$surface-panel;
   color: colors.$stamina;
+  font-size: tokens.$text-xs;
+  font-weight: 600;
   cursor: pointer;
 
-  &:hover,
-  &:focus-visible {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus-visible {
     background: tokens.$surface-alt;
     border-color: colors.$stamina;
   }
 
   &:disabled {
-    color: tokens.$surface-ink-muted;
+    border-color: tokens.$surface-border;
     background: tokens.$surface-muted;
-    cursor: default;
+    color: tokens.$surface-ink-muted;
+    opacity: 0.55;
+    cursor: not-allowed;
   }
 }
 
@@ -37,7 +44,84 @@
   color: tokens.$surface-ink-muted;
 }
 
+.intro {
+  margin: 0 !important;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+}
+
 .fields {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-4;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-sm;
+  font-weight: 700;
+
+  strong {
+    color: colors.$gk-red-orange;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.choices,
+.trueEnds {
+  display: flex;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+  overflow: hidden;
+
+  button {
+    flex: 1;
+    min-width: 32px;
+    padding: tokens.$space-2 tokens.$space-1;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-sm;
+    font-weight: 600;
+
+    & + button {
+      border-left: 1px solid tokens.$surface-border;
+    }
+
+    &:not(:disabled):not(.selected):hover,
+    &:not(:disabled):not(.selected):focus-visible {
+      background: tokens.$surface-alt;
+      color: tokens.$surface-ink;
+    }
+
+    &.selected {
+      background: rgba(255, 118, 0, 0.12);
+      color: colors.$gk-red-orange;
+      box-shadow: inset 0 -2px 0 colors.$gk-red-orange;
+    }
+
+    &:disabled {
+      background: tokens.$surface-muted;
+      color: tokens.$surface-ink-muted;
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.range {
+  width: 100%;
+  accent-color: colors.$gk-red-orange;
+}
+
+.senseiCards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: tokens.$space-3;
@@ -46,12 +130,10 @@
     display: flex;
     flex-direction: column;
     gap: tokens.$space-1;
-    min-width: 0;
     color: tokens.$surface-ink-muted;
-    font-size: tokens.$text-sm;
+    font-size: tokens.$text-xs;
   }
 
-  input,
   select {
     width: 100%;
     min-width: 0;
@@ -68,18 +150,30 @@
   }
 }
 
+.help {
+  margin: 0 !important;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  line-height: 1.4;
+}
+
 .result {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  padding: tokens.$space-3 tokens.$space-4;
-  border-radius: tokens.$radius-md;
-  background: tokens.$surface-alt;
+  padding: tokens.$space-2 0;
+  border-top: 1px solid tokens.$surface-border;
+  border-bottom: 1px solid tokens.$surface-border;
   color: tokens.$surface-ink;
+
+  span {
+    line-height: 1;
+  }
 
   strong {
     color: colors.$stamina;
     font-size: 28px;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
   }
 }
@@ -97,9 +191,7 @@
     flex-direction: column;
     gap: tokens.$space-1;
     margin: tokens.$space-2 0 0;
-    padding: tokens.$space-3;
-    border-radius: tokens.$radius-sm;
-    background: tokens.$surface-muted;
+    padding: 0 tokens.$space-1;
   }
 
   dl > div {

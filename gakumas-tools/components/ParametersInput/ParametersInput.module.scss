@@ -5,21 +5,12 @@
   display: flex;
   flex-direction: row;
   gap: 2px;
-}
 
-.parameter {
-  display: flex;
-  flex: 1;
-  gap: 2px;
-  min-width: 0;
-
-  input {
+  & > input {
     flex: 1;
     min-width: 0;
-  }
 
-  @include mixins.param-colors using ($param-color) {
-    input {
+    @include mixins.param-colors using ($param-color) {
       color: $param-color;
 
       &::placeholder {
