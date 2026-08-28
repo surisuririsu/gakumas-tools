@@ -10,8 +10,8 @@ function parseStaminaBonuses(value) {
 
 IDOLS.forEach((idol) => {
   idol._type = "idol";
-  idol.dearnessStaminaBonuses = parseStaminaBonuses(
-    idol.dearnessStaminaBonuses
+  idol.relationshipStaminaBonuses = parseStaminaBonuses(
+    idol.relationshipStaminaBonuses
   );
 });
 
