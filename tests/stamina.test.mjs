@@ -27,7 +27,7 @@ test("Hiro real-data vector totals 47 stamina", () => {
       trainingRank: 5,
       potentialRank: 0,
       affectionLevel: 20,
-      trueEndScenario: "firstStar",
+      trueEndScenarios: ["firstStar"],
       senseiLevels: [50, 60],
     }),
     {
@@ -42,20 +42,28 @@ test("Hiro real-data vector totals 47 stamina", () => {
   );
 });
 
-test("progression milestones apply with cumulative and replacement semantics", () => {
+test("earned True End achievements and progression bonuses total 46", () => {
   const pIdol = PIdols.getById(24); // Wonder Scale 倉本 千奈
   const idol = Idols.getById(pIdol.idolId);
-  assert.equal(
-    calculateMemoryStamina({
+  assert.deepEqual(
+    getMemoryStaminaBreakdown({
       pIdol,
       idol,
-      trainingRank: 5,
+      trainingRank: 7,
       potentialRank: 4,
-      affectionLevel: 25,
-      trueEndScenario: "nextIdolAudition",
-      senseiLevels: [55],
+      affectionLevel: 27,
+      trueEndScenarios: ["firstStar", "nextIdolAudition"],
+      senseiLevels: [60],
     }),
-    44
+    {
+      base: 23,
+      training: 6,
+      potential: 3,
+      affection: 2,
+      trueEnd: 3,
+      sensei: 9,
+      total: 46,
+    }
   );
 });
 
@@ -69,7 +77,7 @@ test("unknown True End scenarios are rejected", () => {
     () =>
       calculateMemoryStamina({
         pIdol: PIdols.getById(19),
-        trueEndScenario: "unknown",
+        trueEndScenarios: ["unknown"],
       }),
     RangeError
   );

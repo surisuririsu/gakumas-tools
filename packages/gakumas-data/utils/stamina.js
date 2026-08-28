@@ -37,15 +37,19 @@ export function getMemoryStaminaBreakdown({
   trainingRank = 0,
   potentialRank = 0,
   affectionLevel = 0,
-  trueEndScenario = null,
+  trueEndScenarios = [],
   senseiLevels = [],
 }) {
   if (!Number.isInteger(pIdol?.baseStamina)) return null;
-  if (trueEndScenario && !TRUE_END_FIELD_BY_SCENARIO[trueEndScenario]) {
-    throw new RangeError(`Unknown True End scenario: ${trueEndScenario}`);
+  const unknownTrueEndScenario = trueEndScenarios.find(
+    (scenario) => !TRUE_END_FIELD_BY_SCENARIO[scenario]
+  );
+  if (unknownTrueEndScenario) {
+    throw new RangeError(
+      `Unknown True End scenario: ${unknownTrueEndScenario}`
+    );
   }
 
-  const trueEndField = TRUE_END_FIELD_BY_SCENARIO[trueEndScenario];
   const breakdown = {
     base: pIdol.baseStamina,
     training: cumulativeBonusAtRank(
@@ -60,7 +64,10 @@ export function getMemoryStaminaBreakdown({
       idol?.affectionStaminaBonuses || [],
       affectionLevel
     ),
-    trueEnd: trueEndField ? idol?.[trueEndField] || 0 : 0,
+    trueEnd: trueEndScenarios.reduce((total, scenario) => {
+      const stamina = idol?.[TRUE_END_FIELD_BY_SCENARIO[scenario]];
+      return total + (Number.isInteger(stamina) ? stamina : 0);
+    }, 0),
     sensei: senseiLevels.reduce(
       (total, level) => total + getSenseiStaminaBonus(level),
       0
