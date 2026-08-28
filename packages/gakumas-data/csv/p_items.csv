@@ -473,6 +473,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 472,ほっぺたぺたり,SR,FALSE,anomaly,produce,support,,FALSE,
 473,溶けてゆく夏,SSR,FALSE,sense,stage,pIdol,150,FALSE,at:everyTurn { if:turnsElapsed%3==2 { genki+=3; concentration+=2 }; limit:2 }
 474,溶けてゆく夏+,SSR,TRUE,sense,stage,pIdol,150,FALSE,at:everyTurn { if:turnsElapsed%3==2 { genki+=5; concentration+=3 }; limit:2 }
-475,夏の足音,SSR,FALSE,sense,stage,pIdol,151,FALSE,"at:buffCostConsumed { if:concentration>=13 { concentration+=3; setConcentrationEffectBuff(0.05,1); genki+=1 } }"
+475,夏の足音,SSR,FALSE,sense,stage,pIdol,151,FALSE,"at:buffCostConsumed { if:concentration>=13 { concentration+=2; setConcentrationEffectBuff(0.05,1); genki+=1 } }"
 476,夏の足音+,SSR,TRUE,sense,stage,pIdol,151,FALSE,"at:buffCostConsumed { if:concentration>=13 { concentration+=3; setConcentrationEffectBuff(0.05,1); genki+=1 } }"
 477,真夏に咲く太陽,SSR,FALSE,sense,produce,support,,FALSE,
