@@ -36,7 +36,7 @@ export function getMemoryStaminaBreakdown({
   idol,
   trainingRank = 0,
   potentialRank = 0,
-  relationshipLevel = 0,
+  affectionLevel = 0,
   trueEndScenario = null,
   senseiLevels = [],
 }) {
@@ -56,9 +56,9 @@ export function getMemoryStaminaBreakdown({
       pIdol.potentialStaminaBonuses,
       potentialRank
     ),
-    relationship: replacementBonusAtRank(
-      idol?.relationshipStaminaBonuses || [],
-      relationshipLevel
+    affection: replacementBonusAtRank(
+      idol?.affectionStaminaBonuses || [],
+      affectionLevel
     ),
     trueEnd: trueEndField ? idol?.[trueEndField] || 0 : 0,
     sensei: senseiLevels.reduce(
