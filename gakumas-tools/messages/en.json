@@ -291,6 +291,34 @@
   "ParametersInput": {
     "stamina": "Stamina"
   },
+  "StaminaCalculator": {
+    "title": "Stamina calculator",
+    "open": "Calculate stamina",
+    "selectPIdol": "Add a P-idol card or item to the loadout first",
+    "trainingRank": "Training rank",
+    "potentialRank": "Awakening rank",
+    "affectionLevel": "Affection level",
+    "trueEndScenario": "True End scenario",
+    "none": "None",
+    "senseiLevel": "Sensei card {number} level",
+    "total": "Calculated stamina",
+    "showBreakdown": "Show breakdown",
+    "apply": "Insert {stamina} stamina",
+    "unavailable": "Stamina data for this P-idol is not confirmed yet.",
+    "scenarios": {
+      "firstStar": "Hajime",
+      "nextIdolAudition": "N.I.A",
+      "hatsuboshiIdolFestival": "H.I.F"
+    },
+    "breakdown": {
+      "base": "Base",
+      "training": "Training",
+      "potential": "Awakening",
+      "affection": "Affection",
+      "trueEnd": "True End",
+      "sensei": "Sensei cards"
+    }
+  },
   "MemorySave": {
     "save": "Save",
     "saveAsNew": "Save as new",

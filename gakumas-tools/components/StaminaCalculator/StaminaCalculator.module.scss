@@ -1,0 +1,115 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+.open {
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-xs;
+  background: tokens.$surface-panel;
+  color: colors.$stamina;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: tokens.$surface-alt;
+    border-color: colors.$stamina;
+  }
+
+  &:disabled {
+    color: tokens.$surface-ink-muted;
+    background: tokens.$surface-muted;
+    cursor: default;
+  }
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-4;
+  overflow-y: auto;
+}
+
+.pIdol {
+  margin: calc(#{tokens.$space-3} * -1) 0 0;
+  color: tokens.$surface-ink-muted;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: tokens.$space-3;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: tokens.$space-1;
+    min-width: 0;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-sm;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: tokens.$space-2;
+    border: 1px solid tokens.$surface-border;
+    border-radius: tokens.$radius-xs;
+    background: tokens.$surface-panel;
+    color: tokens.$surface-ink;
+  }
+
+  @media (max-width: 440px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: tokens.$space-3 tokens.$space-4;
+  border-radius: tokens.$radius-md;
+  background: tokens.$surface-alt;
+  color: tokens.$surface-ink;
+
+  strong {
+    color: colors.$stamina;
+    font-size: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.breakdown {
+  color: tokens.$surface-ink;
+
+  summary {
+    color: colors.$gk-orange;
+    cursor: pointer;
+  }
+
+  dl {
+    display: flex;
+    flex-direction: column;
+    gap: tokens.$space-1;
+    margin: tokens.$space-2 0 0;
+    padding: tokens.$space-3;
+    border-radius: tokens.$radius-sm;
+    background: tokens.$surface-muted;
+  }
+
+  dl > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+}

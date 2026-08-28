@@ -299,6 +299,34 @@
   "ParametersInput": {
     "stamina": "体力"
   },
+  "StaminaCalculator": {
+    "title": "体力計算",
+    "open": "体力を計算する",
+    "selectPIdol": "先に編成へPアイドルのカードまたはアイテムを追加してください",
+    "trainingRank": "特訓段階",
+    "potentialRank": "才能開花段階",
+    "affectionLevel": "親愛度",
+    "trueEndScenario": "True Endシナリオ",
+    "none": "なし",
+    "senseiLevel": "あさり先生カード{number}のレベル",
+    "total": "計算後の体力",
+    "showBreakdown": "内訳を表示",
+    "apply": "体力{stamina}を入力",
+    "unavailable": "このPアイドルの体力データはまだ確認できていません。",
+    "scenarios": {
+      "firstStar": "初",
+      "nextIdolAudition": "N.I.A",
+      "hatsuboshiIdolFestival": "H.I.F"
+    },
+    "breakdown": {
+      "base": "基礎値",
+      "training": "特訓",
+      "potential": "才能開花",
+      "affection": "親愛度",
+      "trueEnd": "True End",
+      "sensei": "あさり先生カード"
+    }
+  },
   "MemoriesNudge": {
     "create": "メモリーを作成する",
     "import": "スクショからメモリーを読み取る"

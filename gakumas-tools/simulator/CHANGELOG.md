@@ -7,6 +7,7 @@ Dates are based on Eastern Time Zone.
 
 ## 2026-08-28
 
+- Add a stamina calculator to the simulator loadout
 - Update neeyucchauyo misuzu
 
 

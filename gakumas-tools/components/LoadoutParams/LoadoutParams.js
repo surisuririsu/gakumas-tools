@@ -5,6 +5,7 @@ export default function LoadoutParams({
   params,
   onChange,
   withStamina,
+  staminaAction,
   typeMultipliers,
 }) {
   return (
@@ -13,6 +14,7 @@ export default function LoadoutParams({
         parameters={params}
         onChange={onChange}
         withStamina={withStamina}
+        staminaAction={staminaAction}
         max={10000}
       />
       <div className={styles.typeMultipliers}>

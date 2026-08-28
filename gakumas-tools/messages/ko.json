@@ -291,6 +291,34 @@
   "ParametersInput": {
     "stamina": "체력"
   },
+  "StaminaCalculator": {
+    "title": "체력 계산기",
+    "open": "체력 계산",
+    "selectPIdol": "먼저 편성에 P 아이돌 카드 또는 아이템을 추가해 주세요",
+    "trainingRank": "특훈 단계",
+    "potentialRank": "재능 개화 단계",
+    "affectionLevel": "친애도",
+    "trueEndScenario": "True End 시나리오",
+    "none": "없음",
+    "senseiLevel": "아사리 선생님 카드 {number} 레벨",
+    "total": "계산된 체력",
+    "showBreakdown": "내역 보기",
+    "apply": "체력 {stamina} 입력",
+    "unavailable": "이 P 아이돌의 체력 데이터는 아직 확인되지 않았습니다.",
+    "scenarios": {
+      "firstStar": "하츠",
+      "nextIdolAudition": "N.I.A",
+      "hatsuboshiIdolFestival": "H.I.F"
+    },
+    "breakdown": {
+      "base": "기본",
+      "training": "특훈",
+      "potential": "재능 개화",
+      "affection": "친애도",
+      "trueEnd": "True End",
+      "sensei": "아사리 선생님 카드"
+    }
+  },
   "MemoriesNudge": {
     "create": "메모리 생성하기",
     "import": "스크린샷으로부터 메모리 불러오기"

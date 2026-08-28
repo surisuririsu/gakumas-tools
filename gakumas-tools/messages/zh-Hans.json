@@ -291,6 +291,34 @@
   "ParametersInput": {
     "stamina": "体力"
   },
+  "StaminaCalculator": {
+    "title": "体力计算器",
+    "open": "计算体力",
+    "selectPIdol": "请先在编组中添加 P 偶像的卡牌或道具",
+    "trainingRank": "特训阶段",
+    "potentialRank": "才能开花阶段",
+    "affectionLevel": "亲爱度",
+    "trueEndScenario": "True End 剧本",
+    "none": "无",
+    "senseiLevel": "朝里老师卡牌 {number} 等级",
+    "total": "计算体力",
+    "showBreakdown": "显示明细",
+    "apply": "填入 {stamina} 体力",
+    "unavailable": "此 P 偶像的体力数据尚未确认。",
+    "scenarios": {
+      "firstStar": "初",
+      "nextIdolAudition": "N.I.A",
+      "hatsuboshiIdolFestival": "H.I.F"
+    },
+    "breakdown": {
+      "base": "基础",
+      "training": "特训",
+      "potential": "才能开花",
+      "affection": "亲爱度",
+      "trueEnd": "True End",
+      "sensei": "朝里老师卡牌"
+    }
+  },
   "MemorySave": {
     "save": "保存",
     "saveAsNew": "作为新回忆卡保存",
