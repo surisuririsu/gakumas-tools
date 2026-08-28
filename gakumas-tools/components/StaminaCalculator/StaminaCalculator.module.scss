@@ -3,32 +3,32 @@
 
 .open {
   width: 100%;
-  min-height: 24px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: tokens.$space-1;
-  padding: 2px tokens.$space-1;
-  border: 1px solid tokens.$surface-border;
+  padding: 0;
+  border: 0;
   border-radius: tokens.$radius-xs;
-  background: tokens.$surface-panel;
+  background: transparent;
   color: colors.$stamina;
-  font-size: tokens.$text-xs;
-  font-weight: 600;
+  font-size: 12px;
   cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 
   &:not(:disabled):hover,
   &:not(:disabled):focus-visible {
-    background: tokens.$surface-alt;
-    border-color: colors.$stamina;
+    background: colors.$stamina;
+    color: colors.$white;
   }
 
   &:disabled {
-    border-color: tokens.$surface-border;
-    background: tokens.$surface-muted;
+    background: transparent;
     color: tokens.$surface-ink-muted;
-    opacity: 0.55;
-    cursor: not-allowed;
+    opacity: 0.35;
+    cursor: default;
   }
 }
 
@@ -39,9 +39,16 @@
   overflow-y: auto;
 }
 
+.heading {
+  h3 {
+    margin: 0;
+  }
+}
+
 .pIdol {
-  margin: calc(#{tokens.$space-3} * -1) 0 0;
+  margin: tokens.$space-1 0 0 !important;
   color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
 }
 
 .intro {
@@ -76,43 +83,65 @@
   }
 }
 
+.fieldLabelText {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-2;
+
+  svg {
+    width: 14px;
+    color: colors.$gk-orange;
+  }
+}
+
 .choices,
 .trueEnds {
   display: flex;
+  gap: 2px;
+  padding: tokens.$space-1;
   border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  overflow: hidden;
+  border-radius: 22px;
 
   button {
     flex: 1;
     min-width: 32px;
-    padding: tokens.$space-2 tokens.$space-1;
+    padding: tokens.$space-1;
+    border-radius: 16px;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-sm;
     font-weight: 600;
 
-    & + button {
-      border-left: 1px solid tokens.$surface-border;
-    }
-
     &:not(:disabled):not(.selected):hover,
     &:not(:disabled):not(.selected):focus-visible {
-      background: tokens.$surface-alt;
+      background: tokens.$surface-muted;
       color: tokens.$surface-ink;
     }
 
     &.selected {
-      background: rgba(255, 118, 0, 0.12);
+      background: colors.$gk-orange-extra-light;
       color: colors.$gk-red-orange;
-      box-shadow: inset 0 -2px 0 colors.$gk-red-orange;
+      box-shadow: 0 0 0 2px colors.$gk-orange;
     }
 
     &:disabled {
-      background: tokens.$surface-muted;
       color: tokens.$surface-ink-muted;
-      opacity: 0.45;
-      cursor: not-allowed;
+      opacity: 0.35;
+      cursor: default;
     }
+  }
+}
+
+.trueEnds {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+
+  button {
+    background: tokens.$surface-muted;
+  }
+
+  @media (max-width: 440px) {
+    flex-direction: column;
   }
 }
 

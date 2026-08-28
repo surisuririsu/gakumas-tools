@@ -3,6 +3,7 @@
 .typeMultipliers {
   display: flex;
   font-size: 14px;
+  line-height: 18px;
 
   & > div {
     flex: 1;
@@ -15,5 +16,6 @@
 }
 
 .staminaAction {
-  padding: 2px;
+  display: flex;
+  align-items: center;
 }

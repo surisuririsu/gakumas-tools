@@ -1,7 +1,13 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCalculator } from "react-icons/fa6";
+import {
+  FaChalkboardUser,
+  FaDumbbell,
+  FaHeart,
+  FaStar,
+  FaTrophy,
+} from "react-icons/fa6";
 import {
   Idols,
   PIdols,
@@ -50,6 +56,18 @@ function ChoiceButtons({ label, value, values, onChange }) {
           {option}
         </button>
       ))}
+    </div>
+  );
+}
+
+function FieldLabel({ icon, children, value }) {
+  return (
+    <div className={styles.fieldLabel}>
+      <span className={styles.fieldLabelText}>
+        {icon}
+        <span>{children}</span>
+      </span>
+      {value != null && <strong>{value}</strong>}
     </div>
   );
 }
@@ -109,7 +127,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
   return (
     <Modal onClose={onClose}>
       <div className={styles.modal}>
-        <div>
+        <div className={styles.heading}>
           <h3>{t("title")}</h3>
           <p className={styles.pIdol}>
             {idol?.name} — {pIdol.title}
@@ -122,7 +140,9 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
 
             <div className={styles.fields}>
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("trainingRank")}</div>
+                <FieldLabel icon={<FaDumbbell />}>
+                  {t("trainingRank")}
+                </FieldLabel>
                 <ChoiceButtons
                   label={t("trainingRank")}
                   value={trainingRank}
@@ -132,7 +152,9 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("potentialRank")}</div>
+                <FieldLabel icon={<FaStar />}>
+                  {t("potentialRank")}
+                </FieldLabel>
                 <ChoiceButtons
                   label={t("potentialRank")}
                   value={potentialRank}
@@ -142,10 +164,9 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>
-                  <span>{t("affectionLevel")}</span>
-                  <strong>{affectionLevel}</strong>
-                </div>
+                <FieldLabel icon={<FaHeart />} value={affectionLevel}>
+                  {t("affectionLevel")}
+                </FieldLabel>
                 <input
                   className={styles.range}
                   type="range"
@@ -160,9 +181,9 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>
+                <FieldLabel icon={<FaTrophy />}>
                   {t("trueEndAchievements")}
-                </div>
+                </FieldLabel>
                 <div
                   className={styles.trueEnds}
                   role="group"
@@ -190,7 +211,9 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("senseiCards")}</div>
+                <FieldLabel icon={<FaChalkboardUser />}>
+                  {t("senseiCards")}
+                </FieldLabel>
                 <div className={styles.senseiCards}>
                   {senseiLevels.map((level, index) => (
                     <label key={index}>
@@ -274,8 +297,7 @@ export default function StaminaCalculator({ pIdolId, onApply }) {
         aria-label={pIdol ? t("open") : t("selectPIdol")}
         onClick={() => setOpen(true)}
       >
-        <FaCalculator />
-        <span>{t("openShort")}</span>
+        <FaHeart />
       </button>
       {open && pIdol && (
         <StaminaCalculatorModal
