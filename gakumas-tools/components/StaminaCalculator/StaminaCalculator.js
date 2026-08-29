@@ -13,6 +13,10 @@ import ButtonGroup from "@/components/ButtonGroup";
 import Modal from "@/components/Modal";
 import TabGroup from "@/components/TabGroup";
 import { getLoadoutStaminaContributions } from "@/utils/stamina";
+import {
+  loadStaminaProgression,
+  saveStaminaProgression,
+} from "@/utils/staminaProgression";
 import styles from "./StaminaCalculator.module.scss";
 
 const TRUE_END_SCENARIOS = ["hajime", "nia", "hif"];
@@ -44,8 +48,7 @@ const SENSEI_LEVELS = [
 
 function getDefaultSettings(pIdol) {
   return {
-    trainingRank: 7,
-    awakeningRank: 4,
+    ...loadStaminaProgression(pIdol?.id),
     affectionLevel: 37,
     trueEndScenarios: getAvailableTrueEndScenarios(pIdol),
     senseiLevels: [60, 0],
@@ -66,6 +69,17 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
 
   const idol = Idols.getById(pIdol.idolId);
   const availableTrueEndScenarios = getAvailableTrueEndScenarios(pIdol);
+
+  function updateProgression(update) {
+    const next = {
+      trainingRank: settings.trainingRank,
+      awakeningRank: settings.awakeningRank,
+      ...update,
+    };
+    const [key, value] = Object.entries(update)[0];
+    onChange(key, value);
+    saveStaminaProgression(pIdol.id, next);
+  }
 
   function setSenseiLevel(index, level) {
     const next = [...settings.senseiLevels];
@@ -106,7 +120,9 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
               <ButtonGroup
                 selected={settings.trainingRank}
                 options={TRAINING_RANKS}
-                onChange={(value) => onChange("trainingRank", value)}
+                onChange={(value) =>
+                  updateProgression({ trainingRank: value })
+                }
               />
             </section>
 
@@ -115,7 +131,9 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
               <ButtonGroup
                 selected={settings.awakeningRank}
                 options={AWAKENING_RANKS}
-                onChange={(value) => onChange("awakeningRank", value)}
+                onChange={(value) =>
+                  updateProgression({ awakeningRank: value })
+                }
               />
             </section>
 
