@@ -40,6 +40,8 @@
 }
 
 .heading {
+  text-align: left;
+
   h3 {
     margin: 0;
   }
@@ -55,6 +57,7 @@
   margin: 0 !important;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
+  text-align: left;
 }
 
 .fields {
@@ -83,71 +86,48 @@
   }
 }
 
-.fieldLabelText {
-  display: inline-flex;
-  align-items: center;
+.trueEnds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: tokens.$space-2;
 
-  svg {
-    width: 14px;
-    color: colors.$gk-orange;
+  @media (max-width: 440px) {
+    grid-template-columns: 1fr;
   }
 }
 
-.choices,
-.trueEnds {
+.trueEnd {
+  min-width: 0;
   display: flex;
-  gap: 2px;
+  align-items: center;
+  gap: tokens.$space-1;
+  margin: 0;
   padding: tokens.$space-1;
-  border: 1px solid tokens.$surface-border;
-  border-radius: 22px;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: 600;
+  cursor: pointer;
 
-  button {
-    flex: 1;
-    min-width: 32px;
-    padding: tokens.$space-1;
-    border-radius: 16px;
-    color: tokens.$surface-ink-muted;
-    font-size: tokens.$text-sm;
-    font-weight: 600;
-
-    &:not(:disabled):not(.selected):hover,
-    &:not(:disabled):not(.selected):focus-visible {
-      background: tokens.$surface-muted;
-      color: tokens.$surface-ink;
-    }
-
-    &.selected {
-      background: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
-      box-shadow: 0 0 0 2px colors.$gk-orange;
-    }
+  input {
+    flex: 0 0 auto;
+    width: 1.25em;
+    height: 1.25em;
+    accent-color: colors.$gk-orange;
+    cursor: pointer;
 
     &:disabled {
-      color: tokens.$surface-ink-muted;
-      opacity: 0.35;
       cursor: default;
     }
   }
-}
 
-.trueEnds {
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-
-  button {
-    background: tokens.$surface-muted;
+  span {
+    min-width: 0;
   }
 
-  @media (max-width: 440px) {
-    flex-direction: column;
+  &:has(input:disabled) {
+    opacity: 0.4;
+    cursor: default;
   }
-}
-
-.range {
-  width: 100%;
-  accent-color: colors.$gk-red-orange;
 }
 
 .senseiCards {

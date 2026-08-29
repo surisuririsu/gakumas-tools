@@ -1,21 +1,15 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import {
-  FaChalkboardUser,
-  FaDumbbell,
-  FaHeart,
-  FaStar,
-  FaTrophy,
-} from "react-icons/fa6";
+import { FaHeart } from "react-icons/fa6";
 import {
   Idols,
   PIdols,
   getMemoryStaminaBreakdown,
 } from "gakumas-data";
 import Button from "@/components/Button";
+import ButtonGroup from "@/components/ButtonGroup";
 import Modal from "@/components/Modal";
-import c from "@/utils/classNames";
 import styles from "./StaminaCalculator.module.scss";
 
 const TRUE_END_SCENARIOS = [
@@ -30,8 +24,21 @@ const TRUE_END_FIELDS = {
   hatsuboshiIdolFestival: "trueEndStaminaHatsuboshiIdolFestival",
 };
 
-const TRAINING_RANKS = Array.from({ length: 8 }, (_, rank) => rank);
-const POTENTIAL_RANKS = Array.from({ length: 5 }, (_, rank) => rank);
+const TRAINING_RANKS = Array.from({ length: 8 }, (_, value) => ({
+  value,
+  label: value,
+}));
+const POTENTIAL_RANKS = Array.from({ length: 5 }, (_, value) => ({
+  value,
+  label: value,
+}));
+// Affection only changes memory stamina at levels 22 and 25. Grouping the
+// no-op levels avoids a long picker while still representing every result.
+const AFFECTION_RANGES = [
+  { value: 0, label: "0–21" },
+  { value: 22, label: "22–24" },
+  { value: 37, label: "25–37" },
+];
 const SENSEI_LEVELS = [
   { value: 0, min: 0, max: 0, stamina: 0 },
   { value: 1, min: 1, max: 24, stamina: 4 },
@@ -41,36 +48,6 @@ const SENSEI_LEVELS = [
   { value: 50, min: 50, max: 54, stamina: 8 },
   { value: 60, min: 55, max: 60, stamina: 9 },
 ];
-
-function ChoiceButtons({ label, value, values, onChange }) {
-  return (
-    <div className={styles.choices} role="group" aria-label={label}>
-      {values.map((option) => (
-        <button
-          type="button"
-          key={option}
-          className={c(option === value && styles.selected)}
-          aria-pressed={option === value}
-          onClick={() => onChange(option)}
-        >
-          {option}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function FieldLabel({ icon, children, value }) {
-  return (
-    <div className={styles.fieldLabel}>
-      <span className={styles.fieldLabelText}>
-        {icon}
-        <span>{children}</span>
-      </span>
-      {value != null && <strong>{value}</strong>}
-    </div>
-  );
-}
 
 function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
   const t = useTranslations("StaminaCalculator");
@@ -140,50 +117,36 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
 
             <div className={styles.fields}>
               <section className={styles.field}>
-                <FieldLabel icon={<FaDumbbell />}>
-                  {t("trainingRank")}
-                </FieldLabel>
-                <ChoiceButtons
-                  label={t("trainingRank")}
-                  value={trainingRank}
-                  values={TRAINING_RANKS}
+                <div className={styles.fieldLabel}>{t("trainingRank")}</div>
+                <ButtonGroup
+                  selected={trainingRank}
+                  options={TRAINING_RANKS}
                   onChange={setTrainingRank}
                 />
               </section>
 
               <section className={styles.field}>
-                <FieldLabel icon={<FaStar />}>
-                  {t("potentialRank")}
-                </FieldLabel>
-                <ChoiceButtons
-                  label={t("potentialRank")}
-                  value={potentialRank}
-                  values={POTENTIAL_RANKS}
+                <div className={styles.fieldLabel}>{t("potentialRank")}</div>
+                <ButtonGroup
+                  selected={potentialRank}
+                  options={POTENTIAL_RANKS}
                   onChange={setPotentialRank}
                 />
               </section>
 
               <section className={styles.field}>
-                <FieldLabel icon={<FaHeart />} value={affectionLevel}>
-                  {t("affectionLevel")}
-                </FieldLabel>
-                <input
-                  className={styles.range}
-                  type="range"
-                  aria-label={t("affectionLevel")}
-                  min={0}
-                  max={37}
-                  value={affectionLevel}
-                  onChange={(event) =>
-                    setAffectionLevel(Number(event.target.value))
-                  }
+                <div className={styles.fieldLabel}>{t("affectionLevel")}</div>
+                <ButtonGroup
+                  selected={affectionLevel}
+                  options={AFFECTION_RANGES}
+                  onChange={setAffectionLevel}
                 />
               </section>
 
               <section className={styles.field}>
-                <FieldLabel icon={<FaTrophy />}>
+                <div className={styles.fieldLabel}>
                   {t("trueEndAchievements")}
-                </FieldLabel>
+                </div>
                 <div
                   className={styles.trueEnds}
                   role="group"
@@ -194,16 +157,15 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
                       confirmedTrueEndScenarios.includes(scenario);
                     const selected = trueEndScenarios.includes(scenario);
                     return (
-                      <button
-                        type="button"
-                        key={scenario}
-                        disabled={!confirmed}
-                        className={c(selected && styles.selected)}
-                        aria-pressed={selected}
-                        onClick={() => toggleTrueEndScenario(scenario)}
-                      >
-                        {t(`scenarios.${scenario}`)}
-                      </button>
+                      <label key={scenario} className={styles.trueEnd}>
+                        <input
+                          type="checkbox"
+                          disabled={!confirmed}
+                          checked={selected}
+                          onChange={() => toggleTrueEndScenario(scenario)}
+                        />
+                        <span>{t(`scenarios.${scenario}`)}</span>
+                      </label>
                     );
                   })}
                 </div>
@@ -211,9 +173,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <FieldLabel icon={<FaChalkboardUser />}>
-                  {t("senseiCards")}
-                </FieldLabel>
+                <div className={styles.fieldLabel}>{t("senseiCards")}</div>
                 <div className={styles.senseiCards}>
                   {senseiLevels.map((level, index) => (
                     <label key={index}>
