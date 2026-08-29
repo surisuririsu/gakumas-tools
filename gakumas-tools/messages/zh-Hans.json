@@ -298,7 +298,7 @@
     "selectPIdol": "请先在编组中添加 P 偶像的卡牌或道具",
     "defaultsHelp": "默认值为常见的满养成状态，只需修改不同的项目。",
     "trainingRank": "特训阶段",
-    "potentialRank": "才能开花阶段",
+    "awakeningRank": "才能开花阶段",
     "affectionLevel": "亲爱度",
     "trueEndAchievements": "已达成的 True End",
     "trueEndHelp": "True End 体力奖励会永久累加。请选择所有已达成的项目；未确认的数据无法选择。",
@@ -312,14 +312,14 @@
     "apply": "填入 {stamina} 体力",
     "unavailable": "此 P 偶像的体力数据尚未确认。",
     "scenarios": {
-      "firstStar": "初",
-      "nextIdolAudition": "N.I.A",
-      "hatsuboshiIdolFestival": "H.I.F"
+      "hajime": "初",
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "breakdown": {
       "base": "基础",
       "training": "特训",
-      "potential": "才能开花",
+      "awakening": "才能开花",
       "affection": "亲爱度",
       "trueEnd": "True End",
       "sensei": "朝里老师卡牌"

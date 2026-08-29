@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   PIdols,
   calculateMemoryStamina,
+  getAvailableTrueEndScenarios,
   getMemoryStaminaBreakdown,
   getSenseiStaminaBonus,
 } from "gakumas-data";
@@ -74,6 +75,18 @@ test("P-idol-specific stamina overrides stay isolated in calculator data", () =>
     }),
     31
   );
+});
+
+test("only confirmed True End scenarios are exposed to the UI", () => {
+  assert.deepEqual(getAvailableTrueEndScenarios(PIdols.getById(19)), [
+    "hajime",
+    "nia",
+  ]);
+  assert.deepEqual(getAvailableTrueEndScenarios(PIdols.getById(20)), [
+    "hajime",
+    "nia",
+    "hif",
+  ]);
 });
 
 test("unconfirmed preview metadata stays unavailable", () => {

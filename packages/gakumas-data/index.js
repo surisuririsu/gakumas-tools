@@ -15,6 +15,7 @@ export {
 export { parseEffects, parsePatches } from "./utils/parser";
 export {
   calculateMemoryStamina,
+  getAvailableTrueEndScenarios,
   getMemoryStaminaBreakdown,
   getSenseiStaminaBonus,
 } from "./utils/stamina";

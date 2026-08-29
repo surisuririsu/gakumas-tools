@@ -306,7 +306,7 @@
     "selectPIdol": "先に編成へPアイドルのカードまたはアイテムを追加してください",
     "defaultsHelp": "よく使われる最大育成状態を初期値にしています。異なる項目だけ変更してください。",
     "trainingRank": "特訓段階",
-    "potentialRank": "才能開花段階",
+    "awakeningRank": "才能開花段階",
     "affectionLevel": "親愛度",
     "trueEndAchievements": "達成済みTrue End",
     "trueEndHelp": "True Endの体力ボーナスは永続で加算されます。達成済みのものをすべて選択してください。未確認データは選択できません。",
@@ -320,14 +320,14 @@
     "apply": "体力{stamina}を入力",
     "unavailable": "このPアイドルの体力データはまだ確認できていません。",
     "scenarios": {
-      "firstStar": "初",
-      "nextIdolAudition": "N.I.A",
-      "hatsuboshiIdolFestival": "H.I.F"
+      "hajime": "初",
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "breakdown": {
       "base": "基礎値",
       "training": "特訓",
-      "potential": "才能開花",
+      "awakening": "才能開花",
       "affection": "親愛度",
       "trueEnd": "True End",
       "sensei": "あさり先生カード"

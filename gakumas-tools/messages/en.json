@@ -298,7 +298,7 @@
     "selectPIdol": "Add a P-idol card or item to the loadout first",
     "defaultsHelp": "Defaults match a typical maxed setup. Change only what differs.",
     "trainingRank": "Training rank",
-    "potentialRank": "Awakening rank",
+    "awakeningRank": "Awakening rank",
     "affectionLevel": "Affection level",
     "trueEndAchievements": "True End achievements",
     "trueEndHelp": "These are permanent idol bonuses. Select every True End you have completed; unavailable data is disabled.",
@@ -312,14 +312,14 @@
     "apply": "Insert {stamina} stamina",
     "unavailable": "Stamina data for this P-idol is not confirmed yet.",
     "scenarios": {
-      "firstStar": "Hajime",
-      "nextIdolAudition": "N.I.A",
-      "hatsuboshiIdolFestival": "H.I.F"
+      "hajime": "Hajime",
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "breakdown": {
       "base": "Base",
       "training": "Training",
-      "potential": "Awakening",
+      "awakening": "Awakening",
       "affection": "Affection",
       "trueEnd": "True End",
       "sensei": "Sensei cards"

@@ -5,6 +5,7 @@ import { FaHeart } from "react-icons/fa6";
 import {
   Idols,
   PIdols,
+  getAvailableTrueEndScenarios,
   getMemoryStaminaBreakdown,
 } from "gakumas-data";
 import Button from "@/components/Button";
@@ -13,22 +14,16 @@ import Modal from "@/components/Modal";
 import styles from "./StaminaCalculator.module.scss";
 
 const TRUE_END_SCENARIOS = [
-  "firstStar",
-  "nextIdolAudition",
-  "hatsuboshiIdolFestival",
+  "hajime",
+  "nia",
+  "hif",
 ];
-
-const TRUE_END_FIELDS = {
-  firstStar: "trueEndStaminaFirstStar",
-  nextIdolAudition: "trueEndStaminaNextIdolAudition",
-  hatsuboshiIdolFestival: "trueEndStaminaHatsuboshiIdolFestival",
-};
 
 const TRAINING_RANKS = Array.from({ length: 8 }, (_, value) => ({
   value,
   label: value,
 }));
-const POTENTIAL_RANKS = Array.from({ length: 5 }, (_, value) => ({
+const AWAKENING_RANKS = Array.from({ length: 5 }, (_, value) => ({
   value,
   label: value,
 }));
@@ -52,14 +47,12 @@ const SENSEI_LEVELS = [
 function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
   const t = useTranslations("StaminaCalculator");
   const idol = Idols.getById(pIdol.idolId);
-  const confirmedTrueEndScenarios = TRUE_END_SCENARIOS.filter((scenario) =>
-    Number.isInteger(idol?.[TRUE_END_FIELDS[scenario]]),
-  );
+  const availableTrueEndScenarios = getAvailableTrueEndScenarios(pIdol);
   const [trainingRank, setTrainingRank] = useState(7);
-  const [potentialRank, setPotentialRank] = useState(4);
+  const [awakeningRank, setAwakeningRank] = useState(4);
   const [affectionLevel, setAffectionLevel] = useState(37);
   const [trueEndScenarios, setTrueEndScenarios] = useState(
-    confirmedTrueEndScenarios,
+    availableTrueEndScenarios,
   );
   const [senseiLevels, setSenseiLevels] = useState([60, 0]);
 
@@ -67,18 +60,16 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
     () =>
       getMemoryStaminaBreakdown({
         pIdol,
-        idol,
         trainingRank,
-        potentialRank,
+        awakeningRank,
         affectionLevel,
         trueEndScenarios,
         senseiLevels,
       }),
     [
       pIdol,
-      idol,
       trainingRank,
-      potentialRank,
+      awakeningRank,
       affectionLevel,
       trueEndScenarios,
       senseiLevels,
@@ -126,11 +117,11 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
               </section>
 
               <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("potentialRank")}</div>
+                <div className={styles.fieldLabel}>{t("awakeningRank")}</div>
                 <ButtonGroup
-                  selected={potentialRank}
-                  options={POTENTIAL_RANKS}
-                  onChange={setPotentialRank}
+                  selected={awakeningRank}
+                  options={AWAKENING_RANKS}
+                  onChange={setAwakeningRank}
                 />
               </section>
 
@@ -154,7 +145,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
                 >
                   {TRUE_END_SCENARIOS.map((scenario) => {
                     const confirmed =
-                      confirmedTrueEndScenarios.includes(scenario);
+                      availableTrueEndScenarios.includes(scenario);
                     const selected = trueEndScenarios.includes(scenario);
                     return (
                       <label key={scenario} className={styles.trueEnd}>
@@ -210,7 +201,7 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
                 {[
                   "base",
                   "training",
-                  "potential",
+                  "awakening",
                   "affection",
                   "trueEnd",
                   "sensei",

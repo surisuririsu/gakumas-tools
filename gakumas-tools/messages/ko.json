@@ -298,7 +298,7 @@
     "selectPIdol": "먼저 편성에 P 아이돌 카드 또는 아이템을 추가해 주세요",
     "defaultsHelp": "일반적인 최대 육성 상태를 기본값으로 설정했습니다. 다른 항목만 변경하세요.",
     "trainingRank": "특훈 단계",
-    "potentialRank": "재능 개화 단계",
+    "awakeningRank": "재능 개화 단계",
     "affectionLevel": "친애도",
     "trueEndAchievements": "달성한 True End",
     "trueEndHelp": "True End 체력 보너스는 영구적으로 합산됩니다. 달성한 항목을 모두 선택하세요. 확인되지 않은 데이터는 선택할 수 없습니다.",
@@ -312,14 +312,14 @@
     "apply": "체력 {stamina} 입력",
     "unavailable": "이 P 아이돌의 체력 데이터는 아직 확인되지 않았습니다.",
     "scenarios": {
-      "firstStar": "하츠",
-      "nextIdolAudition": "N.I.A",
-      "hatsuboshiIdolFestival": "H.I.F"
+      "hajime": "하츠",
+      "nia": "N.I.A",
+      "hif": "H.I.F"
     },
     "breakdown": {
       "base": "기본",
       "training": "특훈",
-      "potential": "재능 개화",
+      "awakening": "재능 개화",
       "affection": "친애도",
       "trueEnd": "True End",
       "sensei": "아사리 선생님 카드"
