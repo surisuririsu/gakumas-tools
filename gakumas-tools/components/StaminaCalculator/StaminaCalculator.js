@@ -11,6 +11,7 @@ import {
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import Modal from "@/components/Modal";
+import TabGroup from "@/components/TabGroup";
 import { getLoadoutStaminaContributions } from "@/utils/stamina";
 import styles from "./StaminaCalculator.module.scss";
 
@@ -218,6 +219,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
 
 function StaminaCalculatorModal({ memories, onApply, onClose }) {
   const t = useTranslations("StaminaCalculator");
+  const [activeMemory, setActiveMemory] = useState(0);
   const [settings, setSettings] = useState(() =>
     memories.map(({ pIdol }) => getDefaultSettings(pIdol)),
   );
@@ -253,15 +255,30 @@ function StaminaCalculatorModal({ memories, onApply, onClose }) {
         </div>
         <p className={styles.intro}>{t("defaultsHelp")}</p>
 
-        {memories.map((memory, index) => (
-          <MemoryStaminaFields
-            key={memory.index}
-            memory={memory}
-            settings={settings[index]}
-            breakdown={breakdowns[index]}
-            onChange={(key, value) => updateSettings(index, key, value)}
+        {memories.length > 1 && (
+          <TabGroup
+            className={styles.memoryTabs}
+            selected={activeMemory}
+            options={memories.map((memory, index) => ({
+              value: index,
+              label: t("memory", { number: memory.index + 1 }),
+            }))}
+            onChange={setActiveMemory}
           />
-        ))}
+        )}
+
+        {memories.map(
+          (memory, index) =>
+            index === activeMemory && (
+              <MemoryStaminaFields
+                key={memory.index}
+                memory={memory}
+                settings={settings[index]}
+                breakdown={breakdowns[index]}
+                onChange={(key, value) => updateSettings(index, key, value)}
+              />
+            ),
+        )}
 
         {total != null && (
           <>

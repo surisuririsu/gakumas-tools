@@ -75,6 +75,10 @@
   border-radius: tokens.$radius-sm;
 }
 
+.memoryTabs {
+  flex: 0 0 auto;
+}
+
 .memoryHeading {
   display: flex;
   align-items: flex-start;
@@ -87,7 +91,7 @@
 
   strong {
     flex: 0 0 auto;
-    color: colors.$stamina;
+    color: tokens.$surface-ink;
     font-size: tokens.$text-sm;
     font-variant-numeric: tabular-nums;
   }
