@@ -54,14 +54,11 @@ function getDefaultSettings(pIdol) {
 
 function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
   const t = useTranslations("StaminaCalculator");
-  const { pIdol, index, multiplier } = memory;
+  const { pIdol, multiplier } = memory;
 
   if (!pIdol) {
     return (
       <section className={styles.memory}>
-        <div className={styles.memoryHeading}>
-          <h4>{t("memory", { number: index + 1 })}</h4>
-        </div>
         <p className={styles.help}>{t("missingPIdol")}</p>
       </section>
     );
@@ -88,12 +85,9 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
   return (
     <section className={styles.memory}>
       <div className={styles.memoryHeading}>
-        <div>
-          <h4>{t("memory", { number: index + 1 })}</h4>
-          <p className={styles.pIdol}>
-            {idol?.name} — {pIdol.title}
-          </p>
-        </div>
+        <p className={styles.pIdol}>
+          {idol?.name} — {pIdol.title}
+        </p>
         {breakdown && (
           <strong>
             {t("contribution", {

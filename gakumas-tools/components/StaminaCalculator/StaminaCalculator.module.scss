@@ -48,7 +48,7 @@
 }
 
 .pIdol {
-  margin: tokens.$space-1 0 0 !important;
+  margin: 0 !important;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
 }
@@ -84,10 +84,6 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: tokens.$space-3;
-
-  h4 {
-    margin: 0;
-  }
 
   strong {
     flex: 0 0 auto;
