@@ -66,6 +66,38 @@
   gap: tokens.$space-4;
 }
 
+.memory {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+}
+
+.memoryHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: tokens.$space-3;
+
+  h4 {
+    margin: 0;
+  }
+
+  strong {
+    flex: 0 0 auto;
+    color: colors.$stamina;
+    font-size: tokens.$text-sm;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 440px) {
+    flex-direction: column;
+    gap: tokens.$space-1;
+  }
+}
+
 .field {
   display: flex;
   flex-direction: column;

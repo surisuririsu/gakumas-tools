@@ -5,6 +5,7 @@ import { usePathname } from "@/i18n/routing";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { getSimulatorUrl } from "@/utils/simulator";
+import { getMemoryParamContribution } from "@/utils/stamina";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
@@ -280,7 +281,9 @@ export function LoadoutContextProvider({ children }) {
       // If there is currently a memory in that slot, remove its params
       setParams((curParams) =>
         curParams.map(
-          (p, i) => (p || 0) - Math.floor(memoryParams[index][i] * multiplier)
+          (p, i) =>
+            (p || 0) -
+            getMemoryParamContribution(memoryParams[index][i], multiplier),
         )
       );
     }
@@ -293,7 +296,8 @@ export function LoadoutContextProvider({ children }) {
     });
     setParams((curParams) =>
       curParams.map(
-        (p, i) => (p || 0) + Math.floor(memory.params[i] * multiplier)
+        (p, i) =>
+          (p || 0) + getMemoryParamContribution(memory.params[i], multiplier),
       )
     );
     if (index == 0) {

@@ -11,13 +11,10 @@ import {
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import Modal from "@/components/Modal";
+import { getLoadoutStaminaContributions } from "@/utils/stamina";
 import styles from "./StaminaCalculator.module.scss";
 
-const TRUE_END_SCENARIOS = [
-  "hajime",
-  "nia",
-  "hif",
-];
+const TRUE_END_SCENARIOS = ["hajime", "nia", "hif"];
 
 const TRAINING_RANKS = Array.from({ length: 8 }, (_, value) => ({
   value,
@@ -44,52 +41,208 @@ const SENSEI_LEVELS = [
   { value: 60, min: 55, max: 60, stamina: 9 },
 ];
 
-function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
+function getDefaultSettings(pIdol) {
+  return {
+    trainingRank: 7,
+    awakeningRank: 4,
+    affectionLevel: 37,
+    trueEndScenarios: getAvailableTrueEndScenarios(pIdol),
+    senseiLevels: [60, 0],
+  };
+}
+
+function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
   const t = useTranslations("StaminaCalculator");
+  const { pIdol, index, multiplier } = memory;
+
+  if (!pIdol) {
+    return (
+      <section className={styles.memory}>
+        <div className={styles.memoryHeading}>
+          <h4>{t("memory", { number: index + 1 })}</h4>
+        </div>
+        <p className={styles.help}>{t("missingPIdol")}</p>
+      </section>
+    );
+  }
+
   const idol = Idols.getById(pIdol.idolId);
   const availableTrueEndScenarios = getAvailableTrueEndScenarios(pIdol);
-  const [trainingRank, setTrainingRank] = useState(7);
-  const [awakeningRank, setAwakeningRank] = useState(4);
-  const [affectionLevel, setAffectionLevel] = useState(37);
-  const [trueEndScenarios, setTrueEndScenarios] = useState(
-    availableTrueEndScenarios,
-  );
-  const [senseiLevels, setSenseiLevels] = useState([60, 0]);
-
-  const breakdown = useMemo(
-    () =>
-      getMemoryStaminaBreakdown({
-        pIdol,
-        trainingRank,
-        awakeningRank,
-        affectionLevel,
-        trueEndScenarios,
-        senseiLevels,
-      }),
-    [
-      pIdol,
-      trainingRank,
-      awakeningRank,
-      affectionLevel,
-      trueEndScenarios,
-      senseiLevels,
-    ],
-  );
 
   function setSenseiLevel(index, level) {
-    setSenseiLevels((current) => {
-      const next = [...current];
-      next[index] = level || 0;
-      return next;
-    });
+    const next = [...settings.senseiLevels];
+    next[index] = level || 0;
+    onChange("senseiLevels", next);
   }
 
   function toggleTrueEndScenario(scenario) {
-    setTrueEndScenarios((current) =>
-      current.includes(scenario)
-        ? current.filter((value) => value !== scenario)
-        : [...current, scenario],
+    onChange(
+      "trueEndScenarios",
+      settings.trueEndScenarios.includes(scenario)
+        ? settings.trueEndScenarios.filter((value) => value !== scenario)
+        : [...settings.trueEndScenarios, scenario],
     );
+  }
+
+  return (
+    <section className={styles.memory}>
+      <div className={styles.memoryHeading}>
+        <div>
+          <h4>{t("memory", { number: index + 1 })}</h4>
+          <p className={styles.pIdol}>
+            {idol?.name} — {pIdol.title}
+          </p>
+        </div>
+        {breakdown && (
+          <strong>
+            {t("contribution", {
+              percent: Math.round(multiplier * 100),
+              stamina: Math.floor(breakdown.total * multiplier),
+            })}
+          </strong>
+        )}
+      </div>
+
+      {breakdown ? (
+        <>
+          <div className={styles.fields}>
+            <section className={styles.field}>
+              <div className={styles.fieldLabel}>{t("trainingRank")}</div>
+              <ButtonGroup
+                selected={settings.trainingRank}
+                options={TRAINING_RANKS}
+                onChange={(value) => onChange("trainingRank", value)}
+              />
+            </section>
+
+            <section className={styles.field}>
+              <div className={styles.fieldLabel}>{t("awakeningRank")}</div>
+              <ButtonGroup
+                selected={settings.awakeningRank}
+                options={AWAKENING_RANKS}
+                onChange={(value) => onChange("awakeningRank", value)}
+              />
+            </section>
+
+            <section className={styles.field}>
+              <div className={styles.fieldLabel}>{t("affectionLevel")}</div>
+              <ButtonGroup
+                selected={settings.affectionLevel}
+                options={AFFECTION_RANGES}
+                onChange={(value) => onChange("affectionLevel", value)}
+              />
+            </section>
+
+            <section className={styles.field}>
+              <div className={styles.fieldLabel}>
+                {t("trueEndAchievements")}
+              </div>
+              <div
+                className={styles.trueEnds}
+                role="group"
+                aria-label={t("trueEndAchievements")}
+              >
+                {TRUE_END_SCENARIOS.map((scenario) => {
+                  const confirmed =
+                    availableTrueEndScenarios.includes(scenario);
+                  const selected =
+                    settings.trueEndScenarios.includes(scenario);
+                  return (
+                    <label key={scenario} className={styles.trueEnd}>
+                      <input
+                        type="checkbox"
+                        disabled={!confirmed}
+                        checked={selected}
+                        onChange={() => toggleTrueEndScenario(scenario)}
+                      />
+                      <span>{t(`scenarios.${scenario}`)}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              <p className={styles.help}>{t("trueEndHelp")}</p>
+            </section>
+
+            <section className={styles.field}>
+              <div className={styles.fieldLabel}>{t("senseiCards")}</div>
+              <div className={styles.senseiCards}>
+                {settings.senseiLevels.map((level, index) => (
+                  <label key={index}>
+                    <span>{t("senseiCard", { number: index + 1 })}</span>
+                    <select
+                      value={level}
+                      onChange={(event) =>
+                        setSenseiLevel(index, Number(event.target.value))
+                      }
+                    >
+                      {SENSEI_LEVELS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.value === 0
+                            ? t("notUsed")
+                            : t("senseiLevelRange", option)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ))}
+              </div>
+              <p className={styles.help}>{t("senseiHelp")}</p>
+            </section>
+          </div>
+
+          <details className={styles.breakdown}>
+            <summary>{t("showBreakdown")}</summary>
+            <dl>
+              {[
+                "base",
+                "training",
+                "awakening",
+                "affection",
+                "trueEnd",
+                "sensei",
+              ].map((key) => (
+                <div key={key}>
+                  <dt>{t(`breakdown.${key}`)}</dt>
+                  <dd>{breakdown[key]}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        </>
+      ) : (
+        <p className={styles.help}>{t("unavailable")}</p>
+      )}
+    </section>
+  );
+}
+
+function StaminaCalculatorModal({ memories, onApply, onClose }) {
+  const t = useTranslations("StaminaCalculator");
+  const [settings, setSettings] = useState(() =>
+    memories.map(({ pIdol }) => getDefaultSettings(pIdol)),
+  );
+
+  const breakdowns = useMemo(
+    () =>
+      memories.map(({ pIdol }, index) =>
+        getMemoryStaminaBreakdown({ pIdol, ...settings[index] }),
+      ),
+    [memories, settings],
+  );
+  const contributions = getLoadoutStaminaContributions(
+    breakdowns.map((breakdown) => breakdown?.total),
+    memories.map(({ multiplier }) => multiplier),
+  );
+  const total = contributions.some((value) => value == null)
+    ? null
+    : contributions.reduce((sum, value) => sum + value, 0);
+
+  function updateSettings(index, key, value) {
+    setSettings((current) => {
+      const next = [...current];
+      next[index] = { ...next[index], [key]: value };
+      return next;
+    });
   }
 
   return (
@@ -97,162 +250,66 @@ function StaminaCalculatorModal({ pIdol, onApply, onClose }) {
       <div className={styles.modal}>
         <div className={styles.heading}>
           <h3>{t("title")}</h3>
-          <p className={styles.pIdol}>
-            {idol?.name} — {pIdol.title}
-          </p>
         </div>
+        <p className={styles.intro}>{t("defaultsHelp")}</p>
 
-        {breakdown ? (
+        {memories.map((memory, index) => (
+          <MemoryStaminaFields
+            key={memory.index}
+            memory={memory}
+            settings={settings[index]}
+            breakdown={breakdowns[index]}
+            onChange={(key, value) => updateSettings(index, key, value)}
+          />
+        ))}
+
+        {total != null && (
           <>
-            <p className={styles.intro}>{t("defaultsHelp")}</p>
-
-            <div className={styles.fields}>
-              <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("trainingRank")}</div>
-                <ButtonGroup
-                  selected={trainingRank}
-                  options={TRAINING_RANKS}
-                  onChange={setTrainingRank}
-                />
-              </section>
-
-              <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("awakeningRank")}</div>
-                <ButtonGroup
-                  selected={awakeningRank}
-                  options={AWAKENING_RANKS}
-                  onChange={setAwakeningRank}
-                />
-              </section>
-
-              <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("affectionLevel")}</div>
-                <ButtonGroup
-                  selected={affectionLevel}
-                  options={AFFECTION_RANGES}
-                  onChange={setAffectionLevel}
-                />
-              </section>
-
-              <section className={styles.field}>
-                <div className={styles.fieldLabel}>
-                  {t("trueEndAchievements")}
-                </div>
-                <div
-                  className={styles.trueEnds}
-                  role="group"
-                  aria-label={t("trueEndAchievements")}
-                >
-                  {TRUE_END_SCENARIOS.map((scenario) => {
-                    const confirmed =
-                      availableTrueEndScenarios.includes(scenario);
-                    const selected = trueEndScenarios.includes(scenario);
-                    return (
-                      <label key={scenario} className={styles.trueEnd}>
-                        <input
-                          type="checkbox"
-                          disabled={!confirmed}
-                          checked={selected}
-                          onChange={() => toggleTrueEndScenario(scenario)}
-                        />
-                        <span>{t(`scenarios.${scenario}`)}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-                <p className={styles.help}>{t("trueEndHelp")}</p>
-              </section>
-
-              <section className={styles.field}>
-                <div className={styles.fieldLabel}>{t("senseiCards")}</div>
-                <div className={styles.senseiCards}>
-                  {senseiLevels.map((level, index) => (
-                    <label key={index}>
-                      <span>{t("senseiCard", { number: index + 1 })}</span>
-                      <select
-                        value={level}
-                        onChange={(event) =>
-                          setSenseiLevel(index, Number(event.target.value))
-                        }
-                      >
-                        {SENSEI_LEVELS.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.value === 0
-                              ? t("notUsed")
-                              : t("senseiLevelRange", option)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                  ))}
-                </div>
-                <p className={styles.help}>{t("senseiHelp")}</p>
-              </section>
-            </div>
-
             <div className={styles.result}>
               <span>{t("total")}</span>
-              <strong>{breakdown.total}</strong>
+              <strong>{total}</strong>
             </div>
-
-            <details className={styles.breakdown}>
-              <summary>{t("showBreakdown")}</summary>
-              <dl>
-                {[
-                  "base",
-                  "training",
-                  "awakening",
-                  "affection",
-                  "trueEnd",
-                  "sensei",
-                ].map((key) => (
-                  <div key={key}>
-                    <dt>{t(`breakdown.${key}`)}</dt>
-                    <dd>{breakdown[key]}</dd>
-                  </div>
-                ))}
-              </dl>
-            </details>
-
             <Button
               style="primary"
               fill
               onClick={() => {
-                onApply(breakdown.total);
+                onApply(total);
                 onClose();
               }}
             >
-              {t("apply", { stamina: breakdown.total })}
+              {t("apply", { stamina: total })}
             </Button>
           </>
-        ) : (
-          <p>{t("unavailable")}</p>
         )}
       </div>
     </Modal>
   );
 }
 
-export default function StaminaCalculator({ pIdolId, onApply }) {
+export default function StaminaCalculator({ memorySlots, onApply }) {
   const t = useTranslations("StaminaCalculator");
   const [open, setOpen] = useState(false);
-  const pIdol = PIdols.getById(pIdolId);
+  const memories = memorySlots.map((slot) => ({
+    ...slot,
+    pIdol: PIdols.getById(slot.pIdolId),
+  }));
+  const hasPIdol = memories.some(({ pIdol }) => pIdol);
 
   return (
     <>
       <button
         type="button"
         className={styles.open}
-        disabled={!pIdol}
-        title={pIdol ? t("open") : t("selectPIdol")}
-        aria-label={pIdol ? t("open") : t("selectPIdol")}
+        disabled={!hasPIdol}
+        title={hasPIdol ? t("open") : t("selectPIdol")}
+        aria-label={hasPIdol ? t("open") : t("selectPIdol")}
         onClick={() => setOpen(true)}
       >
         <FaHeart />
       </button>
-      {open && pIdol && (
+      {open && hasPIdol && (
         <StaminaCalculatorModal
-          pIdol={pIdol}
+          memories={memories}
           onApply={onApply}
           onClose={() => setOpen(false)}
         />
