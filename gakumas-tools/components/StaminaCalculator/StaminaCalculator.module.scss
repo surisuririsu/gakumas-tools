@@ -48,7 +48,7 @@
 }
 
 .pIdol {
-  margin: tokens.$space-1 0 0 !important;
+  margin: 0 !important;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
 }
@@ -64,6 +64,38 @@
   display: flex;
   flex-direction: column;
   gap: tokens.$space-4;
+}
+
+.memory {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  border: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-sm;
+}
+
+.memoryTabs {
+  flex: 0 0 auto;
+}
+
+.memoryHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: tokens.$space-3;
+
+  strong {
+    flex: 0 0 auto;
+    color: tokens.$surface-ink;
+    font-size: tokens.$text-sm;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 440px) {
+    flex-direction: column;
+    gap: tokens.$space-1;
+  }
 }
 
 .field {

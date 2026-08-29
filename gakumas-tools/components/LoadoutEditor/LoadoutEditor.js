@@ -21,6 +21,19 @@ export default function LoadoutEditor({ config, idolId }) {
     loadout
   );
 
+  const staminaMemorySlots = loadout.skillCardIdGroups
+    .slice(0, 2)
+    .map((skillCardIds, index) => ({
+      index,
+      multiplier: stage.type !== "linkContest" && index ? 0.2 : 1,
+      pIdolId: config.idol.inferPIdolId(
+        index ? [] : loadout.pItemIds,
+        skillCardIds,
+      ),
+      hasCards: skillCardIds.some((id) => id),
+    }))
+    .filter(({ index, pIdolId, hasCards }) => index === 0 || pIdolId || hasCards);
+
   return (
     <div className={styles.loadoutEditor}>
       <LoadoutParams
@@ -29,7 +42,7 @@ export default function LoadoutEditor({ config, idolId }) {
         withStamina
         staminaAction={
           <StaminaCalculator
-            pIdolId={config.idol.pIdolId}
+            memorySlots={staminaMemorySlots}
             onApply={(stamina) =>
               setParams([...loadout.params.slice(0, 3), stamina])
             }
