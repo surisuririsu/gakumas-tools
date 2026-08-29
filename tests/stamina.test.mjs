@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  Idols,
   PIdols,
   calculateMemoryStamina,
   getMemoryStaminaBreakdown,
@@ -19,21 +18,19 @@ test("Sensei stamina follows the support-card level breakpoints", () => {
 
 test("Hiro real-data vector totals 47 stamina", () => {
   const pIdol = PIdols.getById(26); // 光景 篠澤 広
-  const idol = Idols.getById(pIdol.idolId);
   assert.deepEqual(
     getMemoryStaminaBreakdown({
       pIdol,
-      idol,
       trainingRank: 5,
-      potentialRank: 0,
+      awakeningRank: 0,
       affectionLevel: 20,
-      trueEndScenarios: ["firstStar"],
+      trueEndScenarios: ["hajime"],
       senseiLevels: [50, 60],
     }),
     {
       base: 22,
       training: 6,
-      potential: 0,
+      awakening: 0,
       affection: 0,
       trueEnd: 2,
       sensei: 17,
@@ -44,26 +41,38 @@ test("Hiro real-data vector totals 47 stamina", () => {
 
 test("earned True End achievements and progression bonuses total 46", () => {
   const pIdol = PIdols.getById(24); // Wonder Scale 倉本 千奈
-  const idol = Idols.getById(pIdol.idolId);
   assert.deepEqual(
     getMemoryStaminaBreakdown({
       pIdol,
-      idol,
       trainingRank: 7,
-      potentialRank: 4,
+      awakeningRank: 4,
       affectionLevel: 27,
-      trueEndScenarios: ["firstStar", "nextIdolAudition"],
+      trueEndScenarios: ["hajime", "nia"],
       senseiLevels: [60],
     }),
     {
       base: 23,
       training: 6,
-      potential: 3,
+      awakening: 3,
       affection: 2,
       trueEnd: 3,
       sensei: 9,
       total: 46,
     }
+  );
+});
+
+test("P-idol-specific stamina overrides stay isolated in calculator data", () => {
+  assert.equal(
+    calculateMemoryStamina({ pIdol: PIdols.getById(62) }),
+    31
+  );
+  assert.equal(
+    calculateMemoryStamina({
+      pIdol: PIdols.getById(64),
+      trainingRank: 7,
+    }),
+    31
   );
 });
 

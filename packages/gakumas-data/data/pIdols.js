@@ -1,21 +1,7 @@
 import P_IDOLS from "../json/p_idols.json";
 
-function parseStaminaBonuses(value) {
-  if (!value) return [];
-  return value.split(",").map((milestone) => {
-    const [rank, stamina] = milestone.split(":").map(Number);
-    return { rank, stamina };
-  });
-}
-
 P_IDOLS.forEach((pIdol) => {
   pIdol._type = "pIdol";
-  pIdol.trainingStaminaBonuses = parseStaminaBonuses(
-    pIdol.trainingStaminaBonuses
-  );
-  pIdol.potentialStaminaBonuses = parseStaminaBonuses(
-    pIdol.potentialStaminaBonuses
-  );
 });
 
 const P_IDOLS_BY_ID = P_IDOLS.reduce((acc, cur) => {

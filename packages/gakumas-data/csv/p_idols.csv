@@ -1,152 +1,152 @@
-id,idolId,title,rarity,plan,recommendedEffect,baseStamina,trainingStaminaBonuses,potentialStaminaBonuses
-1,1,学園生活,R,sense,goodConditionTurns,32,5:3,4:3
-2,2,学園生活,R,sense,concentration,30,5:3,4:3
-3,3,学園生活,R,logic,goodImpressionTurns,27,5:3,4:3
-4,4,学園生活,R,sense,goodConditionTurns,31,5:3,4:3
-5,5,学園生活,R,logic,goodImpressionTurns,28,"1:3,5:3",4:3
-6,6,学園生活,R,logic,motivation,23,"1:3,5:3",4:3
-7,7,学園生活,R,sense,concentration,30,5:3,4:3
-8,8,学園生活,R,logic,motivation,22,"1:3,5:3",4:3
-9,9,学園生活,R,sense,concentration,30,5:3,4:3
-10,1,わたしが一番！,SR,sense,goodConditionTurns,32,5:3,4:3
-11,2,一匹狼,SR,sense,concentration,30,5:3,4:3
-12,3,カワイイ♡はじめました,SR,logic,goodImpressionTurns,27,5:3,4:3
-13,4,はじまりはカッコよく,SR,sense,goodConditionTurns,31,5:3,4:3
-14,5,一つ踏み出した先に,SR,logic,goodImpressionTurns,28,"1:3,5:3",4:3
-15,6,胸を張って一歩ずつ,SR,logic,motivation,23,"1:3,5:3",4:3
-16,7,夢へのリスタート,SR,sense,concentration,30,5:3,4:3
-17,8,一番向いてないこと,SR,logic,motivation,22,"1:3,5:3",4:3
-18,9,『私らしさ』のはじまり,SR,sense,concentration,30,5:3,4:3
-19,1,Fighting My Way,SSR,sense,goodConditionTurns,32,5:3,4:3
-20,2,Luna say maybe,SSR,sense,concentration,30,5:3,4:3
-21,3,世界一可愛い私,SSR,logic,goodImpressionTurns,27,5:3,4:3
-22,4,Fluorite,SSR,sense,goodConditionTurns,31,5:3,4:3
-23,5,白線,SSR,logic,goodImpressionTurns,28,"1:3,5:3",4:3
-24,6,Wonder Scale,SSR,logic,motivation,23,"1:3,5:3",4:3
-25,7,Tame-Lie-One-Step,SSR,sense,concentration,30,5:3,4:3
-26,8,光景,SSR,logic,motivation,22,"1:3,5:3",4:3
-27,9,clumsy trick,SSR,sense,concentration,30,5:3,4:3
-28,2,アイヴイ,SSR,logic,goodImpressionTurns,30,5:3,4:3
-29,10,学園生活,R,logic,motivation,30,5:3,4:3
-30,10,アイドル、はじめっ！,SR,logic,motivation,30,5:3,4:3
-31,10,The Rolling Riceball,SSR,logic,motivation,30,5:3,4:3
-32,3,Yellow Big Bang！,SSR,sense,goodConditionTurns,27,5:3,4:3
-33,1,Boom Boom Pow,SSR,logic,goodImpressionTurns,32,5:3,4:3
-34,4,キミとセミブルー,SSR,sense,concentration,31,5:3,4:3
-35,7,キミとセミブルー,SSR,logic,motivation,30,5:3,4:3
-36,9,キミとセミブルー,SSR,sense,goodConditionTurns,30,5:3,4:3
-37,8,コントラスト,SSR,sense,concentration,22,"1:3,5:3",4:3
-38,1,冠菊,SSR,logic,goodImpressionTurns,32,5:3,4:3
-39,5,冠菊,SSR,sense,goodConditionTurns,28,"1:3,5:3",4:3
-40,3,冠菊,SSR,logic,motivation,27,5:3,4:3
-41,1,初声,R,logic,goodImpressionTurns,32,5:3,4:3
-42,2,初声,R,logic,goodImpressionTurns,30,5:3,4:3
-43,3,初声,R,sense,goodConditionTurns,27,5:3,4:3
-44,6,日々、発見的ステップ！,SSR,sense,goodConditionTurns,23,"1:3,5:3",4:3
-45,5,初心,R,sense,goodConditionTurns,28,"1:3,5:3",4:3
-46,6,初心,R,sense,goodConditionTurns,23,"1:3,5:3",4:3
-47,9,初心,R,logic,motivation,30,5:3,4:3
-48,9,ようこそ初星温泉,SSR,logic,motivation,30,5:3,4:3
-49,6,ようこそ初星温泉,SSR,sense,concentration,23,"1:3,5:3",4:3
-50,4,Feel Jewel Dream,SSR,logic,goodImpressionTurns,31,5:3,4:3
-51,6,仮装狂騒曲,SSR,sense,concentration,23,"1:3,5:3",4:3
-52,2,仮装狂騒曲,SSR,logic,motivation,30,5:3,4:3
-53,8,仮装狂騒曲,SSR,sense,goodConditionTurns,22,"1:3,5:3",4:3
-54,4,初恋,R,logic,goodImpressionTurns,31,5:3,4:3
-55,7,初恋,R,logic,motivation,30,5:3,4:3
-56,8,初恋,R,sense,concentration,22,"1:3,5:3",4:3
-57,9,L.U.V,SSR,logic,goodImpressionTurns,30,"1:3,5:3",4:3
-58,1,古今東西ちょちょいのちょい,SSR,sense,concentration,32,5:3,4:3
-59,11,学園生活,R,anomaly,strength,31,5:3,4:3
-60,11,一番星,SR,anomaly,fullPower,31,5:3,4:3
-61,11,小さな野望,SSR,anomaly,strength,31,5:3,4:3
-62,3,White Night! White Wish!,SSR,logic,motivation,31,5:3,4:3
-63,10,White Night! White Wish!,SSR,sense,goodConditionTurns,30,5:3,4:3
-64,5,White Night! White Wish!,SSR,logic,motivation,28,5:3,4:3
-65,7,カクシタワタシ,SSR,anomaly,fullPower,30,5:3,4:3
-66,1,Campus mode!!,SSR,sense,goodConditionTurns,32,5:3,4:3
-67,2,Campus mode!!,SSR,sense,concentration,30,5:3,4:3
-68,3,Campus mode!!,SSR,logic,goodImpressionTurns,27,5:3,4:3
-69,4,Campus mode!!,SSR,anomaly,strength,31,5:3,4:3
-70,11,Campus mode!!,SSR,sense,goodConditionTurns,31,5:3,4:3
-71,9,Campus mode!!,SSR,anomaly,fullPower,30,5:3,4:3
-72,6,Campus mode!!,SSR,logic,motivation,23,"1:3,5:3",4:3
-73,8,Campus mode!!,SSR,logic,motivation,22,"1:3,5:3",4:3
-74,10,Campus mode!!,SSR,anomaly,fullPower,30,5:3,4:3
-75,5,Campus mode!!,SSR,sense,concentration,28,"1:3,5:3",4:3
-76,7,Campus mode!!,SSR,logic,goodImpressionTurns,30,5:3,4:3
-77,8,ハッピーミルフィーユ,SSR,anomaly,fullPower,22,"1:3,5:3",4:3
-78,9,ハッピーミルフィーユ,SSR,anomaly,strength,30,5:3,4:3
-79,11,ハッピーミルフィーユ,SSR,logic,motivation,31,5:3,4:3
-80,2,雪解けに,SSR,anomaly,strength,30,5:3,4:3
-81,6,雪解けに,SSR,logic,goodImpressionTurns,23,"1:3,5:3",4:3
-82,4,雪解けに,SSR,anomaly,fullPower,31,5:3,4:3
-83,5,極光,SSR,anomaly,strength,28,"1:3,5:3",4:3
-84,5,桜フォトグラフ,SSR,anomaly,fullPower,28,"1:3,5:3",4:3
-85,7,桜フォトグラフ,SSR,sense,goodConditionTurns,30,5:3,4:3
-86,1,桜フォトグラフ,SSR,anomaly,fullPower,32,5:3,4:3
-87,11,Our Chant,SSR,logic,goodImpressionTurns,31,5:3,4:3
-88,1,雨上がりのアイリス,SSR,logic,motivation,32,5:3,4:3
-89,2,雨上がりのアイリス,SSR,sense,goodConditionTurns,30,5:3,4:3
-90,3,雨上がりのアイリス,SSR,anomaly,strength,27,5:3,4:3
-91,12,学園生活,R,anomaly,preservation,27,"1:3,5:3",4:3
-92,12,ゆっくり、一歩ずつ,SR,anomaly,preservation,27,"1:3,5:3",4:3
-93,12,ツキノカメ,SSR,anomaly,preservation,27,"1:3,5:3",4:3
-94,6,Howling over the World,SSR,anomaly,strength,23,"1:3,5:3",4:3
-95,9,Howling over the World,SSR,sense,concentration,30,5:3,4:3
-96,5,Howling over the World,SSR,logic,goodImpressionTurns,28,"1:3,5:3",4:3
-97,7,Love & Joy,SSR,sense,concentration,30,5:3,4:3
-98,12,Campus mode!!,SSR,logic,motivation,27,"1:3,5:3",4:3
-99,11,初陣,R,logic,motivation,31,5:3,4:3
-100,12,初陣,R,logic,motivation,27,"1:3,5:3",4:3
-101,10,初陣,R,sense,goodConditionTurns,30,5:3,4:3
-102,8,サンフェーデッド,SSR,anomaly,strength,22,"1:3,5:3",4:3
-103,10,Star-mine,SSR,logic,goodImpressionTurns,30,5:3,4:3
-104,12,Star-mine,SSR,sense,goodConditionTurns,27,"1:3,5:3",4:3
-105,11,Star-mine,SSR,anomaly,fullPower,31,5:3,4:3
-106,3,自己肯定感爆上げ↑↑しゅきしゅきソング,SSR,sense,concentration,27,5:3,4:3
-107,4,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,logic,motivation,31,5:3,4:3
-108,7,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,logic,goodImpressionTurns,30,5:3,4:3
-109,8,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,anomaly,fullPower,22,"1:3,5:3",4:3
-110,9,36℃ U・B・U,SSR,logic,goodImpressionTurns,30,5:3,4:3
-111,3,がむしゃらに行こう！,SSR,sense,goodConditionTurns,27,5:3,4:3
-112,1,がむしゃらに行こう！,SSR,anomaly,strength,32,5:3,4:3
-113,2,がむしゃらに行こう！,SSR,logic,goodImpressionTurns,30,5:3,4:3
-114,6,空と約束,SSR,sense,goodConditionTurns,23,"1:3,5:3",4:3
-115,4,見て,SSR,sense,concentration,31,5:3,4:3
-116,13,学園生活,R,anomaly,strength,31,5:3,4:3
-117,13,初志貫徹,SR,logic,motivation,31,5:3,4:3
-118,13,理論武装して,SSR,logic,motivation,31,5:3,4:3
-119,10,グースーピー,SSR,anomaly,strength,30,5:3,4:3
-120,5,Atmosphere,SSR,anomaly,fullPower,28,"1:3,5:3",4:3
-121,13,Campus mode!!,SSR,sense,goodConditionTurns,31,5:3,4:3
-122,12,Superlative,SSR,logic,goodImpressionTurns,27,"1:3,5:3",4:3
-123,2,一体いつから,SSR,anomaly,fullPower,30,5:3,4:3
-124,6,みちなるひろがる,SSR,sense,concentration,23,"1:3,5:3",4:3
-125,8,みちなるひろがる,SSR,logic,goodImpressionTurns,22,"1:3,5:3",4:3
-126,11,赤裸々,SSR,logic,motivation,31,5:3,4:3
-127,10,ENDLESS DANCE,SSR,sense,concentration,30,5:3,4:3
-128,12,ENDLESS DANCE,SSR,logic,goodImpressionTurns,27,"1:3,5:3",4:3
-129,11,ENDLESS DANCE,SSR,anomaly,strength,31,5:3,4:3
-130,1,Wildest Flower,SSR,logic,goodImpressionTurns,32,5:3,4:3
-131,14,,SSR,sense,concentration,,,
-132,14,,SSR,logic,goodImpressionTurns,,,
-133,14,,SSR,anomaly,strength,,,
-134,5,ときめきエモーション,SSR,sense,goodConditionTurns,28,"1:3,5:3",4:3
-135,7,ときめきエモーション,SSR,anomaly,strength,30,5:3,4:3
-136,10,真っ白いページと水彩の主人公,SSR,logic,motivation,30,5:3,4:3
-137,12,VEIL,SSR,anomaly,strength,27,"1:3,5:3",4:3
-138,2,ガラクタロード,SSR,logic,motivation,30,5:3,4:3
-139,9,ガラクタロード,SSR,sense,goodConditionTurns,30,5:3,4:3
-140,8,ガラクタロード,SSR,sense,concentration,22,"1:3,5:3",4:3
-141,5,ガラクタロード,SSR,logic,motivation,28,"1:3,5:3",4:3
-142,4,SUGAR FLAVOR,SSR,sense,goodConditionTurns,31,5:3,4:3
-143,9,SUGAR FLAVOR,SSR,anomaly,strength,30,5:3,4:3
-144,3,GO MY WAY!!,SSR,anomaly,fullPower,27,5:3,4:3
-145,1,GO MY WAY!!,SSR,sense,goodConditionTurns,32,5:3,4:3
-146,10,GO MY WAY!!,SSR,logic,goodImpressionTurns,30,5:3,4:3
-147,13,クライアイ,SSR,anomaly,fullPower,31,5:3,4:3
-148,1,ガラクタロード,SSR,anomaly,strength,32,5:3,4:3
-149,2,「ねえ、言っちゃうよ。」,SSR,anomaly,strength,30,5:3,4:3
-150,11,「ねえ、言っちゃうよ。」,SSR,sense,concentration,31,5:3,4:3
-151,12,「ねえ、言っちゃうよ。」,SSR,sense,concentration,,,
+id,idolId,title,rarity,plan,recommendedEffect
+1,1,学園生活,R,sense,goodConditionTurns
+2,2,学園生活,R,sense,concentration
+3,3,学園生活,R,logic,goodImpressionTurns
+4,4,学園生活,R,sense,goodConditionTurns
+5,5,学園生活,R,logic,goodImpressionTurns
+6,6,学園生活,R,logic,motivation
+7,7,学園生活,R,sense,concentration
+8,8,学園生活,R,logic,motivation
+9,9,学園生活,R,sense,concentration
+10,1,わたしが一番！,SR,sense,goodConditionTurns
+11,2,一匹狼,SR,sense,concentration
+12,3,カワイイ♡はじめました,SR,logic,goodImpressionTurns
+13,4,はじまりはカッコよく,SR,sense,goodConditionTurns
+14,5,一つ踏み出した先に,SR,logic,goodImpressionTurns
+15,6,胸を張って一歩ずつ,SR,logic,motivation
+16,7,夢へのリスタート,SR,sense,concentration
+17,8,一番向いてないこと,SR,logic,motivation
+18,9,『私らしさ』のはじまり,SR,sense,concentration
+19,1,Fighting My Way,SSR,sense,goodConditionTurns
+20,2,Luna say maybe,SSR,sense,concentration
+21,3,世界一可愛い私,SSR,logic,goodImpressionTurns
+22,4,Fluorite,SSR,sense,goodConditionTurns
+23,5,白線,SSR,logic,goodImpressionTurns
+24,6,Wonder Scale,SSR,logic,motivation
+25,7,Tame-Lie-One-Step,SSR,sense,concentration
+26,8,光景,SSR,logic,motivation
+27,9,clumsy trick,SSR,sense,concentration
+28,2,アイヴイ,SSR,logic,goodImpressionTurns
+29,10,学園生活,R,logic,motivation
+30,10,アイドル、はじめっ！,SR,logic,motivation
+31,10,The Rolling Riceball,SSR,logic,motivation
+32,3,Yellow Big Bang！,SSR,sense,goodConditionTurns
+33,1,Boom Boom Pow,SSR,logic,goodImpressionTurns
+34,4,キミとセミブルー,SSR,sense,concentration
+35,7,キミとセミブルー,SSR,logic,motivation
+36,9,キミとセミブルー,SSR,sense,goodConditionTurns
+37,8,コントラスト,SSR,sense,concentration
+38,1,冠菊,SSR,logic,goodImpressionTurns
+39,5,冠菊,SSR,sense,goodConditionTurns
+40,3,冠菊,SSR,logic,motivation
+41,1,初声,R,logic,goodImpressionTurns
+42,2,初声,R,logic,goodImpressionTurns
+43,3,初声,R,sense,goodConditionTurns
+44,6,日々、発見的ステップ！,SSR,sense,goodConditionTurns
+45,5,初心,R,sense,goodConditionTurns
+46,6,初心,R,sense,goodConditionTurns
+47,9,初心,R,logic,motivation
+48,9,ようこそ初星温泉,SSR,logic,motivation
+49,6,ようこそ初星温泉,SSR,sense,concentration
+50,4,Feel Jewel Dream,SSR,logic,goodImpressionTurns
+51,6,仮装狂騒曲,SSR,sense,concentration
+52,2,仮装狂騒曲,SSR,logic,motivation
+53,8,仮装狂騒曲,SSR,sense,goodConditionTurns
+54,4,初恋,R,logic,goodImpressionTurns
+55,7,初恋,R,logic,motivation
+56,8,初恋,R,sense,concentration
+57,9,L.U.V,SSR,logic,goodImpressionTurns
+58,1,古今東西ちょちょいのちょい,SSR,sense,concentration
+59,11,学園生活,R,anomaly,strength
+60,11,一番星,SR,anomaly,fullPower
+61,11,小さな野望,SSR,anomaly,strength
+62,3,White Night! White Wish!,SSR,logic,motivation
+63,10,White Night! White Wish!,SSR,sense,goodConditionTurns
+64,5,White Night! White Wish!,SSR,logic,motivation
+65,7,カクシタワタシ,SSR,anomaly,fullPower
+66,1,Campus mode!!,SSR,sense,goodConditionTurns
+67,2,Campus mode!!,SSR,sense,concentration
+68,3,Campus mode!!,SSR,logic,goodImpressionTurns
+69,4,Campus mode!!,SSR,anomaly,strength
+70,11,Campus mode!!,SSR,sense,goodConditionTurns
+71,9,Campus mode!!,SSR,anomaly,fullPower
+72,6,Campus mode!!,SSR,logic,motivation
+73,8,Campus mode!!,SSR,logic,motivation
+74,10,Campus mode!!,SSR,anomaly,fullPower
+75,5,Campus mode!!,SSR,sense,concentration
+76,7,Campus mode!!,SSR,logic,goodImpressionTurns
+77,8,ハッピーミルフィーユ,SSR,anomaly,fullPower
+78,9,ハッピーミルフィーユ,SSR,anomaly,strength
+79,11,ハッピーミルフィーユ,SSR,logic,motivation
+80,2,雪解けに,SSR,anomaly,strength
+81,6,雪解けに,SSR,logic,goodImpressionTurns
+82,4,雪解けに,SSR,anomaly,fullPower
+83,5,極光,SSR,anomaly,strength
+84,5,桜フォトグラフ,SSR,anomaly,fullPower
+85,7,桜フォトグラフ,SSR,sense,goodConditionTurns
+86,1,桜フォトグラフ,SSR,anomaly,fullPower
+87,11,Our Chant,SSR,logic,goodImpressionTurns
+88,1,雨上がりのアイリス,SSR,logic,motivation
+89,2,雨上がりのアイリス,SSR,sense,goodConditionTurns
+90,3,雨上がりのアイリス,SSR,anomaly,strength
+91,12,学園生活,R,anomaly,preservation
+92,12,ゆっくり、一歩ずつ,SR,anomaly,preservation
+93,12,ツキノカメ,SSR,anomaly,preservation
+94,6,Howling over the World,SSR,anomaly,strength
+95,9,Howling over the World,SSR,sense,concentration
+96,5,Howling over the World,SSR,logic,goodImpressionTurns
+97,7,Love & Joy,SSR,sense,concentration
+98,12,Campus mode!!,SSR,logic,motivation
+99,11,初陣,R,logic,motivation
+100,12,初陣,R,logic,motivation
+101,10,初陣,R,sense,goodConditionTurns
+102,8,サンフェーデッド,SSR,anomaly,strength
+103,10,Star-mine,SSR,logic,goodImpressionTurns
+104,12,Star-mine,SSR,sense,goodConditionTurns
+105,11,Star-mine,SSR,anomaly,fullPower
+106,3,自己肯定感爆上げ↑↑しゅきしゅきソング,SSR,sense,concentration
+107,4,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,logic,motivation
+108,7,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,logic,goodImpressionTurns
+109,8,ミラクルナナウ(ﾟ∀ﾟ)！,SSR,anomaly,fullPower
+110,9,36℃ U・B・U,SSR,logic,goodImpressionTurns
+111,3,がむしゃらに行こう！,SSR,sense,goodConditionTurns
+112,1,がむしゃらに行こう！,SSR,anomaly,strength
+113,2,がむしゃらに行こう！,SSR,logic,goodImpressionTurns
+114,6,空と約束,SSR,sense,goodConditionTurns
+115,4,見て,SSR,sense,concentration
+116,13,学園生活,R,anomaly,strength
+117,13,初志貫徹,SR,logic,motivation
+118,13,理論武装して,SSR,logic,motivation
+119,10,グースーピー,SSR,anomaly,strength
+120,5,Atmosphere,SSR,anomaly,fullPower
+121,13,Campus mode!!,SSR,sense,goodConditionTurns
+122,12,Superlative,SSR,logic,goodImpressionTurns
+123,2,一体いつから,SSR,anomaly,fullPower
+124,6,みちなるひろがる,SSR,sense,concentration
+125,8,みちなるひろがる,SSR,logic,goodImpressionTurns
+126,11,赤裸々,SSR,logic,motivation
+127,10,ENDLESS DANCE,SSR,sense,concentration
+128,12,ENDLESS DANCE,SSR,logic,goodImpressionTurns
+129,11,ENDLESS DANCE,SSR,anomaly,strength
+130,1,Wildest Flower,SSR,logic,goodImpressionTurns
+131,14,,SSR,sense,concentration
+132,14,,SSR,logic,goodImpressionTurns
+133,14,,SSR,anomaly,strength
+134,5,ときめきエモーション,SSR,sense,goodConditionTurns
+135,7,ときめきエモーション,SSR,anomaly,strength
+136,10,真っ白いページと水彩の主人公,SSR,logic,motivation
+137,12,VEIL,SSR,anomaly,strength
+138,2,ガラクタロード,SSR,logic,motivation
+139,9,ガラクタロード,SSR,sense,goodConditionTurns
+140,8,ガラクタロード,SSR,sense,concentration
+141,5,ガラクタロード,SSR,logic,motivation
+142,4,SUGAR FLAVOR,SSR,sense,goodConditionTurns
+143,9,SUGAR FLAVOR,SSR,anomaly,strength
+144,3,GO MY WAY!!,SSR,anomaly,fullPower
+145,1,GO MY WAY!!,SSR,sense,goodConditionTurns
+146,10,GO MY WAY!!,SSR,logic,goodImpressionTurns
+147,13,クライアイ,SSR,anomaly,fullPower
+148,1,ガラクタロード,SSR,anomaly,strength
+149,2,「ねえ、言っちゃうよ。」,SSR,anomaly,strength
+150,11,「ねえ、言っちゃうよ。」,SSR,sense,concentration
+151,12,「ねえ、言っちゃうよ。」,SSR,sense,concentration

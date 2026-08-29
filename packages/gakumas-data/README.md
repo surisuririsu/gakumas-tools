@@ -39,11 +39,12 @@ pnpm validate:data
 Unknown references fail with a precise error pointing at the entity and
 column.
 
-## Stamina metadata
+## Stamina calculation
 
-Stamina values must come from player-visible in-game screens: each P-idol's
-status/upgrade panels, idol affection and achievement bonuses, and the
-support-card level table. Public transcriptions are useful cross-checks:
+Stamina constants in `utils/stamina.js` must come from player-visible in-game
+screens: each P-idol's status/upgrade panels, idol affection and achievement
+bonuses, and the support-card level table. Public transcriptions are useful
+cross-checks:
 
 True End stamina rewards are permanent achievements, not properties of the
 scenario currently being produced. Pass every earned True End scenario to the
@@ -53,11 +54,6 @@ calculator so their rewards are summed.
 - [affection and True End achievements](https://seesaawiki.jp/gakumasu/d/%A5%A2%A5%C1%A1%BC%A5%D6%A5%E1%A5%F3%A5%C8)
 - [Sensei support-card level table](https://seesaawiki.jp/gakumasu/d/%A4%AD%A4%DF%A4%CF%A1%A2%BC%AB%CB%FD%A4%CE%C0%B8%C5%CC%A4%C7%A4%B9)
 
-After editing the CSV columns, regenerate JSON:
-
-```sh
-python3 -m scripts.csv_to_json
-```
-
-Leave preview rows blank until their values are visible in game. Preserve CRLF
-CSV formatting and no trailing newline.
+Keep future and preview P-idols out of the confirmed ID ranges until their
+values are visible in game. Add exceptional per-P-idol values as explicit
+overrides instead of extending the general entity CSV schema.
