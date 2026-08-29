@@ -6,7 +6,7 @@
   flex-direction: row;
   gap: 2px;
 
-  input {
+  & > input {
     flex: 1;
     min-width: 0;
 

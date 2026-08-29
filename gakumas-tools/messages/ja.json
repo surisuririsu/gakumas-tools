@@ -299,6 +299,40 @@
   "ParametersInput": {
     "stamina": "体力"
   },
+  "StaminaCalculator": {
+    "title": "体力計算",
+    "open": "体力を計算する",
+    "openShort": "体力計算",
+    "selectPIdol": "先に編成へPアイドルのカードまたはアイテムを追加してください",
+    "defaultsHelp": "よく使われる最大育成状態を初期値にしています。異なる項目だけ変更してください。",
+    "trainingRank": "特訓段階",
+    "awakeningRank": "才能開花段階",
+    "affectionLevel": "親愛度",
+    "trueEndAchievements": "達成済みTrue End",
+    "trueEndHelp": "True Endの体力ボーナスは永続で加算されます。達成済みのものをすべて選択してください。未確認データは選択できません。",
+    "senseiCards": "あさり先生サポートカード",
+    "senseiCard": "カード{number}",
+    "notUsed": "使用なし（+0）",
+    "senseiLevelRange": "Lv.{min}～{max}（+{stamina}）",
+    "senseiHelp": "各カードの効果は1回ずつ加算されます。体力が変わるレベル帯だけを表示しています。",
+    "total": "計算後の体力",
+    "showBreakdown": "内訳を表示",
+    "apply": "体力{stamina}を入力",
+    "unavailable": "このPアイドルの体力データはまだ確認できていません。",
+    "scenarios": {
+      "hajime": "初",
+      "nia": "N.I.A",
+      "hif": "H.I.F"
+    },
+    "breakdown": {
+      "base": "基礎値",
+      "training": "特訓",
+      "awakening": "才能開花",
+      "affection": "親愛度",
+      "trueEnd": "True End",
+      "sensei": "あさり先生カード"
+    }
+  },
   "MemoriesNudge": {
     "create": "メモリーを作成する",
     "import": "スクショからメモリーを読み取る"

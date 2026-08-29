@@ -5,6 +5,7 @@ export default function LoadoutParams({
   params,
   onChange,
   withStamina,
+  staminaAction,
   typeMultipliers,
 }) {
   return (
@@ -19,7 +20,9 @@ export default function LoadoutParams({
         {Object.keys(typeMultipliers).map((param) => (
           <div key={param}>{Math.round(typeMultipliers[param] * 100)}%</div>
         ))}
-        {withStamina && <div />}
+        {withStamina && (
+          <div className={styles.staminaAction}>{staminaAction}</div>
+        )}
       </div>
     </div>
   );

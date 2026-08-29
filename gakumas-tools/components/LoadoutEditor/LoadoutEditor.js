@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import { useTranslations } from "next-intl";
 import LoadoutParams from "@/components/LoadoutParams";
+import StaminaCalculator from "@/components/StaminaCalculator";
 import StagePItems from "@/components/StagePItems";
 import LoadoutSkillCardGroup from "@/components/LoadoutSkillCardGroup";
 import LoadoutContext from "@/contexts/LoadoutContext";
@@ -26,6 +27,14 @@ export default function LoadoutEditor({ config, idolId }) {
         params={loadout.params}
         onChange={setParams}
         withStamina
+        staminaAction={
+          <StaminaCalculator
+            pIdolId={config.idol.pIdolId}
+            onApply={(stamina) =>
+              setParams([...loadout.params.slice(0, 3), stamina])
+            }
+          />
+        }
         typeMultipliers={config.typeMultipliers}
       />
       <div className={styles.pItemsRow}>

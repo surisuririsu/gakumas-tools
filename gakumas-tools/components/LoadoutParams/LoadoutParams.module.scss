@@ -3,6 +3,7 @@
 .typeMultipliers {
   display: flex;
   font-size: 14px;
+  line-height: 18px;
 
   & > div {
     flex: 1;
@@ -12,4 +13,9 @@
       color: $param-color;
     }
   }
+}
+
+.staminaAction {
+  display: flex;
+  align-items: center;
 }

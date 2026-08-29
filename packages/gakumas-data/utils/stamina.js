@@ -70,7 +70,7 @@ const SENSEI_STAMINA_BONUSES = [
   { rank: 55, stamina: 9 },
 ];
 
-const TRUE_END_SCENARIOS = new Set(["hajime", "nia", "hif"]);
+const TRUE_END_SCENARIOS = ["hajime", "nia", "hif"];
 
 function cumulativeBonusAtRank(bonuses, rank) {
   return bonuses
@@ -107,6 +107,14 @@ export function getSenseiStaminaBonus(level) {
   return replacementBonusAtRank(SENSEI_STAMINA_BONUSES, level || 0);
 }
 
+export function getAvailableTrueEndScenarios(pIdol) {
+  const bonuses = TRUE_END_STAMINA_BY_IDOL_ID[pIdol?.idolId];
+  if (!bonuses) return [];
+  return TRUE_END_SCENARIOS.filter((scenario) =>
+    Object.hasOwn(bonuses, scenario)
+  );
+}
+
 export function getMemoryStaminaBreakdown({
   pIdol,
   trainingRank = 0,
@@ -118,7 +126,7 @@ export function getMemoryStaminaBreakdown({
   const pIdolStamina = getPIdolStaminaData(pIdol);
   if (!pIdolStamina) return null;
   const unknownTrueEndScenario = trueEndScenarios.find(
-    (scenario) => !TRUE_END_SCENARIOS.has(scenario)
+    (scenario) => !TRUE_END_SCENARIOS.includes(scenario)
   );
   if (unknownTrueEndScenario) {
     throw new RangeError(
