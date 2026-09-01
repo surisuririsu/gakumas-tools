@@ -1,4 +1,4 @@
-import * as ort from "onnxruntime-web";
+import * as ort from "onnxruntime-web/wasm";
 
 function loadModel(modelPath, classesPath) {
   let promise;
