@@ -56,18 +56,26 @@ function Rehearsal() {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
   const [dragOver, setDragOver] = useState(false);
-  const workersRef = useRef();
+  const workersRef = useRef([]);
 
-  useEffect(() => {
-    const numWorkers = Math.min(
+  // Each Tesseract worker fetches its script, core wasm and traineddata, so
+  // spin them up on the first import rather than on page load, and only as
+  // many as the batch can use. Workers persist for later imports.
+  const ensureWorkers = useCallback((count) => {
+    const target = Math.min(
+      count,
       navigator.hardwareConcurrency || 1,
       MAX_WORKERS,
     );
-    workersRef.current = Array.from({ length: numWorkers }, () =>
-      createWorker("eng", 1),
-    );
+    while (workersRef.current.length < target) {
+      workersRef.current.push(createWorker("eng", 1));
+    }
+    return workersRef.current;
+  }, []);
+
+  useEffect(() => {
     return () => {
-      workersRef.current?.forEach(async (w) => (await w).terminate());
+      workersRef.current.forEach(async (w) => (await w).terminate());
     };
   }, []);
 
@@ -77,7 +85,7 @@ function Rehearsal() {
       // Single worker is enough: seeking dominates runtime, OCR is fast, and
       // one-frame-at-a-time streaming keeps peak memory flat (one canvas
       // instead of N candidates on mobile).
-      const worker = await workersRef.current[0];
+      const [worker] = await Promise.all(ensureWorkers(1));
       const results = [];
       let scanStarted = false;
       let lastStatusAt = 0;
@@ -114,11 +122,11 @@ function Rehearsal() {
       setProcessingStatus(t("videoComplete", { count: results.length }));
       return { results, scanStarted };
     },
-    [t],
+    [ensureWorkers, t],
   );
 
   const processImages = useCallback(async (imageFiles) => {
-    const workers = workersRef.current;
+    const workers = ensureWorkers(imageFiles.length);
     const scored = await runBatched(
       imageFiles,
       workers,
@@ -136,7 +144,7 @@ function Rehearsal() {
     );
     const results = scored.filter(Boolean);
     return { results, failures: scored.length - results.length };
-  }, []);
+  }, [ensureWorkers]);
 
   const handleFiles = useCallback(
     async (fileList) => {
