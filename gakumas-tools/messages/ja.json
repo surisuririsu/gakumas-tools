@@ -346,6 +346,7 @@
     "signInToSave": "Discordでログインして保存"
   },
   "MemoriesHeader": {
+    "confirmDelete": "{num}個のメモリーを削除しますか？",
     "selected": "{num}個のメモリーを選択",
     "delete": "削除する"
   },
