@@ -1,5 +1,12 @@
 "use client";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Stages } from "gakumas-data";
 import { usePathname } from "@/i18n/routing";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
@@ -65,9 +72,12 @@ export function LoadoutContextProvider({ children }) {
     loadoutsFromUrl.length ? loadoutsFromUrl : [loadout]
   );
 
-  const simulatorUrl = getSimulatorUrl(loadout, loadouts);
+  const simulatorUrl = useMemo(
+    () => getSimulatorUrl(loadout, loadouts),
+    [loadout, loadouts]
+  );
 
-  const setLoadout = (loadout) => {
+  const setLoadout = useCallback((loadout) => {
     setStageId(loadout.stageId);
     if (loadout.stageId == "custom") {
       let custom = loadout.customStage;
@@ -93,7 +103,7 @@ export function LoadoutContextProvider({ children }) {
         console.error(e);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (["sense", "logic", "anomaly"].includes(stage.plan)) {
@@ -140,7 +150,7 @@ export function LoadoutContextProvider({ children }) {
     }
   }, [pItemIds]);
 
-  function clear() {
+  const clear = useCallback(() => {
     setMemoryParams([null, null]);
     setParams([null, null, null, null]);
     setPItemIds([0, 0, 0, 0]);
@@ -152,25 +162,38 @@ export function LoadoutContextProvider({ children }) {
       [{}, {}, {}, {}, {}, {}],
       [{}, {}, {}, {}, {}, {}],
     ]);
-  }
+  }, []);
 
-  function replacePItemId(index, itemId) {
+  const replacePItemId = useCallback((index, itemId) => {
     setPItemIds((cur) => {
       const next = [...cur];
       next[index] = itemId;
       return next;
     });
-  }
+  }, []);
 
-  function swapPItemIds(indexA, indexB) {
+  const swapPItemIds = useCallback((indexA, indexB) => {
     setPItemIds((cur) => {
       const next = [...cur];
       [next[indexA], next[indexB]] = [next[indexB], next[indexA]];
       return next;
     });
-  }
+  }, []);
 
-  function replaceSkillCardId(index, cardId) {
+  const replaceCustomizations = useCallback((index, customizations) => {
+    setCustomizationGroups((cur) => {
+      const curCustomizations = [].concat(...cur);
+      const updatedCustomizations = [...curCustomizations];
+      updatedCustomizations[index] = customizations;
+      let chunks = [];
+      for (let i = 0; i < updatedCustomizations.length; i += 6) {
+        chunks.push(updatedCustomizations.slice(i, i + 6));
+      }
+      return chunks;
+    });
+  }, []);
+
+  const replaceSkillCardId = useCallback((index, cardId) => {
     let changed = false;
     setSkillCardIdGroups((cur) => {
       const skillCardIds = [].concat(...cur);
@@ -188,9 +211,9 @@ export function LoadoutContextProvider({ children }) {
     if (changed) {
       replaceCustomizations(index, []);
     }
-  }
+  }, [replaceCustomizations]);
 
-  function swapSkillCardIds(indexA, indexB) {
+  const swapSkillCardIds = useCallback((indexA, indexB) => {
     setSkillCardIdGroups((cur) => {
       const skillCardIds = [].concat(...cur);
       const temp = skillCardIds[indexA];
@@ -214,22 +237,9 @@ export function LoadoutContextProvider({ children }) {
       }
       return chunks;
     });
-  }
+  }, []);
 
-  function replaceCustomizations(index, customizations) {
-    setCustomizationGroups((cur) => {
-      const curCustomizations = [].concat(...cur);
-      const updatedCustomizations = [...curCustomizations];
-      updatedCustomizations[index] = customizations;
-      let chunks = [];
-      for (let i = 0; i < updatedCustomizations.length; i += 6) {
-        chunks.push(updatedCustomizations.slice(i, i + 6));
-      }
-      return chunks;
-    });
-  }
-
-  const insertSkillCardIdGroup = (groupIndex) => {
+  const insertSkillCardIdGroup = useCallback((groupIndex) => {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
@@ -240,9 +250,9 @@ export function LoadoutContextProvider({ children }) {
       updatedCustomizations.splice(groupIndex, 0, []);
       return updatedCustomizations;
     });
-  };
+  }, []);
 
-  const deleteSkillCardIdGroup = (groupIndex) => {
+  const deleteSkillCardIdGroup = useCallback((groupIndex) => {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       updatedSkillCardIds.splice(groupIndex, 1);
@@ -253,9 +263,9 @@ export function LoadoutContextProvider({ children }) {
       updatedCustomizations.splice(groupIndex, 1);
       return updatedCustomizations;
     });
-  };
+  }, []);
 
-  const swapSkillCardIdGroups = (groupIndexA, groupIndexB) => {
+  const swapSkillCardIdGroups = useCallback((groupIndexA, groupIndexB) => {
     setSkillCardIdGroups((cur) => {
       const updatedSkillCardIds = [...cur];
       const temp = updatedSkillCardIds[groupIndexA];
@@ -270,9 +280,9 @@ export function LoadoutContextProvider({ children }) {
       updatedCustomizations[groupIndexB] = temp;
       return updatedCustomizations;
     });
-  };
+  }, []);
 
-  function setMemory(memory, index) {
+  const setMemory = useCallback((memory, index) => {
     const multiplier = stage.type !== "linkContest" && index ? 0.2 : 1;
 
     if (!memoryParams.some((p) => p)) {
@@ -313,35 +323,55 @@ export function LoadoutContextProvider({ children }) {
       next[index] = memory.customizations || [];
       return next;
     });
-  }
+  }, [stage, memoryParams]);
+
+  const value = useMemo(
+    () => ({
+      loadout,
+      setLoadout,
+      setMemory,
+      setStageId,
+      setCustomStage,
+      setSupportBonus,
+      setParams,
+      replacePItemId,
+      swapPItemIds,
+      replaceSkillCardId,
+      swapSkillCardIds,
+      replaceCustomizations,
+      clear,
+      insertSkillCardIdGroup,
+      deleteSkillCardIdGroup,
+      swapSkillCardIdGroups,
+      stage,
+      simulatorUrl,
+      loadouts,
+      setLoadouts,
+      currentLoadoutIndex,
+      setCurrentLoadoutIndex,
+    }),
+    [
+      loadout,
+      setLoadout,
+      setMemory,
+      replacePItemId,
+      swapPItemIds,
+      replaceSkillCardId,
+      swapSkillCardIds,
+      replaceCustomizations,
+      clear,
+      insertSkillCardIdGroup,
+      deleteSkillCardIdGroup,
+      swapSkillCardIdGroups,
+      stage,
+      simulatorUrl,
+      loadouts,
+      currentLoadoutIndex,
+    ]
+  );
 
   return (
-    <LoadoutContext.Provider
-      value={{
-        loadout,
-        setLoadout,
-        setMemory,
-        setStageId,
-        setCustomStage,
-        setSupportBonus,
-        setParams,
-        replacePItemId,
-        swapPItemIds,
-        replaceSkillCardId,
-        swapSkillCardIds,
-        replaceCustomizations,
-        clear,
-        insertSkillCardIdGroup,
-        deleteSkillCardIdGroup,
-        swapSkillCardIdGroups,
-        stage,
-        simulatorUrl,
-        loadouts,
-        setLoadouts,
-        currentLoadoutIndex,
-        setCurrentLoadoutIndex,
-      }}
-    >
+    <LoadoutContext.Provider value={value}>
       {children}
     </LoadoutContext.Provider>
   );

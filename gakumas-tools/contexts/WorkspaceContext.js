@@ -1,5 +1,12 @@
 "use client";
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   DEFAULT_WORKSPACE,
   parseWorkspace,
@@ -48,34 +55,31 @@ export function WorkspaceContextProvider({ initialWorkspace, children }) {
     writeWorkspaceCookie({ filter, plan, idolId, pinnedTools });
   }, [filter, plan, idolId, pinnedTools]);
 
-  const pin = useCallback(
-    (tool) => {
-      setPinnedTools([...pinnedTools, tool]);
-    },
-    [pinnedTools]
-  );
+  const pin = useCallback((tool) => {
+    setPinnedTools((cur) => [...cur, tool]);
+  }, []);
 
-  const unpin = useCallback(
-    (tool) => {
-      setPinnedTools(pinnedTools.filter((t) => t != tool));
-    },
-    [pinnedTools]
+  const unpin = useCallback((tool) => {
+    setPinnedTools((cur) => cur.filter((t) => t != tool));
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      filter,
+      setFilter,
+      plan,
+      setPlan,
+      idolId,
+      setIdolId,
+      pinnedTools,
+      pin,
+      unpin,
+    }),
+    [filter, plan, idolId, pinnedTools, pin, unpin]
   );
 
   return (
-    <WorkspaceContext.Provider
-      value={{
-        filter,
-        setFilter,
-        plan,
-        setPlan,
-        idolId,
-        setIdolId,
-        pinnedTools,
-        pin,
-        unpin,
-      }}
-    >
+    <WorkspaceContext.Provider value={value}>
       {children}
     </WorkspaceContext.Provider>
   );
