@@ -358,7 +358,8 @@
     "provideData": "提供数据",
     "lastUpdated": "最后更新于",
     "start": "开始",
-    "restart": "重新开始"
+    "restart": "重新开始",
+    "simulationFailed": "模拟失败，请重试。"
   },
   "StrategyPicker": {
     "auto": "自动",
