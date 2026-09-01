@@ -12,8 +12,8 @@ import {
 } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
 import c from "@/utils/classNames";
-import BoxPlot from "@/components/BoxPlot";
 import Button from "@/components/Button";
+import { BoxPlot, DistributionPlot } from "@/components/Charts";
 import Image from "@/components/Image";
 import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table";
@@ -27,7 +27,6 @@ import { streamCandidateFrames } from "@/utils/imageProcessing/videoFrameExtract
 import { bucketScores } from "@/utils/simulator";
 import { runBatched } from "@/utils/workerPool";
 import KofiAd from "../KofiAd";
-import DistributionPlot from "../DistributionPlot";
 import RehearsalTable from "./RehearsalTable";
 import {
   bucketFiles,
