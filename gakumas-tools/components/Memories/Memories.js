@@ -1,6 +1,9 @@
 "use client";
 import { memo, useContext, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
+import Alert from "@/components/Alert";
+import Button from "@/components/Button";
 import DataContext from "@/contexts/DataContext";
 import SearchContext from "@/contexts/SearchContext";
 import { calculateContestPower } from "@/utils/contestPower";
@@ -14,8 +17,9 @@ import MemoriesList from "./MemoriesList";
 import styles from "./Memories.module.scss";
 
 function Memories() {
+  const t = useTranslations("Memories");
   const { status } = useSession();
-  const { memories, fetchMemories } = useContext(DataContext);
+  const { memories, memoriesError, fetchMemories } = useContext(DataContext);
   const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
   const [selectedMemories, setSelectedMemories] = useState({});
@@ -58,6 +62,18 @@ function Memories() {
         selectedMemories={selectedMemories}
         setSelectedMemories={setSelectedMemories}
       />
+      {memoriesError && (
+        <Alert variant="danger" className={styles.alert}>
+          <div className={styles.alertContent}>
+            {t(`${memoriesError}Error`)}
+            {memoriesError == "load" && (
+              <Button size="sm" onClick={fetchMemories}>
+                {t("retry")}
+              </Button>
+            )}
+          </div>
+        </Alert>
+      )}
       <MemoriesList
         memories={filteredMemories}
         deleting={action == "delete"}

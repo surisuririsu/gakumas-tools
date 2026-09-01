@@ -343,11 +343,18 @@
   "MemorySave": {
     "save": "保存",
     "saveAsNew": "新規保存",
-    "signInToSave": "Discordでログインして保存"
+    "signInToSave": "Discordでログインして保存",
+    "saveFailed": "保存に失敗しました"
   },
   "MemoriesHeader": {
     "selected": "{num}個のメモリーを選択",
     "delete": "削除する"
+  },
+  "Memories": {
+    "loadError": "メモリーの読み込みに失敗しました",
+    "uploadError": "メモリーの保存に失敗しました",
+    "deleteError": "メモリーの削除に失敗しました",
+    "retry": "再試行"
   },
   "MemoryImporterModal": {
     "importMemories": "Import memories from screenshots",

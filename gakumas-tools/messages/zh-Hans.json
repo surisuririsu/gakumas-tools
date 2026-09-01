@@ -331,7 +331,8 @@
   "MemorySave": {
     "save": "保存",
     "saveAsNew": "作为新回忆卡保存",
-    "signInToSave": "登入 Discord 以同步保存"
+    "signInToSave": "登入 Discord 以同步保存",
+    "saveFailed": "保存失败"
   },
   "MemoriesNudge": {
     "create": "创建回忆卡",
@@ -340,6 +341,12 @@
   "MemoriesHeader": {
     "selected": "{num} 个回忆卡被选中",
     "delete": "删除"
+  },
+  "Memories": {
+    "loadError": "回忆卡加载失败",
+    "uploadError": "回忆卡保存失败",
+    "deleteError": "回忆卡删除失败",
+    "retry": "重试"
   },
   "MemoryImporterModal": {
     "importMemories": "从截图中导入回忆卡",

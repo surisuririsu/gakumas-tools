@@ -335,11 +335,18 @@
   "MemorySave": {
     "save": "저장",
     "saveAsNew": "새로 저장",
-    "signInToSave": "Discord로 로그인하여 저장"
+    "signInToSave": "Discord로 로그인하여 저장",
+    "saveFailed": "저장에 실패했습니다"
   },
   "MemoriesHeader": {
     "selected": "{num}개의 메모리 선택됨",
     "delete": "삭제하기"
+  },
+  "Memories": {
+    "loadError": "메모리를 불러오지 못했습니다",
+    "uploadError": "메모리를 저장하지 못했습니다",
+    "deleteError": "메모리를 삭제하지 못했습니다",
+    "retry": "다시 시도"
   },
   "MemoryImporterModal": {
     "importMemories": "스크린샷으로부터 메모리 불러오기",

@@ -42,6 +42,11 @@ function MemorySave() {
       )}
 
       {saveState == "saved" && <FaCheck />}
+      {saveState == "error" && (
+        <span className={styles.error} role="alert">
+          {t("saveFailed")}
+        </span>
+      )}
     </div>
   );
 }
