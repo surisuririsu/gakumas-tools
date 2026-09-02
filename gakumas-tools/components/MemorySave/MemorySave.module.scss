@@ -1,7 +1,15 @@
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
 .save {
   max-width: 400px;
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 16px;
+}
+
+.error {
+  color: colors.$red;
+  font-size: tokens.$text-sm;
 }

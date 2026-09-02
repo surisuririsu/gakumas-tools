@@ -20,6 +20,17 @@
   padding: tokens.$space-6;
 }
 
+.alert {
+  margin: tokens.$space-2 tokens.$space-3 0;
+}
+
+.alertContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: tokens.$space-2;
+}
+
 .header {
   display: flex;
   flex-direction: row;

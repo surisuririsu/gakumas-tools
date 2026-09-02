@@ -331,7 +331,8 @@
   "MemorySave": {
     "save": "Save",
     "saveAsNew": "Save as new",
-    "signInToSave": "Sign in with Discord to save"
+    "signInToSave": "Sign in with Discord to save",
+    "saveFailed": "Save failed"
   },
   "MemoriesNudge": {
     "create": "Create a memory",
@@ -340,6 +341,12 @@
   "MemoriesHeader": {
     "selected": "{num} memories selected",
     "delete": "Delete"
+  },
+  "Memories": {
+    "loadError": "Failed to load memories",
+    "uploadError": "Failed to save memories",
+    "deleteError": "Failed to delete memories",
+    "retry": "Retry"
   },
   "MemoryImporterModal": {
     "importMemories": "Import memories from screenshots",

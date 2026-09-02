@@ -44,22 +44,28 @@ export function MemoryContextProvider({ children }) {
       skillCardIds,
       customizations,
     };
-    if (asNew || !id) {
-      const result = await fetch("/api/memory", {
-        method: "POST",
+    const isNew = asNew || !id;
+    const url = isNew ? "/api/memory" : `/api/memory/${id}`;
+    const method = isNew ? "POST" : "PUT";
+    const body = isNew ? { memories: [memory] } : memory;
+    try {
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ memories: [memory] }),
+        body: JSON.stringify(body),
       });
-      const { ids } = await result.json();
-      setId(ids[0]);
+      if (!response.ok) {
+        throw new Error(`${method} ${url} failed with ${response.status}`);
+      }
+      if (isNew) {
+        const { ids } = await response.json();
+        setId(ids[0]);
+      }
       setSaveState("saved");
-    } else {
-      await fetch(`/api/memory/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(memory),
-      });
-      setSaveState("saved");
+    } catch (error) {
+      console.error(error);
+      setSaveState("error");
+      return;
     }
     fetchMemories();
   }
