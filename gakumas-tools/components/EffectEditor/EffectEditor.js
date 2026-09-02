@@ -20,7 +20,9 @@ function handleKeyDown(e) {
       .match(/^\s*/)[0];
     const extra = value[selectionStart - 1] === "{" ? INDENT : "";
     insertText(`\n${currentIndent}${extra}`);
-  } else if (e.key === "Tab") {
+  } else if (e.key === "Tab" && !e.shiftKey) {
+    // Shift+Tab keeps moving focus backwards so the editor is not a
+    // keyboard trap; plain Tab indents.
     e.preventDefault();
     insertText(INDENT);
   }
