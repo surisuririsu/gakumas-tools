@@ -70,16 +70,19 @@ function NavbarMenu() {
                 icon={FaXTwitter}
                 href="https://x.com/surisuririsu"
                 size="small"
+                ariaLabel="X"
               />
               <IconButton
                 icon={FaGithub}
                 href="https://github.com/surisuririsu/gakumas-tools"
                 size="small"
+                ariaLabel="GitHub"
               />
               <IconButton
                 icon={SiKofi}
                 href="https://ko-fi.com/surisuririsu"
                 size="small"
+                ariaLabel="Ko-fi"
               />
             </div>
             <div className={styles.fine}>

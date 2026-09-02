@@ -234,6 +234,7 @@
     "filter": "Filter"
   },
   "EntityIcon": {
+    "emptySlot": "Empty slot",
     "high": "H",
     "low": "L",
     "planMismatch": "Plan mismatch",
@@ -339,6 +340,10 @@
   },
   "MemoriesHeader": {
     "selected": "{num} memories selected",
+    "search": "Search",
+    "create": "Create memory",
+    "import": "Import from screenshots",
+    "cancel": "Cancel",
     "delete": "Delete"
   },
   "MemoryImporterModal": {
@@ -433,6 +438,9 @@
     "cancel": "Cancel",
     "ok": "OK"
   },
+  "Modal": {
+    "close": "Close"
+  },
   "SimulatorResult": {
     "min": "Min",
     "average": "Average",
@@ -473,7 +481,8 @@
     "season": "Season",
     "allSeasons": "All seasons",
     "allIdols": "All idols",
-    "allStages": "All stages"
+    "allStages": "All stages",
+    "actions": "Actions"
   },
   "SimulatorStats": {
     "total": "Total",

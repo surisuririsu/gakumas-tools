@@ -51,12 +51,17 @@ function MemoriesHeader({
   return (
     <div className={styles.header}>
       {action ? (
-        <IconButton icon={FaCircleXmark} onClick={() => setAction(null)} />
+        <IconButton
+          icon={FaCircleXmark}
+          onClick={() => setAction(null)}
+          ariaLabel={t("cancel")}
+        />
       ) : (
         <>
           <IconButton
             icon={FaMagnifyingGlass}
             onClick={() => setAction("search")}
+            ariaLabel={t("search")}
           />
           <IconButton
             icon={FaPen}
@@ -64,6 +69,7 @@ function MemoriesHeader({
               setAll({});
               setModal(<MemoryEditorModal />);
             }}
+            ariaLabel={t("create")}
           />
           {status == "authenticated" && (
             <IconButton
@@ -71,12 +77,14 @@ function MemoriesHeader({
               onClick={() =>
                 setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
               }
+              ariaLabel={t("import")}
             />
           )}
           <IconButton
             icon={FaRegTrashCan}
             tone="danger"
             onClick={() => setAction("delete")}
+            ariaLabel={t("delete")}
           />
           <div className={styles.fill} />
           {!memoriesLoading && (
