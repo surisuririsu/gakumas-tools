@@ -339,6 +339,7 @@
     "saveFailed": "저장에 실패했습니다"
   },
   "MemoriesHeader": {
+    "confirmDelete": "메모리 {num}개를 삭제하시겠습니까?",
     "selected": "{num}개의 메모리 선택됨",
     "delete": "삭제하기"
   },

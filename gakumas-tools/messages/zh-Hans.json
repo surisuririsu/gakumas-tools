@@ -339,6 +339,7 @@
     "import": "从截图导入回忆卡"
   },
   "MemoriesHeader": {
+    "confirmDelete": "删除 {num} 个回忆卡？",
     "selected": "{num} 个回忆卡被选中",
     "delete": "删除"
   },

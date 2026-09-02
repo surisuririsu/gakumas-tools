@@ -339,6 +339,7 @@
     "import": "Import memories from screenshots"
   },
   "MemoriesHeader": {
+    "confirmDelete": "Delete {num, plural, one {# memory} other {# memories}}?",
     "selected": "{num} memories selected",
     "delete": "Delete"
   },

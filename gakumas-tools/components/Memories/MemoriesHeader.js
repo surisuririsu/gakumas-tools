@@ -11,6 +11,7 @@ import {
   FaRegTrashCan,
 } from "react-icons/fa6";
 import Button from "@/components/Button";
+import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
 import StagePItems from "@/components/StagePItems";
@@ -108,10 +109,19 @@ function MemoriesHeader({
           {t("selected", { num: selectedMemoryIds.length })}{" "}
           <Button
             style="red"
-            onClick={() => {
-              deleteMemories(selectedMemoryIds);
-              setSelectedMemories({});
-            }}
+            onClick={() =>
+              setModal(
+                <ConfirmModal
+                  message={t("confirmDelete", {
+                    num: selectedMemoryIds.length,
+                  })}
+                  onConfirm={() => {
+                    deleteMemories(selectedMemoryIds);
+                    setSelectedMemories({});
+                  }}
+                />
+              )
+            }
             disabled={!selectedMemoryIds.length}
           >
             {t("delete")}
