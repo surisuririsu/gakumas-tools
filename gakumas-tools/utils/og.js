@@ -6,6 +6,13 @@ import { SITE_URL } from "@/utils/localeUrls";
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
 
+// Query-driven preview images are pure functions of their URL and the
+// bundled data; let browsers and the CDN reuse them instead of re-running
+// satori + resvg for every crawler hit. Data changes ship with a deploy,
+// and a day of staleness is fine for a social card.
+export const PREVIEW_CACHE_CONTROL =
+  "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
+
 const SITE_NAME = "Gakumas Tools";
 const SITE_HOST = new URL(SITE_URL).host;
 

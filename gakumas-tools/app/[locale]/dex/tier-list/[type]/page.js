@@ -31,7 +31,7 @@ export async function generateMetadata({ params, searchParams }) {
   if (entityType) {
     const query = new URLSearchParams(await searchParams);
     query.set("type", entityType);
-    metadata.openGraph.images = [`/api/tier-list-preview/?${query.toString()}`];
+    metadata.openGraph.images = [`/api/tier-list-preview?${query.toString()}`];
   }
 
   return metadata;
