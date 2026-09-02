@@ -3,6 +3,10 @@
     "title": "Gakumas Tools",
     "description": "Gakumas Tools is a collection of useful tools for producers at Hatsuboshi Gakuen. Calculate required final exam scores for produce ranks, view p-item and skill card information, organize memories, plan and simulate contest loadouts and more. Be the best producer and help your idols shine!"
   },
+  "Error": {
+    "notFound": "404 Not Found",
+    "generic": "Something went wrong"
+  },
   "tools": {
     "home": {
       "title": "Home",
