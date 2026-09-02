@@ -5,10 +5,8 @@ import {
   AiOutlineBarChart,
   AiOutlineBoxPlot,
 } from "react-icons/ai";
-import AreaPlot from "@/components/AreaPlot";
-import BoxPlot from "@/components/BoxPlot";
 import ButtonGroup from "@/components/ButtonGroup";
-import DistributionPlot from "@/components/DistributionPlot";
+import { AreaPlot, BoxPlot, DistributionPlot } from "@/components/Charts";
 import styles from "./SimulatorResult.module.scss";
 
 const HISTOGRAM = <AiOutlineBarChart />;
