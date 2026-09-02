@@ -1,0 +1,22 @@
+# The Dockerfile copies the workspace manifests, gakumas-tools/ and packages/.
+# Everything below is either regenerated inside the image or not needed for
+# the build, and would otherwise be uploaded as build context (host
+# node_modules alone is over a gigabyte) or overlay the container's own
+# installs and build output.
+.git
+**/node_modules
+**/.next
+**/dump
+.env
+.env.*
+**/.env
+**/.env.*
+gk-img
+screenshots
+tests
+scripts
+.venv
+.classifier-data
+**/__pycache__
+**/.DS_Store
+*.log
