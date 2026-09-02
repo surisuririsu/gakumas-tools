@@ -40,5 +40,5 @@ export async function POST(request) {
     )
   );
 
-  return Response.json({ ids: insertedIds });
+  return Response.json({ ids: Object.values(insertedIds) });
 }

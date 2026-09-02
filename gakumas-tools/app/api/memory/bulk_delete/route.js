@@ -13,9 +13,9 @@ export async function POST(request) {
   const { ids } = await request.json();
 
   const { db } = await connect();
-  const { deletedIds } = await db
+  const { deletedCount } = await db
     .collection("memories")
     .deleteMany({ userId, _id: { $in: ids.map((id) => new ObjectId(id)) } });
 
-  return Response.json({ ids: deletedIds });
+  return Response.json({ deletedCount });
 }

@@ -15,7 +15,7 @@ export async function PUT(request, { params: routeParams }) {
     await request.json();
 
   const { db } = await connect();
-  const { updatedId } = await db.collection("memories").updateOne(
+  await db.collection("memories").updateOne(
     { _id: id, userId },
     {
       $set: {
@@ -30,5 +30,5 @@ export async function PUT(request, { params: routeParams }) {
     }
   );
 
-  return Response.json({ id: updatedId });
+  return Response.json({ id });
 }

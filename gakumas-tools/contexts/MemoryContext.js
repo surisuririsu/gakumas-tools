@@ -50,8 +50,8 @@ export function MemoryContextProvider({ children }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ memories: [memory] }),
       });
-      const data = await result.json();
-      setId(data.id);
+      const { ids } = await result.json();
+      setId(ids[0]);
       setSaveState("saved");
     } else {
       await fetch(`/api/memory/${id}`, {
