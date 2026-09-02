@@ -1,8 +1,9 @@
 "use client";
 import { memo, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import Oshi, { OSHI_PROPS } from "@/components/Oshi";
+import { OSHI_PROPS } from "@/components/Oshi/config";
 import ToolHeader from "@/components/ToolHeader";
 import c from "@/utils/classNames";
 import { TOOLS } from "@/utils/tools";
@@ -13,6 +14,9 @@ import styles from "./Navbar.module.scss";
 // Width of the underline relative to the link itself (60% = matches the old
 // `left: 20%; right: 20%` styling).
 const INDICATOR_FRACTION = 0.6;
+
+// Only loaded when a banner is configured.
+const Oshi = dynamic(() => import("@/components/Oshi"));
 
 function Navbar() {
   const t = useTranslations("tools");

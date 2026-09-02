@@ -5,8 +5,6 @@ import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import styles from "./Oshi.module.scss";
 
-export const OSHI_PROPS = null;
-
 export default function Oshi({
   text,
   initiallyExpanded,
