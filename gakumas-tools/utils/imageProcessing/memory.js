@@ -1,5 +1,5 @@
 import { PItems, SkillCards } from "gakumas-data";
-import * as ort from "onnxruntime-web";
+import * as ort from "onnxruntime-web/wasm";
 import {
   DEBUG,
   getBlackCanvas,
