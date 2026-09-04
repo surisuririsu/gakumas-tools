@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useMemo } from "react";
+import { createContext, useCallback, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Stages } from "gakumas-data";
 import {
@@ -22,7 +22,7 @@ export function LoadoutUrlContextProvider({ children }) {
     []
   );
 
-  const updateUrl = (loadout, loadouts) => {
+  const updateUrl = useCallback((loadout, loadouts) => {
     const url = new URL(window.location);
 
     if (loadout.stageId === "custom") {
@@ -39,12 +39,17 @@ export function LoadoutUrlContextProvider({ children }) {
     }
 
     window.history.replaceState(null, "", url);
-  };
+  }, []);
+
+  // replaceState re-renders every useSearchParams consumer, including this
+  // provider; a stable value keeps that from cascading to the loadout tree.
+  const value = useMemo(
+    () => ({ loadoutFromUrl, loadoutsFromUrl, updateUrl }),
+    [loadoutFromUrl, loadoutsFromUrl, updateUrl]
+  );
 
   return (
-    <LoadoutUrlContext.Provider
-      value={{ loadoutFromUrl, loadoutsFromUrl, updateUrl }}
-    >
+    <LoadoutUrlContext.Provider value={value}>
       {children}
     </LoadoutUrlContext.Provider>
   );

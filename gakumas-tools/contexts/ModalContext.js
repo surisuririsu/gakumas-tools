@@ -1,13 +1,18 @@
 "use client";
-import { createContext, useState, useRef } from "react";
+import { createContext, useCallback, useMemo, useRef, useState } from "react";
 
 const ModalContext = createContext();
 
 export function ModalContextProvider({ children }) {
   const [modals, _setModals] = useState([]);
   const originalFocusRef = useRef(null);
+  // Mirrors `modals` so the depth getter can stay referentially stable while
+  // still reading the current stack at call time (Modal calls it from a
+  // keydown handler).
+  const modalsRef = useRef(modals);
+  modalsRef.current = modals;
 
-  function closeModal() {
+  const closeModal = useCallback(() => {
     _setModals((cur) => {
       const newModals = cur.slice(0, cur.length - 1);
       // If closing the last modal, we'll need to restore focus
@@ -22,9 +27,9 @@ export function ModalContextProvider({ children }) {
       }
       return newModals;
     });
-  }
+  }, []);
 
-  function setModal(modal) {
+  const setModal = useCallback((modal) => {
     _setModals((cur) => {
       // Store the original focused element when opening the first modal
       if (cur.length === 0) {
@@ -32,12 +37,17 @@ export function ModalContextProvider({ children }) {
       }
       return cur.concat(modal);
     });
-  }
+  }, []);
 
-  const getModalStackDepth = () => modals.length;
+  const getModalStackDepth = useCallback(() => modalsRef.current.length, []);
+
+  const value = useMemo(
+    () => ({ setModal, closeModal, getModalStackDepth }),
+    [setModal, closeModal, getModalStackDepth]
+  );
 
   return (
-    <ModalContext.Provider value={{ setModal, closeModal, getModalStackDepth }}>
+    <ModalContext.Provider value={value}>
       <>
         {children}
         {!!modals.length && modals[modals.length - 1]}
