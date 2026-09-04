@@ -1,5 +1,5 @@
-import Error from "@/components/Error";
+import { notFound } from "next/navigation";
 
-export default function NotFound() {
-  return <Error code={404} />;
+export default function CatchAllPage() {
+  notFound();
 }
