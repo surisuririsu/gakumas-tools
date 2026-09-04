@@ -9,16 +9,22 @@ const PATHS = [
   "/calculator/hif",
   "/memory-calculator",
   "/dex",
+  "/dex/reference/skill-cards",
+  "/dex/reference/p-items",
+  "/dex/reference/p-drinks",
+  "/dex/tier-list/skill-cards",
+  "/dex/tier-list/p-items",
+  "/dex/tier-list/p-drinks",
+  "/dex/tier-list/p-idols",
+  "/dex/collection/p-idols",
   "/memories",
   "/simulator",
   "/rehearsal",
 ];
 
 export default function sitemap() {
-  const lastModified = new Date();
   return PATHS.map((path) => ({
     url: localePath(routing.defaultLocale, path, { absolute: true }),
-    lastModified,
     priority: path === "/" ? 1.0 : 0.7,
     alternates: { languages: alternateLanguages(path) },
   }));
