@@ -17,10 +17,19 @@ export const PREVIEW_CACHE_CONTROL =
 // surfaces as an aborted response that the proxy in front of the app reports
 // as an opaque 502 with nothing in our logs. Render to a buffer first so the
 // error is logged and answered with a real 500.
+// resvg refuses anything over 32767px per side, and even well below that a
+// render can take minutes and hundreds of MB. Nothing we generate needs more.
+const MAX_IMAGE_PIXELS = 720 * 4000;
+
 export async function renderImage(element, options) {
+  if (options.width * options.height > MAX_IMAGE_PIXELS) {
+    return new Response("Image too large", { status: 400 });
+  }
   try {
+    console.time("og:render");
     const response = new ImageResponse(element, options);
     const body = await response.arrayBuffer();
+    console.timeEnd("og:render");
     return new Response(body, { status: 200, headers: response.headers });
   } catch (err) {
     console.error("image render failed:", err);
