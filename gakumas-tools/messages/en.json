@@ -366,7 +366,8 @@
     "provideData": "Provide data",
     "lastUpdated": "Last updated",
     "start": "Start",
-    "restart": "Restart"
+    "restart": "Restart",
+    "simulationFailed": "Simulation failed. Please try again."
   },
   "StrategyPicker": {
     "auto": "Auto",

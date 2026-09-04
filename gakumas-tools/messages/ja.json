@@ -374,7 +374,8 @@
     "provideData": "データを提供する",
     "lastUpdated": "最終更新",
     "start": "開始",
-    "restart": "再開"
+    "restart": "再開",
+    "simulationFailed": "シミュレーションに失敗しました。もう一度お試しください。"
   },
   "StrategyPicker": {
     "auto": "自動",

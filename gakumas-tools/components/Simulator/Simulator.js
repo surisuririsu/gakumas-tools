@@ -34,12 +34,12 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
+import { DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
 import {
-  MAX_WORKERS,
-  DEFAULT_NUM_RUNS,
-  SYNC,
-  WORKER_MESSAGE,
-} from "@/simulator/constants";
+  retainWorkerPool,
+  runOnWorkers,
+  workerCount,
+} from "@/simulator/workerPool";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import usePersistedState from "@/utils/usePersistedState";
 import ManualPlay from "./ManualPlay";
@@ -68,12 +68,12 @@ export default function Simulator() {
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [running, setRunning] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [numRuns, setNumRuns] = usePersistedState(
     NUM_RUNS_KEY,
     DEFAULT_NUM_RUNS,
   );
   const [enterPercents, setEnterPercents] = useState(false);
-  const workersRef = useRef();
 
   const [pendingDecision, setPendingDecision] = useState(null);
   const resolveDecisionRef = useRef(null);
@@ -109,25 +109,14 @@ export default function Simulator() {
     });
   }, [loadouts, stage, enterPercents]);
 
-  // Set up web workers on mount
   useEffect(() => {
-    let numWorkers = 1;
-    if (navigator.hardwareConcurrency) {
-      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
-    }
     // Seed a hardware-scaled default only when the user has no saved value.
     if (localStorage.getItem(NUM_RUNS_KEY) == null) {
-      setNumRuns(Math.round(Math.min(numWorkers, MAX_WORKERS) / 2) * 1000);
+      setNumRuns(Math.round(workerCount() / 2) * 1000);
     }
-
-    workersRef.current = [];
-    for (let i = 0; i < numWorkers; i++) {
-      workersRef.current.push(
-        new Worker(new URL("../../simulator/worker.js", import.meta.url)),
-      );
-    }
-
-    return () => workersRef.current?.forEach((worker) => worker.terminate());
+    // Workers are shared with any other mounted Simulator (e.g. a pinned
+    // copy) and spawned on the first run.
+    return retainWorkerPool();
   }, []);
 
   const setResult = useCallback(
@@ -186,48 +175,39 @@ export default function Simulator() {
 
   async function runSimulation() {
     setRunning(true);
+    setFailed(false);
     setProgress(0);
 
     console.time("simulation");
 
-    if (SYNC || !workersRef.current) {
-      const result = await simulate(
-        config,
-        linkConfigs,
-        strategy,
-        numRuns,
-        (completed) => setProgress(completed),
-      );
-      setResult(result);
-    } else {
-      const numWorkers = workersRef.current.length;
-      const runsPerWorker = Math.round(numRuns / numWorkers);
-
-      let promises = [];
-      for (let i = 0; i < numWorkers; i++) {
-        promises.push(
-          new Promise((resolve) => {
-            workersRef.current[i].onmessage = (e) => {
-              if (e.data.type === WORKER_MESSAGE.PROGRESS) {
-                setProgress((p) => p + e.data.delta);
-              } else if (e.data.type === WORKER_MESSAGE.RESULT) {
-                resolve(e.data.result);
-              }
-            };
-            workersRef.current[i].postMessage({
-              idolStageConfig: config,
-              linkConfigs: linkConfigs,
-              strategyName: strategy,
-              numRuns: runsPerWorker,
-            });
-          }),
+    try {
+      let result;
+      if (SYNC) {
+        result = await simulate(
+          config,
+          linkConfigs,
+          strategy,
+          numRuns,
+          (completed) => setProgress(completed),
         );
+      } else {
+        const results = await runOnWorkers(
+          {
+            idolStageConfig: config,
+            linkConfigs,
+            strategyName: strategy,
+            numRuns,
+          },
+          (delta) => setProgress((p) => p + delta),
+        );
+        result = mergeResults(results);
       }
-
-      Promise.all(promises).then((results) => {
-        const mergedResults = mergeResults(results);
-        setResult(mergedResults);
-      });
+      setResult(result);
+    } catch (err) {
+      console.error(err);
+      console.timeEnd("simulation");
+      setFailed(true);
+      setRunning(false);
     }
   }
 
@@ -395,6 +375,7 @@ export default function Simulator() {
         />
       )}
 
+      {failed && <Alert variant="danger">{t("simulationFailed")}</Alert>}
       {!simulatorData && <div className={styles.resultPlaceholder} />}
     </div>
   );
