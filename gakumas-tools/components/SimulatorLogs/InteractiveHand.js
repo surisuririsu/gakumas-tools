@@ -30,12 +30,12 @@ function InteractiveHand({
   }, []);
 
   const getCardIndex = (i) => {
-    return pendingDecision.handCards[i];
+    return pendingDecision?.handCards[i];
   };
 
   const isCardUsable = (i) => {
     const cardIndex = getCardIndex(i);
-    return pendingDecision.usableCards.includes(cardIndex);
+    return pendingDecision?.usableCards.includes(cardIndex);
   };
 
   const handleCardClick = (i) => {
