@@ -22,8 +22,6 @@ const PATHS = [
   "/rehearsal",
 ];
 
-// No lastModified: the sitemap is generated at build time, so a timestamp
-// here would claim every page changed on every deploy.
 export default function sitemap() {
   return PATHS.map((path) => ({
     url: localePath(routing.defaultLocale, path, { absolute: true }),
