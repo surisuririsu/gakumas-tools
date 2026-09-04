@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useTranslations } from "next-intl";
 import { FaPlus } from "react-icons/fa6";
 import { Idols } from "gakumas-data";
 import Image from "@/components/Image";
@@ -27,6 +28,7 @@ function EntityIcon({
   showTier,
   showEmptyPlaceholder,
 }) {
+  const t = useTranslations("EntityIcon");
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const icon = resolveEntityIcon(entity, idolId);
 
@@ -84,7 +86,12 @@ function EntityIcon({
 
   if (onClick) {
     return (
-        <button ref={dragRef} className={className} onClick={() => onClick(entity || {})}>
+        <button
+          ref={dragRef}
+          className={className}
+          onClick={() => onClick(entity || {})}
+          aria-label={entity ? undefined : t("emptySlot")}
+        >
           <div ref={dropRef} className={styles.dropArea}>
             {unwrappedElement ||
               (showEmptyPlaceholder && (

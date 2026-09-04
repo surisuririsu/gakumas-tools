@@ -234,6 +234,7 @@
     "filter": "필터"
   },
   "EntityIcon": {
+    "emptySlot": "빈 슬롯",
     "high": "고",
     "low": "저",
     "planMismatch": "플랜 불일치",
@@ -341,6 +342,10 @@
   "MemoriesHeader": {
     "confirmDelete": "메모리 {num}개를 삭제하시겠습니까?",
     "selected": "{num}개의 메모리 선택됨",
+    "search": "검색",
+    "create": "메모리 생성",
+    "import": "스크린샷에서 가져오기",
+    "cancel": "취소",
     "delete": "삭제하기"
   },
   "Memories": {
@@ -441,6 +446,9 @@
     "cancel": "취소",
     "ok": "OK"
   },
+  "Modal": {
+    "close": "닫기"
+  },
   "SimulatorResult": {
     "min": "최솟값",
     "average": "평균값",
@@ -481,7 +489,8 @@
     "season": "시즌",
     "allSeasons": "전체 시즌",
     "allIdols": "전체 아이돌",
-    "allStages": "전체 스테이지"
+    "allStages": "전체 스테이지",
+    "actions": "작업"
   },
   "SimulatorStats": {
     "total": "합계",

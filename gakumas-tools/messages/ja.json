@@ -242,6 +242,7 @@
     "filter": "フィルタ"
   },
   "EntityIcon": {
+    "emptySlot": "空きスロット",
     "high": "高",
     "low": "低",
     "planMismatch": "プラン不一致",
@@ -349,6 +350,10 @@
   "MemoriesHeader": {
     "confirmDelete": "{num}個のメモリーを削除しますか？",
     "selected": "{num}個のメモリーを選択",
+    "search": "検索",
+    "create": "メモリーを作成",
+    "import": "スクショから読み込み",
+    "cancel": "キャンセル",
     "delete": "削除する"
   },
   "Memories": {
@@ -449,6 +454,9 @@
     "cancel": "キャンセル",
     "ok": "OK"
   },
+  "Modal": {
+    "close": "閉じる"
+  },
   "SimulatorResult": {
     "min": "最小値",
     "average": "平均値",
@@ -489,7 +497,8 @@
     "season": "シーズン",
     "allSeasons": "全シーズン",
     "allIdols": "全アイドル",
-    "allStages": "全ステージ"
+    "allStages": "全ステージ",
+    "actions": "操作"
   },
   "SimulatorStats": {
     "total": "合計",

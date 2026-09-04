@@ -234,6 +234,7 @@
     "filter": "筛选"
   },
   "EntityIcon": {
+    "emptySlot": "空槽位",
     "high": "H",
     "low": "L",
     "planMismatch": "计划不匹配",
@@ -341,6 +342,10 @@
   "MemoriesHeader": {
     "confirmDelete": "删除 {num} 个回忆卡？",
     "selected": "{num} 个回忆卡被选中",
+    "search": "搜索",
+    "create": "创建回忆卡",
+    "import": "从截图导入",
+    "cancel": "取消",
     "delete": "删除"
   },
   "Memories": {
@@ -441,6 +446,9 @@
     "cancel": "取消",
     "ok": "确认"
   },
+  "Modal": {
+    "close": "关闭"
+  },
   "SimulatorResult": {
     "min": "最低分",
     "average": "平均分",
@@ -481,7 +489,8 @@
     "season": "赛季",
     "allSeasons": "全部赛季",
     "allIdols": "全部偶像",
-    "allStages": "全部舞台"
+    "allStages": "全部舞台",
+    "actions": "操作"
   },
   "SimulatorStats": {
     "total": "合计",

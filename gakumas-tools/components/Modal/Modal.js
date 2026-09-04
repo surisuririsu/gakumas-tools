@@ -1,9 +1,11 @@
 import { memo, useContext, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { FaXmark } from "react-icons/fa6";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Modal.module.scss";
 
 function Modal({ children, dismissable = true, onClose }) {
+  const t = useTranslations("Modal");
   const { closeModal: contextClose, getModalStackDepth } =
     useContext(ModalContext);
   const close = onClose || contextClose;
@@ -86,15 +88,22 @@ function Modal({ children, dismissable = true, onClose }) {
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
     >
-      <div 
+      <div
         ref={modalRef}
-        className={styles.modal} 
+        className={styles.modal}
         onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
       >
         {dismissable && (
-          <button className={styles.close} onClick={close}>
-            <FaXmark />
+          <button
+            type="button"
+            className={styles.close}
+            onClick={close}
+            aria-label={t("close")}
+          >
+            <FaXmark aria-hidden="true" />
           </button>
         )}
         {children}
