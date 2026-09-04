@@ -476,9 +476,9 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 475,夏の足音,SSR,FALSE,sense,stage,pIdol,151,FALSE,"at:buffCostConsumed { if:concentration>=13 { concentration+=2; setConcentrationEffectBuff(0.05,1); genki+=1 } }"
 476,夏の足音+,SSR,TRUE,sense,stage,pIdol,151,FALSE,"at:buffCostConsumed { if:concentration>=13 { concentration+=3; setConcentrationEffectBuff(0.05,1); genki+=1 } }"
 477,真夏に咲く太陽,SSR,FALSE,sense,produce,support,,FALSE,
-478,憧れの標,SSR,FALSE,sense,stage,pIdol,152,FALSE,at:afterActiveCardUsed { if:goodConditionTurns>=8 { goodConditionTurns+=5; cardUsesRemaining+=1; genki+=5 }; limit:1 }
+478,憧れの標,SSR,FALSE,sense,stage,pIdol,152,FALSE,at:afterActiveCardUsed { if:goodConditionTurns>=8 { goodConditionTurns+=4; cardUsesRemaining+=1; genki+=5 }; limit:1 }
 479,憧れの標+,SSR,TRUE,sense,stage,pIdol,152,FALSE,at:afterActiveCardUsed { if:goodConditionTurns>=8 { goodConditionTurns+=5; cardUsesRemaining+=1; genki+=5 }; limit:1 }
-480,可能性の標,SSR,FALSE,logic,stage,pIdol,153,FALSE,at:startOfTurn { if:turnsRemaining<=2 { score+=genki*0.8; fixedStamina-=2 } }
+480,可能性の標,SSR,FALSE,logic,stage,pIdol,153,FALSE,at:startOfTurn { if:turnsRemaining<=2 { score+=genki*0.65; fixedStamina-=2 } }
 481,可能性の標+,SSR,TRUE,logic,stage,pIdol,153,FALSE,at:startOfTurn { if:turnsRemaining<=2 { score+=genki*0.8; fixedStamina-=2 } }
-482,勇気の標,SSR,FALSE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=7 }; limit:1 }
+482,勇気の標,SSR,FALSE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=4 }; limit:1 }
 483,勇気の標+,SSR,TRUE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=7 }; limit:1 }
