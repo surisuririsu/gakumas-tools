@@ -17,7 +17,15 @@ import {
   resolveEntityIcon,
 } from "@/utils/entities";
 import { PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
-import { decodeList, EMPTY_LIST } from "@/utils/tierList";
+import { clampList, decodeList, EMPTY_LIST } from "@/utils/tierList";
+
+// A social card only needs a summary, and every icon costs render time and
+// wasm memory that is never returned to the OS. Show at most this many per
+// tier; the rest become a "+N" badge.
+const MAX_ITEMS_PER_TIER = 16;
+// The card is rendered at 1x, so icons are embedded at the size they're
+// drawn; the full-size source only inflates the SVG and the wasm heap.
+const ICON_PX = ITEM_SIZE;
 
 const PNG_CACHE_LIMIT = 500;
 const pngCache = new Map();
@@ -34,7 +42,10 @@ async function fetchAsPng(url) {
     const res = await fetch(url);
     if (res.ok) {
       const buf = Buffer.from(await res.arrayBuffer());
-      const png = await sharp(buf).png().toBuffer();
+      const png = await sharp(buf)
+        .resize(ICON_PX, ICON_PX, { fit: "inside", withoutEnlargement: true })
+        .png()
+        .toBuffer();
       dataUrl = `data:image/png;base64,${png.toString("base64")}`;
     }
   } catch (err) {
@@ -104,7 +115,13 @@ export async function GET(request) {
     return new Response("Invalid type", { status: 400 });
   }
 
-  const list = decodeList(url.searchParams.get("d")) || EMPTY_LIST;
+  const list = clampList(
+    decodeList(url.searchParams.get("d")) || EMPTY_LIST,
+    MAX_ITEMS_PER_TIER,
+  );
+  if (!list.tiers.length) {
+    return new Response("No valid tiers", { status: 400 });
+  }
 
   const itemEntries = [];
   for (const rank of list.tiers) {
@@ -118,10 +135,12 @@ export async function GET(request) {
     }
   }
 
+  console.time("tl:fetch");
   const [rankPairs, iconCache] = await Promise.all([
     Promise.all(list.tiers.map(async (r) => [r, await loadRankPng(r)])),
     fetchAll(itemEntries.map(([, key, fetchUrl]) => [key, fetchUrl])),
   ]);
+  console.timeEnd("tl:fetch");
   const rankSrc = Object.fromEntries(rankPairs.filter(([, v]) => v));
 
   const itemSrc = {};
@@ -139,9 +158,11 @@ export async function GET(request) {
 
   let height = PREVIEW_PADDING * 2;
   for (const rank of list.tiers) {
-    height += rowHeight((list.items[rank] || []).length, columns);
+    const count = list.items[rank].length + (list.overflow[rank] ? 1 : 0);
+    height += rowHeight(count, columns);
   }
 
+  console.log("tl:icons", Object.keys(itemSrc).length, "bytes", Object.values(itemSrc).reduce((a, b) => a + b.length, 0));
   return renderImage(
     <TierListPreview list={list} rankSrc={rankSrc} itemSrc={itemSrc} />,
     {
