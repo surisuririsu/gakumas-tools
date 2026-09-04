@@ -5,11 +5,6 @@ import MemorySummary from "@/components/MemorySummary";
 import MemoriesNudge from "./MemoriesNudge";
 import styles from "./Memories.module.scss";
 
-// Defined at module scope so react-window sees one stable component type.
-// When this lived inside MemoriesList's render, every state change (ticking
-// a checkbox, changing the search) handed the list a new component, which
-// unmounted and remounted every visible row, images and drag handlers
-// included.
 const Row = memo(function Row({
   index,
   style,
