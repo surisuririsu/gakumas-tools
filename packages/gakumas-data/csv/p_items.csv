@@ -482,3 +482,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 481,可能性の標+,SSR,TRUE,logic,stage,pIdol,153,FALSE,at:startOfTurn { if:turnsRemaining<=2 { score+=genki*0.8; fixedStamina-=2 } }
 482,勇気の標,SSR,FALSE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=4 }; limit:1 }
 483,勇気の標+,SSR,TRUE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=7 }; limit:1 }
+484,たらふくすし放題♪,SSR,FALSE,logic,produce,support,,TRUE,
