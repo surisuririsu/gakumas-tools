@@ -150,3 +150,6 @@ id,idolId,title,rarity,plan,recommendedEffect
 149,2,「ねえ、言っちゃうよ。」,SSR,anomaly,strength
 150,11,「ねえ、言っちゃうよ。」,SSR,sense,concentration
 151,12,「ねえ、言っちゃうよ。」,SSR,sense,concentration
+152,4,標,SSR,sense,goodConditionTurns
+153,6,標,SSR,logic,motivation
+154,7,標,SSR,sense,concentration
