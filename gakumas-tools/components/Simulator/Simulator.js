@@ -114,8 +114,6 @@ export default function Simulator() {
     if (localStorage.getItem(NUM_RUNS_KEY) == null) {
       setNumRuns(Math.round(workerCount() / 2) * 1000);
     }
-    // Workers are shared with any other mounted Simulator (e.g. a pinned
-    // copy) and spawned on the first run.
     return retainWorkerPool();
   }, []);
 

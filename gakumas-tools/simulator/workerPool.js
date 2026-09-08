@@ -8,15 +8,12 @@ export function workerCount() {
   return Math.min(navigator.hardwareConcurrency || 1, MAX_WORKERS);
 }
 
-// Call from a mount effect and run the returned release on unmount. The pool
-// is shared by every mounted Simulator (the page and a pinned copy), spawned
-// on first use, and terminated once the last holder unmounts.
+// Call from a mount effect and run the returned release on unmount.
 export function retainWorkerPool() {
   holders++;
   return () => {
     holders--;
     if (holders > 0) return;
-    holders = 0;
     workers?.forEach((worker) => worker.terminate());
     workers = null;
   };
@@ -32,14 +29,12 @@ function getWorkerPool() {
   return workers;
 }
 
-// Splits `numRuns` across the pool and resolves with one result per worker.
-// Messages carry a run id so concurrent runs from two Simulator instances
-// sharing the pool don't read each other's progress or results.
 export function runOnWorkers(
   { idolStageConfig, linkConfigs, strategyName, numRuns },
   onProgress
 ) {
   const pool = getWorkerPool();
+  // Two Simulators can share the pool, so each run tags its own messages.
   const runId = nextRunId++;
   const runsPerWorker = Math.round(numRuns / pool.length);
 
@@ -47,28 +42,31 @@ export function runOnWorkers(
     pool.map(
       (worker) =>
         new Promise((resolve, reject) => {
-          const cleanup = () => {
-            worker.removeEventListener("message", onMessage);
-            worker.removeEventListener("error", onError);
-          };
-          const onMessage = (e) => {
-            if (e.data.runId !== runId) return;
-            if (e.data.type === WORKER_MESSAGE.PROGRESS) {
-              onProgress(e.data.delta);
-            } else if (e.data.type === WORKER_MESSAGE.RESULT) {
-              cleanup();
-              resolve(e.data.result);
-            } else if (e.data.type === WORKER_MESSAGE.ERROR) {
-              cleanup();
-              reject(new Error(e.data.message));
-            }
-          };
-          const onError = (e) => {
-            cleanup();
-            reject(e.error || new Error(e.message || "Worker failed"));
-          };
-          worker.addEventListener("message", onMessage);
-          worker.addEventListener("error", onError);
+          const listeners = new AbortController();
+          worker.addEventListener(
+            "message",
+            ({ data }) => {
+              if (data.runId !== runId) return;
+              if (data.type === WORKER_MESSAGE.PROGRESS) {
+                onProgress(data.delta);
+              } else if (data.type === WORKER_MESSAGE.RESULT) {
+                listeners.abort();
+                resolve(data.result);
+              } else if (data.type === WORKER_MESSAGE.ERROR) {
+                listeners.abort();
+                reject(new Error(data.message));
+              }
+            },
+            { signal: listeners.signal }
+          );
+          worker.addEventListener(
+            "error",
+            (e) => {
+              listeners.abort();
+              reject(e.error || new Error(e.message || "Worker failed"));
+            },
+            { signal: listeners.signal }
+          );
           worker.postMessage({
             runId,
             idolStageConfig,
