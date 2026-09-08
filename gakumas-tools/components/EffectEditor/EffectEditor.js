@@ -21,8 +21,7 @@ function handleKeyDown(e) {
     const extra = value[selectionStart - 1] === "{" ? INDENT : "";
     insertText(`\n${currentIndent}${extra}`);
   } else if (e.key === "Tab" && !e.shiftKey) {
-    // Shift+Tab keeps moving focus backwards so the editor is not a
-    // keyboard trap; plain Tab indents.
+    // Shift+Tab has to stay a way out of the textarea.
     e.preventDefault();
     insertText(INDENT);
   }

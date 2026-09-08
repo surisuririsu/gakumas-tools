@@ -86,21 +86,18 @@ function EntityIcon({
 
   if (onClick) {
     return (
-        <button
-          ref={dragRef}
-          className={className}
-          onClick={() => onClick(entity || {})}
-          aria-label={entity ? undefined : t("emptySlot")}
-        >
-          <div ref={dropRef} className={styles.dropArea}>
-            {unwrappedElement ||
-              (showEmptyPlaceholder && (
-                <FaPlus
-                  className={styles.emptyPlaceholder}
-                  aria-hidden="true"
-                />
-              ))}
-          </div>
+      <button
+        ref={dragRef}
+        className={className}
+        onClick={() => onClick(entity || {})}
+        aria-label={entity ? undefined : t("emptySlot")}
+      >
+        <div ref={dropRef} className={styles.dropArea}>
+          {unwrappedElement ||
+            (showEmptyPlaceholder && (
+              <FaPlus className={styles.emptyPlaceholder} aria-hidden="true" />
+            ))}
+        </div>
       </button>
     );
   } else {
