@@ -6,9 +6,6 @@ const ModalContext = createContext();
 export function ModalContextProvider({ children }) {
   const [modals, _setModals] = useState([]);
   const originalFocusRef = useRef(null);
-  // Mirrors `modals` so the depth getter can stay referentially stable while
-  // still reading the current stack at call time (Modal calls it from a
-  // keydown handler).
   const modalsRef = useRef(modals);
   modalsRef.current = modals;
 

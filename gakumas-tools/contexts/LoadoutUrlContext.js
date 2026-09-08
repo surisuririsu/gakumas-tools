@@ -41,8 +41,6 @@ export function LoadoutUrlContextProvider({ children }) {
     window.history.replaceState(null, "", url);
   }, []);
 
-  // replaceState re-renders every useSearchParams consumer, including this
-  // provider; a stable value keeps that from cascading to the loadout tree.
   const value = useMemo(
     () => ({ loadoutFromUrl, loadoutsFromUrl, updateUrl }),
     [loadoutFromUrl, loadoutsFromUrl, updateUrl]

@@ -371,9 +371,7 @@ export function LoadoutContextProvider({ children }) {
   );
 
   return (
-    <LoadoutContext.Provider value={value}>
-      {children}
-    </LoadoutContext.Provider>
+    <LoadoutContext.Provider value={value}>{children}</LoadoutContext.Provider>
   );
 }
 
