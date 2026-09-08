@@ -9,10 +9,8 @@ export const OG_CONTENT_TYPE = "image/png";
 export const PREVIEW_CACHE_CONTROL =
   "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
 
-// ImageResponse renders inside its body stream, so a satori/resvg failure
-// surfaces as an aborted response that the proxy in front of the app reports
-// as an opaque 502 with nothing in our logs. Render to a buffer first so the
-// error is logged and answered with a real 500.
+// ImageResponse renders inside its body stream, where a satori/resvg failure
+// would abort an already-started 200 and surface as a bare 502 with no log.
 export async function renderImage(element, options) {
   try {
     const response = new ImageResponse(element, options);
