@@ -3,8 +3,6 @@ import { Link } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./IconButton.module.scss";
 
-// Icon-only control: `ariaLabel` is the accessible name, since the icon
-// itself carries none.
 function IconButton({
   icon: Icon,
   onClick,
