@@ -6,21 +6,15 @@ import { SITE_URL } from "@/utils/localeUrls";
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
 
-// Query-driven preview images are pure functions of their URL and the
-// bundled data; let browsers and the CDN reuse them instead of re-running
-// satori + resvg for every crawler hit. Data changes ship with a deploy,
-// and a day of staleness is fine for a social card.
 export const PREVIEW_CACHE_CONTROL =
   "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
 
-// ImageResponse renders inside its body stream, so a satori/resvg failure
-// surfaces as an aborted response that the proxy in front of the app reports
-// as an opaque 502 with nothing in our logs. Render to a buffer first so the
-// error is logged and answered with a real 500.
-// resvg refuses anything over 32767px per side, and even well below that a
-// render can take minutes and hundreds of MB. Nothing we generate needs more.
+// resvg refuses anything over 32767px per side, and well below that a render
+// can still take minutes and hundreds of MB.
 const MAX_IMAGE_PIXELS = 720 * 4000;
 
+// ImageResponse renders inside its body stream, where a satori/resvg failure
+// would abort an already-started 200 and surface as a bare 502 with no log.
 export async function renderImage(element, options) {
   if (options.width * options.height > MAX_IMAGE_PIXELS) {
     return new Response("Image too large", { status: 400 });
