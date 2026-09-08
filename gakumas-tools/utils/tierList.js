@@ -34,9 +34,8 @@ export function decodeList(str) {
   return { tiers: sortRanks(tiers), items };
 }
 
-// Bound a decoded list for rendering: only known ranks, each id once, and
-// at most `maxPerTier` ids per tier. Returns the clamped list plus how many
-// ids were cut from each tier so the renderer can show an overflow count.
+// Known ranks only, each id once, and at most `maxPerTier` ids per tier, plus
+// the count cut from each tier.
 export function clampList(list, maxPerTier) {
   const tiers = list.tiers.filter((rank) => AVAILABLE_RANKS.includes(rank));
   const items = {};

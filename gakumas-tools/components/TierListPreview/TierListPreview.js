@@ -12,8 +12,8 @@ export default function TierListPreview({ list, rankSrc, itemSrc }) {
             ...(i === 0 && styles.tierLabelFirst),
             ...(last && styles.tierLabelLast),
           };
-          const ids = list.items[rank] || [];
-          const overflow = list.overflow?.[rank] || 0;
+          const ids = list.items[rank];
+          const overflow = list.overflow[rank];
           return (
             <div key={rank} style={rowStyle}>
               <div style={labelStyle}>
@@ -22,25 +22,22 @@ export default function TierListPreview({ list, rankSrc, itemSrc }) {
                 )}
               </div>
               <div style={styles.items}>
+                {/* Backgrounds, not <img>: satori's <img> path is
+                    superlinear in the number of images. */}
                 {ids.map((id) => (
-                  // A background image, not <img>: satori's <img> handling
-                  // grows superlinearly with the number of images (256 take
-                  // ~6s vs ~0.07s as backgrounds for the same output). See
-                  // TierListPreview.styles.js for the other render costs.
                   <div
                     key={id}
                     style={
                       itemSrc[id]
-                        ? { ...styles.item, backgroundImage: `url(${itemSrc[id]})` }
+                        ? {
+                            ...styles.item,
+                            backgroundImage: `url(${itemSrc[id]})`,
+                          }
                         : styles.item
                     }
                   />
                 ))}
-                {overflow > 0 && (
-                  <div key="overflow" style={styles.overflow}>
-                    +{overflow}
-                  </div>
-                )}
+                {overflow > 0 && <div style={styles.overflow}>+{overflow}</div>}
               </div>
             </div>
           );

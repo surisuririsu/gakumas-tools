@@ -20,10 +20,8 @@ export async function renderImage(element, options) {
     return new Response("Image too large", { status: 400 });
   }
   try {
-    console.time("og:render");
     const response = new ImageResponse(element, options);
     const body = await response.arrayBuffer();
-    console.timeEnd("og:render");
     return new Response(body, { status: 200, headers: response.headers });
   } catch (err) {
     console.error("image render failed:", err);

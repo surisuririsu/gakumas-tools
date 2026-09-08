@@ -7,11 +7,9 @@ export const ITEMS_PADDING = 10;
 export const MIN_ROW_HEIGHT = 80;
 const PANEL_RADIUS = 10;
 
-// Rendering notes: resvg re-rasterizes a clipped group for every filtered
-// child inside it, so a rounded `overflow: hidden` panel plus an inset
-// box-shadow (an SVG filter) on each tile made a 160-icon list take ~25s.
-// The panel is left unclipped (the first/last tier labels round their own
-// corners) and tiles use a plain border: same look, ~1s.
+// resvg re-rasterizes a clipped group for every filtered child, so the panel
+// takes no `overflow: hidden` (the first and last tier labels round their own
+// corners) and the tiles take a border rather than an inset box-shadow.
 
 const styles = {
   container: {
