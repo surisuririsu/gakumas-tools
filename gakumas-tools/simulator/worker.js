@@ -2,8 +2,7 @@ import { simulate } from ".";
 import { WORKER_MESSAGE } from "./constants";
 
 addEventListener("message", async (e) => {
-  const { runId, idolStageConfig, linkConfigs, strategyName, numRuns } =
-    e.data;
+  const { runId, idolStageConfig, linkConfigs, strategyName, numRuns } = e.data;
   let lastReported = 0;
   try {
     const result = await simulate(
