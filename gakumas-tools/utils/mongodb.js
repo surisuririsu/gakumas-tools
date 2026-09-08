@@ -14,13 +14,10 @@ if (!MONGODB_DB) {
   );
 }
 
-// Every API query is scoped by userId (and loadouts are sorted by createdAt),
-// so without these the driver scans the whole collection per request.
-// createIndex is idempotent; it runs once per process after connecting.
-const INDEXES = [
-  ["memories", { userId: 1 }],
-  ["loadouts", { userId: 1, createdAt: -1 }],
-];
+const INDEXES = {
+  memories: { userId: 1 },
+  loadouts: { userId: 1, createdAt: -1 },
+};
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
@@ -36,19 +33,17 @@ if (!cached) {
 async function ensureIndexes(db) {
   try {
     await Promise.all(
-      INDEXES.map(([name, keys]) => db.collection(name).createIndex(keys))
+      Object.entries(INDEXES).map(([name, keys]) =>
+        db.collection(name).createIndex(keys)
+      )
     );
   } catch (err) {
-    // Index creation needs privileges the API user may not have; queries
-    // still work without them, so don't fail the connection.
     console.warn("mongodb: could not ensure indexes:", err?.message || err);
   }
 }
 
 async function createConnection() {
   const client = await MongoClient.connect(MONGODB_URI, {
-    // Fail API calls quickly when the cluster is unreachable instead of
-    // hanging for the driver's 30s default.
     serverSelectionTimeoutMS: 5000,
   });
   const db = client.db(MONGODB_DB);
@@ -63,8 +58,7 @@ export async function connect() {
 
   if (!cached.promise) {
     cached.promise = createConnection().catch((err) => {
-      // Drop the rejected promise so the next request retries rather than
-      // every request failing until the process restarts.
+      // Let the next request retry instead of awaiting this rejection.
       cached.promise = null;
       throw err;
     });
