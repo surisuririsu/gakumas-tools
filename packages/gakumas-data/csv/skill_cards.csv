@@ -869,3 +869,7 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 868,出発進行ですわ～♪+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,153,FALSE,,cost-=1,genki+=7; if:motivation>=6 { genki+=10 }; if:motivation>=9 { at:turn { drawCard(2); limit:1 } },1,
 869,応えたい気持ち,,SSR,active,sense,1,FALSE,TRUE,pIdol,154,FALSE,,cost-=4,concentrationMultiplier=2; score+=10; concentration+=6,1,
 870,応えたい気持ち+,,SSR,active,sense,1,TRUE,TRUE,pIdol,154,FALSE,,cost-=4,concentrationMultiplier=2; score+=20; concentration+=6,1,
+871,光り輝く道しるべ,,SSR,mental,logic,1,FALSE,TRUE,pIdol,155,FALSE,,,,1,
+872,光り輝く道しるべ+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,155,FALSE,,goodImpressionTurns-=5,goodImpressionTurns+=4; motivation+=3; cardUsesRemaining+=1,1,at:startOfTurn { if:turnsRemaining==1 & countCards[baseId(871) & removed] > 0 { useRandomCardFree[baseId(871)]; limit:3 } }
+873,先へ進む姿,,SSR,active,logic,1,FALSE,TRUE,pIdol,155,FALSE,,,,,
+874,先へ進む姿+,,SSR,active,logic,1,TRUE,TRUE,pIdol,155,FALSE,,goodImpressionTurns-=4,goodImpressionTurns+=consumedGoodImpressionTurns*0.85; score+=goodImpressionTurns*2.7,,

@@ -167,6 +167,7 @@ export default class Executor extends EngineComponent {
             state[S.triggeredEffect]?.source?.type === "skillCardEffect");
         const actionPrev = needsChangeTrigger ? state.slice() : null;
         const prevGenki = state[S.genki];
+        const prevGoodImpressionTurns = state[S.goodImpressionTurns];
 
         this.executeAction(state, actions[i], card);
 
@@ -202,6 +203,13 @@ export default class Executor extends EngineComponent {
         // Consumed genki
         if (state[S.genki] < prevGenki) {
           state[S.consumedGenki] += prevGenki - state[S.genki];
+        }
+        if (
+          phase === "processCost" &&
+          state[S.goodImpressionTurns] < prevGoodImpressionTurns
+        ) {
+          state[S.consumedGoodImpressionTurns] +=
+            prevGoodImpressionTurns - state[S.goodImpressionTurns];
         }
       }
     } finally {

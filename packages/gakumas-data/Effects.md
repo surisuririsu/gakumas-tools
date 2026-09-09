@@ -369,6 +369,7 @@ They are also valid as assignment LHS unless marked read-only.
 | 絶好調                         | `perfectConditionTurns`        |
 | 集中                           | `concentration`                |
 | 好印象                         | `goodImpressionTurns`          |
+| ステージ中に消費した好印象     | `consumedGoodImpressionTurns`  |
 | やる気                         | `motivation`                   |
 | 誇り                           | `prideTurns`                   |
 | 指針                           | `stance`                       |

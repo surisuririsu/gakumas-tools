@@ -132,6 +132,7 @@ export const ALL_FIELDS = [
   "consumedStamina",
   "genki",
   "consumedGenki",
+  "consumedGoodImpressionTurns",
   "score",
 
   // Turns
