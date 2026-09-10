@@ -483,5 +483,6 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 482,勇気の標,SSR,FALSE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=4 }; limit:1 }
 483,勇気の標+,SSR,TRUE,sense,stage,pIdol,154,FALSE,at:cardUsed { if:concentration>=13 { cardUsesRemaining+=1; concentration+=7 }; limit:1 }
 484,たらふくすし放題♪,SSR,FALSE,logic,produce,support,,TRUE,
-485,頂点の輝き,SSR,FALSE,logic,stage,pIdol,155,FALSE,
+485,頂点の輝き,SSR,FALSE,logic,stage,pIdol,155,FALSE,at:startOfTurn { if:turnsRemaining==1 { goodImpressionTurns+=5; turnsRemaining+=1; goodImpressionTurns-=6 }; limit:2 }
 486,頂点の輝き+,SSR,TRUE,logic,stage,pIdol,155,FALSE,at:startOfTurn { if:turnsRemaining==1 { goodImpressionTurns+=5; turnsRemaining+=1; fixedStamina+=1; goodImpressionTurns-=6 }; limit:2 }
+487,素敵なお仕事,SSR,FALSE,free,produce,support,,TRUE,
