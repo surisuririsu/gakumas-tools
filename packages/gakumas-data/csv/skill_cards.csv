@@ -873,3 +873,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 872,光り輝く道しるべ+,,SSR,mental,logic,1,TRUE,TRUE,pIdol,155,FALSE,,goodImpressionTurns-=5,goodImpressionTurns+=4; motivation+=3; cardUsesRemaining+=1,1,at:startOfTurn { if:turnsRemaining==1 & countCards[baseId(871) & removed] > 0 { useRandomCardFree[baseId(871)]; limit:3 } }
 873,先へ進む姿,,SSR,active,logic,1,FALSE,TRUE,pIdol,155,FALSE,,goodImpressionTurns-=4,goodImpressionTurns+=consumedGoodImpressionTurns*0.85; score+=goodImpressionTurns*1.8,,
 874,先へ進む姿+,,SSR,active,logic,1,TRUE,TRUE,pIdol,155,FALSE,,goodImpressionTurns-=4,goodImpressionTurns+=consumedGoodImpressionTurns*0.85; score+=goodImpressionTurns*2.7,,
+875,好きを集める一番星,,L,mental,sense,1,FALSE,TRUE,produce,106,TRUE,,cost-=0,concentration+=7; cardUsesRemaining+=1; moveSelectedToTopOfDeck[deck | discarded](2),1,
+876,夢を追い続ける一番星,,L,mental,logic,1,FALSE,TRUE,produce,126,FALSE,,cost-=0,at:staminaDecreased { if:parentPhase==processCost { genki+=5 }; limit:4 }; cardUsesRemaining+=1,1,

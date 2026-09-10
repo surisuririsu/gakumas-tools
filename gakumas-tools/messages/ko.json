@@ -585,6 +585,7 @@
     "skip": "스킵",
     "selectCardsToHold": "{num}장의 카드를 선택",
     "selectCardsToMoveToHand": "{num}장의 카드를 선택",
+    "selectCardsToMoveToTopOfDeck": "덱 맨 위로 옮길 카드 {num}장을 선택",
     "confirm": "확인"
   },
   "BoxPlot": {

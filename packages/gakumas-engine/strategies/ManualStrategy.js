@@ -21,6 +21,16 @@ export class MoveToHandSelectionRequest extends Error {
   }
 }
 
+export class MoveToTopOfDeckSelectionRequest extends Error {
+  constructor(state, cards, num) {
+    super("Move to top of deck selection required");
+    this.name = "MoveToTopOfDeckSelectionRequest";
+    this.state = state;
+    this.cards = cards;
+    this.num = num;
+  }
+}
+
 export class UseCardFreeSelectionRequest extends Error {
   constructor(state, cards, num) {
     super("Use card free selection required");
@@ -76,6 +86,16 @@ export default class ManualStrategy extends BaseStrategy {
     return indices;
   }
 
+  pickCardsToMoveToTopOfDeck(state, cards, num = 1) {
+    if (!this.pickCardsToMoveToTopOfDeckIndices) {
+      throw new MoveToTopOfDeckSelectionRequest(state, cards, num);
+    }
+
+    const indices = this.pickCardsToMoveToTopOfDeckIndices;
+    delete this.pickCardsToMoveToTopOfDeckIndices;
+    return indices;
+  }
+
   pickCardsToHold(state, cards, num = 1) {
     if (!this.pickCardsToHoldIndices) {
       throw new HoldSelectionRequest(state, cards, num);
@@ -115,6 +135,15 @@ export default class ManualStrategy extends BaseStrategy {
       });
 
       this.pickCardsToMoveToHandIndices = selectedIndices;
+    } else if (exception instanceof MoveToTopOfDeckSelectionRequest) {
+      const selectedIndices = await this.inputCallback({
+        type: "MOVE_TO_TOP_OF_DECK_SELECTION",
+        state: exception.state,
+        cards: exception.cards,
+        num: exception.num,
+      });
+
+      this.pickCardsToMoveToTopOfDeckIndices = selectedIndices;
     } else if (exception instanceof UseCardFreeSelectionRequest) {
       const selectedIndices = await this.inputCallback({
         type: "USE_CARD_FREE_SELECTION",

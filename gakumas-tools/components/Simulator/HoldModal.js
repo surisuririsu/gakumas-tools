@@ -13,6 +13,11 @@ export default function HoldModal({ decision, onDecision, idolId }) {
   const t = useTranslations("stage");
   const { state, cards, num } = decision;
   const [selectedIndices, setSelectedIndices] = useState([]);
+  const promptKey =
+    {
+      HOLD_SELECTION: "selectCardsToHold",
+      MOVE_TO_TOP_OF_DECK_SELECTION: "selectCardsToMoveToTopOfDeck",
+    }[decision.type] ?? "selectCardsToMoveToHand";
 
   const toggleCard = (arrayIndex) => {
     setSelectedIndices((prev) => {
@@ -28,12 +33,7 @@ export default function HoldModal({ decision, onDecision, idolId }) {
   return (
     <Modal dismissable={false}>
       <h3>
-        {t(
-          decision.type == "HOLD_SELECTION"
-            ? "selectCardsToHold"
-            : "selectCardsToMoveToHand",
-          { num }
-        )}
+        {t(promptKey, { num })}
       </h3>
       <div className={styles.cardGrid}>
         {cards.map((cardIndex, arrayIndex) => {
