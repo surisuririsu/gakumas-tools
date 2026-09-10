@@ -156,6 +156,7 @@ Assignment operators: `=`, `+=`, `-=`, `*=`, `/=`, `%=`.
 | 特定カードを手札に移動 (選択)             | `moveSelectedToHand[targetExpr](, num)`                                  |
 | 特定カードを手札に移動 (全部)             | `moveAllToHand[targetExpr]`                                              |
 | 特定カードを山札上に移動 (ランダム)       | `moveRandomToTopOfDeck[...](, num)`                                      |
+| 特定カードを山札上に移動 (選択)           | `moveSelectedToTopOfDeck[...](, num)`                                    |
 | 特定カードを山札上に移動 (全部)           | `moveAllToTopOfDeck[...]`                                                |
 | 特定カードを山札に戻す                    | `moveAllToDeck[...]`                                                     |
 | 特定カードを保留 (ランダム)               | `holdRandom[...](, num)`                                                 |

@@ -22,6 +22,15 @@ export default class BaseStrategy {
   }
 
   /**
+   * Given a state and list of cards, selects cards to move to the top of deck.
+   * Returns the indices of the cards to move.
+   * Can be async for strategies that need to await user input (ManualStrategy).
+   */
+  pickCardsToMoveToTopOfDeck(state, cards, num = 1) {
+    throw new Error("pickCardsToMoveToTopOfDeck is not implemented!");
+  }
+
+  /**
    * Given a state and list of cards, selects a card to hold.
    * Returns the indices of the cards to hold.
    * Can be async for strategies that need to await user input (ManualStrategy).
