@@ -17,6 +17,7 @@ import {
   EntityTypes,
   resolveEntityIcon,
 } from "@/utils/entities";
+import { PREVIEW_CACHE_CONTROL } from "@/utils/og";
 import { decodeList, EMPTY_LIST } from "@/utils/tierList";
 
 const PNG_CACHE_LIMIT = 500;
@@ -144,6 +145,10 @@ export async function GET(request) {
 
   return new ImageResponse(
     <TierListPreview list={list} rankSrc={rankSrc} itemSrc={itemSrc} />,
-    { width: PREVIEW_WIDTH, height },
+    {
+      width: PREVIEW_WIDTH,
+      height,
+      headers: { "Cache-Control": PREVIEW_CACHE_CONTROL },
+    },
   );
 }

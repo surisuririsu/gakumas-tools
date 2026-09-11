@@ -6,7 +6,7 @@ export async function generateMetadata({ params, searchParams }) {
   const { locale } = await params;
   const metadata = await generateMetadataForTool("simulator", locale, "/simulator");
   const query = new URLSearchParams(await searchParams).toString();
-  metadata.openGraph.images = [`/api/preview/?${query}`];
+  metadata.openGraph.images = [`/api/preview?${query}`];
 
   return metadata;
 }

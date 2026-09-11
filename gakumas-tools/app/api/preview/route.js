@@ -4,6 +4,7 @@ import { IdolConfig } from "gakumas-engine";
 import gkImg from "gakumas-images";
 import { PItems, SkillCards } from "gakumas-data";
 import Preview from "@/components/Preview";
+import { PREVIEW_CACHE_CONTROL } from "@/utils/og";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 const PNG_CACHE_LIMIT = 500;
@@ -92,6 +93,6 @@ export async function GET(request) {
         imageMap={imageMap}
       />
     ),
-    { width: 470, height }
+    { width: 470, height, headers: { "Cache-Control": PREVIEW_CACHE_CONTROL } }
   );
 }
