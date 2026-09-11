@@ -485,4 +485,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 484,たらふくすし放題♪,SSR,FALSE,logic,produce,support,,TRUE,
 485,頂点の輝き,SSR,FALSE,logic,stage,pIdol,155,FALSE,at:startOfTurn { if:turnsRemaining==1 { goodImpressionTurns+=5; turnsRemaining+=1; goodImpressionTurns-=6 }; limit:2 }
 486,頂点の輝き+,SSR,TRUE,logic,stage,pIdol,155,FALSE,at:startOfTurn { if:turnsRemaining==1 { goodImpressionTurns+=5; turnsRemaining+=1; fixedStamina+=1; goodImpressionTurns-=6 }; limit:2 }
-487,素敵なお仕事,SSR,FALSE,free,produce,support,,TRUE,
+487,素敵なお仕事,SSR,FALSE,free,produce,support,,FALSE,
