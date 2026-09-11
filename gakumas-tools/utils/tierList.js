@@ -1,4 +1,4 @@
-import { sortRanks } from "@/components/TierList/ranks";
+import { AVAILABLE_RANKS, sortRanks } from "@/components/TierList/ranks";
 
 export const DEFAULT_RANKS = ["S4", "SSS", "SS", "S", "A", "B"];
 
@@ -32,6 +32,26 @@ export function decodeList(str) {
   }
   if (!tiers.length) return null;
   return { tiers: sortRanks(tiers), items };
+}
+
+// Known ranks only, each id once, and at most `maxPerTier` ids per tier, plus
+// the count cut from each tier.
+export function clampList(list, maxPerTier) {
+  const tiers = list.tiers.filter((rank) => AVAILABLE_RANKS.includes(rank));
+  const items = {};
+  const overflow = {};
+  const seen = new Set();
+  for (const rank of tiers) {
+    const unique = [];
+    for (const id of list.items[rank] || []) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      unique.push(id);
+    }
+    items[rank] = unique.slice(0, maxPerTier);
+    overflow[rank] = unique.length - items[rank].length;
+  }
+  return { tiers, items, overflow };
 }
 
 export function isDefaultList(list) {
