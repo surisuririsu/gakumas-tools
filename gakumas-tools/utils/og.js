@@ -9,6 +9,19 @@ export const OG_CONTENT_TYPE = "image/png";
 export const PREVIEW_CACHE_CONTROL =
   "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400";
 
+// ImageResponse renders inside its body stream, where a satori/resvg failure
+// would abort an already-started 200 and surface as a bare 502 with no log.
+export async function renderImage(element, options) {
+  try {
+    const response = new ImageResponse(element, options);
+    const body = await response.arrayBuffer();
+    return new Response(body, { status: 200, headers: response.headers });
+  } catch (err) {
+    console.error("image render failed:", err);
+    return new Response("Image render failed", { status: 500 });
+  }
+}
+
 const SITE_NAME = "Gakumas Tools";
 const SITE_HOST = new URL(SITE_URL).host;
 
@@ -178,7 +191,7 @@ export async function toolOgImage(locale, tool, themeKey = "brand") {
     : (toolMessages.metaTitle ?? toolMessages.title);
   const fontData = await loadFont(locale);
 
-  return new ImageResponse(
+  return renderImage(
     (
       <div
         style={{

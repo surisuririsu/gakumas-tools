@@ -1,10 +1,9 @@
-import { ImageResponse } from "next/og";
 import sharp from "sharp";
 import { IdolConfig } from "gakumas-engine";
 import gkImg from "gakumas-images";
 import { PItems, SkillCards } from "gakumas-data";
 import Preview from "@/components/Preview";
-import { PREVIEW_CACHE_CONTROL } from "@/utils/og";
+import { PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 const PNG_CACHE_LIMIT = 500;
@@ -82,7 +81,7 @@ export async function GET(request) {
   );
   const imageMap = Object.fromEntries(entries.filter(([, v]) => v));
 
-  return new ImageResponse(
+  return renderImage(
     (
       <Preview
         itemIds={pItemIds}
