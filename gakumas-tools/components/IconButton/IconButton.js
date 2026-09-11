@@ -10,6 +10,7 @@ function IconButton({
   disabled,
   size = "medium",
   tone,
+  ariaLabel,
 }) {
   const className = c(
     styles.iconButton,
@@ -23,14 +24,22 @@ function IconButton({
       className={className}
       href={href}
       target="_blank"
+      rel="noopener noreferrer"
       onClick={onClick}
-      disabled={disabled}
+      aria-disabled={disabled || undefined}
+      aria-label={ariaLabel}
     >
-      <Icon />
+      <Icon aria-hidden="true" />
     </Link>
   ) : (
-    <button className={className} onClick={onClick} disabled={disabled}>
-      <Icon />
+    <button
+      type="button"
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+    >
+      <Icon aria-hidden="true" />
     </button>
   );
 }

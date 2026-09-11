@@ -20,7 +20,8 @@ function handleKeyDown(e) {
       .match(/^\s*/)[0];
     const extra = value[selectionStart - 1] === "{" ? INDENT : "";
     insertText(`\n${currentIndent}${extra}`);
-  } else if (e.key === "Tab") {
+  } else if (e.key === "Tab" && !e.shiftKey) {
+    // Shift+Tab has to stay a way out of the textarea.
     e.preventDefault();
     insertText(INDENT);
   }
