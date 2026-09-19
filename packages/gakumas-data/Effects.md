@@ -385,6 +385,7 @@ They are also valid as assignment LHS unless marked read-only.
 | 全力回数                       | `fullPowerTimes`               |
 | 消費体力減少                   | `halfCostTurns`                |
 | 消費体力増加                   | `doubleCostTurns`              |
+| 強化状態コスト増加             | `doubleBuffCostTurns`          |
 | 消費体力削減                   | `costReduction`                |
 | 消費体力追加                   | `costIncrease`                 |
 | スキルカード追加発動           | `doubleCardEffectCards`        |

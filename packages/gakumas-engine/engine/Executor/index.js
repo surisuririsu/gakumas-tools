@@ -427,12 +427,14 @@ export default class Executor extends EngineComponent {
         intermediate += growth[G[`g.${lhs}`]];
       }
     } else if (op === "-=") {
-      if (
-        growth?.[G["g.typedCost"]] &&
-        (state[S.phase] === "processCost" || state[S.phase] === "checkCost")
-      ) {
-        rhsValue -= growth[G["g.typedCost"]];
-        if (rhsValue < 0) rhsValue = 0;
+      if (state[S.phase] === "processCost" || state[S.phase] === "checkCost") {
+        if (growth?.[G["g.typedCost"]]) {
+          rhsValue -= growth[G["g.typedCost"]];
+          if (rhsValue < 0) rhsValue = 0;
+        }
+        if (state[S.doubleBuffCostTurns] > 0 && BUFF_FIELDS.includes(S[lhs])) {
+          rhsValue *= 2;
+        }
       }
       intermediate -= rhsValue;
     } else if (op === "*=") {

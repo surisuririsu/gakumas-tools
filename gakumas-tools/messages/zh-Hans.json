@@ -529,6 +529,7 @@
     "enthusiasmBonus": "热意增加",
     "halfCostTurns": "体力消耗减半",
     "doubleCostTurns": "体力消耗翻倍",
+    "doubleBuffCostTurns": "强化状态消耗翻倍",
     "costReduction": "体力消耗减小",
     "costIncrease": "体力消耗增加",
     "doubleCardEffectCards": "卡牌效果额外生效",
