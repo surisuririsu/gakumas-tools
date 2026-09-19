@@ -529,6 +529,7 @@
     "enthusiasmBonus": "열의 추가",
     "halfCostTurns": "소비 체력 경감",
     "doubleCostTurns": "소비 체력 증가",
+    "doubleBuffCostTurns": "강화 상태 비용 증가",
     "costReduction": "소비 체력 감소",
     "costIncrease": "소비 체력 추가",
     "doubleCardEffectCards": "스킬 카드 추가 발동",

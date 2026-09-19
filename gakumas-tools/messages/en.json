@@ -529,6 +529,7 @@
     "enthusiasmBonus": "Enthusiasm bonus",
     "halfCostTurns": "Half cost turns",
     "doubleCostTurns": "Double cost turns",
+    "doubleBuffCostTurns": "Double buff cost turns",
     "costReduction": "Cost reduction",
     "costIncrease": "Cost increase",
     "doubleCardEffectCards": "Repeat card effects",

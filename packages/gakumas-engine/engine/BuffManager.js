@@ -90,6 +90,7 @@ export default class BuffManager extends EngineComponent {
     // General
     state[S.halfCostTurns] = 0;
     state[S.doubleCostTurns] = 0;
+    state[S.doubleBuffCostTurns] = 0;
     state[S.costReduction] = 0;
     state[S.costIncrease] = 0;
     state[S.nullifyCostCards] = 0;
