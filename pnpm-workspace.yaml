@@ -57,8 +57,8 @@ overrides:
   # next-auth pins ^8.3.2; buffer bounds advisory patched in 11.1.1.
   # Kept on 11.x — still dual CJS/ESM with the named exports next-auth uses.
   uuid: '^11.1.1'
-  # onnxruntime-node pins ^0.5; 4GB allocation advisory patched in 0.6.0.
-  adm-zip: '^0.6.0'
+  # onnxruntime-node pins ^0.5; archive extraction advisories patched in 0.6.1.
+  adm-zip: '^0.6.1'
   # via sass; DoS advisories patched in 5.1.8.
   immutable: '^5.1.8'
   # via onnxruntime-web; DoS advisories patched in 7.6.5. Kept on 7.x to
