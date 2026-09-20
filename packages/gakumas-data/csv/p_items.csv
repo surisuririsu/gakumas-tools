@@ -488,4 +488,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 487,素敵なお仕事,SSR,FALSE,free,produce,support,,FALSE,
 488,止まない嵐,SSR,FALSE,anomaly,stage,pIdol,156,FALSE,"at:startOfTurn { setFullPowerChargeBuff(0.25,1); setStance(preservation); genki+=2; doubleBuffCostTurns+=1 }"
 489,止まない嵐+,SSR,TRUE,anomaly,stage,pIdol,156,FALSE,"at:startOfTurn { setFullPowerChargeBuff(0.4,1); setStance(preservation); genki+=2; doubleBuffCostTurns+=1 }"
-490,限界への挑戦権,SR,FALSE,anomaly,produce,support,,FALSE,
+490,限界への挑戦券,SR,FALSE,anomaly,produce,support,,FALSE,
