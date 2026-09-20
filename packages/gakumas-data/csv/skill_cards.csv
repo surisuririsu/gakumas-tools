@@ -878,4 +878,4 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 877,わたしは、風！,,SSR,active,anomaly,1,FALSE,TRUE,pIdol,156,FALSE,,fullPowerCharge-=2,"setFullPowerEffectBuff(0.1,1); score+=2+cumulativeFullPowerCharge*1.2; score+=2+cumulativeFullPowerCharge*1.2",,
 878,わたしは、風！+,,SSR,active,anomaly,1,TRUE,TRUE,pIdol,156,FALSE,,fullPowerCharge-=2,"setFullPowerEffectBuff(0.1,1); score+=5+cumulativeFullPowerCharge*1.5; score+=5+cumulativeFullPowerCharge*1.5",,
 879,うたたねレポート,,SSR,mental,anomaly,1,FALSE,TRUE,support,,FALSE,,cost-=4,fullPowerCharge+=4; if:stance!=fullPower { fullPowerCharge+=2 }; if:isFullPower { target:hand { g.score+=7 } },1,
-880,うたたねレポート+,,SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,cost-=4,fullPowerCharge+=4; if:stance!=fullPower { fullPowerCharge+=2 }; if:isFullPower { target:hand { g.score+=7 } },1,
+880,うたたねレポート+,"29,43",SSR,mental,anomaly,1,TRUE,TRUE,support,,FALSE,,cost-=3,fullPowerCharge+=5; if:stance!=fullPower { fullPowerCharge+=2 }; if:isFullPower { target:hand { g.score+=7 } },1,
