@@ -17,3 +17,4 @@ screenshots/
 scripts/train_classifier/checkpoints/
 tests/overlays/
 tests/.tesseract-cache/
+.claude/
