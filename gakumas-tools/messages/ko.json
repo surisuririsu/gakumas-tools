@@ -284,7 +284,8 @@
     "error": "가져오기에 실패했습니다"
   },
   "MemorySummaryActionButtons": {
-    "edit": "편집"
+    "edit": "편집",
+    "loaded": "메모리 {slot}에 불러왔습니다"
   },
   "MemoryEditorModal": {
     "name": "이름",

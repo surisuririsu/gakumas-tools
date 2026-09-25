@@ -284,7 +284,8 @@
     "error": "Failed to import"
   },
   "MemorySummaryActionButtons": {
-    "edit": "Edit"
+    "edit": "Edit",
+    "loaded": "Loaded into memory slot {slot}"
   },
   "MemoryEditorModal": {
     "name": "Name",

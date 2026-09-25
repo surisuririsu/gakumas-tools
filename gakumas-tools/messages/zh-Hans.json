@@ -284,7 +284,8 @@
     "error": "导入失败"
   },
   "MemorySummaryActionButtons": {
-    "edit": "编辑"
+    "edit": "编辑",
+    "loaded": "已载入到回忆卡{slot}"
   },
   "MemoryEditorModal": {
     "name": "命名",

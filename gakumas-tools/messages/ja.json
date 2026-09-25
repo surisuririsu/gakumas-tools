@@ -292,7 +292,8 @@
     "error": "読み込みに失敗しました"
   },
   "MemorySummaryActionButtons": {
-    "edit": "編集"
+    "edit": "編集",
+    "loaded": "メモリー{slot}に読み込みました"
   },
   "MemoryEditorModal": {
     "name": "名前",
