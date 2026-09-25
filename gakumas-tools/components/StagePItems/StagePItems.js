@@ -28,6 +28,7 @@ function StagePItems({ pItemIds, replacePItemId, swapPItemIds, indications, size
           }
           onSwap={swapPItemIds}
           size={size}
+          showEmptyPlaceholder
         />
       ))}
     </div>
