@@ -239,7 +239,7 @@ function PIdolCollection() {
           <div className={styles.bar}>
             <div
               className={styles.barFill}
-              style={{ width: `${overallPct}%` }}
+              style={{ transform: `scaleX(${overallPct / 100})` }}
             />
           </div>
           <div className={styles.bulkActions}>

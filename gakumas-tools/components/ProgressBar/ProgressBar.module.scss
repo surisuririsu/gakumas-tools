@@ -11,9 +11,9 @@
     content: "";
     position: absolute;
     inset: 0;
-    width: var(--progress, 0%);
     background: tokens.$gradient-brand;
-    border-radius: inherit;
-    transition: width 0.15s ease;
+    transform: scaleX(var(--progress, 0));
+    transform-origin: left;
+    transition: transform tokens.$duration-fast linear;
   }
 }

@@ -84,9 +84,10 @@ button.cost {
 
   @media (hover: hover) {
     opacity: 0;
-    transition: all 0.3s;
+    transition: opacity 0.3s;
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       opacity: 1;
     }
   }

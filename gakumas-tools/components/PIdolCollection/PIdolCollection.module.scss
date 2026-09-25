@@ -121,7 +121,8 @@
 .barFill {
   height: 100%;
   background: tokens.$gradient-brand;
-  transition: width 0.2s ease;
+  transform-origin: left;
+  transition: transform tokens.$duration-base tokens.$ease-out;
 }
 
 .bulkActions {

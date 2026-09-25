@@ -28,7 +28,6 @@ function Navbar() {
     visible: false,
   });
 
-  // Measure the active link and slide the indicator to match.
   useEffect(() => {
     const container = linksRef.current;
     if (!container) return;
@@ -39,17 +38,15 @@ function Navbar() {
         setIndicator((prev) => ({ ...prev, visible: false }));
         return;
       }
-      const containerRect = container.getBoundingClientRect();
-      const rect = activeEl.getBoundingClientRect();
-      const width = rect.width * INDICATOR_FRACTION;
-      const left =
-        rect.left - containerRect.left + (rect.width - width) / 2;
+      const width = activeEl.offsetWidth * INDICATOR_FRACTION;
+      const left = activeEl.offsetLeft + (activeEl.offsetWidth - width) / 2;
       setIndicator({ left, width, visible: true });
     };
 
     measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    const observer = new ResizeObserver(measure);
+    observer.observe(container);
+    return () => observer.disconnect();
   }, [pathname]);
 
   return (

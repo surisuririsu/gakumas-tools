@@ -25,7 +25,10 @@
   padding: 8px;
   border: 2px solid colors.$gray-light;
   border-radius: 8px;
-  transition: all 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s,
+    box-shadow 0.2s;
 
   &:hover {
     border-color: colors.$blue;
