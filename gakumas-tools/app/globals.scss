@@ -1,4 +1,5 @@
 @use "../styles/colors";
+@use "../styles/mixins";
 @use "../styles/tokens";
 
 * {
@@ -89,14 +90,12 @@ h1,
 h2,
 h3 {
   color: tokens.$surface-ink;
-  font-weight: 400;
+  font-weight: tokens.$weight-heavy;
 }
 
 label {
   margin-top: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: tokens.$surface-ink-muted;
+  @include mixins.label;
 }
 
 a {

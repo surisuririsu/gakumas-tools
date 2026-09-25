@@ -14,12 +14,28 @@ $radius-sm: 6px;
 $radius-md: 10px;
 $radius-lg: 14px;
 $radius-xl: 18px;
+$radius-pill: 999px;
 
 // Type scale
+$text-2xs: 11px;
 $text-xs: 12px;
 $text-sm: 13px;
+$text-md: 14px;
 $text-base: 15px;
 $text-lg: 18px;
+$text-xl: 22px;
+
+$weight-regular: 400;
+$weight-semibold: 600;
+$weight-bold: 700;
+$weight-heavy: 800;
+
+// Layers
+$z-raised: 1;
+$z-sticky: 10;
+$z-nav: 100;
+$z-modal: 300;
+$z-tooltip: 400;
 
 // Motion
 $duration-press: 60ms;
@@ -27,20 +43,18 @@ $duration-fast: 120ms;
 $duration-base: 180ms;
 $duration-slow: 280ms;
 $duration-spring: 340ms;
+$duration-slide: 420ms;
 $ease-out: cubic-bezier(0.2, 0, 0, 1);
 $ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 $ease-spring: cubic-bezier(0.32, 1.34, 0.52, 1);
 $ease-pop: cubic-bezier(0.32, 1.48, 0.52, 1);
+$ease-glide: cubic-bezier(0.22, 1, 0.36, 1);
 
 $press-scale: 0.96;
 $press-scale-wide: 0.985;
 $press-depth: 2px;
 
-// Focus
-$focus-ring-width: 2px;
-$focus-ring-color: colors.$gk-orange;
-
-// Surface palette
+// Surfaces
 $surface-bg: #f2f2f5;
 $surface-alt: #f7f7f9;
 $surface-panel: #ffffff;
@@ -51,24 +65,71 @@ $surface-border-strong: #b5b5be;
 $surface-edge: #dadae1;
 $fill-muted: rgba(20, 20, 40, 0.06);
 $fill-muted-hover: rgba(20, 20, 40, 0.09);
+$fill-subtle: rgba(20, 20, 40, 0.035);
 $surface-ink: #1c1c22;
 $surface-ink-muted: #63636b;
 $surface-ink-subtle: #71717a;
+$surface-ink-faint: #a1a1aa;
 
 $shadow-card:
   0 2px 0 $surface-border,
   0 10px 24px rgba(20, 20, 40, 0.05);
+$shadow-card-hover:
+  0 4px 0 $surface-border,
+  0 14px 28px rgba(20, 20, 40, 0.08);
+$shadow-float:
+  0 0 0 1px rgba(20, 20, 40, 0.06),
+  0 4px 0 rgba(20, 20, 40, 0.06),
+  0 16px 40px rgba(20, 20, 40, 0.16);
 $shadow-icon:
   0 3px 0 rgba(20, 20, 40, 0.2),
   0 6px 12px rgba(20, 20, 40, 0.08);
 $shadow-icon-pressed:
   0 1px 0 rgba(20, 20, 40, 0.2),
   0 2px 4px rgba(20, 20, 40, 0.08);
+$thumb-edge: 0 2px 0 #d6d6dd;
+
+// Roles
+$brand: colors.$gk-orange;
+$brand-edge: #d27f00;
+$brand-hover: #f7a114;
+$accent-ink: #ec8a00;
+$accent-tint: #fff1df;
+$accent-edge: #ffcb8a;
 
 $primary: #1c8be6;
 $primary-edge: #0f64b5;
+$primary-hover: #2a95ee;
+$primary-tint: #e8f3fd;
+$primary-halo: rgba(28, 139, 230, 0.18);
 $link: #1479d6;
-$accent-ink: #ec8a00;
+$link-hover-bg: #edf5fd;
+
+$danger: #d23658;
+$danger-edge: #a8213f;
+$danger-hover: #dc4868;
+$danger-tint: #fdeff2;
+
+$success: #00934a;
+$success-tint: #e7f8ee;
+$success-edge: #b6e3c8;
+
+$warning-ink: #9a5b00;
+$warning-tint: #fff5d4;
+
+// Fields
+$field-height: 36px;
+$field-radius: $radius-md;
+$field-bg: $fill-muted;
+$field-bg-hover: $fill-muted-hover;
+$field-inset: inset 0 2px 0 rgba(20, 20, 40, 0.05);
+$field-focus:
+  inset 0 0 0 1.5px $primary,
+  0 0 0 3px $primary-halo;
+
+// Focus
+$focus-ring-width: 2px;
+$focus-ring-color: $primary;
 
 // Parameter tiles: tint, hard edge, ink
 $vocal-tint: #fdedf4;
@@ -83,8 +144,14 @@ $visual-ink: #e89e00;
 $stamina-tint: #e7f8ee;
 $stamina-edge: #b6e3c8;
 $stamina-ink: #00934a;
-$accent-tint: #fff1df;
-$accent-edge: #ffcb8a;
+
+// Charts
+$chart-bar-top: #5bc0ff;
+$chart-bar: #1c8fe8;
+$chart-highlight-top: #ffc766;
+$chart-highlight: $brand;
+$chart-grid: #ececf1;
+$chart-tick: #8a8a93;
 
 $gradient-brand: linear-gradient(
   100deg,
