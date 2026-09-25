@@ -6,7 +6,6 @@ import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
 import ModalContext from "@/contexts/ModalContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
-import ToastContext from "@/contexts/ToastContext";
 import {
   computeRange,
   computeTicks,
@@ -24,7 +23,6 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
   const t = useTranslations("CompareTab");
   const { status } = useSession();
   const { setModal } = useContext(ModalContext);
-  const { showToast } = useContext(ToastContext);
   const {
     history,
     savedRuns,
@@ -151,33 +149,17 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
     );
   }
 
-  async function report(action, successMessage, failureMessage) {
-    try {
-      await action();
-      if (successMessage) {
-        showToast({ tone: "success", message: successMessage });
-      }
-    } catch (err) {
-      console.error(err);
-      showToast({ tone: "error", message: failureMessage });
-    }
-  }
-
   async function handleSave(run, name) {
     if (status !== "authenticated") {
       promptSignIn();
       return;
     }
-    await report(() => saveRun(run, name), t("runSaved"), t("saveFailed"));
+    await saveRun(run, name).catch(console.error);
   }
 
   async function handleRename(run, name) {
     if (run.name === name) return;
-    await report(
-      () => renameSaved(run._id || run.id, name),
-      null,
-      t("renameFailed"),
-    );
+    await renameSaved(run._id || run.id, name).catch(console.error);
   }
 
   function handleLoad(run) {
@@ -202,11 +184,7 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
 
   function handleDeleteSaved(run) {
     confirmDelete(() =>
-      report(
-        () => deleteSaved([run._id || run.id]),
-        t("runDeleted"),
-        t("deleteFailed"),
-      ),
+      deleteSaved([run._id || run.id]).catch(console.error),
     );
   }
 

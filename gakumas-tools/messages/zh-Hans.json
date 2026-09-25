@@ -284,8 +284,7 @@
     "error": "导入失败"
   },
   "MemorySummaryActionButtons": {
-    "edit": "编辑",
-    "loaded": "已载入到回忆卡{slot}"
+    "edit": "编辑"
   },
   "MemoryEditorModal": {
     "name": "命名",
@@ -359,8 +358,7 @@
     "create": "创建回忆卡",
     "import": "从截图导入",
     "cancel": "取消",
-    "delete": "删除",
-    "deleted": "已删除 {num} 个回忆卡"
+    "delete": "删除"
   },
   "Memories": {
     "loadError": "回忆卡加载失败",
@@ -374,8 +372,7 @@
     "progress": "进度: {progress}/{total}",
     "preparing": "正在准备识别…（首次使用需下载数MB）",
     "saving": "保存中…",
-    "failed": "导入失败，请检查截图后重试。",
-    "imported": "已导入 {num} 个回忆卡"
+    "failed": "导入失败，请检查截图后重试。"
   },
   "Simulator": {
     "supportBonus": "支援加成 %",
@@ -390,9 +387,7 @@
     "lastUpdated": "最后更新于",
     "start": "开始",
     "restart": "重新开始",
-    "simulationFailed": "模拟失败，请重试。",
-    "cancel": "取消",
-    "retry": "重试"
+    "cancel": "取消"
   },
   "StrategyPicker": {
     "auto": "自动",
@@ -433,9 +428,7 @@
     "addRow": "添加行",
     "moveUp": "上移",
     "moveDown": "下移",
-    "removeRow": "删除行",
-    "rowRemoved": "已删除该行",
-    "undo": "撤销"
+    "removeRow": "删除行"
   },
   "SimulatorSubTools": {
     "costRanges": "容量范围",
@@ -450,9 +443,7 @@
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
     "share": "分享",
-    "openLoadouts": "编组",
-    "linkCopied": "已复制链接",
-    "copyFailed": "无法复制链接"
+    "openLoadouts": "编组"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "从截图导入编组",
@@ -465,9 +456,7 @@
     "more": "更多…",
     "x": "分享到 X",
     "saveImage": "保存为图片",
-    "exporting": "保存中…",
-    "imageSaved": "已保存图片",
-    "exportFailed": "无法保存图片，请重试。"
+    "exporting": "保存中…"
   },
   "ConfirmModal": {
     "cancel": "取消",
@@ -475,9 +464,6 @@
   },
   "Modal": {
     "close": "关闭"
-  },
-  "Toaster": {
-    "dismiss": "关闭"
   },
   "SimulatorResult": {
     "min": "最低分",
@@ -490,10 +476,7 @@
     "downloadScores": "分数",
     "optimizeParams": "优化参数",
     "outdated": "此结果来自修改编组之前。",
-    "rerun": "重新运行",
-    "paramsOptimized": "已更新参数（预计 +{gain}）",
-    "alreadyOptimal": "参数已是最优",
-    "cannotOptimize": "无法为此舞台优化参数"
+    "rerun": "重新运行"
   },
   "CompareTab": {
     "saved": "已保存",
@@ -526,11 +509,6 @@
     "allIdols": "全部偶像",
     "allStages": "全部舞台",
     "actions": "操作",
-    "runSaved": "已保存编组",
-    "saveFailed": "无法保存编组",
-    "renameFailed": "无法重命名",
-    "runDeleted": "已删除编组",
-    "deleteFailed": "无法删除编组",
     "loadFailed": "无法加载已保存的编组。",
     "retry": "重试"
   },
@@ -657,9 +635,7 @@
     "videoError": "处理视频时出错: {message}",
     "imageError": "{count} 张截图无法解析，已跳过。",
     "needsChecking": "{count} 行需要检查",
-    "confirmRow": "确认此行的数值正确",
-    "rowRemoved": "已删除该行",
-    "undo": "撤销"
+    "confirmRow": "确认此行的数值正确"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

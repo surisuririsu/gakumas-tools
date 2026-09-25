@@ -1,13 +1,12 @@
 "use client";
-import { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
 import Image from "@/components/Image";
 import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
 import ProgressBar from "@/components/ProgressBar";
-import ModalContext from "@/contexts/ModalContext";
-import ToastContext from "@/contexts/ToastContext";
 import c from "@/utils/classNames";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import {
@@ -21,8 +20,6 @@ const BUSY_STATUSES = ["preparing", "reading", "saving"];
 
 function MemoryImporterModal({ onSuccess, multiple = true }) {
   const t = useTranslations("MemoryImporterModal");
-  const { closeModal } = useContext(ModalContext);
-  const { showToast } = useContext(ToastContext);
 
   const [status, setStatus] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -79,17 +76,13 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
         if ((await onSuccess(results)) === false) {
           throw new Error("Couldn't save imported memories");
         }
-        closeModal();
-        showToast({
-          tone: "success",
-          message: t("imported", { num: results.length }),
-        });
+        setStatus("done");
       } catch (err) {
         console.error(err);
         setStatus("error");
       }
     },
-    [onSuccess, closeModal, showToast, t]
+    [onSuccess]
   );
 
   return (
@@ -125,7 +118,9 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
       >
         {busy && <Loader />}
         {status == "preparing" && t("preparing")}
-        {status == "reading" && t("progress", { progress, total })}
+        {(status == "reading" || status == "done") &&
+          t("progress", { progress, total })}
+        {status == "done" && <FaCheck />}
         {status == "saving" && t("saving")}
         {status == "error" && t("failed")}
       </div>

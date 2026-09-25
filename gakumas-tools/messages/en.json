@@ -284,8 +284,7 @@
     "error": "Failed to import"
   },
   "MemorySummaryActionButtons": {
-    "edit": "Edit",
-    "loaded": "Loaded into memory slot {slot}"
+    "edit": "Edit"
   },
   "MemoryEditorModal": {
     "name": "Name",
@@ -359,8 +358,7 @@
     "create": "Create memory",
     "import": "Import from screenshots",
     "cancel": "Cancel",
-    "delete": "Delete",
-    "deleted": "Deleted {num, plural, one {# memory} other {# memories}}"
+    "delete": "Delete"
   },
   "Memories": {
     "loadError": "Failed to load memories",
@@ -374,8 +372,7 @@
     "progress": "Progress: {progress}/{total}",
     "preparing": "Preparing the reader… (first use downloads a few MB)",
     "saving": "Saving…",
-    "failed": "Import failed. Check the screenshots and try again.",
-    "imported": "Imported {num, plural, one {# memory} other {# memories}}"
+    "failed": "Import failed. Check the screenshots and try again."
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
@@ -390,9 +387,7 @@
     "lastUpdated": "Last updated",
     "start": "Start",
     "restart": "Restart",
-    "simulationFailed": "Simulation failed. Please try again.",
-    "cancel": "Cancel",
-    "retry": "Retry"
+    "cancel": "Cancel"
   },
   "StrategyPicker": {
     "auto": "Auto",
@@ -433,9 +428,7 @@
     "addRow": "Add row",
     "moveUp": "Move up",
     "moveDown": "Move down",
-    "removeRow": "Remove row",
-    "rowRemoved": "Row removed",
-    "undo": "Undo"
+    "removeRow": "Remove row"
   },
   "SimulatorSubTools": {
     "costRanges": "Cost ranges",
@@ -450,9 +443,7 @@
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear",
     "share": "Share",
-    "openLoadouts": "Loadouts",
-    "linkCopied": "Link copied",
-    "copyFailed": "Couldn't copy the link"
+    "openLoadouts": "Loadouts"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "Import loadout from screenshot",
@@ -465,9 +456,7 @@
     "more": "More…",
     "x": "Share on X",
     "saveImage": "Save as image",
-    "exporting": "Saving…",
-    "imageSaved": "Image saved",
-    "exportFailed": "Couldn't save the image. Please try again."
+    "exporting": "Saving…"
   },
   "ConfirmModal": {
     "cancel": "Cancel",
@@ -475,9 +464,6 @@
   },
   "Modal": {
     "close": "Close"
-  },
-  "Toaster": {
-    "dismiss": "Dismiss"
   },
   "SimulatorResult": {
     "min": "Min",
@@ -490,10 +476,7 @@
     "downloadScores": "Scores",
     "optimizeParams": "Optimize params",
     "outdated": "These results are from before your last edit.",
-    "rerun": "Re-run",
-    "paramsOptimized": "Parameters updated (est. +{gain})",
-    "alreadyOptimal": "Parameters are already optimal",
-    "cannotOptimize": "Can't optimize parameters for this stage"
+    "rerun": "Re-run"
   },
   "CompareTab": {
     "saved": "Saved",
@@ -526,11 +509,6 @@
     "allIdols": "All idols",
     "allStages": "All stages",
     "actions": "Actions",
-    "runSaved": "Loadout saved",
-    "saveFailed": "Couldn't save the loadout",
-    "renameFailed": "Couldn't rename the loadout",
-    "runDeleted": "Loadout deleted",
-    "deleteFailed": "Couldn't delete the loadout",
     "loadFailed": "Couldn't load your saved loadouts.",
     "retry": "Retry"
   },
@@ -657,9 +635,7 @@
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
     "needsChecking": "{count} row(s) need checking",
-    "confirmRow": "Confirm this row's values are correct",
-    "rowRemoved": "Row removed",
-    "undo": "Undo"
+    "confirmRow": "Confirm this row's values are correct"
   },
   "KofiAd": {
     "prompt": "Support this project"

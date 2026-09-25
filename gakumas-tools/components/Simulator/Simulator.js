@@ -30,7 +30,6 @@ import StageSelect from "@/components/StageSelect";
 import StrategyPicker from "@/components/StrategyPicker";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
-import ToastContext from "@/contexts/ToastContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
@@ -66,7 +65,6 @@ export default function Simulator() {
   } = useContext(LoadoutContext);
   const { pushRun } = useContext(SimulationRunsContext);
   const { plan, idolId } = useContext(WorkspaceContext);
-  const { showToast } = useContext(ToastContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
   const [resultConfig, setResultConfig] = useState(null);
@@ -234,11 +232,6 @@ export default function Simulator() {
       if (controller.signal.aborted) return;
       console.error(err);
       setRunning(false);
-      showToast({
-        tone: "error",
-        message: t("simulationFailed"),
-        action: { label: t("retry"), onClick: rerunSimulation },
-      });
     }
   }
   runSimulationRef.current = runSimulation;

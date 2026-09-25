@@ -292,8 +292,7 @@
     "error": "読み込みに失敗しました"
   },
   "MemorySummaryActionButtons": {
-    "edit": "編集",
-    "loaded": "メモリー{slot}に読み込みました"
+    "edit": "編集"
   },
   "MemoryEditorModal": {
     "name": "名前",
@@ -367,8 +366,7 @@
     "create": "メモリーを作成",
     "import": "スクショから読み込み",
     "cancel": "キャンセル",
-    "delete": "削除する",
-    "deleted": "{num}個のメモリーを削除しました"
+    "delete": "削除する"
   },
   "Memories": {
     "loadError": "メモリーの読み込みに失敗しました",
@@ -382,8 +380,7 @@
     "progress": "Progress: {progress}/{total}",
     "preparing": "読み取りの準備中…（初回は数MBをダウンロードします）",
     "saving": "保存中…",
-    "failed": "読み込みに失敗しました。スクショを確認してもう一度お試しください。",
-    "imported": "{num}個のメモリーを読み込みました"
+    "failed": "読み込みに失敗しました。スクショを確認してもう一度お試しください。"
   },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
@@ -398,9 +395,7 @@
     "lastUpdated": "最終更新",
     "start": "開始",
     "restart": "再開",
-    "simulationFailed": "シミュレーションに失敗しました。もう一度お試しください。",
-    "cancel": "キャンセル",
-    "retry": "再試行"
+    "cancel": "キャンセル"
   },
   "StrategyPicker": {
     "auto": "自動",
@@ -441,9 +436,7 @@
     "addRow": "行を追加",
     "moveUp": "上に移動",
     "moveDown": "下に移動",
-    "removeRow": "行を削除",
-    "rowRemoved": "行を削除しました",
-    "undo": "元に戻す"
+    "removeRow": "行を削除"
   },
   "SimulatorSubTools": {
     "costRanges": "コスト範囲",
@@ -458,9 +451,7 @@
     "confirm": "編成をクリアしますか？",
     "clear": "クリア",
     "share": "共有",
-    "openLoadouts": "編成",
-    "linkCopied": "リンクをコピーしました",
-    "copyFailed": "リンクをコピーできませんでした"
+    "openLoadouts": "編成"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "スクリーンショットから編成を読み込み",
@@ -473,9 +464,7 @@
     "more": "その他…",
     "x": "Xで共有",
     "saveImage": "画像として保存",
-    "exporting": "保存中…",
-    "imageSaved": "画像を保存しました",
-    "exportFailed": "画像を保存できませんでした。もう一度お試しください。"
+    "exporting": "保存中…"
   },
   "ConfirmModal": {
     "cancel": "キャンセル",
@@ -483,9 +472,6 @@
   },
   "Modal": {
     "close": "閉じる"
-  },
-  "Toaster": {
-    "dismiss": "閉じる"
   },
   "SimulatorResult": {
     "min": "最小値",
@@ -498,10 +484,7 @@
     "downloadScores": "スコア",
     "optimizeParams": "パラメータ最適化",
     "outdated": "この結果は編成を変更する前のものです。",
-    "rerun": "再実行",
-    "paramsOptimized": "パラメータを更新しました（推定 +{gain}）",
-    "alreadyOptimal": "パラメータはすでに最適です",
-    "cannotOptimize": "このステージではパラメータを最適化できません"
+    "rerun": "再実行"
   },
   "CompareTab": {
     "saved": "保存済み",
@@ -534,11 +517,6 @@
     "allIdols": "全アイドル",
     "allStages": "全ステージ",
     "actions": "操作",
-    "runSaved": "編成を保存しました",
-    "saveFailed": "編成を保存できませんでした",
-    "renameFailed": "名前を変更できませんでした",
-    "runDeleted": "編成を削除しました",
-    "deleteFailed": "編成を削除できませんでした",
     "loadFailed": "保存済み編成を読み込めませんでした。",
     "retry": "再試行"
   },
@@ -665,9 +643,7 @@
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
     "needsChecking": "{count}件の行を確認してください",
-    "confirmRow": "この行の値が正しいことを確認",
-    "rowRemoved": "行を削除しました",
-    "undo": "元に戻す"
+    "confirmRow": "この行の値が正しいことを確認"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"
