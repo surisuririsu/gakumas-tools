@@ -1,5 +1,5 @@
 "use client";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
@@ -21,6 +21,8 @@ const Oshi = dynamic(() => import("@/components/Oshi"));
 function Navbar() {
   const t = useTranslations("tools");
   const pathname = usePathname();
+  const [pendingPath, setPendingPath] = useState(null);
+  const activePath = pendingPath || pathname;
   const linksRef = useRef(null);
   const [indicator, setIndicator] = useState({
     left: 0,
@@ -47,7 +49,11 @@ function Navbar() {
     const observer = new ResizeObserver(measure);
     observer.observe(container);
     return () => observer.disconnect();
-  }, [pathname]);
+  }, [activePath]);
+
+  const handlePendingChange = useCallback((path, pending) => {
+    setPendingPath((cur) => (pending ? path : cur == path ? null : cur));
+  }, []);
 
   return (
     <>
@@ -64,11 +70,15 @@ function Navbar() {
               icon={TOOLS[key].icon}
               path={TOOLS[key].path}
               title={t(`${key}.title`)}
-              active={pathname.startsWith(TOOLS[key].path)}
+              active={activePath.startsWith(TOOLS[key].path)}
+              onPendingChange={handlePendingChange}
             />
           ))}
           <div
-            className={styles.indicator}
+            className={c(
+              styles.indicator,
+              pendingPath && pendingPath != pathname && styles.pending
+            )}
             style={{
               transform: `translateX(${indicator.left}px)`,
               width: `${indicator.width}px`,

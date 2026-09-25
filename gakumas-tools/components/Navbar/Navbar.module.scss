@@ -58,6 +58,16 @@
   transition:
     transform tokens.$duration-slow tokens.$ease-in-out,
     opacity tokens.$duration-base ease;
+
+  &.pending {
+    animation: indicatorPulse 0.8s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes indicatorPulse {
+  to {
+    opacity: 0.4;
+  }
 }
 
 .link {
