@@ -1,5 +1,5 @@
 "use client";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { FaCircleUser, FaGithub, FaXTwitter } from "react-icons/fa6";
@@ -21,11 +21,21 @@ function NavbarMenu() {
   const { data: session, status } = useSession();
   const [expanded, setExpanded] = useState(false);
 
+  useEffect(() => {
+    if (!expanded) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setExpanded(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [expanded]);
+
   return (
     <div className={styles.menu}>
       <button
         className={styles.avatar}
         aria-label={t("menu")}
+        aria-expanded={expanded}
         onClick={() => setExpanded(!expanded)}
       >
         {status == "authenticated" ? (
@@ -57,7 +67,9 @@ function NavbarMenu() {
             </div>
           )}
 
-          <Link href="/">{t("home")}</Link>
+          <Link href="/" onClick={() => setExpanded(false)}>
+            {t("home")}
+          </Link>
 
           <a href="https://wikiwiki.jp/gakumas/" target="_blank">
             {t("gakumasContestWiki")}

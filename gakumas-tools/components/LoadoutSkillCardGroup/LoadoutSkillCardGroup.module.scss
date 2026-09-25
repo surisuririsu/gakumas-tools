@@ -125,6 +125,12 @@ button.cost {
   color: colors.$blue;
 }
 
+.moveButton:disabled,
+.deleteButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .deleteButton {
   color: colors.$red;
 }
