@@ -1,56 +1,153 @@
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .guide {
-  margin-top: tokens.$space-5;
   display: flex;
   flex-direction: column;
   gap: tokens.$space-2;
-  font-size: tokens.$text-sm;
+  margin-top: tokens.$space-4;
   color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  line-height: 1.6;
+}
 
-  details {
-    border: 1px solid tokens.$surface-border;
-    border-radius: tokens.$radius-sm;
-    background-color: tokens.$surface-panel;
-    padding: tokens.$space-2 tokens.$space-3;
-  }
+.title {
+  padding: 0 tokens.$space-1;
+  @include mixins.heading;
+}
 
-  summary {
-    cursor: pointer;
-    font-weight: 600;
-    user-select: none;
-  }
+.about {
+  padding: 0 tokens.$space-1;
+  font-size: tokens.$text-xs;
+  line-height: 1.55;
+}
 
-  .title {
-    font-size: tokens.$text-sm;
-    font-weight: 600;
-    line-height: 1.4;
-    color: tokens.$surface-ink;
-  }
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  margin-top: tokens.$space-2;
+}
 
-  .about {
-    margin-top: 0;
-    font-size: tokens.$text-xs;
-    line-height: 1.5;
-  }
+.section {
+  @include mixins.card;
+  border-radius: tokens.$radius-lg;
+  overflow: hidden;
+}
 
-  p {
-    margin-top: tokens.$space-2;
-    line-height: 1.6;
-  }
+.sectionTitle {
+  font-size: inherit;
+}
 
-  table {
-    margin-top: tokens.$space-2;
+.toggle {
+  width: 100%;
+  justify-content: space-between;
+  gap: tokens.$space-3;
+  padding: 13px tokens.$space-4;
+  text-align: left;
+  @include mixins.heading;
+  font-size: tokens.$text-md;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
+  @include mixins.focus-ring-inset;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-subtle;
+    }
   }
+}
+
+.caret {
+  flex-shrink: 0;
+  color: tokens.$surface-ink-subtle;
+  font-size: 12px;
+  @include mixins.caret;
+
+  .open & {
+    @include mixins.caret-open;
+  }
+}
+
+.body {
+  display: grid;
+  grid-template-rows: 1fr;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.inner {
+  min-width: 0;
+  min-height: 0;
+}
+
+.content {
+  padding: 0 tokens.$space-4 tokens.$space-4;
+}
+
+.opening,
+.closing {
+  > .inner {
+    overflow: hidden;
+  }
+}
+
+.opening {
+  animation: expand tokens.$duration-spring tokens.$ease-glide both;
+
+  > .inner {
+    animation: settle tokens.$duration-spring tokens.$ease-spring both;
+  }
+}
+
+.closing {
+  animation: collapse tokens.$duration-base tokens.$ease-in-out both;
+}
+
+@keyframes expand {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes collapse {
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes settle {
+  from {
+    translate: 0 -8px;
+  }
+}
+
+.rankTable {
+  td:first-child {
+    font-weight: tokens.$weight-heavy;
+  }
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
 }
 
 .faqItem {
-  &:not(:last-child) {
-    margin-bottom: tokens.$space-3;
-  }
-}
+  padding: 10px tokens.$space-3;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
 
-.question {
-  font-weight: 600;
-  color: tokens.$surface-ink;
+  dt {
+    margin-bottom: 2px;
+    color: tokens.$surface-ink;
+    font-weight: tokens.$weight-bold;
+  }
 }

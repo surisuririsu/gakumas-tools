@@ -1,3 +1,4 @@
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .produceRankCalculator {
@@ -9,9 +10,10 @@
   padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
 }
 
-.bonus {
-  font-size: 0.8em;
-  color: tokens.$surface-ink-muted;
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
 }
 
 .form {
@@ -20,6 +22,87 @@
   gap: tokens.$space-2;
 }
 
-.resultPanel {
-  margin-top: tokens.$space-3;
+.fieldHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: tokens.$space-2;
+  margin-top: 4px;
+
+  label {
+    margin-top: 0;
+  }
+}
+
+.headerTag {
+  margin-top: tokens.$space-2;
+}
+
+.tag {
+  @include mixins.tag;
+  @include mixins.numeric;
+
+  b {
+    color: tokens.$surface-ink;
+    font-weight: tokens.$weight-heavy;
+  }
+}
+
+.beat1,
+.beat2 {
+  animation: 460ms tokens.$ease-pop both;
+}
+
+.beat1 {
+  animation-name: tagBeatA;
+}
+
+.beat2 {
+  animation-name: tagBeatB;
+}
+
+@keyframes tagBeatA {
+  from {
+    scale: 0.85;
+  }
+}
+
+@keyframes tagBeatB {
+  from {
+    scale: 0.85;
+  }
+}
+
+.targetTable {
+  th:first-child,
+  td:first-child {
+    padding-left: 12px;
+    text-align: left;
+  }
+
+  td:last-child {
+    font-weight: tokens.$weight-heavy;
+  }
+}
+
+.rankName {
+  display: inline-block;
+  min-width: 3.4em;
+  font-weight: tokens.$weight-heavy;
+}
+
+.rankRating {
+  color: tokens.$surface-ink-subtle;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+}
+
+.reached {
+  color: tokens.$surface-ink-faint;
+}
+
+.unreachable {
+  color: tokens.$surface-ink-faint;
+  font-size: tokens.$text-lg;
+  line-height: 1;
 }

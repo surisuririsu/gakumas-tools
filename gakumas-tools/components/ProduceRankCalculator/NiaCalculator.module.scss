@@ -1,18 +1,5 @@
-@use "sass:color";
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
-
-.bonus {
-  font-size: 0.8em;
-  color: tokens.$surface-ink-muted;
-}
-
-.nia {
-  display: flex;
-  flex-direction: column;
-  gap: tokens.$space-5;
-  margin-top: tokens.$space-3;
-}
 
 .section {
   display: flex;
@@ -24,90 +11,120 @@
   align-self: flex-start;
 }
 
-.recommendedScores {
-  table {
-    height: 0;
-    text-align: center;
+$param-columns: (
+  (2, tokens.$vocal-tint, tokens.$vocal-ink),
+  (3, tokens.$dance-tint, tokens.$dance-ink),
+  (4, tokens.$visual-tint, tokens.$visual-ink)
+);
 
-    thead,
-    tbody {
-      background: none;
+.recommendedScores {
+  table-layout: fixed;
+
+  th:first-child {
+    width: 46%;
+    padding-left: 12px;
+    text-align: left;
+  }
+
+  @each $i, $tint, $ink in $param-columns {
+    th:nth-child(#{$i}) {
+      background-color: $tint;
+      color: $ink;
+    }
+
+    td:nth-child(#{$i}) {
+      color: $ink;
     }
   }
 
-  thead th {
-    background-color: colors.$gray;
-    color: colors.$white;
-    width: 22%;
+  th:nth-child(n + 2),
+  td:nth-child(n + 2) {
+    padding-inline: 4px;
   }
 
-  thead th:nth-child(1) {
-    width: 34%;
+  td:first-child {
+    padding: 4px 6px 4px 0;
+    text-align: left;
+
+    > .rankLabel {
+      padding-left: 12px;
+    }
   }
 
-  thead th:nth-child(2) {
-    background-color: colors.$vocal;
+  td:nth-child(n + 2) {
+    font-weight: tokens.$weight-heavy;
   }
 
-  thead th:nth-child(3) {
-    background-color: colors.$dance;
-  }
-
-  thead th:nth-child(4) {
-    background-color: colors.$visual;
-  }
-
-  td {
-    color: colors.$black-dark;
-  }
-
-  td:nth-child(1) {
-    padding: 0;
-    background-color: tokens.$surface-muted;
-  }
-
-  td:nth-child(2) {
-    background-color: color.scale(colors.$vocal, $alpha: -80%);
-  }
-
-  td:nth-child(3) {
-    background-color: color.scale(colors.$dance, $alpha: -80%);
-  }
-
-  td:nth-child(4) {
-    background-color: color.scale(colors.$visual, $alpha: -80%);
-  }
-
-  button {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    display: flex;
-    padding: 0 tokens.$space-2;
-    color: colors.$gray;
-  }
-
-  .rankButtonLabel {
-    flex: 1;
+  td:first-child {
     color: tokens.$surface-ink;
   }
 }
 
-.flex {
+.rankLabel {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  justify-content: space-around;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+
+  > :first-child {
+    min-width: 0;
+  }
+}
+
+.applyButton {
+  @include mixins.chip;
+  width: 100%;
+  justify-content: space-between;
+  gap: tokens.$space-1;
+  padding: 0 8px 0 12px;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-sm;
+
+  svg {
+    flex-shrink: 0;
+    color: tokens.$accent-ink;
+    font-size: 13px;
+  }
+}
+
+.voteStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: tokens.$space-2;
+}
+
+.stat {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 6px;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
   text-align: center;
 }
 
-@container (width < 530px) {
-  .recommendedScores {
-    font-size: 12px;
+.statLabel {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-bold;
+  line-height: 1.3;
+}
 
-    th,
-    td {
-      padding: 4px 0;
-      overflow: hidden;
-    }
-  }
+.statValue {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  color: tokens.$surface-ink;
+  font-size: 17px;
+  font-weight: tokens.$weight-heavy;
+  line-height: 1.3;
+  @include mixins.numeric;
+}
+
+.statTag {
+  @include mixins.tag(tokens.$accent-tint, tokens.$accent-ink);
 }

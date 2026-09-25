@@ -1,65 +1,46 @@
-@use "../../styles/colors";
 @use "../../styles/tokens";
+@use "./segments";
 
-.scenarioPicker {
-  display: flex;
-  gap: tokens.$space-2;
+div.scenarioPicker {
+  flex-shrink: 0;
+  padding: 4px 4px 6px;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$surface-panel;
+  box-shadow: tokens.$shadow-card;
+  @include segments.colored-group;
+
+  :is(a, button) {
+    padding: 10px tokens.$space-3;
+    border-radius: tokens.$radius-md;
+    font-size: tokens.$text-base;
+    font-weight: tokens.$weight-heavy;
+  }
+
+  > span[aria-hidden="true"] {
+    border-radius: tokens.$radius-md;
+  }
 }
 
-.scenarioChip {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: tokens.$space-3 tokens.$space-4;
-  border: 1px solid transparent;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
-  font-size: tokens.$text-base;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.2s ease;
+.hajimeSelected {
+  @include segments.selected(tokens.$hajime-color);
+}
+
+.niaSelected {
+  @include segments.selected(tokens.$nia-color);
+}
+
+.hifSelected {
+  @include segments.selected(tokens.$hif-color);
 }
 
 .hajime {
-  color: tokens.$hajime-color;
-  border-color: tokens.$hajime-color;
-
-  &.selected {
-    background: tokens.$gradient-hajime;
-    color: colors.$white;
-    border-color: transparent;
-    box-shadow: tokens.$shadow-hajime;
-  }
+  @include segments.label(tokens.$hajime-color);
 }
 
 .nia {
-  color: tokens.$nia-color;
-  border-color: tokens.$nia-color;
-
-  &.selected {
-    background: tokens.$gradient-nia;
-    color: colors.$white;
-    border-color: transparent;
-    box-shadow: tokens.$shadow-nia;
-  }
+  @include segments.label(tokens.$nia-color);
 }
 
 .hif {
-  color: tokens.$hif-color;
-  border-color: tokens.$hif-color;
-
-  &.selected {
-    background: tokens.$gradient-hif;
-    color: colors.$white;
-    border-color: transparent;
-    box-shadow: tokens.$shadow-hif;
-  }
+  @include segments.label(tokens.$hif-color);
 }

@@ -1,6 +1,12 @@
-@use "sass:color";
-@use "../../styles/colors";
+@use "sass:list";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-3;
+}
 
 .form {
   display: flex;
@@ -8,64 +14,93 @@
   gap: tokens.$space-2;
 }
 
+$params: (
+  vo: (tokens.$vocal-tint, tokens.$vocal-ink),
+  da: (tokens.$dance-tint, tokens.$dance-ink),
+  vi: (tokens.$visual-tint, tokens.$visual-ink),
+);
+
 .results {
   table-layout: fixed;
-  width: 100%;
   text-align: center;
-  border-collapse: collapse;
+  @include mixins.table;
 
   th,
   td {
-    padding: tokens.$space-2 0;
+    padding: 7px 2px;
   }
 
   th {
-    background-color: colors.$gray;
-    color: colors.$white;
+    overflow: hidden;
   }
 
-  th:nth-last-child(3) {
-    background-color: colors.$vocal;
-  }
-
-  th:nth-last-child(2) {
-    background-color: colors.$dance;
-  }
-
-  th:nth-last-child(1) {
-    background-color: colors.$visual;
+  th {
+    border-radius: 0;
   }
 
   td {
-    color: tokens.$surface-ink;
+    border-bottom: 0;
+    color: tokens.$surface-ink-muted;
+    font-weight: tokens.$weight-semibold;
   }
 
-  td:nth-last-child(3n + 1) {
-    background-color: color.scale(colors.$visual, $alpha: -80%);
+  .weekStart:not(:first-child) td {
+    border-top: 1px solid tokens.$surface-border;
   }
 
-  td:nth-last-child(3n + 2) {
-    background-color: color.scale(colors.$dance, $alpha: -80%);
+  @each $param, $tones in $params {
+    th.#{$param} {
+      background-color: list.nth($tones, 1);
+      color: list.nth($tones, 2);
+    }
+
+    td.#{$param} {
+      color: list.nth($tones, 2);
+    }
   }
 
-  td:nth-last-child(3n + 3) {
-    background-color: color.scale(colors.$vocal, $alpha: -80%);
+  th:last-child {
+    border-top-right-radius: tokens.$radius-md;
+    border-bottom-right-radius: tokens.$radius-md;
   }
 
-  td:nth-child(-n + 2),
+  th:first-child {
+    border-top-left-radius: tokens.$radius-md;
+    border-bottom-left-radius: tokens.$radius-md;
+  }
+
+  .main {
+    font-weight: tokens.$weight-heavy;
+  }
+
+  .week,
   .perfect {
-    background-color: tokens.$surface-muted !important;
+    color: tokens.$surface-ink;
+    font-weight: tokens.$weight-heavy;
+  }
+
+  .type {
+    font-weight: tokens.$weight-bold;
   }
 }
 
 @container (width < 530px) {
   .results {
-    font-size: 12px;
+    font-size: tokens.$text-xs;
 
     th,
     td {
-      padding: tokens.$space-1 0;
-      overflow: hidden;
+      padding: 6px 1px;
+    }
+
+    th {
+      font-size: tokens.$text-2xs;
+    }
+
+    .split {
+      padding-inline: 0;
+      font-size: tokens.$text-2xs;
+      letter-spacing: -0.02em;
     }
   }
 }

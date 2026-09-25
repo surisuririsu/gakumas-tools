@@ -14,7 +14,9 @@ import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
 import ProduceRankResult from "@/components/ProduceRankResult";
 import Table from "@/components/Table";
+import useBeat from "@/components/ProduceRankResult/useBeat";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import c from "@/utils/classNames";
 import { getRank, TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 import {
   BALANCE_BY_IDOL,
@@ -32,8 +34,10 @@ import {
   PARAM_REGIMES_BY_DIFF_STAGE_BALANCE_ORDER,
   VOTE_REGIMES_BY_DIFF_STAGE,
 } from "@/utils/nia";
+import InfoTag from "./InfoTag";
 import ParamBadges from "./ParamBadges";
 import Params from "./Params";
+import shared from "./ProduceRankCalculator.module.scss";
 import styles from "./NiaCalculator.module.scss";
 
 const AFFECTION_OPTIONS = [...new Array(11)].map((x, i) => ({
@@ -163,190 +167,221 @@ export default function NiaCalculator() {
   }
 
   return (
-    <>
-      <label>{t("difficulty")}</label>
-      <DifficultyPicker
-        difficulties={DIFFICULTIES}
-        selected={difficulty}
-        onChange={(diff) => {
-          if (diff === "master") {
-            setStage("finale");
-            setAffection(20);
-          } else {
-            setChallengeParamBonus(null);
-          }
-          setDifficulty(diff);
-        }}
-      />
-      <div className={styles.bonus}>
-        {t("parameterLimit")}: {maxParams}
-      </div>
+    <div className={shared.stack}>
+      <Panel
+        label={t("difficulty")}
+        headerAction={
+          <InfoTag
+            className={shared.headerTag}
+            label={t("parameterLimit")}
+            value={maxParams}
+          />
+        }
+      >
+        <DifficultyPicker
+          difficulties={DIFFICULTIES}
+          selected={difficulty}
+          onChange={(diff) => {
+            if (diff === "master") {
+              setStage("finale");
+              setAffection(20);
+            } else {
+              setChallengeParamBonus(null);
+            }
+            setDifficulty(diff);
+          }}
+        />
+      </Panel>
 
-      <div className={styles.nia}>
-        <Panel label={t("idol")}>
-          <div className={styles.section}>
-            <div className={styles.idolSelect}>
-              <IconSelect
-                options={IDOL_OPTIONS}
-                selected={idolId}
-                onChange={setIdolId}
-              />
-            </div>
-
-            {difficulty === "pro" && (
-              <>
-                <label>{t("affectionAtStartOfProduce")}</label>
-                <ButtonGroup
-                  options={AFFECTION_OPTIONS}
-                  selected={affection}
-                  onChange={setAffection}
-                />
-              </>
-            )}
-
-            <label>{t("paramBonusPct")}</label>
-            <ParametersInput
-              parameters={paramBonuses}
-              max={maxParams}
-              onChange={setParamBonuses}
-              round={false}
-            />
-
-            {difficulty === "master" && (
-              <>
-                <label>{t("challengePItemsParamBonusPct")}</label>
-                <Input
-                  type="number"
-                  value={challengeParamBonus || ""}
-                  placeholder="%"
-                  onChange={setChallengeParamBonus}
-                  min={0}
-                  max={55}
-                />
-              </>
-            )}
-          </div>
-        </Panel>
-
-        <Panel label={t("stage")}>
-          <div className={styles.section}>
-            <ButtonGroup
-              options={STAGE_OPTIONS_BY_DIFFICULTY[difficulty]}
-              selected={stage}
-              onChange={setStage}
-            />
-
-            <label>{t("paramsPreAudition")}</label>
-            <ParametersInput
-              parameters={params}
-              max={maxParams}
-              onChange={setParams}
-            />
-
-            <label>{t("votesPreAudition")}</label>
-            <Input
-              type="number"
-              value={votes || ""}
-              placeholder={t("voteCount")}
-              onChange={setVotes}
-              min={0}
-              max={10000000}
+      <Panel label={t("idol")}>
+        <div className={styles.section}>
+          <div className={styles.idolSelect}>
+            <IconSelect
+              options={IDOL_OPTIONS}
+              selected={idolId}
+              onChange={setIdolId}
             />
           </div>
+
+          {difficulty === "pro" && (
+            <>
+              <label>{t("affectionAtStartOfProduce")}</label>
+              <ButtonGroup
+                options={AFFECTION_OPTIONS}
+                selected={affection}
+                onChange={setAffection}
+              />
+            </>
+          )}
+
+          <label>{t("paramBonusPct")}</label>
+          <ParametersInput
+            parameters={paramBonuses}
+            max={maxParams}
+            onChange={setParamBonuses}
+            round={false}
+          />
+
+          {difficulty === "master" && (
+            <>
+              <label>{t("challengePItemsParamBonusPct")}</label>
+              <Input
+                type="number"
+                value={challengeParamBonus || ""}
+                placeholder="%"
+                onChange={setChallengeParamBonus}
+                min={0}
+                max={55}
+              />
+            </>
+          )}
+        </div>
+      </Panel>
+
+      <Panel label={t("stage")}>
+        <div className={styles.section}>
+          <ButtonGroup
+            options={STAGE_OPTIONS_BY_DIFFICULTY[difficulty]}
+            selected={stage}
+            onChange={setStage}
+          />
+
+          <label>{t("paramsPreAudition")}</label>
+          <ParametersInput
+            parameters={params}
+            max={maxParams}
+            onChange={setParams}
+          />
+
+          <label>{t("votesPreAudition")}</label>
+          <Input
+            type="number"
+            value={votes || ""}
+            placeholder={t("voteCount")}
+            onChange={setVotes}
+            min={0}
+            max={10000000}
+          />
+        </div>
+      </Panel>
+
+      {recommendedScores && (
+        <Panel label={t("recommendedScores")}>
+          <Table
+            className={styles.recommendedScores}
+            headers={TABLE_HEADERS}
+            rows={Object.keys(TARGET_RATING_BY_RANK)
+              .slice(0, 8)
+              .map((rank) => {
+                const recommended = recommendedScores[rank];
+                const rankLabel = (
+                  <>
+                    <span className={shared.rankName}>{rank}</span>
+                    <span className={shared.rankRating}>
+                      {TARGET_RATING_BY_RANK[rank].toLocaleString()}
+                    </span>
+                  </>
+                );
+                if (!recommended) {
+                  return [
+                    <span key="rank" className={styles.rankLabel}>
+                      {rankLabel}
+                    </span>,
+                    "-",
+                    "-",
+                    "-",
+                  ];
+                }
+                return [
+                  <button
+                    key="rank"
+                    className={styles.applyButton}
+                    onClick={() => setScores(recommended)}
+                  >
+                    <span className={styles.rankLabel}>{rankLabel}</span>
+                    <FaCircleChevronDown />
+                  </button>,
+                  ...recommended.map((score) => score.toLocaleString()),
+                ];
+              })}
+          />
         </Panel>
+      )}
 
-        {recommendedScores && (
-          <Panel label={t("recommendedScores")}>
-            <div className={styles.recommendedScores}>
-              <Table
-                headers={TABLE_HEADERS}
-                rows={Object.keys(TARGET_RATING_BY_RANK)
-                  .slice(0, 8)
-                  .map((rank) => {
-                    let row = [
-                      recommendedScores[rank] ? (
-                        <button
-                          onClick={() => setScores(recommendedScores[rank])}
-                        >
-                          <FaCircleChevronDown />
-                          <span className={styles.rankButtonLabel}>
-                            {rank} (
-                            {TARGET_RATING_BY_RANK[rank].toLocaleString()})
-                          </span>
-                        </button>
-                      ) : (
-                        `${rank} (${TARGET_RATING_BY_RANK[
-                          rank
-                        ].toLocaleString()})`
-                      ),
-                    ];
-                    if (recommendedScores[rank]) {
-                      return row.concat(
-                        recommendedScores[rank].map((score) =>
-                          score.toLocaleString(),
-                        ),
-                      );
-                    } else {
-                      return row.concat(["-", "-", "-"]);
-                    }
-                  })}
-              />
-            </div>
-          </Panel>
-        )}
-
-        <Panel label={t("scores")}>
-          <div className={styles.section}>
-            {difficulty === "pro" && (
-              <LineChart
-                paramOrder={paramOrder}
-                paramRegimes={paramRegimesByOrder}
-                scores={scores}
-                gainedParams={gainedParams}
-              />
-            )}
-
-            <ParametersInput
-              parameters={scores}
-              max={1000000000}
-              onChange={setScores}
+      <Panel label={t("scores")}>
+        <div className={styles.section}>
+          {difficulty === "pro" && (
+            <LineChart
+              paramOrder={paramOrder}
+              paramRegimes={paramRegimesByOrder}
+              scores={scores}
+              gainedParams={gainedParams}
             />
+          )}
 
-            <label>{t("gainedParams")}</label>
-            <ParamBadges params={gainedParams} />
+          <ParametersInput
+            parameters={scores}
+            max={1000000000}
+            onChange={setScores}
+          />
 
-            <label>{t("bonusParams")}</label>
-            <ParamBadges params={bonusParams} />
+          <label>{t("gainedParams")}</label>
+          <ParamBadges params={gainedParams} />
 
-            {difficulty === "master" && (
+          <label>{t("bonusParams")}</label>
+          <ParamBadges params={bonusParams} />
+
+          {difficulty === "master" && (
+            <>
+              <label>{t("challengeParams")}</label>
               <ParamBadges params={challengeParams} />
-            )}
+            </>
+          )}
 
-            <label>{t("paramsPostAudition")}</label>
-            <Params params={postAuditionParams} />
+          <label>{t("paramsPostAudition")}</label>
+          <Params params={postAuditionParams} />
+        </div>
+      </Panel>
 
-            <div className={styles.flex}>
-              <div>
-                <label>{t("gainedVotes")}</label>
-                <div>+{gainedVotes.toLocaleString()}</div>
-              </div>
+      <Panel label={t("produceRank")}>
+        <div className={styles.section}>
+          <ProduceRankResult
+            rating={actualRating}
+            rank={actualRank}
+            ratingByRank={TARGET_RATING_BY_RANK}
+          />
 
-              <div>
-                <label>{t("votesPostAudition")}</label>
-                <div>
-                  {totalVotes.toLocaleString()}
-                  {voteRank ? ` (${voteRank})` : null}
-                </div>
-              </div>
-            </div>
-
-            <label>{t("produceRank")}</label>
-            <ProduceRankResult rating={actualRating} rank={actualRank} />
+          <div className={styles.voteStats}>
+            <VoteStat
+              label={t("gainedVotes")}
+              value={`+${gainedVotes.toLocaleString()}`}
+            />
+            <VoteStat
+              label={t("votesPostAudition")}
+              value={totalVotes.toLocaleString()}
+              tag={voteRank}
+            />
           </div>
-        </Panel>
+        </div>
+      </Panel>
 
-        <Alert>{t("niaNote")}</Alert>
-      </div>
-    </>
+      <Alert>{t("niaNote")}</Alert>
+    </div>
+  );
+}
+
+function VoteStat({ label, value, tag }) {
+  const beat = useBeat(value);
+
+  return (
+    <div className={styles.stat}>
+      <span className={styles.statLabel}>{label}</span>
+      <span
+        className={c(styles.statValue, beat && shared[`beat${beat}`])}
+      >
+        {value}
+        {tag && <span className={styles.statTag}>{tag}</span>}
+      </span>
+    </div>
   );
 }

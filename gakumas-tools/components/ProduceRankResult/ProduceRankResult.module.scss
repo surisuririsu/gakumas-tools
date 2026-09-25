@@ -1,18 +1,119 @@
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .result {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: tokens.$space-2 0;
+  align-items: center;
+  gap: 14px;
+  min-height: 84px;
+  padding: tokens.$space-3 tokens.$space-4;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$accent-tint;
+}
+
+.badge {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 56px;
+  height: 56px;
+
+  img {
+    display: block;
+  }
+}
+
+.unknown {
+  border: 2px dashed tokens.$accent-edge;
+  border-radius: 50%;
+  color: tokens.$accent-edge;
+  font-size: tokens.$text-xl;
+  font-weight: tokens.$weight-heavy;
+}
+
+.pop1,
+.pop2 {
+  animation: 460ms tokens.$ease-pop both;
+}
+
+.pop1 {
+  animation-name: rankPopA;
+}
+
+.pop2 {
+  animation-name: rankPopB;
+}
+
+@keyframes rankPopA {
+  from {
+    opacity: 0.4;
+    scale: 0.55;
+    rotate: -14deg;
+  }
+}
+
+@keyframes rankPopB {
+  from {
+    opacity: 0.4;
+    scale: 0.55;
+    rotate: -14deg;
+  }
+}
+
+.values {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .rating {
-  background: tokens.$gradient-brand;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  min-width: 5.6ch;
+  color: tokens.$accent-ink;
+  font-size: 34px;
+  font-weight: tokens.$weight-heavy;
+  line-height: 1.1;
+  transform-origin: 0 60%;
+  @include mixins.numeric;
+}
+
+.pending {
+  color: tokens.$accent-edge;
+}
+
+.beat1,
+.beat2 {
+  animation: 520ms tokens.$ease-pop both;
+}
+
+.beat1 {
+  animation-name: beatA;
+}
+
+.beat2 {
+  animation-name: beatB;
+}
+
+@keyframes beatA {
+  from {
+    scale: 0.9;
+  }
+}
+
+@keyframes beatB {
+  from {
+    scale: 0.9;
+  }
+}
+
+.next {
+  @include mixins.tag(tokens.$surface-panel, tokens.$accent-ink);
+  @include mixins.numeric;
+}
+
+.nextHidden {
+  visibility: hidden;
 }

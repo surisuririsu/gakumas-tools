@@ -14,15 +14,11 @@ import "@/components/Charts/theme";
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
-const PARAMETER_COLORS = [
-  "rgba(242, 53, 132, 1)",
-  "rgba(28, 133, 237, 1)",
-  "rgba(247, 177, 46, 1)",
-];
+const PARAMETER_COLORS = ["#d62a6e", "#1470d0", "#e89e00"];
 const PARAMETER_COLORS_TRANSPARENT = [
-  "rgba(242, 53, 132, 0.5)",
-  "rgba(28, 133, 237, 0.5)",
-  "rgba(247, 177, 46, 0.5)",
+  "rgba(214, 42, 110, 0.35)",
+  "rgba(20, 112, 208, 0.35)",
+  "rgba(232, 158, 0, 0.35)",
 ];
 
 function LineChart({

@@ -1,6 +1,6 @@
-import React, { memo, useContext, useMemo } from "react";
+import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
+import { FaMinus, FaPlus } from "react-icons/fa6";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
@@ -10,8 +10,15 @@ import { EntityTypes } from "@/utils/entities";
 import { NON_PIDOL_FILTER } from "../skillCardFilters";
 import styles from "./TargetSkillCards.module.scss";
 
+function Appear({ live, className, children }) {
+  const [animate] = useState(live);
+
+  return <div className={c(className, animate && styles.pop)}>{children}</div>;
+}
+
 function TargetSkillCards({ idolId }) {
   const t = useTranslations("TargetSkillCards");
+  const [live, setLive] = useState(false);
 
   const {
     targetSkillCardIds,
@@ -38,84 +45,97 @@ function TargetSkillCards({ idolId }) {
   );
 
   return (
-    <div className={styles.targetSkillCards}>
-      {targetSkillCardIds.map((skillCardId, index) => (
-        <div key={`${index}_${skillCardId}`} className={styles.slot}>
-          <button
-            className={styles.minus}
-            onClick={() => setNegation(index, !targetNegations[index])}
-          >
-            {targetNegations[index] ? (
-              <span className={styles.not}>NOT</span>
-            ) : (
-              <FaCircleMinus />
-            )}
-          </button>
-
+    <div
+      className={c(styles.targetSkillCards, live && styles.live)}
+      onClickCapture={() => setLive(true)}
+    >
+      {targetSkillCardIds.map((skillCardId, index) => {
+        const alternates = alternateSkillCardIds[index];
+        const negated = !!targetNegations[index];
+        return (
           <div
-            className={c(
-              styles.orGroup,
-              alternateSkillCardIds[index]?.length && styles.hasMultiple
-            )}
+            key={`${index}_${skillCardId}`}
+            className={c(styles.slot, negated && styles.negated)}
           >
-            <EntityIcon
-              type={EntityTypes.SKILL_CARD}
-              id={skillCardId}
-              onClick={() =>
-                setModal(
-                  <EntityPickerModal
-                    type={EntityTypes.SKILL_CARD}
-                    onPick={(card) => replaceTargetCardId(index, card.id)}
-                    filters={filters}
-                  />
-                )
-              }
-              idolId={idolId}
-              size="fill"
-              showTier
-              showEmptyPlaceholder
-            />
+            <button
+              className={styles.negate}
+              aria-pressed={negated}
+              onClick={() => setNegation(index, !negated)}
+            >
+              <FaMinus className={styles.minus} />
+              <span className={styles.not}>NOT</span>
+            </button>
 
-            {alternateSkillCardIds[index]?.map((altSkillCardId, altIndex) => (
-              <React.Fragment
-                key={`${index}_${altIndex}_${skillCardId}_${altSkillCardId}`}
-              >
-                <span className={styles.or}>OR</span>
-                <EntityIcon
-                  type={EntityTypes.SKILL_CARD}
-                  id={altSkillCardId}
-                  onClick={() =>
-                    setModal(
-                      <EntityPickerModal
-                        type={EntityTypes.SKILL_CARD}
-                        onPick={(card) =>
-                          replaceAlternateCardId(index * 10 + altIndex, card.id)
-                        }
-                        filters={filters}
-                      />
-                    )
-                  }
-                  idolId={idolId}
-                  size="fill"
-                  showTier
-                />
-              </React.Fragment>
-            ))}
+            <div
+              className={c(
+                styles.orGroup,
+                alternates?.length && styles.hasMultiple
+              )}
+            >
+              <EntityIcon
+                type={EntityTypes.SKILL_CARD}
+                id={skillCardId}
+                onClick={() =>
+                  setModal(
+                    <EntityPickerModal
+                      type={EntityTypes.SKILL_CARD}
+                      onPick={(card) => replaceTargetCardId(index, card.id)}
+                      filters={filters}
+                    />
+                  )
+                }
+                idolId={idolId}
+                size="fill"
+                showTier
+                showEmptyPlaceholder
+              />
 
-            {alternateSkillCardIds[index]?.length != 10 &&
-              alternateSkillCardIds[index]?.[
-                alternateSkillCardIds[index].length - 1
-              ] != 0 && (
-                <button
-                  className={styles.plus}
-                  onClick={() => addAlternateSkillCards(index)}
+              {alternates?.map((altSkillCardId, altIndex) => (
+                <Appear
+                  key={`${index}_${altIndex}_${skillCardId}_${altSkillCardId}`}
+                  live={live}
+                  className={styles.alternate}
                 >
-                  <FaCirclePlus />
-                </button>
+                  <span className={styles.or}>OR</span>
+                  <EntityIcon
+                    type={EntityTypes.SKILL_CARD}
+                    id={altSkillCardId}
+                    onClick={() =>
+                      setModal(
+                        <EntityPickerModal
+                          type={EntityTypes.SKILL_CARD}
+                          onPick={(card) =>
+                            replaceAlternateCardId(
+                              index * 10 + altIndex,
+                              card.id
+                            )
+                          }
+                          filters={filters}
+                        />
+                      )
+                    }
+                    idolId={idolId}
+                    size="fill"
+                    showTier
+                  />
+                </Appear>
+              ))}
+            </div>
+
+            {alternates?.length != 10 &&
+              alternates?.[alternates.length - 1] != 0 && (
+                <Appear live={live} className={styles.addWrap}>
+                  <button
+                    className={styles.add}
+                    onClick={() => addAlternateSkillCards(index)}
+                  >
+                    <FaPlus />
+                  </button>
+                </Appear>
               )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

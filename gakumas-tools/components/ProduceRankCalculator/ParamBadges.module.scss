@@ -1,23 +1,48 @@
 @use "../../styles/mixins";
-@use "../../styles/colors";
+@use "../../styles/tokens";
 
 .badges {
-  display: flex;
-  justify-content: space-around;
-  margin: 4px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: tokens.$space-2;
 }
 
 .badge {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  padding: 2px;
-  background-color: colors.$white;
-  border-radius: 50vh;
+  padding: 4px;
+  border-radius: tokens.$radius-pill;
+  font-size: tokens.$text-md;
+  font-weight: tokens.$weight-heavy;
+  line-height: 20px;
+  text-align: center;
+  @include mixins.numeric;
 
-  @include mixins.param-colors using ($param-color) {
-    color: $param-color;
-    box-shadow: 0 0 8px $param-color;
+  @include mixins.param-tones using ($tint, $edge, $ink) {
+    background-color: $tint;
+    color: $ink;
+  }
+}
+
+.beat1,
+.beat2 {
+  animation: 460ms tokens.$ease-pop both;
+}
+
+.beat1 {
+  animation-name: badgeBeatA;
+}
+
+.beat2 {
+  animation-name: badgeBeatB;
+}
+
+@keyframes badgeBeatA {
+  from {
+    scale: 0.88;
+  }
+}
+
+@keyframes badgeBeatB {
+  from {
+    scale: 0.88;
   }
 }

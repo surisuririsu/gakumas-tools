@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .memoryCalculator {
@@ -7,7 +7,7 @@
   padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-5;
+  gap: tokens.$space-3;
 }
 
 .settingsRow {
@@ -20,31 +20,96 @@
 .settingField {
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-1;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 14px;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
+}
 
-  label {
-    margin-top: 0;
-  }
+.statLabel {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-bold;
 }
 
 .costRange {
-  font-size: tokens.$text-lg;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
   color: tokens.$surface-ink;
+  font-size: tokens.$text-lg;
+  font-weight: tokens.$weight-heavy;
+  line-height: 1.25;
+  @include mixins.numeric;
 }
 
 .resultsPanel {
   overflow: hidden;
 }
 
+.outcome {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.outcomePct {
+  min-width: 62px;
+  padding: 1px 8px;
+  border-radius: tokens.$radius-pill;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-heavy;
+  line-height: 20px;
+  text-align: center;
+  @include mixins.numeric;
+}
+
+.success {
+  background-color: tokens.$success-tint;
+  color: tokens.$success;
+}
+
+.failure {
+  background-color: tokens.$danger-tint;
+  color: tokens.$danger;
+}
+
+.beat1,
+.beat2 {
+  animation: 460ms tokens.$ease-pop both;
+}
+
+.beat1 {
+  animation-name: outcomeBeatA;
+}
+
+.beat2 {
+  animation-name: outcomeBeatB;
+}
+
+@keyframes outcomeBeatA {
+  from {
+    scale: 0.85;
+  }
+}
+
+@keyframes outcomeBeatB {
+  from {
+    scale: 0.85;
+  }
+}
+
 .resultsContent {
-  padding: tokens.$space-2;
+  padding: tokens.$space-1 tokens.$space-3 tokens.$space-2;
   transition: opacity tokens.$duration-base;
 
   &.stale {
     opacity: 0.5;
   }
+}
+
+.switched {
+  @include mixins.rise-in;
 }
 
 .moreResults {
@@ -54,12 +119,56 @@
 .result {
   display: flex;
   align-items: center;
-  gap: tokens.$space-1;
+  gap: tokens.$space-3;
+  padding: tokens.$space-2 tokens.$space-1;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid tokens.$surface-border;
+  }
+}
+
+.cards {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .card {
   position: relative;
-  width: 16%;
-  max-width: 64px;
+  width: 40px;
   aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+
+  @container (width >= 480px) {
+    width: 48px;
+  }
+}
+
+.resultStats {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.resultProbability {
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-base;
+  font-weight: tokens.$weight-heavy;
+  line-height: 1.2;
+  @include mixins.numeric;
+}
+
+.resultCost {
+  @include mixins.tag;
+  @include mixins.numeric;
+
+  b {
+    color: tokens.$surface-ink;
+    font-weight: tokens.$weight-heavy;
+  }
 }

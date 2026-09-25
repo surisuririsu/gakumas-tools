@@ -6,7 +6,6 @@ import Input from "@/components/Input";
 import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
 import ProduceRankResult from "@/components/ProduceRankResult";
-import Table from "@/components/Table";
 import {
   calculateTargetRound2Scores,
   calculateTotalRating,
@@ -19,6 +18,9 @@ import {
   MAX_TOTAL_SCORE,
   TARGET_RATING_BY_RANK,
 } from "@/utils/hif";
+import InfoTag from "./InfoTag";
+import TargetScoreTable from "./TargetScoreTable";
+import shared from "./ProduceRankCalculator.module.scss";
 import styles from "./HifCalculator.module.scss";
 
 const SCORE_MODES = ["total", "split"];
@@ -30,8 +32,6 @@ function HifCalculator() {
     value: mode,
     label: t(`hifScoreModes.${mode}`),
   }));
-
-  const TABLE_HEADERS = [t("produceRank"), t("targetScore")];
 
   const [params, setParams] = useState([null, null, null]);
   const [preRound2Star, setPreRound2Star] = useState(null);
@@ -66,17 +66,14 @@ function HifCalculator() {
       });
   const rank = allEmpty ? "?" : getRank(totalRating) || "?";
 
-  const targetRows = useMemo(
+  const targets = useMemo(
     () =>
       calculateTargetRound2Scores({
         params,
         preRound2Star: preRound2Star || 0,
         round1Score,
         currentRound2Score: round2Score || 0,
-      }).map(({ rank: r, score }) => [
-        `${r} (${TARGET_RATING_BY_RANK[r].toLocaleString()})`,
-        score == null ? "∞" : score.toLocaleString(),
-      ]),
+      }),
     [params, preRound2Star, round1Score, round2Score],
   );
 
@@ -90,7 +87,7 @@ function HifCalculator() {
       : t("hifDerivedTotal", { value: totalScore.toLocaleString() });
 
   return (
-    <div className={styles.hif}>
+    <div className={shared.stack}>
       <Panel label={t("preRound2")}>
         <div className={styles.stack}>
           <div className={styles.field}>
@@ -136,7 +133,7 @@ function HifCalculator() {
               min={0}
               max={leftMax}
             />
-            <div className={styles.hint}>{derivedLabel}</div>
+            <InfoTag className={styles.hint} label={derivedLabel} />
           </div>
 
           <div className={styles.field}>
@@ -149,18 +146,27 @@ function HifCalculator() {
               min={0}
               max={MAX_ROUND2_SCORE}
             />
-            <div className={styles.hint}>
-              {t("hifRound2StarGain", { value: boostedStarGain })}
-            </div>
+            <InfoTag
+              className={styles.hint}
+              label={t("hifRound2StarGain", { value: boostedStarGain })}
+            />
           </div>
         </div>
       </Panel>
 
-      <Panel label={t("produceRank")} className={styles.resultPanel}>
-        <ProduceRankResult rating={totalRating} rank={rank} />
+      <Panel label={t("produceRank")}>
+        <ProduceRankResult
+          rating={totalRating}
+          rank={rank}
+          ratingByRank={TARGET_RATING_BY_RANK}
+        />
+      </Panel>
 
-        <label>{t("hifTargetRound2Scores")}</label>
-        <Table headers={TABLE_HEADERS} rows={targetRows} />
+      <Panel label={t("hifTargetRound2Scores")}>
+        <TargetScoreTable
+          targets={targets}
+          ratingByRank={TARGET_RATING_BY_RANK}
+        />
       </Panel>
     </div>
   );
