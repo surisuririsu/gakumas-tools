@@ -8,17 +8,14 @@
   justify-content: center;
   align-items: center;
   gap: tokens.$space-2;
-  border-radius: tokens.$radius-sm;
-  transition:
-    background-color tokens.$duration-fast ease,
-    color tokens.$duration-fast ease,
-    scale tokens.$duration-slow tokens.$ease-spring;
-  @include mixins.pressable;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 .sm {
   gap: tokens.$space-1;
   padding: tokens.$space-1 tokens.$space-2;
+  border-radius: tokens.$radius-md;
   font-size: tokens.$text-sm;
 
   @media (pointer: coarse) {
@@ -37,29 +34,62 @@
 }
 
 .default {
-  background-color: colors.$white;
-  color: colors.$black;
-  border: 1px solid tokens.$surface-border;
+  background-color: tokens.$surface-muted;
+  color: tokens.$surface-ink;
+  @include mixins.raised;
 
   &:hover,
   &:focus-visible {
-    background-color: tokens.$surface-alt;
+    background-color: tokens.$surface-muted-hover;
   }
 }
 
 .primary {
-  background: tokens.$gradient-brand;
+  background-color: colors.$gk-orange;
   color: colors.$white;
+  @include mixins.raised(#d27f00, 3px);
 
   &:hover,
   &:focus-visible {
-    background: colors.$gk-red-orange;
+    background-color: #f7a114;
   }
 }
 
-.secondary {
+.red {
+  background-color: colors.$red-dark;
+  color: colors.$white;
+  @include mixins.raised(color.adjust(colors.$red-dark, $lightness: -14%), 3px);
+
+  &:hover,
+  &:focus-visible {
+    background-color: color.adjust(colors.$red-dark, $lightness: 4%);
+  }
+}
+
+.blue {
+  background-color: tokens.$primary;
+  color: colors.$white;
+  @include mixins.raised(tokens.$primary-edge, 3px);
+
+  &:hover,
+  &:focus-visible {
+    background-color: #2a95ee;
+  }
+}
+
+.secondary,
+.red-secondary,
+.blue-secondary {
   background-color: transparent;
-  color: colors.$gk-orange;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable;
+}
+
+.secondary {
+  color: tokens.$accent-ink;
 
   &:hover,
   &:focus-visible {
@@ -68,58 +98,33 @@
   }
 }
 
-.red {
-  background-color: colors.$red-dark;
-  color: colors.$white;
-
-  &:hover,
-  &:focus-visible {
-    background-color: color.adjust(colors.$red-dark, $lightness: -6%);
-  }
-}
-
 .red-secondary {
-  background-color: transparent;
-  color: colors.$red;
+  color: #d23658;
 
   &:hover,
   &:focus-visible {
-    background-color: colors.$red-extra-light;
-    color: colors.$red-dark;
-  }
-}
-
-.blue {
-  background-color: colors.$blue;
-  color: colors.$white;
-
-  &:hover,
-  &:focus-visible {
-    background-color: colors.$blue-dark;
+    background-color: #fdeff2;
   }
 }
 
 .blue-secondary {
-  background-color: transparent;
-  color: colors.$blue;
+  color: tokens.$link;
 
   &:hover,
   &:focus-visible {
-    background-color: colors.$blue-extra-light;
-    color: colors.$blue-dark;
+    background-color: #edf5fd;
   }
 }
 
 .disabled {
-  background-color: colors.$gray-extra-light;
-  color: colors.$gray;
+  background-color: tokens.$surface-muted;
+  color: tokens.$surface-border-strong;
   cursor: not-allowed;
 }
 
 .fill {
   width: 100%;
   flex: 1;
-  @include mixins.pressable(tokens.$press-scale-wide);
 }
 
 .pill {

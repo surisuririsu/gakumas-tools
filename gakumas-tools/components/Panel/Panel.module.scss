@@ -1,11 +1,9 @@
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .panel {
   position: relative;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  @include mixins.card;
 }
 
 .padded {
@@ -13,21 +11,16 @@
 }
 
 .label {
-  position: absolute;
-  top: -12px;
-  left: tokens.$space-3;
   max-width: calc(100% - 100px);
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: tokens.$space-1;
-  padding: tokens.$space-1 tokens.$space-3;
-  border-radius: 999px;
-  background-color: tokens.$surface-muted;
+  margin-bottom: tokens.$space-3;
   color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-sm;
-  font-weight: 700;
+  font-size: tokens.$text-xs;
+  font-weight: 800;
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 1.2;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
@@ -45,9 +38,7 @@
 
 .headerAction {
   position: absolute;
-  top: -12px;
+  top: tokens.$space-2;
   right: tokens.$space-3;
-  padding: 0 tokens.$space-1;
-  background-color: tokens.$surface-panel;
   line-height: 0;
 }

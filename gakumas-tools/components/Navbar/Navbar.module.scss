@@ -3,12 +3,15 @@
 @use "../../styles/tokens";
 
 .navbar {
+  position: relative;
+  z-index: 1;
   min-height: 52px;
   display: flex;
   align-items: center;
   padding: 0 tokens.$space-3;
   border-radius: 0 0 20px 20px;
   background: tokens.$gradient-brand;
+  box-shadow: 0 6px 16px rgba(243, 152, 0, 0.16);
   color: colors.$white;
 
   &.hasOshi {
@@ -50,13 +53,14 @@
 .indicator {
   position: absolute;
   left: 0;
-  bottom: 6px;
-  height: 2px;
+  bottom: 5px;
+  height: 3px;
   border-radius: 2px;
   background-color: colors.$white;
   pointer-events: none;
   transition:
-    transform tokens.$duration-slow tokens.$ease-in-out,
+    transform 420ms tokens.$ease-spring,
+    width 420ms tokens.$ease-spring,
     opacity tokens.$duration-base ease;
 
   &.pending {

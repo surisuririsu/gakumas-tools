@@ -5,30 +5,32 @@
 .input {
   min-width: 0;
   outline: none;
-  padding: tokens.$space-1 tokens.$space-2;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-xs;
-  background-color: transparent;
-  color: colors.$black;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$surface-muted;
+  color: tokens.$surface-ink;
   font-size: tokens.$text-base;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    background-color tokens.$duration-fast,
+    box-shadow tokens.$duration-fast;
 
   &::placeholder {
-    color: colors.$gray;
+    color: tokens.$surface-ink-subtle;
     font-weight: 400;
   }
 
   &:hover {
-    border-color: colors.$gk-orange-light;
+    background-color: tokens.$surface-muted-hover;
   }
 
   &:focus {
-    border-color: colors.$gk-orange;
-    box-shadow: 0 0 0 3px color.adjust(colors.$gk-orange, $alpha: -0.85);
+    background-color: colors.$white;
+    box-shadow:
+      inset 0 0 0 2px colors.$gk-orange,
+      0 0 0 3px color.adjust(colors.$gk-orange, $alpha: -0.85);
   }
 
   &::-webkit-outer-spin-button,

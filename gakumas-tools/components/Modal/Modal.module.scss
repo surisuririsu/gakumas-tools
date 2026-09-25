@@ -39,9 +39,11 @@
   display: flex;
   flex-direction: column;
   padding: tokens.$space-6 tokens.$space-5 tokens.$space-5;
-  border-radius: tokens.$radius-md;
+  border-radius: tokens.$radius-xl;
   background-color: tokens.$surface-panel;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+  box-shadow:
+    0 3px 0 rgba(20, 20, 40, 0.12),
+    0 16px 40px rgba(20, 20, 40, 0.22);
   container-type: inline-size;
   animation: modalIn tokens.$duration-slow tokens.$ease-spring;
   transition:

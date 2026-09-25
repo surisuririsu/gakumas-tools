@@ -8,13 +8,21 @@
   position: relative;
   display: flex;
   justify-content: center;
-  box-shadow: inset 0 0 0 2px colors.$gray-light;
-  border-radius: 8%;
-  background-color: colors.$gray-extra-light;
+  border-radius: 12%;
+  background-color: #f4f4f7;
   container-type: inline-size;
 
   img {
-    border-radius: 8%;
+    border-radius: 12%;
+  }
+
+  &.empty {
+    box-shadow: inset 0 0 0 1.5px #dcdce3;
+  }
+
+  &.filled {
+    background-color: colors.$white;
+    box-shadow: 0 2px 0 rgba(20, 20, 40, 0.16);
   }
 
   .dropArea {
@@ -28,22 +36,43 @@
 }
 
 .emptyPlaceholder {
-  color: colors.$gray-light;
+  color: #bdbdc6;
   width: 40%;
   height: 40%;
   transition: color 0.2s;
 }
 
 button.entityIcon {
-  outline: 3px solid transparent;
-  outline-offset: 0;
+  --press-opacity: 1;
+  outline: 2.5px solid transparent;
+  outline-offset: 2px;
   transition:
     outline-color tokens.$duration-fast ease,
-    scale tokens.$duration-slow tokens.$ease-spring;
-  @include mixins.pressable(0.94);
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-base;
+
+  &.filled {
+    box-shadow: tokens.$shadow-icon;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      translate: 0 -2px;
+    }
+  }
+
+  &:active {
+    translate: 0 2px;
+    scale: 0.95;
+    transition-duration: tokens.$duration-press;
+
+    &.filled {
+      box-shadow: tokens.$shadow-icon-pressed;
+    }
+  }
 }
 
-button.entityIcon:hover,
 button.entityIcon:focus-visible {
   outline-color: colors.$gk-orange;
 }
@@ -60,6 +89,7 @@ button.swapSource {
 
 button.swapTarget {
   outline-color: colors.$gk-orange;
+  translate: 0 -4px;
   scale: 1.06;
 }
 

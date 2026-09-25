@@ -2,51 +2,68 @@
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
+$thumb-edge: 0 2px 0 #d6d6dd;
+
 .buttonGroup {
+  position: relative;
   display: flex;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
+  padding: 3px 3px 5px;
+  border-radius: 11px;
+  background-color: tokens.$surface-muted;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 
   :is(button, a) {
+    position: relative;
+    z-index: 1;
     flex: 1;
     min-width: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: tokens.$space-2 tokens.$space-3;
-    color: tokens.$surface-ink-muted;
+    padding: 6px tokens.$space-3;
+    border-radius: 8px;
+    color: tokens.$surface-ink-subtle;
     font-size: tokens.$text-sm;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
     transition:
-      background-color tokens.$duration-fast,
       color tokens.$duration-fast,
-      box-shadow tokens.$duration-base tokens.$ease-out;
+      scale tokens.$duration-spring tokens.$ease-spring;
     --press-opacity: 1;
     @include mixins.focus-ring-inset;
 
     &.selected {
-      background-color: rgba(255, 118, 0, 0.12);
-      color: colors.$gk-red-orange;
-      font-weight: 700;
-      box-shadow: inset 0 -2px 0 colors.$gk-red-orange;
+      color: tokens.$accent-ink;
     }
 
     &:not(.selected):hover {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
+      color: tokens.$surface-ink;
     }
 
-    &:not(.selected):active {
-      background-color: rgba(255, 118, 0, 0.2);
+    &:active {
+      scale: 0.9;
       transition-duration: tokens.$duration-press;
     }
-
-    & + :is(button, a) {
-      border-left: 1px solid tokens.$surface-border;
-    }
   }
+
+  &:not(.measured) .selected {
+    background-color: colors.$white;
+    box-shadow: $thumb-edge;
+  }
+}
+
+.thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+  background-color: colors.$white;
+  box-shadow: $thumb-edge;
+  pointer-events: none;
+  transition:
+    translate 420ms tokens.$ease-spring,
+    width 420ms tokens.$ease-spring,
+    height 420ms tokens.$ease-spring;
 }
