@@ -516,7 +516,14 @@
     "allSeasons": "All seasons",
     "allIdols": "All idols",
     "allStages": "All stages",
-    "actions": "Actions"
+    "actions": "Actions",
+    "runSaved": "Loadout saved",
+    "saveFailed": "Couldn't save the loadout",
+    "renameFailed": "Couldn't rename the loadout",
+    "runDeleted": "Loadout deleted",
+    "deleteFailed": "Couldn't delete the loadout",
+    "loadFailed": "Couldn't load your saved loadouts.",
+    "retry": "Retry"
   },
   "SimulatorStats": {
     "total": "Total",

@@ -6,6 +6,7 @@ import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
 import ModalContext from "@/contexts/ModalContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
+import ToastContext from "@/contexts/ToastContext";
 import {
   computeRange,
   computeTicks,
@@ -23,10 +24,13 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
   const t = useTranslations("CompareTab");
   const { status } = useSession();
   const { setModal } = useContext(ModalContext);
+  const { showToast } = useContext(ToastContext);
   const {
     history,
     savedRuns,
     savedLoading,
+    savedError,
+    refetchSaved,
     saveRun,
     deleteHistoryRun,
     deleteSaved,
@@ -147,17 +151,33 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
     );
   }
 
+  async function report(action, successMessage, failureMessage) {
+    try {
+      await action();
+      if (successMessage) {
+        showToast({ tone: "success", message: successMessage });
+      }
+    } catch (err) {
+      console.error(err);
+      showToast({ tone: "error", message: failureMessage });
+    }
+  }
+
   async function handleSave(run, name) {
     if (status !== "authenticated") {
       promptSignIn();
       return;
     }
-    await saveRun(run, name);
+    await report(() => saveRun(run, name), t("runSaved"), t("saveFailed"));
   }
 
   async function handleRename(run, name) {
     if (run.name === name) return;
-    await renameSaved(run._id || run.id, name);
+    await report(
+      () => renameSaved(run._id || run.id, name),
+      null,
+      t("renameFailed"),
+    );
   }
 
   function handleLoad(run) {
@@ -181,7 +201,13 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
   }
 
   function handleDeleteSaved(run) {
-    confirmDelete(() => deleteSaved([run._id || run.id]));
+    confirmDelete(() =>
+      report(
+        () => deleteSaved([run._id || run.id]),
+        t("runDeleted"),
+        t("deleteFailed"),
+      ),
+    );
   }
 
   const filterCls = (v) =>
@@ -288,6 +314,13 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
       ) : subTab === "saved" &&
         (status === "loading" || savedLoading) ? (
         <div className={styles.empty}>{t("loading")}</div>
+      ) : subTab === "saved" && savedError && !savedRuns.length ? (
+        <div className={styles.empty}>
+          <div>{t("loadFailed")}</div>
+          <button className={styles.clearFiltersLink} onClick={refetchSaved}>
+            {t("retry")}
+          </button>
+        </div>
       ) : visibleRuns.length === 0 ? (
         <div className={styles.empty}>
           {totalRuns > 0 ? (

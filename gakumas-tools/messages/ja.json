@@ -524,7 +524,14 @@
     "allSeasons": "全シーズン",
     "allIdols": "全アイドル",
     "allStages": "全ステージ",
-    "actions": "操作"
+    "actions": "操作",
+    "runSaved": "編成を保存しました",
+    "saveFailed": "編成を保存できませんでした",
+    "renameFailed": "名前を変更できませんでした",
+    "runDeleted": "編成を削除しました",
+    "deleteFailed": "編成を削除できませんでした",
+    "loadFailed": "保存済み編成を読み込めませんでした。",
+    "retry": "再試行"
   },
   "SimulatorStats": {
     "total": "合計",

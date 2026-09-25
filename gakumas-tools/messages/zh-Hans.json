@@ -516,7 +516,14 @@
     "allSeasons": "全部赛季",
     "allIdols": "全部偶像",
     "allStages": "全部舞台",
-    "actions": "操作"
+    "actions": "操作",
+    "runSaved": "已保存编组",
+    "saveFailed": "无法保存编组",
+    "renameFailed": "无法重命名",
+    "runDeleted": "已删除编组",
+    "deleteFailed": "无法删除编组",
+    "loadFailed": "无法加载已保存的编组。",
+    "retry": "重试"
   },
   "SimulatorStats": {
     "total": "合计",

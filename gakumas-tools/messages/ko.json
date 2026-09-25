@@ -516,7 +516,14 @@
     "allSeasons": "전체 시즌",
     "allIdols": "전체 아이돌",
     "allStages": "전체 스테이지",
-    "actions": "작업"
+    "actions": "작업",
+    "runSaved": "편성을 저장했습니다",
+    "saveFailed": "편성을 저장하지 못했습니다",
+    "renameFailed": "이름을 변경하지 못했습니다",
+    "runDeleted": "편성을 삭제했습니다",
+    "deleteFailed": "편성을 삭제하지 못했습니다",
+    "loadFailed": "저장된 편성을 불러오지 못했습니다.",
+    "retry": "다시 시도"
   },
   "SimulatorStats": {
     "total": "합계",
