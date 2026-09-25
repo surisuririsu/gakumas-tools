@@ -62,9 +62,9 @@ function LessonCalculator() {
         <table className={styles.results}>
           <thead>
             <tr>
-              <th style={{ width: "9%" }}>{t("week")}</th>
-              <th style={{ width: "15%" }}>{t("type")}</th>
-              <th style={{ width: "12%" }}>{t("score")}</th>
+              <th style={{ width: "11%" }}>{t("week")}</th>
+              <th style={{ width: "13%" }}>{t("type")}</th>
+              <th style={{ width: "11%" }}>{t("score")}</th>
               {PARAMS.map((param, i) => (
                 <th key={param} colSpan={3} className={styles[param]}>
                   {PARAM_LABELS[i]}

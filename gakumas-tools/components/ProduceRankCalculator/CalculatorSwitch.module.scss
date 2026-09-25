@@ -1,6 +1,10 @@
 @use "../../styles/tokens";
 
 div.calculatorSwitch {
+  --segment: #{tokens.$accent-tint};
+  --segment-edge: #{tokens.$accent-edge};
+  --segment-ink: #{tokens.$accent-ink};
+  --segment-radius: #{tokens.$radius-md};
   flex-shrink: 0;
   padding: 4px 4px 6px;
   border-radius: tokens.$radius-lg;
@@ -9,18 +13,5 @@ div.calculatorSwitch {
 
   :is(a, button) {
     padding: 8px tokens.$space-3;
-    border-radius: tokens.$radius-md;
-  }
-
-  > span[aria-hidden="true"] {
-    border-radius: tokens.$radius-md;
-    background-color: tokens.$accent-tint;
-    box-shadow: 0 2px 0 tokens.$accent-edge;
-  }
-
-  &:not(:has(> span[aria-hidden="true"]))
-    :is([aria-current="page"], [aria-pressed="true"]) {
-    background-color: tokens.$accent-tint;
-    box-shadow: 0 2px 0 tokens.$accent-edge;
   }
 }
