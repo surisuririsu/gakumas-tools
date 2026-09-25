@@ -15,7 +15,11 @@ function StageSelect() {
   const { setModal } = useContext(ModalContext);
 
   const chevron = (
-    <FaChevronDown className={styles.chevron} aria-hidden="true" />
+    <FaChevronDown
+      className={styles.chevron}
+      aria-hidden="true"
+      data-export-hide="true"
+    />
   );
 
   return (

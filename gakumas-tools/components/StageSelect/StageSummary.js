@@ -21,7 +21,13 @@ function StageSummary({ stage, trailing }) {
           )}
           {formatStageName(stage, t)}
         </span>
-        <Image src={`/plans/${stage.plan}.png`} width={20} height={20} alt="" />
+        <Image
+          src={`/plans/${stage.plan}.png`}
+          width={20}
+          height={20}
+          alt=""
+          unoptimized
+        />
         {trailing}
       </div>
       {criteria.every((c) => c) && (

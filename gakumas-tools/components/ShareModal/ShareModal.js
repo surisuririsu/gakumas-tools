@@ -55,6 +55,9 @@ async function exportImage() {
     imageTimeout: 10000,
     logging: false,
     ignoreElements: (el) => el.dataset?.exportHide == "true",
+    onclone: (doc) => {
+      doc.documentElement.dataset.exporting = "true";
+    },
   });
   const blob = await new Promise((resolve) =>
     canvas.toBlob(resolve, "image/png")

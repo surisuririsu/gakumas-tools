@@ -128,3 +128,14 @@ select {
 textarea {
   font-family: inherit;
 }
+
+html[data-exporting] {
+  *,
+  ::after {
+    letter-spacing: normal !important;
+  }
+
+  input {
+    box-shadow: none !important;
+  }
+}
