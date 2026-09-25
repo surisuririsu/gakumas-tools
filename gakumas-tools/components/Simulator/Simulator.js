@@ -1,5 +1,6 @@
 "use client";
 import {
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -227,8 +228,10 @@ export default function Simulator() {
         result = mergeResults(results);
       }
       revealResultRef.current = true;
-      setResultConfig(runConfig);
-      setResult(result);
+      startTransition(() => {
+        setResultConfig(runConfig);
+        setResult(result);
+      });
     } catch (err) {
       console.timeEnd("simulation");
       if (controller.signal.aborted) return;
