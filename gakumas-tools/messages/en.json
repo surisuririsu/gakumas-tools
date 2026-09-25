@@ -454,6 +454,9 @@
   "Modal": {
     "close": "Close"
   },
+  "Toaster": {
+    "dismiss": "Dismiss"
+  },
   "SimulatorResult": {
     "min": "Min",
     "average": "Average",

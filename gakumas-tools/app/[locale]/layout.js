@@ -17,6 +17,7 @@ import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { ModalContextProvider } from "@/contexts/ModalContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SessionContextProvider } from "@/contexts/SessionContext";
+import { ToastContextProvider } from "@/contexts/ToastContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
@@ -70,13 +71,15 @@ export default async function RootLayout({ params, children }) {
                       <LoadoutUrlContextProvider>
                         <LoadoutContextProvider>
                           <SimulationRunsContextProvider>
-                            <ModalContextProvider>
-                              <div className={styles.tools}>
-                                <PinnedTools />
-                                <main>{children}</main>
-                              </div>
-                              <Tooltips />
-                            </ModalContextProvider>
+                            <ToastContextProvider>
+                              <ModalContextProvider>
+                                <div className={styles.tools}>
+                                  <PinnedTools />
+                                  <main>{children}</main>
+                                </div>
+                                <Tooltips />
+                              </ModalContextProvider>
+                            </ToastContextProvider>
                           </SimulationRunsContextProvider>
                         </LoadoutContextProvider>
                       </LoadoutUrlContextProvider>

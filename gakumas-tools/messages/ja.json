@@ -462,6 +462,9 @@
   "Modal": {
     "close": "閉じる"
   },
+  "Toaster": {
+    "dismiss": "閉じる"
+  },
   "SimulatorResult": {
     "min": "最小値",
     "average": "平均値",

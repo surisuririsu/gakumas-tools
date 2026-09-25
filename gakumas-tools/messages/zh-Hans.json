@@ -454,6 +454,9 @@
   "Modal": {
     "close": "关闭"
   },
+  "Toaster": {
+    "dismiss": "关闭"
+  },
   "SimulatorResult": {
     "min": "最低分",
     "average": "平均分",

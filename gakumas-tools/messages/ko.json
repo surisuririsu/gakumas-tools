@@ -454,6 +454,9 @@
   "Modal": {
     "close": "닫기"
   },
+  "Toaster": {
+    "dismiss": "닫기"
+  },
   "SimulatorResult": {
     "min": "최솟값",
     "average": "평균값",
