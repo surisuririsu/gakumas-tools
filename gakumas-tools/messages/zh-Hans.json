@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 页面未找到",
-    "generic": "发生错误"
+    "generic": "发生错误",
+    "retry": "重试",
+    "home": "首页"
   },
   "tools": {
     "home": {

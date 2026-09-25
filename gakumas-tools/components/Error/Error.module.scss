@@ -5,8 +5,15 @@
   flex-direction: column;
 
   h2 {
-    padding: 16px 0;
+    padding: 16px 0 12px;
     text-align: center;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding-bottom: 16px;
   }
 
   .wrapper {

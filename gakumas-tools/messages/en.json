@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 Not Found",
-    "generic": "Something went wrong"
+    "generic": "Something went wrong",
+    "retry": "Try again",
+    "home": "Home"
   },
   "tools": {
     "home": {

@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 페이지를 찾을 수 없습니다",
-    "generic": "오류가 발생했습니다"
+    "generic": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "home": "홈"
   },
   "tools": {
     "home": {
