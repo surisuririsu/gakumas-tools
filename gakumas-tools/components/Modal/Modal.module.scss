@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .overlay {
@@ -58,8 +59,10 @@
   color: tokens.$surface-ink-muted;
   font-size: 18px;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color tokens.$duration-fast ease,
+    color tokens.$duration-fast ease,
+    scale tokens.$duration-slow tokens.$ease-spring;
+  @include mixins.pressable(0.9);
 
   &:hover {
     background-color: tokens.$surface-muted;

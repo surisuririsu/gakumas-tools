@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .iconButton {
@@ -9,8 +10,10 @@
   background-color: transparent;
   color: tokens.$surface-ink-muted;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color tokens.$duration-fast ease,
+    color tokens.$duration-fast ease,
+    scale tokens.$duration-slow tokens.$ease-spring;
+  @include mixins.pressable(0.9);
 
   &:hover {
     background-color: tokens.$surface-muted;
@@ -38,5 +41,5 @@
 .disabled {
   background-color: transparent !important;
   color: tokens.$surface-border-strong !important;
-  cursor: default;
+  cursor: not-allowed;
 }

@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .buttonGroup {
@@ -21,8 +22,11 @@
     font-weight: 600;
     white-space: nowrap;
     transition:
-      background-color 0.15s,
-      color 0.15s;
+      background-color tokens.$duration-fast,
+      color tokens.$duration-fast,
+      box-shadow tokens.$duration-base tokens.$ease-out;
+    --press-opacity: 1;
+    @include mixins.focus-ring-inset;
 
     &.selected {
       background-color: rgba(255, 118, 0, 0.12);
@@ -34,6 +38,11 @@
     &:not(.selected):hover {
       background-color: colors.$gk-orange-extra-light;
       color: colors.$gk-red-orange;
+    }
+
+    &:not(.selected):active {
+      background-color: rgba(255, 118, 0, 0.2);
+      transition-duration: tokens.$duration-press;
     }
 
     & + :is(button, a) {

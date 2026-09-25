@@ -130,7 +130,8 @@
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    scale tokens.$duration-slow tokens.$ease-spring;
 
   &::before {
     content: "";
@@ -157,6 +158,11 @@
     .toolIcon {
       transform: scale(1.05);
     }
+  }
+
+  &:active {
+    scale: 0.98;
+    transition-duration: tokens.$duration-press;
   }
 }
 

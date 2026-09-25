@@ -14,6 +14,7 @@ function ButtonGroup({ className, selected, options, onChange }) {
             key={value}
             href={href}
             className={value == selected ? styles.selected : null}
+            aria-current={value == selected ? "page" : undefined}
           >
             {label}
           </Link>
@@ -21,6 +22,7 @@ function ButtonGroup({ className, selected, options, onChange }) {
           <button
             key={value}
             className={value == selected ? styles.selected : null}
+            aria-pressed={value == selected}
             onClick={() => onChange(value)}
           >
             {label}

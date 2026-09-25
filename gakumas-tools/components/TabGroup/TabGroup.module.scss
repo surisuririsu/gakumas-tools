@@ -1,4 +1,6 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .tabGroup {
   display: flex;
@@ -12,9 +14,14 @@
     font-weight: 600;
     border-bottom: 2px solid transparent;
     margin-bottom: -2px;
-    transition: all 0.15s;
+    transition:
+      color tokens.$duration-fast,
+      border-color tokens.$duration-base tokens.$ease-out;
+    --press-opacity: 1;
+    @include mixins.focus-ring-inset;
 
-    &:hover {
+    &:hover,
+    &:active {
       color: colors.$gk-red-orange;
     }
 

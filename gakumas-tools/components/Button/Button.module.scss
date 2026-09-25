@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .button {
@@ -9,8 +10,10 @@
   gap: tokens.$space-2;
   border-radius: tokens.$radius-sm;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color tokens.$duration-fast ease,
+    color tokens.$duration-fast ease,
+    scale tokens.$duration-slow tokens.$ease-spring;
+  @include mixins.pressable;
 }
 
 .sm {
@@ -106,12 +109,13 @@
 .disabled {
   background-color: colors.$gray-extra-light;
   color: colors.$gray;
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .fill {
   width: 100%;
   flex: 1;
+  @include mixins.pressable(tokens.$press-scale-wide);
 }
 
 .pill {

@@ -1,6 +1,7 @@
 @use "../../styles/mixins";
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .entityIcon {
   aspect-ratio: 1;
@@ -35,10 +36,15 @@
 
 button.entityIcon {
   outline: 3px solid transparent;
-  transition: outline-color 0.15s ease;
+  outline-offset: 0;
+  transition:
+    outline-color tokens.$duration-fast ease,
+    scale tokens.$duration-slow tokens.$ease-spring;
+  @include mixins.pressable(0.94);
 }
 
-button.entityIcon:hover {
+button.entityIcon:hover,
+button.entityIcon:focus-visible {
   outline-color: colors.$gk-orange;
 }
 
@@ -125,7 +131,8 @@ button.entityIcon:focus .emptyPlaceholder {
   font-size: 12px;
 }
 
-button.entityIcon:hover .tier {
+button.entityIcon:hover .tier,
+button.entityIcon:focus-visible .tier {
   display: flex;
 }
 
@@ -164,7 +171,7 @@ button.entityIcon:hover .tier {
   background-color: colors.$red;
   color: colors.$white;
   font-size: 12px;
-  transition: all 0.2s;
+  transition: background-color tokens.$duration-base;
 
   &:hover {
     background-color: colors.$red-light;
