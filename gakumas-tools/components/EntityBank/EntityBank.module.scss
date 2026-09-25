@@ -23,7 +23,7 @@
 
 .selected {
   z-index: tokens.$z-raised;
-  transform: translateY(-4px) rotate(-2deg) scale(1.07);
+  transform: translateY(-4px) scale(1.07);
   @include mixins.selected-ring;
 }
 
