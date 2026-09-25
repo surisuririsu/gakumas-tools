@@ -190,7 +190,11 @@
   display: flex;
   align-items: center;
   gap: tokens.$space-2;
-  min-height: calc(1em + 8px);
+  height: 1.2em;
+
+  > div {
+    width: 1.2em;
+  }
 }
 
 .runPercent {
