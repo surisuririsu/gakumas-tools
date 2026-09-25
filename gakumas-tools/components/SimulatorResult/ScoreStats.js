@@ -1,16 +1,12 @@
 import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import c from "@/utils/classNames";
-import useCountUp from "@/utils/useCountUp";
 import styles from "./SimulatorResult.module.scss";
 
 const SPARKLE_COUNT = 7;
 const SPARKLE_PATH =
   "M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z";
-
-function CountUp({ value }) {
-  return useCountUp(value);
-}
+const KEYS = ["min", "average", "median", "max"];
 
 function ScoreStats({ data }) {
   const t = useTranslations("SimulatorResult");
@@ -22,28 +18,39 @@ function ScoreStats({ data }) {
   }
   const beat = runs % 2 ? styles.beatA : styles.beatB;
 
-  const stats = [
-    ["min", data.minRun.score],
-    ["average", data.averageScore],
-    ["median", data.medianScore],
-    ["max", data.maxRun.score],
+  const values = [
+    data.minRun.score,
+    data.averageScore,
+    data.medianScore,
+    data.maxRun.score,
   ];
 
   return (
     <div className={styles.statsWrap}>
-      <div className={c(styles.stats, beat)}>
-        {stats.map(([key, value]) => (
-          <div
-            key={key}
-            className={c(styles.stat, key == "average" && styles.hero)}
-          >
-            <span className={styles.statLabel}>{t(key)}</span>
-            <span className={styles.statValue}>
-              <CountUp value={value} />
-            </span>
-          </div>
-        ))}
-      </div>
+      <table className={c(styles.stats, beat)}>
+        <thead>
+          <tr>
+            {KEYS.map((key) => (
+              <th key={key} className={key == "average" ? styles.hero : null}>
+                {t(key)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {values.map((value, i) => (
+              <td
+                key={KEYS[i]}
+                className={KEYS[i] == "average" ? styles.hero : null}
+                style={{ "--score": Math.round(value) }}
+              >
+                {value}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
       <span
         className={c(styles.burst, beat)}
         aria-hidden="true"

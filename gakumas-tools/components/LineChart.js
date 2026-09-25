@@ -9,6 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Scatter } from "react-chartjs-2";
+import "@/components/Charts/theme";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 

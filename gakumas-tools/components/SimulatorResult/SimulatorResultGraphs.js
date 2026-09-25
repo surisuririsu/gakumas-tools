@@ -43,6 +43,7 @@ function SimulatorResultGraphs({ data, plan }) {
           label={label}
           data={data.bucketedScores}
           bucketSize={data.bucketSize}
+          highlight={data.medianScore}
         />
       )}
       {graphType == "boxplot" && (

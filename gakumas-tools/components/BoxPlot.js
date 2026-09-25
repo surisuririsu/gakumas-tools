@@ -14,6 +14,7 @@ import {
   BoxPlotController,
   BoxAndWiskers,
 } from "@sgratzl/chartjs-chart-boxplot";
+import { CHART_COLORS } from "@/components/Charts/theme";
 
 ChartJS.register(
   CategoryScale,
@@ -67,9 +68,13 @@ function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
         label: d.label,
         data: d.data,
         coef: 3,
-        backgroundColor: "rgba(28, 139, 230, 0.18)",
-        borderColor: "rgb(28, 139, 230)",
-        outlierBorderColor: "rgb(28, 139, 230)",
+        backgroundColor: CHART_COLORS.boxFill,
+        borderColor: CHART_COLORS.bar,
+        borderWidth: 2,
+        medianColor: CHART_COLORS.highlight,
+        outlierBackgroundColor: CHART_COLORS.boxFill,
+        outlierBorderColor: CHART_COLORS.whisker,
+        outlierRadius: 2.5,
         meanRadius: 0,
         maxBarThickness: 60,
       })),
