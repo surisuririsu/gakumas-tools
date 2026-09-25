@@ -7,10 +7,11 @@ import styles from "./ButtonGroup.module.scss";
 const SELECTED = `.${styles.selected}`;
 const LEAD = "260ms cubic-bezier(0.22, 1, 0.36, 1)";
 const TRAIL = "420ms cubic-bezier(0.32, 1.34, 0.52, 1)";
+const TINT = "background-color 280ms, box-shadow 280ms";
 
 function thumbTransition(direction) {
-  if (direction > 0) return `left ${TRAIL}, right ${LEAD}`;
-  if (direction < 0) return `left ${LEAD}, right ${TRAIL}`;
+  if (direction > 0) return `left ${TRAIL}, right ${LEAD}, ${TINT}`;
+  if (direction < 0) return `left ${LEAD}, right ${TRAIL}, ${TINT}`;
   return undefined;
 }
 

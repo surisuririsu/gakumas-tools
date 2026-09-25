@@ -16,9 +16,7 @@ div.scenarioPicker {
     font-weight: tokens.$weight-heavy;
   }
 
-  > span[aria-hidden="true"] {
-    border-radius: tokens.$radius-md;
-  }
+  --segment-radius: #{tokens.$radius-md};
 }
 
 .hajimeSelected {

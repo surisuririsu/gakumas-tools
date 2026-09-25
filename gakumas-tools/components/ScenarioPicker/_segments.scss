@@ -2,53 +2,25 @@
 @use "../../styles/colors";
 @use "../../styles/tokens";
 
-$selected: ':is([aria-current="page"], [aria-pressed="true"])';
-
 @mixin colored-group {
   :is(a, button) {
     letter-spacing: 0.04em;
     text-transform: uppercase;
-  }
-
-  > span[aria-hidden="true"] {
-    background-color: transparent;
-    box-shadow: none;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background-color: var(--segment);
-      background-image: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.18),
-        rgba(255, 255, 255, 0) 70%
-      );
-      box-shadow: 0 2px 0 var(--segment-edge);
-      transition:
-        background-color tokens.$duration-slow tokens.$ease-out,
-        box-shadow tokens.$duration-slow tokens.$ease-out;
-    }
-  }
-
-  &:not(:has(> span[aria-hidden="true"])) #{$selected} {
-    background-color: var(--segment);
-    box-shadow: 0 2px 0 var(--segment-edge);
   }
 }
 
 @mixin selected($color) {
   --segment: #{$color};
   --segment-edge: #{color.adjust($color, $lightness: -14%)};
+  --segment-ink: #{colors.$white};
 }
 
 @mixin label($color) {
   color: $color;
   transition: color tokens.$duration-fast;
 
-  #{$selected} > & {
-    color: colors.$white;
+  :is([aria-current="page"], [aria-pressed="true"]) > & {
+    color: inherit;
     transition: color tokens.$duration-base tokens.$ease-out 110ms;
   }
 }

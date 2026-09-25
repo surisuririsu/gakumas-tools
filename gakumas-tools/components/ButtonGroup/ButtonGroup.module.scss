@@ -22,7 +22,7 @@
     justify-content: center;
     align-items: center;
     padding: 6px tokens.$space-3;
-    border-radius: 8px;
+    border-radius: var(--segment-radius, 8px);
     color: tokens.$surface-ink-subtle;
     font-size: tokens.$text-sm;
     font-weight: 700;
@@ -34,7 +34,7 @@
     @include mixins.focus-ring-inset;
 
     &.selected {
-      color: tokens.$accent-ink;
+      color: var(--segment-ink, #{tokens.$accent-ink});
     }
 
     &:not(.selected):hover {
@@ -48,18 +48,20 @@
   }
 
   &:not(.measured) .selected {
-    background-color: colors.$white;
-    box-shadow: tokens.$thumb-edge;
+    background-color: var(--segment, #{colors.$white});
+    box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
   }
 }
 
 .thumb {
   position: absolute;
-  border-radius: 8px;
-  background-color: colors.$white;
-  box-shadow: tokens.$thumb-edge;
+  border-radius: var(--segment-radius, 8px);
+  background-color: var(--segment, #{colors.$white});
+  box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
   pointer-events: none;
   transition:
     left tokens.$duration-slow tokens.$ease-glide,
-    right tokens.$duration-slow tokens.$ease-glide;
+    right tokens.$duration-slow tokens.$ease-glide,
+    background-color tokens.$duration-slow,
+    box-shadow tokens.$duration-slow;
 }
