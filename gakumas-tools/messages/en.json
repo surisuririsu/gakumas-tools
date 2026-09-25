@@ -345,7 +345,11 @@
   },
   "MemoriesNudge": {
     "create": "Create a memory",
-    "import": "Import memories from screenshots"
+    "import": "Import memories from screenshots",
+    "noMatches": "No memories match these filters.",
+    "signInHint": "Sign in with Discord to keep your memories and use them in the simulator. You can also create one without signing in.",
+    "signIn": "Sign in",
+    "empty": "No memories yet. Import them from screenshots to get started."
   },
   "MemoriesHeader": {
     "confirmDelete": "Delete {num, plural, one {# memory} other {# memories}}?",

@@ -18,6 +18,28 @@
   align-items: center;
   gap: tokens.$space-4;
   padding: tokens.$space-6;
+  animation: nudgeIn tokens.$duration-slow tokens.$ease-out;
+}
+
+.nudgeText {
+  max-width: 320px;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.nudgeActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: tokens.$space-2;
+}
+
+@keyframes nudgeIn {
+  from {
+    opacity: 0;
+  }
 }
 
 .alert {

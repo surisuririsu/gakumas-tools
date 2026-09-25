@@ -398,7 +398,12 @@ function Rehearsal() {
       )}
 
       <div className={styles.toolbar}>
-        <Button style="default" size="sm" onClick={download}>
+        <Button
+          style="default"
+          size="sm"
+          onClick={download}
+          disabled={!data.length}
+        >
           <FaDownload /> CSV
         </Button>
         {flaggedCount > 0 && (
@@ -409,7 +414,9 @@ function Rehearsal() {
         )}
       </div>
 
-      <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
+      {data.length > 0 && (
+        <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
+      )}
 
       {selectedData && (
         <div className={styles.statsWrapper}>

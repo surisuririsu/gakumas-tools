@@ -345,7 +345,11 @@
   },
   "MemoriesNudge": {
     "create": "创建回忆卡",
-    "import": "从截图导入回忆卡"
+    "import": "从截图导入回忆卡",
+    "noMatches": "没有符合条件的回忆卡。",
+    "signInHint": "登入 Discord 即可保存回忆卡并在模拟器中使用，也可以不登入直接创建。",
+    "signIn": "登入",
+    "empty": "还没有回忆卡。从截图导入即可开始。"
   },
   "MemoriesHeader": {
     "confirmDelete": "删除 {num} 个回忆卡？",

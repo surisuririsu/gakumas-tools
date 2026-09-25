@@ -76,6 +76,7 @@ function Memories() {
       )}
       <MemoriesList
         memories={filteredMemories}
+        filtered={memories.length > 0}
         deleting={action == "delete"}
         picking={action == "pick"}
         selectedMemories={selectedMemories}

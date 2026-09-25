@@ -44,6 +44,7 @@ const Row = memo(function Row({
 
 function MemoriesList({
   memories,
+  filtered,
   deleting,
   picking,
   selectedMemories,
@@ -67,7 +68,7 @@ function MemoriesList({
           }}
         />
       ) : (
-        <MemoriesNudge />
+        <MemoriesNudge filtered={filtered} />
       )}
     </div>
   );
