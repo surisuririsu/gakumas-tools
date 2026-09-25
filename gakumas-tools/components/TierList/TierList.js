@@ -258,7 +258,7 @@ function TierList({ type }) {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { distance: 8 },
+      activationConstraint: { delay: 200, tolerance: 8 },
     }),
   );
 
@@ -302,6 +302,7 @@ function TierList({ type }) {
     setActiveId(event.active.id);
     lastOverIdRef.current = null;
     recentlyMovedRef.current = false;
+    navigator.vibrate?.(8);
   }, []);
 
   const handleDragOver = useCallback((event) => {

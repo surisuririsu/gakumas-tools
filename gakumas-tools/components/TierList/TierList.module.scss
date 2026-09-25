@@ -172,6 +172,29 @@
   pointer-events: auto;
 }
 
+@media (hover: none) {
+  .tierAddTop,
+  .tierAddBottom,
+  .tierDeleteBtn {
+    opacity: 0.85;
+    pointer-events: auto;
+    font-size: 11px;
+
+    svg {
+      font-size: 10px;
+    }
+  }
+
+  .tierAddTop,
+  .tierAddBottom {
+    height: 18px;
+  }
+
+  .tierDeleteBtn {
+    width: 18px;
+  }
+}
+
 .items {
   flex: 1;
   display: flex;
@@ -196,7 +219,9 @@
   width: 56px;
   height: 56px;
   cursor: grab;
-  touch-action: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
 
   &:active {
     cursor: grabbing;

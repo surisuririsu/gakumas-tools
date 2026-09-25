@@ -97,7 +97,9 @@
   inset: 0;
   border-radius: 8%;
   cursor: grab;
-  touch-action: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
 
   &:active {
     cursor: grabbing;
