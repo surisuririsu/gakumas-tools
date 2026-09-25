@@ -11,8 +11,11 @@
   flex-direction: column;
   width: 350px;
   margin: 8px 0 8px 8px;
-  box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
-  border-radius: 8px;
+  border-radius: 18px;
+  background-color: #f7f7f9;
+  box-shadow:
+    0 0 0 1px #e3e3e9,
+    0 8px 24px rgba(20, 20, 40, 0.08);
   overflow: hidden;
 }
 

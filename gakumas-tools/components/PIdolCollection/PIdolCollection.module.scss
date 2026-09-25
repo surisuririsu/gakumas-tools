@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .collection {
@@ -60,9 +61,7 @@
   flex-wrap: wrap;
   gap: tokens.$space-3;
   padding: tokens.$space-3;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
+  @include mixins.card;
 }
 
 .overall {
@@ -138,7 +137,7 @@
     font-size: tokens.$text-xs;
     border: 1px solid tokens.$surface-border;
     border-radius: tokens.$radius-sm;
-    background-color: tokens.$surface-bg;
+    background-color: tokens.$fill-muted;
     color: tokens.$surface-ink;
     cursor: pointer;
     transition: background-color 0.15s ease;
@@ -198,7 +197,7 @@
   gap: tokens.$space-1;
   padding: 2px tokens.$space-2;
   min-height: 32px;
-  background-color: tokens.$surface-bg;
+  background-color: tokens.$fill-muted;
   border: 1px solid tokens.$surface-border;
   border-radius: 999px;
   font-size: tokens.$text-xs;
@@ -254,7 +253,7 @@
   padding: tokens.$space-1;
   border: 1px solid tokens.$surface-border;
   border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
+  background-color: tokens.$surface-panel;
   cursor: pointer;
   text-align: left;
   transition:

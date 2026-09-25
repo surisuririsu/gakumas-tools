@@ -19,7 +19,7 @@
   padding: tokens.$space-2;
   border: 1px solid tokens.$surface-border;
   border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
+  background-color: tokens.$fill-muted;
   font-family: monospace;
   font-size: tokens.$text-xs;
   color: tokens.$surface-ink;
@@ -34,7 +34,7 @@
   padding: tokens.$space-2 tokens.$space-3;
   border: 1px solid tokens.$surface-border;
   border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-ink;
   font-size: tokens.$text-sm;
   cursor: pointer;

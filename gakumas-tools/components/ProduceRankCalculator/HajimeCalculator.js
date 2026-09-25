@@ -77,46 +77,48 @@ function HajimeCalculator() {
         {t("parameterLimit")}: {maxParams}
       </div>
 
-      {difficulty === "legend" && (
-        <>
-          <label>{t("midtermScore")}</label>
-          <Input
-            type="number"
-            value={midtermScore || ""}
-            placeholder={t("midtermScore")}
-            onChange={setMidtermScore}
-            min={0}
-            max={10000000}
-          />
-        </>
-      )}
+      <Panel className={styles.form}>
+        {difficulty === "legend" && (
+          <>
+            <label>{t("midtermScore")}</label>
+            <Input
+              type="number"
+              value={midtermScore || ""}
+              placeholder={t("midtermScore")}
+              onChange={setMidtermScore}
+              min={0}
+              max={10000000}
+            />
+          </>
+        )}
 
-      <label>{t("finalExamPlacement")}</label>
-      <ButtonGroup
-        options={EXAM_PLACE_OPTIONS}
-        selected={place}
-        onChange={setPlace}
-      />
-      <div className={styles.bonus}>
-        {t("parameter")}: +{placeParamBonus}
-      </div>
+        <label>{t("finalExamPlacement")}</label>
+        <ButtonGroup
+          options={EXAM_PLACE_OPTIONS}
+          selected={place}
+          onChange={setPlace}
+        />
+        <div className={styles.bonus}>
+          {t("parameter")}: +{placeParamBonus}
+        </div>
 
-      <label>{t("parameters")}</label>
-      <ParametersInput
-        parameters={params}
-        max={maxParams}
-        onChange={setParams}
-      />
+        <label>{t("parameters")}</label>
+        <ParametersInput
+          parameters={params}
+          max={maxParams}
+          onChange={setParams}
+        />
 
-      <label>{t("score")}</label>
-      <Input
-        type="number"
-        value={actualScore || ""}
-        placeholder={t("score")}
-        onChange={setActualScore}
-        min={0}
-        max={10000000}
-      />
+        <label>{t("score")}</label>
+        <Input
+          type="number"
+          value={actualScore || ""}
+          placeholder={t("score")}
+          onChange={setActualScore}
+          min={0}
+          max={10000000}
+        />
+      </Panel>
 
       <Panel label={t("produceRank")} className={styles.resultPanel}>
         <ProduceRankResult rating={actualRating} rank={actualRank} />

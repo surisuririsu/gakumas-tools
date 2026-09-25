@@ -2,6 +2,12 @@
 @use "../../styles/colors";
 @use "../../styles/tokens";
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
 .results {
   table-layout: fixed;
   width: 100%;

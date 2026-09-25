@@ -14,6 +14,12 @@
   color: tokens.$surface-ink-muted;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
 .resultPanel {
   margin-top: tokens.$space-3;
 }

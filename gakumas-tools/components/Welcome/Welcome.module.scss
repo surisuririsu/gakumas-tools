@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .welcome {
@@ -123,15 +124,11 @@
   gap: tokens.$space-3;
   padding: tokens.$space-4;
   width: 100%;
-  background: tokens.$surface-panel;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
+  @include mixins.card;
   overflow: hidden;
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease,
-    scale tokens.$duration-slow tokens.$ease-spring;
+    translate tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
 
   &::before {
     content: "";
@@ -146,22 +143,26 @@
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  &:hover {
-    border-color: colors.$gk-orange-light;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-    transform: translateY(-1px);
+  @media (hover: hover) {
+    &:hover {
+      translate: 0 -2px;
+      box-shadow:
+        0 4px 0 tokens.$surface-border,
+        0 14px 28px rgba(20, 20, 40, 0.08);
 
-    &::before {
-      transform: scaleX(1);
-    }
+      &::before {
+        transform: scaleX(1);
+      }
 
-    .toolIcon {
-      transform: scale(1.05);
+      .toolIcon {
+        transform: scale(1.05);
+      }
     }
   }
 
   &:active {
-    scale: 0.98;
+    translate: 0 2px;
+    box-shadow: 0 0 0 tokens.$surface-border;
     transition-duration: tokens.$duration-press;
   }
 }
