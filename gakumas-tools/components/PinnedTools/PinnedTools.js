@@ -2,6 +2,7 @@
 import { createElement, memo, useContext } from "react";
 import dynamic from "next/dynamic";
 import { FaXmark } from "react-icons/fa6";
+import Loader from "@/components/Loader";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { TOOLS } from "@/utils/tools";
 import styles from "./PinnedTools.module.scss";
@@ -10,22 +11,42 @@ import styles from "./PinnedTools.module.scss";
 // The container around each one is a fixed 350px and stretches to the row
 // height, so it reserves the right box server-side and the tool fills in on
 // hydration without moving <main>.
+function ToolLoading() {
+  return (
+    <div className={styles.loading} aria-busy="true">
+      <Loader />
+    </div>
+  );
+}
+
 const TOOL_COMPONENTS = {
-  dex: dynamic(() => import("@/components/Dex"), { ssr: false }),
+  dex: dynamic(() => import("@/components/Dex"), {
+    ssr: false,
+    loading: ToolLoading,
+  }),
   lessonCalculator: dynamic(() => import("@/components/LessonCalculator"), {
     ssr: false,
+    loading: ToolLoading,
   }),
   memoryCalculator: dynamic(() => import("@/components/MemoryCalculator"), {
     ssr: false,
+    loading: ToolLoading,
   }),
-  memories: dynamic(() => import("@/components/Memories"), { ssr: false }),
+  memories: dynamic(() => import("@/components/Memories"), {
+    ssr: false,
+    loading: ToolLoading,
+  }),
   produceRankCalculator: dynamic(
     () => import("@/components/ProduceRankCalculator"),
-    { ssr: false }
+    { ssr: false, loading: ToolLoading }
   ),
-  rehearsal: dynamic(() => import("@/components/Rehearsal"), { ssr: false }),
+  rehearsal: dynamic(() => import("@/components/Rehearsal"), {
+    ssr: false,
+    loading: ToolLoading,
+  }),
   simulator: dynamic(() => import("@/components/Simulator/Simulator"), {
     ssr: false,
+    loading: ToolLoading,
   }),
 };
 

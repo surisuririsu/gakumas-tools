@@ -97,6 +97,12 @@
   }
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: tokens.$space-6 0;
+}
+
 @keyframes overlayIn {
   from {
     opacity: 0;

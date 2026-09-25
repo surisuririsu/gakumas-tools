@@ -6,13 +6,14 @@ import { FaDiscord, FaPen } from "react-icons/fa6";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
+import ModalLoading from "@/components/Modal/ModalLoading";
 import DataContext from "@/contexts/DataContext";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Memories.module.scss";
 
 const MemoryImporterModal = dynamic(
   () => import("@/components/MemoryImporterModal"),
-  { ssr: false }
+  { ssr: false, loading: ModalLoading }
 );
 
 function MemoriesNudge({ filtered }) {

@@ -5,6 +5,7 @@ import { FaChevronDown, FaChevronUp, FaFileImport } from "react-icons/fa6";
 import Button from "@/components/Button";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
+import ModalLoading from "@/components/Modal/ModalLoading";
 import Panel from "@/components/Panel";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -19,7 +20,7 @@ import styles from "./DraftPick.module.scss";
 
 const DraftPickImporterModal = dynamic(
   () => import("@/components/DraftPickImporterModal"),
-  { ssr: false }
+  { ssr: false, loading: ModalLoading }
 );
 
 const EMPTY_SLOTS = [0, 0, 0];

@@ -14,6 +14,7 @@ import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
 import IconButton from "@/components/IconButton";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
+import ModalLoading from "@/components/Modal/ModalLoading";
 import StagePItems from "@/components/StagePItems";
 import StageSkillCards from "@/components/StageSkillCards";
 import DataContext from "@/contexts/DataContext";
@@ -25,7 +26,7 @@ import styles from "./Memories.module.scss";
 
 const MemoryImporterModal = dynamic(
   () => import("@/components/MemoryImporterModal"),
-  { ssr: false }
+  { ssr: false, loading: ModalLoading }
 );
 
 function MemoriesHeader({

@@ -16,11 +16,7 @@ import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import Image from "@/components/Image";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
-
-const MemoryImporterModal = dynamic(
-  () => import("@/components/MemoryImporterModal"),
-  { ssr: false }
-);
+import ModalLoading from "@/components/Modal/ModalLoading";
 import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
@@ -29,6 +25,11 @@ import ToastContext from "@/contexts/ToastContext";
 import { useRouter } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
+
+const MemoryImporterModal = dynamic(
+  () => import("@/components/MemoryImporterModal"),
+  { ssr: false, loading: ModalLoading }
+);
 
 function LoadoutSkillCardGroup({
   skillCardIds,
