@@ -48,6 +48,21 @@ button.entityIcon:focus-visible {
   outline-color: colors.$gk-orange;
 }
 
+.swappable {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+button.swapSource {
+  opacity: 0.35;
+}
+
+button.swapTarget {
+  outline-color: colors.$gk-orange;
+  scale: 1.06;
+}
+
 button.entityIcon:hover .emptyPlaceholder,
 button.entityIcon:focus .emptyPlaceholder {
   color: colors.$gk-orange;

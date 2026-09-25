@@ -1,5 +1,6 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useTranslations } from "next-intl";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { FaPlus } from "react-icons/fa6";
 import { Idols } from "gakumas-data";
 import Image from "@/components/Image";
@@ -9,11 +10,49 @@ import {
   EntityTypes,
   resolveEntityIcon,
 } from "@/utils/entities";
-import { useDrag, useDrop } from "@/utils/safeDnd";
 import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
+
+function SwappableButton({ swap, className, children, ...rest }) {
+  const dragId = `${swap.type}-${swap.index}`;
+  const {
+    setNodeRef: setDragRef,
+    listeners,
+    isDragging,
+  } = useDraggable({ id: dragId, data: swap, disabled: !swap.id });
+  const {
+    setNodeRef: setDropRef,
+    isOver,
+    active,
+  } = useDroppable({ id: dragId, data: swap });
+  const ref = useCallback(
+    (node) => {
+      setDragRef(node);
+      setDropRef(node);
+    },
+    [setDragRef, setDropRef]
+  );
+  const isTarget =
+    isOver && !isDragging && active?.data.current?.type == swap.type;
+
+  return (
+    <button
+      ref={ref}
+      {...listeners}
+      className={c(
+        className,
+        styles.swappable,
+        isDragging && styles.swapSource,
+        isTarget && styles.swapTarget
+      )}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
 
 function EntityIcon({
   type,
@@ -31,23 +70,6 @@ function EntityIcon({
   const t = useTranslations("EntityIcon");
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const icon = resolveEntityIcon(entity, idolId);
-
-  const [{ isDragging }, dragRef] = useDrag({
-    type: "ENTITY_ICON",
-    item: { type, id, index },
-  });
-
-  const [, dropRef] = useDrop({
-    accept: "ENTITY_ICON",
-    drop: (item) => {
-      if (item.type != type) {
-        return;
-      }
-      if (onSwap) {
-        onSwap(item.index, index);
-      }
-    },
-  });
 
   let displayName = entity?.name;
   if (entity?._type === "pIdol") {
@@ -84,25 +106,33 @@ function EntityIcon({
     indications?.duplicate && styles.duplicate
   );
 
-  if (onClick) {
-    return (
-      <button
-        ref={dragRef}
-        className={className}
-        onClick={() => onClick(entity || {})}
-        aria-label={entity ? undefined : t("emptySlot")}
-      >
-        <div ref={dropRef} className={styles.dropArea}>
-          {unwrappedElement ||
-            (showEmptyPlaceholder && (
-              <FaPlus className={styles.emptyPlaceholder} aria-hidden="true" />
-            ))}
-        </div>
-      </button>
-    );
-  } else {
+  if (!onClick) {
     return <div className={className}>{unwrappedElement}</div>;
   }
+
+  const contents = (
+    <div className={styles.dropArea}>
+      {unwrappedElement ||
+        (showEmptyPlaceholder && (
+          <FaPlus className={styles.emptyPlaceholder} aria-hidden="true" />
+        ))}
+    </div>
+  );
+  const buttonProps = {
+    className,
+    onClick: () => onClick(entity || {}),
+    "aria-label": entity ? undefined : t("emptySlot"),
+  };
+
+  if (onSwap) {
+    const swap = { type, index, id, idolId, customizations, onSwap };
+    return (
+      <SwappableButton swap={swap} {...buttonProps}>
+        {contents}
+      </SwappableButton>
+    );
+  }
+  return <button {...buttonProps}>{contents}</button>;
 }
 
 export default memo(EntityIcon);
