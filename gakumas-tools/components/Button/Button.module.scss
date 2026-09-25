@@ -20,6 +20,10 @@
   gap: tokens.$space-1;
   padding: tokens.$space-1 tokens.$space-2;
   font-size: tokens.$text-sm;
+
+  @media (pointer: coarse) {
+    min-height: 36px;
+  }
 }
 
 .md {
