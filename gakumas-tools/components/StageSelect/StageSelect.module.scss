@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 button.stageSelect {
@@ -7,21 +7,47 @@ button.stageSelect {
   background-color: transparent;
   box-shadow: none;
   color: tokens.$surface-ink;
-  font-weight: 700;
+  font-weight: tokens.$weight-bold;
+  text-align: left;
 
   &:hover {
-    background-color: tokens.$surface-alt;
+    background-color: tokens.$fill-subtle;
+  }
+
+  &:active:not(:disabled) {
+    translate: none;
+    scale: tokens.$press-scale-wide;
+    box-shadow: none;
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+  margin-left: tokens.$space-2;
+  color: tokens.$surface-ink-faint;
+  font-size: 12px;
+  transition:
+    color tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring;
+
+  .stageSelect:hover & {
+    color: tokens.$surface-ink-muted;
+    translate: 0 2px;
   }
 }
 
 .typeSelect {
-  margin-bottom: 16px;
+  flex-shrink: 0;
+  margin-bottom: tokens.$space-3;
 }
 
 .stageList {
   max-height: 400px;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  margin: 0 -4px;
+  padding: 0 4px 4px;
   overflow-y: auto;
 }
 
@@ -30,37 +56,48 @@ button.stageSelect {
 }
 
 .option {
+  flex-shrink: 0;
   display: block;
-  padding: 8px;
-  color: colors.$gray-dark;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  padding: 8px 6px 9px;
+  border-radius: tokens.$radius-control;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink;
+  font-weight: tokens.$weight-bold;
+  text-align: left;
+  @include mixins.raised;
+  @include mixins.rise-in;
+  @include mixins.stagger(20ms);
 
   &:hover {
-    background-color: colors.$gk-orange-extra-light;
-    color: colors.$gk-red-orange;
+    background-color: tokens.$fill-muted-hover;
+  }
+
+  &.selected {
+    @include mixins.chip-selected;
   }
 }
 
 .namePlan {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: tokens.$space-2;
   padding: 0 4px;
 }
 
 .nameWithIndicator {
+  flex: 1;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .activeDot {
+  flex-shrink: 0;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: colors.$custom-green;
-  flex-shrink: 0;
+  background-color: tokens.$success;
 }
 
 .status {
@@ -71,20 +108,14 @@ button.stageSelect {
 
   div {
     border-radius: 3px;
-  }
 
-
-  div:nth-child(1) {
-    background-color: #f23584;
-  }
-  div:nth-child(2) {
-    background-color: #1c85ed;
-  }
-  div:nth-child(3) {
-    background-color: #f7b12e;
+    @include mixins.param-colors using ($color) {
+      background-color: $color;
+    }
   }
 }
 
 .placeholder {
   flex: 1;
+  color: tokens.$surface-ink-muted;
 }

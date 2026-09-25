@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .loadoutEditor {
@@ -11,17 +11,29 @@
 .pItemsRow {
   display: flex;
   align-items: center;
-  padding-right: 8px;
-  color: colors.$black;
+  gap: tokens.$space-2;
+  padding-right: tokens.$space-2;
 }
 
 .pItems {
   flex: 1;
 }
 
+.stageTag {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  white-space: nowrap;
+  @include mixins.numeric;
+}
+
+.group {
+  position: relative;
+}
+
 .dragOverlay {
   border-radius: 8%;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 12px 28px rgba(20, 20, 40, 0.28);
   cursor: grabbing;
   scale: 1.08;
   animation: lift tokens.$duration-base tokens.$ease-spring;
@@ -30,6 +42,6 @@
 @keyframes lift {
   from {
     scale: 1;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 rgba(20, 20, 40, 0);
   }
 }

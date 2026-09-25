@@ -1,13 +1,16 @@
 @use "sass:color";
-@use "sass:list";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
-$tiles: (
-  1: (tokens.$vocal-tint, tokens.$vocal-edge, tokens.$vocal-ink),
-  2: (tokens.$dance-tint, tokens.$dance-edge, tokens.$dance-ink),
-  3: (tokens.$visual-tint, tokens.$visual-edge, tokens.$visual-ink),
-  4: (tokens.$stamina-tint, tokens.$stamina-edge, tokens.$stamina-ink),
-);
+@mixin tones {
+  @include mixins.param-tones using ($tint, $edge, $ink) {
+    --tint: #{$tint};
+    --edge: #{$edge};
+    --ink: #{$ink};
+    --halo: #{color.change($ink, $alpha: 0.18)};
+    --placeholder: #{color.change($ink, $alpha: 0.45)};
+  }
+}
 
 .parameters {
   display: flex;
@@ -17,37 +20,121 @@ $tiles: (
   & > input {
     flex: 1;
     min-width: 0;
-    font-weight: 800;
+    background-color: var(--tint);
+    box-shadow: 0 2px 0 var(--edge);
+    color: var(--ink);
+    font-weight: tokens.$weight-heavy;
+    @include mixins.numeric;
+    @include tones;
 
-    @each $i, $tile in $tiles {
-      $tint: list.nth($tile, 1);
-      $edge: list.nth($tile, 2);
-      $ink: list.nth($tile, 3);
+    &::placeholder {
+      color: var(--placeholder);
+    }
 
-      &:nth-child(#{$i}) {
-        background-color: $tint;
-        box-shadow: 0 2px 0 $edge;
-        color: $ink;
+    &:hover:not(:focus, :disabled) {
+      background-color: var(--tint);
+      box-shadow: 0 2px 0 var(--edge), inset 0 0 0 1.5px var(--halo);
+    }
 
-        &::placeholder {
-          color: color.change($ink, $alpha: 0.45);
-        }
+    &:focus {
+      background-color: tokens.$surface-panel;
+      box-shadow:
+        tokens.$field-inset,
+        inset 0 0 0 2px var(--ink),
+        0 0 0 4px var(--halo);
+    }
 
-        &:focus {
-          background-color: #fff;
-          box-shadow: inset 0 0 0 2px $ink;
-        }
-      }
+    &[data-beat="a"] {
+      animation: beatA 520ms tokens.$ease-pop;
+    }
+
+    &[data-beat="b"] {
+      animation: beatB 520ms tokens.$ease-pop;
     }
   }
 }
 
-.attached > input {
-  padding: 5px 2px 1px;
-  border-radius: 12px 12px 0 0;
-  font-size: 17px;
+.tile {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 3px 3px 0;
+  border-radius: tokens.$radius-control;
+  background-color: var(--tint);
+  box-shadow: 0 3px 0 var(--edge);
+  color: var(--ink);
+  transition: box-shadow tokens.$duration-base tokens.$ease-out;
+  @include tones;
 
-  &:not(:focus) {
+  & > input {
+    width: 100%;
+    height: 33px;
+    min-height: 0;
+    padding: 2px 2px 0;
+    border-radius: 9px;
+    background-color: transparent;
     box-shadow: none;
+    color: inherit;
+    font-size: 17px;
+    font-weight: tokens.$weight-heavy;
+    @include mixins.numeric;
+
+    &::placeholder {
+      color: var(--placeholder);
+    }
+
+    &:hover:not(:focus, :disabled) {
+      background-color: rgba(255, 255, 255, 0.55);
+    }
+
+    &:focus {
+      background-color: tokens.$surface-panel;
+      box-shadow: tokens.$field-inset;
+    }
+  }
+
+  &:focus-within {
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 5px var(--halo);
+  }
+
+  &.beatA {
+    animation: beatA 520ms tokens.$ease-pop;
+  }
+
+  &.beatB {
+    animation: beatB 520ms tokens.$ease-pop;
+  }
+}
+
+.footer {
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3px;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-bold;
+  line-height: 18px;
+  @include mixins.numeric;
+}
+
+@keyframes beatA {
+  from {
+    scale: 0.88;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 6px var(--halo);
+  }
+}
+
+@keyframes beatB {
+  from {
+    scale: 0.88;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 6px var(--halo);
   }
 }

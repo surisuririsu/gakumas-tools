@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
@@ -42,31 +41,54 @@
 .loadoutTabs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: tokens.$space-2;
 }
 
 .loadoutTab {
   display: flex;
-  gap: 4px;
+  gap: tokens.$space-1;
+
+  & > :not(.selectButton) {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .selectButton {
-  padding: 8px 2px;
-  border-radius: 100px;
+  flex-shrink: 0;
+  width: 28px;
+  padding: tokens.$space-3 0;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-ink-subtle;
-  border: 1px solid tokens.$surface-border-strong;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-heavy;
+  letter-spacing: 0.06em;
   writing-mode: vertical-lr;
-  font-weight: 600;
-  transition: box-shadow 0.2s;
+  @include mixins.raised;
 
   &:hover {
-    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
+    background-color: tokens.$fill-muted-hover;
+    color: tokens.$surface-ink;
+  }
+
+  &.selectedTab {
+    @include mixins.chip-selected;
   }
 }
 
 .loadoutSummary {
-  flex: 1;
-  padding: 0 4px;
+  padding: tokens.$space-1;
+  border-radius: tokens.$radius-lg;
+  cursor: pointer;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
+
+  &:hover {
+    background-color: tokens.$fill-subtle;
+  }
 }
 
 .supportBonusInput {
@@ -115,9 +137,9 @@
     min-width: 42px;
     color: tokens.$surface-ink;
     font-size: tokens.$text-base;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+    font-weight: tokens.$weight-bold;
     text-align: right;
+    @include mixins.numeric;
   }
 }
 
@@ -139,10 +161,10 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background-color: colors.$white;
+    background-color: tokens.$surface-panel;
     box-shadow:
-      0 2px 0 #cfcfd6,
-      0 1px 4px rgba(0, 0, 0, 0.14);
+      tokens.$thumb-edge,
+      0 1px 4px rgba(20, 20, 40, 0.14);
     appearance: none;
     transition: scale tokens.$duration-spring tokens.$ease-spring;
   }
@@ -156,10 +178,10 @@
     height: 24px;
     border: 0;
     border-radius: 50%;
-    background-color: colors.$white;
+    background-color: tokens.$surface-panel;
     box-shadow:
-      0 2px 0 #cfcfd6,
-      0 1px 4px rgba(0, 0, 0, 0.14);
+      tokens.$thumb-edge,
+      0 1px 4px rgba(20, 20, 40, 0.14);
   }
 }
 
@@ -168,45 +190,48 @@
   flex-wrap: wrap;
   gap: tokens.$space-1;
 
-  & + * {
-    margin-top: tokens.$space-2;
-  }
-
   button {
     display: inline-flex;
     align-items: center;
-    gap: tokens.$space-1;
-    padding: 3px 9px 3px 11px;
-    border-radius: 999px;
+    gap: 3px;
+    height: 20px;
+    padding: 0 8px 0 10px;
+    border-radius: tokens.$radius-pill;
     background-color: tokens.$fill-muted;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-xs;
-    font-weight: 700;
+    font-weight: tokens.$weight-bold;
+    white-space: nowrap;
     @include mixins.raised;
 
     svg {
-      font-size: 10px;
-      transition: transform 0.15s ease;
+      font-size: 9px;
+      @include mixins.caret;
     }
 
-    &:not(.disabled):hover {
+    &:hover:not(:disabled) {
+      background-color: tokens.$fill-muted-hover;
       color: tokens.$surface-ink;
     }
 
     &.expanded {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
+      @include mixins.chip-selected;
 
       svg {
-        transform: rotate(180deg);
+        @include mixins.caret-open;
       }
     }
 
-    &.disabled {
-      opacity: 0.5;
-      cursor: default;
+    &:disabled {
+      opacity: 0.45;
+      box-shadow: none;
+      cursor: not-allowed;
     }
   }
+}
+
+.subTool {
+  padding-top: tokens.$space-2;
 }
 
 .subLinks {
@@ -214,8 +239,18 @@
   justify-content: space-between;
   align-items: center;
   color: tokens.$link;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+
+  & > a {
+    padding: 2px tokens.$space-1;
+    border-radius: tokens.$radius-sm;
+    transition: background-color tokens.$duration-fast;
+
+    &:hover {
+      background-color: tokens.$link-hover-bg;
+    }
+  }
 }
 
 .buttons {
@@ -223,6 +258,11 @@
   flex-wrap: wrap;
   align-items: stretch;
   gap: tokens.$space-2;
+}
+
+.copied {
+  color: tokens.$success;
+  @include mixins.pop-in;
 }
 
 .buttonText {
