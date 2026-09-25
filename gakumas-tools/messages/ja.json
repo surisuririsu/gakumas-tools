@@ -245,7 +245,8 @@
     }
   },
   "EntityBank": {
-    "filter": "フィルタ"
+    "filter": "フィルタ",
+    "noMatches": "条件に一致するものがありません。"
   },
   "EntityIcon": {
     "emptySlot": "空きスロット",

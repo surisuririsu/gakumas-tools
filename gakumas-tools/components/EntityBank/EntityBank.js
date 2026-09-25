@@ -1,7 +1,14 @@
-import { memo, useContext, useMemo, useState } from "react";
+import {
+  memo,
+  startTransition,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import { FaCheck, FaXmark } from "react-icons/fa6";
-import { PIdols, PItems, SkillCards } from "gakumas-data";
+import { PIdols } from "gakumas-data";
 import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
@@ -15,7 +22,44 @@ import {
 } from "@/utils/entities";
 import styles from "./EntityBank.module.scss";
 
-function EntityBank({ type, onClick, filters = [], includeNull = true }) {
+const INITIAL_RENDER_COUNT = 96;
+const NO_FILTERS = [];
+
+function getEntities(type, { filter, plan, idolId }) {
+  const Entities = ENTITY_DATA_BY_TYPE[type];
+  const compareFn = COMPARE_FN_BY_TYPE[type];
+
+  if (!filter) return [...Entities.getAll()].sort(compareFn);
+
+  let signatureEntities = [];
+  if (type !== EntityTypes.P_DRINK) {
+    const pIdolIds = PIdols.getFiltered({
+      idolIds: [idolId],
+      plans: [plan],
+    }).map((pi) => pi.id);
+    signatureEntities = Entities.getFiltered({
+      pIdolIds,
+    });
+  }
+
+  const nonSignatureEntities = Entities.getFiltered({
+    rarities: ["R", "SR", "SSR", "L"],
+    plans: [plan, "free"],
+    modes: ["stage"],
+    sourceTypes: ["default", "produce", "support"],
+    pIdolIds: [null],
+  }).sort(compareFn);
+
+  return signatureEntities.concat(nonSignatureEntities);
+}
+
+function EntityBank({
+  type,
+  onClick,
+  filters = NO_FILTERS,
+  includeNull = true,
+  progressive = false,
+}) {
   const t = useTranslations("EntityBank");
 
   const { filter, setFilter, plan, setPlan, idolId, setIdolId } =
@@ -26,47 +70,27 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
       {},
     ),
   );
+  const [renderAll, setRenderAll] = useState(!progressive);
 
-  let entities = [];
-  const Entities = ENTITY_DATA_BY_TYPE[type];
-  const compareFn = COMPARE_FN_BY_TYPE[type];
+  useEffect(() => {
+    if (!renderAll) startTransition(() => setRenderAll(true));
+  }, [renderAll]);
 
-  if (filter) {
-    let signatureEntities = [];
-    if (type !== EntityTypes.P_DRINK) {
-      const pIdolIds = PIdols.getFiltered({
-        idolIds: [idolId],
-        plans: [plan],
-      }).map((pi) => pi.id);
-      signatureEntities = Entities.getFiltered({
-        pIdolIds,
-      });
+  const entities = useMemo(() => {
+    let result = getEntities(type, { filter, plan, idolId }).filter(
+      (e) => !isEntityHidden(type, e.id),
+    );
+    for (let customFilter of filters) {
+      if (!customFilter.label || enabledCustomFilters[customFilter.label]) {
+        result = result.filter(customFilter.callback);
+      }
     }
+    return result;
+  }, [type, filter, plan, idolId, filters, enabledCustomFilters]);
 
-    const nonSignatureEntities = Entities.getFiltered({
-      rarities: ["R", "SR", "SSR", "L"],
-      plans: [plan, "free"],
-      modes: ["stage"],
-      sourceTypes: ["default", "produce", "support"],
-      pIdolIds: [null],
-    }).sort(compareFn);
-
-    entities = signatureEntities.concat(nonSignatureEntities);
-  } else {
-    entities = Entities.getAll().sort(compareFn);
-  }
-
-  entities = entities.filter((e) => !isEntityHidden(type, e.id));
-
-  for (let customFilter of filters) {
-    if (!customFilter.label || enabledCustomFilters[customFilter.label]) {
-      entities = entities.filter(customFilter.callback);
-    }
-  }
-
-  if (includeNull) {
-    entities = [{}, ...entities];
-  }
+  const visibleEntities = renderAll
+    ? entities
+    : entities.slice(0, INITIAL_RENDER_COUNT);
 
   const toggleableFilters = useMemo(
     () => filters.filter((f) => f.label),
@@ -76,7 +100,15 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
   return (
     <>
       <div className={styles.entities}>
-        {entities.map((entity) => (
+        {includeNull && (
+          <EntityIcon
+            key={`${type}_null`}
+            type={type}
+            onClick={onClick}
+            size="fill"
+          />
+        )}
+        {visibleEntities.map((entity) => (
           <EntityIcon
             key={`${type}_${entity.id}`}
             type={type}
@@ -87,6 +119,9 @@ function EntityBank({ type, onClick, filters = [], includeNull = true }) {
             showTier
           />
         ))}
+        {!entities.length && (
+          <p className={styles.noMatches}>{t("noMatches")}</p>
+        )}
       </div>
 
       <div className={styles.filter}>

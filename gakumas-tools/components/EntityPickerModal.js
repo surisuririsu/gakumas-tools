@@ -39,6 +39,7 @@ function EntityPickerModal({
           closeModal();
         }}
         filters={filters}
+        progressive
       />
     </Modal>
   );

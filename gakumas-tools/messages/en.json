@@ -237,7 +237,8 @@
     }
   },
   "EntityBank": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "noMatches": "Nothing matches these filters."
   },
   "EntityIcon": {
     "emptySlot": "Empty slot",

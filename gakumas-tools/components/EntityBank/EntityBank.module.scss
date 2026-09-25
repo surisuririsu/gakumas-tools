@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .entities {
   flex: 1;
@@ -9,6 +10,15 @@
   justify-content: space-around;
   padding: 8px;
   overflow-y: scroll;
+}
+
+.noMatches {
+  grid-column: 1 / -1;
+  align-self: center;
+  padding: tokens.$space-4;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  text-align: center;
 }
 
 .filter {

@@ -237,7 +237,8 @@
     }
   },
   "EntityBank": {
-    "filter": "筛选"
+    "filter": "筛选",
+    "noMatches": "没有符合条件的项目。"
   },
   "EntityIcon": {
     "emptySlot": "空槽位",
