@@ -19,7 +19,7 @@
 .cell {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   transition:
     filter tokens.$duration-base,
     opacity tokens.$duration-base,

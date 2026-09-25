@@ -333,7 +333,7 @@
 
 .itemPlaceholder {
   opacity: 0.3;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   outline: 2px dashed tokens.$accent-edge;
   outline-offset: 1px;
 }
@@ -358,7 +358,7 @@
   align-items: center;
   justify-content: center;
   border: 1.5px dashed tokens.$surface-border-strong;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   background-color: tokens.$fill-subtle;
   color: tokens.$accent-ink;
   font-size: 18px;

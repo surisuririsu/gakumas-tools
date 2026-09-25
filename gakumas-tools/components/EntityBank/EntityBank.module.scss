@@ -15,7 +15,7 @@
 
 .cell {
   position: relative;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   transition:
     transform tokens.$duration-slide tokens.$ease-spring,
     box-shadow tokens.$duration-base tokens.$ease-out;

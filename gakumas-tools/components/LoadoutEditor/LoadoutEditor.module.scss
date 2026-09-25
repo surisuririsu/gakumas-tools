@@ -32,7 +32,7 @@
 }
 
 .dragOverlay {
-  border-radius: 8%;
+  border-radius: tokens.$radius-icon;
   box-shadow: 0 12px 28px rgba(20, 20, 40, 0.28);
   cursor: grabbing;
   scale: 1.08;

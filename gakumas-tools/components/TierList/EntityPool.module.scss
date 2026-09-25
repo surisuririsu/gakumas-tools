@@ -96,7 +96,7 @@
 .dragSurface {
   position: absolute;
   inset: 0;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   cursor: grab;
   touch-action: manipulation;
   -webkit-touch-callout: none;

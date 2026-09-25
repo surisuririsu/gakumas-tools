@@ -8,12 +8,12 @@
   position: relative;
   display: flex;
   justify-content: center;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   background-color: #f4f4f7;
   container-type: inline-size;
 
   img {
-    border-radius: 12%;
+    border-radius: tokens.$radius-icon;
   }
 
   &.empty {

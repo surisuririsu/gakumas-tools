@@ -36,7 +36,7 @@ Never give non-interactive things a hard edge, and never give buttons a flat loo
 - Single choice: `ButtonGroup` (sliding thumb) or `TabGroup` (sliding ink). Never hand-roll a segmented control. To colour a group, set `--segment`, `--segment-edge`, `--segment-ink` and `--segment-radius` on it (see `ScenarioPicker`).
 - Icon choices (plans, idols, ranks): `IconSelect`, which collapses to a dropdown on narrow screens.
 - Text and numbers: `Input`; parameter values: `ParametersInput`. Dropdowns: `Select` (or `mixins.select` / `select-active` on a native `<select>`).
-- Multiple choice, toggles and filters: separate `chip`s with a gap; selected ones use `chip-selected`. The current pick in a grid of icons gets `selected-ring`. Quiet text links use `link-pill`.
+- Multiple choice, toggles and filters: separate `chip`s with a gap; selected ones use `chip-selected`. The current pick in a grid of icons gets `selected-ring`. Anything that clips or outlines a game icon uses `$radius-icon`, which matches the frame drawn into the art. Quiet text links use `link-pill`.
 - Tables: `Table`, or `mixins.table` on a hand-written `<table>`.
 - Loading: `Loader` (`size="large"` for page-level, `center` to centre it).
 

@@ -265,7 +265,7 @@
 .imgWrapper {
   width: 100%;
   max-width: 56px;
-  border-radius: 12%;
+  border-radius: tokens.$radius-icon;
   transition:
     box-shadow tokens.$duration-base,
     translate tokens.$duration-spring tokens.$ease-spring;

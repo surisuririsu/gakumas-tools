@@ -186,7 +186,7 @@
   height: 32px;
 
   img {
-    border-radius: 12%;
+    border-radius: tokens.$radius-icon;
   }
 }
 
