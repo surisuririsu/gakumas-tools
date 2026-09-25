@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { onCLS } from "web-vitals/attribution";
+import { onCLS, onINP } from "web-vitals/attribution";
 import { logEvent } from "@/utils/logging";
 
 // GA4 only keeps integers on event params, and CLS values are fractions well
@@ -21,6 +21,20 @@ export default function WebVitals() {
         shift_value: Math.round((attribution.largestShiftValue || 0) * GA_PRECISION),
         shift_time: Math.round(attribution.largestShiftTime || 0),
         // Distinguishes a shift during load from one after hydration.
+        load_state: attribution.loadState,
+        path: window.location.pathname,
+      });
+    });
+
+    onINP(({ value, rating, attribution }) => {
+      logEvent("web_vitals_inp", {
+        value: Math.round(value),
+        rating,
+        target: attribution.interactionTarget?.slice(0, MAX_PARAM_LENGTH),
+        interaction_type: attribution.interactionType,
+        input_delay: Math.round(attribution.inputDelay),
+        processing: Math.round(attribution.processingDuration),
+        presentation: Math.round(attribution.presentationDelay),
         load_state: attribution.loadState,
         path: window.location.pathname,
       });
