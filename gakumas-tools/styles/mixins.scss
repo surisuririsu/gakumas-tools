@@ -10,6 +10,33 @@
   }
 }
 
+@mixin card {
+  border-radius: tokens.$radius-xl;
+  background-color: tokens.$surface-panel;
+  box-shadow: tokens.$shadow-card;
+}
+
+@mixin raised(
+  $edge-color: tokens.$surface-edge,
+  $depth: tokens.$press-depth,
+  $soft: null
+) {
+  --press-opacity: 1;
+  box-shadow: 0 $depth 0 $edge-color, $soft;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+
+  &:active:not(:disabled, [aria-disabled="true"], .disabled) {
+    translate: 0 $depth;
+    box-shadow: 0 0 0 $edge-color, $soft;
+    transition-duration: tokens.$duration-press;
+  }
+}
+
 @mixin focus-ring-inset {
   &:focus-visible {
     outline-offset: -(tokens.$focus-ring-width);
