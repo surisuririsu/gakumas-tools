@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaTriangleExclamation } from "react-icons/fa6";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import MemoryContext from "@/contexts/MemoryContext";
@@ -57,6 +57,7 @@ function MemorySave() {
         )}
         {saveState == "error" && (
           <span className={styles.error} role="alert">
+            <FaTriangleExclamation />
             {t("saveFailed")}
           </span>
         )}

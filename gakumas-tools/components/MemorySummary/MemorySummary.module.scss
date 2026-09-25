@@ -1,57 +1,127 @@
+@use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
+
+@mixin actions-shown {
+  &:is(.actionsShown, :focus-within) {
+    @content;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
 
 .memorySummary {
   min-width: 0;
   max-width: 100vw;
   flex: 1;
   display: flex;
-  transition: background-color 0.15s ease;
+  text-align: left;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
 
-  &:hover,
-  &:focus-within {
-    background-color: tokens.$surface-muted;
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-subtle;
+    }
+  }
 
-    .left .actions {
+  @include actions-shown {
+    .actions {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    .action {
+      opacity: 1;
+      scale: 1;
+      transition:
+        background-color tokens.$duration-fast,
+        opacity tokens.$duration-base calc(var(--i) * 45ms),
+        scale tokens.$duration-spring tokens.$ease-pop calc(var(--i) * 45ms),
+        translate tokens.$duration-spring tokens.$ease-spring,
+        box-shadow tokens.$duration-spring tokens.$ease-spring;
+
+      &:active {
+        transition-duration: tokens.$duration-press;
+      }
     }
   }
 }
 
-.left.actionsShown .actions {
-  opacity: 1;
-  pointer-events: auto;
+button.memorySummary {
+  font-family: inherit;
+  @include mixins.pressable(tokens.$press-scale-wide);
+  @include mixins.focus-ring-inset;
 }
 
 .left {
   position: relative;
+  flex-shrink: 0;
 }
 
 .actions {
   position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.55);
+  align-items: stretch;
+  gap: 3px;
+  padding: 0 tokens.$space-1;
+  background-color: rgba(20, 20, 40, 0.5);
+  backdrop-filter: blur(1.5px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease;
+  transition: opacity tokens.$duration-base tokens.$ease-out;
+}
 
-  button {
-    transform: scale(0.6);
-    margin: -8px;
-  }
+.action {
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 9px;
+  background-color: tokens.$surface-panel;
+  color: tokens.$surface-ink;
+  font-family: inherit;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-heavy;
+  white-space: nowrap;
+  @include mixins.numeric;
+  @include mixins.raised(tokens.$surface-border-strong);
+  opacity: 0;
+  scale: 0.7;
+  transition:
+    background-color tokens.$duration-fast,
+    opacity tokens.$duration-fast,
+    scale tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
 
-  @media (pointer: coarse) {
-    button {
-      transform: scale(0.8);
-      margin: -4px;
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$surface-alt;
     }
   }
+
+  svg {
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+}
+
+.trophy {
+  color: tokens.$accent-ink;
+}
+
+.arrow {
+  color: tokens.$surface-ink-subtle;
 }
 
 .details {
@@ -64,12 +134,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: baseline;
   gap: tokens.$space-2;
-  font-size: tokens.$text-base;
-  font-weight: 600;
 
   span:first-child {
     overflow: hidden;
+    @include mixins.heading;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -77,13 +147,23 @@
   span:last-child {
     flex-shrink: 0;
     color: tokens.$surface-ink-muted;
-    font-variant-numeric: tabular-nums;
+    font-size: tokens.$text-md;
+    font-weight: tokens.$weight-bold;
+    @include mixins.numeric;
   }
 }
 
 .row {
   display: flex;
+  align-items: center;
   gap: 2px;
+}
+
+.pItem {
+  flex: 0 1 35px;
+  min-width: 24px;
+  height: auto;
+  aspect-ratio: 1;
 }
 
 .imgWrapper {
@@ -96,16 +176,24 @@
 }
 
 .parameters {
-  width: 120px;
+  flex-shrink: 0;
   display: flex;
-  gap: 1px;
-  margin: tokens.$space-2 0;
-  border-radius: tokens.$radius-sm;
-  overflow: hidden;
+  gap: 3px;
+  padding-left: tokens.$space-1;
 
-  & > div {
-    @include mixins.param-colors using ($param-color) {
-      background-color: $param-color;
+  span {
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 7px;
+    font-size: tokens.$text-2xs;
+    font-weight: tokens.$weight-heavy;
+    line-height: 22px;
+    text-align: center;
+    @include mixins.numeric;
+
+    @include mixins.param-tones using ($tint, $edge, $ink) {
+      background-color: $tint;
+      color: $ink;
     }
   }
 }
