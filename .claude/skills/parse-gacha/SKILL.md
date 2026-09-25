@@ -17,17 +17,13 @@ Screenshots in the directory `screenshots/gacha/`. Expected screenshots:
 
 ## Instructions
 
-### Step 1: Read all screenshots
-
-Use the Read tool to view each image in the provided directory or paths.
-
-### Step 2: Get next IDs
+### Step 1: Get next IDs
 
 ```bash
 tail -3 packages/gakumas-data/csv/p_idols.csv packages/gakumas-data/csv/p_items.csv packages/gakumas-data/csv/skill_cards.csv
 ```
 
-### Step 3: Extract pIdol info
+### Step 2: Extract pIdol info
 
 From the announcement, identify:
 
@@ -36,24 +32,7 @@ From the announcement, identify:
 - Plan (センス=sense, ロジック=logic, アノマリー=anomaly)
 - Recommended effect (infer from skill card/p-item effects)
 
-Idol ID reference:
-| ID | Name |
-|----|------|
-| 1 | 花海 咲季 |
-| 2 | 月村 手毬 |
-| 3 | 藤田 ことね |
-| 4 | 有村 麻央 |
-| 5 | 葛城 リーリヤ |
-| 6 | 倉本 千奈 |
-| 7 | 紫雲 清夏 |
-| 8 | 篠澤 広 |
-| 9 | 姫崎 莉波 |
-| 10 | 花海 佑芽 |
-| 11 | 十王 星南 |
-| 12 | 秦谷 美鈴 |
-| 13 | 雨夜 燕 |
-
-### Step 4: Extract pIdol skill card
+### Step 3: Extract pIdol skill card
 
 The announcement shows the **upgraded version only**. Create both unupgraded and upgraded rows with identical effects.
 
@@ -68,7 +47,7 @@ effects: the letter at the center bottom of the icon is **A** (active) or
 or **circle** (mental). "Gives score → active, buffs only → mental" is a
 tendency, not a rule — e.g. 夏風の通り道 grants no score but is active.
 
-### Step 5: Extract pIdol p-item
+### Step 4: Extract pIdol p-item
 
 Same as skill card - create both unupgraded and upgraded rows.
 
@@ -77,7 +56,7 @@ Same as skill card - create both unupgraded and upgraded rows.
 - mode: stage
 - pIdolId: the new pIdol's ID
 
-### Step 6: Extract support card p-items
+### Step 5: Extract support card p-items
 
 For each support card shown:
 
@@ -86,14 +65,14 @@ For each support card shown:
 - mode: stage (for サポートイベント items) or produce
 - No pIdolId
 
-### Step 7: Update hidden entity IDs
+### Step 6: Update hidden entity IDs
 
 Add the unupgraded pIdol item and card IDs to hide them (since we only have upgraded effect text):
 
 - `gakumas-tools/utils/entities.js`
 - Add to HIDDEN_ITEM_IDS and HIDDEN_CARD_IDS arrays
 
-### Step 8: Validate
+### Step 7: Validate
 
 Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
@@ -214,10 +193,7 @@ Support items:
 
 ### utils/entities.js updates
 
-```javascript
-export const HIDDEN_ITEM_IDS = new Set([...existing, [unupgraded_pIdol_item_id]]);
-export const HIDDEN_CARD_IDS = new Set([...existing, [unupgraded_pIdol_card_id]]);
-```
+Append the unupgraded pIdol item ID to the `HIDDEN_ITEM_IDS` Set literal and the unupgraded card ID to `HIDDEN_CARD_IDS`, keeping the IDs already there.
 
 ## Worked Example: Wildest Flower Gacha
 
@@ -251,13 +227,6 @@ p_items.csv:
 403,すべてを超えた先へ+,SSR,TRUE,logic,stage,pIdol,130,FALSE,"at:startOfStage { setScoreDebuff(0.2,4); limit:1 }; at:turn { if:turnsElapsed==3 { motivation+=2; cardUsesRemaining+=1; limit:1 } }; at:turn { if:turnsElapsed==6 { goodImpressionTurns+=4; cardUsesRemaining+=1; limit:1 } }"
 404,咲季の完全食・改,SSR,FALSE,logic,stage,support,,FALSE,"at:cardUsed { if:turnCardsUsed%2==1 { goodImpressionTurns+=2; setGoodImpressionTurnsEffectBuff(0.25) }; limit:1 }"
 405,演技のたしなみ,SR,FALSE,logic,stage,support,,FALSE,"at:staminaDecreased { if:parentPhase==processCost & isVisualTurn { goodImpressionTurns+=2; halfCostTurns+=2 }; limit:1 }"
-```
-
-utils/entities.js:
-
-```javascript
-export const HIDDEN_ITEM_IDS = new Set([402]);
-export const HIDDEN_CARD_IDS = new Set([783]);
 ```
 
 ## Reference

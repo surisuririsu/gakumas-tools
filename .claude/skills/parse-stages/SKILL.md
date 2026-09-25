@@ -15,14 +15,11 @@ Screenshots in the directory `screenshots/stages/`. Expected screenshots:
 
 ## Instructions
 
-### Step 1: Read all screenshots
-Use the Read tool to view each image in the provided directory or paths.
-
-### Step 2: Extract season number
+### Step 1: Extract season number
 Look for "コンテストシーズンN" in the announcement header to get the season number.
 
-### Step 3: Analyze criteria bars (one per stage)
-**As of Season 43**, each stage has its own 審査基準 (criteria) bar, shown in the per-stage header row (`ステージN 審査基準 [bar] プラン [icon]`). Earlier seasons shared a single season-level bar.
+### Step 2: Analyze criteria bars (one per stage)
+Each stage has its own 審査基準 (criteria) bar, shown in the per-stage header row (`ステージN 審査基準 [bar] プラン [icon]`).
 
 Run the analysis script **once per stage** on the image containing that stage's bar. It prints the stage's `criteria` and `firstTurns` values (vo,da,vi) ready to paste:
 ```bash
@@ -30,35 +27,35 @@ python scripts/analyze_criteria_bar.py <image_with_stage_N_bar>
 ```
 Record each stage's criteria separately — they may differ.
 
-### Step 4: Identify plan for each stage
+### Step 3: Identify plan for each stage
 The plan icon appears in each stage's header row, to the right of its criteria bar (`プラン [icon]`). Icons are silver/gray:
 - **Sense (センス)**: 8-pointed star with layered petals
 - **Logic (ロジック)**: 3D hexagonal cube
 - **Free (フリー)**: Rectangular badge with "FREE" text
 - **Anomaly (アノマリー)**: Abstract swirling shape with orbital circles
 
-### Step 5: Extract stage data from table
+### Step 4: Extract stage data from table
 For each stage row, extract:
 - Turn count (e.g., "12ターン" → 12)
 - Support/Trouble effect (応援/トラブル column) - may be "ー" for none
 - P-item name and effect text
 
-### Step 6: Infer turn counts breakdown
+### Step 5: Infer turn counts breakdown
 Turn counts are roughly proportional to criteria but don't follow a strict algorithm.
 Check `tail -15 packages/gakumas-data/csv/stages.csv` for recent stages with similar criteria distributions.
 
 **Important**: The turnCounts don't always match simple `criteria[i] * total_turns` rounding. Look for stages with the exact same criteria values in recent history and use those as reference. The distribution may vary slightly between stages even with the same criteria.
 
-### Step 7: Translate effects to DSL
+### Step 6: Translate effects to DSL
 Use the Structured DSL Reference below to convert Japanese effect text to DSL format.
 
-### Step 8: Output CSV rows
+### Step 7: Output CSV rows
 Generate one CSV row per stage with this format:
 ```
 id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effects,linkTurnCounts
 ```
 
-### Step 9: Validate
+### Step 8: Validate
 Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
 ## Structured DSL Reference
@@ -130,11 +127,9 @@ Actions are bare assignments or function calls — no `do:` prefix.
 | スコア上昇量増加 N%（Mターン） | `setScoreBuff(0.N,M)` |
 | 指針を変更 | `setStance(preservation)` / `setStance(strength)` / `setStance(fullPower)` |
 
-**Note**: "+" may be misread as "×" in screenshots. When you see "×N", double-check - it's likely "+N".
-
 ### Target rules (target:)
-Target blocks scope growth actions to a set of cards. They nest inside an
-effect body; no need to split into a separate effect.
+Target blocks scope growth actions to a set of cards and nest inside an
+effect body alongside regular actions.
 
 | Japanese | DSL |
 |----------|-----|
@@ -177,9 +172,9 @@ at:<phase> {
 ```
 **Important**: Use `%N==(N-1)` (e.g., `%3==2` for "every 3"). The counter increments before the modulo check.
 
-For stance changes, use built-in counter `stanceChangedTimes` or `stanceChangedByCardTimes`:
+For stance changes, use built-in counter `stanceChangedTimes` or `stanceChangedByDirectEffectTimes`:
 ```
-at:stanceChanged { if:parentPhase==processCard & stanceChangedByCardTimes%2==1 { <actions> }; limit:N }
+at:stanceChanged { if:parentPhase==processCard & stanceChangedByDirectEffectTimes%2==1 { <actions> }; limit:N }
 ```
 
 ### Worked Examples
@@ -213,7 +208,6 @@ at:stanceChanged { if:parentPhase==processCard & isStrength { halfCostTurns+=1; 
 ```
 at:endOfTurn { if:cumulativeFullPowerCharge>=13 { setStance(preservation); target:pIdol { g.score+=30 } }; limit:2 }
 ```
-**Note**: The old DSL required growth and non-growth actions to be in separate effects. In the new DSL, a `target:` block nests inside a regular effect body — no splitting needed.
 
 ## Output Format
 
