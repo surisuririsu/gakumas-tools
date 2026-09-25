@@ -67,6 +67,11 @@
     "sendFeedback": "Send feedback",
     "signOut": "Sign out"
   },
+  "ToolHeader": {
+    "pin": "Pin beside other tools",
+    "unpin": "Unpin",
+    "pinned": "Pinned: opens beside other tools"
+  },
   "Welcome": {
     "title": "Gakumas Tools",
     "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!",

@@ -25,12 +25,11 @@
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 60px;
   right: tokens.$space-3;
   bottom: 0;
   left: 0;
-  z-index: 10;
   pointer-events: none;
 
   &.expanded {
@@ -41,78 +40,69 @@
 .dropdown {
   float: right;
   position: relative;
-  min-width: 220px;
+  min-width: 232px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   padding: tokens.$space-2;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
+  @include mixins.popover;
   color: tokens.$surface-ink;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-
-  // Delayed visibility change keeps the fade-out running before the element
-  // goes inert.
   visibility: hidden;
   opacity: 0;
-  transform: translateY(-6px) scale(0.98);
+  translate: 0 -8px;
+  scale: 0.96;
   transform-origin: top right;
   transition:
-    opacity 0.15s ease,
-    transform 0.18s cubic-bezier(0.2, 0, 0.2, 1),
-    visibility 0s linear 0.18s;
+    opacity tokens.$duration-fast ease,
+    translate tokens.$duration-base tokens.$ease-out,
+    scale tokens.$duration-base tokens.$ease-out,
+    visibility 0s linear tokens.$duration-base;
 
   &.expanded {
     visibility: visible;
     opacity: 1;
-    transform: translateY(0) scale(1);
+    translate: 0 0;
+    scale: 1;
     transition:
-      opacity 0.15s ease,
-      transform 0.18s cubic-bezier(0.2, 0, 0.2, 1),
+      opacity tokens.$duration-fast ease,
+      translate tokens.$duration-spring tokens.$ease-spring,
+      scale tokens.$duration-spring tokens.$ease-spring,
       visibility 0s;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: tokens.$gradient-brand;
-  }
-
-  & > * {
-    width: 100%;
-    display: block;
-    padding: tokens.$space-2 tokens.$space-3;
-    border-radius: tokens.$radius-sm;
-    transition:
-      background-color 0.15s,
-      color 0.15s;
   }
 
   & > button,
   & > a {
     min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 tokens.$space-3;
+    border-radius: tokens.$radius-md;
+    font-family: inherit;
+    font-size: tokens.$text-md;
+    font-weight: tokens.$weight-semibold;
+    transition:
+      background-color tokens.$duration-fast,
+      scale tokens.$duration-spring tokens.$ease-spring;
+    @include mixins.pressable(tokens.$press-scale-wide);
 
     &:hover {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
+      background-color: tokens.$fill-muted;
     }
   }
 }
 
-// width: auto lets the negative horizontal margins actually widen the
-// element; with inherited width: 100% they'd only shift it left.
+.signIn {
+  padding: 2px 0 tokens.$space-2;
+}
+
 .author {
-  width: auto;
-  margin: tokens.$space-1 (-(tokens.$space-2));
+  margin: tokens.$space-1 0;
   padding: tokens.$space-3;
-  border-top: 1px solid tokens.$surface-border;
-  border-bottom: 1px solid tokens.$surface-border;
-  border-radius: 0 !important;
-  background-color: tokens.$surface-alt;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
 }
@@ -139,7 +129,5 @@
   }
   .dropdown {
     width: 100%;
-    border-left: 0;
-    border-right: 0;
   }
 }

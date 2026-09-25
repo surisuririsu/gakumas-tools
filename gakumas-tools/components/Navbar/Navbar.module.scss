@@ -4,7 +4,7 @@
 
 .navbar {
   position: relative;
-  z-index: 1;
+  z-index: tokens.$z-nav;
   min-height: 52px;
   display: flex;
   align-items: center;
@@ -63,8 +63,25 @@
     width 420ms tokens.$ease-spring,
     opacity tokens.$duration-base ease;
 
+  &.appearing {
+    transition: opacity tokens.$duration-base ease;
+    animation: indicatorGrow 420ms tokens.$ease-spring;
+  }
+
   &.pending {
     animation: indicatorPulse 0.8s ease-in-out infinite alternate;
+  }
+
+  &.appearing.pending {
+    animation:
+      indicatorGrow 420ms tokens.$ease-spring,
+      indicatorPulse 0.8s 420ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes indicatorGrow {
+  from {
+    scale: 0 1;
   }
 }
 

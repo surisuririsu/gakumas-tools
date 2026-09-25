@@ -6,7 +6,7 @@ import styles from "./Navbar.module.scss";
 
 const TRANSITION_TYPES = ["nav-tool"];
 
-function PendingReporter({ path, onPendingChange }) {
+export function PendingReporter({ path, onPendingChange }) {
   const { pending } = useLinkStatus();
   useEffect(() => {
     onPendingChange(path, pending);

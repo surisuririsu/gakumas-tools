@@ -7,7 +7,7 @@ import { OSHI_PROPS } from "@/components/Oshi/config";
 import ToolHeader from "@/components/ToolHeader";
 import c from "@/utils/classNames";
 import { TOOLS } from "@/utils/tools";
-import NavbarLink from "./NavbarLink";
+import NavbarLink, { PendingReporter } from "./NavbarLink";
 import NavbarMenu from "./NavbarMenu";
 import styles from "./Navbar.module.scss";
 
@@ -42,7 +42,12 @@ function Navbar() {
       }
       const width = activeEl.offsetWidth * INDICATOR_FRACTION;
       const left = activeEl.offsetLeft + (activeEl.offsetWidth - width) / 2;
-      setIndicator({ left, width, visible: true });
+      setIndicator((prev) => ({
+        left,
+        width,
+        visible: true,
+        appearing: !prev.visible,
+      }));
     };
 
     measure();
@@ -61,6 +66,7 @@ function Navbar() {
         <Link href="/" className={styles.brand}>
           <span className={styles.brandPrimary}>Gakumas</span>
           <span className={styles.brandSecondary}>Tools</span>
+          <PendingReporter path="/" onPendingChange={handlePendingChange} />
         </Link>
 
         <div className={styles.links} ref={linksRef}>
@@ -77,6 +83,7 @@ function Navbar() {
           <div
             className={c(
               styles.indicator,
+              indicator.appearing && styles.appearing,
               pendingPath && pendingPath != pathname && styles.pending
             )}
             style={{

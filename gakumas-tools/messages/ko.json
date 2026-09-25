@@ -67,6 +67,11 @@
     "sendFeedback": "피드백 보내기",
     "signOut": "로그아웃"
   },
+  "ToolHeader": {
+    "pin": "다른 도구 옆에 고정",
+    "unpin": "고정 해제",
+    "pinned": "고정됨: 다른 도구 옆에 표시됩니다"
+  },
   "Welcome": {
     "title": "Gakumas Tools - 학원마스 툴",
     "introduction": "프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션 등 편리한 기능을 제공합니다.",
