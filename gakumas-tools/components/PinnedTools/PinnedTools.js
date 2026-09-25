@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { FaXmark } from "react-icons/fa6";
 import Loader from "@/components/Loader";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import { usePathname } from "@/i18n/routing";
 import { TOOLS } from "@/utils/tools";
 import styles from "./PinnedTools.module.scss";
 
@@ -52,7 +53,11 @@ const TOOL_COMPONENTS = {
 
 function PinnedTools() {
   const { pinnedTools, unpin } = useContext(WorkspaceContext);
-  const filteredTools = pinnedTools.filter((tool) => tool in TOOL_COMPONENTS);
+  const pathname = usePathname();
+  const filteredTools = pinnedTools.filter(
+    (tool) =>
+      tool in TOOL_COMPONENTS && !pathname.startsWith(TOOLS[tool]?.path)
+  );
 
   if (!filteredTools.length) return null;
 
