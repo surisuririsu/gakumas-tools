@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import EntityIcon from "@/components/EntityIcon";
+import { usePopOnActivate } from "@/components/EntityBank/usePop";
 import {
   COMPARE_FN_BY_TYPE,
   ENTITY_DATA_BY_TYPE,
@@ -67,6 +68,22 @@ const PoolItem = memo(function PoolItem({ type, id }) {
   );
 });
 
+const POP_CLASSES = { a: styles.popA, b: styles.popB };
+
+function FilterChip({ active, onClick, children }) {
+  const pop = usePopOnActivate(active);
+  return (
+    <button
+      type="button"
+      className={c(styles.chip, active && styles.chipActive, POP_CLASSES[pop])}
+      aria-pressed={active}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
 function EntityPool({ type, list }) {
   const t = useTranslations("TierList");
 
@@ -131,54 +148,38 @@ function EntityPool({ type, list }) {
         <div className={styles.filters}>
           {availableRarities.length > 0 && (
             <>
-              <button
-                type="button"
-                className={c(
-                  styles.chip,
-                  rarityFilter == null && styles.chipActive,
-                )}
+              <FilterChip
+                active={rarityFilter == null}
                 onClick={() => setRarityFilter(null)}
               >
                 {t("filterAll")}
-              </button>
+              </FilterChip>
               {availableRarities.map((r) => (
-                <button
+                <FilterChip
                   key={r}
-                  type="button"
-                  className={c(
-                    styles.chip,
-                    rarityFilter === r && styles.chipActive,
-                  )}
+                  active={rarityFilter === r}
                   onClick={() => toggleRarity(r)}
                 >
                   {r}
-                </button>
+                </FilterChip>
               ))}
             </>
           )}
           {hasUpgradedVariants && (
             <>
               <span className={styles.filterDivider} aria-hidden="true" />
-              <button
-                type="button"
-                className={c(
-                  styles.chip,
-                  upgradedFilter === false && styles.chipActive,
-                )}
+              <FilterChip
+                active={upgradedFilter === false}
                 onClick={() => toggleUpgraded(false)}
               >
                 {t("filterBase")}
-              </button>
-              <button
-                type="button"
-                className={c(
-                  styles.chip,
-                  upgradedFilter === true && styles.chipActive,
-                )}
+              </FilterChip>
+              <FilterChip
+                active={upgradedFilter === true}
                 onClick={() => toggleUpgraded(true)}
               >
                 {t("filterUpgraded")}
-              </button>
+              </FilterChip>
             </>
           )}
         </div>

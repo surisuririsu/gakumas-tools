@@ -1,50 +1,228 @@
-@use "../../styles/mixins";
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .entityDetails {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  gap: tokens.$space-2;
+  height: 244px;
+  padding: tokens.$space-3 tokens.$space-3 0;
 
   @container (width < 460px) {
-    height: 160px;
+    height: 192px;
+    padding: tokens.$space-2 tokens.$space-2 0;
   }
 }
 
-.imageWrapper {
+.stage {
   position: relative;
   flex: 1;
+  min-height: 0;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$surface-alt;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  display: flex;
+  gap: 14px;
+  padding: tokens.$space-3;
+  border-radius: inherit;
+  background-color: tokens.$surface-alt;
+
+  @container (width < 460px) {
+    gap: 10px;
+    padding: 10px;
+  }
+}
+
+.side {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.icon {
+  position: relative;
+  width: 80px;
+  aspect-ratio: 1;
+  margin-bottom: 2px;
+  border-radius: 12%;
+  background-color: tokens.$surface-panel;
+  overflow: hidden;
+
+  @container (width < 460px) {
+    width: 64px;
+  }
 
   img {
-    object-fit: contain;
+    object-fit: cover;
+  }
+}
+
+.tag {
+  @include mixins.tag(tokens.$fill-muted, tokens.$surface-ink-muted);
+  max-width: 100%;
+  padding: 1px 7px 1px 5px;
+  gap: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  img {
+    flex-shrink: 0;
+  }
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.title {
+  @include mixins.heading;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @container (width < 460px) {
+    font-size: tokens.$text-md;
+  }
+}
+
+.description {
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+  background-color: tokens.$surface-alt;
+}
+
+.crop {
+  position: relative;
+  width: min(100cqw, 100cqh * 362 / 168, 400px);
+  aspect-ratio: 362 / 168;
+  overflow: hidden;
+
+  img {
+    position: absolute;
+    top: calc(-100% * 43 / 168);
+    left: calc(-100% * 124 / 362);
+    width: calc(100% * 500 / 362);
+    max-width: none;
+    height: auto;
+    mix-blend-mode: multiply;
+    filter: brightness(1.05);
+  }
+}
+
+.pending {
+  opacity: 0;
+}
+
+.entering {
+  animation: layerIn tokens.$duration-fast tokens.$ease-out both;
+
+  .icon {
+    animation: iconIn tokens.$duration-spring tokens.$ease-pop both;
+  }
+
+  .tag {
+    animation: iconIn tokens.$duration-spring tokens.$ease-pop both;
+    animation-delay: 60ms;
+
+    & + .tag {
+      animation-delay: 90ms;
+    }
+  }
+
+  .title,
+  .description {
+    animation: textIn tokens.$duration-slow tokens.$ease-glide both;
+  }
+
+  .title {
+    animation-delay: 30ms;
+  }
+
+  .description {
+    animation-delay: 70ms;
+  }
+}
+
+.leaving {
+  pointer-events: none;
+  animation: layerOut tokens.$duration-base tokens.$ease-out forwards;
+}
+
+@keyframes layerIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes layerOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes iconIn {
+  from {
+    opacity: 0;
+    scale: 0.8;
+    rotate: -6deg;
+  }
+}
+
+@keyframes textIn {
+  from {
+    opacity: 0;
+    translate: 0 8px;
   }
 }
 
 .placeholder {
+  position: absolute;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  color: colors.$gray-light;
-  font-size: 60px;
+  color: tokens.$surface-ink-faint;
+  font-size: 44px;
 }
 
 .c11ns {
-  height: 12px;
+  flex-shrink: 0;
   display: flex;
   align-items: stretch;
-  gap: 8px;
-  margin: 0 8px;
-
-  transition: height 0.2s;
+  gap: tokens.$space-2;
+  height: 12px;
+  padding: 0 tokens.$space-2;
+  transition:
+    height tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
 }
 
 .c11n {
   flex: 1;
   min-width: 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px colors.$gray-light;
+  display: flex;
+  flex-direction: column;
+  border-radius: tokens.$radius-sm;
+  box-shadow: tokens.$shadow-icon-pressed;
   overflow: hidden;
+  transition:
+    border-radius tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-base;
 
   @include mixins.c11n-gradients using ($c11n-gradient) {
     background: $c11n-gradient;
@@ -52,18 +230,21 @@
 }
 
 .max {
-  width: 50%;
-  margin: auto;
-  border-radius: 0 0 6px 6px;
-  background-color: colors.$white;
-  font-size: 12px;
+  width: 56%;
+  margin: 0 auto;
+  border-radius: 0 0 tokens.$radius-sm tokens.$radius-sm;
+  background-color: tokens.$surface-panel;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-bold;
+  line-height: 16px;
 }
 
 .name {
-  padding: 2px 8px;
+  padding: 2px tokens.$space-2;
   color: colors.$white;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-heavy;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -72,18 +253,24 @@
 .max,
 .name {
   opacity: 0;
-  transition: opacity 0.2s;
+  translate: 0 -4px;
+  transition:
+    opacity tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring;
 }
 
 .expanded {
   height: 48px;
 
   .c11n {
-    border: 2px solid colors.$white;
+    border-radius: tokens.$radius-md;
+    box-shadow: tokens.$shadow-icon;
   }
 
   .max,
   .name {
     opacity: 1;
+    translate: 0 0;
+    transition-delay: calc(var(--i, 0) * 40ms + 60ms);
   }
 }

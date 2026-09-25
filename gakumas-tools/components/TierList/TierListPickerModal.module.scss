@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .picker {
@@ -10,42 +10,73 @@
 .entities {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-  gap: tokens.$space-2;
+  gap: 10px;
   max-height: 65vh;
   overflow-y: auto;
-  padding: tokens.$space-1;
+  padding: 10px;
 }
 
 .cell {
   position: relative;
   aspect-ratio: 1;
-  transition: filter 0.15s ease;
+  border-radius: 12%;
+  transition:
+    filter tokens.$duration-base,
+    opacity tokens.$duration-base,
+    box-shadow tokens.$duration-base tokens.$ease-out;
 }
 
 .picked {
-  filter: grayscale(0.5) brightness(0.75);
+  filter: grayscale(0.8);
+  opacity: 0.5;
 }
 
 .current {
+  z-index: tokens.$z-raised;
   filter: none;
-  outline: 2px solid colors.$gk-orange;
-  outline-offset: 2px;
-  border-radius: 8%;
+  opacity: 1;
+  @include mixins.selected-ring;
+}
+
+.currentPop {
+  animation: pickPop 460ms tokens.$ease-pop;
+}
+
+@keyframes pickPop {
+  0% {
+    scale: 0.86;
+  }
+  100% {
+    scale: 1;
+  }
 }
 
 .tierBadge {
   position: absolute;
-  top: -6px;
-  left: -6px;
+  top: -8px;
+  left: -8px;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 1.5px 0 rgba(20, 20, 40, 0.25));
+  transform-origin: 30% 30%;
 
   img {
     width: auto;
     height: 22px;
     object-fit: contain;
+  }
+}
+
+.tierBadgeIn {
+  animation: badgeIn tokens.$duration-spring tokens.$ease-pop;
+}
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+    scale: 0.3;
+    rotate: -20deg;
   }
 }

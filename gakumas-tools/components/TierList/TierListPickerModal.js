@@ -2,6 +2,10 @@ import { memo, useMemo, useRef } from "react";
 import EntityIcon from "@/components/EntityIcon";
 import Image from "@/components/Image";
 import Modal from "@/components/Modal";
+import {
+  usePopOnActivate,
+  usePopOnChange,
+} from "@/components/EntityBank/usePop";
 import c from "@/utils/classNames";
 import { COMPARE_FN_BY_TYPE, ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./TierListPickerModal.module.scss";
@@ -13,17 +17,25 @@ const PickerEntity = memo(function PickerEntity({
   isCurrent,
   onPick,
 }) {
+  const pop = usePopOnActivate(isCurrent);
+  const badgePop = usePopOnChange(pickedTier);
+
   return (
     <div
       className={c(
         styles.cell,
         pickedTier && styles.picked,
         isCurrent && styles.current,
+        pop && styles.currentPop,
       )}
     >
       <EntityIcon type={type} id={id} size="fill" onClick={onPick} />
       {pickedTier && (
-        <div className={styles.tierBadge} aria-label={pickedTier}>
+        <div
+          key={pickedTier}
+          className={c(styles.tierBadge, badgePop && styles.tierBadgeIn)}
+          aria-label={pickedTier}
+        >
           <Image
             src={`/ranks/${pickedTier}.png`}
             alt={pickedTier}
