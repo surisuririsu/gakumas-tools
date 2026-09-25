@@ -8,6 +8,8 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import EntityIcon from "@/components/EntityIcon";
+import SwapButtonContext from "@/components/EntityIcon/SwapButtonContext";
+import SwappableButton from "@/components/EntityIcon/SwappableButton";
 import styles from "./LoadoutEditor.module.scss";
 
 export default function SwapDndContext({ children }) {
@@ -39,7 +41,9 @@ export default function SwapDndContext({ children }) {
       onDragEnd={handleDragEnd}
       onDragCancel={() => setDragged(null)}
     >
-      {children}
+      <SwapButtonContext.Provider value={SwappableButton}>
+        {children}
+      </SwapButtonContext.Provider>
       <DragOverlay dropAnimation={null}>
         {dragged && (
           <div className={styles.dragOverlay}>

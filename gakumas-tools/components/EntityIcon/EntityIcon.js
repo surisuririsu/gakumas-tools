@@ -1,6 +1,5 @@
-import { memo, useCallback } from "react";
+import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
-import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { FaPlus } from "react-icons/fa6";
 import { Idols } from "gakumas-data";
 import Image from "@/components/Image";
@@ -12,47 +11,9 @@ import {
 } from "@/utils/entities";
 import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
+import SwapButtonContext from "./SwapButtonContext";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
-
-function SwappableButton({ swap, className, children, ...rest }) {
-  const dragId = `${swap.type}-${swap.index}`;
-  const {
-    setNodeRef: setDragRef,
-    listeners,
-    isDragging,
-  } = useDraggable({ id: dragId, data: swap, disabled: !swap.id });
-  const {
-    setNodeRef: setDropRef,
-    isOver,
-    active,
-  } = useDroppable({ id: dragId, data: swap });
-  const ref = useCallback(
-    (node) => {
-      setDragRef(node);
-      setDropRef(node);
-    },
-    [setDragRef, setDropRef]
-  );
-  const isTarget =
-    isOver && !isDragging && active?.data.current?.type == swap.type;
-
-  return (
-    <button
-      ref={ref}
-      {...listeners}
-      className={c(
-        className,
-        styles.swappable,
-        isDragging && styles.swapSource,
-        isTarget && styles.swapTarget
-      )}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
-}
 
 function EntityIcon({
   type,
@@ -68,6 +29,7 @@ function EntityIcon({
   showEmptyPlaceholder,
 }) {
   const t = useTranslations("EntityIcon");
+  const SwapButton = useContext(SwapButtonContext);
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const icon = resolveEntityIcon(entity, idolId);
 
@@ -124,12 +86,12 @@ function EntityIcon({
     "aria-label": entity ? undefined : t("emptySlot"),
   };
 
-  if (onSwap) {
+  if (onSwap && SwapButton) {
     const swap = { type, index, id, idolId, customizations, onSwap };
     return (
-      <SwappableButton swap={swap} {...buttonProps}>
+      <SwapButton swap={swap} {...buttonProps}>
         {contents}
-      </SwappableButton>
+      </SwapButton>
     );
   }
   return <button {...buttonProps}>{contents}</button>;
