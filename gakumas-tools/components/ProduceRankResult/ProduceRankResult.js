@@ -54,7 +54,7 @@ function findNextRank(rating, ratingByRank) {
 export default function ProduceRankResult({ rating, rank, ratingByRank }) {
   const t = useTranslations("Calculator");
   const known = rank && rank !== "?";
-  const next = rank !== "?" && findNextRank(rating, ratingByRank);
+  const next = findNextRank(rating, ratingByRank);
   const counted = useCountUp(rating);
   const shown =
     typeof rating == "number" && typeof counted == "number" ? counted : rating;
@@ -92,7 +92,7 @@ export default function ProduceRankResult({ rating, rank, ratingByRank }) {
         >
           {shown.toLocaleString()}
         </span>
-        <span className={c(styles.next, !next && styles.nextHidden)}>
+        <span className={c(styles.next, !next && styles.nextEmpty)}>
           {next
             ? t("toNextRank", {
                 rank: next.rank,

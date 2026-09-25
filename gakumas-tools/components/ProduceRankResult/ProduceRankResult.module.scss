@@ -70,6 +70,6 @@
   @include mixins.numeric;
 }
 
-.nextHidden {
-  visibility: hidden;
+.nextEmpty {
+  color: tokens.$accent-edge;
 }
