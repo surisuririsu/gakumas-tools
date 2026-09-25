@@ -337,7 +337,9 @@
     "save": "Save",
     "saveAsNew": "Save as new",
     "signInToSave": "Sign in with Discord to save",
-    "saveFailed": "Save failed"
+    "saveFailed": "Save failed",
+    "saving": "Saving…",
+    "saved": "Saved"
   },
   "MemoriesNudge": {
     "create": "Create a memory",
@@ -350,7 +352,8 @@
     "create": "Create memory",
     "import": "Import from screenshots",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "deleted": "Deleted {num, plural, one {# memory} other {# memories}}"
   },
   "Memories": {
     "loadError": "Failed to load memories",
@@ -361,7 +364,11 @@
   "MemoryImporterModal": {
     "importMemories": "Import memories from screenshots",
     "instructions": "<p>Parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
-    "progress": "Progress: {progress}/{total}"
+    "progress": "Progress: {progress}/{total}",
+    "preparing": "Preparing the reader… (first use downloads a few MB)",
+    "saving": "Saving…",
+    "failed": "Import failed. Check the screenshots and try again.",
+    "imported": "Imported {num, plural, one {# memory} other {# memories}}"
   },
   "Simulator": {
     "supportBonus": "Support bonus %",

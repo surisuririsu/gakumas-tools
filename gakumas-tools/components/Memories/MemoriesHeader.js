@@ -20,6 +20,7 @@ import DataContext from "@/contexts/DataContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import SearchContext from "@/contexts/SearchContext";
+import ToastContext from "@/contexts/ToastContext";
 import styles from "./Memories.module.scss";
 
 const MemoryImporterModal = dynamic(
@@ -41,6 +42,7 @@ function MemoriesHeader({
     useContext(DataContext);
   const { setAll } = useContext(MemoryContext);
   const { setModal } = useContext(ModalContext);
+  const { showToast } = useContext(ToastContext);
   const { pItemIds, skillCardIds, replacePItemId, replaceSkillCardId } =
     useContext(SearchContext);
 
@@ -123,9 +125,17 @@ function MemoriesHeader({
                   message={t("confirmDelete", {
                     num: selectedMemoryIds.length,
                   })}
-                  onConfirm={() => {
-                    deleteMemories(selectedMemoryIds);
+                  confirmLabel={t("delete")}
+                  danger
+                  onConfirm={async () => {
+                    const num = selectedMemoryIds.length;
                     setSelectedMemories({});
+                    if (await deleteMemories(selectedMemoryIds)) {
+                      showToast({
+                        tone: "success",
+                        message: t("deleted", { num }),
+                      });
+                    }
                   }}
                 />
               )

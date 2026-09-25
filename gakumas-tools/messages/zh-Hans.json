@@ -337,7 +337,9 @@
     "save": "保存",
     "saveAsNew": "作为新回忆卡保存",
     "signInToSave": "登入 Discord 以同步保存",
-    "saveFailed": "保存失败"
+    "saveFailed": "保存失败",
+    "saving": "保存中…",
+    "saved": "已保存"
   },
   "MemoriesNudge": {
     "create": "创建回忆卡",
@@ -350,7 +352,8 @@
     "create": "创建回忆卡",
     "import": "从截图导入",
     "cancel": "取消",
-    "delete": "删除"
+    "delete": "删除",
+    "deleted": "已删除 {num} 个回忆卡"
   },
   "Memories": {
     "loadError": "回忆卡加载失败",
@@ -361,7 +364,11 @@
   "MemoryImporterModal": {
     "importMemories": "从截图中导入回忆卡",
     "instructions": "<p>>每张截图中必须清晰显示总合力、属性、P 物品和技能卡图标。</p><p>记忆卡导入耗时取决于导入数量及设备处理器性能与内存容量，可能需要数秒至数分钟。单次导入过多记忆卡可能导致浏览器崩溃，建议每批次最多导入50张记忆卡。不建议在移动端使用。</p><p> 部分记忆卡可能解析失败，需导入后手动修复，此类条目将在名称中标记为 \"(FIXME)\" </p>",
-    "progress": "进度: {progress}/{total}"
+    "progress": "进度: {progress}/{total}",
+    "preparing": "正在准备识别…（首次使用需下载数MB）",
+    "saving": "保存中…",
+    "failed": "导入失败，请检查截图后重试。",
+    "imported": "已导入 {num} 个回忆卡"
   },
   "Simulator": {
     "supportBonus": "支援加成 %",

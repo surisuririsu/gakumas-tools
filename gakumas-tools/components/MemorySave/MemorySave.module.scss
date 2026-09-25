@@ -9,6 +9,31 @@
   margin-top: 16px;
 }
 
+.status,
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  font-size: tokens.$text-sm;
+  font-weight: 600;
+}
+
+.status {
+  color: tokens.$surface-ink-muted;
+}
+
+.saved {
+  color: colors.$custom-green;
+  animation: savedIn tokens.$duration-slow tokens.$ease-spring;
+}
+
+@keyframes savedIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
 .error {
   color: colors.$red;
   font-size: tokens.$text-sm;

@@ -52,7 +52,7 @@ function LoadoutSkillCardGroup({
   const { setTargetSkillCardIds, setAcquiredSkillCardIds } = useContext(
     MemoryCalculatorContext,
   );
-  const { setModal, closeModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
   const [expanded, setExpanded] = useState(false);
   const [costExpanded, setCostExpanded] = useState(false);
 
@@ -135,10 +135,7 @@ function LoadoutSkillCardGroup({
               setModal(
                 <MemoryImporterModal
                   multiple={false}
-                  onSuccess={(memories) => {
-                    setMemory(memories[0], groupIndex);
-                    closeModal();
-                  }}
+                  onSuccess={(memories) => setMemory(memories[0], groupIndex)}
                 />,
               )
             }

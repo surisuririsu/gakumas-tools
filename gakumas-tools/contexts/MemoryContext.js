@@ -32,7 +32,7 @@ export function MemoryContextProvider({ children }) {
 
   useEffect(() => {
     setSaveState("unsaved");
-  }, [name, pIdolId, params, pItemIds, skillCardIds]);
+  }, [name, pIdolId, params, pItemIds, skillCardIds, customizations]);
 
   async function save(asNew) {
     setSaveState("saving");

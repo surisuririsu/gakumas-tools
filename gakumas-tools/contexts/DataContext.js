@@ -49,12 +49,14 @@ export function DataContextProvider({ children }) {
     setMemoriesError(null);
     try {
       await postJson(url, body);
+      return true;
     } catch (error) {
       console.error(error);
       setMemoriesError(action);
-      return;
+      return false;
+    } finally {
+      fetchMemories();
     }
-    fetchMemories();
   }
 
   function uploadMemories(memories) {
@@ -62,6 +64,8 @@ export function DataContextProvider({ children }) {
   }
 
   function deleteMemories(memoryIds) {
+    const ids = new Set(memoryIds);
+    setMemories((cur) => cur.filter((memory) => !ids.has(memory._id)));
     return mutateMemories("delete", "/api/memory/bulk_delete", {
       ids: memoryIds,
     });

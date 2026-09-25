@@ -341,7 +341,9 @@
     "save": "저장",
     "saveAsNew": "새로 저장",
     "signInToSave": "Discord로 로그인하여 저장",
-    "saveFailed": "저장에 실패했습니다"
+    "saveFailed": "저장에 실패했습니다",
+    "saving": "저장 중…",
+    "saved": "저장했습니다"
   },
   "MemoriesHeader": {
     "confirmDelete": "메모리 {num}개를 삭제하시겠습니까?",
@@ -350,7 +352,8 @@
     "create": "메모리 생성",
     "import": "스크린샷에서 가져오기",
     "cancel": "취소",
-    "delete": "삭제하기"
+    "delete": "삭제하기",
+    "deleted": "메모리 {num}개를 삭제했습니다"
   },
   "Memories": {
     "loadError": "메모리를 불러오지 못했습니다",
@@ -361,7 +364,11 @@
   "MemoryImporterModal": {
     "importMemories": "스크린샷으로부터 메모리 불러오기",
     "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상황에 따라 몇 초에서 몇 분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다. 권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
-    "progress": "진행도: {progress}/{total}"
+    "progress": "진행도: {progress}/{total}",
+    "preparing": "인식기 준비 중… (처음 사용 시 몇 MB를 다운로드합니다)",
+    "saving": "저장 중…",
+    "failed": "가져오기에 실패했습니다. 스크린샷을 확인하고 다시 시도해 주세요.",
+    "imported": "메모리 {num}개를 가져왔습니다"
   },
   "Simulator": {
     "supportBonus": "서포트 보너스 %",

@@ -6,6 +6,11 @@
   border-radius: 8px;
   padding: 16px;
   background-color: colors.$gk-orange-extra-light;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
 }
 
 .progress {
@@ -14,6 +19,14 @@
   gap: 4px;
   align-items: center;
   color: colors.$gk-orange;
+
+  &:empty {
+    display: none;
+  }
+
+  &.error {
+    color: colors.$red;
+  }
 }
 
 .help {
