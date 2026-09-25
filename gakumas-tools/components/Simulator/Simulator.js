@@ -314,6 +314,7 @@ export default function Simulator() {
               <span>{numRuns}</span>
               <input
                 className={styles.numRunsSlider}
+                style={{ "--fill": `${((numRuns - 1000) / 9000) * 100}%` }}
                 type="range"
                 value={numRuns}
                 onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}

@@ -1,11 +1,20 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .loadoutEditor {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-start;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+
+  @media (max-width: 480px) {
+    gap: tokens.$space-2;
+    padding: tokens.$space-2;
+  }
 }
 
 .configurator {
@@ -13,12 +22,12 @@
   display: flex;
   flex-direction: column;
   gap: tokens.$space-2;
-  padding: tokens.$space-2 tokens.$space-4;
+  padding: tokens.$space-3;
   overflow: auto;
+  @include mixins.card;
 
   @media (max-width: 480px) {
     padding: tokens.$space-2;
-    padding-bottom: 0;
     gap: tokens.$space-1;
   }
 }
@@ -44,8 +53,8 @@
 .selectButton {
   padding: 8px 2px;
   border-radius: 100px;
-  color: colors.$gray;
-  border: 1px solid colors.$gray;
+  color: tokens.$surface-ink-subtle;
+  border: 1px solid tokens.$surface-border-strong;
   writing-mode: vertical-lr;
   font-weight: 600;
   transition: box-shadow 0.2s;
@@ -115,6 +124,43 @@
 .numRunsSlider {
   flex: 1;
   min-width: 0;
+  height: 8px;
+  margin: 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    tokens.$primary var(--fill),
+    tokens.$surface-border var(--fill)
+  );
+  appearance: none;
+  outline-offset: 6px;
+
+  &::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: colors.$white;
+    box-shadow:
+      0 2px 0 #cfcfd6,
+      0 1px 4px rgba(0, 0, 0, 0.14);
+    appearance: none;
+    transition: scale tokens.$duration-spring tokens.$ease-spring;
+  }
+
+  &:active::-webkit-slider-thumb {
+    scale: 1.15;
+  }
+
+  &::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background-color: colors.$white;
+    box-shadow:
+      0 2px 0 #cfcfd6,
+      0 1px 4px rgba(0, 0, 0, 0.14);
+  }
 }
 
 .expanderButtons {
@@ -130,15 +176,13 @@
     display: inline-flex;
     align-items: center;
     gap: tokens.$space-1;
-    padding: 2px 8px;
+    padding: 3px 9px 3px 11px;
     border-radius: 999px;
     background-color: tokens.$surface-muted;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-xs;
-    font-weight: 600;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
+    font-weight: 700;
+    @include mixins.raised;
 
     svg {
       font-size: 10px;
@@ -169,8 +213,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: colors.$blue;
+  color: tokens.$link;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .buttons {

@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import Input from "@/components/Input";
+import c from "@/utils/classNames";
 import styles from "./ParametersInput.module.scss";
 
 const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
@@ -13,6 +14,7 @@ function ParametersInput({
   withStamina,
   max = MAX,
   round = true,
+  attached,
 }) {
   const t = useTranslations("ParametersInput");
 
@@ -28,7 +30,7 @@ function ParametersInput({
   }
 
   return (
-    <div className={styles.parameters}>
+    <div className={c(styles.parameters, attached && styles.attached)}>
       {parameterNames.map((name, i) => (
         <Input
           key={name}

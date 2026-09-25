@@ -10,13 +10,13 @@ import ButtonGroup from "@/components/ButtonGroup";
 import CompareTab from "@/components/SimulationRuns";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
-import Table from "@/components/Table";
 import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
+import ScoreStats from "./ScoreStats";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
@@ -90,18 +90,7 @@ function SimulatorResult({
       className={c(styles.result, pending && styles.pending)}
       aria-busy={pending}
     >
-      <Table
-        className={styles.stats}
-        headers={[t("min"), t("average"), t("median"), t("max")]}
-        rows={[
-          [
-            data.minRun.score,
-            data.averageScore,
-            data.medianScore,
-            data.maxRun.score,
-          ],
-        ]}
-      />
+      <ScoreStats data={data} />
 
       <SimulatorResultGraphs data={data} plan={plan} />
 

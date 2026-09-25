@@ -19,7 +19,7 @@ ChartJS.register(
   Legend,
 );
 
-const DEFAULT_BAR_COLOR = "rgba(243, 152, 0, 0.6)";
+const DEFAULT_BAR_COLOR = "rgba(28, 139, 230, 0.8)";
 
 const CHART_OPTIONS = {
   animation: false,
@@ -57,6 +57,7 @@ function DistributionPlot({ label, data, bucketSize, color }) {
           label,
           data: counts,
           backgroundColor: color || DEFAULT_BAR_COLOR,
+          borderRadius: 3,
         },
       ],
     }),

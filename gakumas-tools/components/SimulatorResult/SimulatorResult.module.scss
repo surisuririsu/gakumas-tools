@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .result {
@@ -6,8 +7,9 @@
   max-width: Min(100%, 800px);
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-2;
-  padding: tokens.$space-1 tokens.$space-4 tokens.$space-4;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  @include mixins.card;
   transition: opacity tokens.$duration-base;
 
   &.pending {
@@ -15,8 +17,13 @@
   }
 
   .graphSelect button {
-    font-size: 20px;
-    padding: 6px;
+    font-size: 18px;
+    padding: 4px 6px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 10px;
+    padding: 10px tokens.$space-2;
   }
 }
 
@@ -37,32 +44,178 @@
   }
 }
 
+.statsWrap {
+  position: relative;
+  padding-bottom: 2px;
+}
+
 .stats {
-  thead {
-    background: tokens.$gradient-brand;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
 
-    th {
-      color: colors.$white;
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 7px 2px 6px;
+  border-radius: 12px;
+  background-color: tokens.$surface-alt;
+  box-shadow: 0 2px 0 #e4e4ea;
+
+  .beatA > &,
+  .beatB > & {
+    animation: 600ms tokens.$ease-pop both;
+
+    &:nth-child(2) {
+      animation-delay: 40ms;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 80ms;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 120ms;
     }
   }
 
-  tbody {
-    background-color: colors.$gk-orange-extra-light;
-
-    tr {
-      border-bottom: 0;
-    }
+  .beatA > & {
+    animation-name: beatA;
   }
 
-  td {
-    font-size: tokens.$text-lg;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+  .beatB > & {
+    animation-name: beatB;
+  }
+}
+
+.hero {
+  background-color: tokens.$accent-tint;
+  box-shadow: 0 2px 0 tokens.$accent-edge;
+
+  .statLabel {
+    color: #e07e00;
   }
 
-  th,
-  td {
-    padding: tokens.$space-1 tokens.$space-2;
+  .statValue {
+    color: #f28500;
+  }
+}
+
+.statLabel {
+  color: tokens.$surface-ink-muted;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.statValue {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes beatA {
+  from {
+    scale: 0.86;
+  }
+}
+
+@keyframes beatB {
+  from {
+    scale: 0.86;
+  }
+}
+
+.burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  fill: currentColor;
+
+  &:nth-child(1) {
+    --dx: -93px;
+    --dy: -19px;
+    color: colors.$gk-orange;
+  }
+  &:nth-child(2) {
+    --dx: -50px;
+    --dy: -34px;
+    color: colors.$dance;
+  }
+  &:nth-child(3) {
+    --dx: -5px;
+    --dy: -38px;
+    color: colors.$vocal;
+  }
+  &:nth-child(4) {
+    --dx: 43px;
+    --dy: -35px;
+    color: colors.$visual;
+  }
+  &:nth-child(5) {
+    --dx: 90px;
+    --dy: -17px;
+    color: colors.$dance;
+  }
+  &:nth-child(6) {
+    --dx: -74px;
+    --dy: 24px;
+    color: colors.$vocal;
+  }
+  &:nth-child(7) {
+    --dx: 73px;
+    --dy: 25px;
+    color: colors.$gk-orange;
+  }
+
+  .beatA > & {
+    animation: sparkleA 850ms cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+
+  .beatB > & {
+    animation: sparkleB 850ms cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+}
+
+@keyframes sparkleA {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(120deg);
+  }
+}
+
+@keyframes sparkleB {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(120deg);
   }
 }
 
@@ -78,13 +231,13 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  color: colors.$blue;
+  color: tokens.$link;
 }
 
 .download {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: colors.$blue;
+  color: tokens.$link;
   font-size: inherit;
 }

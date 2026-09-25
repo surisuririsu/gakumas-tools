@@ -47,7 +47,7 @@ async function exportImage() {
     import("html2canvas"),
   ]);
   const canvas = await html2canvas(node, {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f2f2f5",
     scale: 2,
     useCORS: true,
     imageTimeout: 10000,

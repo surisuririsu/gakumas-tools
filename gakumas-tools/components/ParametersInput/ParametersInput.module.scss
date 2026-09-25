@@ -1,21 +1,53 @@
 @use "sass:color";
-@use "../../styles/mixins";
+@use "sass:list";
+@use "../../styles/tokens";
+
+$tiles: (
+  1: (tokens.$vocal-tint, tokens.$vocal-edge, tokens.$vocal-ink),
+  2: (tokens.$dance-tint, tokens.$dance-edge, tokens.$dance-ink),
+  3: (tokens.$visual-tint, tokens.$visual-edge, tokens.$visual-ink),
+  4: (tokens.$stamina-tint, tokens.$stamina-edge, tokens.$stamina-ink),
+);
 
 .parameters {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 6px;
 
   & > input {
     flex: 1;
     min-width: 0;
+    font-weight: 800;
 
-    @include mixins.param-colors using ($param-color) {
-      color: $param-color;
+    @each $i, $tile in $tiles {
+      $tint: list.nth($tile, 1);
+      $edge: list.nth($tile, 2);
+      $ink: list.nth($tile, 3);
 
-      &::placeholder {
-        color: color.scale($param-color, $alpha: -40%);
+      &:nth-child(#{$i}) {
+        background-color: $tint;
+        box-shadow: 0 2px 0 $edge;
+        color: $ink;
+
+        &::placeholder {
+          color: color.change($ink, $alpha: 0.45);
+        }
+
+        &:focus {
+          background-color: #fff;
+          box-shadow: inset 0 0 0 2px $ink;
+        }
       }
     }
+  }
+}
+
+.attached > input {
+  padding: 5px 2px 1px;
+  border-radius: 12px 12px 0 0;
+  font-size: 17px;
+
+  &:not(:focus) {
+    box-shadow: none;
   }
 }
