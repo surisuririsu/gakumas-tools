@@ -40,6 +40,15 @@
 
 .resultsContent {
   padding: tokens.$space-2;
+  transition: opacity tokens.$duration-base;
+
+  &.stale {
+    opacity: 0.5;
+  }
+}
+
+.moreResults {
+  height: 1px;
 }
 
 .result {

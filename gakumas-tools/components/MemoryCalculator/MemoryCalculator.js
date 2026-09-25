@@ -1,5 +1,11 @@
 "use client";
-import { memo, useContext, useMemo, useState } from "react";
+import {
+  memo,
+  useContext,
+  useDeferredValue,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
@@ -10,6 +16,7 @@ import TabGroup from "@/components/TabGroup";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import c from "@/utils/classNames";
 import { COST_RANGES, COST_RANGES_BY_RANK } from "@/utils/contestPower";
 import {
   classifyMemories,
@@ -56,9 +63,32 @@ function MemoryCalculator() {
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
+  const inputs = useMemo(
+    () => ({
+      targetSkillCardIds,
+      alternateSkillCardIds,
+      targetNegations,
+      acquiredSkillCardIds,
+      rank,
+    }),
+    [
+      targetSkillCardIds,
+      alternateSkillCardIds,
+      targetNegations,
+      acquiredSkillCardIds,
+      rank,
+    ],
+  );
+  const deferredInputs = useDeferredValue(inputs);
+  const stale = deferredInputs !== inputs;
+
   const possibleMemories = useMemo(
-    () => generatePossibleMemories(acquiredSkillCardIds, rank),
-    [acquiredSkillCardIds, rank],
+    () =>
+      generatePossibleMemories(
+        deferredInputs.acquiredSkillCardIds,
+        deferredInputs.rank,
+      ),
+    [deferredInputs.acquiredSkillCardIds, deferredInputs.rank],
   );
   const {
     onTargetMemories,
@@ -68,15 +98,15 @@ function MemoryCalculator() {
   } = useMemo(
     () =>
       classifyMemories(possibleMemories, {
-        targetSkillCardIds,
-        alternateSkillCardIds,
-        targetNegations,
+        targetSkillCardIds: deferredInputs.targetSkillCardIds,
+        alternateSkillCardIds: deferredInputs.alternateSkillCardIds,
+        targetNegations: deferredInputs.targetNegations,
       }),
     [
       possibleMemories,
-      targetSkillCardIds,
-      alternateSkillCardIds,
-      targetNegations,
+      deferredInputs.targetSkillCardIds,
+      deferredInputs.alternateSkillCardIds,
+      deferredInputs.targetNegations,
     ],
   );
 
@@ -150,7 +180,7 @@ function MemoryCalculator() {
             },
           ]}
         />
-        <div className={styles.resultsContent}>
+        <div className={c(styles.resultsContent, stale && styles.stale)}>
           <MemoryCalculatorResultList
             memories={
               resultsTab === "success" ? onTargetMemories : offTargetMemories
