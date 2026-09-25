@@ -392,9 +392,7 @@ function Rehearsal() {
         )}
       </div>
 
-      {data.length > 0 && (
-        <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
-      )}
+      <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
 
       {selectedData && (
         <div className={styles.statsWrapper}>

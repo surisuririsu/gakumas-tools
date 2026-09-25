@@ -6,7 +6,6 @@ import { createWorker } from "tesseract.js";
 import Image from "@/components/Image";
 import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
-import ProgressBar from "@/components/ProgressBar";
 import c from "@/utils/classNames";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import {
@@ -124,7 +123,6 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
         {status == "saving" && t("saving")}
         {status == "error" && t("failed")}
       </div>
-      {status == "reading" && <ProgressBar value={progress} max={total} />}
     </Modal>
   );
 }
