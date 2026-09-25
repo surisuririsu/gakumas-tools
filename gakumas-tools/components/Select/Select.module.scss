@@ -1,0 +1,36 @@
+@use "sass:string";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
+$accent-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23#{string.slice(inspect(tokens.$accent-ink), 2)}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+.select {
+  max-width: 100%;
+  @include mixins.select;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+}
+
+.sm {
+  min-height: 32px;
+  padding: 4px 28px 4px 10px;
+  background-position: right 9px center;
+  font-size: tokens.$text-sm;
+}
+
+.fill {
+  width: 100%;
+}
+
+.active {
+  background-color: tokens.$accent-tint;
+  background-image: $accent-chevron;
+  box-shadow: none;
+  color: tokens.$accent-ink;
+
+  &:hover:not(:focus, :disabled) {
+    background-color: tokens.$accent-tint;
+  }
+}

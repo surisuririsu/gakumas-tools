@@ -14,6 +14,7 @@ $radius-sm: 6px;
 $radius-md: 10px;
 $radius-lg: 14px;
 $radius-xl: 18px;
+$radius-control: 12px;
 $radius-pill: 999px;
 
 // Type scale
@@ -66,6 +67,7 @@ $surface-edge: #dadae1;
 $fill-muted: rgba(20, 20, 40, 0.06);
 $fill-muted-hover: rgba(20, 20, 40, 0.09);
 $fill-subtle: rgba(20, 20, 40, 0.035);
+$scrim: rgba(20, 20, 40, 0.5);
 $surface-ink: #1c1c22;
 $surface-ink-muted: #63636b;
 $surface-ink-subtle: #71717a;
@@ -95,6 +97,7 @@ $brand-edge: #d27f00;
 $brand-hover: #f7a114;
 $accent-ink: #ec8a00;
 $accent-tint: #fff1df;
+$accent-tint-hover: #ffe9cc;
 $accent-edge: #ffcb8a;
 
 $primary: #1c8be6;
@@ -111,6 +114,7 @@ $danger-hover: #dc4868;
 $danger-tint: #fdeff2;
 
 $success: #00934a;
+$success-ink: #00733a;
 $success-tint: #e7f8ee;
 $success-edge: #b6e3c8;
 
@@ -150,6 +154,8 @@ $chart-bar-top: #5bc0ff;
 $chart-bar: #1c8fe8;
 $chart-highlight-top: #ffc766;
 $chart-highlight: $brand;
+$chart-box-fill: #e3f1fd;
+$chart-whisker: #7fafde;
 $chart-grid: #ececf1;
 $chart-tick: #8a8a93;
 

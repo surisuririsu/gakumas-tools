@@ -3,8 +3,10 @@ import { useContext, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaDownload, FaShareNodes, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
+import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import styles from "./ShareModal.module.scss";
 
@@ -115,12 +117,24 @@ export default function ShareModal({ url }) {
   }
 
   return (
-    <Modal dismissable={!exporting}>
+    <Modal dismissable={!exporting} size="small">
       <h3>{t("title")}</h3>
       <div className={styles.actions}>
-        <Button style="primary" fill onClick={saveImage} disabled={exporting}>
-          <FaDownload />
-          {exporting ? t("exporting") : t("saveImage")}
+        <Button
+          style="primary"
+          fill
+          onClick={exporting ? undefined : saveImage}
+        >
+          <span className={c(styles.swap, exporting && styles.busy)}>
+            <span className={styles.idle} aria-hidden={exporting}>
+              <FaDownload />
+              {t("saveImage")}
+            </span>
+            <span className={styles.working} aria-hidden={!exporting}>
+              <Loader />
+              {t("exporting")}
+            </span>
+          </span>
         </Button>
         <Button
           style="default"

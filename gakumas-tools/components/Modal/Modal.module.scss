@@ -1,5 +1,3 @@
-@use "sass:color";
-@use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
@@ -14,8 +12,8 @@
   justify-content: center;
   align-items: center;
   padding: tokens.$space-2;
-  background-color: rgba(0, 0, 0, 0.45);
-  animation: overlayIn tokens.$duration-fast ease-out;
+  background-color: rgba(20, 20, 40, 0.45);
+  animation: overlayIn tokens.$duration-base tokens.$ease-out;
 
   &.stacked {
     background-color: transparent;
@@ -26,7 +24,7 @@
     animation: overlayOut tokens.$duration-base tokens.$ease-out forwards;
 
     .modal {
-      animation: modalOut tokens.$duration-base tokens.$ease-out forwards;
+      animation: modalOut tokens.$duration-base tokens.$ease-in-out forwards;
     }
   }
 }
@@ -38,14 +36,12 @@
   max-height: calc(100dvh - 16px);
   display: flex;
   flex-direction: column;
-  padding: tokens.$space-6 tokens.$space-5 tokens.$space-5;
+  padding: tokens.$space-4 tokens.$space-5 tokens.$space-5;
   border-radius: tokens.$radius-xl;
   background-color: tokens.$surface-panel;
-  box-shadow:
-    0 3px 0 rgba(20, 20, 40, 0.12),
-    0 16px 40px rgba(20, 20, 40, 0.22);
+  box-shadow: tokens.$shadow-float;
   container-type: inline-size;
-  animation: modalIn tokens.$duration-slow tokens.$ease-spring;
+  animation: modalIn tokens.$duration-slide tokens.$ease-spring;
   transition:
     opacity tokens.$duration-base,
     scale tokens.$duration-base tokens.$ease-out,
@@ -62,12 +58,25 @@
   }
 
   @media only screen and (max-width: 600px) {
-    padding: tokens.$space-6 tokens.$space-3 tokens.$space-3;
+    padding: tokens.$space-4 tokens.$space-3 tokens.$space-3;
+  }
+
+  &.small {
+    width: 400px;
+    padding: tokens.$space-4 tokens.$space-5 tokens.$space-5;
   }
 
   h3 {
-    margin-bottom: tokens.$space-4;
-    color: colors.$gk-orange;
+    margin-bottom: tokens.$space-3;
+    @include mixins.heading;
+  }
+
+  > .close + h3 {
+    padding-right: 40px;
+  }
+
+  > .close + :not(h3) {
+    margin-top: tokens.$space-6;
   }
 
   p {
@@ -79,23 +88,28 @@
   position: absolute;
   top: tokens.$space-2;
   right: tokens.$space-2;
+  z-index: tokens.$z-raised;
   width: 36px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: tokens.$radius-pill;
   color: tokens.$surface-ink-muted;
   font-size: 18px;
   transition:
-    background-color tokens.$duration-fast ease,
-    color tokens.$duration-fast ease,
-    scale tokens.$duration-slow tokens.$ease-spring;
-  @include mixins.pressable(0.9);
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    rotate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.88);
 
-  &:hover {
-    background-color: tokens.$surface-muted;
-    color: tokens.$surface-ink;
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-muted;
+      color: tokens.$surface-ink;
+      rotate: 90deg;
+    }
   }
 }
 
@@ -109,9 +123,6 @@
   from {
     opacity: 0;
   }
-  to {
-    opacity: 1;
-  }
 }
 
 @keyframes overlayOut {
@@ -123,17 +134,16 @@
 @keyframes modalIn {
   from {
     opacity: 0;
-    transform: scale(0.96) translateY(-6px);
+    transform: translateY(16px) scale(0.94);
   }
-  to {
+  40% {
     opacity: 1;
-    transform: scale(1) translateY(0);
   }
 }
 
 @keyframes modalOut {
   to {
     opacity: 0;
-    transform: scale(0.97) translateY(4px);
+    transform: translateY(8px) scale(0.97);
   }
 }

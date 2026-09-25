@@ -150,6 +150,8 @@
 
 $chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2363636b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 
+$chevron-accent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ec8a00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
 @mixin select {
   @include field;
   padding-right: 30px;
@@ -159,6 +161,12 @@ $chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   background-position: right 10px center;
   cursor: pointer;
   text-overflow: ellipsis;
+}
+
+@mixin select-active {
+  background-color: tokens.$accent-tint;
+  background-image: $chevron-accent;
+  color: tokens.$accent-ink;
 }
 
 @mixin title {
@@ -230,7 +238,7 @@ $chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
   box-shadow: 0 tokens.$press-depth 0 tokens.$accent-edge;
 
   &:hover:not(:disabled) {
-    background-color: #ffe9cc;
+    background-color: tokens.$accent-tint-hover;
     color: tokens.$accent-ink;
   }
 
@@ -320,6 +328,32 @@ $chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' widt
 
 @mixin caret-open {
   rotate: 180deg;
+}
+
+@mixin selected-ring {
+  box-shadow:
+    0 0 0 2.5px tokens.$surface-panel,
+    0 0 0 5px tokens.$brand,
+    0 10px 20px rgba(243, 152, 0, 0.28);
+}
+
+@mixin link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  min-height: 32px;
+  padding: 0 tokens.$space-2;
+  border-radius: 9px;
+  color: tokens.$link;
+  font-weight: tokens.$weight-bold;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include pressable(0.92);
+
+  &:hover {
+    background-color: tokens.$link-hover-bg;
+  }
 }
 
 @mixin focus-ring-inset {

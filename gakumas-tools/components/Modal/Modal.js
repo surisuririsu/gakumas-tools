@@ -8,7 +8,7 @@ import styles from "./Modal.module.scss";
 const INLINE_LAYER = { closing: false, covered: false, stacked: false };
 const EXIT_FALLBACK_MS = 400;
 
-function Modal({ children, dismissable = true, onClose }) {
+function Modal({ children, dismissable = true, onClose, size }) {
   const t = useTranslations("Modal");
   const { closeModal: contextClose, getModalStackDepth } =
     useContext(ModalContext);
@@ -115,7 +115,7 @@ function Modal({ children, dismissable = true, onClose }) {
     >
       <div
         ref={modalRef}
-        className={styles.modal}
+        className={c(styles.modal, size == "small" && styles.small)}
         onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
         role="dialog"

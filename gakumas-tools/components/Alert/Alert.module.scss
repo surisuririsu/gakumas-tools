@@ -1,72 +1,69 @@
-@use "sass:color";
-@use "../../styles/colors";
 @use "../../styles/tokens";
 
 .alert {
   display: flex;
-  align-items: stretch;
-  border-radius: tokens.$radius-md;
-  overflow: hidden;
+  align-items: flex-start;
+  gap: tokens.$space-2;
+  padding: 10px tokens.$space-3;
+  border-radius: tokens.$radius-lg;
   font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
   line-height: 1.45;
 }
 
-.bar {
+.icon {
   flex-shrink: 0;
-  width: 4px;
+  width: 14px;
+  height: 14px;
+  margin-top: 2.5px;
 }
 
 .content {
   flex: 1;
-  padding: tokens.$space-2 tokens.$space-3;
+  min-width: 0;
 }
 
 .neutral {
-  .bar {
-    background-color: tokens.$surface-border-strong;
-  }
-  .content {
-    background-color: tokens.$fill-muted;
-    color: tokens.$surface-ink-muted;
+  background-color: tokens.$primary-tint;
+  color: tokens.$surface-ink-muted;
+
+  .icon {
+    color: tokens.$primary;
   }
 }
 
 .info {
-  .bar {
-    background-color: colors.$blue;
-  }
-  .content {
-    background-color: color.mix(colors.$blue, white, 15%);
-    color: color.adjust(colors.$blue, $lightness: -35%);
+  background-color: tokens.$primary-tint;
+  color: tokens.$primary-edge;
+
+  .icon {
+    color: tokens.$primary;
   }
 }
 
 .success {
-  .bar {
-    background-color: colors.$custom-green;
-  }
-  .content {
-    background-color: color.mix(colors.$custom-green, white, 14%);
-    color: color.adjust(colors.$custom-green, $lightness: -28%);
+  background-color: tokens.$success-tint;
+  color: tokens.$surface-ink;
+
+  .icon {
+    color: tokens.$success;
   }
 }
 
 .warning {
-  .bar {
-    background-color: colors.$gk-orange;
-  }
-  .content {
-    background-color: color.mix(colors.$gk-orange, white, 16%);
-    color: color.adjust(colors.$gk-orange, $lightness: -30%);
+  background-color: tokens.$warning-tint;
+  color: tokens.$warning-ink;
+
+  .icon {
+    color: tokens.$brand;
   }
 }
 
 .danger {
-  .bar {
-    background-color: colors.$red-dark;
-  }
-  .content {
-    background-color: color.mix(colors.$red, white, 18%);
-    color: color.adjust(colors.$red, $lightness: -30%);
+  background-color: tokens.$danger-tint;
+  color: tokens.$danger-edge;
+
+  .icon {
+    color: tokens.$danger;
   }
 }
