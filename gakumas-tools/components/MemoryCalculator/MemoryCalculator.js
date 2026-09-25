@@ -45,7 +45,14 @@ function MemoryCalculator() {
   const [resultsTab, setResultsTab] = useState("success");
 
   const confirmClear = (onConfirm) =>
-    setModal(<ConfirmModal message={t("confirm")} onConfirm={onConfirm} />);
+    setModal(
+      <ConfirmModal
+        message={t("confirm")}
+        confirmLabel={t("clear")}
+        danger
+        onConfirm={onConfirm}
+      />
+    );
 
   const costRange = COST_RANGES_BY_RANK[rank];
 

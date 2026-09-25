@@ -190,6 +190,8 @@ function TierList({ type }) {
         setModal(
           <ConfirmModal
             message={t("confirmRemoveTier", { rank, count: itemCount })}
+            confirmLabel={t("removeRankTier", { rank })}
+            danger
             onConfirm={apply}
           />,
         );
@@ -204,6 +206,8 @@ function TierList({ type }) {
     setModal(
       <ConfirmModal
         message={t("confirmClear")}
+        confirmLabel={t("clearAll")}
+        danger
         onConfirm={() =>
           setList((prev) => ({
             ...prev,

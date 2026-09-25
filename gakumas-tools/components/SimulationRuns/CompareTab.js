@@ -167,7 +167,12 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
 
   function confirmDelete(onConfirm) {
     setModal(
-      <ConfirmModal message={t("confirmDelete")} onConfirm={onConfirm} />,
+      <ConfirmModal
+        message={t("confirmDelete")}
+        confirmLabel={t("delete")}
+        danger
+        onConfirm={onConfirm}
+      />,
     );
   }
 

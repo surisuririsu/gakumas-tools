@@ -5,7 +5,13 @@ import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./ConfirmModal.module.scss";
 
-export default function ConfirmModal({ message, onConfirm, onCancel }) {
+export default function ConfirmModal({
+  message,
+  confirmLabel,
+  danger,
+  onConfirm,
+  onCancel,
+}) {
   const t = useTranslations("ConfirmModal");
 
   const { closeModal } = useContext(ModalContext);
@@ -27,8 +33,8 @@ export default function ConfirmModal({ message, onConfirm, onCancel }) {
         <Button style="secondary" fill onClick={cancel}>
           {t("cancel")}
         </Button>
-        <Button style="primary" fill onClick={confirm}>
-          {t("ok")}
+        <Button style={danger ? "red" : "primary"} fill onClick={confirm}>
+          {confirmLabel || t("ok")}
         </Button>
       </div>
     </Modal>
