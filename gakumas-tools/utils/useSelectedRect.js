@@ -1,7 +1,17 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+
+const same = (a, b) =>
+  a &&
+  b &&
+  a.left == b.left &&
+  a.width == b.width &&
+  a.right == b.right &&
+  a.top == b.top &&
+  a.height == b.height;
 
 export default function useSelectedRect(containerRef, selector, selected) {
   const [rect, setRect] = useState(null);
+  const lastRef = useRef(null);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -9,14 +19,23 @@ export default function useSelectedRect(containerRef, selector, selected) {
 
     const measure = () => {
       const el = container.querySelector(selector);
-      setRect(
-        el && {
-          left: el.offsetLeft,
-          top: el.offsetTop,
-          width: el.offsetWidth,
-          height: el.offsetHeight,
-        }
-      );
+      const last = lastRef.current;
+      if (!el) {
+        lastRef.current = null;
+        setRect(null);
+        return;
+      }
+      const next = {
+        left: el.offsetLeft,
+        width: el.offsetWidth,
+        right: container.clientWidth - el.offsetLeft - el.offsetWidth,
+        top: el.offsetTop,
+        height: el.offsetHeight,
+      };
+      if (same(next, last)) return;
+      next.direction = last ? Math.sign(next.left - last.left) : 0;
+      lastRef.current = next;
+      setRect(next);
     };
 
     measure();

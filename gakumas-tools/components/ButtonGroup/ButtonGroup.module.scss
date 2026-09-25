@@ -2,10 +2,9 @@
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
-$thumb-edge: 0 2px 0 #d6d6dd;
-
 .buttonGroup {
   position: relative;
+  isolation: isolate;
   display: flex;
   padding: 3px 3px 5px;
   border-radius: 11px;
@@ -50,20 +49,17 @@ $thumb-edge: 0 2px 0 #d6d6dd;
 
   &:not(.measured) .selected {
     background-color: colors.$white;
-    box-shadow: $thumb-edge;
+    box-shadow: tokens.$thumb-edge;
   }
 }
 
 .thumb {
   position: absolute;
-  top: 0;
-  left: 0;
   border-radius: 8px;
   background-color: colors.$white;
-  box-shadow: $thumb-edge;
+  box-shadow: tokens.$thumb-edge;
   pointer-events: none;
   transition:
-    translate 420ms tokens.$ease-spring,
-    width 420ms tokens.$ease-spring,
-    height 420ms tokens.$ease-spring;
+    left tokens.$duration-slow tokens.$ease-glide,
+    right tokens.$duration-slow tokens.$ease-glide;
 }

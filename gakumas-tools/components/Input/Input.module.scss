@@ -1,45 +1,7 @@
-@use "sass:color";
-@use "../../styles/colors";
-@use "../../styles/tokens";
+@use "../../styles/mixins";
 
 .input {
-  min-width: 0;
-  outline: none;
-  padding: 6px 10px;
-  border: 0;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$fill-muted;
-  color: tokens.$surface-ink;
-  font-size: tokens.$text-base;
-  font-weight: 700;
   text-align: center;
-  transition:
-    background-color tokens.$duration-fast,
-    box-shadow tokens.$duration-fast;
-
-  &::placeholder {
-    color: tokens.$surface-ink-subtle;
-    font-weight: 400;
-  }
-
-  &:hover {
-    background-color: tokens.$fill-muted-hover;
-  }
-
-  &:focus {
-    background-color: colors.$white;
-    box-shadow:
-      inset 0 0 0 2px colors.$gk-orange,
-      0 0 0 3px color.adjust(colors.$gk-orange, $alpha: -0.85);
-  }
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  &[type="number"] {
-    -moz-appearance: textfield;
-  }
+  @include mixins.field;
+  @include mixins.no-spinner;
 }

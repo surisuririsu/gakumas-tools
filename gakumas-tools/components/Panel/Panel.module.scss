@@ -16,12 +16,7 @@
   align-items: center;
   gap: tokens.$space-1;
   margin-bottom: tokens.$space-3;
-  color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-xs;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
-  text-transform: uppercase;
+  @include mixins.heading;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -31,8 +26,8 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  font-size: 12px;
-  opacity: 0.7;
+  color: tokens.$surface-ink-faint;
+  font-size: 13px;
   cursor: help;
 }
 

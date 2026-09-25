@@ -34,7 +34,7 @@ function MemoriesNudge({ filtered }) {
   if (status == "loading" || memoriesLoading) {
     return (
       <div className={styles.nudge} aria-busy="true">
-        <Loader />
+        <Loader size="large" />
       </div>
     );
   }
