@@ -155,7 +155,8 @@
     "hifDerivedTotal": "合計 = {value}",
     "hifRound2StarGain": "スター性 +{value}",
     "hifScoreBonusNote": "スコアは順位発表画面に表示された値（ラウンド1の1位ボーナス×1.2込み）をそのまま入力してください。計算時に自動で補正されます。",
-    "hifTargetRound2Scores": "目標ランク別 必要ラウンド2スコア"
+    "hifTargetRound2Scores": "目標ランク別 必要ラウンド2スコア",
+    "toNextRank": "{rank}まで あと{points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -176,6 +177,13 @@
   },
   "Dex": {
     "maxTimes": "最大{n}回",
+    "unlockPlv": "解放PLv {n}",
+    "plans": {
+      "sense": "センス",
+      "logic": "ロジック",
+      "anomaly": "アノマリー",
+      "free": "フリー"
+    },
     "tabs": {
       "skill-cards": "スキルカード",
       "p-items": "Pアイテム",
@@ -274,6 +282,7 @@
     "acquiredInfo": "各カードの強化前後を含めてください",
     "produceRank": "プロデュース評価",
     "costRange": "コスト範囲",
+    "cost": "コスト",
     "success": "成功",
     "failure": "失敗",
     "clear": "クリア",
@@ -386,7 +395,9 @@
     "progress": "Progress: {progress}/{total}",
     "preparing": "読み取りの準備中…（初回は数MBをダウンロードします）",
     "saving": "保存中…",
-    "failed": "読み込みに失敗しました。スクショを確認してもう一度お試しください。"
+    "failed": "読み込みに失敗しました。スクショを確認してもう一度お試しください。",
+    "selectScreenshots": "スクリーンショットを選択",
+    "dropHint": "タップして選択、またはスクリーンショットをここにドロップ"
   },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
@@ -487,7 +498,10 @@
     "stats": "統計",
     "compare": "比較",
     "downloadScores": "スコア",
-    "optimizeParams": "パラメータ最適化"
+    "optimizeParams": "パラメータ最適化",
+    "optimizeGain": "平均 +{gain}",
+    "optimizeAlready": "最適化済み",
+    "optimizeFailed": "最適化できません"
   },
   "CompareTab": {
     "saved": "保存済み",
@@ -646,7 +660,9 @@
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
     "needsChecking": "{count}件の行を確認してください",
-    "confirmRow": "この行の値が正しいことを確認"
+    "confirmRow": "この行の値が正しいことを確認",
+    "selectFiles": "ファイルを選択",
+    "addRow": "行を追加"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

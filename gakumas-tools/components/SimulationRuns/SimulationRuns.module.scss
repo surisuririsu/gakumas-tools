@@ -1,5 +1,8 @@
-@use "../../styles/colors";
+@use "sass:string";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
+
+$accent-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23#{string.slice(inspect(tokens.$accent-ink), 2)}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 
 .modalScroll {
   flex: 1;
@@ -17,7 +20,7 @@
 .compare {
   display: grid;
   grid-template-columns:
-    20px
+    24px
     44px
     minmax(80px, 1fr)
     minmax(140px, 2fr)
@@ -26,17 +29,16 @@
   column-gap: tokens.$space-2;
   row-gap: tokens.$space-1;
   align-items: center;
-  padding: 0 tokens.$space-2;
+  color: tokens.$surface-ink;
 
   @media (max-width: 640px) {
     grid-template-columns:
-      20px
+      24px
       32px
       minmax(60px, 1fr)
       minmax(100px, 2fr)
       max-content;
-    column-gap: 4px;
-    padding: 0 4px;
+    column-gap: 6px;
   }
 }
 
@@ -47,31 +49,42 @@
   align-items: center;
   gap: tokens.$space-2;
   flex-wrap: wrap;
-  margin-bottom: tokens.$space-1;
+  margin-bottom: tokens.$space-2;
 }
 
 .filters {
   display: flex;
-  gap: tokens.$space-2;
+  gap: 6px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .filter {
+  @include mixins.select;
+  max-width: 100%;
+  min-height: 34px;
+  padding: 4px 28px 4px 10px;
+  background-position: right 9px center;
   font-size: tokens.$text-sm;
-  padding: 4px 8px;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  background: tokens.$surface-panel;
 }
 
 .filterActive {
-  border-color: colors.$gk-orange;
-  color: colors.$gk-orange;
-  background: rgba(255, 118, 0, 0.06);
+  background-color: tokens.$accent-tint;
+  background-image: $accent-chevron;
+  box-shadow: none;
+  color: tokens.$accent-ink;
+
+  &:hover:not(:focus, :disabled) {
+    background-color: tokens.$accent-tint;
+  }
 }
 
 .fullRow {
-  grid-column: 1 / -1;
+  display: contents;
+
+  > * {
+    grid-column: 1 / -1;
+  }
 }
 
 .axisRow {
@@ -81,9 +94,9 @@
   align-items: end;
   position: sticky;
   top: 0;
-  z-index: 1;
-  background: tokens.$surface-panel;
+  z-index: tokens.$z-sticky;
   padding-top: 2px;
+  background-color: tokens.$surface-panel;
 }
 
 .axisPlot {
@@ -94,54 +107,54 @@
 
 .axisLabel {
   position: absolute;
-  bottom: 0;
+  bottom: 2px;
   transform: translateX(-50%);
-  font-size: tokens.$text-xs;
-  color: tokens.$surface-ink-muted;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  color: tokens.$chart-tick;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-semibold;
   line-height: 1;
+  white-space: nowrap;
+  @include mixins.numeric;
 }
 
 .fifoNote {
   grid-column: 1 / -1;
-  padding: tokens.$space-2 tokens.$space-2;
-  font-size: tokens.$text-sm;
+  margin: tokens.$space-1 0;
+  padding: tokens.$space-2 tokens.$space-3;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
   color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
   text-align: center;
-  background: tokens.$surface-alt;
-  border: 1px dashed tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
 }
 
 .fifoNoteWarn {
-  color: colors.$gk-orange;
-  background: rgba(255, 118, 0, 0.08);
-  border-color: colors.$gk-orange;
-  font-weight: 600;
+  background-color: tokens.$warning-tint;
+  color: tokens.$warning-ink;
+  font-weight: tokens.$weight-bold;
 }
 
 .empty {
   grid-column: 1 / -1;
-  padding: tokens.$space-4;
-  text-align: center;
-  color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: tokens.$space-1;
+  padding: tokens.$space-5 tokens.$space-4;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
+  text-align: center;
 }
 
 .expandedDetails {
-  grid-column: 1 / -1;
-  padding: tokens.$space-2;
-  background: tokens.$surface-alt;
-  border-radius: tokens.$radius-sm;
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-2;
-  margin-bottom: tokens.$space-1;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+  border-radius: 12px;
+  background-color: tokens.$fill-subtle;
 }
 
 .expandedLinkLoadout {
@@ -151,9 +164,8 @@
 }
 
 .expandedLinkLabel {
+  @include mixins.label;
   font-size: tokens.$text-xs;
-  font-weight: 600;
-  color: tokens.$surface-ink-muted;
   text-transform: uppercase;
 }
 
@@ -162,25 +174,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: tokens.$space-2;
-  padding: tokens.$space-1 tokens.$space-2;
-  font-size: tokens.$text-xs;
-  color: tokens.$surface-ink-muted;
-  border-top: 1px dashed tokens.$surface-border;
+  gap: tokens.$space-1;
   margin-top: tokens.$space-1;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
 }
 
 .clearFiltersLink {
-  background: none;
-  border: 0;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: tokens.$radius-md;
+  color: tokens.$link;
   font: inherit;
-  color: colors.$gk-orange;
-  cursor: pointer;
-  text-decoration: underline;
+  font-weight: tokens.$weight-bold;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.92);
 
   &:hover {
-    opacity: 0.8;
+    background-color: tokens.$link-hover-bg;
   }
 }
 
@@ -189,23 +205,26 @@
   display: grid;
   grid-template-columns: subgrid;
   align-items: center;
-  padding: tokens.$space-1 0;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
+  padding: 6px 0;
+  border-radius: 12px;
+  transition: background-color tokens.$duration-fast;
 
-  &:hover {
-    background: tokens.$surface-alt;
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-subtle;
+    }
   }
 }
 
 .rowCurrent {
   position: sticky;
   top: 20px;
-  z-index: 3;
-  background: tokens.$surface-panel;
-  border-top-color: tokens.$surface-border;
-  border-bottom-color: tokens.$surface-border;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  z-index: tokens.$z-sticky;
+
+  &,
+  &:hover {
+    background-color: tokens.$accent-tint;
+  }
 }
 
 .expandCell {
@@ -215,23 +234,28 @@
 }
 
 .expandBtn {
-  width: 20px;
-  height: 20px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: tokens.$surface-ink-muted;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: tokens.$radius-xs;
-  font-size: 10px;
-  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: tokens.$radius-sm;
+  color: tokens.$surface-ink-subtle;
+  font-size: 11px;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.88);
 
   &:hover {
-    background: tokens.$surface-muted;
+    background-color: tokens.$fill-muted;
     color: tokens.$surface-ink;
+  }
+}
+
+.expandIcon {
+  @include mixins.caret;
+
+  .rowExpanded & {
+    @include mixins.caret-open;
   }
 }
 
@@ -245,6 +269,7 @@
   img {
     width: 36px;
     height: 36px;
+    border-radius: 12%;
   }
 
   @media (max-width: 640px) {
@@ -261,8 +286,8 @@
 .cardPlaceholder {
   width: 36px;
   height: 36px;
-  border-radius: tokens.$radius-xs;
-  background: tokens.$surface-muted;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$fill-muted;
 
   @media (max-width: 640px) {
     width: 28px;
@@ -282,62 +307,67 @@
   display: flex;
   align-items: center;
   gap: tokens.$space-1;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .tag {
-  font-size: tokens.$text-xs;
-  font-weight: 600;
-  color: colors.$gk-orange;
+  @include mixins.tag(tokens.$surface-panel, tokens.$accent-ink);
+  padding: 0 7px;
+  font-weight: tokens.$weight-heavy;
+  letter-spacing: 0.03em;
+  line-height: 16px;
   text-transform: uppercase;
 }
 
 .time {
+  color: tokens.$surface-ink-subtle;
   font-size: tokens.$text-xs;
-  color: tokens.$surface-ink-muted;
+  font-weight: tokens.$weight-semibold;
 }
 
-.runName {
-  font-size: tokens.$text-sm;
-  font-weight: 600;
+.runName,
+.runNameEditable {
   overflow: hidden;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.runNameEditable {
+  cursor: text;
+  transition: color tokens.$duration-fast;
+
+  &:hover {
+    color: tokens.$link;
+    text-decoration: underline dotted;
+  }
 }
 
 .runNameRow {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: tokens.$space-1;
   min-width: 0;
-}
-
-.runNameEditable {
-  font-size: tokens.$text-sm;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: text;
-
-  &:hover {
-    text-decoration: underline dotted;
-  }
 }
 
 .nameInput {
+  @include mixins.field;
   flex: 1;
-  min-width: 0;
+  min-height: 30px;
+  padding: 3px 8px;
+  border-radius: tokens.$radius-sm;
   font-size: tokens.$text-sm;
-  padding: 3px 6px;
-  border: 1px solid tokens.$surface-border-strong;
-  border-radius: tokens.$radius-xs;
-  background: tokens.$surface-panel;
 }
 
 .stageName {
-  font-size: tokens.$text-sm;
-  color: tokens.$surface-ink-muted;
   overflow: hidden;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -356,20 +386,23 @@
 }
 
 .tooltip {
-  background: tokens.$surface-ink;
-  color: #fff;
-  padding: tokens.$space-1 tokens.$space-2;
-  border-radius: tokens.$radius-sm;
-  font-size: tokens.$text-xs;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 130px;
+  padding: tokens.$space-2 10px;
+  border-radius: tokens.$radius-md;
+  background-color: color-mix(in srgb, tokens.$surface-ink 92%, transparent);
+  box-shadow: tokens.$shadow-float;
+  color: tokens.$surface-panel;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+  white-space: nowrap;
   z-index: tokens.$z-tooltip;
   pointer-events: none;
-  min-width: 130px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  transform-origin: 50% 100%;
+  @include mixins.numeric;
+  @include mixins.pop-in;
 
   > div {
     display: flex;
@@ -383,32 +416,32 @@
 }
 
 .boxPlot {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
 .gridLine {
-  stroke: tokens.$surface-border;
+  stroke: tokens.$chart-grid;
   stroke-width: 1;
   stroke-dasharray: 2 2;
 }
 
 .whisker {
-  stroke: colors.$gk-orange;
-  stroke-width: 1.5;
   fill: none;
+  stroke: tokens.$chart-bar;
+  stroke-width: 1.5;
 }
 
 .box {
-  fill: rgba(255, 118, 0, 0.25);
-  stroke: colors.$gk-orange;
+  fill: tokens.$primary-tint;
+  stroke: tokens.$chart-bar;
   stroke-width: 1.5;
 }
 
 .median {
-  stroke: colors.$gk-orange;
-  stroke-width: 2;
+  stroke: tokens.$chart-highlight;
+  stroke-width: 2.5;
 }
 
 .mean {
@@ -416,26 +449,29 @@
   top: 50%;
   width: 6px;
   height: 6px;
+  border: 1.5px solid tokens.$chart-bar;
   border-radius: 50%;
-  background: tokens.$surface-panel;
-  border: 1.5px solid colors.$gk-orange;
+  background-color: tokens.$surface-panel;
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
 .boxPlotCurrent {
   .whisker,
-  .box,
-  .median {
-    stroke: tokens.$hajime-color;
+  .box {
+    stroke: tokens.$brand;
   }
 
   .box {
-    fill: rgba(224, 104, 64, 0.28);
+    fill: tokens.$surface-panel;
+  }
+
+  .median {
+    stroke: tokens.$brand-edge;
   }
 
   .mean {
-    border-color: tokens.$hajime-color;
+    border-color: tokens.$brand;
   }
 }
 
@@ -445,8 +481,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: tokens.$surface-ink-muted;
+  color: tokens.$surface-ink-subtle;
   font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
 }
 
 .numbersCell {
@@ -454,8 +491,9 @@
   flex-direction: column;
   gap: 2px;
   font-size: tokens.$text-sm;
-  font-variant-numeric: tabular-nums;
+  font-weight: tokens.$weight-bold;
   text-align: right;
+  @include mixins.numeric;
 
   @media (max-width: 640px) {
     display: none;
@@ -463,17 +501,18 @@
 }
 
 .label {
+  margin-right: 2px;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-xs;
-  margin-right: 2px;
+  font-weight: tokens.$weight-semibold;
 }
 
 .actionsCell {
+  position: relative;
   display: flex;
   gap: 2px;
   align-items: center;
   justify-content: flex-end;
-  position: relative;
 }
 
 .actionsInline {
@@ -502,26 +541,30 @@
   display: none;
 
   @media (max-width: 640px) {
-    display: flex;
     position: absolute;
     inset: 0;
+    display: flex;
     gap: 2px;
     align-items: center;
     justify-content: flex-end;
-    background: tokens.$surface-panel;
+    background-color: tokens.$surface-panel;
     opacity: 0;
-    transform: translateX(12px);
+    translate: 12px 0;
     pointer-events: none;
     transition:
-      opacity 140ms ease,
-      transform 140ms ease;
+      opacity tokens.$duration-fast,
+      translate tokens.$duration-spring tokens.$ease-spring;
+
+    .rowCurrent & {
+      background-color: tokens.$accent-tint;
+    }
   }
 }
 
 .rowMenuOpen .mobileActionsInline {
   @media (max-width: 640px) {
     opacity: 1;
-    transform: translateX(0);
+    translate: 0 0;
     pointer-events: auto;
   }
 }

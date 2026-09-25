@@ -1,15 +1,14 @@
-@use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .manualPlay {
   flex: 1;
   max-width: min(100%, 800px);
-  padding: tokens.$space-3;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  color: colors.$black-dark;
+  gap: tokens.$space-2;
+  padding: tokens.$space-3;
+  color: tokens.$surface-ink;
   @include mixins.card;
 
   @media (max-width: 480px) {
@@ -19,44 +18,68 @@
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 4px;
-  margin-bottom: 24px;
-  font-size: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: tokens.$space-2;
+  margin-bottom: tokens.$space-4;
+  padding: 2px 2px 4px;
   overflow: auto;
+  font-size: tokens.$text-xs;
 }
 
 .holdCard {
   flex-direction: column;
-  gap: 8px;
-  padding: 8px;
-  border: 2px solid colors.$gray-light;
-  border-radius: 8px;
-  transition:
-    border-color 0.2s,
-    background-color 0.2s,
-    box-shadow 0.2s;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: tokens.$space-2 6px;
+  border-radius: 12px;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink;
+  font-weight: tokens.$weight-semibold;
+  line-height: 1.3;
+  @include mixins.raised;
 
   &:hover {
-    border-color: colors.$blue;
+    background-color: tokens.$fill-muted-hover;
   }
 
   &.selected {
-    border-color: colors.$gk-orange;
-    background: colors.$gk-orange-extra-light;
-    box-shadow: 0 0 8px colors.$gk-orange;
+    @include mixins.chip-selected;
+
+    .imgWrapper {
+      animation: selectPop tokens.$duration-spring tokens.$ease-pop;
+    }
+  }
+}
+
+@keyframes selectPop {
+  from {
+    scale: 0.86;
   }
 }
 
 .imgWrapper {
   width: 60px;
+  max-width: 100%;
 }
 
 .toTop {
   align-self: flex-end;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  margin: 8px;
-  color: colors.$blue;
+  gap: 5px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: tokens.$radius-md;
+  color: tokens.$link;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  text-decoration: none;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.9);
+
+  &:hover {
+    background-color: tokens.$link-hover-bg;
+  }
 }

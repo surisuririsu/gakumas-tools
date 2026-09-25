@@ -1,6 +1,7 @@
 import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
+import c from "@/utils/classNames";
 import { structureLogs } from "@/utils/simulator";
 import Logs from "./Logs";
 import styles from "./SimulatorLogs.module.scss";
@@ -18,8 +19,9 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
   );
 
   const [runToShow, setRunToShow] = useState("average");
+  const [switched, setSwitched] = useState(false);
 
-  let logs, structuredLogs;
+  let logs;
   if (runToShow == "min") {
     logs = minRun.logs;
   } else if (runToShow == "average") {
@@ -28,17 +30,24 @@ function SimulatorLogs({ minRun, averageRun, maxRun, idolId }) {
     logs = maxRun.logs;
   }
 
-  structuredLogs = structureLogs(logs);
+  const structuredLogs = useMemo(() => structureLogs(logs), [logs]);
 
   return (
     <div className={styles.simulatorLogs}>
       <ButtonGroup
         selected={runToShow}
         options={OPTIONS}
-        onChange={(value) => setRunToShow(value == runToShow ? null : value)}
+        onChange={(value) => {
+          setRunToShow(value == runToShow ? null : value);
+          setSwitched(true);
+        }}
       />
 
-      {structuredLogs && <Logs logs={structuredLogs} idolId={idolId} />}
+      {structuredLogs && (
+        <div key={runToShow} className={c(switched && styles.enter)}>
+          <Logs logs={structuredLogs} idolId={idolId} />
+        </div>
+      )}
     </div>
   );
 }

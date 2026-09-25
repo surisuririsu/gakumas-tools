@@ -1,6 +1,7 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+  FaCheck,
   FaCircleArrowUp,
   FaDownload,
   FaWandMagicSparkles,
@@ -23,6 +24,59 @@ import KofiAd from "../KofiAd";
 
 const TABS = ["stats", "logs", "compare"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
+const FEEDBACK_MS = 2200;
+const SPARKLE_COUNT = 4;
+const SPARKLE_PATH =
+  "M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z";
+
+function OptimizeLabel({ feedback }) {
+  const t = useTranslations("SimulatorResult");
+  const shown = feedback?.visible;
+
+  let text = null;
+  if (feedback) {
+    text =
+      feedback.kind == "gain"
+        ? t("optimizeGain", { gain: feedback.gain.toLocaleString() })
+        : t(feedback.kind == "optimal" ? "optimizeAlready" : "optimizeFailed");
+  }
+
+  return (
+    <span className={c(styles.swap, shown && styles.swapped)}>
+      <span className={styles.swapIdle} aria-hidden={shown || undefined}>
+        <FaWandMagicSparkles />
+        {t("optimizeParams")}
+      </span>
+      <span
+        className={c(styles.swapResult, feedback && styles[feedback.kind])}
+        aria-hidden="true"
+      >
+        {feedback && (
+          <span key={feedback.key} className={styles.swapContent}>
+            {feedback.kind != "failed" && (
+              <span className={styles.swapIcon}>
+                <FaCheck />
+                {feedback.kind == "gain" && (
+                  <span className={styles.optSparkles}>
+                    {Array.from({ length: SPARKLE_COUNT }, (_, i) => (
+                      <svg key={i} viewBox="0 0 24 24">
+                        <path d={SPARKLE_PATH} />
+                      </svg>
+                    ))}
+                  </span>
+                )}
+              </span>
+            )}
+            {text}
+          </span>
+        )}
+      </span>
+      <span className={styles.status} role="status">
+        {shown ? text : ""}
+      </span>
+    </span>
+  );
+}
 
 function SimulatorResult({
   pending,
@@ -40,6 +94,10 @@ function SimulatorResult({
   // in the effect below so the initial markup matches between server and
   // client (avoids hydration mismatch warnings).
   const [tab, setTabState] = useState("logs");
+  const [tabSwitched, setTabSwitched] = useState(false);
+  const [optimizeFeedback, setOptimizeFeedback] = useState(null);
+  const [run, setRun] = useState({ data, config });
+  if (run.data !== data) setRun({ data, config });
 
   useEffect(() => {
     try {
@@ -50,8 +108,18 @@ function SimulatorResult({
     }
   }, []);
 
+  useEffect(() => {
+    if (!optimizeFeedback?.visible) return;
+    const timer = setTimeout(
+      () => setOptimizeFeedback((cur) => cur && { ...cur, visible: false }),
+      FEEDBACK_MS
+    );
+    return () => clearTimeout(timer);
+  }, [optimizeFeedback]);
+
   const setTab = useCallback((value) => {
     setTabState(value);
+    setTabSwitched(true);
     try {
       localStorage.setItem(TAB_STORAGE_KEY, value);
     } catch {
@@ -61,22 +129,47 @@ function SimulatorResult({
   }, []);
 
   const optimizeParams = useCallback(() => {
+    const showFeedback = (kind, gain) =>
+      setOptimizeFeedback((cur) => ({
+        kind,
+        gain,
+        key: (cur?.key || 0) + 1,
+        visible: true,
+      }));
+
     const result = findOptimalParams({
       scoreStats: data.scoreStats,
-      config,
+      config: run.config,
       enterPercents,
     });
-    if (!result) return;
-    setParams((cur) => [
-      result.params.vocal,
-      result.params.dance,
-      result.params.visual,
-      cur[3],
-    ]);
+    if (!result) {
+      showFeedback("failed");
+      return;
+    }
+
+    const { vocal, dance, visual } = result.params;
+    const current = config.idol.params;
+    const changed =
+      vocal != current.vocal ||
+      dance != current.dance ||
+      visual != current.visual;
+
+    if (changed) {
+      setParams((cur) => [vocal, dance, visual, cur[3]]);
+      const gain = Math.max(
+        Math.round(
+          (result.optimalScore - result.baseScore) / data.scoreStats.numRuns
+        ),
+        0
+      );
+      showFeedback("gain", gain);
+    } else {
+      showFeedback("optimal");
+    }
     logEvent("simulator_params_optimize", {
       gain: Math.round(result.optimalScore - result.baseScore),
     });
-  }, [data.scoreStats, config, enterPercents, setParams]);
+  }, [data.scoreStats, run.config, config, enterPercents, setParams]);
 
   const downloadScores = useCallback(() => {
     const blob = new Blob([data.scores.join("\n")], { type: "text/csv" });
@@ -99,9 +192,13 @@ function SimulatorResult({
           <FaDownload />
           {t("downloadScores")}
         </Button>
-        <Button fill size="sm" onClick={optimizeParams}>
-          <FaWandMagicSparkles />
-          {t("optimizeParams")}
+        <Button
+          fill
+          size="sm"
+          className={styles.optimize}
+          onClick={optimizeParams}
+        >
+          <OptimizeLabel feedback={optimizeFeedback} />
         </Button>
       </div>
 
@@ -112,23 +209,28 @@ function SimulatorResult({
           onChange={setTab}
         />
 
-        {tab === "logs" && (
-          <SimulatorLogs
-            minRun={data.minRun}
-            averageRun={data.averageRun}
-            maxRun={data.maxRun}
-            idolId={idolId}
-          />
-        )}
+        <div
+          key={tab}
+          className={c(styles.panel, tabSwitched && styles.panelEnter)}
+        >
+          {tab === "logs" && (
+            <SimulatorLogs
+              minRun={data.minRun}
+              averageRun={data.averageRun}
+              maxRun={data.maxRun}
+              idolId={idolId}
+            />
+          )}
 
-        {tab === "stats" && (
-          <SimulatorStats
-            cardUsage={data.cardUsage}
-            scoreStats={data.scoreStats}
-          />
-        )}
+          {tab === "stats" && (
+            <SimulatorStats
+              cardUsage={data.cardUsage}
+              scoreStats={data.scoreStats}
+            />
+          )}
 
-        {tab === "compare" && <CompareTab currentRun={currentRun} />}
+          {tab === "compare" && <CompareTab currentRun={currentRun} />}
+        </div>
 
         <div className={styles.footer}>
           <KofiAd />
