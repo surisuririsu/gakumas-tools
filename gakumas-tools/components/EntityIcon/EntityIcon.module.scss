@@ -17,7 +17,8 @@
   }
 
   &.empty {
-    box-shadow: inset 0 0 0 1.5px #dcdce3;
+    border: 1.5px dashed #d4d4dc;
+    background-color: tokens.$fill-subtle;
   }
 
   &.filled {
@@ -36,10 +37,14 @@
 }
 
 .emptyPlaceholder {
-  color: #bdbdc6;
-  width: 40%;
-  height: 40%;
-  transition: color 0.2s;
+  width: 36%;
+  height: 36%;
+  color: colors.$gk-orange;
+  opacity: 0;
+  scale: 0.5;
+  transition:
+    opacity tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-pop;
 }
 
 button.entityIcon {
@@ -87,15 +92,21 @@ button.swapSource {
   opacity: 0.35;
 }
 
-button.swapTarget {
+button.entityIcon.swapTarget {
+  z-index: tokens.$z-raised;
   outline-color: colors.$gk-orange;
   translate: 0 -4px;
   scale: 1.06;
 }
 
-button.entityIcon:hover .emptyPlaceholder,
-button.entityIcon:focus .emptyPlaceholder {
-  color: colors.$gk-orange;
+button.entityIcon:is(:hover, :focus-visible) .emptyPlaceholder {
+  opacity: 1;
+  scale: 1;
+}
+
+button.empty:is(:hover, :focus-visible) {
+  border-color: tokens.$accent-edge;
+  background-color: tokens.$accent-tint;
 }
 
 .fill {
@@ -121,6 +132,7 @@ button.entityIcon:focus .emptyPlaceholder {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  font-weight: tokens.$weight-bold;
 }
 
 .customizations {
@@ -169,57 +181,69 @@ button.entityIcon:focus .emptyPlaceholder {
 
 .tier {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  display: none;
-  border: 1px solid;
-  font-size: 12px;
+  top: -5px;
+  left: -5px;
+  width: auto;
+  min-width: 20px;
+  padding: 0 5px;
+  border-radius: tokens.$radius-pill;
+  font-size: tokens.$text-2xs;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.4;
+  transform-origin: 20% 20%;
+  transition:
+    opacity tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-pop;
 }
 
-button.entityIcon:hover .tier,
-button.entityIcon:focus-visible .tier {
-  display: flex;
+button.entityIcon:is(:hover, :focus-visible) .tier {
+  opacity: 1;
+  scale: 1;
 }
 
 .low {
-  border-color: colors.$black;
-  color: colors.$black-dark;
-
   &.R {
-    background-color: colors.$silver;
+    background-color: #dff1fa;
+    color: #2d6a85;
+    box-shadow: 0 1.5px 0 #a9d3e6;
   }
 
   &.SR {
-    background-color: colors.$gold;
+    background-color: #fdeec6;
+    color: #8a6100;
+    box-shadow: 0 1.5px 0 #f0cf79;
   }
 }
 
 .high {
-  background-color: colors.$white;
-
   &.R {
-    color: colors.$silver-dark;
-    border-color: colors.$silver-dark;
+    background-color: #2d8fbd;
+    color: colors.$white;
+    box-shadow: 0 1.5px 0 #1d6a8f;
   }
 
   &.SR {
-    color: colors.$gold-dark;
-    border-color: colors.$gold-dark;
+    background-color: #e9a300;
+    color: colors.$white;
+    box-shadow: 0 1.5px 0 #b37c00;
   }
 }
 
 .indication {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  border: 1px solid colors.$red-light;
-  background-color: colors.$red;
+  top: -5px;
+  left: -5px;
+  background-color: tokens.$danger;
+  box-shadow: 0 1.5px 0 tokens.$danger-edge;
   color: colors.$white;
-  font-size: 12px;
+  font-size: tokens.$text-xs;
+  @include mixins.pop-in;
   transition: background-color tokens.$duration-base;
 
   &:hover {
-    background-color: colors.$red-light;
+    background-color: tokens.$danger-hover;
   }
 }
 
