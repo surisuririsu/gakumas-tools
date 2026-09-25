@@ -5,7 +5,22 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
 
 body {
@@ -14,6 +29,12 @@ body {
   flex-direction: column;
   overflow: hidden;
   background-color: tokens.$surface-bg;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(:focus-visible) {
+  outline: tokens.$focus-ring-width solid tokens.$focus-ring-color;
+  outline-offset: 2px;
 }
 
 main {
@@ -53,6 +74,10 @@ button {
   font-size: inherit;
   cursor: pointer;
   user-select: none;
+}
+
+:where(button:not(:disabled):active) {
+  opacity: var(--press-opacity, 0.7);
 }
 
 textarea {

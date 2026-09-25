@@ -1,4 +1,20 @@
 @use "./colors";
+@use "./tokens";
+
+@mixin pressable($scale: tokens.$press-scale) {
+  --press-opacity: 1;
+
+  &:active:not(:disabled, [aria-disabled="true"], .disabled) {
+    scale: $scale;
+    transition-duration: tokens.$duration-press;
+  }
+}
+
+@mixin focus-ring-inset {
+  &:focus-visible {
+    outline-offset: -(tokens.$focus-ring-width);
+  }
+}
 
 @mixin param-colors {
   @each $i,

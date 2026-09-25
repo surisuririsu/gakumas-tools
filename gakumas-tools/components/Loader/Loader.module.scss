@@ -24,3 +24,11 @@
     transform: rotate(1turn);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader,
+  .loader::before {
+    animation-duration: 2s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
