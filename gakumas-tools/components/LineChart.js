@@ -1,4 +1,4 @@
-import React from "react";
+import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import {
   Chart as ChartJS,
@@ -24,7 +24,7 @@ const PARAMETER_COLORS_TRANSPARENT = [
   "rgba(247, 177, 46, 0.5)",
 ];
 
-export default function LineChart({
+function LineChart({
   paramOrder,
   paramRegimes,
   scores,
@@ -32,61 +32,69 @@ export default function LineChart({
 }) {
   const t = useTranslations("Calculator");
 
-  const options = {
-    scales: {
-      x: {
-        type: "linear",
-        position: "bottom",
-        title: {
-          display: true,
-          text: t("score"),
-          padding: 1,
+  const options = useMemo(
+    () => ({
+      scales: {
+        x: {
+          type: "linear",
+          position: "bottom",
+          title: {
+            display: true,
+            text: t("score"),
+            padding: 1,
+          },
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: t("parameter"),
+            padding: 0,
+          },
         },
       },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: t("parameter"),
-          padding: 0,
+
+      plugins: {
+        legend: {
+          display: false,
         },
       },
-    },
+    }),
+    [t]
+  );
 
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  };
-
-  const data = {
-    datasets: paramOrder
-      .map((order, i) => {
-        const regimes = paramRegimes[order];
-        const data = regimes.map(({ threshold, constant }) => ({
-          x: threshold,
-          y: constant,
-        }));
-        return {
-          label: PARAMETER_NAMES[i],
-          data,
-          pointRadius: 2,
-          showLine: true,
-          borderWidth: 2,
-          borderColor: PARAMETER_COLORS[i],
-          backgroundColor: PARAMETER_COLORS[i],
-        };
-      })
-      .concat(
-        scores.map((score, i) => ({
-          data: [{ x: score, y: gainedParams[i] }],
-          pointRadius: 8,
-          borderColor: PARAMETER_COLORS[i],
-          backgroundColor: PARAMETER_COLORS_TRANSPARENT[i],
-        }))
-      ),
-  };
+  const data = useMemo(
+    () => ({
+      datasets: paramOrder
+        .map((order, i) => {
+          const regimes = paramRegimes[order];
+          const data = regimes.map(({ threshold, constant }) => ({
+            x: threshold,
+            y: constant,
+          }));
+          return {
+            label: PARAMETER_NAMES[i],
+            data,
+            pointRadius: 2,
+            showLine: true,
+            borderWidth: 2,
+            borderColor: PARAMETER_COLORS[i],
+            backgroundColor: PARAMETER_COLORS[i],
+          };
+        })
+        .concat(
+          scores.map((score, i) => ({
+            data: [{ x: score, y: gainedParams[i] }],
+            pointRadius: 8,
+            borderColor: PARAMETER_COLORS[i],
+            backgroundColor: PARAMETER_COLORS_TRANSPARENT[i],
+          }))
+        ),
+    }),
+    [paramOrder, paramRegimes, scores, gainedParams]
+  );
 
   return <Scatter options={options} data={data} />;
 }
+
+export default memo(LineChart);

@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useMemo } from "react";
+import { memo, useContext, useEffect, useMemo } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
@@ -20,7 +20,7 @@ import AxisRow from "./AxisRow";
 import CompareRow from "./CompareRow";
 import styles from "./SimulationRuns.module.scss";
 
-export default function CompareTab({ currentRun, onAfterLoad }) {
+function CompareTab({ currentRun, onAfterLoad }) {
   const t = useTranslations("CompareTab");
   const { status } = useSession();
   const { setModal } = useContext(ModalContext);
@@ -372,3 +372,5 @@ export default function CompareTab({ currentRun, onAfterLoad }) {
     </div>
   );
 }
+
+export default memo(CompareTab);

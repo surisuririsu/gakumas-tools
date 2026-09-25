@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   AiOutlineAreaChart,
@@ -13,11 +13,16 @@ const HISTOGRAM = <AiOutlineBarChart />;
 const BOXPLOT = <AiOutlineBoxPlot />;
 const AREA = <AiOutlineAreaChart />;
 
-export default function SimulatorResultGraphs({ data, plan }) {
+function SimulatorResultGraphs({ data, plan }) {
   const t = useTranslations("SimulatorResultGraphs");
 
   const [graphType, setGraphType] = useState("histogram");
   const label = `${t("score")} (n=${data.scores.length})`;
+  const boxPlotLabels = useMemo(() => [label], [label]);
+  const boxPlotData = useMemo(
+    () => [{ label, data: [data.scores] }],
+    [label, data.scores]
+  );
 
   return (
     <div>
@@ -41,13 +46,11 @@ export default function SimulatorResultGraphs({ data, plan }) {
         />
       )}
       {graphType == "boxplot" && (
-        <BoxPlot
-          labels={[label]}
-          data={[{ label, data: [data.scores] }]}
-          showXAxis={false}
-        />
+        <BoxPlot labels={boxPlotLabels} data={boxPlotData} showXAxis={false} />
       )}
       {graphType == "area" && <AreaPlot data={data.graphData} plan={plan} />}
     </div>
   );
 }
+
+export default memo(SimulatorResultGraphs);
