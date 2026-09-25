@@ -376,7 +376,9 @@
     "lastUpdated": "最后更新于",
     "start": "开始",
     "restart": "重新开始",
-    "simulationFailed": "模拟失败，请重试。"
+    "simulationFailed": "模拟失败，请重试。",
+    "cancel": "取消",
+    "retry": "重试"
   },
   "StrategyPicker": {
     "auto": "自动",
@@ -466,7 +468,9 @@
     "stats": "统计",
     "compare": "比较",
     "downloadScores": "分数",
-    "optimizeParams": "优化参数"
+    "optimizeParams": "优化参数",
+    "outdated": "此结果来自修改编组之前。",
+    "rerun": "重新运行"
   },
   "CompareTab": {
     "saved": "已保存",

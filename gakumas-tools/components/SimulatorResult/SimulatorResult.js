@@ -1,6 +1,7 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+  FaArrowRotateRight,
   FaCircleArrowUp,
   FaDownload,
   FaWandMagicSparkles,
@@ -13,6 +14,7 @@ import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
+import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
@@ -23,7 +25,17 @@ import KofiAd from "../KofiAd";
 const TABS = ["stats", "logs", "compare"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
 
-function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
+function SimulatorResult({
+  containerRef,
+  pending,
+  outdated,
+  onRerun,
+  data,
+  config,
+  enterPercents,
+  idolId,
+  plan,
+}) {
   const t = useTranslations("SimulatorResult");
   const { setParams } = useContext(LoadoutContext);
   const { history } = useContext(SimulationRunsContext);
@@ -77,7 +89,22 @@ function SimulatorResult({ data, config, enterPercents, idolId, plan }) {
   }, [data.scores]);
 
   return (
-    <div id="simulator_result" className={styles.result}>
+    <div
+      id="simulator_result"
+      ref={containerRef}
+      className={c(styles.result, pending && styles.pending)}
+      aria-busy={pending}
+    >
+      {outdated && (
+        <div className={styles.outdated} data-export-hide="true">
+          <span>{t("outdated")}</span>
+          <Button size="sm" style="blue-secondary" onClick={onRerun}>
+            <FaArrowRotateRight />
+            {t("rerun")}
+          </Button>
+        </div>
+      )}
+
       <Table
         className={styles.stats}
         headers={[t("min"), t("average"), t("median"), t("max")]}

@@ -376,7 +376,9 @@
     "lastUpdated": "Last updated",
     "start": "Start",
     "restart": "Restart",
-    "simulationFailed": "Simulation failed. Please try again."
+    "simulationFailed": "Simulation failed. Please try again.",
+    "cancel": "Cancel",
+    "retry": "Retry"
   },
   "StrategyPicker": {
     "auto": "Auto",
@@ -466,7 +468,9 @@
     "stats": "Stats",
     "compare": "Compare",
     "downloadScores": "Scores",
-    "optimizeParams": "Optimize params"
+    "optimizeParams": "Optimize params",
+    "outdated": "These results are from before your last edit.",
+    "rerun": "Re-run"
   },
   "CompareTab": {
     "saved": "Saved",

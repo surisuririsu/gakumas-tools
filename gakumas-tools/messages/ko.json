@@ -376,7 +376,9 @@
     "lastUpdated": "최종 업데이트",
     "start": "시작",
     "restart": "재시작",
-    "simulationFailed": "시뮬레이션에 실패했습니다. 다시 시도해 주세요."
+    "simulationFailed": "시뮬레이션에 실패했습니다. 다시 시도해 주세요.",
+    "cancel": "취소",
+    "retry": "다시 시도"
   },
   "StrategyPicker": {
     "auto": "자동",
@@ -466,7 +468,9 @@
     "stats": "통계",
     "compare": "비교",
     "downloadScores": "점수",
-    "optimizeParams": "파라미터 최적화"
+    "optimizeParams": "파라미터 최적화",
+    "outdated": "편성을 변경하기 전의 결과입니다.",
+    "rerun": "다시 실행"
   },
   "CompareTab": {
     "saved": "저장됨",

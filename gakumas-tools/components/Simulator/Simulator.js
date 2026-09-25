@@ -23,15 +23,14 @@ import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
-import Loader from "@/components/Loader";
 import LoadoutEditor from "@/components/LoadoutEditor";
 import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
-import ProgressBar from "@/components/ProgressBar";
 import SimulatorResult from "@/components/SimulatorResult";
 import StageSelect from "@/components/StageSelect";
 import StrategyPicker from "@/components/StrategyPicker";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
+import ToastContext from "@/contexts/ToastContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
 import { DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
@@ -40,9 +39,11 @@ import {
   runOnWorkers,
   workerCount,
 } from "@/simulator/workerPool";
+import { createProgressStore } from "@/utils/progressStore";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import usePersistedState from "@/utils/usePersistedState";
 import ManualPlay from "./ManualPlay";
+import SimulateButton from "./SimulateButton";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
@@ -65,10 +66,11 @@ export default function Simulator() {
   } = useContext(LoadoutContext);
   const { pushRun } = useContext(SimulationRunsContext);
   const { plan, idolId } = useContext(WorkspaceContext);
+  const { showToast } = useContext(ToastContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
+  const [resultConfig, setResultConfig] = useState(null);
   const [running, setRunning] = useState(false);
-  const [failed, setFailed] = useState(false);
   const [numRuns, setNumRuns] = usePersistedState(
     NUM_RUNS_KEY,
     DEFAULT_NUM_RUNS,
@@ -77,7 +79,11 @@ export default function Simulator() {
 
   const [pendingDecision, setPendingDecision] = useState(null);
   const resolveDecisionRef = useRef(null);
-  const [progress, setProgress] = useState(0);
+  const [progress] = useState(createProgressStore);
+  const abortRef = useRef(null);
+  const resultRef = useRef(null);
+  const revealResultRef = useRef(false);
+  const runSimulationRef = useRef(null);
 
   const config = useMemo(() => {
     const idolConfig = new IdolConfig(loadout);
@@ -116,6 +122,15 @@ export default function Simulator() {
     }
     return retainWorkerPool();
   }, []);
+
+  useEffect(() => {
+    if (!revealResultRef.current || !simulatorData) return;
+    revealResultRef.current = false;
+    const el = resultRef.current;
+    if (el && el.getBoundingClientRect().top > window.innerHeight * 0.75) {
+      el.scrollIntoView({ block: "start" });
+    }
+  }, [simulatorData]);
 
   const setResult = useCallback(
     (result) => {
@@ -171,10 +186,20 @@ export default function Simulator() {
     setRunning(false);
   }
 
+  const cancelSimulation = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setRunning(false);
+  }, []);
+
+  const rerunSimulation = useCallback(() => runSimulationRef.current(), []);
+
   async function runSimulation() {
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const runConfig = config;
     setRunning(true);
-    setFailed(false);
-    setProgress(0);
+    progress.set(0);
 
     console.time("simulation");
 
@@ -186,7 +211,7 @@ export default function Simulator() {
           linkConfigs,
           strategy,
           numRuns,
-          (completed) => setProgress(completed),
+          (completed) => progress.set(completed),
         );
       } else {
         const results = await runOnWorkers(
@@ -196,18 +221,27 @@ export default function Simulator() {
             strategyName: strategy,
             numRuns,
           },
-          (delta) => setProgress((p) => p + delta),
+          (delta) => progress.set((p) => p + delta),
+          controller.signal,
         );
         result = mergeResults(results);
       }
+      revealResultRef.current = true;
+      setResultConfig(runConfig);
       setResult(result);
     } catch (err) {
-      console.error(err);
       console.timeEnd("simulation");
-      setFailed(true);
+      if (controller.signal.aborted) return;
+      console.error(err);
       setRunning(false);
+      showToast({
+        tone: "error",
+        message: t("simulationFailed"),
+        action: { label: t("retry"), onClick: rerunSimulation },
+      });
     }
   }
+  runSimulationRef.current = runSimulation;
 
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
@@ -293,10 +327,10 @@ export default function Simulator() {
             <StrategyPicker
               strategy={strategy}
               setStrategy={(value) => {
+                cancelSimulation();
                 setSimulatorData(null);
                 setPendingDecision(null);
                 setStrategy(value);
-                setRunning(false);
               }}
             />
           </div>
@@ -319,21 +353,13 @@ export default function Simulator() {
 
         <div data-export-hide="true">
           {strategy === "HeuristicStrategy" && (
-            <>
-              <Button
-                style="blue"
-                fill
-                onClick={runSimulation}
-                disabled={running}
-              >
-                {running ? <Loader /> : t("simulate")}
-              </Button>
-              {running && numRuns > 0 && (
-                <div className={styles.progressBarWrap}>
-                  <ProgressBar value={progress} max={numRuns} />
-                </div>
-              )}
-            </>
+            <SimulateButton
+              running={running}
+              numRuns={numRuns}
+              progress={progress}
+              onRun={rerunSimulation}
+              onCancel={cancelSimulation}
+            />
           )}
 
           {strategy === "ManualStrategy" && (
@@ -365,6 +391,10 @@ export default function Simulator() {
 
       {strategy === "HeuristicStrategy" && simulatorData && (
         <SimulatorResult
+          containerRef={resultRef}
+          pending={running}
+          outdated={!running && resultConfig != config}
+          onRerun={rerunSimulation}
           data={simulatorData}
           config={config}
           enterPercents={enterPercents}
@@ -373,7 +403,6 @@ export default function Simulator() {
         />
       )}
 
-      {failed && <Alert variant="danger">{t("simulationFailed")}</Alert>}
       {!simulatorData && <div className={styles.resultPlaceholder} />}
     </div>
   );

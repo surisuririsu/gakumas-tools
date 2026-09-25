@@ -3,6 +3,7 @@ import { MAX_WORKERS, WORKER_MESSAGE } from "./constants";
 let workers = null;
 let holders = 0;
 let nextRunId = 0;
+const pendingRejects = new Set();
 
 export function workerCount() {
   return Math.min(navigator.hardwareConcurrency || 1, MAX_WORKERS);
@@ -14,9 +15,15 @@ export function retainWorkerPool() {
   return () => {
     holders--;
     if (holders > 0) return;
-    workers?.forEach((worker) => worker.terminate());
-    workers = null;
+    terminatePool(new DOMException("Worker pool released", "AbortError"));
   };
+}
+
+function terminatePool(reason) {
+  workers?.forEach((worker) => worker.terminate());
+  workers = null;
+  pendingRejects.forEach((reject) => reject(reason));
+  pendingRejects.clear();
 }
 
 function getWorkerPool() {
@@ -31,18 +38,27 @@ function getWorkerPool() {
 
 export function runOnWorkers(
   { idolStageConfig, linkConfigs, strategyName, numRuns },
-  onProgress
+  onProgress,
+  signal
 ) {
+  if (signal?.aborted) return Promise.reject(signal.reason);
   const pool = getWorkerPool();
   // Two Simulators can share the pool, so each run tags its own messages.
   const runId = nextRunId++;
   const runsPerWorker = Math.round(numRuns / pool.length);
 
+  const cancel = () => terminatePool(signal.reason);
+  signal?.addEventListener("abort", cancel, { once: true });
+
   return Promise.all(
     pool.map(
       (worker) =>
         new Promise((resolve, reject) => {
+          pendingRejects.add(reject);
           const listeners = new AbortController();
+          listeners.signal.addEventListener("abort", () =>
+            pendingRejects.delete(reject)
+          );
           worker.addEventListener(
             "message",
             ({ data }) => {
@@ -76,5 +92,5 @@ export function runOnWorkers(
           });
         })
     )
-  );
+  ).finally(() => signal?.removeEventListener("abort", cancel));
 }

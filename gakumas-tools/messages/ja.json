@@ -384,7 +384,9 @@
     "lastUpdated": "最終更新",
     "start": "開始",
     "restart": "再開",
-    "simulationFailed": "シミュレーションに失敗しました。もう一度お試しください。"
+    "simulationFailed": "シミュレーションに失敗しました。もう一度お試しください。",
+    "cancel": "キャンセル",
+    "retry": "再試行"
   },
   "StrategyPicker": {
     "auto": "自動",
@@ -474,7 +476,9 @@
     "stats": "統計",
     "compare": "比較",
     "downloadScores": "スコア",
-    "optimizeParams": "パラメータ最適化"
+    "optimizeParams": "パラメータ最適化",
+    "outdated": "この結果は編成を変更する前のものです。",
+    "rerun": "再実行"
   },
   "CompareTab": {
     "saved": "保存済み",

@@ -186,6 +186,16 @@
   }
 }
 
+.runRow {
+  display: flex;
+  gap: tokens.$space-2;
+}
+
+.runPercent {
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+}
+
 .progressBarWrap {
   margin-top: tokens.$space-1;
 }
