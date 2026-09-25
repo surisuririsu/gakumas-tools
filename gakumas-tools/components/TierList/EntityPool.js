@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import EntityIcon from "@/components/EntityIcon";
@@ -13,7 +13,30 @@ import styles from "./EntityPool.module.scss";
 
 export const POOL_ID = "pool";
 
-const PoolItem = memo(function PoolItem({ type, id }) {
+const nearCallbacks = new WeakMap();
+let nearObserver = null;
+
+function observeNear(el, onNear) {
+  nearObserver ??= new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        nearCallbacks.get(entry.target)?.();
+        nearCallbacks.delete(entry.target);
+        nearObserver.unobserve(entry.target);
+      }
+    },
+    { rootMargin: "200px" },
+  );
+  nearCallbacks.set(el, onNear);
+  nearObserver.observe(el);
+  return () => {
+    nearCallbacks.delete(el);
+    nearObserver.unobserve(el);
+  };
+}
+
+function DragSurface({ id }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
   });
@@ -22,9 +45,24 @@ const PoolItem = memo(function PoolItem({ type, id }) {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={c(styles.item, isDragging && styles.itemDragging)}
-    >
+      className={c(styles.dragSurface, isDragging && styles.dragging)}
+    />
+  );
+}
+
+const PoolItem = memo(function PoolItem({ type, id }) {
+  const ref = useRef(null);
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    if (near) return;
+    return observeNear(ref.current, () => setNear(true));
+  }, [near]);
+
+  return (
+    <div ref={ref} className={styles.item}>
       <EntityIcon type={type} id={id} size="fill" />
+      {near && <DragSurface id={id} />}
     </div>
   );
 });
