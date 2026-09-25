@@ -34,13 +34,13 @@
 }
 
 .default {
-  background-color: tokens.$surface-muted;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-ink;
   @include mixins.raised;
 
   &:hover,
   &:focus-visible {
-    background-color: tokens.$surface-muted-hover;
+    background-color: tokens.$fill-muted-hover;
   }
 }
 
@@ -117,7 +117,7 @@
 }
 
 .disabled {
-  background-color: tokens.$surface-muted;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-border-strong;
   cursor: not-allowed;
 }

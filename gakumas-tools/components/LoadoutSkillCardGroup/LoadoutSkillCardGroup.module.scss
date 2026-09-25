@@ -1,4 +1,5 @@
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .sub {
   display: flex;
@@ -16,7 +17,7 @@
     font-size: 22px;
 
     &:disabled {
-      color: colors.$gray-light;
+      color: tokens.$surface-border-strong;
       cursor: not-allowed;
     }
   }
@@ -29,20 +30,20 @@
 button.cost {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  border-radius: 10px;
-  background-color: colors.$gray-extra-light;
-  color: colors.$black-medium;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink-muted;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
   border: none;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color tokens.$duration-fast;
 
   &:hover,
   &.costOpen {
-    background-color: colors.$gray-light;
+    background-color: tokens.$fill-muted-hover;
   }
 }
 
@@ -53,8 +54,8 @@ button.cost {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background-color: colors.$gray-extra-light;
-  border-radius: 6px;
+  background-color: tokens.$surface-alt;
+  border-radius: tokens.$radius-md;
   font-size: 12px;
 
   li {

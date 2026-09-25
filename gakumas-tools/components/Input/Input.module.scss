@@ -8,7 +8,7 @@
   padding: 6px 10px;
   border: 0;
   border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-muted;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-ink;
   font-size: tokens.$text-base;
   font-weight: 700;
@@ -23,7 +23,7 @@
   }
 
   &:hover {
-    background-color: tokens.$surface-muted-hover;
+    background-color: tokens.$fill-muted-hover;
   }
 
   &:focus {

@@ -5,7 +5,7 @@
 .alert {
   display: flex;
   align-items: stretch;
-  border-radius: tokens.$radius-sm;
+  border-radius: tokens.$radius-md;
   overflow: hidden;
   font-size: tokens.$text-sm;
   line-height: 1.45;
@@ -26,7 +26,7 @@
     background-color: tokens.$surface-border-strong;
   }
   .content {
-    background-color: tokens.$surface-muted;
+    background-color: tokens.$fill-muted;
     color: tokens.$surface-ink-muted;
   }
 }
