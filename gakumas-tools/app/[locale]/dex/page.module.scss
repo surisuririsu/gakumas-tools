@@ -23,39 +23,18 @@
   align-items: center;
   gap: tokens.$space-3;
   padding: tokens.$space-3;
-  @include mixins.card;
   color: tokens.$surface-ink;
-  transition:
-    translate tokens.$duration-spring tokens.$ease-spring,
-    box-shadow tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.card-interactive;
 
   @media (hover: hover) {
-    &:hover {
-      translate: 0 -2px;
-      box-shadow:
-        0 4px 0 tokens.$surface-border,
-        0 14px 28px rgba(20, 20, 40, 0.08);
+    &:hover .icon {
+      @include mixins.icon-tile-wiggle;
     }
-  }
-
-  &:active {
-    translate: 0 2px;
-    box-shadow: 0 0 0 tokens.$surface-border;
-    transition-duration: tokens.$duration-press;
   }
 }
 
 .icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-muted;
-  color: colors.$gk-orange;
-  font-size: 20px;
+  @include mixins.icon-tile(40px);
 }
 
 .text {
@@ -66,8 +45,7 @@
 }
 
 .title {
-  font-size: tokens.$text-base;
-  font-weight: 600;
+  @include mixins.heading;
 }
 
 .description {
