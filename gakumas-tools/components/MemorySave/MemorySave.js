@@ -42,23 +42,25 @@ function MemorySave() {
         </>
       )}
 
-      {saveState == "saving" && (
-        <span className={styles.status}>
-          <Loader />
-          {t("saving")}
-        </span>
-      )}
-      {saveState == "saved" && (
-        <span className={styles.saved} role="status">
-          <FaCheck />
-          {t("saved")}
-        </span>
-      )}
-      {saveState == "error" && (
-        <span className={styles.error} role="alert">
-          {t("saveFailed")}
-        </span>
-      )}
+      <div className={styles.statusSlot}>
+        {saveState == "saving" && (
+          <span className={styles.status}>
+            <Loader />
+            {t("saving")}
+          </span>
+        )}
+        {saveState == "saved" && (
+          <span className={styles.saved} role="status">
+            <FaCheck />
+            {t("saved")}
+          </span>
+        )}
+        {saveState == "error" && (
+          <span className={styles.error} role="alert">
+            {t("saveFailed")}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

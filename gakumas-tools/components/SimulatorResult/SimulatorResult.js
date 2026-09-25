@@ -1,7 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
-  FaArrowRotateRight,
   FaCircleArrowUp,
   FaDownload,
   FaWandMagicSparkles,
@@ -14,7 +13,6 @@ import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
 import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
-import ToastContext from "@/contexts/ToastContext";
 import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
@@ -27,10 +25,7 @@ const TABS = ["stats", "logs", "compare"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
 
 function SimulatorResult({
-  containerRef,
   pending,
-  outdated,
-  onRerun,
   data,
   config,
   enterPercents,
@@ -40,7 +35,6 @@ function SimulatorResult({
   const t = useTranslations("SimulatorResult");
   const { setParams } = useContext(LoadoutActionsContext);
   const { history } = useContext(SimulationRunsContext);
-  const { showToast } = useContext(ToastContext);
   const currentRun = history[0] || null;
   // Default rendered during SSR / pre-hydration. Hydrated from localStorage
   // in the effect below so the initial markup matches between server and
@@ -72,27 +66,17 @@ function SimulatorResult({
       config,
       enterPercents,
     });
-    if (!result) {
-      showToast({ tone: "error", message: t("cannotOptimize") });
-      return;
-    }
-    const gain = Math.round(result.optimalScore - result.baseScore);
-    logEvent("simulator_params_optimize", { gain });
-    if (gain <= 0) {
-      showToast({ message: t("alreadyOptimal") });
-      return;
-    }
+    if (!result) return;
     setParams((cur) => [
       result.params.vocal,
       result.params.dance,
       result.params.visual,
       cur[3],
     ]);
-    showToast({
-      tone: "success",
-      message: t("paramsOptimized", { gain: gain.toLocaleString() }),
+    logEvent("simulator_params_optimize", {
+      gain: Math.round(result.optimalScore - result.baseScore),
     });
-  },[data.scoreStats, config, enterPercents, setParams, showToast, t]);
+  }, [data.scoreStats, config, enterPercents, setParams]);
 
   const downloadScores = useCallback(() => {
     const blob = new Blob([data.scores.join("\n")], { type: "text/csv" });
@@ -103,20 +87,9 @@ function SimulatorResult({
   return (
     <div
       id="simulator_result"
-      ref={containerRef}
       className={c(styles.result, pending && styles.pending)}
       aria-busy={pending}
     >
-      {outdated && (
-        <div className={styles.outdated} data-export-hide="true">
-          <span>{t("outdated")}</span>
-          <Button size="sm" style="blue-secondary" onClick={onRerun}>
-            <FaArrowRotateRight />
-            {t("rerun")}
-          </Button>
-        </div>
-      )}
-
       <Table
         className={styles.stats}
         headers={[t("min"), t("average"), t("median"), t("max")]}

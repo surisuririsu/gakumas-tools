@@ -9,6 +9,22 @@
   margin-top: 16px;
 }
 
+.statusSlot {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+}
+
+.status,
+.saved,
+.error {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  translate: 0 -50%;
+  white-space: nowrap;
+}
+
 .status,
 .saved {
   display: inline-flex;

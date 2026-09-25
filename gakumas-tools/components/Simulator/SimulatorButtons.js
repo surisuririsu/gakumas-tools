@@ -1,7 +1,8 @@
 "use client";
-import { memo, useContext } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+  FaCheck,
   FaRegCopy,
   FaRegFloppyDisk,
   FaRegTrashCan,
@@ -13,7 +14,6 @@ import LoadoutsModal from "@/components/SimulationRuns/LoadoutsModal";
 import ShareModal from "@/components/ShareModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import ModalContext from "@/contexts/ModalContext";
-import ToastContext from "@/contexts/ToastContext";
 import styles from "./Simulator.module.scss";
 
 function SimulatorButtons() {
@@ -21,16 +21,15 @@ function SimulatorButtons() {
 
   const { clear, simulatorUrl } = useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
-  const { showToast } = useContext(ToastContext);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const copiedTimerRef = useRef(null);
 
-  async function copyLink() {
-    try {
-      await navigator.clipboard.writeText(simulatorUrl);
-      showToast({ tone: "success", message: t("linkCopied") });
-    } catch {
-      showToast({ tone: "error", message: t("copyFailed") });
-    }
-  }
+  useEffect(
+    () => () => {
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+    },
+    [],
+  );
 
   return (
     <div className={styles.buttons} data-export-hide="true">
@@ -66,9 +65,19 @@ function SimulatorButtons() {
           <Button
             style="blue-secondary"
             size="sm"
-            onClick={copyLink}
+            onClick={() => {
+              navigator.clipboard.writeText(simulatorUrl);
+              setLinkCopied(true);
+              if (copiedTimerRef.current) {
+                clearTimeout(copiedTimerRef.current);
+              }
+              copiedTimerRef.current = setTimeout(
+                () => setLinkCopied(false),
+                3000,
+              );
+            }}
           >
-            <FaRegCopy />
+            {linkCopied ? <FaCheck /> : <FaRegCopy />}
             <span className={styles.buttonText}>URL</span>
           </Button>
           <Button

@@ -186,18 +186,16 @@
   }
 }
 
-.runRow {
+.runLabel {
   display: flex;
+  align-items: center;
   gap: tokens.$space-2;
+  min-height: calc(1em + 8px);
 }
 
 .runPercent {
-  min-width: 3ch;
+  min-width: 4ch;
   font-variant-numeric: tabular-nums;
-}
-
-.progressBarWrap {
-  margin-top: tokens.$space-1;
 }
 
 .resultPlaceholder {

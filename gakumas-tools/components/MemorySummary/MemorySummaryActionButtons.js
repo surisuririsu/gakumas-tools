@@ -6,7 +6,6 @@ import MemoryEditorModal from "@/components/MemoryEditorModal";
 import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
-import ToastContext from "@/contexts/ToastContext";
 import { useRouter } from "@/i18n/routing";
 import styles from "./MemorySummary.module.scss";
 
@@ -17,7 +16,6 @@ function MemorySummaryActionButtons({ memory }) {
   const { setMemory } = useContext(LoadoutActionsContext);
   const { setAll } = useContext(MemoryContext);
   const { setModal } = useContext(ModalContext);
-  const { showToast } = useContext(ToastContext);
 
   function editMemory() {
     setAll(memory);
@@ -27,7 +25,6 @@ function MemorySummaryActionButtons({ memory }) {
   function loadMemory(index) {
     setMemory(memory, index);
     router.push("/simulator");
-    showToast({ tone: "success", message: t("loaded", { slot: index + 1 }) });
   }
 
   return (
