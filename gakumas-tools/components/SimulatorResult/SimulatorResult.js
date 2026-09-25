@@ -12,7 +12,7 @@ import CompareTab from "@/components/SimulationRuns";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import ToastContext from "@/contexts/ToastContext";
 import c from "@/utils/classNames";
@@ -38,7 +38,7 @@ function SimulatorResult({
   plan,
 }) {
   const t = useTranslations("SimulatorResult");
-  const { setParams } = useContext(LoadoutContext);
+  const { setParams } = useContext(LoadoutActionsContext);
   const { history } = useContext(SimulationRunsContext);
   const { showToast } = useContext(ToastContext);
   const currentRun = history[0] || null;

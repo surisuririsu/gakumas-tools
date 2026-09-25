@@ -18,7 +18,7 @@ import Image from "@/components/Image";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
 import ModalLoading from "@/components/Modal/ModalLoading";
 import StageSkillCards from "@/components/StageSkillCards";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import ToastContext from "@/contexts/ToastContext";
@@ -36,13 +36,13 @@ function LoadoutSkillCardGroup({
   customizations,
   indications,
   groupIndex,
+  groupCount,
   idolId,
 }) {
   const t = useTranslations("LoadoutSkillCardGroup");
   const { status } = useSession();
   const router = useRouter();
   const {
-    loadout,
     setMemory,
     replaceSkillCardId,
     swapSkillCardIds,
@@ -50,7 +50,7 @@ function LoadoutSkillCardGroup({
     insertSkillCardIdGroup,
     deleteSkillCardIdGroup,
     swapSkillCardIdGroups,
-  } = useContext(LoadoutContext);
+  } = useContext(LoadoutActionsContext);
   const { setTargetSkillCardIds, setAcquiredSkillCardIds } = useContext(
     MemoryCalculatorContext,
   );
@@ -177,7 +177,7 @@ function LoadoutSkillCardGroup({
           <button
             className={styles.moveButton}
             onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex + 1)}
-            disabled={groupIndex >= loadout.skillCardIdGroups.length - 1}
+            disabled={groupIndex >= groupCount - 1}
           >
             <FaCircleArrowDown title={t("moveDown")} />
           </button>
@@ -185,7 +185,7 @@ function LoadoutSkillCardGroup({
           <button
             className={styles.deleteButton}
             onClick={deleteRow}
-            disabled={loadout.skillCardIdGroups.length < 2}
+            disabled={groupCount < 2}
           >
             <FaCircleXmark title={t("removeRow")} />
           </button>

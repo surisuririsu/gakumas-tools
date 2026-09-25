@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { Stages } from "gakumas-data";
@@ -17,6 +18,8 @@ import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
 
 const LoadoutContext = createContext();
+
+export const LoadoutActionsContext = createContext();
 
 export function LoadoutContextProvider({ children }) {
   const pathname = usePathname();
@@ -285,7 +288,14 @@ export function LoadoutContextProvider({ children }) {
     });
   }, []);
 
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+  const memoryParamsRef = useRef(memoryParams);
+  memoryParamsRef.current = memoryParams;
+
   const setMemory = useCallback((memory, index) => {
+    const stage = stageRef.current;
+    const memoryParams = memoryParamsRef.current;
     const multiplier = stage.type !== "linkContest" && index ? 0.2 : 1;
 
     if (!memoryParams.some((p) => p)) {
@@ -326,11 +336,10 @@ export function LoadoutContextProvider({ children }) {
       next[index] = memory.customizations || [];
       return next;
     });
-  }, [stage, memoryParams]);
+  }, []);
 
-  const value = useMemo(
+  const actions = useMemo(
     () => ({
-      loadout,
       setLoadout,
       setMemory,
       setStageId,
@@ -346,15 +355,10 @@ export function LoadoutContextProvider({ children }) {
       insertSkillCardIdGroup,
       deleteSkillCardIdGroup,
       swapSkillCardIdGroups,
-      stage,
-      simulatorUrl,
-      loadouts,
       setLoadouts,
-      currentLoadoutIndex,
       setCurrentLoadoutIndex,
     }),
     [
-      loadout,
       setLoadout,
       setMemory,
       replacePItemId,
@@ -366,15 +370,27 @@ export function LoadoutContextProvider({ children }) {
       insertSkillCardIdGroup,
       deleteSkillCardIdGroup,
       swapSkillCardIdGroups,
+    ]
+  );
+
+  const value = useMemo(
+    () => ({
+      ...actions,
+      loadout,
       stage,
       simulatorUrl,
       loadouts,
       currentLoadoutIndex,
-    ]
+    }),
+    [actions, loadout, stage, simulatorUrl, loadouts, currentLoadoutIndex]
   );
 
   return (
-    <LoadoutContext.Provider value={value}>{children}</LoadoutContext.Provider>
+    <LoadoutActionsContext.Provider value={actions}>
+      <LoadoutContext.Provider value={value}>
+        {children}
+      </LoadoutContext.Provider>
+    </LoadoutActionsContext.Provider>
   );
 }
 

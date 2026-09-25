@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { FaTrophy, FaArrowRight } from "react-icons/fa6";
 import Button from "@/components/Button";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import ToastContext from "@/contexts/ToastContext";
@@ -14,7 +14,7 @@ function MemorySummaryActionButtons({ memory }) {
   const t = useTranslations("MemorySummaryActionButtons");
 
   const router = useRouter();
-  const { setMemory } = useContext(LoadoutContext);
+  const { setMemory } = useContext(LoadoutActionsContext);
   const { setAll } = useContext(MemoryContext);
   const { setModal } = useContext(ModalContext);
   const { showToast } = useContext(ToastContext);

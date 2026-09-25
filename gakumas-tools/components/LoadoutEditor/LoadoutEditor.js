@@ -1,5 +1,5 @@
 "use client";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { useTranslations } from "next-intl";
 import LoadoutParams from "@/components/LoadoutParams";
 import StaminaCalculator from "@/components/StaminaCalculator";
@@ -10,7 +10,7 @@ import { getIndications } from "@/utils/simulator";
 import { formatStageShortName } from "@/utils/stages";
 import styles from "./LoadoutEditor.module.scss";
 
-export default function LoadoutEditor({ config, idolId }) {
+function LoadoutEditor({ config, idolId }) {
   const t = useTranslations("Simulator");
 
   const { stage, loadout, setParams, replacePItemId, swapPItemIds } =
@@ -69,9 +69,12 @@ export default function LoadoutEditor({ config, idolId }) {
           customizations={loadout.customizationGroups[i]}
           indications={skillCardIndicationGroups[i]}
           groupIndex={i}
+          groupCount={loadout.skillCardIdGroups.length}
           idolId={config.idol.idolId || idolId}
         />
       ))}
     </div>
   );
 }
+
+export default memo(LoadoutEditor);
