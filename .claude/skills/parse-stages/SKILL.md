@@ -24,11 +24,11 @@ Look for "コンテストシーズンN" in the announcement header to get the se
 ### Step 3: Analyze criteria bars (one per stage)
 **As of Season 43**, each stage has its own 審査基準 (criteria) bar, shown in the per-stage header row (`ステージN 審査基準 [bar] プラン [icon]`). Earlier seasons shared a single season-level bar.
 
-Run the analysis script **once per stage** on the image containing that stage's bar:
+Run the analysis script **once per stage** on the image containing that stage's bar. It prints the stage's `criteria` and `firstTurns` values (vo,da,vi) ready to paste:
 ```bash
 python scripts/analyze_criteria_bar.py <image_with_stage_N_bar>
 ```
-Convert percentages to decimals (e.g., 20% → 0.2). Record each stage's criteria separately — they may differ.
+Record each stage's criteria separately — they may differ.
 
 ### Step 4: Identify plan for each stage
 The plan icon appears in each stage's header row, to the right of its criteria bar (`プラン [icon]`). Icons are silver/gray:
@@ -49,29 +49,16 @@ Check `tail -15 packages/gakumas-data/csv/stages.csv` for recent stages with sim
 
 **Important**: The turnCounts don't always match simple `criteria[i] * total_turns` rounding. Look for stages with the exact same criteria values in recent history and use those as reference. The distribution may vary slightly between stages even with the same criteria.
 
-### Step 7: Infer first turn probabilities
-1. If any criterion >= 0.45: that one gets 1.0, others get 0
-2. Otherwise: highest gets 0.9, second highest gets 0.1, lowest gets 0
-3. Tiebreaker: vo > da > vi
-
-Example: criteria=[0.35, 0.4, 0.25] (none >= 0.45)
-- Highest: da (0.4) → 0.9
-- Second: vo (0.35) → 0.1
-- Lowest: vi (0.25) → 0
-- Result: [0.1, 0.9, 0]
-
-Quick reference - check `tail -15 packages/gakumas-data/csv/stages.csv` for recent patterns.
-
-### Step 8: Translate effects to DSL
+### Step 7: Translate effects to DSL
 Use the Structured DSL Reference below to convert Japanese effect text to DSL format.
 
-### Step 9: Output CSV rows
+### Step 8: Output CSV rows
 Generate one CSV row per stage with this format:
 ```
 id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effects,linkTurnCounts
 ```
 
-### Step 10: Validate
+### Step 9: Validate
 Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
 ## Structured DSL Reference

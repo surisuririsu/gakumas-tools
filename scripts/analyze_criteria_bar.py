@@ -166,6 +166,16 @@ def analyze_image(image_path):
     return percentages
 
 
+def first_turns(criteria):
+    order = sorted(range(3), key=lambda i: (-criteria[i], i))
+    turns = [0, 0, 0]
+    if criteria[order[0]] >= 0.45:
+        turns[order[0]] = 1
+    else:
+        turns[order[0]], turns[order[1]] = 0.9, 0.1
+    return turns
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python analyze_criteria_bar.py <image_path>")
@@ -184,6 +194,10 @@ def main():
         print(f"  Pink:   {round(pink)}% ({pink:.1f}%)")
         print(f"  Blue:   {round(blue)}% ({blue:.1f}%)")
         print(f"  Orange: {round(orange)}% ({orange:.1f}%)")
+
+        criteria = [round(pink) / 100, round(blue) / 100, round(orange) / 100]
+        print(f'  criteria:   "{",".join(f"{c:g}" for c in criteria)}"')
+        print(f'  firstTurns: "{",".join(f"{t:g}" for t in first_turns(criteria))}"')
 
 
 if __name__ == "__main__":
