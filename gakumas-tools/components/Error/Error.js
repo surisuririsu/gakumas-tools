@@ -1,8 +1,19 @@
 import { useTranslations } from "next-intl";
-import { FaArrowRotateRight, FaHouse } from "react-icons/fa6";
-import Button from "@/components/Button";
+import buttonStyles from "@/components/Button/Button.module.scss";
 import Image from "@/components/Image";
+import c from "@/utils/classNames";
 import styles from "./Error.module.scss";
+
+const RETRY_CLASS = c(
+  buttonStyles.button,
+  buttonStyles.primary,
+  buttonStyles.md
+);
+const HOME_CLASS = c(
+  buttonStyles.button,
+  buttonStyles.default,
+  buttonStyles.md
+);
 
 export default function Error({ code, onRetry }) {
   const t = useTranslations("Error");
@@ -13,15 +24,13 @@ export default function Error({ code, onRetry }) {
       <h2>{notFound ? t("notFound") : t("generic")}</h2>
       <div className={styles.actions}>
         {onRetry && (
-          <Button style="primary" onClick={onRetry}>
-            <FaArrowRotateRight />
+          <button className={RETRY_CLASS} onClick={onRetry}>
             {t("retry")}
-          </Button>
+          </button>
         )}
-        <Button href="/">
-          <FaHouse />
+        <a className={HOME_CLASS} href="/">
           {t("home")}
-        </Button>
+        </a>
       </div>
       <div className={styles.wrapper}>
         <Image
