@@ -15,7 +15,20 @@
   align-items: center;
   padding: tokens.$space-2;
   background-color: rgba(0, 0, 0, 0.45);
-  animation: overlayIn 0.15s ease-out;
+  animation: overlayIn tokens.$duration-fast ease-out;
+
+  &.stacked {
+    background-color: transparent;
+  }
+
+  &.closing {
+    pointer-events: none;
+    animation: overlayOut tokens.$duration-base tokens.$ease-out forwards;
+
+    .modal {
+      animation: modalOut tokens.$duration-base tokens.$ease-out forwards;
+    }
+  }
 }
 
 .modal {
@@ -30,7 +43,21 @@
   background-color: tokens.$surface-panel;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
   container-type: inline-size;
-  animation: modalIn 0.18s cubic-bezier(0.2, 0, 0.2, 1);
+  animation: modalIn tokens.$duration-slow tokens.$ease-spring;
+  transition:
+    opacity tokens.$duration-base,
+    scale tokens.$duration-base tokens.$ease-out,
+    visibility 0s;
+
+  .covered > & {
+    visibility: hidden;
+    opacity: 0;
+    scale: 0.97;
+    transition:
+      opacity tokens.$duration-fast,
+      scale tokens.$duration-fast,
+      visibility 0s linear tokens.$duration-fast;
+  }
 
   @media only screen and (max-width: 600px) {
     padding: tokens.$space-6 tokens.$space-3 tokens.$space-3;
@@ -79,6 +106,12 @@
   }
 }
 
+@keyframes overlayOut {
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
@@ -87,5 +120,12 @@
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalOut {
+  to {
+    opacity: 0;
+    transform: scale(0.97) translateY(4px);
   }
 }

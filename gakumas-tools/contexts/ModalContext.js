@@ -1,55 +1,86 @@
 "use client";
-import { createContext, useCallback, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const ModalContext = createContext();
 
+export const ModalLayerContext = createContext(null);
+
 export function ModalContextProvider({ children }) {
   const [modals, _setModals] = useState([]);
-  const originalFocusRef = useRef(null);
+  const nextIdRef = useRef(0);
   const modalsRef = useRef(modals);
   modalsRef.current = modals;
 
   const closeModal = useCallback(() => {
     _setModals((cur) => {
-      const newModals = cur.slice(0, cur.length - 1);
-      // If closing the last modal, we'll need to restore focus
-      if (newModals.length === 0 && originalFocusRef.current) {
-        // Use setTimeout to ensure the modal is unmounted first
-        setTimeout(() => {
-          if (originalFocusRef.current && originalFocusRef.current.focus) {
-            originalFocusRef.current.focus();
-          }
-          originalFocusRef.current = null;
-        }, 0);
-      }
-      return newModals;
+      const index = cur.findLastIndex((modal) => !modal.closing);
+      if (index == -1) return cur;
+      return cur.map((modal, i) =>
+        i == index ? { ...modal, closing: true } : modal
+      );
     });
   }, []);
 
-  const setModal = useCallback((modal) => {
-    _setModals((cur) => {
-      // Store the original focused element when opening the first modal
-      if (cur.length === 0) {
-        originalFocusRef.current = document.activeElement;
-      }
-      return cur.concat(modal);
-    });
+  const setModal = useCallback((element) => {
+    const id = nextIdRef.current++;
+    const returnFocus = document.activeElement;
+    _setModals((cur) => cur.concat({ id, element, returnFocus }));
   }, []);
 
-  const getModalStackDepth = useCallback(() => modalsRef.current.length, []);
+  const removeModal = useCallback((id) => {
+    const modal = modalsRef.current.find((m) => m.id == id);
+    if (!modal) return;
+    _setModals((cur) => cur.filter((m) => m.id != id));
+    if (modal.returnFocus?.isConnected) modal.returnFocus.focus();
+  }, []);
+
+  const getModalStackDepth = useCallback(
+    () => modalsRef.current.filter((modal) => !modal.closing).length,
+    []
+  );
 
   const value = useMemo(
     () => ({ setModal, closeModal, getModalStackDepth }),
     [setModal, closeModal, getModalStackDepth]
   );
 
+  const liveIndices = modals.flatMap((modal, i) => (modal.closing ? [] : i));
+
   return (
     <ModalContext.Provider value={value}>
-      <>
-        {children}
-        {!!modals.length && modals[modals.length - 1]}
-      </>
+      {children}
+      {modals.map((modal, i) => (
+        <ModalLayer
+          key={modal.id}
+          id={modal.id}
+          closing={!!modal.closing}
+          covered={liveIndices.some((j) => j > i)}
+          stacked={liveIndices.some((j) => j < i)}
+          onExited={removeModal}
+        >
+          {modal.element}
+        </ModalLayer>
+      ))}
     </ModalContext.Provider>
+  );
+}
+
+function ModalLayer({ id, closing, covered, stacked, onExited, children }) {
+  const value = useMemo(
+    () => ({ closing, covered, stacked, onExited: () => onExited(id) }),
+    [id, closing, covered, stacked, onExited]
+  );
+
+  return (
+    <ModalLayerContext.Provider value={value}>
+      {children}
+    </ModalLayerContext.Provider>
   );
 }
 
