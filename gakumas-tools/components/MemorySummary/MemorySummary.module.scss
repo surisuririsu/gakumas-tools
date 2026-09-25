@@ -14,8 +14,14 @@
 
     .left .actions {
       opacity: 1;
+      pointer-events: auto;
     }
   }
+}
+
+.left.actionsShown .actions {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .left {
@@ -32,11 +38,19 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.55);
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.15s ease;
 
   button {
     transform: scale(0.6);
     margin: -8px;
+  }
+
+  @media (pointer: coarse) {
+    button {
+      transform: scale(0.8);
+      margin: -4px;
+    }
   }
 }
 

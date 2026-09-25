@@ -1,9 +1,10 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import EntityIcon from "@/components/EntityIcon";
 import Image from "@/components/Image";
 import PIdol from "@/components/PIdol";
+import c from "@/utils/classNames";
 import { calculateContestPower } from "@/utils/contestPower";
 import { EntityTypes } from "@/utils/entities";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
@@ -13,6 +14,7 @@ function MemorySummary({ memory, picking, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
     memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
+  const [actionsShown, setActionsShown] = useState(false);
   const contestPower = calculateContestPower(
     params,
     pItemIds,
@@ -31,7 +33,10 @@ function MemorySummary({ memory, picking, onClick }) {
 
   const summaryContent = (
     <>
-      <div className={styles.left}>
+      <div
+        className={c(styles.left, actionsShown && styles.actionsShown)}
+        onClick={picking ? undefined : () => setActionsShown((v) => !v)}
+      >
         <PIdol pIdolId={pIdolId} />
         {!picking && <MemorySummaryActionButtons memory={memory} />}
       </div>

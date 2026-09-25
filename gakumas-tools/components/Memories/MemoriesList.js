@@ -20,7 +20,7 @@ const Row = memo(function Row({
   return (
     <div className={styles.memoryTile} style={style} {...ariaAttributes}>
       {deleting && (
-        <div className={styles.check}>
+        <label className={styles.check}>
           <input
             type="checkbox"
             checked={!!selectedMemories[memory._id]}
@@ -31,7 +31,7 @@ const Row = memo(function Row({
               }))
             }
           />
-        </div>
+        </label>
       )}
       <MemorySummary
         memory={memory}

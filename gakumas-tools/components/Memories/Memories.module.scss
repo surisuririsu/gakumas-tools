@@ -108,12 +108,18 @@
 
 .check {
   display: flex;
+  margin: 0;
   background-color: color.adjust(colors.$red, $alpha: -0.85);
+  cursor: pointer;
 
   input {
     width: 16px;
     margin: tokens.$space-2;
     accent-color: colors.$red-dark;
     cursor: pointer;
+
+    @media (pointer: coarse) {
+      width: 22px;
+    }
   }
 }
