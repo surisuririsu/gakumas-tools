@@ -20,26 +20,6 @@
   }
 }
 
-.outdated {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: tokens.$space-2;
-  padding: tokens.$space-1 tokens.$space-1 tokens.$space-1 tokens.$space-3;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-alt;
-  color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-sm;
-  animation: outdatedIn tokens.$duration-slow tokens.$ease-spring;
-}
-
-@keyframes outdatedIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-}
-
 .details {
   display: flex;
   flex-direction: column;

@@ -473,9 +473,7 @@
     "stats": "Stats",
     "compare": "Compare",
     "downloadScores": "Scores",
-    "optimizeParams": "Optimize params",
-    "outdated": "These results are from before your last edit.",
-    "rerun": "Re-run"
+    "optimizeParams": "Optimize params"
   },
   "CompareTab": {
     "saved": "Saved",

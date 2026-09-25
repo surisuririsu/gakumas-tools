@@ -67,7 +67,6 @@ export default function Simulator() {
   const { plan, idolId } = useContext(WorkspaceContext);
   const [strategy, setStrategy] = useState("HeuristicStrategy");
   const [simulatorData, setSimulatorData] = useState(null);
-  const [resultConfig, setResultConfig] = useState(null);
   const [running, setRunning] = useState(false);
   const [numRuns, setNumRuns] = usePersistedState(
     NUM_RUNS_KEY,
@@ -79,8 +78,6 @@ export default function Simulator() {
   const resolveDecisionRef = useRef(null);
   const [progress] = useState(createProgressStore);
   const abortRef = useRef(null);
-  const resultRef = useRef(null);
-  const revealResultRef = useRef(false);
   const runSimulationRef = useRef(null);
 
   const config = useMemo(() => {
@@ -120,15 +117,6 @@ export default function Simulator() {
     }
     return retainWorkerPool();
   }, []);
-
-  useEffect(() => {
-    if (!revealResultRef.current || !simulatorData) return;
-    revealResultRef.current = false;
-    const el = resultRef.current;
-    if (el && el.getBoundingClientRect().top > window.innerHeight * 0.75) {
-      el.scrollIntoView({ block: "start" });
-    }
-  }, [simulatorData]);
 
   const setResult = useCallback(
     (result) => {
@@ -189,7 +177,6 @@ export default function Simulator() {
   async function runSimulation() {
     const controller = new AbortController();
     abortRef.current = controller;
-    const runConfig = config;
     setRunning(true);
     progress.set(0);
 
@@ -218,8 +205,6 @@ export default function Simulator() {
         );
         result = mergeResults(results);
       }
-      revealResultRef.current = true;
-      setResultConfig(runConfig);
       setResult(result);
     } catch (err) {
       console.timeEnd("simulation");
@@ -378,10 +363,7 @@ export default function Simulator() {
 
       {strategy === "HeuristicStrategy" && simulatorData && (
         <SimulatorResult
-          containerRef={resultRef}
           pending={running}
-          outdated={!running && resultConfig != config}
-          onRerun={startSimulation}
           data={simulatorData}
           config={config}
           enterPercents={enterPercents}

@@ -473,9 +473,7 @@
     "stats": "统计",
     "compare": "比较",
     "downloadScores": "分数",
-    "optimizeParams": "优化参数",
-    "outdated": "此结果来自修改编组之前。",
-    "rerun": "重新运行"
+    "optimizeParams": "优化参数"
   },
   "CompareTab": {
     "saved": "已保存",

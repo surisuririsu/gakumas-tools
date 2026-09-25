@@ -473,9 +473,7 @@
     "stats": "통계",
     "compare": "비교",
     "downloadScores": "점수",
-    "optimizeParams": "파라미터 최적화",
-    "outdated": "편성을 변경하기 전의 결과입니다.",
-    "rerun": "다시 실행"
+    "optimizeParams": "파라미터 최적화"
   },
   "CompareTab": {
     "saved": "저장됨",

@@ -1,7 +1,6 @@
 import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
-  FaArrowRotateRight,
   FaCircleArrowUp,
   FaDownload,
   FaWandMagicSparkles,
@@ -26,10 +25,7 @@ const TABS = ["stats", "logs", "compare"];
 const TAB_STORAGE_KEY = "simulatorResultTab";
 
 function SimulatorResult({
-  containerRef,
   pending,
-  outdated,
-  onRerun,
   data,
   config,
   enterPercents,
@@ -91,20 +87,9 @@ function SimulatorResult({
   return (
     <div
       id="simulator_result"
-      ref={containerRef}
       className={c(styles.result, pending && styles.pending)}
       aria-busy={pending}
     >
-      {outdated && (
-        <div className={styles.outdated} data-export-hide="true">
-          <span>{t("outdated")}</span>
-          <Button size="sm" style="blue-secondary" onClick={onRerun}>
-            <FaArrowRotateRight />
-            {t("rerun")}
-          </Button>
-        </div>
-      )}
-
       <Table
         className={styles.stats}
         headers={[t("min"), t("average"), t("median"), t("max")]}

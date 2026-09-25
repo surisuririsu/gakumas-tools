@@ -481,9 +481,7 @@
     "stats": "統計",
     "compare": "比較",
     "downloadScores": "スコア",
-    "optimizeParams": "パラメータ最適化",
-    "outdated": "この結果は編成を変更する前のものです。",
-    "rerun": "再実行"
+    "optimizeParams": "パラメータ最適化"
   },
   "CompareTab": {
     "saved": "保存済み",
