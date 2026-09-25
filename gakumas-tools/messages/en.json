@@ -426,7 +426,9 @@
     "addRow": "Add row",
     "moveUp": "Move up",
     "moveDown": "Move down",
-    "removeRow": "Remove row"
+    "removeRow": "Remove row",
+    "rowRemoved": "Row removed",
+    "undo": "Undo"
   },
   "SimulatorSubTools": {
     "costRanges": "Cost ranges",
@@ -648,7 +650,9 @@
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
     "needsChecking": "{count} row(s) need checking",
-    "confirmRow": "Confirm this row's values are correct"
+    "confirmRow": "Confirm this row's values are correct",
+    "rowRemoved": "Row removed",
+    "undo": "Undo"
   },
   "KofiAd": {
     "prompt": "Support this project"

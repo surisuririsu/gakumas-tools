@@ -1,5 +1,13 @@
 "use client";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
@@ -17,6 +25,7 @@ import { BoxPlot, DistributionPlot } from "@/components/Charts";
 import Image from "@/components/Image";
 import ProgressBar from "@/components/ProgressBar";
 import Table from "@/components/Table";
+import ToastContext from "@/contexts/ToastContext";
 import { downloadBlob } from "@/utils/download";
 import { DEBUG } from "@/utils/imageProcessing/common";
 import {
@@ -48,6 +57,7 @@ const BRIGHTNESS_THRESHOLD = 180;
 function Rehearsal() {
   const t = useTranslations("Rehearsal");
   const tRes = useTranslations("SimulatorResult");
+  const { showToast } = useContext(ToastContext);
 
   const [total, setTotal] = useState(null);
   const [progress, setProgress] = useState(null);
@@ -247,12 +257,24 @@ function Rehearsal() {
     [],
   );
   const handleRowDelete = useCallback(
-    (i) =>
+    (i) => {
+      let removed;
       setData((d) => {
-        if (d[i]?.src) URL.revokeObjectURL(d[i].src);
+        removed = d[i];
         return d.filter((_, j) => j !== i);
-      }),
-    [],
+      });
+      showToast({
+        message: t("rowRemoved"),
+        action: {
+          label: t("undo"),
+          onClick: () => {
+            if (!removed) return;
+            setData((d) => [...d.slice(0, i), removed, ...d.slice(i)]);
+          },
+        },
+      });
+    },
+    [showToast, t],
   );
   const handleCellEdit = useCallback(
     (i, j, k, value) =>

@@ -25,6 +25,7 @@ import StageSkillCards from "@/components/StageSkillCards";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
+import ToastContext from "@/contexts/ToastContext";
 import { useRouter } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
@@ -53,6 +54,7 @@ function LoadoutSkillCardGroup({
     MemoryCalculatorContext,
   );
   const { setModal } = useContext(ModalContext);
+  const { showToast } = useContext(ToastContext);
   const [expanded, setExpanded] = useState(false);
   const [costExpanded, setCostExpanded] = useState(false);
 
@@ -71,6 +73,19 @@ function LoadoutSkillCardGroup({
         }),
     [skillCardIds],
   );
+
+  function deleteRow() {
+    deleteSkillCardIdGroup(groupIndex);
+    if (!skillCardIds.some((id) => id)) return;
+    showToast({
+      message: t("rowRemoved"),
+      action: {
+        label: t("undo"),
+        onClick: () =>
+          insertSkillCardIdGroup(groupIndex, skillCardIds, customizations),
+      },
+    });
+  }
 
   const cost = useMemo(
     () => costBreakdown.reduce((acc, cur) => acc + cur.cost, 0),
@@ -168,7 +183,7 @@ function LoadoutSkillCardGroup({
 
           <button
             className={styles.deleteButton}
-            onClick={() => deleteSkillCardIdGroup(groupIndex)}
+            onClick={deleteRow}
             disabled={loadout.skillCardIdGroups.length < 2}
           >
             <FaCircleXmark title={t("removeRow")} />

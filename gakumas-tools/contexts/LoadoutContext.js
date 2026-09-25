@@ -239,18 +239,21 @@ export function LoadoutContextProvider({ children }) {
     });
   }, []);
 
-  const insertSkillCardIdGroup = useCallback((groupIndex) => {
-    setSkillCardIdGroups((cur) => {
-      const updatedSkillCardIds = [...cur];
-      updatedSkillCardIds.splice(groupIndex, 0, [0, 0, 0, 0, 0, 0]);
-      return updatedSkillCardIds;
-    });
-    setCustomizationGroups((cur) => {
-      const updatedCustomizations = [...cur];
-      updatedCustomizations.splice(groupIndex, 0, []);
-      return updatedCustomizations;
-    });
-  }, []);
+  const insertSkillCardIdGroup = useCallback(
+    (groupIndex, skillCardIds = [0, 0, 0, 0, 0, 0], customizations = []) => {
+      setSkillCardIdGroups((cur) => {
+        const updatedSkillCardIds = [...cur];
+        updatedSkillCardIds.splice(groupIndex, 0, skillCardIds);
+        return updatedSkillCardIds;
+      });
+      setCustomizationGroups((cur) => {
+        const updatedCustomizations = [...cur];
+        updatedCustomizations.splice(groupIndex, 0, customizations);
+        return updatedCustomizations;
+      });
+    },
+    [],
+  );
 
   const deleteSkillCardIdGroup = useCallback((groupIndex) => {
     setSkillCardIdGroups((cur) => {

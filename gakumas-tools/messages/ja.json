@@ -434,7 +434,9 @@
     "addRow": "行を追加",
     "moveUp": "上に移動",
     "moveDown": "下に移動",
-    "removeRow": "行を削除"
+    "removeRow": "行を削除",
+    "rowRemoved": "行を削除しました",
+    "undo": "元に戻す"
   },
   "SimulatorSubTools": {
     "costRanges": "コスト範囲",
@@ -656,7 +658,9 @@
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
     "needsChecking": "{count}件の行を確認してください",
-    "confirmRow": "この行の値が正しいことを確認"
+    "confirmRow": "この行の値が正しいことを確認",
+    "rowRemoved": "行を削除しました",
+    "undo": "元に戻す"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

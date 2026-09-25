@@ -426,7 +426,9 @@
     "addRow": "添加行",
     "moveUp": "上移",
     "moveDown": "下移",
-    "removeRow": "删除行"
+    "removeRow": "删除行",
+    "rowRemoved": "已删除该行",
+    "undo": "撤销"
   },
   "SimulatorSubTools": {
     "costRanges": "容量范围",
@@ -648,7 +650,9 @@
     "videoError": "处理视频时出错: {message}",
     "imageError": "{count} 张截图无法解析，已跳过。",
     "needsChecking": "{count} 行需要检查",
-    "confirmRow": "确认此行的数值正确"
+    "confirmRow": "确认此行的数值正确",
+    "rowRemoved": "已删除该行",
+    "undo": "撤销"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

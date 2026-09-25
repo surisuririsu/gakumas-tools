@@ -426,7 +426,9 @@
     "addRow": "행 추가",
     "moveUp": "위로 이동",
     "moveDown": "아래로 이동",
-    "removeRow": "행 삭제"
+    "removeRow": "행 삭제",
+    "rowRemoved": "행을 삭제했습니다",
+    "undo": "실행 취소"
   },
   "SimulatorSubTools": {
     "costRanges": "코스트 범위",
@@ -648,7 +650,9 @@
     "videoError": "동영상 처리 중 오류: {message}",
     "imageError": "{count}개의 스크린샷을 분석하지 못해 건너뛰었습니다.",
     "needsChecking": "{count}개의 행을 확인해야 합니다",
-    "confirmRow": "이 행의 값이 올바른지 확인"
+    "confirmRow": "이 행의 값이 올바른지 확인",
+    "rowRemoved": "행을 삭제했습니다",
+    "undo": "실행 취소"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"
