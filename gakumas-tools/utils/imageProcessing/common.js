@@ -48,7 +48,12 @@ export function getBlackCanvas(img) {
   const canvas = getPreprocessedCanvas(img, (r, g, b) => {
     const average = (r + g + b) / 3;
     return (
-      [r, g, b].every((v) => Math.abs(v - average) < 8 && v < 185) ||
+      (r < 185 &&
+        g < 185 &&
+        b < 185 &&
+        Math.abs(r - average) < 8 &&
+        Math.abs(g - average) < 8 &&
+        Math.abs(b - average) < 8) ||
       (r > 70 && r < 120 && g > 70 && g < 120 && b > 90 && b < 130)
     );
   });
@@ -72,7 +77,7 @@ export function getBlackCanvas(img) {
 export function getWhiteCanvas(img, threshold = 252, scale = 1) {
   return getPreprocessedCanvas(
     img,
-    (r, g, b) => [r, g, b].every((v) => v > threshold),
+    (r, g, b) => r > threshold && g > threshold && b > threshold,
     scale,
   );
 }
