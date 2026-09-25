@@ -442,7 +442,9 @@
     "confirm": "編成をクリアしますか？",
     "clear": "クリア",
     "share": "共有",
-    "openLoadouts": "編成"
+    "openLoadouts": "編成",
+    "linkCopied": "リンクをコピーしました",
+    "copyFailed": "リンクをコピーできませんでした"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "スクリーンショットから編成を読み込み",
@@ -455,7 +457,9 @@
     "more": "その他…",
     "x": "Xで共有",
     "saveImage": "画像として保存",
-    "exporting": "保存中…"
+    "exporting": "保存中…",
+    "imageSaved": "画像を保存しました",
+    "exportFailed": "画像を保存できませんでした。もう一度お試しください。"
   },
   "ConfirmModal": {
     "cancel": "キャンセル",
@@ -478,7 +482,10 @@
     "downloadScores": "スコア",
     "optimizeParams": "パラメータ最適化",
     "outdated": "この結果は編成を変更する前のものです。",
-    "rerun": "再実行"
+    "rerun": "再実行",
+    "paramsOptimized": "パラメータを更新しました（推定 +{gain}）",
+    "alreadyOptimal": "パラメータはすでに最適です",
+    "cannotOptimize": "このステージではパラメータを最適化できません"
   },
   "CompareTab": {
     "saved": "保存済み",

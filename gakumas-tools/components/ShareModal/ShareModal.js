@@ -5,6 +5,7 @@ import { FaDownload, FaShareNodes, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
+import ToastContext from "@/contexts/ToastContext";
 import { downloadBlob } from "@/utils/download";
 import styles from "./ShareModal.module.scss";
 
@@ -40,50 +41,48 @@ function getExportTarget() {
 
 async function exportImage() {
   const node = document.getElementById("simulator_loadout");
-  if (!node) return;
-  node.classList.add("exporting");
-  try {
-    const { isIOS, isIOSSafari } = getExportTarget();
-    const [, { default: html2canvas }] = await Promise.all([
-      isIOS ? eagerLoadLazyImages() : Promise.resolve(),
-      import("html2canvas"),
-    ]);
-    const canvas = await html2canvas(node, {
-      backgroundColor: "#ffffff",
-      scale: 2,
-      useCORS: true,
-      imageTimeout: 10000,
-      logging: false,
-    });
-    const blob = await new Promise((resolve) =>
-      canvas.toBlob(resolve, "image/png")
-    );
-    if (!blob) return;
+  if (!node) throw new Error("Nothing to export");
+  const { isIOS, isIOSSafari } = getExportTarget();
+  const [, { default: html2canvas }] = await Promise.all([
+    isIOS ? eagerLoadLazyImages() : Promise.resolve(),
+    import("html2canvas"),
+  ]);
+  const canvas = await html2canvas(node, {
+    backgroundColor: "#ffffff",
+    scale: 2,
+    useCORS: true,
+    imageTimeout: 10000,
+    logging: false,
+    ignoreElements: (el) => el.dataset?.exportHide == "true",
+  });
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, "image/png")
+  );
+  if (!blob) throw new Error("Couldn't encode image");
 
-    if (isIOSSafari) {
-      const file = new File([blob], FILENAME, { type: "image/png" });
-      if (
-        typeof navigator.canShare === "function" &&
-        navigator.canShare({ files: [file] })
-      ) {
-        try {
-          await navigator.share({ files: [file] });
-          return;
-        } catch (err) {
-          if (err?.name === "AbortError") return;
-        }
+  if (isIOSSafari) {
+    const file = new File([blob], FILENAME, { type: "image/png" });
+    if (
+      typeof navigator.canShare === "function" &&
+      navigator.canShare({ files: [file] })
+    ) {
+      try {
+        await navigator.share({ files: [file] });
+        return "shared";
+      } catch (err) {
+        if (err?.name === "AbortError") return "cancelled";
       }
     }
-
-    downloadBlob(blob, FILENAME);
-  } finally {
-    node.classList.remove("exporting");
   }
+
+  downloadBlob(blob, FILENAME);
+  return "downloaded";
 }
 
 export default function ShareModal({ url }) {
   const t = useTranslations("ShareModal");
   const { closeModal } = useContext(ModalContext);
+  const { showToast } = useContext(ToastContext);
   const [exporting, setExporting] = useState(false);
 
   const canWebShare =
@@ -108,10 +107,14 @@ export default function ShareModal({ url }) {
           30000
         );
       });
-      await Promise.race([exportImage(), timeout]);
+      const outcome = await Promise.race([exportImage(), timeout]);
       closeModal();
+      if (outcome == "downloaded") {
+        showToast({ tone: "success", message: t("imageSaved") });
+      }
     } catch (err) {
       console.error(err);
+      showToast({ tone: "error", message: t("exportFailed") });
     } finally {
       clearTimeout(timeoutId);
       setExporting(false);
@@ -119,7 +122,7 @@ export default function ShareModal({ url }) {
   }
 
   return (
-    <Modal>
+    <Modal dismissable={!exporting}>
       <h3>{t("title")}</h3>
       <div className={styles.actions}>
         <Button style="primary" fill onClick={saveImage} disabled={exporting}>

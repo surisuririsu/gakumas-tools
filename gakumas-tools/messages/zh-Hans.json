@@ -434,7 +434,9 @@
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
     "share": "分享",
-    "openLoadouts": "编组"
+    "openLoadouts": "编组",
+    "linkCopied": "已复制链接",
+    "copyFailed": "无法复制链接"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "从截图导入编组",
@@ -447,7 +449,9 @@
     "more": "更多…",
     "x": "分享到 X",
     "saveImage": "保存为图片",
-    "exporting": "保存中…"
+    "exporting": "保存中…",
+    "imageSaved": "已保存图片",
+    "exportFailed": "无法保存图片，请重试。"
   },
   "ConfirmModal": {
     "cancel": "取消",
@@ -470,7 +474,10 @@
     "downloadScores": "分数",
     "optimizeParams": "优化参数",
     "outdated": "此结果来自修改编组之前。",
-    "rerun": "重新运行"
+    "rerun": "重新运行",
+    "paramsOptimized": "已更新参数（预计 +{gain}）",
+    "alreadyOptimal": "参数已是最优",
+    "cannotOptimize": "无法为此舞台优化参数"
   },
   "CompareTab": {
     "saved": "已保存",

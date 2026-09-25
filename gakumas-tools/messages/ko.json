@@ -434,7 +434,9 @@
     "confirm": "편성을 초기화할까요?",
     "clear": "초기화",
     "share": "공유",
-    "openLoadouts": "편성"
+    "openLoadouts": "편성",
+    "linkCopied": "링크를 복사했습니다",
+    "copyFailed": "링크를 복사하지 못했습니다"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "스크린샷에서 편성 불러오기",
@@ -447,7 +449,9 @@
     "more": "더보기…",
     "x": "X에 공유",
     "saveImage": "이미지로 저장",
-    "exporting": "저장 중…"
+    "exporting": "저장 중…",
+    "imageSaved": "이미지를 저장했습니다",
+    "exportFailed": "이미지를 저장하지 못했습니다. 다시 시도해 주세요."
   },
   "ConfirmModal": {
     "cancel": "취소",
@@ -470,7 +474,10 @@
     "downloadScores": "점수",
     "optimizeParams": "파라미터 최적화",
     "outdated": "편성을 변경하기 전의 결과입니다.",
-    "rerun": "다시 실행"
+    "rerun": "다시 실행",
+    "paramsOptimized": "파라미터를 변경했습니다 (예상 +{gain})",
+    "alreadyOptimal": "파라미터가 이미 최적입니다",
+    "cannotOptimize": "이 스테이지에서는 파라미터를 최적화할 수 없습니다"
   },
   "CompareTab": {
     "saved": "저장됨",

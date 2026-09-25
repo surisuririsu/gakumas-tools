@@ -14,6 +14,7 @@ import SimulatorStats from "@/components/SimulatorStats";
 import Table from "@/components/Table";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
+import ToastContext from "@/contexts/ToastContext";
 import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
@@ -39,6 +40,7 @@ function SimulatorResult({
   const t = useTranslations("SimulatorResult");
   const { setParams } = useContext(LoadoutContext);
   const { history } = useContext(SimulationRunsContext);
+  const { showToast } = useContext(ToastContext);
   const currentRun = history[0] || null;
   // Default rendered during SSR / pre-hydration. Hydrated from localStorage
   // in the effect below so the initial markup matches between server and
@@ -70,17 +72,27 @@ function SimulatorResult({
       config,
       enterPercents,
     });
-    if (!result) return;
+    if (!result) {
+      showToast({ tone: "error", message: t("cannotOptimize") });
+      return;
+    }
+    const gain = Math.round(result.optimalScore - result.baseScore);
+    logEvent("simulator_params_optimize", { gain });
+    if (gain <= 0) {
+      showToast({ message: t("alreadyOptimal") });
+      return;
+    }
     setParams((cur) => [
       result.params.vocal,
       result.params.dance,
       result.params.visual,
       cur[3],
     ]);
-    logEvent("simulator_params_optimize", {
-      gain: Math.round(result.optimalScore - result.baseScore),
+    showToast({
+      tone: "success",
+      message: t("paramsOptimized", { gain: gain.toLocaleString() }),
     });
-  }, [data.scoreStats, config, enterPercents, setParams]);
+  },[data.scoreStats, config, enterPercents, setParams, showToast, t]);
 
   const downloadScores = useCallback(() => {
     const blob = new Blob([data.scores.join("\n")], { type: "text/csv" });
