@@ -184,13 +184,7 @@ export default function Simulator() {
     setRunning(false);
   }
 
-  const cancelSimulation = useCallback(() => {
-    abortRef.current?.abort();
-    abortRef.current = null;
-    setRunning(false);
-  }, []);
-
-  const rerunSimulation = useCallback(() => runSimulationRef.current(), []);
+  const startSimulation = useCallback(() => runSimulationRef.current(), []);
 
   async function runSimulation() {
     const controller = new AbortController();
@@ -320,10 +314,11 @@ export default function Simulator() {
             <StrategyPicker
               strategy={strategy}
               setStrategy={(value) => {
-                cancelSimulation();
+                abortRef.current?.abort();
                 setSimulatorData(null);
                 setPendingDecision(null);
                 setStrategy(value);
+                setRunning(false);
               }}
             />
           </div>
@@ -350,8 +345,7 @@ export default function Simulator() {
               running={running}
               numRuns={numRuns}
               progress={progress}
-              onRun={rerunSimulation}
-              onCancel={cancelSimulation}
+              onRun={startSimulation}
             />
           )}
 
@@ -387,7 +381,7 @@ export default function Simulator() {
           containerRef={resultRef}
           pending={running}
           outdated={!running && resultConfig != config}
-          onRerun={rerunSimulation}
+          onRerun={startSimulation}
           data={simulatorData}
           config={config}
           enterPercents={enterPercents}

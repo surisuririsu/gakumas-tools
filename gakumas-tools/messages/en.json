@@ -386,8 +386,7 @@
     "provideData": "Provide data",
     "lastUpdated": "Last updated",
     "start": "Start",
-    "restart": "Restart",
-    "cancel": "Cancel"
+    "restart": "Restart"
   },
   "StrategyPicker": {
     "auto": "Auto",

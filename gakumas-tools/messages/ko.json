@@ -386,8 +386,7 @@
     "provideData": "데이터 제공하기",
     "lastUpdated": "최종 업데이트",
     "start": "시작",
-    "restart": "재시작",
-    "cancel": "취소"
+    "restart": "재시작"
   },
   "StrategyPicker": {
     "auto": "자동",
