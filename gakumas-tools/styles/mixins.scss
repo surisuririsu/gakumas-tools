@@ -318,6 +318,33 @@ $chevron-accent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
   }
 }
 
+@mixin beat($name: beat, $duration: 520ms) {
+  .#{$name}A,
+  .#{$name}B {
+    animation: $duration tokens.$ease-pop both;
+  }
+
+  .#{$name}A {
+    animation-name: #{$name}FramesA;
+  }
+
+  .#{$name}B {
+    animation-name: #{$name}FramesB;
+  }
+
+  @keyframes #{$name}FramesA {
+    from {
+      @content;
+    }
+  }
+
+  @keyframes #{$name}FramesB {
+    from {
+      @content;
+    }
+  }
+}
+
 @mixin stagger($step: 25ms, $max: 12) {
   animation-delay: calc(min(var(--i, 0), #{$max}) * #{$step});
 }

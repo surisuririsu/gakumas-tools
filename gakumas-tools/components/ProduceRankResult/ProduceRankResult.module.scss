@@ -33,33 +33,10 @@
   font-weight: tokens.$weight-heavy;
 }
 
-.pop1,
-.pop2 {
-  animation: 460ms tokens.$ease-pop both;
-}
-
-.pop1 {
-  animation-name: rankPopA;
-}
-
-.pop2 {
-  animation-name: rankPopB;
-}
-
-@keyframes rankPopA {
-  from {
-    opacity: 0.4;
-    scale: 0.55;
-    rotate: -14deg;
-  }
-}
-
-@keyframes rankPopB {
-  from {
-    opacity: 0.4;
-    scale: 0.55;
-    rotate: -14deg;
-  }
+@include mixins.beat(pop, 460ms) {
+  opacity: 0.4;
+  scale: 0.55;
+  rotate: -14deg;
 }
 
 .values {
@@ -84,29 +61,8 @@
   color: tokens.$accent-edge;
 }
 
-.beat1,
-.beat2 {
-  animation: 520ms tokens.$ease-pop both;
-}
-
-.beat1 {
-  animation-name: beatA;
-}
-
-.beat2 {
-  animation-name: beatB;
-}
-
-@keyframes beatA {
-  from {
-    scale: 0.9;
-  }
-}
-
-@keyframes beatB {
-  from {
-    scale: 0.9;
-  }
+@include mixins.beat(beat, 520ms) {
+  scale: 0.9;
 }
 
 .next {

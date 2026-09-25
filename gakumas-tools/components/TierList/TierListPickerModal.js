@@ -5,7 +5,7 @@ import Modal from "@/components/Modal";
 import {
   usePopOnActivate,
   usePopOnChange,
-} from "@/components/EntityBank/usePop";
+} from "@/utils/usePop";
 import c from "@/utils/classNames";
 import { COMPARE_FN_BY_TYPE, ENTITY_DATA_BY_TYPE } from "@/utils/entities";
 import styles from "./TierListPickerModal.module.scss";

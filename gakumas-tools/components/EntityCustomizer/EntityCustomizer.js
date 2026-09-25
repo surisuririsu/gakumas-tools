@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { Customizations, SkillCards } from "gakumas-data";
 import EntityIcon from "@/components/EntityIcon";
-import { usePopOnChange } from "@/components/EntityBank/usePop";
+import { usePopOnChange } from "@/utils/usePop";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import c from "@/utils/classNames";
 import styles from "./EntityCustomizer.module.scss";

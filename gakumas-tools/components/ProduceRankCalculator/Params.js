@@ -1,9 +1,9 @@
-import useBeat from "@/components/ProduceRankResult/useBeat";
+import { usePopOnChange } from "@/utils/usePop";
 import c from "@/utils/classNames";
 import styles from "./Params.module.scss";
 
 function Param({ value }) {
-  const beat = useBeat(value);
+  const beat = usePopOnChange(value);
 
   return (
     <div className={c(styles.param, beat && styles[`beat${beat}`])}>

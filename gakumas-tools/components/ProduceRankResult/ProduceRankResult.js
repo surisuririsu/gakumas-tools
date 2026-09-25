@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "@/components/Image";
 import c from "@/utils/classNames";
-import useBeat from "./useBeat";
+import { usePopOnChange } from "@/utils/usePop";
 import styles from "./ProduceRankResult.module.scss";
 
 const COUNT_MS = 650;
@@ -58,8 +58,8 @@ export default function ProduceRankResult({ rating, rank, ratingByRank }) {
   const counted = useCountUp(rating);
   const shown =
     typeof rating == "number" && typeof counted == "number" ? counted : rating;
-  const ratingBeat = useBeat(rating);
-  const rankBeat = useBeat(known ? rank : null);
+  const ratingBeat = usePopOnChange(rating);
+  const rankBeat = usePopOnChange(known ? rank : null);
 
   return (
     <div className={styles.result}>

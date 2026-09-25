@@ -22,27 +22,6 @@
   }
 }
 
-.beat1,
-.beat2 {
-  animation: 520ms tokens.$ease-pop both;
-}
-
-.beat1 {
-  animation-name: paramBeatA;
-}
-
-.beat2 {
-  animation-name: paramBeatB;
-}
-
-@keyframes paramBeatA {
-  from {
-    scale: 0.88;
-  }
-}
-
-@keyframes paramBeatB {
-  from {
-    scale: 0.88;
-  }
+@include mixins.beat(beat, 520ms) {
+  scale: 0.88;
 }

@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import EntityIcon from "@/components/EntityIcon";
-import { usePopOnActivate } from "@/components/EntityBank/usePop";
+import { usePopOnActivate } from "@/utils/usePop";
 import {
   COMPARE_FN_BY_TYPE,
   ENTITY_DATA_BY_TYPE,
@@ -68,14 +68,12 @@ const PoolItem = memo(function PoolItem({ type, id }) {
   );
 });
 
-const POP_CLASSES = { a: styles.popA, b: styles.popB };
-
 function FilterChip({ active, onClick, children }) {
   const pop = usePopOnActivate(active);
   return (
     <button
       type="button"
-      className={c(styles.chip, active && styles.chipActive, POP_CLASSES[pop])}
+      className={c(styles.chip, active && styles.chipActive, pop && styles[`pop${pop}`])}
       aria-pressed={active}
       onClick={onClick}
     >

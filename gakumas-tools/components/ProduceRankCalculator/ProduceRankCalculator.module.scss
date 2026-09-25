@@ -48,29 +48,8 @@
   }
 }
 
-.beat1,
-.beat2 {
-  animation: 460ms tokens.$ease-pop both;
-}
-
-.beat1 {
-  animation-name: tagBeatA;
-}
-
-.beat2 {
-  animation-name: tagBeatB;
-}
-
-@keyframes tagBeatA {
-  from {
-    scale: 0.85;
-  }
-}
-
-@keyframes tagBeatB {
-  from {
-    scale: 0.85;
-  }
+@include mixins.beat(beat, 460ms) {
+  scale: 0.85;
 }
 
 .targetTable {

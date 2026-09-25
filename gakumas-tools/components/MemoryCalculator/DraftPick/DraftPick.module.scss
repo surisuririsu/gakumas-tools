@@ -82,27 +82,6 @@
   color: tokens.$accent-ink;
 }
 
-.beat1,
-.beat2 {
-  animation: 460ms tokens.$ease-pop both;
-}
-
-.beat1 {
-  animation-name: probabilityBeatA;
-}
-
-.beat2 {
-  animation-name: probabilityBeatB;
-}
-
-@keyframes probabilityBeatA {
-  from {
-    scale: 0.85;
-  }
-}
-
-@keyframes probabilityBeatB {
-  from {
-    scale: 0.85;
-  }
+@include mixins.beat(beat, 460ms) {
+  scale: 0.85;
 }

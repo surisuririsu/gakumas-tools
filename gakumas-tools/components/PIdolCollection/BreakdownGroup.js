@@ -1,10 +1,8 @@
 import { memo } from "react";
-import { usePopOnActivate } from "@/components/EntityBank/usePop";
+import { usePopOnActivate } from "@/utils/usePop";
 import c from "@/utils/classNames";
 import styles from "./PIdolCollection.module.scss";
 import { pct } from "./utils";
-
-const POP_CLASSES = { a: styles.popA, b: styles.popB };
 
 function BreakdownRow({ row, animate }) {
   const pop = usePopOnActivate(row.active, animate);
@@ -15,7 +13,7 @@ function BreakdownRow({ row, animate }) {
       className={c(
         styles.breakdownRow,
         row.active && styles.breakdownActive,
-        POP_CLASSES[pop],
+        pop && styles[`pop${pop}`],
       )}
       aria-pressed={row.active}
       onClick={row.onClick}

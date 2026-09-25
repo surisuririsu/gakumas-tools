@@ -22,27 +22,6 @@
   }
 }
 
-.beat1,
-.beat2 {
-  animation: 460ms tokens.$ease-pop both;
-}
-
-.beat1 {
-  animation-name: badgeBeatA;
-}
-
-.beat2 {
-  animation-name: badgeBeatB;
-}
-
-@keyframes badgeBeatA {
-  from {
-    scale: 0.88;
-  }
-}
-
-@keyframes badgeBeatB {
-  from {
-    scale: 0.88;
-  }
+@include mixins.beat(beat, 460ms) {
+  scale: 0.88;
 }

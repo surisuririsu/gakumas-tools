@@ -12,7 +12,7 @@ import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
 import IconSelect from "@/components/IconSelect";
 import Panel from "@/components/Panel";
-import useBeat from "@/components/ProduceRankResult/useBeat";
+import { usePopOnChange } from "@/utils/usePop";
 import TabGroup from "@/components/TabGroup";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -218,7 +218,7 @@ function MemoryCalculator() {
 }
 
 function OutcomeLabel({ label, probability, tone }) {
-  const beat = useBeat(probability);
+  const beat = usePopOnChange(probability);
 
   return (
     <span className={styles.outcome}>

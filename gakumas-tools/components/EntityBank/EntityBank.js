@@ -19,7 +19,7 @@ import {
   EntityTypes,
   isEntityHidden,
 } from "@/utils/entities";
-import { usePopOnActivate } from "./usePop";
+import { usePopOnActivate } from "@/utils/usePop";
 import styles from "./EntityBank.module.scss";
 
 const INITIAL_RENDER_COUNT = 96;
@@ -53,14 +53,12 @@ function getEntities(type, { filter, plan, idolId }) {
   return signatureEntities.concat(nonSignatureEntities);
 }
 
-const POP_CLASSES = { a: styles.popA, b: styles.popB };
-
 function FilterChip({ on, icon, onToggle, children }) {
   const pop = usePopOnActivate(on);
   return (
     <button
       type="button"
-      className={c(styles.chip, on && styles.chipOn, POP_CLASSES[pop])}
+      className={c(styles.chip, on && styles.chipOn, pop && styles[`pop${pop}`])}
       aria-pressed={on}
       onClick={onToggle}
     >

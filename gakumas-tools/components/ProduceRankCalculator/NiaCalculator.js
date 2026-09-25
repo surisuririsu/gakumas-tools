@@ -14,7 +14,7 @@ import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
 import ProduceRankResult from "@/components/ProduceRankResult";
 import Table from "@/components/Table";
-import useBeat from "@/components/ProduceRankResult/useBeat";
+import { usePopOnChange } from "@/utils/usePop";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import c from "@/utils/classNames";
 import { getRank, TARGET_RATING_BY_RANK } from "@/utils/produceRank";
@@ -371,7 +371,7 @@ export default function NiaCalculator() {
 }
 
 function VoteStat({ label, value, tag }) {
-  const beat = useBeat(value);
+  const beat = usePopOnChange(value);
 
   return (
     <div className={styles.stat}>

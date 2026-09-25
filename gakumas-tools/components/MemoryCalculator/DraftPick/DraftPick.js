@@ -7,7 +7,7 @@ import Collapse from "@/components/Collapse";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
 import ModalLoading from "@/components/Modal/ModalLoading";
-import useBeat from "@/components/ProduceRankResult/useBeat";
+import { usePopOnChange } from "@/utils/usePop";
 import Panel from "@/components/Panel";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -180,7 +180,7 @@ function DraftPick({ idolId }) {
 }
 
 function Probability({ value, best }) {
-  const beat = useBeat(value);
+  const beat = usePopOnChange(value);
 
   return (
     <div
