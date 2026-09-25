@@ -18,7 +18,6 @@ import { MemoryContextProvider } from "@/contexts/MemoryContext";
 import { ModalContextProvider } from "@/contexts/ModalContext";
 import { SearchContextProvider } from "@/contexts/SearchContext";
 import { SessionContextProvider } from "@/contexts/SessionContext";
-import { ToastContextProvider } from "@/contexts/ToastContext";
 import { WorkspaceContextProvider } from "@/contexts/WorkspaceContext";
 import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
@@ -74,20 +73,18 @@ export default async function RootLayout({ params, children }) {
                       <LoadoutUrlContextProvider>
                         <LoadoutContextProvider>
                           <SimulationRunsContextProvider>
-                            <ToastContextProvider>
-                              <ModalContextProvider>
-                                <div className={styles.tools}>
-                                  <PinnedTools />
-                                  <ViewTransition
-                                    update={TOOL_SWITCH}
-                                    default="none"
-                                  >
-                                    <main>{children}</main>
-                                  </ViewTransition>
-                                </div>
-                                <Tooltips />
-                              </ModalContextProvider>
-                            </ToastContextProvider>
+                            <ModalContextProvider>
+                              <div className={styles.tools}>
+                                <PinnedTools />
+                                <ViewTransition
+                                  update={TOOL_SWITCH}
+                                  default="none"
+                                >
+                                  <main>{children}</main>
+                                </ViewTransition>
+                              </div>
+                              <Tooltips />
+                            </ModalContextProvider>
                           </SimulationRunsContextProvider>
                         </LoadoutContextProvider>
                       </LoadoutUrlContextProvider>

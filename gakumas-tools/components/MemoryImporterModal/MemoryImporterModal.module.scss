@@ -18,11 +18,8 @@
   display: flex;
   gap: 4px;
   align-items: center;
+  min-height: calc(1em + 8px);
   color: colors.$gk-orange;
-
-  &:empty {
-    display: none;
-  }
 
   &.error {
     color: colors.$red;

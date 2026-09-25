@@ -5,7 +5,6 @@ import { FaDownload, FaShareNodes, FaXTwitter } from "react-icons/fa6";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import ModalContext from "@/contexts/ModalContext";
-import ToastContext from "@/contexts/ToastContext";
 import { downloadBlob } from "@/utils/download";
 import styles from "./ShareModal.module.scss";
 
@@ -68,21 +67,19 @@ async function exportImage() {
     ) {
       try {
         await navigator.share({ files: [file] });
-        return "shared";
+        return;
       } catch (err) {
-        if (err?.name === "AbortError") return "cancelled";
+        if (err?.name === "AbortError") return;
       }
     }
   }
 
   downloadBlob(blob, FILENAME);
-  return "downloaded";
 }
 
 export default function ShareModal({ url }) {
   const t = useTranslations("ShareModal");
   const { closeModal } = useContext(ModalContext);
-  const { showToast } = useContext(ToastContext);
   const [exporting, setExporting] = useState(false);
 
   const canWebShare =
@@ -107,14 +104,10 @@ export default function ShareModal({ url }) {
           30000
         );
       });
-      const outcome = await Promise.race([exportImage(), timeout]);
+      await Promise.race([exportImage(), timeout]);
       closeModal();
-      if (outcome == "downloaded") {
-        showToast({ tone: "success", message: t("imageSaved") });
-      }
     } catch (err) {
       console.error(err);
-      showToast({ tone: "error", message: t("exportFailed") });
     } finally {
       clearTimeout(timeoutId);
       setExporting(false);
