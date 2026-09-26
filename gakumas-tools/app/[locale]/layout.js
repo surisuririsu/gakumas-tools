@@ -23,6 +23,8 @@ import { routing } from "@/i18n/routing";
 import { authOptions } from "@/utils/auth";
 import { GA_ID } from "@/utils/logging";
 import { generateDefaultMetadata } from "@/utils/metadata";
+import { activeOshiProps } from "@/utils/oshi";
+import { getCachedOshiSettings } from "@/utils/oshiStore";
 import { parseWorkspace, WORKSPACE_COOKIE_KEY } from "@/utils/workspace";
 import styles from "./layout.module.scss";
 import "../globals.scss";
@@ -58,6 +60,7 @@ export default async function RootLayout({ params, children }) {
   const initialWorkspace = workspaceCookie
     ? parseWorkspace(workspaceCookie.value)
     : null;
+  const oshi = activeOshiProps(await getCachedOshiSettings(), locale);
 
   return (
     <html lang={locale}>
@@ -65,7 +68,7 @@ export default async function RootLayout({ params, children }) {
         <SessionContextProvider session={session}>
           <NextIntlClientProvider messages={messages}>
             <WorkspaceContextProvider initialWorkspace={initialWorkspace}>
-              <Navbar />
+              <Navbar oshi={oshi} />
               <DataContextProvider>
                 <MemoryCalculatorContextProvider>
                   <MemoryContextProvider>

@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 .oshi {
   z-index: 1;
@@ -7,17 +8,19 @@
   & > button,
   & > a {
     display: flex;
+    align-items: center;
     justify-content: center;
+    gap: tokens.$space-1;
     border-radius: 0 0 16px 16px;
-    background: colors.$dance;
+    background: var(--oshi-bg);
     padding: 4px 8px;
-    color: colors.$white;
+    color: var(--oshi-ink);
     text-align: center;
     box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: color.adjust(colors.$dance, $lightness: -10%);
+      background-color: color-mix(in srgb, var(--oshi-bg), black 10%);
     }
   }
 }
