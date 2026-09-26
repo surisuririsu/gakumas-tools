@@ -1,0 +1,31 @@
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
+.select {
+  max-width: 100%;
+  @include mixins.select;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+}
+
+.sm {
+  min-height: 32px;
+  padding: 4px 28px 4px 10px;
+  background-position: right 9px center;
+  font-size: tokens.$text-sm;
+}
+
+.fill {
+  width: 100%;
+}
+
+.active {
+  @include mixins.select-active;
+  box-shadow: none;
+
+  &:hover:not(:focus, :disabled) {
+    background-color: tokens.$accent-tint;
+  }
+}

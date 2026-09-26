@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   AiOutlineAreaChart,
@@ -7,6 +7,7 @@ import {
 } from "react-icons/ai";
 import ButtonGroup from "@/components/ButtonGroup";
 import { AreaPlot, BoxPlot, DistributionPlot } from "@/components/Charts";
+import c from "@/utils/classNames";
 import styles from "./SimulatorResult.module.scss";
 
 const HISTOGRAM = <AiOutlineBarChart />;
@@ -16,7 +17,12 @@ const AREA = <AiOutlineAreaChart />;
 function SimulatorResultGraphs({ data, plan }) {
   const t = useTranslations("SimulatorResultGraphs");
 
-  const [graphType, setGraphType] = useState("histogram");
+  const [graphType, setGraphTypeState] = useState("histogram");
+  const [switched, setSwitched] = useState(false);
+  const setGraphType = useCallback((value) => {
+    setGraphTypeState(value);
+    setSwitched(true);
+  }, []);
   const label = `${t("score")} (n=${data.scores.length})`;
   const boxPlotLabels = useMemo(() => [label], [label]);
   const boxPlotData = useMemo(
@@ -38,17 +44,26 @@ function SimulatorResultGraphs({ data, plan }) {
           onChange={setGraphType}
         />
       </div>
-      {graphType == "histogram" && (
-        <DistributionPlot
-          label={label}
-          data={data.bucketedScores}
-          bucketSize={data.bucketSize}
-        />
-      )}
-      {graphType == "boxplot" && (
-        <BoxPlot labels={boxPlotLabels} data={boxPlotData} showXAxis={false} />
-      )}
-      {graphType == "area" && <AreaPlot data={data.graphData} plan={plan} />}
+      <div key={graphType} className={c(switched && styles.graphPanelEnter)}>
+        {graphType == "histogram" && (
+          <DistributionPlot
+            label={label}
+            data={data.bucketedScores}
+            bucketSize={data.bucketSize}
+            highlight={data.medianScore}
+          />
+        )}
+        {graphType == "boxplot" && (
+          <BoxPlot
+            labels={boxPlotLabels}
+            data={boxPlotData}
+            showXAxis={false}
+          />
+        )}
+        {graphType == "area" && (
+          <AreaPlot data={data.graphData} plan={plan} />
+        )}
+      </div>
     </div>
   );
 }

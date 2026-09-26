@@ -1,7 +1,9 @@
 "use client";
 import { createElement, memo, useContext } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { FaXmark } from "react-icons/fa6";
+import IconButton from "@/components/IconButton";
 import Loader from "@/components/Loader";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { usePathname } from "@/i18n/routing";
@@ -15,7 +17,7 @@ import styles from "./PinnedTools.module.scss";
 function ToolLoading() {
   return (
     <div className={styles.loading} aria-busy="true">
-      <Loader />
+      <Loader size="large" />
     </div>
   );
 }
@@ -52,11 +54,15 @@ const TOOL_COMPONENTS = {
 };
 
 function PinnedTools() {
+  const t = useTranslations("tools");
+  const tHeader = useTranslations("ToolHeader");
   const { pinnedTools, unpin } = useContext(WorkspaceContext);
   const pathname = usePathname();
   const filteredTools = pinnedTools.filter(
     (tool) =>
-      tool in TOOL_COMPONENTS && !pathname.startsWith(TOOLS[tool]?.path)
+      tool in TOOL_COMPONENTS &&
+      TOOLS[tool] &&
+      !pathname.startsWith(TOOLS[tool].path)
   );
 
   if (!filteredTools.length) return null;
@@ -66,10 +72,14 @@ function PinnedTools() {
       {filteredTools.map((tool) => (
         <div key={tool} className={styles.container}>
           <div className={styles.header}>
-            {TOOLS[tool].icon}
-            <button onClick={() => unpin(tool)}>
-              <FaXmark />
-            </button>
+            <span className={styles.icon}>{TOOLS[tool].icon}</span>
+            <span className={styles.title}>{t(`${tool}.title`)}</span>
+            <IconButton
+              icon={FaXmark}
+              size="small"
+              onClick={() => unpin(tool)}
+              ariaLabel={tHeader("unpin")}
+            />
           </div>
           <div className={styles.tool}>
             {createElement(TOOL_COMPONENTS[tool])}

@@ -7,9 +7,8 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { FaCheck, FaXmark } from "react-icons/fa6";
+import { FaCheck, FaFilter, FaXmark } from "react-icons/fa6";
 import { PIdols } from "gakumas-data";
-import Checkbox from "@/components/Checkbox";
 import EntityIcon from "@/components/EntityIcon";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
@@ -20,6 +19,7 @@ import {
   EntityTypes,
   isEntityHidden,
 } from "@/utils/entities";
+import { usePopOnActivate } from "@/utils/usePop";
 import styles from "./EntityBank.module.scss";
 
 const INITIAL_RENDER_COUNT = 96;
@@ -53,9 +53,25 @@ function getEntities(type, { filter, plan, idolId }) {
   return signatureEntities.concat(nonSignatureEntities);
 }
 
+function FilterChip({ on, icon, onToggle, children }) {
+  const pop = usePopOnActivate(on);
+  return (
+    <button
+      type="button"
+      className={c(styles.chip, on && styles.chipOn, pop && styles[`pop${pop}`])}
+      aria-pressed={on}
+      onClick={onToggle}
+    >
+      {icon}
+      {children}
+    </button>
+  );
+}
+
 function EntityBank({
   type,
   onClick,
+  selectedId,
   filters = NO_FILTERS,
   includeNull = true,
   progressive = false,
@@ -92,6 +108,8 @@ function EntityBank({
     ? entities
     : entities.slice(0, INITIAL_RENDER_COUNT);
 
+  const filterPop = usePopOnActivate(!!filter);
+
   const toggleableFilters = useMemo(
     () => filters.filter((f) => f.label),
     [filters],
@@ -101,23 +119,27 @@ function EntityBank({
     <>
       <div className={styles.entities}>
         {includeNull && (
-          <EntityIcon
-            key={`${type}_null`}
-            type={type}
-            onClick={onClick}
-            size="fill"
-          />
+          <div className={styles.cell}>
+            <EntityIcon type={type} onClick={onClick} size="fill" />
+          </div>
         )}
         {visibleEntities.map((entity) => (
-          <EntityIcon
+          <div
             key={`${type}_${entity.id}`}
-            type={type}
-            id={entity.id}
-            idolId={idolId}
-            onClick={onClick}
-            size="fill"
-            showTier
-          />
+            className={c(
+              styles.cell,
+              entity.id == selectedId && styles.selected,
+            )}
+          >
+            <EntityIcon
+              type={type}
+              id={entity.id}
+              idolId={idolId}
+              onClick={onClick}
+              size="fill"
+              showTier
+            />
+          </div>
         ))}
         {!entities.length && (
           <p className={styles.noMatches}>{t("noMatches")}</p>
@@ -125,43 +147,49 @@ function EntityBank({
       </div>
 
       <div className={styles.filter}>
-        <div className={styles.defaultFilters}>
-          <Checkbox
-            label={filter ? "" : t("filter")}
-            checked={filter}
-            onChange={setFilter}
-          />
+        <FilterChip
+          on={!!filter}
+          icon={<FaFilter className={styles.chipIcon} />}
+          onToggle={() => setFilter(!filter)}
+        >
+          {t("filter")}
+        </FilterChip>
 
-          {filter && (
+        {filter && (
+          <div className={c(styles.planIdol, filterPop && styles.planIdolIn)}>
             <PlanIdolSelects
               plan={plan}
               idolId={idolId}
               setPlan={setPlan}
               setIdolId={setIdolId}
             />
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className={styles.customFilters}>
-          {toggleableFilters.map((f) => (
-            <button
+        {toggleableFilters.map((f) => {
+          const enabled = !!enabledCustomFilters[f.label];
+          return (
+            <FilterChip
               key={f.label}
-              className={c(
-                styles.toggle,
-                enabledCustomFilters[f.label] && styles.enabled,
-              )}
-              onClick={() =>
+              on={enabled}
+              icon={
+                enabled ? (
+                  <FaCheck key="on" className={styles.chipIcon} />
+                ) : (
+                  <FaXmark key="off" className={styles.chipIcon} />
+                )
+              }
+              onToggle={() =>
                 setEnabledCustomFilters({
                   ...enabledCustomFilters,
-                  [f.label]: !enabledCustomFilters[f.label],
+                  [f.label]: !enabled,
                 })
               }
             >
-              {enabledCustomFilters[f.label] ? <FaCheck /> : <FaXmark />}
               {f.label}
-            </button>
-          ))}
-        </div>
+            </FilterChip>
+          );
+        })}
       </div>
     </>
   );

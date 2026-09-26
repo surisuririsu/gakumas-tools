@@ -1,0 +1,10 @@
+@use "../../styles/mixins";
+
+.reference {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  @include mixins.card;
+}

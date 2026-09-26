@@ -7,7 +7,6 @@ import Input from "@/components/Input";
 import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
 import ProduceRankResult from "@/components/ProduceRankResult";
-import Table from "@/components/Table";
 import {
   calculateActualRating,
   calculateRatingExExamScore,
@@ -18,19 +17,19 @@ import {
   PARAM_BONUS_BY_PLACE_LEGEND,
   TARGET_RATING_BY_RANK,
 } from "@/utils/produceRank";
+import InfoTag from "./InfoTag";
+import TargetScoreTable from "./TargetScoreTable";
 import styles from "./ProduceRankCalculator.module.scss";
+
+const DIFFICULTIES = ["regular", "pro", "master", "legend"];
 
 function HajimeCalculator() {
   const t = useTranslations("Calculator");
-
-  const DIFFICULTIES = ["regular", "pro", "master", "legend"];
 
   const EXAM_PLACE_OPTIONS = [1, 2, 3, 4].map((place) => ({
     value: place,
     label: t(`places.${place}`),
   }));
-
-  const TABLE_HEADERS = [t("produceRank"), t("targetScore")];
 
   const [difficulty, setDifficulty] = useState("legend");
   const [place, setPlace] = useState(1);
@@ -51,13 +50,7 @@ function HajimeCalculator() {
     difficulty,
   );
 
-  const targetScoreRows = calculateTargetScores(
-    ratingExExamScore,
-    difficulty,
-  ).map(({ rank, score }) => [
-    `${rank} (${TARGET_RATING_BY_RANK[rank].toLocaleString()})`,
-    score.toLocaleString(),
-  ]);
+  const targetScores = calculateTargetScores(ratingExExamScore, difficulty);
   const actualRating = calculateActualRating(
     actualScore,
     ratingExExamScore,
@@ -66,65 +59,82 @@ function HajimeCalculator() {
   const actualRank = getRank(actualRating);
 
   return (
-    <>
-      <label>{t("difficulty")}</label>
-      <DifficultyPicker
-        difficulties={DIFFICULTIES}
-        selected={difficulty}
-        onChange={setDifficulty}
-      />
-      <div className={styles.bonus}>
-        {t("parameterLimit")}: {maxParams}
-      </div>
-
-      {difficulty === "legend" && (
-        <>
-          <label>{t("midtermScore")}</label>
-          <Input
-            type="number"
-            value={midtermScore || ""}
-            placeholder={t("midtermScore")}
-            onChange={setMidtermScore}
-            min={0}
-            max={10000000}
+    <div className={styles.stack}>
+      <Panel
+        label={t("difficulty")}
+        headerAction={
+          <InfoTag
+            className={styles.headerTag}
+            label={t("parameterLimit")}
+            value={maxParams}
           />
-        </>
-      )}
-
-      <label>{t("finalExamPlacement")}</label>
-      <ButtonGroup
-        options={EXAM_PLACE_OPTIONS}
-        selected={place}
-        onChange={setPlace}
-      />
-      <div className={styles.bonus}>
-        {t("parameter")}: +{placeParamBonus}
-      </div>
-
-      <label>{t("parameters")}</label>
-      <ParametersInput
-        parameters={params}
-        max={maxParams}
-        onChange={setParams}
-      />
-
-      <label>{t("score")}</label>
-      <Input
-        type="number"
-        value={actualScore || ""}
-        placeholder={t("score")}
-        onChange={setActualScore}
-        min={0}
-        max={10000000}
-      />
-
-      <Panel label={t("produceRank")} className={styles.resultPanel}>
-        <ProduceRankResult rating={actualRating} rank={actualRank} />
-
-        <label>{t("targetScores")}</label>
-        <Table headers={TABLE_HEADERS} rows={targetScoreRows} />
+        }
+      >
+        <DifficultyPicker
+          difficulties={DIFFICULTIES}
+          selected={difficulty}
+          onChange={setDifficulty}
+        />
       </Panel>
-    </>
+
+      <Panel className={styles.form}>
+        {difficulty === "legend" && (
+          <>
+            <label>{t("midtermScore")}</label>
+            <Input
+              type="number"
+              value={midtermScore || ""}
+              placeholder={t("midtermScore")}
+              onChange={setMidtermScore}
+              min={0}
+              max={10000000}
+            />
+          </>
+        )}
+
+        <div className={styles.fieldHead}>
+          <label>{t("finalExamPlacement")}</label>
+          <InfoTag label={t("parameter")} value={`+${placeParamBonus}`} />
+        </div>
+        <ButtonGroup
+          options={EXAM_PLACE_OPTIONS}
+          selected={place}
+          onChange={setPlace}
+        />
+
+        <label>{t("parameters")}</label>
+        <ParametersInput
+          parameters={params}
+          max={maxParams}
+          onChange={setParams}
+        />
+
+        <label>{t("score")}</label>
+        <Input
+          type="number"
+          value={actualScore || ""}
+          placeholder={t("score")}
+          onChange={setActualScore}
+          min={0}
+          max={10000000}
+        />
+      </Panel>
+
+      <Panel label={t("produceRank")}>
+        <ProduceRankResult
+          rating={actualRating}
+          rank={actualRank}
+          ratingByRank={TARGET_RATING_BY_RANK}
+        />
+      </Panel>
+
+      <Panel label={t("targetScores")}>
+        <TargetScoreTable
+          targets={targetScores}
+          ratingByRank={TARGET_RATING_BY_RANK}
+        />
+      </Panel>
+    </div>
   );
 }
 

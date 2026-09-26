@@ -1,5 +1,13 @@
+@use "../../styles/tokens";
+
 .selects {
   display: flex;
-  gap: 4px;
-  padding: 4px;
+  align-items: flex-start;
+  gap: tokens.$space-2;
+  min-width: 0;
+  padding: tokens.$space-1;
+
+  > :first-child {
+    flex-shrink: 0;
+  }
 }

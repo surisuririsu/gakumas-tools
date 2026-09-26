@@ -1,26 +1,28 @@
-@use "../../styles/mixins";
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .entityCustomizer {
-  position: relative;
   display: flex;
-  gap: 8px;
-  margin: 0 12px 12px;
-  border: 2px solid colors.$gray-light;
-  border-radius: 8px;
-  padding: 8px;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  margin: 0 10px tokens.$space-1;
+  padding: 10px;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$fill-subtle;
 }
 
 .label {
-  position: absolute;
-  top: -14px;
-  padding: 0 4px;
-  background-color: colors.$white;
-  color: colors.$gray;
-  font-size: 14px;
+  @include mixins.label;
+}
+
+.body {
+  display: flex;
+  gap: 10px;
 }
 
 .icon {
+  flex-shrink: 0;
   width: 68px;
 }
 
@@ -28,9 +30,8 @@
   flex: 1;
   min-width: 0;
   display: flex;
-  gap: 4px;
+  gap: 6px;
   color: colors.$white;
-  font-weight: 600;
 
   @container (width < 460px) {
     flex-direction: column;
@@ -40,15 +41,16 @@
 .c11n {
   flex: 1;
   min-width: 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px colors.$gray-light;
+  display: flex;
+  flex-direction: column;
+  border-radius: tokens.$radius-md;
 
   @include mixins.c11n-gradients using ($c11n-gradient) {
     background: $c11n-gradient;
   }
 
   @container (width < 460px) {
-    display: flex;
+    flex-direction: row;
     align-items: center;
   }
 }
@@ -56,46 +58,66 @@
 .input {
   display: flex;
   align-items: center;
-  text-align: center;
-  font-size: 24px;
+  justify-content: space-between;
+  gap: tokens.$space-1;
+  padding: 6px;
+}
 
-  .level {
-    width: 20px;
-    font-size: 20px;
+.step {
+  flex-shrink: 0;
+  width: 30px;
+  height: 28px;
+  border-radius: tokens.$radius-sm;
+  background-color: rgba(255, 255, 255, 0.26);
+  color: colors.$white;
+  font-size: 12px;
+  @include mixins.raised(rgba(20, 20, 40, 0.18));
+  transition:
+    background-color tokens.$duration-fast,
+    opacity tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-pop,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+
+  &:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.38);
   }
 
-  & > * {
-    flex: 1;
-  }
-
-  button {
-    padding: 8px 12px;
-  }
-
-  @container (width < 460px) {
-    font-size: unset;
-
-    .level {
-      font-size: unset;
-    }
+  &:disabled {
+    opacity: 0;
+    scale: 0.5;
+    cursor: default;
   }
 }
 
-.disabled {
-  color: transparent;
+.level {
+  flex: 1;
+  min-width: 20px;
+  font-size: tokens.$text-lg;
+  font-weight: tokens.$weight-heavy;
+  line-height: 1;
+  text-align: center;
+  @include mixins.numeric;
+}
+
+.levelPop {
+  @include mixins.pop-in;
 }
 
 .text {
   display: block;
-  font-size: 14px;
-  padding: 0 8px 8px;
+  padding: 0 tokens.$space-2 tokens.$space-2;
   overflow: hidden;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
 
   @container (width < 460px) {
-    padding: 4px 8px;
-    border-left: 2px solid colors.$white;
+    flex: 1;
+    min-width: 0;
+    padding: 0 10px 0 tokens.$space-1;
+    text-align: left;
   }
 }

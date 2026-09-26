@@ -1,33 +1,59 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
-.files {
+.help {
   display: flex;
-  margin-top: 16px;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: colors.$gk-orange-extra-light;
+  gap: tokens.$space-4;
+  margin-bottom: tokens.$space-4;
+  overflow: auto;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
+  line-height: 1.5;
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: progress;
+  img {
+    flex-shrink: 0;
+    border-radius: tokens.$radius-md;
   }
 }
 
 .progress {
-  margin-top: 4px;
   display: flex;
-  gap: 4px;
-  align-items: center;
-  min-height: calc(1em + 8px);
-  color: colors.$gk-orange;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: tokens.$space-3;
+  color: tokens.$surface-ink-muted;
+
+  &.done {
+    color: tokens.$success;
+  }
 
   &.error {
-    color: colors.$red;
+    color: tokens.$danger;
   }
 }
 
-.help {
+.status {
+  min-height: 20px;
   display: flex;
-  gap: 16px;
-  overflow: auto;
+  align-items: center;
+  gap: 6px;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  @include mixins.numeric;
+  @include mixins.rise-in;
+
+  svg {
+    flex-shrink: 0;
+    @include mixins.pop-in;
+  }
+}
+
+.bar {
+  opacity: 0;
+  transition: opacity tokens.$duration-base;
+}
+
+.barShown {
+  opacity: 1;
 }

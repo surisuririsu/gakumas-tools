@@ -1,8 +1,10 @@
 "use client";
 import { memo, useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { FaChevronDown } from "react-icons/fa6";
 import { PIdols, SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
+import Collapse from "@/components/Collapse";
 import Image from "@/components/Image";
 import Input from "@/components/Input";
 import MemorySave from "@/components/MemorySave";
@@ -111,8 +113,9 @@ function MemoryEditorModal() {
             onClick={() => setPowerOpen((v) => !v)}
             aria-expanded={powerOpen}
           >
-            <label>{t("contestPower")}</label>
-            <span>{powerBreakdown.total}</span>
+            <span className={styles.statLabel}>{t("contestPower")}</span>
+            <span className={styles.statValue}>{powerBreakdown.total}</span>
+            <FaChevronDown className={styles.caret} aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -120,12 +123,13 @@ function MemoryEditorModal() {
             onClick={() => setCostOpen((v) => !v)}
             aria-expanded={costOpen}
           >
-            <label>{t("cost")}</label>
-            <span>{skillCardCost}</span>
+            <span className={styles.statLabel}>{t("cost")}</span>
+            <span className={styles.statValue}>{skillCardCost}</span>
+            <FaChevronDown className={styles.caret} aria-hidden="true" />
           </button>
         </div>
 
-        {powerOpen && (
+        <Collapse open={powerOpen}>
           <ul className={styles.breakdown}>
             <li>
               <span>{t("parameters")}</span>
@@ -144,16 +148,16 @@ function MemoryEditorModal() {
               <span>{powerBreakdown.customizationPower}</span>
             </li>
           </ul>
-        )}
+        </Collapse>
 
-        {costOpen && (
+        <Collapse open={costOpen && costBreakdown.length > 0}>
           <ul className={styles.breakdown}>
             {costBreakdown.map((item, i) => (
               <li key={`${i}_${item.id}`}>
                 <Image
                   src={gkImg(item.card, idolId).icon}
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
                   alt=""
                 />
                 <span className={styles.breakdownName}>{item.name}</span>
@@ -161,7 +165,7 @@ function MemoryEditorModal() {
               </li>
             ))}
           </ul>
-        )}
+        </Collapse>
 
         <MemorySave />
       </div>

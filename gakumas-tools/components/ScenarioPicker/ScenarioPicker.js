@@ -1,41 +1,24 @@
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
+import ButtonGroup from "@/components/ButtonGroup";
 import c from "@/utils/classNames";
 import { CALCULATOR_PATH_BY_SCENARIO, SCENARIOS } from "@/utils/scenarios";
 import styles from "./ScenarioPicker.module.scss";
 
-// Calculator routes render the tabs as crawlable links; embedded usages
-// (e.g. pinned tools) pass onChange and get buttons that switch in place.
 export default function ScenarioPicker({ selected, onChange }) {
   const t = useTranslations("Calculator");
 
+  const options = SCENARIOS.map((s) => ({
+    value: s,
+    label: <span className={styles[s]}>{t(`scenarios.${s}`)}</span>,
+    href: onChange ? undefined : CALCULATOR_PATH_BY_SCENARIO[s],
+  }));
+
   return (
-    <div className={styles.scenarioPicker}>
-      {SCENARIOS.map((s) => {
-        const className = c(
-          styles.scenarioChip,
-          styles[s],
-          selected === s && styles.selected
-        );
-        return onChange ? (
-          <button
-            key={s}
-            type="button"
-            className={className}
-            onClick={() => onChange(s)}
-          >
-            {t(`scenarios.${s}`)}
-          </button>
-        ) : (
-          <Link
-            key={s}
-            href={CALCULATOR_PATH_BY_SCENARIO[s]}
-            className={className}
-          >
-            {t(`scenarios.${s}`)}
-          </Link>
-        );
-      })}
-    </div>
+    <ButtonGroup
+      className={c(styles.scenarioPicker, styles[`${selected}Selected`])}
+      options={options}
+      selected={selected}
+      onChange={onChange}
+    />
   );
 }

@@ -9,6 +9,7 @@ export default function KofiAd() {
       className={styles.kofiAd}
       href="https://ko-fi.com/surisuririsu"
       target="_blank"
+      rel="noopener noreferrer"
     >
       <SiKofi />
       <span>{t("prompt")}</span>

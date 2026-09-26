@@ -4,6 +4,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import ButtonGroup from "@/components/ButtonGroup";
 import ConfirmModal from "@/components/ConfirmModal";
+import Loader from "@/components/Loader";
 import ModalContext from "@/contexts/ModalContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import {
@@ -14,6 +15,7 @@ import {
   stageKeyOf,
   stageLabelOf,
 } from "@/utils/simulationRun";
+import c from "@/utils/classNames";
 import usePersistedState from "@/utils/usePersistedState";
 import AxisRow from "./AxisRow";
 import CompareRow from "./CompareRow";
@@ -188,8 +190,7 @@ function CompareTab({ currentRun, onAfterLoad }) {
     );
   }
 
-  const filterCls = (v) =>
-    `${styles.filter} ${v !== "all" ? styles.filterActive : ""}`;
+  const filterCls = (v) => c(styles.filter, v !== "all" && styles.filterActive);
 
   const hasActiveFilters =
     stageFilter !== "all" || seasonFilter !== "all" || idolFilter !== "all";
@@ -277,9 +278,10 @@ function CompareTab({ currentRun, onAfterLoad }) {
 
       {showFifoNote && (
         <div
-          className={`${styles.fifoNote} ${
-            history.length >= MAX_HISTORY ? styles.fifoNoteWarn : ""
-          }`}
+          className={c(
+            styles.fifoNote,
+            history.length >= MAX_HISTORY && styles.fifoNoteWarn
+          )}
         >
           {history.length >= MAX_HISTORY
             ? t("fifoAtLimit", { max: MAX_HISTORY })
@@ -291,7 +293,9 @@ function CompareTab({ currentRun, onAfterLoad }) {
         <div className={styles.empty}>{t("signInToView")}</div>
       ) : subTab === "saved" &&
         (status === "loading" || savedLoading) ? (
-        <div className={styles.empty}>{t("loading")}</div>
+        <div className={styles.empty}>
+          <Loader size="large" />
+        </div>
       ) : subTab === "saved" && savedError && !savedRuns.length ? (
         <div className={styles.empty}>
           <div>{t("loadFailed")}</div>

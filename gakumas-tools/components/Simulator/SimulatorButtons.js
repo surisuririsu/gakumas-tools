@@ -77,7 +77,11 @@ function SimulatorButtons() {
               );
             }}
           >
-            {linkCopied ? <FaCheck /> : <FaRegCopy />}
+            {linkCopied ? (
+              <FaCheck className={styles.copied} />
+            ) : (
+              <FaRegCopy />
+            )}
             <span className={styles.buttonText}>URL</span>
           </Button>
           <Button

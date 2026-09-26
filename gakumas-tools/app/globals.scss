@@ -1,4 +1,5 @@
 @use "../styles/colors";
+@use "../styles/mixins";
 @use "../styles/tokens";
 
 * {
@@ -89,14 +90,12 @@ h1,
 h2,
 h3 {
   color: tokens.$surface-ink;
-  font-weight: 400;
+  font-weight: tokens.$weight-heavy;
 }
 
 label {
   margin-top: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: tokens.$surface-ink-muted;
+  @include mixins.label;
 }
 
 a {
@@ -111,9 +110,15 @@ button {
   border: none;
   background-color: transparent;
   color: inherit;
+  font-family: inherit;
   font-size: inherit;
   cursor: pointer;
   user-select: none;
+}
+
+input,
+select {
+  font-family: inherit;
 }
 
 :where(button:not(:disabled):active) {
@@ -122,4 +127,15 @@ button {
 
 textarea {
   font-family: inherit;
+}
+
+html[data-exporting] {
+  *,
+  ::after {
+    letter-spacing: normal !important;
+  }
+
+  input {
+    box-shadow: none !important;
+  }
 }

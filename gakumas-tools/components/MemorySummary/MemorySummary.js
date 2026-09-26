@@ -1,18 +1,22 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import { PIdols, PItems, SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
 import EntityIcon from "@/components/EntityIcon";
 import Image from "@/components/Image";
 import PIdol from "@/components/PIdol";
+import c from "@/utils/classNames";
 import { calculateContestPower } from "@/utils/contestPower";
 import { EntityTypes } from "@/utils/entities";
 import MemorySummaryActionButtons from "./MemorySummaryActionButtons";
 import styles from "./MemorySummary.module.scss";
 
+const PARAMETER_NAMES = ["Vo", "Da", "Vi"];
+
 function MemorySummary({ memory, picking, onClick }) {
   const { name, pIdolId, params, pItemIds, skillCardIds, customizations } =
     memory;
   const idolId = PIdols.getById(pIdolId)?.idolId;
+  const [actionsShown, setActionsShown] = useState(false);
   const contestPower = calculateContestPower(
     params,
     pItemIds,
@@ -31,7 +35,10 @@ function MemorySummary({ memory, picking, onClick }) {
 
   const summaryContent = (
     <>
-      <div className={styles.left}>
+      <div
+        className={styles.left}
+        onClick={picking ? undefined : () => setActionsShown((v) => !v)}
+      >
         <PIdol pIdolId={pIdolId} />
         {!picking && <MemorySummaryActionButtons memory={memory} />}
       </div>
@@ -46,6 +53,7 @@ function MemorySummary({ memory, picking, onClick }) {
           {pItems.map((pItem, i) => (
             <Image
               key={i}
+              className={styles.pItem}
               src={gkImg(pItem).icon}
               width={35}
               height={35}
@@ -55,9 +63,11 @@ function MemorySummary({ memory, picking, onClick }) {
           ))}
           <div className={styles.filler} />
           <div className={styles.parameters}>
-            <div style={{ flex: params[0] }} />
-            <div style={{ flex: params[1] }} />
-            <div style={{ flex: params[2] }} />
+            {PARAMETER_NAMES.map((param, i) => (
+              <span key={param} title={param}>
+                {params[i] || 0}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -80,12 +90,18 @@ function MemorySummary({ memory, picking, onClick }) {
 
   if (picking) {
     return (
-      <button className={styles.memorySummary} onClick={onClick}>
+      <button type="button" className={styles.memorySummary} onClick={onClick}>
         {summaryContent}
       </button>
     );
   } else {
-    return <div className={styles.memorySummary}>{summaryContent}</div>;
+    return (
+      <div
+        className={c(styles.memorySummary, actionsShown && styles.actionsShown)}
+      >
+        {summaryContent}
+      </div>
+    );
   }
 }
 

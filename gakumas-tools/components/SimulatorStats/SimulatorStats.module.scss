@@ -1,126 +1,165 @@
-@use "sass:color";
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  color: colors.$black-dark;
+  gap: tokens.$space-5;
+  color: tokens.$surface-ink;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
 }
 
 .sectionHeader {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px 0;
-}
-
-.headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
+  gap: tokens.$space-2 tokens.$space-3;
 }
 
-// Plain large text marker — visually heavier than the table rows, no
-// background to compete with the right-side type chips.
 .title {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.typeChips {
-  display: flex;
-  gap: 4px;
-  font-size: 11px;
-}
-
-.chip {
-  padding: 2px 6px;
-  border-radius: 3px;
-  color: colors.$white;
+  @include mixins.heading;
   white-space: nowrap;
-
-  &.vocal {
-    background-color: colors.$vocal-light;
-  }
-  &.dance {
-    background-color: colors.$dance-light;
-  }
-  &.visual {
-    background-color: colors.$visual-light;
-  }
 }
 
 .typeBar {
+  flex: 1 1 240px;
   display: flex;
-  height: 3px;
+  gap: 3px;
+  min-width: 0;
+}
 
-  > div {
-    height: 100%;
+.typeSegment {
+  flex-basis: 0;
+  min-width: fit-content;
+  padding: 3px 8px;
+  border-radius: tokens.$radius-sm;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-heavy;
+  line-height: 16px;
+  text-align: center;
+  white-space: nowrap;
+  @include mixins.numeric;
+
+  &.vocal {
+    background-color: tokens.$vocal-tint;
+    color: tokens.$vocal-ink;
   }
 
-  .vocal {
-    background-color: colors.$vocal-light;
+  &.dance {
+    background-color: tokens.$dance-tint;
+    color: tokens.$dance-ink;
   }
-  .dance {
-    background-color: colors.$dance-light;
-  }
-  .visual {
-    background-color: colors.$visual-light;
+
+  &.visual {
+    background-color: tokens.$visual-tint;
+    color: tokens.$visual-ink;
   }
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  // Auto layout so the card column can absorb whatever space the
-  // (short, nowrap) numeric columns don't need — avoids truncating
-  // names on narrow screens when numbers only need ~40–50px apiece.
   table-layout: auto;
-  font-size: 12px;
-
-  th,
-  td {
-    padding: 4px 6px;
-    vertical-align: middle;
-  }
+  @include mixins.table;
+  @include mixins.table-hover;
 
   th {
-    font-weight: 600;
-    color: colors.$gray-dark;
-    border-bottom: 1px solid colors.$gray-extra-light;
-    white-space: nowrap;
+    padding: 0;
+
+    &.activeSort {
+      color: tokens.$accent-ink;
+    }
   }
 
-  tbody tr:nth-child(even) {
-    background-color: color.adjust(colors.$gk-orange, $lightness: 45%);
+  td {
+    padding: 5px 6px;
+    vertical-align: middle;
+
+    &:first-child {
+      padding-left: 8px;
+    }
+
+    &:last-child {
+      padding-right: 8px;
+    }
+  }
+
+  td.cardCell {
+    max-width: 0;
+  }
+
+  td.numericCell {
+    font-weight: tokens.$weight-semibold;
   }
 }
 
-.sortable {
-  cursor: pointer;
-  user-select: none;
+.sortButton {
+  display: inline-flex;
+  gap: 3px;
+  width: 100%;
+  padding: 7px 6px;
+  border-radius: inherit;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  transition:
+    color tokens.$duration-fast,
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale);
+  @include mixins.focus-ring-inset;
+
+  .cardCell & {
+    justify-content: flex-start;
+  }
+
+  .numericCell & {
+    justify-content: flex-end;
+  }
+
+  th:first-child > & {
+    padding-left: 8px;
+  }
+
+  th:last-child > & {
+    padding-right: 8px;
+  }
 
   &:hover {
-    color: colors.$black-dark;
+    background-color: tokens.$fill-subtle;
+    color: tokens.$surface-ink;
   }
 }
 
-.activeSort {
-  color: colors.$black-dark;
+.sortIcon {
+  flex-shrink: 0;
+  font-size: 9px;
+  opacity: 0.3;
+  @include mixins.caret;
+  transition:
+    opacity tokens.$duration-fast,
+    rotate tokens.$duration-spring tokens.$ease-spring;
+
+  .sortButton:hover & {
+    opacity: 0.6;
+  }
+
+  .activeSort & {
+    opacity: 1;
+  }
 }
 
-.sortArrow {
-  font-size: 10px;
-  margin-left: 2px;
+.ascending {
+  @include mixins.caret-open;
 }
 
-// Card column soaks up whatever's left after the numeric columns claim
-// their natural width. `width: 100%` on a single column under auto layout
-// is the standard "flex fill" trick: the browser still shrinks other
-// columns to content first.
+.activeSort .sortButton:hover {
+  color: tokens.$accent-ink;
+}
+
 .cardCell {
   width: 100%;
   text-align: left;
@@ -130,22 +169,14 @@
   width: 1%;
   white-space: nowrap;
   text-align: right;
-  font-variant-numeric: tabular-nums;
+  @include mixins.numeric;
 }
 
-tbody .cardCell {
-  overflow: hidden;
-}
-
-tbody .cardCell > div,
-tbody .cardCell > span {
-  vertical-align: middle;
-}
-
-tbody .cardCell {
+.card {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: tokens.$space-2;
+  min-width: 0;
 }
 
 .iconWrap {
@@ -153,11 +184,16 @@ tbody .cardCell {
   flex-shrink: 0;
   width: 32px;
   height: 32px;
+
+  img {
+    border-radius: tokens.$radius-icon;
+  }
 }
 
 .cardName {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
+  font-weight: tokens.$weight-semibold;
 }

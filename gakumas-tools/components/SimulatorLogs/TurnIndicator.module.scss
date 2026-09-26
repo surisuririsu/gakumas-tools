@@ -1,16 +1,19 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .turnIndicatorContainer {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .turnIndicator {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,22 +24,22 @@
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
-  z-index: 1;
+  z-index: tokens.$z-raised;
 }
 
 .segment {
   fill: currentColor;
 
   &[data-turn-type="vocal"] {
-    color: colors.$vocal-light;
+    color: colors.$vocal;
   }
 
   &[data-turn-type="dance"] {
-    color: colors.$dance-light;
+    color: colors.$dance;
   }
 
   &[data-turn-type="visual"] {
-    color: colors.$visual-light;
+    color: colors.$visual;
   }
 }
 
@@ -44,38 +47,40 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background-color: colors.$black-medium;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background-color: tokens.$surface-ink;
 }
 
 .number {
-  font-size: 28px;
-  font-weight: 700;
-  color: colors.$white-dark;
+  color: colors.$white;
+  font-size: tokens.$text-xl;
+  font-weight: tokens.$weight-heavy;
+  @include mixins.numeric;
 }
 
 .pointer {
-  fill: colors.$white-dark;
+  fill: colors.$white;
 }
 
 .multiplier {
-  font-size: 14px;
-  font-weight: 600;
-  color: colors.$black-dark;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-heavy;
   text-align: center;
+  @include mixins.numeric;
 
   &[data-turn-type="vocal"] {
-    color: colors.$vocal-light;
+    color: tokens.$vocal-ink;
   }
 
   &[data-turn-type="dance"] {
-    color: colors.$dance-light;
+    color: tokens.$dance-ink;
   }
 
   &[data-turn-type="visual"] {
-    color: colors.$visual-light;
+    color: tokens.$visual-ink;
   }
 }

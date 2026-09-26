@@ -36,12 +36,14 @@ function DexCategoryLayoutInner({
   };
 
   const tabBar = tabs.length > 1 && currentTab && (
-    <div className={c(styles.tabs, flexible && styles.tabsSticky)}>
-      <ButtonGroup
-        options={options}
-        selected={currentTab}
-        onChange={handleTabChange}
-      />
+    <div className={c(styles.tabBar, flexible && styles.tabsSticky)}>
+      <div className={styles.tabs}>
+        <ButtonGroup
+          options={options}
+          selected={currentTab}
+          onChange={handleTabChange}
+        />
+      </div>
     </div>
   );
 

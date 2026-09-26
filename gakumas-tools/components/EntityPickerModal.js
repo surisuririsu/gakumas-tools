@@ -38,6 +38,7 @@ function EntityPickerModal({
           onPick(entity);
           closeModal();
         }}
+        selectedId={id}
         filters={filters}
         progressive
       />

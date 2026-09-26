@@ -1,26 +1,22 @@
 import { useTranslations } from "next-intl";
+import ButtonGroup from "@/components/ButtonGroup";
 import c from "@/utils/classNames";
 import styles from "./DifficultyPicker.module.scss";
 
 export default function DifficultyPicker({ difficulties, selected, onChange }) {
   const t = useTranslations("Calculator");
 
+  const options = difficulties.map((d) => ({
+    value: d,
+    label: <span className={styles[d]}>{t(`difficulties.${d}`)}</span>,
+  }));
+
   return (
-    <div className={styles.difficultyPicker}>
-      {difficulties.map((d) => (
-        <button
-          key={d}
-          type="button"
-          className={c(
-            styles.difficultyChip,
-            styles[d],
-            selected === d && styles.selected
-          )}
-          onClick={() => onChange(d)}
-        >
-          {t(`difficulties.${d}`)}
-        </button>
-      ))}
-    </div>
+    <ButtonGroup
+      className={c(styles.difficultyPicker, styles[`${selected}Selected`])}
+      options={options}
+      selected={selected}
+      onChange={onChange}
+    />
   );
 }

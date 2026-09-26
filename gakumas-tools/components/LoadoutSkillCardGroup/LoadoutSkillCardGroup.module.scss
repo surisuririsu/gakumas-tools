@@ -1,140 +1,157 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
+$reveal: calc(var(--i, 0) * 25ms);
 
 .sub {
   display: flex;
   align-items: center;
-  margin-top: 4px;
-
-  &:hover,
-  &:focus-within {
-    .buttonGroup {
-      opacity: 1;
-    }
-  }
-
-  button {
-    font-size: 22px;
-
-    &:disabled {
-      color: colors.$gray-light;
-      cursor: not-allowed;
-    }
-  }
+  gap: tokens.$space-1;
+  margin-top: tokens.$space-1;
 }
 
 .costWrapper {
   flex: 1;
+  min-width: 0;
+  display: flex;
 }
 
-button.cost {
+.chip {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  border-radius: 10px;
-  background-color: colors.$gray-extra-light;
-  color: colors.$black-medium;
-  font-size: 12px;
-  font-weight: 600;
+  justify-content: center;
+  gap: 3px;
+  height: 22px;
+  padding: 0 8px 0 10px;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-bold;
   white-space: nowrap;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s;
+  @include mixins.numeric;
+  @include mixins.raised;
 
-  &:hover,
-  &.costOpen {
-    background-color: colors.$gray-light;
+  &:hover:not(:disabled) {
+    background-color: tokens.$fill-muted-hover;
+    color: tokens.$surface-ink;
+  }
+
+  &.selected {
+    @include mixins.chip-selected;
   }
 }
 
+.caret {
+  font-size: 9px;
+  @include mixins.caret;
+
+  .selected > & {
+    @include mixins.caret-open;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: tokens.$space-1;
+}
+
+.action,
+.more {
+  width: 26px;
+  padding: 0;
+  font-size: 11px;
+}
+
+.action {
+  opacity: var(--shown, 1);
+
+  &.danger:hover:not(:disabled) {
+    background-color: tokens.$danger-tint;
+    color: tokens.$danger;
+  }
+
+  &:disabled {
+    --shown: 0.35;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+@media (hover: hover) {
+  .action {
+    opacity: 0;
+    scale: 0.6;
+    transition:
+      opacity tokens.$duration-fast $reveal,
+      scale tokens.$duration-spring tokens.$ease-pop $reveal,
+      background-color tokens.$duration-fast,
+      color tokens.$duration-fast,
+      translate tokens.$duration-spring tokens.$ease-spring,
+      box-shadow tokens.$duration-spring tokens.$ease-spring;
+
+    .sub:is(:hover, :focus-within) & {
+      opacity: var(--shown, 1);
+      scale: 1;
+    }
+  }
+
+  .more {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .actions:not(.expanded) {
+    display: none;
+  }
+
+  .expanded .action {
+    @include mixins.pop-in;
+    @include mixins.stagger(30ms);
+  }
+}
+
+.costCollapse {
+  padding-top: 6px;
+}
+
 .costBreakdown {
-  list-style: none;
-  padding: 6px 8px;
-  margin: 6px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  background-color: colors.$gray-extra-light;
-  border-radius: 6px;
-  font-size: 12px;
+  gap: tokens.$space-1;
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+  list-style: none;
 
   li {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: tokens.$space-2;
+    @include mixins.rise-in;
+    @include mixins.stagger(20ms);
+  }
+
+  img {
+    flex-shrink: 0;
+    border-radius: 5px;
   }
 }
 
 .breakdownName {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
 }
 
 .breakdownCost {
-  color: colors.$black-medium;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.buttonGroup {
-  display: flex;
-  gap: 4px;
-
-  @media (hover: hover) {
-    opacity: 0;
-    transition: opacity 0.3s;
-
-    &:hover,
-    &:focus-within {
-      opacity: 1;
-    }
-  }
-
-  @media (hover: none) {
-    button {
-      font-size: 20px;
-      display: none;
-    }
-
-    &.expanded button {
-      display: flex;
-      opacity: 1;
-    }
-  }
-}
-
-.memoryCalculatorButton {
-  color: colors.$gk-orange;
-}
-
-.pickButton {
-  color: colors.$gk-orange;
-}
-
-.importButton {
-  color: colors.$class-1-2;
-}
-
-.addButton {
-  color: colors.$green;
-}
-
-.moveButton {
-  color: colors.$blue;
-}
-
-.deleteButton {
-  color: colors.$red;
-}
-
-.expandButton {
-  display: none;
-  margin-left: 4px;
-  color: colors.$gray;
-
-  @media (hover: none) {
-    display: flex;
-  }
+  font-weight: tokens.$weight-heavy;
+  @include mixins.numeric;
 }

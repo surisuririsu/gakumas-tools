@@ -11,15 +11,23 @@ export default function AvailableCustomizations({ entity }) {
     Customizations.getById
   );
 
-  if (!availableCustomizations.length) return null;
+  if (!availableCustomizations.length) {
+    return <div className={styles.c11ns} aria-hidden="true" />;
+  }
 
   return (
     <button
+      type="button"
       className={c(styles.c11ns, c11nExpanded && styles.expanded)}
+      aria-expanded={c11nExpanded}
       onClick={() => setC11nExpanded(!c11nExpanded)}
     >
-      {availableCustomizations.map((c11n) => (
-        <div key={c11n.id} className={c(styles.c11n, styles[c11n.type])}>
+      {availableCustomizations.map((c11n, i) => (
+        <div
+          key={c11n.id}
+          className={c(styles.c11n, styles[c11n.type])}
+          style={{ "--i": i }}
+        >
           <div className={styles.max}>{t("maxTimes", { n: c11n.max })}</div>
           <div className={styles.name}>{c11n.name}</div>
         </div>

@@ -2,7 +2,6 @@ import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   FaChevronDown,
-  FaChevronUp,
   FaCheck,
   FaPenToSquare,
   FaRegFloppyDisk,
@@ -12,9 +11,11 @@ import {
 } from "react-icons/fa6";
 import { SkillCards, Stages } from "gakumas-data";
 import gkImg from "gakumas-images";
+import Collapse from "@/components/Collapse";
 import Image from "@/components/Image";
 import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
 import { FALLBACK_STAGE } from "@/simulator/constants";
+import c from "@/utils/classNames";
 import { formatRelative } from "@/utils/simulationRun";
 import { formatStageName } from "@/utils/stages";
 import ActionIconList from "./ActionIconList";
@@ -170,9 +171,12 @@ function CompareRow({
     <Fragment>
     <div
       ref={rowRef}
-      className={`${styles.row} ${current ? styles.rowCurrent : ""} ${
-        menuOpen ? styles.rowMenuOpen : ""
-      }`}
+      className={c(
+        styles.row,
+        current && styles.rowCurrent,
+        menuOpen && styles.rowMenuOpen,
+        expanded && styles.rowExpanded
+      )}
       data-run-id={run.id}
     >
       <div className={styles.expandCell}>
@@ -183,7 +187,7 @@ function CompareRow({
           title={expanded ? t("hideDetails") : t("showDetails")}
           aria-expanded={expanded}
         >
-          {expanded ? <FaChevronUp /> : <FaChevronDown />}
+          <FaChevronDown className={styles.expandIcon} aria-hidden="true" />
         </button>
       </div>
 
@@ -272,8 +276,8 @@ function CompareRow({
         editMode={!!editMode}
       />
     </div>
-    {expanded && (
-      <div className={styles.expandedDetails}>
+    <div className={styles.fullRow}>
+      <Collapse open={expanded} className={styles.expandedDetails}>
         {run.linkLoadouts?.length ? (
           run.linkLoadouts.map((ld, i) => (
             <div key={i} className={styles.expandedLinkLoadout}>
@@ -286,8 +290,8 @@ function CompareRow({
         ) : (
           <LoadoutSummary loadout={run.loadout} />
         )}
-      </div>
-    )}
+      </Collapse>
+    </div>
     </Fragment>
   );
 }
