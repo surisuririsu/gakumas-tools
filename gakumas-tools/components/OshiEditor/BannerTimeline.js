@@ -1,5 +1,5 @@
 import c from "@/utils/classNames";
-import { bannerStatus, oshiBackground } from "@/utils/oshi";
+import { bannerStatus, oshiBackground, parseOshiText } from "@/utils/oshi";
 import {
   bannerWindow,
   formatJst,
@@ -25,6 +25,13 @@ function scheduleLabel({ startsAt, endsAt }) {
   return `${from} → ${to}`;
 }
 
+function plainText(text) {
+  return parseOshiText(text)
+    .filter((segment) => typeof segment == "string")
+    .join("")
+    .trim();
+}
+
 export default function BannerTimeline({
   banners,
   selectedId,
@@ -44,10 +51,10 @@ export default function BannerTimeline({
     banners.map(({ id, colors }) => [id, oshiBackground(colors)])
   );
   const texts = Object.fromEntries(
-    banners.map(({ id, text }) => [id, text.ja || "Untitled"])
+    banners.map(({ id, text }) => [id, plainText(text.ja) || "Untitled"])
   );
 
-  function renderSegments(list) {
+  function renderSegments(list, withTooltips) {
     return list.map(({ id, from, to }) => (
       <span
         key={`${id}-${from}`}
@@ -57,7 +64,7 @@ export default function BannerTimeline({
           to == range.end && styles.openEnd
         )}
         style={{ ...place(from, to), background: backgrounds[id] }}
-        data-tooltip-id="panel-info-tooltip"
+        data-tooltip-id={withTooltips ? "panel-info-tooltip" : undefined}
         data-tooltip-content={`${texts[id]} · ${formatJst(from)} → ${formatJst(to)}`}
       />
     ));
@@ -83,7 +90,7 @@ export default function BannerTimeline({
           <span className={styles.laneTitle}>On site</span>
           <span className={styles.track}>
             {segments.length ? (
-              renderSegments(segments)
+              renderSegments(segments, true)
             ) : (
               <span className={styles.empty}>No banner</span>
             )}
@@ -102,25 +109,14 @@ export default function BannerTimeline({
                 banner.id == selectedId && styles.selected,
                 i == errorIndex && styles.invalid
               )}
+              aria-label={texts[banner.id]}
+              aria-pressed={banner.id == selectedId}
+              data-tooltip-id="panel-info-tooltip"
+              data-tooltip-content={`${texts[banner.id]} · ${scheduleLabel(banner)} · ${STATUS_LABELS[status]}`}
               onClick={() => onSelect(banner.id)}
             >
-              <span className={styles.itemHeader}>
-                <span
-                  className={styles.dot}
-                  style={{ background: backgrounds[banner.id] }}
-                />
-                <span className={styles.summary}>
-                  <span className={styles.summaryText}>{texts[banner.id]}</span>
-                  <span className={styles.summarySchedule}>
-                    {scheduleLabel(banner)}
-                  </span>
-                </span>
-                <span className={c(styles.status, styles[status])}>
-                  {STATUS_LABELS[status]}
-                </span>
-              </span>
               <span className={styles.track}>
-                {scheduled && (
+                {scheduled ? (
                   <span
                     className={c(
                       styles.window,
@@ -135,8 +131,13 @@ export default function BannerTimeline({
                         : undefined,
                     }}
                   />
+                ) : (
+                  <span className={styles.empty}>{STATUS_LABELS[status]}</span>
                 )}
-                {renderSegments(segments.filter(({ id }) => id == banner.id))}
+                {renderSegments(
+                  segments.filter(({ id }) => id == banner.id),
+                  false
+                )}
               </span>
             </button>
           );
