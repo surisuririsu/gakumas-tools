@@ -5,6 +5,11 @@ Dates are based on Eastern Time Zone.
 
 
 
+
+## 2026-09-26
+
+- Add contest season 53 preview
+
 ## 2026-08-28
 
 - Add a stamina calculator to the simulator loadout
