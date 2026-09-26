@@ -1,6 +1,6 @@
 import { PIdols, PItems, SkillCards, Stages } from "gakumas-data";
 import { GRAPHED_FIELDS, S } from "gakumas-engine";
-import { MIN_BUCKET_SIZE } from "@/simulator/constants";
+import { FALLBACK_STAGE, MIN_BUCKET_SIZE } from "@/simulator/constants";
 import {
   deserializeCustomizations,
   serializeCustomizations,
@@ -10,12 +10,28 @@ import { deserializeIds, serializeIds } from "./ids";
 const DEFAULTS = {
   stageId: Stages.getAll().findLast((s) => s.type == "contest" && !s.preview)
     .id,
-  supportBonus: "0.04",
-  params: "1500-1500-1500-50",
+  supportBonus: "0.1",
   pItemIds: "0-0-0-0",
   skillCardIdGroups: "0-0-0-0-0-0_0-0-0-0-0-0",
   customizationGroups: "-----_-----",
 };
+
+const DEFAULT_PARAMS_BY_TREND_RANK = [2700, 2000, 800];
+const DEFAULT_STAMINA = 50;
+
+export function getDefaultParams(stage) {
+  const criteria = [
+    stage.criteria.vocal,
+    stage.criteria.dance,
+    stage.criteria.visual,
+  ];
+  const trendOrder = [0, 1, 2].sort((a, b) => criteria[b] - criteria[a]);
+  const params = [];
+  trendOrder.forEach((paramIndex, rank) => {
+    params[paramIndex] = DEFAULT_PARAMS_BY_TREND_RANK[rank];
+  });
+  return [...params, DEFAULT_STAMINA];
+}
 
 const SIMULATOR_BASE_URL = "https://gktools.ris.moe/simulator";
 
@@ -43,14 +59,15 @@ export function loadoutFromSearchParams(searchParams) {
 
   stageId = stageId || DEFAULTS.stageId;
   supportBonus = supportBonus || DEFAULTS.supportBonus;
-  params = params || DEFAULTS.params;
   pItemIds = pItemIds || DEFAULTS.pItemIds;
   skillCardIdGroups = skillCardIdGroups || DEFAULTS.skillCardIdGroups;
   customizationGroups = customizationGroups || DEFAULTS.customizationGroups;
 
   stageId = parseInt(stageId, 10) || null;
   supportBonus = parseFloat(supportBonus) || null;
-  params = deserializeIds(params);
+  params = params
+    ? deserializeIds(params)
+    : getDefaultParams(Stages.getById(stageId) || FALLBACK_STAGE);
   pItemIds = deserializeIds(pItemIds);
   skillCardIdGroups = skillCardIdGroups.split("_").map(deserializeIds);
   customizationGroups = customizationGroups

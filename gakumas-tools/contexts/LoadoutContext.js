@@ -12,7 +12,7 @@ import { Stages } from "gakumas-data";
 import { usePathname } from "@/i18n/routing";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
-import { getSimulatorUrl } from "@/utils/simulator";
+import { getDefaultParams, getSimulatorUrl } from "@/utils/simulator";
 import { getMemoryParamContribution } from "@/utils/stamina";
 import { FALLBACK_STAGE } from "@/simulator/constants";
 import { fixCustomizations } from "@/utils/customizations";
@@ -289,6 +289,21 @@ export function LoadoutContextProvider({ children }) {
   stageRef.current = stage;
   const memoryParamsRef = useRef(memoryParams);
   memoryParamsRef.current = memoryParams;
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+
+  const selectStage = useCallback((stageId, customStage) => {
+    const hasDefaultParams = getDefaultParams(stageRef.current).every(
+      (p, i) => p == paramsRef.current[i],
+    );
+    setStageId(stageId);
+    setCustomStage(customStage);
+    if (hasDefaultParams) {
+      const nextStage =
+        stageId == "custom" ? customStage : Stages.getById(stageId);
+      setParams(getDefaultParams(nextStage));
+    }
+  }, []);
 
   const setMemory = useCallback((memory, index) => {
     const stage = stageRef.current;
@@ -339,8 +354,7 @@ export function LoadoutContextProvider({ children }) {
     () => ({
       setLoadout,
       setMemory,
-      setStageId,
-      setCustomStage,
+      selectStage,
       setSupportBonus,
       setParams,
       replacePItemId,
@@ -358,6 +372,7 @@ export function LoadoutContextProvider({ children }) {
     [
       setLoadout,
       setMemory,
+      selectStage,
       replacePItemId,
       swapPItemIds,
       replaceSkillCardId,

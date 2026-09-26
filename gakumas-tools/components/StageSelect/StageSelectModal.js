@@ -30,13 +30,12 @@ export default function StageSelectModal() {
     { value: "custom", label: t("custom") },
   ];
 
-  const { setStageId, stage, setCustomStage } = useContext(LoadoutContext);
+  const { selectStage, stage } = useContext(LoadoutContext);
   const { closeModal } = useContext(ModalContext);
   const [stageType, setStageType] = useState(stage?.type || "contest");
 
   function setStage(stageId, customStage) {
-    setStageId(stageId);
-    setCustomStage(customStage);
+    selectStage(stageId, customStage);
     closeModal();
   }
 
