@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { S } from "gakumas-engine";
+import "@/components/Charts/theme";
 import c from "@/utils/classNames";
 import styles from "./AreaPlot.module.scss";
 
@@ -34,26 +35,26 @@ function AreaPlot({ data, plan }) {
     () => ({
       score: {
         label: t("score"),
-        color: "rgba(68, 187, 255, 0.25)",
+        color: "28, 143, 232",
         yAxisID: "y1",
       },
       stamina: {
         label: t("stamina"),
-        color: "rgba(0, 211, 91, 0.25)",
+        color: "0, 190, 85",
       },
       genki: {
         label: t("genki"),
-        color: "rgba(68, 246, 255, 0.25)",
+        color: "0, 190, 220",
       },
       ...(plan == "sense"
         ? {
             goodConditionTurns: {
               label: t("goodConditionTurns"),
-              color: "rgba(255, 102, 119, 0.25)",
+              color: "242, 77, 102",
             },
             concentration: {
               label: t("concentration"),
-              color: "rgba(255, 118, 0, 0.25)",
+              color: "243, 152, 0",
             },
           }
         : {}),
@@ -61,15 +62,15 @@ function AreaPlot({ data, plan }) {
         ? {
             goodImpressionTurns: {
               label: t("goodImpressionTurns"),
-              color: "rgba(255, 243, 74, 0.25)",
+              color: "232, 190, 0",
             },
             motivation: {
               label: t("motivation"),
-              color: "rgba(214, 214, 214, 0.25)",
+              color: "140, 140, 150",
             },
             prideTurns: {
               label: t("prideTurns"),
-              color: "rgba(255, 182, 193, 0.25)",
+              color: "240, 120, 160",
             },
           }
         : {}),
@@ -77,19 +78,19 @@ function AreaPlot({ data, plan }) {
         ? {
             cumulativeFullPowerCharge: {
               label: t("cumulativeFullPowerCharge"),
-              color: "rgba(186, 85, 211, 0.25)",
+              color: "170, 80, 210",
             },
             strengthTimes: {
               label: t("strengthTimes"),
-              color: "rgba(255, 99, 132, 0.25)",
+              color: "235, 70, 110",
             },
             preservationTimes: {
               label: t("preservationTimes"),
-              color: "rgba(75, 192, 192, 0.25)",
+              color: "40, 170, 170",
             },
             fullPowerTimes: {
               label: t("fullPowerTimes"),
-              color: "rgba(255, 159, 64, 0.25)",
+              color: "245, 140, 40",
             },
             // Synthesized: sum of the three stance-times series. The engine
             // exposes `stanceChangedTimes` only as a derived resolver, so we
@@ -97,7 +98,7 @@ function AreaPlot({ data, plan }) {
             // field.
             stanceChangedTimes: {
               label: t("stanceChangedTimes"),
-              color: "rgba(153, 102, 255, 0.25)",
+              color: "130, 90, 240",
               compute: (data) => {
                 const a = data[S.strengthTimes] || [];
                 const b = data[S.preservationTimes] || [];
@@ -122,8 +123,10 @@ function AreaPlot({ data, plan }) {
   });
 
   const options = {
+    interaction: { mode: "index", intersect: false },
     scales: {
       x: {
+        grid: { display: false },
         title: {
           display: true,
           text: t("turn"),
@@ -161,7 +164,12 @@ function AreaPlot({ data, plan }) {
         return {
           label: config.label,
           data: raw.map((v) => parseFloat(v.toFixed(2))),
-          backgroundColor: config.color,
+          backgroundColor: `rgba(${config.color}, 0.14)`,
+          borderColor: `rgb(${config.color})`,
+          borderWidth: 2,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          tension: 0.3,
           fill: true,
           yAxisID: config.yAxisID || "y",
         };
@@ -175,6 +183,7 @@ function AreaPlot({ data, plan }) {
           <button
             key={field}
             className={c(activeFields[field] && styles.selected)}
+            aria-pressed={!!activeFields[field]}
             onClick={() =>
               setActiveFields({
                 ...activeFields,

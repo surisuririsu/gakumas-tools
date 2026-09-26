@@ -1,13 +1,22 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .rehearsal {
+  width: calc(100% - #{2 * tokens.$space-3});
   max-width: 800px;
   display: flex;
   flex-direction: column;
   gap: tokens.$space-3;
-  margin: 0 auto;
-  padding: tokens.$space-4 tokens.$space-4 tokens.$space-6;
+  margin: tokens.$space-3 auto;
+  padding: tokens.$space-4;
+  @include mixins.card;
+
+  @media (max-width: 480px) {
+    width: calc(100% - #{2 * tokens.$space-2});
+    margin: tokens.$space-2 auto;
+    padding: tokens.$space-3;
+  }
 }
 
 .help {
@@ -18,53 +27,29 @@
   img {
     flex-shrink: 0;
   }
-}
 
-.uploadCard {
-  display: flex;
-  flex-direction: column;
-  gap: tokens.$space-4;
-  border: 2px dashed colors.$gk-orange;
-  border-radius: tokens.$radius-md;
-  padding: tokens.$space-4;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover,
-  &.dragOver {
-    background-color: colors.$gk-orange-extra-light;
+  p {
+    margin: 0;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-sm;
+    font-weight: tokens.$weight-semibold;
+    line-height: 1.5;
   }
 }
 
-.uploadPrompt {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: tokens.$space-2;
-  border-radius: tokens.$radius-md;
-  padding: tokens.$space-3;
-  background-color: colors.$gk-orange-extra-light;
-  color: colors.$gk-orange;
-  font-weight: 600;
-  text-align: center;
-
-  .dragOver & {
-    background-color: transparent;
-  }
-}
-
-.uploadIcons {
+.formats {
   display: flex;
   gap: tokens.$space-2;
-  font-size: 32px;
+  margin-top: 2px;
+  color: tokens.$surface-ink-faint;
+  font-size: tokens.$text-md;
 }
 
 .progress {
   display: flex;
   flex-direction: column;
-  gap: tokens.$space-1;
-  color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-sm;
+  gap: 6px;
+  padding-top: 2px;
 }
 
 .progressLabel {
@@ -72,193 +57,18 @@
   align-items: center;
   justify-content: space-between;
   gap: tokens.$space-2;
-  font-variant-numeric: tabular-nums;
-}
-
-.tableWrapper {
-  overflow: auto;
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  thead {
-    background-color: tokens.$surface-muted;
-  }
-
-  th {
-    color: tokens.$surface-ink-muted;
-    font-weight: 600;
-  }
-
-  th,
-  td {
-    // Horizontal padding kept tight: 9 columns of 7-digit scores have to
-    // fit in the 768px content width without side-scrolling.
-    padding: tokens.$space-2 tokens.$space-1;
-  }
-
-  // Both action cells (delete left, image preview right) get even padding
-  // rather than relying on neighboring columns for their width.
-  td.action {
-    padding: tokens.$space-2;
-  }
-}
-
-.chartButtons {
-  background-color: tokens.$surface-muted;
-
-  th {
-    padding: 0;
-  }
-
-  button {
-    width: 100%;
-    border: 1px solid transparent;
-    padding: tokens.$space-2;
-    background-color: transparent;
-    color: tokens.$surface-ink-muted;
-    transition:
-      background-color 0.2s,
-      color 0.2s,
-      box-shadow 0.2s;
-
-    &.selected {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-orange;
-      box-shadow: inset 0 -2px 0 colors.$gk-orange;
-    }
-
-    &:hover:not(.selected) {
-      color: colors.$gk-red-orange;
-    }
-  }
-}
-
-// Vertical rules separating the three stage groups. Drawn with an inset
-// shadow instead of a border so they don't add to the table's width.
-.stageStart {
-  box-shadow: inset 2px 0 0 tokens.$surface-border;
-}
-
-.statsWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: tokens.$space-2;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  padding: tokens.$space-4;
-}
-
-.stats {
-  thead {
-    background: tokens.$gradient-brand;
-
-    th {
-      color: colors.$white;
-    }
-  }
-
-  tbody {
-    background-color: colors.$gk-orange-extra-light;
-
-    tr {
-      border-bottom: 0;
-    }
-  }
-
-  td {
-    font-size: tokens.$text-lg;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-
-  th,
-  td {
-    padding: tokens.$space-1 tokens.$space-2;
-  }
-}
-
-.score {
-  cursor: text;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-
-  // The input takes over the cell's padding so it fills the cell exactly,
-  // with an inset ring marking the edit state.
-  &.editing {
-    padding: 0;
-  }
-
-  input {
-    width: 100%;
-    min-width: 5ch;
-    border: none;
-    padding: tokens.$space-2 tokens.$space-1;
-    margin: 0;
-    background-color: colors.$white;
-    color: inherit;
-    font: inherit;
-    text-align: inherit;
-    outline: none;
-    box-shadow: inset 0 0 0 2px colors.$gk-orange;
-  }
-
-  // A stage the OCR could not verify: kept and shown, but ringed so the user
-  // reviews it. Layered over the value heat-map (which is an inline background).
-  &.flagged {
-    box-shadow: inset 0 0 0 2px colors.$gk-orange;
-    font-weight: 700;
-  }
-}
-
-// Center the cell's action button(s); a flagged row's trailing cell holds two
-// (verify + image preview), so keep them inline with a small gap.
-.action {
-  text-align: center;
-  white-space: nowrap;
-}
-
-.action button {
-  display: inline-flex;
-  margin: 0 tokens.$space-1;
+  min-height: 20px;
   color: tokens.$surface-ink-muted;
-  transition: color 0.2s;
-
-  &:hover {
-    color: colors.$gk-red-orange;
-  }
-
-  &.active {
-    color: colors.$gk-orange;
-  }
-
-  // The ✓ confirm-row button (shown only when a row has a flagged stage).
-  &.verify {
-    color: colors.$gk-orange;
-
-    &:hover {
-      color: colors.$gk-red-orange;
-    }
-  }
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  @include mixins.numeric;
 }
 
-.previewRow td {
-  padding: tokens.$space-2;
-  background-color: tokens.$surface-muted;
-
-  div {
-    overflow: auto;
-    max-height: 60vh;
-  }
-
-  img {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    border-radius: tokens.$radius-sm;
-  }
+.done {
+  flex-shrink: 0;
+  color: tokens.$success;
+  font-size: 16px;
+  @include mixins.pop-in;
 }
 
 .toolbar {
@@ -268,23 +78,297 @@
   gap: tokens.$space-3;
 }
 
-// "N rows need checking" — sits beside the CSV button when any row is flagged.
 .flaggedNotice {
+  margin-right: auto;
+  @include mixins.tag(tokens.$danger-tint, tokens.$danger);
+  padding: 3px 10px;
+  font-size: tokens.$text-xs;
+  white-space: normal;
+  @include mixins.pop-in;
+}
+
+.statsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  padding-bottom: 2px;
+}
+
+.distribution {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+}
+
+.stats {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 6px 0;
+  width: calc(100% + 12px);
+  margin: 0 -6px;
+  text-align: center;
+
+  th,
+  td {
+    padding-inline: 2px;
+    background-color: tokens.$surface-alt;
+    animation: statPop 600ms tokens.$ease-pop both;
+
+    &:nth-child(2) {
+      animation-delay: 40ms;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 80ms;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 120ms;
+    }
+  }
+
+  th {
+    padding-top: 7px;
+    border-radius: 12px 12px 0 0;
+    color: tokens.$surface-ink-muted;
+    font-size: tokens.$text-2xs;
+    font-weight: tokens.$weight-bold;
+    line-height: 1.3;
+    transform-origin: 50% 100%;
+  }
+
+  td {
+    padding-bottom: 6px;
+    border-radius: 0 0 12px 12px;
+    font-size: 17px;
+    font-weight: tokens.$weight-heavy;
+    line-height: 1.3;
+    transform-origin: 50% 0;
+    @include mixins.numeric;
+  }
+
+  .hero {
+    background-color: tokens.$accent-tint;
+    color: tokens.$accent-ink;
+  }
+}
+
+@keyframes statPop {
+  from {
+    scale: 0.86;
+  }
+}
+
+.tableWrapper {
+  overflow: auto;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.table {
+  @include mixins.table;
+  border-spacing: 3px;
+
+  th,
+  td {
+    // Horizontal padding kept tight: 9 columns of 7-digit scores have to
+    // fit in the 768px content width without side-scrolling.
+    padding: 7px 6px;
+    border-bottom: 0;
+  }
+
+  th {
+    border-radius: tokens.$radius-sm;
+  }
+}
+
+.chartButtons td {
+  padding: 0 0 2px;
+  text-align: center;
+
+  button {
+    @include mixins.chip;
+    min-width: 34px;
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 15px;
+
+    &.selected {
+      @include mixins.chip-selected;
+    }
+  }
+}
+
+.stageHeaders th {
+  text-align: center;
+
+  &:empty {
+    background-color: transparent;
+  }
+}
+
+.score {
+  border-radius: tokens.$radius-sm;
+  background-color: color-mix(
+    in srgb,
+    tokens.$chart-bar-top calc(var(--heat, 0) * 88% + 8%),
+    transparent
+  );
+  font-weight: tokens.$weight-semibold;
+  text-align: center;
+  cursor: text;
+  transition: background-color tokens.$duration-base;
+
+  @media (hover: hover) {
+    &:hover:not(.editing) {
+      box-shadow: inset 0 0 0 1.5px tokens.$chart-bar;
+    }
+  }
+
+  // The input takes over the cell's padding so it fills the cell exactly.
+  &.editing {
+    padding: 0;
+  }
+
+  input {
+    position: relative;
+    z-index: tokens.$z-raised;
+    width: 100%;
+    min-width: 5ch;
+    margin: 0;
+    padding: 7px 6px;
+    border: none;
+    border-radius: tokens.$radius-sm;
+    outline: none;
+    background-color: tokens.$surface-panel;
+    box-shadow: tokens.$field-focus;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+  }
+
+  // A stage the OCR could not verify: kept and shown, but marked so the user
+  // reviews it.
+  &.flagged {
+    background-color: tokens.$danger-tint;
+    box-shadow: inset 0 0 0 1.5px tokens.$danger;
+    color: tokens.$danger;
+    font-weight: tokens.$weight-heavy;
+  }
+}
+
+.table td.action {
+  padding: 0 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.action button {
+  width: 28px;
+  height: 28px;
   display: inline-flex;
+  justify-content: center;
   align-items: center;
-  gap: tokens.$space-1;
-  margin-right: auto; // push to the left, CSV stays right
-  color: colors.$gk-orange;
+  vertical-align: middle;
+  border-radius: tokens.$radius-pill;
+  color: tokens.$surface-ink-subtle;
   font-size: 14px;
-  font-weight: 600;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.88);
+
+  & + button {
+    margin-left: 2px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-muted;
+      color: tokens.$surface-ink;
+    }
+
+    &.remove:hover {
+      background-color: tokens.$danger-tint;
+      color: tokens.$danger;
+    }
+  }
+
+  &.active {
+    background-color: tokens.$accent-tint;
+    color: tokens.$accent-ink;
+  }
+
+  &.verify {
+    background-color: tokens.$success-tint;
+    box-shadow: 0 2px 0 tokens.$success-edge;
+    color: tokens.$success;
+    @include mixins.pop-in;
+  }
+}
+
+.previewRow {
+  &:not(:has(> td > *)) {
+    display: none;
+  }
+
+  td {
+    padding: 0;
+  }
+}
+
+.preview {
+  max-height: 60vh;
+  overflow: auto;
+  padding: tokens.$space-2;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
+
+  img {
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: tokens.$radius-sm;
+  }
+}
+
+.addButton {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -(tokens.$space-2);
+  border: 1.5px dashed tokens.$surface-edge;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-subtle;
+  color: tokens.$surface-ink-subtle;
+  font-size: 15px;
+  transition:
+    background-color tokens.$duration-fast,
+    border-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
+
+  svg {
+    transition: scale tokens.$duration-spring tokens.$ease-pop;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: tokens.$accent-edge;
+      background-color: tokens.$accent-tint;
+      color: tokens.$accent-ink;
+
+      svg {
+        scale: 1.2;
+      }
+    }
+  }
 }
 
 .ad {
   margin-top: tokens.$space-4;
-}
-
-.addButton {
-  border-radius: 0;
-  font-size: 20px;
-  color: colors.$gray;
 }

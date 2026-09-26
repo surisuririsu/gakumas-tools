@@ -1,21 +1,26 @@
 import { memo } from "react";
+import c from "@/utils/classNames";
 import { TYPES } from "./constants";
+import { formatScore } from "./helpers";
 import styles from "./SimulatorStats.module.scss";
 
-function TypeBar({ counts }) {
-  const total = counts.vocal + counts.dance + counts.visual;
-  if (!total) return <div className={styles.typeBar} />;
+function TypeBar({ counts, totalScoreByType, numRuns }) {
   return (
     <div className={styles.typeBar}>
-      {TYPES.map((type) =>
-        counts[type] > 0 ? (
-          <div
+      {TYPES.map((type) => {
+        const count = counts[type];
+        if (!count) return null;
+        const avgScore = totalScoreByType[type] / numRuns;
+        return (
+          <span
             key={type}
-            className={styles[type]}
-            style={{ width: `${(counts[type] / total) * 100}%` }}
-          />
-        ) : null,
-      )}
+            className={c(styles.typeSegment, styles[type])}
+            style={{ flexGrow: count }}
+          >
+            ×{count} · {formatScore(avgScore)}
+          </span>
+        );
+      })}
     </div>
   );
 }

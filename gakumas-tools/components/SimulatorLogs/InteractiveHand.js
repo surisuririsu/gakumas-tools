@@ -1,12 +1,13 @@
 import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaEllipsisVertical } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
 import Button from "@/components/Button";
+import Collapse from "@/components/Collapse";
 import EntityIcon from "@/components/EntityIcon";
 import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import HandState from "./HandState";
+import HandTitle from "./HandTitle";
 import styles from "./SimulatorLogs.module.scss";
 
 function InteractiveHand({
@@ -50,14 +51,14 @@ function InteractiveHand({
   };
 
   return (
-    <div ref={handRef} className={styles.hand}>
-      <div className={styles.handTitle}>
-        {t("hand")}{" "}
-        <button onClick={() => setExpanded(!expanded)}>
-          <FaEllipsisVertical />
-        </button>
-      </div>
-      {expanded && <HandState state={state} />}
+    <div ref={handRef} className={c(styles.hand, styles.pending)}>
+      <HandTitle
+        expanded={expanded}
+        onToggle={() => setExpanded(!expanded)}
+      />
+      <Collapse open={expanded}>
+        <HandState state={state} />
+      </Collapse>
       <div className={styles.handCards}>
         {handCards.map((card, i) => (
           <button
@@ -82,12 +83,14 @@ function InteractiveHand({
                 size="fill"
               />
             </div>
-            {SkillCards.getById(card.id).name}
+            <span className={styles.cardName}>
+              {SkillCards.getById(card.id).name}
+            </span>
           </button>
         ))}
       </div>
       <div className={styles.skip}>
-        <Button fill className={styles.skipButton} onClick={handleEndTurn}>
+        <Button fill onClick={handleEndTurn}>
           {t("skip")}
         </Button>
       </div>

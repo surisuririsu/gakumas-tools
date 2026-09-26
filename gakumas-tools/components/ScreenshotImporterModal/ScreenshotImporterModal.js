@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
+import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
 import styles from "./ScreenshotImporterModal.module.scss";
 
@@ -41,12 +42,19 @@ function ScreenshotImporterModal({ translationNamespace, importFn, onSuccess }) 
         disabled={loading}
       />
 
-      {loading && <div className={styles.status}>{t("processing")}</div>}
-      {error && (
-        <div className={styles.error}>
-          {t("error")}: {error}
-        </div>
-      )}
+      <div className={styles.feedback} aria-live="polite">
+        {loading && (
+          <div className={styles.status}>
+            <Loader />
+            {t("processing")}
+          </div>
+        )}
+        {error && (
+          <div className={styles.error}>
+            {t("error")}: {error}
+          </div>
+        )}
+      </div>
     </Modal>
   );
 }

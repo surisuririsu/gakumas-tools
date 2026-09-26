@@ -6,7 +6,7 @@ export default function Image(props) {
   return (
     <NextImage
       {...props}
-      unoptimized={isGk}
+      unoptimized={props.unoptimized || isGk}
       crossOrigin={isGk ? "anonymous" : props.crossOrigin}
     />
   );

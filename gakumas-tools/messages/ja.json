@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 ページが見つかりません",
-    "generic": "エラーが発生しました"
+    "generic": "エラーが発生しました",
+    "retry": "再試行",
+    "home": "ホーム"
   },
   "tools": {
     "home": {
@@ -72,6 +74,11 @@
     "gakumasContestWiki": "学マスコンテストWiki",
     "sendFeedback": "フィードバックを送信",
     "signOut": "ログアウト"
+  },
+  "ToolHeader": {
+    "pin": "他のツールの横に固定",
+    "unpin": "固定を解除",
+    "pinned": "固定済み：他のツールの横に表示されます"
   },
   "Welcome": {
     "title": "Gakumas Tools - 学マスツール",
@@ -148,7 +155,8 @@
     "hifDerivedTotal": "合計 = {value}",
     "hifRound2StarGain": "スター性 +{value}",
     "hifScoreBonusNote": "スコアは順位発表画面に表示された値（ラウンド1の1位ボーナス×1.2込み）をそのまま入力してください。計算時に自動で補正されます。",
-    "hifTargetRound2Scores": "目標ランク別 必要ラウンド2スコア"
+    "hifTargetRound2Scores": "目標ランク別 必要ラウンド2スコア",
+    "toNextRank": "{rank}まで あと{points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -169,6 +177,13 @@
   },
   "Dex": {
     "maxTimes": "最大{n}回",
+    "unlockPlv": "解放PLv {n}",
+    "plans": {
+      "sense": "センス",
+      "logic": "ロジック",
+      "anomaly": "アノマリー",
+      "free": "フリー"
+    },
     "tabs": {
       "skill-cards": "スキルカード",
       "p-items": "Pアイテム",
@@ -243,7 +258,8 @@
     }
   },
   "EntityBank": {
-    "filter": "フィルタ"
+    "filter": "フィルタ",
+    "noMatches": "条件に一致するものがありません。"
   },
   "EntityIcon": {
     "emptySlot": "空きスロット",
@@ -266,6 +282,7 @@
     "acquiredInfo": "各カードの強化前後を含めてください",
     "produceRank": "プロデュース評価",
     "costRange": "コスト範囲",
+    "cost": "コスト",
     "success": "成功",
     "failure": "失敗",
     "clear": "クリア",
@@ -343,13 +360,19 @@
   },
   "MemoriesNudge": {
     "create": "メモリーを作成する",
-    "import": "スクショからメモリーを読み取る"
+    "import": "スクショからメモリーを読み取る",
+    "noMatches": "条件に一致するメモリーがありません。",
+    "signInHint": "Discordでログインするとメモリーを保存してシミュレーターで使えます。ログインせずに作成することもできます。",
+    "signIn": "ログイン",
+    "empty": "メモリーがまだありません。スクショから読み取って始めましょう。"
   },
   "MemorySave": {
     "save": "保存",
     "saveAsNew": "新規保存",
     "signInToSave": "Discordでログインして保存",
-    "saveFailed": "保存に失敗しました"
+    "saveFailed": "保存に失敗しました",
+    "saving": "保存中…",
+    "saved": "保存しました"
   },
   "MemoriesHeader": {
     "confirmDelete": "{num}個のメモリーを削除しますか？",
@@ -369,7 +392,12 @@
   "MemoryImporterModal": {
     "importMemories": "Import memories from screenshots",
     "instructions": "<p>Parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
-    "progress": "Progress: {progress}/{total}"
+    "progress": "Progress: {progress}/{total}",
+    "preparing": "読み取りの準備中…（初回は数MBをダウンロードします）",
+    "saving": "保存中…",
+    "failed": "読み込みに失敗しました。スクショを確認してもう一度お試しください。",
+    "selectScreenshots": "スクリーンショットを選択",
+    "dropHint": "タップして選択、またはスクリーンショットをここにドロップ"
   },
   "Simulator": {
     "supportBonus": "サポートボーナス%",
@@ -470,7 +498,10 @@
     "stats": "統計",
     "compare": "比較",
     "downloadScores": "スコア",
-    "optimizeParams": "パラメータ最適化"
+    "optimizeParams": "パラメータ最適化",
+    "optimizeGain": "平均 +{gain}",
+    "optimizeAlready": "最適化済み",
+    "optimizeFailed": "最適化できません"
   },
   "CompareTab": {
     "saved": "保存済み",
@@ -502,7 +533,9 @@
     "allSeasons": "全シーズン",
     "allIdols": "全アイドル",
     "allStages": "全ステージ",
-    "actions": "操作"
+    "actions": "操作",
+    "loadFailed": "保存済み編成を読み込めませんでした。",
+    "retry": "再試行"
   },
   "SimulatorStats": {
     "total": "合計",
@@ -627,7 +660,9 @@
     "videoError": "動画の処理中にエラーが発生しました: {message}",
     "imageError": "{count}件のスクリーンショットを解析できず、スキップされました。",
     "needsChecking": "{count}件の行を確認してください",
-    "confirmRow": "この行の値が正しいことを確認"
+    "confirmRow": "この行の値が正しいことを確認",
+    "selectFiles": "ファイルを選択",
+    "addRow": "行を追加"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

@@ -1,5 +1,6 @@
 "use client";
 import {
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -23,10 +24,8 @@ import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import Input from "@/components/Input";
 import KofiAd from "@/components/KofiAd";
-import Loader from "@/components/Loader";
 import LoadoutEditor from "@/components/LoadoutEditor";
 import LoadoutSummary from "@/components/LoadoutHistory/LoadoutSummary";
-import ProgressBar from "@/components/ProgressBar";
 import SimulatorResult from "@/components/SimulatorResult";
 import StageSelect from "@/components/StageSelect";
 import StrategyPicker from "@/components/StrategyPicker";
@@ -34,15 +33,18 @@ import LoadoutContext from "@/contexts/LoadoutContext";
 import SimulationRunsContext from "@/contexts/SimulationRunsContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
 import { simulate } from "@/simulator";
+import { DEFAULT_NUM_RUNS, SYNC } from "@/simulator/constants";
 import {
-  MAX_WORKERS,
-  DEFAULT_NUM_RUNS,
-  SYNC,
-  WORKER_MESSAGE,
-} from "@/simulator/constants";
+  retainWorkerPool,
+  runOnWorkers,
+  workerCount,
+} from "@/simulator/workerPool";
+import c from "@/utils/classNames";
+import { createProgressStore } from "@/utils/progressStore";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import usePersistedState from "@/utils/usePersistedState";
 import ManualPlay from "./ManualPlay";
+import SimulateButton from "./SimulateButton";
 import SimulatorButtons from "./SimulatorButtons";
 import SimulatorSubTools from "./SimulatorSubTools";
 import styles from "./Simulator.module.scss";
@@ -73,11 +75,12 @@ export default function Simulator() {
     DEFAULT_NUM_RUNS,
   );
   const [enterPercents, setEnterPercents] = useState(false);
-  const workersRef = useRef();
 
   const [pendingDecision, setPendingDecision] = useState(null);
   const resolveDecisionRef = useRef(null);
-  const [progress, setProgress] = useState(0);
+  const [progress] = useState(createProgressStore);
+  const abortRef = useRef(null);
+  const runSimulationRef = useRef(null);
 
   const config = useMemo(() => {
     const idolConfig = new IdolConfig(loadout);
@@ -109,25 +112,12 @@ export default function Simulator() {
     });
   }, [loadouts, stage, enterPercents]);
 
-  // Set up web workers on mount
   useEffect(() => {
-    let numWorkers = 1;
-    if (navigator.hardwareConcurrency) {
-      numWorkers = Math.min(navigator.hardwareConcurrency, MAX_WORKERS);
-    }
     // Seed a hardware-scaled default only when the user has no saved value.
     if (localStorage.getItem(NUM_RUNS_KEY) == null) {
-      setNumRuns(Math.round(Math.min(numWorkers, MAX_WORKERS) / 2) * 1000);
+      setNumRuns(Math.round(workerCount() / 2) * 1000);
     }
-
-    workersRef.current = [];
-    for (let i = 0; i < numWorkers; i++) {
-      workersRef.current.push(
-        new Worker(new URL("../../simulator/worker.js", import.meta.url)),
-      );
-    }
-
-    return () => workersRef.current?.forEach((worker) => worker.terminate());
+    return retainWorkerPool();
   }, []);
 
   const setResult = useCallback(
@@ -184,52 +174,48 @@ export default function Simulator() {
     setRunning(false);
   }
 
+  const startSimulation = useCallback(() => runSimulationRef.current(), []);
+
   async function runSimulation() {
+    const controller = new AbortController();
+    abortRef.current = controller;
     setRunning(true);
-    setProgress(0);
+    progress.set(0);
 
     console.time("simulation");
 
-    if (SYNC || !workersRef.current) {
-      const result = await simulate(
-        config,
-        linkConfigs,
-        strategy,
-        numRuns,
-        (completed) => setProgress(completed),
-      );
-      setResult(result);
-    } else {
-      const numWorkers = workersRef.current.length;
-      const runsPerWorker = Math.round(numRuns / numWorkers);
-
-      let promises = [];
-      for (let i = 0; i < numWorkers; i++) {
-        promises.push(
-          new Promise((resolve) => {
-            workersRef.current[i].onmessage = (e) => {
-              if (e.data.type === WORKER_MESSAGE.PROGRESS) {
-                setProgress((p) => p + e.data.delta);
-              } else if (e.data.type === WORKER_MESSAGE.RESULT) {
-                resolve(e.data.result);
-              }
-            };
-            workersRef.current[i].postMessage({
-              idolStageConfig: config,
-              linkConfigs: linkConfigs,
-              strategyName: strategy,
-              numRuns: runsPerWorker,
-            });
-          }),
+    try {
+      let result;
+      if (SYNC) {
+        result = await simulate(
+          config,
+          linkConfigs,
+          strategy,
+          numRuns,
+          (completed) => progress.set(completed),
         );
+      } else {
+        const results = await runOnWorkers(
+          {
+            idolStageConfig: config,
+            linkConfigs,
+            strategyName: strategy,
+            numRuns,
+          },
+          (delta) => progress.set((p) => p + delta),
+          controller.signal,
+        );
+        result = mergeResults(results);
       }
-
-      Promise.all(promises).then((results) => {
-        const mergedResults = mergeResults(results);
-        setResult(mergedResults);
-      });
+      startTransition(() => setResult(result));
+    } catch (err) {
+      console.timeEnd("simulation");
+      if (controller.signal.aborted) return;
+      console.error(err);
+      setRunning(false);
     }
   }
+  runSimulationRef.current = runSimulation;
 
   return (
     <div id="simulator_loadout" className={styles.loadoutEditor}>
@@ -272,7 +258,11 @@ export default function Simulator() {
             {loadouts.map((loadout, index) => (
               <div key={index} className={styles.loadoutTab}>
                 <button
-                  className={styles.selectButton}
+                  className={c(
+                    styles.selectButton,
+                    index === currentLoadoutIndex && styles.selectedTab,
+                  )}
+                  aria-pressed={index === currentLoadoutIndex}
                   onClick={() => {
                     setLoadout(loadouts[index]);
                     setCurrentLoadoutIndex(index);
@@ -315,6 +305,7 @@ export default function Simulator() {
             <StrategyPicker
               strategy={strategy}
               setStrategy={(value) => {
+                abortRef.current?.abort();
                 setSimulatorData(null);
                 setPendingDecision(null);
                 setStrategy(value);
@@ -328,6 +319,7 @@ export default function Simulator() {
               <span>{numRuns}</span>
               <input
                 className={styles.numRunsSlider}
+                style={{ "--fill": `${((numRuns - 1000) / 9000) * 100}%` }}
                 type="range"
                 value={numRuns}
                 onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
@@ -341,21 +333,12 @@ export default function Simulator() {
 
         <div data-export-hide="true">
           {strategy === "HeuristicStrategy" && (
-            <>
-              <Button
-                style="blue"
-                fill
-                onClick={runSimulation}
-                disabled={running}
-              >
-                {running ? <Loader /> : t("simulate")}
-              </Button>
-              {running && numRuns > 0 && (
-                <div className={styles.progressBarWrap}>
-                  <ProgressBar value={progress} max={numRuns} />
-                </div>
-              )}
-            </>
+            <SimulateButton
+              running={running}
+              numRuns={numRuns}
+              progress={progress}
+              onRun={startSimulation}
+            />
           )}
 
           {strategy === "ManualStrategy" && (
@@ -387,6 +370,7 @@ export default function Simulator() {
 
       {strategy === "HeuristicStrategy" && simulatorData && (
         <SimulatorResult
+          pending={running}
           data={simulatorData}
           config={config}
           enterPercents={enterPercents}

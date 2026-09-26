@@ -8,6 +8,11 @@ export default function LoadoutParams({
   staminaAction,
   typeMultipliers,
 }) {
+  const footers = Object.keys(typeMultipliers).map(
+    (param) => `${Math.round(typeMultipliers[param] * 100)}%`,
+  );
+  if (withStamina) footers.push(staminaAction);
+
   return (
     <div className={styles.params}>
       <ParametersInput
@@ -15,15 +20,9 @@ export default function LoadoutParams({
         onChange={onChange}
         withStamina={withStamina}
         max={10000}
+        attached
+        footers={footers}
       />
-      <div className={styles.typeMultipliers}>
-        {Object.keys(typeMultipliers).map((param) => (
-          <div key={param}>{Math.round(typeMultipliers[param] * 100)}%</div>
-        ))}
-        {withStamina && (
-          <div className={styles.staminaAction}>{staminaAction}</div>
-        )}
-      </div>
     </div>
   );
 }

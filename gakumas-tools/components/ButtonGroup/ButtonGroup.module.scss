@@ -3,50 +3,65 @@
 @use "../../styles/tokens";
 
 .buttonGroup {
+  position: relative;
+  isolation: isolate;
   display: flex;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
+  padding: 3px 3px 5px;
+  border-radius: 11px;
+  background-color: tokens.$fill-muted;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 
   :is(button, a) {
+    position: relative;
+    z-index: 1;
     flex: 1;
     min-width: 44px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: tokens.$space-2 tokens.$space-3;
-    color: tokens.$surface-ink-muted;
+    padding: 6px tokens.$space-3;
+    border-radius: var(--segment-radius, 8px);
+    color: tokens.$surface-ink-subtle;
     font-size: tokens.$text-sm;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
     transition:
-      background-color tokens.$duration-fast,
       color tokens.$duration-fast,
-      box-shadow tokens.$duration-base tokens.$ease-out;
+      scale tokens.$duration-spring tokens.$ease-spring;
     --press-opacity: 1;
     @include mixins.focus-ring-inset;
 
     &.selected {
-      background-color: rgba(255, 118, 0, 0.12);
-      color: colors.$gk-red-orange;
-      font-weight: 700;
-      box-shadow: inset 0 -2px 0 colors.$gk-red-orange;
+      color: var(--segment-ink, #{tokens.$accent-ink});
     }
 
     &:not(.selected):hover {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
+      color: tokens.$surface-ink;
     }
 
-    &:not(.selected):active {
-      background-color: rgba(255, 118, 0, 0.2);
+    &:active {
+      scale: 0.9;
       transition-duration: tokens.$duration-press;
     }
-
-    & + :is(button, a) {
-      border-left: 1px solid tokens.$surface-border;
-    }
   }
+
+  &:not(.measured) .selected {
+    background-color: var(--segment, #{colors.$white});
+    box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
+  }
+}
+
+.thumb {
+  position: absolute;
+  border-radius: var(--segment-radius, 8px);
+  background-color: var(--segment, #{colors.$white});
+  box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
+  pointer-events: none;
+  transition:
+    left tokens.$duration-slow tokens.$ease-glide,
+    right tokens.$duration-slow tokens.$ease-glide,
+    background-color tokens.$duration-slow,
+    box-shadow tokens.$duration-slow;
 }

@@ -1,8 +1,11 @@
 import { memo, useContext, useEffect, useMemo, useState } from "react";
+import { FaChevronDown } from "react-icons/fa6";
 import { PIdols } from "gakumas-data";
+import Collapse from "@/components/Collapse";
 import PlanIdolSelects from "@/components/PlanIdolSelects";
 import PIdol from "@/components/PIdol";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import c from "@/utils/classNames";
 import styles from "./PIdolSelect.module.scss";
 
 function PIdolSelect({ selected, onChange }) {
@@ -23,12 +26,24 @@ function PIdolSelect({ selected, onChange }) {
 
   return (
     <div className={styles.pIdolSelect}>
-      <button className={styles.pIdol} onClick={() => setExpanded(!expanded)}>
+      <button
+        type="button"
+        className={c(
+          styles.pIdol,
+          !selected && styles.empty,
+          expanded && styles.expanded
+        )}
+        onClick={() => setExpanded(!expanded)}
+        aria-expanded={expanded}
+      >
         <PIdol pIdolId={selected} />
+        <span className={styles.caret} aria-hidden="true">
+          <FaChevronDown />
+        </span>
       </button>
 
-      {expanded && (
-        <div className={styles.expander}>
+      <div className={styles.expanderSlot}>
+        <Collapse open={expanded} className={styles.expander}>
           <PlanIdolSelects
             plan={plan}
             idolId={idolId}
@@ -37,21 +52,27 @@ function PIdolSelect({ selected, onChange }) {
           />
 
           <div className={styles.result}>
-            {pIdols.map((pIdol) => (
+            {pIdols.map((pIdol, i) => (
               <button
                 key={pIdol.id}
-                className={styles.pIdolButton}
+                type="button"
+                className={c(
+                  styles.pIdolButton,
+                  pIdol.id == selected && styles.selected
+                )}
+                style={{ "--i": i }}
                 onClick={() => {
                   onChange(pIdol.id);
                   setExpanded(false);
                 }}
+                aria-pressed={pIdol.id == selected}
               >
                 <PIdol pIdolId={pIdol.id} />
               </button>
             ))}
           </div>
-        </div>
-      )}
+        </Collapse>
+      </div>
     </div>
   );
 }

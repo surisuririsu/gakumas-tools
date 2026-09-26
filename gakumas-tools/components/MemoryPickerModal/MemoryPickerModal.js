@@ -52,6 +52,7 @@ function MemoryPickerModal({ index }) {
       <div className={styles.memoryPicker}>
         <MemoriesList
           memories={filteredMemories}
+          filtered={memories.length > 0}
           picking
           onPick={(memory) => {
             setMemory(memory, index);

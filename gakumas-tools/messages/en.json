@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 Not Found",
-    "generic": "Something went wrong"
+    "generic": "Something went wrong",
+    "retry": "Try again",
+    "home": "Home"
   },
   "tools": {
     "home": {
@@ -64,6 +66,11 @@
     "gakumasContestWiki": "Gakumas Contest Wiki",
     "sendFeedback": "Send feedback",
     "signOut": "Sign out"
+  },
+  "ToolHeader": {
+    "pin": "Pin beside other tools",
+    "unpin": "Unpin",
+    "pinned": "Pinned: opens beside other tools"
   },
   "Welcome": {
     "title": "Gakumas Tools",
@@ -140,7 +147,8 @@
     "hifDerivedTotal": "Total = {value}",
     "hifRound2StarGain": "Star gained: +{value}",
     "hifScoreBonusNote": "Enter scores as shown on the placement screen (round 1 includes the ×1.2 1st place bonus). The calculator adjusts for it automatically.",
-    "hifTargetRound2Scores": "Target Round 2 scores"
+    "hifTargetRound2Scores": "Target Round 2 scores",
+    "toNextRank": "{points} to {rank}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -161,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "Max {n}",
+    "unlockPlv": "Unlock PLv {n}",
+    "plans": {
+      "sense": "Sense",
+      "logic": "Logic",
+      "anomaly": "Anomaly",
+      "free": "Free"
+    },
     "tabs": {
       "skill-cards": "Skill cards",
       "p-items": "P-items",
@@ -235,7 +250,8 @@
     }
   },
   "EntityBank": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "noMatches": "Nothing matches these filters."
   },
   "EntityIcon": {
     "emptySlot": "Empty slot",
@@ -258,6 +274,7 @@
     "acquiredInfo": "Include pre/post-upgrade versions of each card",
     "produceRank": "Produce rank",
     "costRange": "Cost range",
+    "cost": "Cost",
     "success": "Success",
     "failure": "Failure",
     "clear": "Clear",
@@ -337,15 +354,21 @@
     "save": "Save",
     "saveAsNew": "Save as new",
     "signInToSave": "Sign in with Discord to save",
-    "saveFailed": "Save failed"
+    "saveFailed": "Save failed",
+    "saving": "Saving…",
+    "saved": "Saved"
   },
   "MemoriesNudge": {
     "create": "Create a memory",
-    "import": "Import memories from screenshots"
+    "import": "Import memories from screenshots",
+    "noMatches": "No memories match these filters.",
+    "signInHint": "Sign in with Discord to keep your memories and use them in the simulator. You can also create one without signing in.",
+    "signIn": "Sign in",
+    "empty": "No memories yet. Import them from screenshots to get started."
   },
   "MemoriesHeader": {
     "confirmDelete": "Delete {num, plural, one {# memory} other {# memories}}?",
-    "selected": "{num} memories selected",
+    "selected": "{num, plural, one {# memory} other {# memories}} selected",
     "search": "Search",
     "create": "Create memory",
     "import": "Import from screenshots",
@@ -361,7 +384,12 @@
   "MemoryImporterModal": {
     "importMemories": "Import memories from screenshots",
     "instructions": "<p>Parameters, p-items, and skill card icons must be visible in each screenshot.</p><p>Importing may take several seconds or minutes depending on the number of memories imported and your device's processor and memory. Your browser may crash if you try to import too many memories at once.</p><p>Some memories may fail to parse correctly, and require fixing after import. In such cases, they will be marked with \"(FIXME)\" in the name.</p>",
-    "progress": "Progress: {progress}/{total}"
+    "progress": "Progress: {progress}/{total}",
+    "preparing": "Preparing the reader… (first use downloads a few MB)",
+    "saving": "Saving…",
+    "failed": "Import failed. Check the screenshots and try again.",
+    "selectScreenshots": "Select screenshots",
+    "dropHint": "Tap to select, or drop screenshots here"
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
@@ -462,7 +490,10 @@
     "stats": "Stats",
     "compare": "Compare",
     "downloadScores": "Scores",
-    "optimizeParams": "Optimize params"
+    "optimizeParams": "Optimize params",
+    "optimizeGain": "Avg +{gain}",
+    "optimizeAlready": "Already optimal",
+    "optimizeFailed": "Can't optimize"
   },
   "CompareTab": {
     "saved": "Saved",
@@ -494,7 +525,9 @@
     "allSeasons": "All seasons",
     "allIdols": "All idols",
     "allStages": "All stages",
-    "actions": "Actions"
+    "actions": "Actions",
+    "loadFailed": "Couldn't load your saved loadouts.",
+    "retry": "Retry"
   },
   "SimulatorStats": {
     "total": "Total",
@@ -619,7 +652,9 @@
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
     "needsChecking": "{count} row(s) need checking",
-    "confirmRow": "Confirm this row's values are correct"
+    "confirmRow": "Confirm this row's values are correct",
+    "selectFiles": "Select files",
+    "addRow": "Add row"
   },
   "KofiAd": {
     "prompt": "Support this project"

@@ -1,8 +1,7 @@
 "use client";
 import { memo, useState } from "react";
-import { useTranslations } from "next-intl";
-import ButtonGroup from "@/components/ButtonGroup";
 import ScenarioPicker from "@/components/ScenarioPicker";
+import CalculatorSwitch from "./CalculatorSwitch";
 import HajimeCalculator from "./HajimeCalculator";
 import HifCalculator from "./HifCalculator";
 import NiaCalculator from "./NiaCalculator";
@@ -10,13 +9,6 @@ import LessonCalculator from "../LessonCalculator";
 import styles from "./ProduceRankCalculator.module.scss";
 
 function ProduceRankCalculator() {
-  const t = useTranslations("Calculator");
-
-  const CALCULATOR_OPTIONS = ["produce-rank", "lesson"].map((calculator) => ({
-    value: calculator,
-    label: t(`calculators.${calculator}`),
-  }));
-
   const [scenario, setScenario] = useState("hif");
   const [calculator, setCalculator] = useState("produce-rank");
 
@@ -25,14 +17,7 @@ function ProduceRankCalculator() {
       <ScenarioPicker selected={scenario} onChange={setScenario} />
 
       {scenario === "hajime" && (
-        <>
-          <label>{t("calculator")}</label>
-          <ButtonGroup
-            options={CALCULATOR_OPTIONS}
-            selected={calculator}
-            onChange={setCalculator}
-          />
-        </>
+        <CalculatorSwitch selected={calculator} onChange={setCalculator} />
       )}
       {scenario === "nia" ? (
         <NiaCalculator />

@@ -1,0 +1,54 @@
+@use "../../styles/tokens";
+
+.collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.inner {
+  min-height: 0;
+  min-width: 0;
+}
+
+.opening,
+.closing {
+  > .inner {
+    overflow: hidden;
+  }
+}
+
+.opening {
+  animation: expand tokens.$duration-spring tokens.$ease-glide both;
+
+  > .inner {
+    animation: settle tokens.$duration-spring tokens.$ease-spring both;
+  }
+}
+
+.closing {
+  animation: collapse tokens.$duration-base tokens.$ease-in-out both;
+}
+
+@keyframes expand {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes collapse {
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes settle {
+  from {
+    translate: 0 -8px;
+  }
+}

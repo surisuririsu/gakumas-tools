@@ -1,7 +1,9 @@
 "use client";
 import { memo } from "react";
+import { FaCheck } from "react-icons/fa6";
 import { List } from "react-window";
 import MemorySummary from "@/components/MemorySummary";
+import c from "@/utils/classNames";
 import MemoriesNudge from "./MemoriesNudge";
 import styles from "./Memories.module.scss";
 
@@ -17,13 +19,22 @@ const Row = memo(function Row({
   onPick,
 }) {
   const memory = memories[index];
+  const checked = !!selectedMemories?.[memory._id];
   return (
-    <div className={styles.memoryTile} style={style} {...ariaAttributes}>
-      {deleting && (
-        <div className={styles.check}>
+    <div
+      className={c(
+        styles.memoryTile,
+        deleting && styles.deleting,
+        deleting && checked && styles.checked
+      )}
+      style={style}
+      {...ariaAttributes}
+    >
+      {setSelectedMemories && (
+        <label className={styles.check} inert={!deleting}>
           <input
             type="checkbox"
-            checked={!!selectedMemories[memory._id]}
+            checked={checked}
             onChange={(e) =>
               setSelectedMemories((prev) => ({
                 ...prev,
@@ -31,7 +42,10 @@ const Row = memo(function Row({
               }))
             }
           />
-        </div>
+          <span className={styles.checkBox} aria-hidden="true">
+            <FaCheck />
+          </span>
+        </label>
       )}
       <MemorySummary
         memory={memory}
@@ -44,6 +58,7 @@ const Row = memo(function Row({
 
 function MemoriesList({
   memories,
+  filtered,
   deleting,
   picking,
   selectedMemories,
@@ -67,7 +82,7 @@ function MemoriesList({
           }}
         />
       ) : (
-        <MemoriesNudge />
+        <MemoriesNudge filtered={filtered} />
       )}
     </div>
   );

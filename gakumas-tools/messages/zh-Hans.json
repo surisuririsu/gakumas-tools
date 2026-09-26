@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 页面未找到",
-    "generic": "发生错误"
+    "generic": "发生错误",
+    "retry": "重试",
+    "home": "首页"
   },
   "tools": {
     "home": {
@@ -64,6 +66,11 @@
     "gakumasContestWiki": "学マス竞技场Wiki",
     "sendFeedback": "反馈",
     "signOut": "登出"
+  },
+  "ToolHeader": {
+    "pin": "固定到其他工具旁",
+    "unpin": "取消固定",
+    "pinned": "已固定：将显示在其他工具旁"
   },
   "Welcome": {
     "title": "学园偶像大师工具站",
@@ -140,7 +147,8 @@
     "hifDerivedTotal": "合计 = {value}",
     "hifRound2StarGain": "闪耀值 +{value}",
     "hifScoreBonusNote": "请直接输入排名公布画面显示的分数（回合1包含第1名加成×1.2）。计算时会自动进行校正。",
-    "hifTargetRound2Scores": "各目标排名所需 Round 2 分数"
+    "hifTargetRound2Scores": "各目标排名所需 Round 2 分数",
+    "toNextRank": "距{rank}还差{points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -161,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "最大{n}回合",
+    "unlockPlv": "解锁PLv {n}",
+    "plans": {
+      "sense": "感性",
+      "logic": "理性",
+      "anomaly": "异常",
+      "free": "自由"
+    },
     "tabs": {
       "skill-cards": "技能卡",
       "p-items": "P 道具",
@@ -235,7 +250,8 @@
     }
   },
   "EntityBank": {
-    "filter": "筛选"
+    "filter": "筛选",
+    "noMatches": "没有符合条件的项目。"
   },
   "EntityIcon": {
     "emptySlot": "空槽位",
@@ -258,6 +274,7 @@
     "acquiredInfo": "请包括每张卡的升级前/后版本",
     "produceRank": "制作评级",
     "costRange": "容量范围",
+    "cost": "容量",
     "success": "成功",
     "failure": "失败",
     "clear": "清除",
@@ -337,11 +354,17 @@
     "save": "保存",
     "saveAsNew": "作为新回忆卡保存",
     "signInToSave": "登入 Discord 以同步保存",
-    "saveFailed": "保存失败"
+    "saveFailed": "保存失败",
+    "saving": "保存中…",
+    "saved": "已保存"
   },
   "MemoriesNudge": {
     "create": "创建回忆卡",
-    "import": "从截图导入回忆卡"
+    "import": "从截图导入回忆卡",
+    "noMatches": "没有符合条件的回忆卡。",
+    "signInHint": "登入 Discord 即可保存回忆卡并在模拟器中使用，也可以不登入直接创建。",
+    "signIn": "登入",
+    "empty": "还没有回忆卡。从截图导入即可开始。"
   },
   "MemoriesHeader": {
     "confirmDelete": "删除 {num} 个回忆卡？",
@@ -361,7 +384,12 @@
   "MemoryImporterModal": {
     "importMemories": "从截图中导入回忆卡",
     "instructions": "<p>>每张截图中必须清晰显示总合力、属性、P 物品和技能卡图标。</p><p>记忆卡导入耗时取决于导入数量及设备处理器性能与内存容量，可能需要数秒至数分钟。单次导入过多记忆卡可能导致浏览器崩溃，建议每批次最多导入50张记忆卡。不建议在移动端使用。</p><p> 部分记忆卡可能解析失败，需导入后手动修复，此类条目将在名称中标记为 \"(FIXME)\" </p>",
-    "progress": "进度: {progress}/{total}"
+    "progress": "进度: {progress}/{total}",
+    "preparing": "正在准备识别…（首次使用需下载数MB）",
+    "saving": "保存中…",
+    "failed": "导入失败，请检查截图后重试。",
+    "selectScreenshots": "选择截图",
+    "dropHint": "点击选择，或将截图拖放到此处"
   },
   "Simulator": {
     "supportBonus": "支援加成 %",
@@ -462,7 +490,10 @@
     "stats": "统计",
     "compare": "比较",
     "downloadScores": "分数",
-    "optimizeParams": "优化参数"
+    "optimizeParams": "优化参数",
+    "optimizeGain": "平均 +{gain}",
+    "optimizeAlready": "已是最优",
+    "optimizeFailed": "无法优化"
   },
   "CompareTab": {
     "saved": "已保存",
@@ -494,7 +525,9 @@
     "allSeasons": "全部赛季",
     "allIdols": "全部偶像",
     "allStages": "全部舞台",
-    "actions": "操作"
+    "actions": "操作",
+    "loadFailed": "无法加载已保存的编组。",
+    "retry": "重试"
   },
   "SimulatorStats": {
     "total": "合计",
@@ -619,7 +652,9 @@
     "videoError": "处理视频时出错: {message}",
     "imageError": "{count} 张截图无法解析，已跳过。",
     "needsChecking": "{count} 行需要检查",
-    "confirmRow": "确认此行的数值正确"
+    "confirmRow": "确认此行的数值正确",
+    "selectFiles": "选择文件",
+    "addRow": "添加行"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

@@ -1,14 +1,45 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .toolHeader {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   color: rgba(255, 255, 255, 0.85);
-  transition: color 0.15s;
+  transition:
+    color tokens.$duration-fast,
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.88);
 
   &:hover {
     color: colors.$white;
+    background-color: rgba(255, 255, 255, 0.14);
+  }
+
+  svg {
+    transition: rotate tokens.$duration-spring tokens.$ease-pop;
+  }
+
+  &.pinned {
+    background-color: colors.$white;
+    color: tokens.$accent-ink;
+    box-shadow: 0 2px 0 rgba(160, 90, 0, 0.35);
+    animation: pinPop tokens.$duration-spring tokens.$ease-pop;
+
+    svg {
+      rotate: -12deg;
+    }
   }
 
   @media only screen and (max-width: 600px) {
     display: none;
+  }
+}
+
+@keyframes pinPop {
+  from {
+    scale: 0.7;
   }
 }

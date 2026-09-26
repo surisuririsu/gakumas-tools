@@ -1,7 +1,10 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaCopy, FaDownload, FaXTwitter } from "react-icons/fa6";
+import { FaCheck, FaCopy, FaDownload, FaXTwitter } from "react-icons/fa6";
+import Button from "@/components/Button";
+import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
+import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import styles from "./TierShareModal.module.scss";
 
@@ -74,7 +77,7 @@ function TierShareModal({ type, onClose }) {
   }, [type, shareUrl, t, tDex]);
 
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} size="small">
       <h3>{t("share")}</h3>
       <p className={styles.help}>{t("shareHelp")}</p>
       <div className={styles.urlRow}>
@@ -85,29 +88,40 @@ function TierShareModal({ type, onClose }) {
           readOnly
           onFocus={(e) => e.target.select()}
         />
-        <button type="button" className={styles.copyBtn} onClick={copy}>
-          <FaCopy />
-          {copied ? t("copied") : t("copy")}
-        </button>
+        <Button size="sm" className={styles.copyBtn} onClick={copy}>
+          <span className={c(styles.swap, copied && styles.swapped)}>
+            <span className={styles.idle}>
+              <FaCopy />
+              {t("copy")}
+            </span>
+            <span className={styles.alt} aria-hidden={!copied}>
+              <FaCheck />
+              {t("copied")}
+            </span>
+          </span>
+        </Button>
       </div>
       <div className={styles.actionRow}>
-        <button
-          type="button"
-          className={styles.actionBtn}
-          onClick={downloadImage}
-          disabled={downloading}
+        <Button
+          style="primary"
+          fill
+          onClick={downloading ? undefined : downloadImage}
         >
-          <FaDownload />
-          {downloading ? t("preparingImage") : t("downloadImage")}
-        </button>
-        <button
-          type="button"
-          className={styles.actionBtn}
-          onClick={shareToX}
-        >
+          <span className={c(styles.swap, downloading && styles.swapped)}>
+            <span className={styles.idle}>
+              <FaDownload />
+              {t("downloadImage")}
+            </span>
+            <span className={styles.alt} aria-hidden={!downloading}>
+              <Loader />
+              {t("preparingImage")}
+            </span>
+          </span>
+        </Button>
+        <Button fill onClick={shareToX}>
           <FaXTwitter />
           {t("shareToX")}
-        </button>
+        </Button>
       </div>
       {error && <p className={styles.error}>{error}</p>}
     </Modal>

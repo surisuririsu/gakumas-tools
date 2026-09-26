@@ -5,7 +5,9 @@
   },
   "Error": {
     "notFound": "404 페이지를 찾을 수 없습니다",
-    "generic": "오류가 발생했습니다"
+    "generic": "오류가 발생했습니다",
+    "retry": "다시 시도",
+    "home": "홈"
   },
   "tools": {
     "home": {
@@ -64,6 +66,11 @@
     "gakumasContestWiki": "학원마스 콘테스트 위키",
     "sendFeedback": "피드백 보내기",
     "signOut": "로그아웃"
+  },
+  "ToolHeader": {
+    "pin": "다른 도구 옆에 고정",
+    "unpin": "고정 해제",
+    "pinned": "고정됨: 다른 도구 옆에 표시됩니다"
   },
   "Welcome": {
     "title": "Gakumas Tools - 학원마스 툴",
@@ -140,7 +147,8 @@
     "hifDerivedTotal": "합계 = {value}",
     "hifRound2StarGain": "스타성 +{value}",
     "hifScoreBonusNote": "점수는 순위 발표 화면에 표시된 값(라운드 1의 1위 보너스 ×1.2 포함)을 그대로 입력해 주세요. 계산 시 자동으로 보정됩니다.",
-    "hifTargetRound2Scores": "목표 랭크별 필요 라운드 2 점수"
+    "hifTargetRound2Scores": "목표 랭크별 필요 라운드 2 점수",
+    "toNextRank": "{rank}까지 {points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -161,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "최대 {n}회",
+    "unlockPlv": "해금 PLv {n}",
+    "plans": {
+      "sense": "센스",
+      "logic": "로직",
+      "anomaly": "어노말리",
+      "free": "프리"
+    },
     "tabs": {
       "skill-cards": "스킬 카드",
       "p-items": "P 아이템",
@@ -235,7 +250,8 @@
     }
   },
   "EntityBank": {
-    "filter": "필터"
+    "filter": "필터",
+    "noMatches": "조건에 맞는 항목이 없습니다."
   },
   "EntityIcon": {
     "emptySlot": "빈 슬롯",
@@ -258,6 +274,7 @@
     "acquiredInfo": "각 카드의 강화 전후를 포함하세요",
     "produceRank": "프로듀스 평가",
     "costRange": "코스트 범위",
+    "cost": "코스트",
     "success": "성공",
     "failure": "실패",
     "clear": "초기화",
@@ -335,13 +352,19 @@
   },
   "MemoriesNudge": {
     "create": "메모리 생성하기",
-    "import": "스크린샷으로부터 메모리 불러오기"
+    "import": "스크린샷으로부터 메모리 불러오기",
+    "noMatches": "조건에 맞는 메모리가 없습니다.",
+    "signInHint": "Discord로 로그인하면 메모리를 저장하고 시뮬레이터에서 사용할 수 있습니다. 로그인하지 않고 만들 수도 있습니다.",
+    "signIn": "로그인",
+    "empty": "아직 메모리가 없습니다. 스크린샷에서 불러와 시작하세요."
   },
   "MemorySave": {
     "save": "저장",
     "saveAsNew": "새로 저장",
     "signInToSave": "Discord로 로그인하여 저장",
-    "saveFailed": "저장에 실패했습니다"
+    "saveFailed": "저장에 실패했습니다",
+    "saving": "저장 중…",
+    "saved": "저장했습니다"
   },
   "MemoriesHeader": {
     "confirmDelete": "메모리 {num}개를 삭제하시겠습니까?",
@@ -361,7 +384,12 @@
   "MemoryImporterModal": {
     "importMemories": "스크린샷으로부터 메모리 불러오기",
     "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상황에 따라 몇 초에서 몇 분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다. 권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
-    "progress": "진행도: {progress}/{total}"
+    "progress": "진행도: {progress}/{total}",
+    "preparing": "인식기 준비 중… (처음 사용 시 몇 MB를 다운로드합니다)",
+    "saving": "저장 중…",
+    "failed": "가져오기에 실패했습니다. 스크린샷을 확인하고 다시 시도해 주세요.",
+    "selectScreenshots": "스크린샷 선택",
+    "dropHint": "탭하여 선택하거나 스크린샷을 여기에 드롭하세요"
   },
   "Simulator": {
     "supportBonus": "서포트 보너스 %",
@@ -462,7 +490,10 @@
     "stats": "통계",
     "compare": "비교",
     "downloadScores": "점수",
-    "optimizeParams": "파라미터 최적화"
+    "optimizeParams": "파라미터 최적화",
+    "optimizeGain": "평균 +{gain}",
+    "optimizeAlready": "이미 최적",
+    "optimizeFailed": "최적화 불가"
   },
   "CompareTab": {
     "saved": "저장됨",
@@ -494,7 +525,9 @@
     "allSeasons": "전체 시즌",
     "allIdols": "전체 아이돌",
     "allStages": "전체 스테이지",
-    "actions": "작업"
+    "actions": "작업",
+    "loadFailed": "저장된 편성을 불러오지 못했습니다.",
+    "retry": "다시 시도"
   },
   "SimulatorStats": {
     "total": "합계",
@@ -619,7 +652,9 @@
     "videoError": "동영상 처리 중 오류: {message}",
     "imageError": "{count}개의 스크린샷을 분석하지 못해 건너뛰었습니다.",
     "needsChecking": "{count}개의 행을 확인해야 합니다",
-    "confirmRow": "이 행의 값이 올바른지 확인"
+    "confirmRow": "이 행의 값이 올바른지 확인",
+    "selectFiles": "파일 선택",
+    "addRow": "행 추가"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"
