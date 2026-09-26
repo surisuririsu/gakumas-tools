@@ -58,6 +58,9 @@ id,name,type,preview,season,stage,round,plan,criteria,turnCounts,firstTurns,effe
 ### Step 8: Validate
 Run `pnpm validate:data` — it parses every DSL column and errors out on unknown phases, variables, actions, or targets.
 
+### Step 9: Regenerate JSON
+Run `pnpm --filter gakumas-data generate` and commit `json/stages.json` together with `csv/stages.csv`.
+
 ## Structured DSL Reference
 
 Effects use a block-scoped DSL. Effects are separated by `;` or whitespace;
@@ -228,3 +231,4 @@ Use `[next_id]` for id field - caller will assign actual IDs.
 - Recent stages (for pattern matching): `tail -15 packages/gakumas-data/csv/stages.csv`
 - Plan icons: `gakumas-tools/public/plans/{sense,logic,free,anomaly}.png`
 - Validate: `pnpm validate:data`
+- Generate JSON: `pnpm --filter gakumas-data generate`
