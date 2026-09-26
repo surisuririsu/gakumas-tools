@@ -1,41 +1,71 @@
+import { CARD_SHADOW, COLORS } from "@/components/OgImage/theme";
+
+export const PREVIEW_PADDING = 16;
+export const CARD_PADDING = 14;
+export const ITEM_SIZE = 48;
+export const CARD_SIZE = 68;
+export const ICON_GAP = 6;
+export const EDGE = 2;
+const GROUP_GAP = 12;
+const COST_GAP = 8;
+const COST_HEIGHT = 24;
+const FOOTER_GAP = 12;
+export const FOOTER_SIZE = 20;
+const FOOTER_HEIGHT = 22;
+
+export const PREVIEW_WIDTH =
+  PREVIEW_PADDING * 2 + CARD_PADDING * 2 + CARD_SIZE * 6 + ICON_GAP * 5;
+
+export function previewHeight(groupCount, isEmpty) {
+  const group =
+    GROUP_GAP +
+    CARD_SIZE +
+    EDGE +
+    (isEmpty ? 0 : COST_GAP + COST_HEIGHT + EDGE);
+  return (
+    PREVIEW_PADDING * 2 +
+    CARD_PADDING * 2 +
+    ITEM_SIZE +
+    EDGE +
+    group * groupCount +
+    FOOTER_GAP +
+    FOOTER_HEIGHT
+  );
+}
+
 const styles = {
   preview: {
-    width: "100%",
-    height: "100%",
+    flexDirection: "column",
+    gap: FOOTER_GAP,
+    padding: PREVIEW_PADDING,
+  },
+  card: {
     display: "flex",
     flexDirection: "column",
-    gap: "8px",
-    padding: "16px",
-    backgroundColor: "#f6f6f6",
+    gap: GROUP_GAP,
+    padding: CARD_PADDING,
+    borderRadius: 18,
+    backgroundColor: COLORS.panel,
+    boxShadow: CARD_SHADOW,
   },
-  row: { display: "flex", gap: "6px" },
-  item: {
-    width: "48px",
-    height: "48px",
-    display: "flex",
-    boxShadow: "inset 0 0 0 2px #ccc",
-    borderRadius: "10%",
-    backgroundColor: "#eee",
-    overflow: "hidden",
+  footer: {
+    height: FOOTER_HEIGHT,
+    padding: "0 4px",
   },
-  url: {
-    flexGrow: 1,
-    display: "flex",
+  row: { display: "flex", gap: ICON_GAP },
+  cardGroup: { display: "flex", flexDirection: "column", gap: COST_GAP },
+  icon: {
+    position: "relative",
     justifyContent: "center",
-    alignItems: "center",
-    color: "#666",
-    fontSize: "20px",
+    backgroundColor: COLORS.panel,
+    backgroundRepeat: "no-repeat",
   },
-  cardGroup: { display: "flex", flexDirection: "column" },
-  card: {
-    width: "68px",
-    height: "68px",
+  empty: {
     display: "flex",
-    justifyContent: "center",
-    boxShadow: "inset 0 0 0 2px #ccc",
-    borderRadius: "8%",
-    backgroundColor: "#eee",
-    overflow: "hidden",
+    flexShrink: 0,
+    marginBottom: EDGE,
+    border: `2px dashed ${COLORS.emptyBorder}`,
+    backgroundColor: COLORS.emptyFill,
   },
   customizations: {
     position: "absolute",
@@ -52,6 +82,7 @@ const styles = {
     borderRadius: "50%",
     color: "white",
     fontSize: "14px",
+    fontWeight: 600,
   },
   effect: {
     backgroundColor: "#ca5cfe",
@@ -78,23 +109,17 @@ const styles = {
     border: "1px solid #49d8ff",
     boxShadow: "0 0 6px #00b1e2",
   },
-  cardCost: {
-    display: "flex",
+  costChip: {
     alignItems: "center",
-    height: "22px",
-    marginTop: "4px",
+    gap: 6,
+    height: COST_HEIGHT,
+    padding: "0 11px",
+    backgroundColor: COLORS.fillMuted,
+    color: COLORS.muted,
+    fontSize: 13,
+    fontWeight: 700,
   },
-  costPill: {
-    display: "flex",
-    alignItems: "center",
-    padding: "2px 10px",
-    borderRadius: "10px",
-    backgroundColor: "#fff",
-    border: "1px solid #ddd",
-    color: "#333",
-    fontSize: "13px",
-    fontWeight: 600,
-  },
+  costValue: { color: COLORS.ink },
 };
 
 export default styles;

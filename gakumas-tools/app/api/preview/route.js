@@ -3,7 +3,12 @@ import { IdolConfig } from "gakumas-engine";
 import gkImg from "gakumas-images";
 import { PItems, SkillCards } from "gakumas-data";
 import Preview from "@/components/Preview";
-import { PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
+import {
+  CARD_SIZE,
+  PREVIEW_WIDTH,
+  previewHeight,
+} from "@/components/Preview/Preview.styles";
+import { loadFonts, PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
 import { loadoutFromSearchParams } from "@/utils/simulator";
 
 const PNG_CACHE_LIMIT = 500;
@@ -21,7 +26,10 @@ async function fetchAsPng(url) {
     const res = await fetch(url);
     if (res.ok) {
       const buf = Buffer.from(await res.arrayBuffer());
-      const png = await sharp(buf).png().toBuffer();
+      const png = await sharp(buf)
+        .resize(CARD_SIZE, CARD_SIZE, { fit: "inside", withoutEnlargement: true })
+        .png()
+        .toBuffer();
       dataUrl = `data:image/png;base64,${png.toString("base64")}`;
     }
   } catch (err) {
@@ -70,16 +78,14 @@ export async function GET(request) {
 
   const isEmpty = skillCardIdGroups.every((g) => g.every((c) => c == 0));
 
-  const height =
-    32 + // Padding
-    48 + // P-Items
-    (8 + 68 + (isEmpty ? 0 : 26)) * Math.min(skillCardIdGroups.length, 4); // Gap + cards + cost row
+  const height = previewHeight(Math.min(skillCardIdGroups.length, 4), isEmpty);
 
   const icons = collectIcons(loadout, idolConfig.idolId, url.origin);
   const entries = await Promise.all(
     [...icons].map(async ([key, fetchUrl]) => [key, await fetchAsPng(fetchUrl)])
   );
   const imageMap = Object.fromEntries(entries.filter(([, v]) => v));
+  const fonts = await loadFonts();
 
   return renderImage(
     (
@@ -92,6 +98,11 @@ export async function GET(request) {
         imageMap={imageMap}
       />
     ),
-    { width: 470, height, headers: { "Cache-Control": PREVIEW_CACHE_CONTROL } }
+    {
+      width: PREVIEW_WIDTH,
+      height,
+      fonts,
+      headers: { "Cache-Control": PREVIEW_CACHE_CONTROL },
+    }
   );
 }
