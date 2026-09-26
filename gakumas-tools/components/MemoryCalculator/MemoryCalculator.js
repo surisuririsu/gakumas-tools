@@ -1,15 +1,23 @@
 "use client";
-import { memo, useContext, useMemo, useState } from "react";
+import {
+  memo,
+  useContext,
+  useDeferredValue,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
 import IconSelect from "@/components/IconSelect";
 import Panel from "@/components/Panel";
+import { usePopOnChange } from "@/utils/usePop";
 import TabGroup from "@/components/TabGroup";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import WorkspaceContext from "@/contexts/WorkspaceContext";
+import c from "@/utils/classNames";
 import { COST_RANGES, COST_RANGES_BY_RANK } from "@/utils/contestPower";
 import {
   classifyMemories,
@@ -43,6 +51,7 @@ function MemoryCalculator() {
   const { idolId } = useContext(WorkspaceContext);
   const { setModal } = useContext(ModalContext);
   const [resultsTab, setResultsTab] = useState("success");
+  const [switched, setSwitched] = useState(false);
 
   const confirmClear = (onConfirm) =>
     setModal(
@@ -56,9 +65,32 @@ function MemoryCalculator() {
 
   const costRange = COST_RANGES_BY_RANK[rank];
 
+  const inputs = useMemo(
+    () => ({
+      targetSkillCardIds,
+      alternateSkillCardIds,
+      targetNegations,
+      acquiredSkillCardIds,
+      rank,
+    }),
+    [
+      targetSkillCardIds,
+      alternateSkillCardIds,
+      targetNegations,
+      acquiredSkillCardIds,
+      rank,
+    ],
+  );
+  const deferredInputs = useDeferredValue(inputs);
+  const stale = deferredInputs !== inputs;
+
   const possibleMemories = useMemo(
-    () => generatePossibleMemories(acquiredSkillCardIds, rank),
-    [acquiredSkillCardIds, rank],
+    () =>
+      generatePossibleMemories(
+        deferredInputs.acquiredSkillCardIds,
+        deferredInputs.rank,
+      ),
+    [deferredInputs.acquiredSkillCardIds, deferredInputs.rank],
   );
   const {
     onTargetMemories,
@@ -68,15 +100,15 @@ function MemoryCalculator() {
   } = useMemo(
     () =>
       classifyMemories(possibleMemories, {
-        targetSkillCardIds,
-        alternateSkillCardIds,
-        targetNegations,
+        targetSkillCardIds: deferredInputs.targetSkillCardIds,
+        alternateSkillCardIds: deferredInputs.alternateSkillCardIds,
+        targetNegations: deferredInputs.targetNegations,
       }),
     [
       possibleMemories,
-      targetSkillCardIds,
-      alternateSkillCardIds,
-      targetNegations,
+      deferredInputs.targetSkillCardIds,
+      deferredInputs.alternateSkillCardIds,
+      deferredInputs.targetNegations,
     ],
   );
 
@@ -127,7 +159,7 @@ function MemoryCalculator() {
             onChange={setRank}
           />
           <div className={styles.settingField}>
-            <label>{t("costRange")}</label>
+            <span className={styles.statLabel}>{t("costRange")}</span>
             <div className={styles.costRange}>
               {costRange.min} ~ {costRange.max}
             </div>
@@ -138,19 +170,41 @@ function MemoryCalculator() {
       <Panel noPadding className={styles.resultsPanel}>
         <TabGroup
           selected={resultsTab}
-          onChange={setResultsTab}
+          onChange={(tab) => {
+            setResultsTab(tab);
+            setSwitched(true);
+          }}
           options={[
             {
               value: "success",
-              label: `${t("success")} (${(onTargetProbability * 100).toFixed(2)}%)`,
+              label: (
+                <OutcomeLabel
+                  label={t("success")}
+                  probability={onTargetProbability}
+                  tone="success"
+                />
+              ),
             },
             {
               value: "failure",
-              label: `${t("failure")} (${(offTargetProbability * 100).toFixed(2)}%)`,
+              label: (
+                <OutcomeLabel
+                  label={t("failure")}
+                  probability={offTargetProbability}
+                  tone="failure"
+                />
+              ),
             },
           ]}
         />
-        <div className={styles.resultsContent}>
+        <div
+          key={resultsTab}
+          className={c(
+            styles.resultsContent,
+            stale && styles.stale,
+            switched && styles.switched,
+          )}
+        >
           <MemoryCalculatorResultList
             memories={
               resultsTab === "success" ? onTargetMemories : offTargetMemories
@@ -160,6 +214,25 @@ function MemoryCalculator() {
         </div>
       </Panel>
     </div>
+  );
+}
+
+function OutcomeLabel({ label, probability, tone }) {
+  const beat = usePopOnChange(probability);
+
+  return (
+    <span className={styles.outcome}>
+      {label}
+      <span
+        className={c(
+          styles.outcomePct,
+          styles[tone],
+          beat && styles[`beat${beat}`],
+        )}
+      >
+        {(probability * 100).toFixed(2)}%
+      </span>
+    </span>
   );
 }
 

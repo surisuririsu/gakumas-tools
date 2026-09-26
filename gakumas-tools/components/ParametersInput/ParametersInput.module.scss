@@ -1,21 +1,140 @@
 @use "sass:color";
 @use "../../styles/mixins";
+@use "../../styles/tokens";
+
+@mixin tones {
+  @include mixins.param-tones using ($tint, $edge, $ink) {
+    --tint: #{$tint};
+    --edge: #{$edge};
+    --ink: #{$ink};
+    --halo: #{color.change($ink, $alpha: 0.18)};
+    --placeholder: #{color.change($ink, $alpha: 0.45)};
+  }
+}
 
 .parameters {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 6px;
 
   & > input {
     flex: 1;
     min-width: 0;
+    background-color: var(--tint);
+    box-shadow: 0 2px 0 var(--edge);
+    color: var(--ink);
+    font-weight: tokens.$weight-heavy;
+    @include mixins.numeric;
+    @include tones;
 
-    @include mixins.param-colors using ($param-color) {
-      color: $param-color;
-
-      &::placeholder {
-        color: color.scale($param-color, $alpha: -40%);
-      }
+    &::placeholder {
+      color: var(--placeholder);
     }
+
+    &:hover:not(:focus, :disabled) {
+      background-color: var(--tint);
+      box-shadow: 0 2px 0 var(--edge), inset 0 0 0 1.5px var(--halo);
+    }
+
+    &:focus {
+      background-color: tokens.$surface-panel;
+      box-shadow:
+        tokens.$field-inset,
+        inset 0 0 0 2px var(--ink),
+        0 0 0 4px var(--halo);
+    }
+
+    &[data-beat="a"] {
+      animation: beatA 520ms tokens.$ease-pop;
+    }
+
+    &[data-beat="b"] {
+      animation: beatB 520ms tokens.$ease-pop;
+    }
+  }
+}
+
+.tile {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 3px 3px 0;
+  border-radius: tokens.$radius-control;
+  background-color: var(--tint);
+  box-shadow: 0 3px 0 var(--edge);
+  color: var(--ink);
+  transition: box-shadow tokens.$duration-base tokens.$ease-out;
+  @include tones;
+
+  & > input {
+    width: 100%;
+    height: 33px;
+    min-height: 0;
+    padding: 2px 2px 0;
+    border-radius: 9px;
+    background-color: transparent;
+    box-shadow: none;
+    color: inherit;
+    font-size: 17px;
+    font-weight: tokens.$weight-heavy;
+    @include mixins.numeric;
+
+    &::placeholder {
+      color: var(--placeholder);
+    }
+
+    &:hover:not(:focus, :disabled) {
+      background-color: rgba(255, 255, 255, 0.55);
+    }
+
+    &:focus {
+      background-color: tokens.$surface-panel;
+      box-shadow: tokens.$field-inset;
+    }
+  }
+
+  &:focus-within {
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 5px var(--halo);
+  }
+
+  &.beatA {
+    animation: beatA 520ms tokens.$ease-pop;
+  }
+
+  &.beatB {
+    animation: beatB 520ms tokens.$ease-pop;
+  }
+}
+
+.footer {
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3px;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-bold;
+  line-height: 18px;
+  @include mixins.numeric;
+}
+
+@keyframes beatA {
+  from {
+    scale: 0.88;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 6px var(--halo);
+  }
+}
+
+@keyframes beatB {
+  from {
+    scale: 0.88;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 0 6px var(--halo);
   }
 }

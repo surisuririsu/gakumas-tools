@@ -1,5 +1,9 @@
-@use "../../../styles/colors";
+@use "../../../styles/mixins";
 @use "../../../styles/tokens";
+
+.draftPick > span:first-child {
+  margin-bottom: 0;
+}
 
 .headerActions {
   display: flex;
@@ -7,10 +11,27 @@
   gap: tokens.$space-2;
 }
 
+.appear {
+  display: contents;
+
+  > * {
+    @include mixins.pop-in;
+  }
+}
+
+.caret {
+  @include mixins.caret;
+}
+
+.open {
+  @include mixins.caret-open;
+}
+
 .slots {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: tokens.$space-2;
+  padding-top: tokens.$space-3;
 }
 
 .slot {
@@ -18,7 +39,7 @@
   flex-direction: column;
   align-items: center;
   gap: tokens.$space-2;
-  padding: tokens.$space-2;
+  padding: 0 tokens.$space-2 tokens.$space-1;
 }
 
 // Reserve height so swapping the Pick button in/out doesn't shift the card below.
@@ -40,15 +61,27 @@
 }
 
 .probability {
+  min-width: 72px;
   padding: 2px 10px;
-  border-radius: 999px;
-  font-size: tokens.$text-sm;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
   color: tokens.$surface-ink;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-heavy;
+  line-height: 20px;
+  text-align: center;
+  @include mixins.numeric;
 }
 
-.probability.best {
-  background-color: colors.$gk-orange-extra-light;
-  color: colors.$gk-red-orange;
+.empty {
+  color: tokens.$surface-ink-faint;
+}
+
+.best {
+  background-color: tokens.$accent-tint;
+  color: tokens.$accent-ink;
+}
+
+@include mixins.beat(beat, 460ms) {
+  scale: 0.85;
 }

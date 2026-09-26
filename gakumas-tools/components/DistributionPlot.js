@@ -9,6 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { CHART_COLORS, verticalGradient } from "@/components/Charts/theme";
 
 ChartJS.register(
   CategoryScale,
@@ -19,23 +20,28 @@ ChartJS.register(
   Legend,
 );
 
-const DEFAULT_BAR_COLOR = "rgba(243, 152, 0, 0.6)";
-
 const CHART_OPTIONS = {
-  animation: false,
+  animation: {
+    delay: (ctx) =>
+      ctx.type == "data" && ctx.mode == "default" ? ctx.dataIndex * 10 : 0,
+  },
+  scales: {
+    x: { grid: { display: false } },
+    y: { beginAtZero: true },
+  },
 };
 
-const CROSSHAIR_LINE_COLOR = "rgba(0, 0, 0, 0.45)";
-const LABEL_BG_COLOR = "rgba(0, 0, 0, 0.75)";
+const CROSSHAIR_LINE_COLOR = "rgba(28, 28, 34, 0.45)";
+const LABEL_BG_COLOR = "rgba(28, 28, 34, 0.92)";
 const LABEL_TEXT_COLOR = "#fff";
 const LABEL_FONT_SIZE = 12;
-const LABEL_FONT = `${LABEL_FONT_SIZE}px sans-serif`;
+const LABEL_FONT = `600 ${LABEL_FONT_SIZE}px ${ChartJS.defaults.font.family}`;
 const LABEL_PAD_X = 8;
 const LABEL_PAD_Y = 4;
 const LABEL_OFFSET_X = 0;
 const LABEL_OFFSET_Y = 4;
 
-function DistributionPlot({ label, data, bucketSize, color }) {
+function DistributionPlot({ label, data, bucketSize, color, highlight }) {
   const { counts, labels, total, cumulativeBefore } = useMemo(() => {
     const counts = Object.values(data);
     const labels = Object.keys(data).map((k) => k * bucketSize);
@@ -56,11 +62,23 @@ function DistributionPlot({ label, data, bucketSize, color }) {
         {
           label,
           data: counts,
-          backgroundColor: color || DEFAULT_BAR_COLOR,
+          backgroundColor:
+            color ||
+            (({ chart, dataIndex }) =>
+              labels[dataIndex] <= highlight &&
+              highlight < labels[dataIndex] + bucketSize
+                ? verticalGradient(
+                    chart,
+                    CHART_COLORS.highlight,
+                    CHART_COLORS.highlightTop,
+                  )
+                : verticalGradient(chart, CHART_COLORS.bar, CHART_COLORS.barTop)),
+          borderRadius: { topLeft: 4, topRight: 4 },
+          borderSkipped: "bottom",
         },
       ],
     }),
-    [labels, counts, label, color],
+    [labels, counts, label, color, highlight, bucketSize],
   );
 
   // Keep plugin identity stable across renders so react-chartjs-2 doesn't
@@ -126,7 +144,9 @@ function DistributionPlot({ label, data, bucketSize, color }) {
         const boxY = Math.max(2, top - LABEL_OFFSET_Y - boxH);
 
         ctx.fillStyle = LABEL_BG_COLOR;
-        ctx.fillRect(boxX, boxY, boxW, boxH);
+        ctx.beginPath();
+        ctx.roundRect(boxX, boxY, boxW, boxH, 6);
+        ctx.fill();
         ctx.fillStyle = LABEL_TEXT_COLOR;
         ctx.textBaseline = "top";
         ctx.fillText(text, boxX + LABEL_PAD_X, boxY + LABEL_PAD_Y);

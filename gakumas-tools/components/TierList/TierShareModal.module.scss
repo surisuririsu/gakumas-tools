@@ -1,8 +1,7 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .help {
-  margin-bottom: tokens.$space-3;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
 }
@@ -15,59 +14,64 @@
 
 .urlInput {
   flex: 1;
-  min-width: 0;
-  padding: tokens.$space-2;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
-  font-family: monospace;
+  @include mixins.field;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: tokens.$text-xs;
-  color: tokens.$surface-ink;
+  font-weight: tokens.$weight-semibold;
 }
 
-.copyBtn,
-.actionBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: tokens.$space-1;
-  padding: tokens.$space-2 tokens.$space-3;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
-  color: tokens.$surface-ink;
-  font-size: tokens.$text-sm;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-
-  &:hover:not(:disabled) {
-    border-color: colors.$gk-orange;
-    background-color: colors.$gk-orange-extra-light;
-    color: colors.$gk-orange;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+.urlRow .copyBtn {
+  flex-shrink: 0;
+  min-height: tokens.$field-height;
+  padding: 0 tokens.$space-3;
 }
 
 .actionRow {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: tokens.$space-2;
+}
 
-  .actionBtn {
-    flex: 1 1 200px;
+.swap {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.idle,
+.alt {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  white-space: nowrap;
+  transition:
+    opacity tokens.$duration-base,
+    translate tokens.$duration-slide tokens.$ease-spring;
+}
+
+.alt {
+  opacity: 0;
+  translate: 0 14px;
+}
+
+.swapped {
+  .idle {
+    opacity: 0;
+    translate: 0 -14px;
+  }
+
+  .alt {
+    opacity: 1;
+    translate: 0 0;
   }
 }
 
 .error {
-  margin-top: tokens.$space-2;
-  color: colors.$red;
+  margin-top: tokens.$space-3;
+  margin-bottom: 0;
+  color: tokens.$danger;
   font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  @include mixins.pop-in;
 }

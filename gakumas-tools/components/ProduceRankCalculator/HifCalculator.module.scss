@@ -1,12 +1,5 @@
 @use "../../styles/tokens";
 
-.hif {
-  display: flex;
-  flex-direction: column;
-  gap: tokens.$space-5;
-  margin-top: tokens.$space-3;
-}
-
 .field {
   display: flex;
   flex-direction: column;
@@ -21,9 +14,7 @@
 }
 
 .hint {
-  font-size: tokens.$text-xs;
-  color: tokens.$surface-ink-muted;
-  line-height: 1.4;
+  align-self: flex-start;
 }
 
 .modeRow {
@@ -47,8 +38,4 @@
     grid-template-columns: 1fr;
     row-gap: tokens.$space-3;
   }
-}
-
-.resultPanel {
-  margin-top: tokens.$space-2;
 }

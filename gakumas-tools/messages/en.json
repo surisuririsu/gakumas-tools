@@ -67,6 +67,11 @@
     "sendFeedback": "Send feedback",
     "signOut": "Sign out"
   },
+  "ToolHeader": {
+    "pin": "Pin beside other tools",
+    "unpin": "Unpin",
+    "pinned": "Pinned: opens beside other tools"
+  },
   "Welcome": {
     "title": "Gakumas Tools",
     "introduction": "Tools for playing Gakuen Idolmaster. Calculate required final exam scores for produce ranks, view p-item and skill card information, import and search memories, simulate contest loadouts and more!",
@@ -142,7 +147,8 @@
     "hifDerivedTotal": "Total = {value}",
     "hifRound2StarGain": "Star gained: +{value}",
     "hifScoreBonusNote": "Enter scores as shown on the placement screen (round 1 includes the ×1.2 1st place bonus). The calculator adjusts for it automatically.",
-    "hifTargetRound2Scores": "Target Round 2 scores"
+    "hifTargetRound2Scores": "Target Round 2 scores",
+    "toNextRank": "{points} to {rank}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -163,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "Max {n}",
+    "unlockPlv": "Unlock PLv {n}",
+    "plans": {
+      "sense": "Sense",
+      "logic": "Logic",
+      "anomaly": "Anomaly",
+      "free": "Free"
+    },
     "tabs": {
       "skill-cards": "Skill cards",
       "p-items": "P-items",
@@ -237,7 +250,8 @@
     }
   },
   "EntityBank": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "noMatches": "Nothing matches these filters."
   },
   "EntityIcon": {
     "emptySlot": "Empty slot",
@@ -260,6 +274,7 @@
     "acquiredInfo": "Include pre/post-upgrade versions of each card",
     "produceRank": "Produce rank",
     "costRange": "Cost range",
+    "cost": "Cost",
     "success": "Success",
     "failure": "Failure",
     "clear": "Clear",
@@ -353,7 +368,7 @@
   },
   "MemoriesHeader": {
     "confirmDelete": "Delete {num, plural, one {# memory} other {# memories}}?",
-    "selected": "{num} memories selected",
+    "selected": "{num, plural, one {# memory} other {# memories}} selected",
     "search": "Search",
     "create": "Create memory",
     "import": "Import from screenshots",
@@ -372,7 +387,9 @@
     "progress": "Progress: {progress}/{total}",
     "preparing": "Preparing the reader… (first use downloads a few MB)",
     "saving": "Saving…",
-    "failed": "Import failed. Check the screenshots and try again."
+    "failed": "Import failed. Check the screenshots and try again.",
+    "selectScreenshots": "Select screenshots",
+    "dropHint": "Tap to select, or drop screenshots here"
   },
   "Simulator": {
     "supportBonus": "Support bonus %",
@@ -473,7 +490,10 @@
     "stats": "Stats",
     "compare": "Compare",
     "downloadScores": "Scores",
-    "optimizeParams": "Optimize params"
+    "optimizeParams": "Optimize params",
+    "optimizeGain": "Avg +{gain}",
+    "optimizeAlready": "Already optimal",
+    "optimizeFailed": "Can't optimize"
   },
   "CompareTab": {
     "saved": "Saved",
@@ -632,7 +652,9 @@
     "videoError": "Error processing video: {message}",
     "imageError": "{count} screenshot(s) could not be parsed and were skipped.",
     "needsChecking": "{count} row(s) need checking",
-    "confirmRow": "Confirm this row's values are correct"
+    "confirmRow": "Confirm this row's values are correct",
+    "selectFiles": "Select files",
+    "addRow": "Add row"
   },
   "KofiAd": {
     "prompt": "Support this project"

@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useSession } from "next-auth/react";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import {
   deriveRunMeta,
@@ -27,7 +27,7 @@ const SimulationRunsContext = createContext();
 export function SimulationRunsContextProvider({ children }) {
   const { status } = useSession();
   const { loadoutFromUrl, loadoutsFromUrl } = useContext(LoadoutUrlContext);
-  const { setLoadout, setLoadouts } = useContext(LoadoutContext);
+  const { setLoadout, setLoadouts } = useContext(LoadoutActionsContext);
 
   const [loaded, setLoaded] = useState(false);
   const [history, setHistory] = useState([]);

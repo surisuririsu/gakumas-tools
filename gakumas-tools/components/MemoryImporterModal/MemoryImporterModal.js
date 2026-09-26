@@ -1,11 +1,13 @@
 "use client";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { FaCircleCheck, FaTriangleExclamation } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
 import Image from "@/components/Image";
 import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
+import ProgressBar from "@/components/ProgressBar";
+import FileDropzone from "@/components/Rehearsal/FileDropzone";
 import c from "@/utils/classNames";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import {
@@ -34,8 +36,7 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
   );
 
   const handleFiles = useCallback(
-    async (e) => {
-      const files = Array.from(e.target.files);
+    async (files) => {
       if (!files.length) return;
       setTotal(files.length);
       setProgress(0);
@@ -102,26 +103,36 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
         </div>
       </div>
 
-      <input
-        className={styles.files}
-        type="file"
-        multiple={multiple}
+      <FileDropzone
+        title={t("selectScreenshots")}
+        hint={t("dropHint")}
         accept="image/*"
+        multiple={multiple}
         disabled={busy}
-        onChange={handleFiles}
+        onFiles={handleFiles}
       />
 
       <div
-        className={c(styles.progress, status == "error" && styles.error)}
+        className={c(
+          styles.progress,
+          status == "done" && styles.done,
+          status == "error" && styles.error
+        )}
         aria-live="polite"
       >
-        {busy && <Loader />}
-        {status == "preparing" && t("preparing")}
-        {(status == "reading" || status == "done") &&
-          t("progress", { progress, total })}
-        {status == "done" && <FaCheck />}
-        {status == "saving" && t("saving")}
-        {status == "error" && t("failed")}
+        <div key={status} className={styles.status}>
+          {busy && <Loader />}
+          {status == "done" && <FaCircleCheck />}
+          {status == "error" && <FaTriangleExclamation />}
+          {status == "preparing" && t("preparing")}
+          {(status == "reading" || status == "done") &&
+            t("progress", { progress, total })}
+          {status == "saving" && t("saving")}
+          {status == "error" && t("failed")}
+        </div>
+        <div className={c(styles.bar, status && styles.barShown)}>
+          <ProgressBar value={progress} max={total} />
+        </div>
       </div>
     </Modal>
   );

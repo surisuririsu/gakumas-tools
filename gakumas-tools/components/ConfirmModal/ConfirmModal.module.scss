@@ -1,4 +1,7 @@
+@use "../../styles/tokens";
+
 .buttons {
   display: flex;
-  gap: 8px;
+  gap: tokens.$space-2;
+  margin-top: tokens.$space-3;
 }

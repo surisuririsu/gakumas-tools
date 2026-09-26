@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
@@ -8,18 +7,19 @@
   justify-content: center;
   align-items: center;
   gap: tokens.$space-2;
-  border-radius: tokens.$radius-sm;
-  transition:
-    background-color tokens.$duration-fast ease,
-    color tokens.$duration-fast ease,
-    scale tokens.$duration-slow tokens.$ease-spring;
-  @include mixins.pressable;
+  border-radius: 12px;
+  font-weight: tokens.$weight-bold;
 }
 
 .sm {
   gap: tokens.$space-1;
   padding: tokens.$space-1 tokens.$space-2;
+  border-radius: tokens.$radius-md;
   font-size: tokens.$text-sm;
+
+  @media (pointer: coarse) {
+    min-height: 36px;
+  }
 }
 
 .md {
@@ -33,91 +33,98 @@
 }
 
 .default {
-  background-color: colors.$white;
-  color: colors.$black;
-  border: 1px solid tokens.$surface-border;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink;
+  @include mixins.raised;
 
   &:hover,
   &:focus-visible {
-    background-color: tokens.$surface-alt;
+    background-color: tokens.$fill-muted-hover;
   }
 }
 
 .primary {
-  background: tokens.$gradient-brand;
+  background-color: tokens.$brand;
   color: colors.$white;
+  @include mixins.raised(tokens.$brand-edge, 3px);
 
   &:hover,
   &:focus-visible {
-    background: colors.$gk-red-orange;
-  }
-}
-
-.secondary {
-  background-color: transparent;
-  color: colors.$gk-orange;
-
-  &:hover,
-  &:focus-visible {
-    background-color: colors.$gk-orange-extra-light;
-    color: colors.$gk-red-orange;
+    background-color: tokens.$brand-hover;
   }
 }
 
 .red {
-  background-color: colors.$red-dark;
+  background-color: tokens.$danger;
   color: colors.$white;
+  @include mixins.raised(tokens.$danger-edge, 3px);
 
   &:hover,
   &:focus-visible {
-    background-color: color.adjust(colors.$red-dark, $lightness: -6%);
-  }
-}
-
-.red-secondary {
-  background-color: transparent;
-  color: colors.$red;
-
-  &:hover,
-  &:focus-visible {
-    background-color: colors.$red-extra-light;
-    color: colors.$red-dark;
+    background-color: tokens.$danger-hover;
   }
 }
 
 .blue {
-  background-color: colors.$blue;
+  background-color: tokens.$primary;
   color: colors.$white;
+  @include mixins.raised(tokens.$primary-edge, 3px);
 
   &:hover,
   &:focus-visible {
-    background-color: colors.$blue-dark;
+    background-color: tokens.$primary-hover;
+  }
+}
+
+.secondary,
+.red-secondary,
+.blue-secondary {
+  background-color: transparent;
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable;
+}
+
+.secondary {
+  color: tokens.$accent-ink;
+
+  &:hover,
+  &:focus-visible {
+    background-color: tokens.$accent-tint;
+  }
+}
+
+.red-secondary {
+  color: tokens.$danger;
+
+  &:hover,
+  &:focus-visible {
+    background-color: tokens.$danger-tint;
   }
 }
 
 .blue-secondary {
-  background-color: transparent;
-  color: colors.$blue;
+  color: tokens.$link;
 
   &:hover,
   &:focus-visible {
-    background-color: colors.$blue-extra-light;
-    color: colors.$blue-dark;
+    background-color: tokens.$link-hover-bg;
   }
 }
 
 .disabled {
-  background-color: colors.$gray-extra-light;
-  color: colors.$gray;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink-faint;
   cursor: not-allowed;
 }
 
 .fill {
   width: 100%;
   flex: 1;
-  @include mixins.pressable(tokens.$press-scale-wide);
 }
 
 .pill {
-  border-radius: 999px;
+  border-radius: tokens.$radius-pill;
 }

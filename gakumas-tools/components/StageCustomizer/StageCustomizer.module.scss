@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .stageCustomizer {
@@ -22,8 +22,9 @@
   gap: tokens.$space-1;
 
   a {
-    color: colors.$blue;
+    align-self: flex-start;
     font-size: tokens.$text-sm;
+    @include mixins.link-pill;
   }
 }
 

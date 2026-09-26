@@ -67,6 +67,11 @@
     "sendFeedback": "피드백 보내기",
     "signOut": "로그아웃"
   },
+  "ToolHeader": {
+    "pin": "다른 도구 옆에 고정",
+    "unpin": "고정 해제",
+    "pinned": "고정됨: 다른 도구 옆에 표시됩니다"
+  },
   "Welcome": {
     "title": "Gakumas Tools - 학원마스 툴",
     "introduction": "프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션 등 편리한 기능을 제공합니다.",
@@ -142,7 +147,8 @@
     "hifDerivedTotal": "합계 = {value}",
     "hifRound2StarGain": "스타성 +{value}",
     "hifScoreBonusNote": "점수는 순위 발표 화면에 표시된 값(라운드 1의 1위 보너스 ×1.2 포함)을 그대로 입력해 주세요. 계산 시 자동으로 보정됩니다.",
-    "hifTargetRound2Scores": "목표 랭크별 필요 라운드 2 점수"
+    "hifTargetRound2Scores": "목표 랭크별 필요 라운드 2 점수",
+    "toNextRank": "{rank}까지 {points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -163,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "최대 {n}회",
+    "unlockPlv": "해금 PLv {n}",
+    "plans": {
+      "sense": "센스",
+      "logic": "로직",
+      "anomaly": "어노말리",
+      "free": "프리"
+    },
     "tabs": {
       "skill-cards": "스킬 카드",
       "p-items": "P 아이템",
@@ -237,7 +250,8 @@
     }
   },
   "EntityBank": {
-    "filter": "필터"
+    "filter": "필터",
+    "noMatches": "조건에 맞는 항목이 없습니다."
   },
   "EntityIcon": {
     "emptySlot": "빈 슬롯",
@@ -260,6 +274,7 @@
     "acquiredInfo": "각 카드의 강화 전후를 포함하세요",
     "produceRank": "프로듀스 평가",
     "costRange": "코스트 범위",
+    "cost": "코스트",
     "success": "성공",
     "failure": "실패",
     "clear": "초기화",
@@ -372,7 +387,9 @@
     "progress": "진행도: {progress}/{total}",
     "preparing": "인식기 준비 중… (처음 사용 시 몇 MB를 다운로드합니다)",
     "saving": "저장 중…",
-    "failed": "가져오기에 실패했습니다. 스크린샷을 확인하고 다시 시도해 주세요."
+    "failed": "가져오기에 실패했습니다. 스크린샷을 확인하고 다시 시도해 주세요.",
+    "selectScreenshots": "스크린샷 선택",
+    "dropHint": "탭하여 선택하거나 스크린샷을 여기에 드롭하세요"
   },
   "Simulator": {
     "supportBonus": "서포트 보너스 %",
@@ -473,7 +490,10 @@
     "stats": "통계",
     "compare": "비교",
     "downloadScores": "점수",
-    "optimizeParams": "파라미터 최적화"
+    "optimizeParams": "파라미터 최적화",
+    "optimizeGain": "평균 +{gain}",
+    "optimizeAlready": "이미 최적",
+    "optimizeFailed": "최적화 불가"
   },
   "CompareTab": {
     "saved": "저장됨",
@@ -632,7 +652,9 @@
     "videoError": "동영상 처리 중 오류: {message}",
     "imageError": "{count}개의 스크린샷을 분석하지 못해 건너뛰었습니다.",
     "needsChecking": "{count}개의 행을 확인해야 합니다",
-    "confirmRow": "이 행의 값이 올바른지 확인"
+    "confirmRow": "이 행의 값이 올바른지 확인",
+    "selectFiles": "파일 선택",
+    "addRow": "행 추가"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"

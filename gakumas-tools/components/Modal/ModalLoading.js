@@ -6,7 +6,7 @@ export default function ModalLoading() {
   return (
     <Modal>
       <div className={styles.loading} aria-busy="true">
-        <Loader />
+        <Loader size="large" />
       </div>
     </Modal>
   );

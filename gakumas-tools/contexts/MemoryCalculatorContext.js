@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { SkillCards } from "gakumas-data";
 
 const MEMORY_CALCULATOR_STORAGE_KEY = "gakumas-tools.memoryCalculator";
@@ -48,7 +54,7 @@ export function MemoryCalculatorContextProvider({ children }) {
     rank,
   ]);
 
-  function setTargetSkillCardIds(callback) {
+  const setTargetSkillCardIds = useCallback((callback) => {
     let removedIndices = [];
     _setTargetSkillCardIds((cur) => {
       const updated = callback(cur);
@@ -72,9 +78,9 @@ export function MemoryCalculatorContextProvider({ children }) {
       removedIndices.forEach((idx) => (updated[idx] = 0));
       return updated.filter((neg) => neg !== 0);
     });
-  }
+  }, []);
 
-  function setAlternateSkillCardIds(callback) {
+  const setAlternateSkillCardIds = useCallback((callback) => {
     _setAlternateSkillCardIds((cur) => {
       let arr = [];
       for (let i = 0; i < cur.length; i++) {
@@ -96,96 +102,129 @@ export function MemoryCalculatorContextProvider({ children }) {
       }
       return updatedObj;
     });
-  }
+  }, []);
 
-  function addAlternateSkillCards(index) {
-    const updatedAlternateSkillCardIds = JSON.parse(
-      JSON.stringify(alternateSkillCardIds)
-    );
-    if (alternateSkillCardIds[index]?.length) {
-      updatedAlternateSkillCardIds[index].push(0);
-    } else {
-      // Add the opposite upgraded version of the card by default
-      let targetSkillCard = SkillCards.getById(targetSkillCardIds[index]);
-      if (!targetSkillCard || targetSkillCard.rarity == "T") {
-        updatedAlternateSkillCardIds[index] = [0];
-      } else if (targetSkillCard.upgraded) {
-        updatedAlternateSkillCardIds[index] = [targetSkillCard.id - 1];
+  const addAlternateSkillCards = useCallback(
+    (index) => {
+      const updatedAlternateSkillCardIds = JSON.parse(
+        JSON.stringify(alternateSkillCardIds)
+      );
+      if (alternateSkillCardIds[index]?.length) {
+        updatedAlternateSkillCardIds[index].push(0);
       } else {
-        updatedAlternateSkillCardIds[index] = [targetSkillCard.id + 1];
+        // Add the opposite upgraded version of the card by default
+        let targetSkillCard = SkillCards.getById(targetSkillCardIds[index]);
+        if (!targetSkillCard || targetSkillCard.rarity == "T") {
+          updatedAlternateSkillCardIds[index] = [0];
+        } else if (targetSkillCard.upgraded) {
+          updatedAlternateSkillCardIds[index] = [targetSkillCard.id - 1];
+        } else {
+          updatedAlternateSkillCardIds[index] = [targetSkillCard.id + 1];
+        }
       }
-    }
-    _setAlternateSkillCardIds(updatedAlternateSkillCardIds);
-  }
+      _setAlternateSkillCardIds(updatedAlternateSkillCardIds);
+    },
+    [alternateSkillCardIds, targetSkillCardIds]
+  );
 
-  function setNegation(index, value) {
-    const updatedNegations = [...targetNegations];
-    updatedNegations[index] = value;
-    _setTargetNegations(updatedNegations);
-  }
+  const setNegation = useCallback(
+    (index, value) => {
+      const updatedNegations = [...targetNegations];
+      updatedNegations[index] = value;
+      _setTargetNegations(updatedNegations);
+    },
+    [targetNegations]
+  );
 
-  function setAcquiredSkillCardIds(callback) {
+  const setAcquiredSkillCardIds = useCallback((callback) => {
     _setAcquiredSkillCardIds((cur) => {
       return callback(cur)
         .filter((id) => id)
         .concat(0);
     });
-  }
+  }, []);
 
-  function replaceTargetCardId(index, cardId) {
-    setTargetSkillCardIds((cur) => {
-      const next = [...cur];
-      next[index] = cardId;
-      return next;
-    });
-  }
+  const replaceTargetCardId = useCallback(
+    (index, cardId) => {
+      setTargetSkillCardIds((cur) => {
+        const next = [...cur];
+        next[index] = cardId;
+        return next;
+      });
+    },
+    [setTargetSkillCardIds]
+  );
 
-  function replaceAlternateCardId(index, cardId) {
-    setAlternateSkillCardIds((cur) => {
-      const next = [...cur];
-      next[index] = cardId;
-      return next;
-    });
-  }
+  const replaceAlternateCardId = useCallback(
+    (index, cardId) => {
+      setAlternateSkillCardIds((cur) => {
+        const next = [...cur];
+        next[index] = cardId;
+        return next;
+      });
+    },
+    [setAlternateSkillCardIds]
+  );
 
-  function replaceAcquiredCardId(index, cardId) {
-    setAcquiredSkillCardIds((cur) => {
-      const next = [...cur];
-      next[index] = cardId;
-      return next;
-    });
-  }
+  const replaceAcquiredCardId = useCallback(
+    (index, cardId) => {
+      setAcquiredSkillCardIds((cur) => {
+        const next = [...cur];
+        next[index] = cardId;
+        return next;
+      });
+    },
+    [setAcquiredSkillCardIds]
+  );
 
-  function clearTargetCardIds() {
+  const clearTargetCardIds = useCallback(() => {
     _setTargetSkillCardIds([0]);
     _setAlternateSkillCardIds([]);
     _setTargetNegations([]);
-  }
+  }, []);
 
-  function clearAcquiredCardIds() {
+  const clearAcquiredCardIds = useCallback(() => {
     _setAcquiredSkillCardIds([0]);
-  }
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      targetSkillCardIds,
+      setTargetSkillCardIds,
+      alternateSkillCardIds,
+      acquiredSkillCardIds,
+      setAcquiredSkillCardIds,
+      targetNegations,
+      addAlternateSkillCards,
+      setNegation,
+      replaceTargetCardId,
+      replaceAlternateCardId,
+      replaceAcquiredCardId,
+      clearTargetCardIds,
+      clearAcquiredCardIds,
+      rank,
+      setRank,
+    }),
+    [
+      targetSkillCardIds,
+      setTargetSkillCardIds,
+      alternateSkillCardIds,
+      acquiredSkillCardIds,
+      setAcquiredSkillCardIds,
+      targetNegations,
+      addAlternateSkillCards,
+      setNegation,
+      replaceTargetCardId,
+      replaceAlternateCardId,
+      replaceAcquiredCardId,
+      clearTargetCardIds,
+      clearAcquiredCardIds,
+      rank,
+    ]
+  );
 
   return (
-    <MemoryCalculatorContext.Provider
-      value={{
-        targetSkillCardIds,
-        setTargetSkillCardIds,
-        alternateSkillCardIds,
-        acquiredSkillCardIds,
-        setAcquiredSkillCardIds,
-        targetNegations,
-        addAlternateSkillCards,
-        setNegation,
-        replaceTargetCardId,
-        replaceAlternateCardId,
-        replaceAcquiredCardId,
-        clearTargetCardIds,
-        clearAcquiredCardIds,
-        rank,
-        setRank,
-      }}
-    >
+    <MemoryCalculatorContext.Provider value={value}>
       {children}
     </MemoryCalculatorContext.Provider>
   );
