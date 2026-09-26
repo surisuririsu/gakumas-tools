@@ -6,4 +6,4 @@ export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 export const alt = "Gakumas Tools";
 
-export default ogImageRoute("produceRankCalculator", "hajime");
+export default ogImageRoute("hajime");
