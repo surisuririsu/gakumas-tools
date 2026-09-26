@@ -6,20 +6,8 @@ import c from "@/utils/classNames";
 import { DEFAULT_BANNER, validateOshiSettings } from "@/utils/oshi";
 import BannerForm from "./BannerForm";
 import BannerTimeline from "./BannerTimeline";
+import { currentJstHour, fromJstInput, toJstInput, weekAfter } from "./jst";
 import styles from "./OshiEditor.module.scss";
-
-const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
-
-function toJstInput(date) {
-  if (!date) return "";
-  return new Date(new Date(date).getTime() + JST_OFFSET_MS)
-    .toISOString()
-    .slice(0, 16);
-}
-
-function fromJstInput(value) {
-  return value ? `${value}:00+09:00` : null;
-}
 
 const MAX_COLORS = 3;
 const NOW_TICK_MS = 60 * 1000;
@@ -109,7 +97,12 @@ export default function OshiEditor({ initialSettings, initialNow }) {
   }
 
   function add() {
-    const banner = toForm({ ...DEFAULT_BANNER, id: crypto.randomUUID() });
+    const startsAt = currentJstHour();
+    const banner = {
+      ...toForm({ ...DEFAULT_BANNER, id: crypto.randomUUID() }),
+      startsAt,
+      endsAt: weekAfter(startsAt),
+    };
     change([...banners, banner]);
     setSelectedId(banner.id);
   }

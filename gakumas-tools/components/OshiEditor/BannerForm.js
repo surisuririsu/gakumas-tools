@@ -16,6 +16,7 @@ import {
   oshiBackground,
   oshiProps,
 } from "@/utils/oshi";
+import { currentJstHour, weekAfter } from "./jst";
 import styles from "./OshiEditor.module.scss";
 
 const LANGUAGES = [
@@ -69,6 +70,26 @@ const SWATCHES = [
   { name: "gradient-master", colors: ["#ff5f92", "#ff8f60"] },
   { name: "gradient-legend", colors: ["#7d9cff", "#c88eff", "#ff7db9"] },
 ];
+
+function DateField({ label, value, onChange, getDefault }) {
+  return (
+    <div className={styles.field}>
+      <span className={styles.label}>{label}</span>
+      <span className={styles.dateField}>
+        <Input
+          className={styles.text}
+          type="datetime-local"
+          value={value}
+          aria-label={label}
+          onChange={onChange}
+        />
+        <Button size="sm" onClick={() => onChange(value ? "" : getDefault())}>
+          {value ? "Clear" : "Set"}
+        </Button>
+      </span>
+    </div>
+  );
+}
 
 export default function BannerForm({ banner, onChange, onDelete }) {
   const textRef = useRef(null);
@@ -216,24 +237,18 @@ export default function BannerForm({ banner, onChange, onDelete }) {
       </div>
 
       <div className={styles.schedule}>
-        <label className={styles.field}>
-          <span className={styles.label}>Show from (JST)</span>
-          <Input
-            className={styles.text}
-            type="datetime-local"
-            value={banner.startsAt}
-            onChange={(startsAt) => onChange({ startsAt })}
-          />
-        </label>
-        <label className={styles.field}>
-          <span className={styles.label}>Show until (JST)</span>
-          <Input
-            className={styles.text}
-            type="datetime-local"
-            value={banner.endsAt}
-            onChange={(endsAt) => onChange({ endsAt })}
-          />
-        </label>
+        <DateField
+          label="Show from (JST)"
+          value={banner.startsAt}
+          onChange={(startsAt) => onChange({ startsAt })}
+          getDefault={currentJstHour}
+        />
+        <DateField
+          label="Show until (JST)"
+          value={banner.endsAt}
+          onChange={(endsAt) => onChange({ endsAt })}
+          getDefault={() => weekAfter(banner.startsAt || currentJstHour())}
+        />
       </div>
 
       <div>

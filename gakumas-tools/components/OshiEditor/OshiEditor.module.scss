@@ -244,6 +244,16 @@
   @include mixins.numeric;
 }
 
+.dateField {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+
+  input {
+    flex: 1;
+  }
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
