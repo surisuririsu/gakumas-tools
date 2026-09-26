@@ -1,22 +1,28 @@
-@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/tokens";
 
 $editor-font:
   "SFMono-Regular",
   "Cascadia Code",
   "Liberation Mono",
   monospace;
+$editor-text: rgba(255, 255, 255, 0.92);
+$editor-muted: rgba(255, 255, 255, 0.55);
 
 .editor {
   position: relative;
   min-height: 120px;
-  border: 2px solid colors.$black-medium;
-  border-radius: 6px;
-  background: colors.$black-medium;
+  border-radius: tokens.$field-radius;
+  background-color: tokens.$surface-ink;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.35);
   overflow: hidden;
+  transition: box-shadow tokens.$duration-base tokens.$ease-out;
 
   &:focus-within {
-    border-color: colors.$gk-orange;
+    box-shadow:
+      inset 0 2px 0 rgba(0, 0, 0, 0.35),
+      inset 0 0 0 1.5px tokens.$primary,
+      0 0 0 3px tokens.$primary-halo;
   }
 }
 
@@ -25,7 +31,7 @@ $editor-font:
 .highlight,
 .input {
   margin: 0;
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-family: $editor-font;
   font-size: 14px;
   line-height: 1.4;
@@ -39,7 +45,7 @@ $editor-font:
 // with content. Everything else (including the textarea) overlays on top.
 .highlight {
   min-height: 100%;
-  color: colors.$white-dark;
+  color: $editor-text;
 }
 
 .input {
@@ -52,30 +58,27 @@ $editor-font:
   outline: none;
   background: transparent;
   color: transparent;
-  caret-color: colors.$white-dark;
+  caret-color: colors.$white;
   overflow: hidden;
 }
 
 .keyword {
-  color: colors.$china;
+  color: tokens.$brand-hover;
 }
 
 .anchor {
-  color: colors.$red;
+  color: tokens.$danger-hover;
 }
 
 .number {
-  color: colors.$class-1-2;
+  color: tokens.$success-edge;
 }
 
-.operator {
-  color: colors.$white-dark;
-}
-
+.operator,
 .punctuation {
-  color: colors.$white-dark;
+  color: $editor-muted;
 }
 
 .identifier {
-  color: colors.$hiro;
+  color: tokens.$chart-bar-top;
 }

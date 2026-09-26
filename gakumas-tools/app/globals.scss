@@ -1,11 +1,67 @@
 @use "../styles/colors";
+@use "../styles/mixins";
 @use "../styles/tokens";
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(root) {
+  display: none;
+}
+
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-old(.tool-switch) {
+  animation: viewFadeOut tokens.$duration-fast ease-out both;
+}
+
+::view-transition-new(.tool-switch) {
+  animation: viewRiseIn tokens.$duration-slow tokens.$ease-out
+    tokens.$duration-press both;
+}
+
+@keyframes viewFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes viewRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 body {
@@ -14,6 +70,12 @@ body {
   flex-direction: column;
   overflow: hidden;
   background-color: tokens.$surface-bg;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(:focus-visible) {
+  outline: tokens.$focus-ring-width solid tokens.$focus-ring-color;
+  outline-offset: 2px;
 }
 
 main {
@@ -28,14 +90,12 @@ h1,
 h2,
 h3 {
   color: tokens.$surface-ink;
-  font-weight: 400;
+  font-weight: tokens.$weight-heavy;
 }
 
 label {
   margin-top: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: tokens.$surface-ink-muted;
+  @include mixins.label;
 }
 
 a {
@@ -50,15 +110,32 @@ button {
   border: none;
   background-color: transparent;
   color: inherit;
+  font-family: inherit;
   font-size: inherit;
   cursor: pointer;
   user-select: none;
+}
+
+input,
+select {
+  font-family: inherit;
+}
+
+:where(button:not(:disabled):active) {
+  opacity: var(--press-opacity, 0.7);
 }
 
 textarea {
   font-family: inherit;
 }
 
-.exporting [data-export-hide="true"] {
-  display: none !important;
+html[data-exporting] {
+  *,
+  ::after {
+    letter-spacing: normal !important;
+  }
+
+  input {
+    box-shadow: none !important;
+  }
 }

@@ -1,6 +1,7 @@
 @use "../../styles/tokens";
 
 .tooltip {
+  z-index: tokens.$z-tooltip !important;
   max-width: 260px;
   padding: tokens.$space-2 tokens.$space-3 !important;
   border-radius: tokens.$radius-sm !important;

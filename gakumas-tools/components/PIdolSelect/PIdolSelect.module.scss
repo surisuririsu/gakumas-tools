@@ -1,41 +1,124 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .pIdolSelect {
   display: flex;
-  gap: 4px;
+  align-items: flex-start;
+  gap: tokens.$space-3;
   user-select: none;
 }
 
+@mixin tile {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background-color: tokens.$surface-panel;
+  box-shadow: tokens.$shadow-icon;
+  --press-opacity: 1;
+  transition:
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-spring,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+
+  > :first-child {
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      translate: 0 -2px;
+    }
+  }
+
+  &:active {
+    translate: 0 2px;
+    box-shadow: tokens.$shadow-icon-pressed;
+    transition-duration: tokens.$duration-press;
+  }
+}
+
 .pIdol {
-  min-width: 89px;
-  height: fit-content;
-  border: 4px solid colors.$gray-light;
-  border-radius: 8px;
-  overflow: hidden;
+  @include tile;
+
+  &.empty {
+    box-shadow: none;
+
+    > :first-child {
+      outline: 1.5px dashed tokens.$surface-edge;
+      outline-offset: -1.5px;
+      background-color: tokens.$fill-subtle;
+    }
+  }
+}
+
+.caret {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$surface-panel;
+  box-shadow: 0 2px 0 tokens.$surface-edge;
+  color: tokens.$surface-ink-muted;
+  font-size: 11px;
+
+  svg {
+    @include mixins.caret;
+  }
+
+  .expanded & {
+    background-color: tokens.$accent-tint;
+    box-shadow: 0 2px 0 tokens.$accent-edge;
+    color: tokens.$accent-ink;
+
+    svg {
+      @include mixins.caret-open;
+    }
+  }
+}
+
+.expanderSlot {
+  flex: 1;
+  min-width: 0;
 }
 
 .expander {
-  width: 100%;
-  min-width: 0;
-  margin-left: 8px;
-  border: 2px solid colors.$gray-light;
-  border-radius: 4px;
-  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-1;
+  padding: tokens.$space-1;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$fill-subtle;
   container-type: inline-size;
 }
 
 .result {
   display: flex;
-  gap: 4px;
-  padding: 4px;
+  gap: tokens.$space-2;
+  padding: 6px 6px tokens.$space-2;
   overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .pIdolButton {
-  transition: 0.2s all;
+  @include tile;
+  @include mixins.pop-in;
+  @include mixins.stagger(30ms, 8);
 
-  &:hover,
-  &:focus {
-    transform: scale(1.05);
+  &.selected {
+    box-shadow:
+      0 0 0 2.5px tokens.$surface-panel,
+      0 0 0 4.5px tokens.$brand,
+      tokens.$shadow-icon;
+  }
+
+  &:focus-visible {
+    outline-offset: 3px;
   }
 }

@@ -15,19 +15,21 @@ function Row({ row, numRuns }) {
   return (
     <tr>
       <td className={styles.cardCell}>
-        <div className={styles.iconWrap}>
-          <Image
-            src={gkImg(entity).icon}
-            alt={entity.name}
-            title={entity.name}
-            width={32}
-            height={32}
-          />
-          {!isPItem && row.c && (
-            <CustomizationCounts customizations={row.c} size="small" />
-          )}
+        <div className={styles.card}>
+          <div className={styles.iconWrap}>
+            <Image
+              src={gkImg(entity).icon}
+              alt={entity.name}
+              title={entity.name}
+              width={32}
+              height={32}
+            />
+            {!isPItem && row.c && (
+              <CustomizationCounts customizations={row.c} size="small" />
+            )}
+          </div>
+          <span className={styles.cardName}>{entity.name}</span>
         </div>
-        <span className={styles.cardName}>{entity.name}</span>
       </td>
       <td className={styles.numericCell}>{row.use.toLocaleString()}</td>
       <td className={styles.numericCell}>

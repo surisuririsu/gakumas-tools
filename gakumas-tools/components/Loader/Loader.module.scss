@@ -1,26 +1,36 @@
-@use "../../styles/colors";
+@use "../../styles/tokens";
 
 .loader {
-  width: calc(1em + 8px);
-  aspect-ratio: 1;
-  display: grid;
-  border: 2px solid #0000;
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  flex-shrink: 0;
+  border: 0.17em solid color-mix(in srgb, currentColor 28%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
-  border-right-color: colors.$blue;
-  animation: spin 1s infinite linear;
+  animation: spin 0.7s linear infinite;
 }
 
-.loader::before {
-  content: "";
-  grid-area: 1/1;
-  margin: 3px;
-  border: inherit;
-  border-radius: 50%;
-  animation: spin 2s infinite;
+.large {
+  font-size: 28px;
+  color: tokens.$primary;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: tokens.$space-6 0;
 }
 
 @keyframes spin {
-  100% {
-    transform: rotate(1turn);
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation-duration: 1.4s !important;
+    animation-iteration-count: infinite !important;
   }
 }

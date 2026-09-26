@@ -37,7 +37,14 @@ function SimulatorButtons() {
         style="red-secondary"
         size="sm"
         onClick={() =>
-          setModal(<ConfirmModal message={t("confirm")} onConfirm={clear} />)
+          setModal(
+            <ConfirmModal
+              message={t("confirm")}
+              confirmLabel={t("clear")}
+              danger
+              onConfirm={clear}
+            />,
+          )
         }
       >
         <FaRegTrashCan />
@@ -70,7 +77,11 @@ function SimulatorButtons() {
               );
             }}
           >
-            {linkCopied ? <FaCheck /> : <FaRegCopy />}
+            {linkCopied ? (
+              <FaCheck className={styles.copied} />
+            ) : (
+              <FaRegCopy />
+            )}
             <span className={styles.buttonText}>URL</span>
           </Button>
           <Button

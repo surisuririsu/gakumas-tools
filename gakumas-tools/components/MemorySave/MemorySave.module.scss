@@ -1,15 +1,44 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .save {
   max-width: 400px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
+  gap: tokens.$space-2;
+  margin-top: tokens.$space-2;
+}
+
+.statusSlot {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+}
+
+.status,
+.saved,
+.error {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  translate: 0 -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  white-space: nowrap;
+  @include mixins.pop-in;
+}
+
+.status {
+  color: tokens.$surface-ink-muted;
+}
+
+.saved {
+  color: tokens.$success;
 }
 
 .error {
-  color: colors.$red;
-  font-size: tokens.$text-sm;
+  color: tokens.$danger;
 }

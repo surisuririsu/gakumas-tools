@@ -1,7 +1,7 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaHeart } from "react-icons/fa6";
+import { FaCheck, FaChevronDown, FaHeart } from "react-icons/fa6";
 import {
   Idols,
   PIdols,
@@ -10,8 +10,12 @@ import {
 } from "gakumas-data";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
+import Collapse from "@/components/Collapse";
 import Modal from "@/components/Modal";
+import Select from "@/components/Select";
 import TabGroup from "@/components/TabGroup";
+import ModalContext from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import { getLoadoutStaminaContributions } from "@/utils/stamina";
 import {
   loadStaminaProgression,
@@ -57,6 +61,7 @@ function getDefaultSettings(pIdol) {
 
 function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
   const t = useTranslations("StaminaCalculator");
+  const [showBreakdown, setShowBreakdown] = useState(false);
   const { pIdol, multiplier } = memory;
 
   if (!pIdol) {
@@ -103,7 +108,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
           {idol?.name} — {pIdol.title}
         </p>
         {breakdown && (
-          <strong>
+          <strong className={styles.contribution}>
             {t("contribution", {
               percent: Math.round(multiplier * 100),
               stamina: Math.floor(breakdown.total * multiplier),
@@ -118,6 +123,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
             <section className={styles.field}>
               <div className={styles.fieldLabel}>{t("trainingRank")}</div>
               <ButtonGroup
+                className={styles.ranks}
                 selected={settings.trainingRank}
                 options={TRAINING_RANKS}
                 onChange={(value) =>
@@ -129,6 +135,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
             <section className={styles.field}>
               <div className={styles.fieldLabel}>{t("awakeningRank")}</div>
               <ButtonGroup
+                className={styles.ranks}
                 selected={settings.awakeningRank}
                 options={AWAKENING_RANKS}
                 onChange={(value) =>
@@ -140,6 +147,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
             <section className={styles.field}>
               <div className={styles.fieldLabel}>{t("affectionLevel")}</div>
               <ButtonGroup
+                className={styles.ranks}
                 selected={settings.affectionLevel}
                 options={AFFECTION_RANGES}
                 onChange={(value) => onChange("affectionLevel", value)}
@@ -168,6 +176,7 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
                         checked={selected}
                         onChange={() => toggleTrueEndScenario(scenario)}
                       />
+                      <FaCheck className={styles.check} aria-hidden="true" />
                       <span>{t(`scenarios.${scenario}`)}</span>
                     </label>
                   );
@@ -182,20 +191,18 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
                 {settings.senseiLevels.map((level, index) => (
                   <label key={index}>
                     <span>{t("senseiCard", { number: index + 1 })}</span>
-                    <select
+                    <Select
+                      fill
                       value={level}
-                      onChange={(event) =>
-                        setSenseiLevel(index, Number(event.target.value))
-                      }
-                    >
-                      {SENSEI_LEVELS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.value === 0
+                      options={SENSEI_LEVELS.map((option) => ({
+                        value: option.value,
+                        label:
+                          option.value === 0
                             ? t("notUsed")
-                            : t("senseiLevelRange", option)}
-                        </option>
-                      ))}
-                    </select>
+                            : t("senseiLevelRange", option),
+                      }))}
+                      onChange={(value) => setSenseiLevel(index, value)}
+                    />
                   </label>
                 ))}
               </div>
@@ -203,24 +210,37 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
             </section>
           </div>
 
-          <details className={styles.breakdown}>
-            <summary>{t("showBreakdown")}</summary>
-            <dl>
-              {[
-                "base",
-                "training",
-                "awakening",
-                "affection",
-                "trueEnd",
-                "sensei",
-              ].map((key) => (
-                <div key={key}>
-                  <dt>{t(`breakdown.${key}`)}</dt>
-                  <dd>{breakdown[key]}</dd>
-                </div>
-              ))}
-            </dl>
-          </details>
+          <div className={styles.breakdown}>
+            <button
+              type="button"
+              className={c(
+                styles.breakdownToggle,
+                showBreakdown && styles.expanded,
+              )}
+              aria-expanded={showBreakdown}
+              onClick={() => setShowBreakdown(!showBreakdown)}
+            >
+              {t("showBreakdown")}
+              <FaChevronDown aria-hidden="true" />
+            </button>
+            <Collapse open={showBreakdown}>
+              <dl>
+                {[
+                  "base",
+                  "training",
+                  "awakening",
+                  "affection",
+                  "trueEnd",
+                  "sensei",
+                ].map((key) => (
+                  <div key={key}>
+                    <dt>{t(`breakdown.${key}`)}</dt>
+                    <dd>{breakdown[key]}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Collapse>
+          </div>
         </>
       ) : (
         <p className={styles.help}>{t("unavailable")}</p>
@@ -229,8 +249,9 @@ function MemoryStaminaFields({ memory, settings, breakdown, onChange }) {
   );
 }
 
-function StaminaCalculatorModal({ memories, onApply, onClose }) {
+function StaminaCalculatorModal({ memories, onApply }) {
   const t = useTranslations("StaminaCalculator");
+  const { closeModal } = useContext(ModalContext);
   const [activeMemory, setActiveMemory] = useState(0);
   const [settings, setSettings] = useState(() =>
     memories.map(({ pIdol }) => getDefaultSettings(pIdol)),
@@ -251,6 +272,13 @@ function StaminaCalculatorModal({ memories, onApply, onClose }) {
     ? null
     : contributions.reduce((sum, value) => sum + value, 0);
 
+  const [shownTotal, setShownTotal] = useState(total);
+  const [beats, setBeats] = useState(0);
+  if (total !== shownTotal) {
+    setShownTotal(total);
+    setBeats(beats + 1);
+  }
+
   function updateSettings(index, key, value) {
     setSettings((current) => {
       const next = [...current];
@@ -260,11 +288,9 @@ function StaminaCalculatorModal({ memories, onApply, onClose }) {
   }
 
   return (
-    <Modal onClose={onClose}>
+    <Modal>
+      <h3 className={styles.title}>{t("title")}</h3>
       <div className={styles.modal}>
-        <div className={styles.heading}>
-          <h3>{t("title")}</h3>
-        </div>
         <p className={styles.intro}>{t("defaultsHelp")}</p>
 
         {memories.length > 1 && (
@@ -296,14 +322,20 @@ function StaminaCalculatorModal({ memories, onApply, onClose }) {
           <>
             <div className={styles.result}>
               <span>{t("total")}</span>
-              <strong>{total}</strong>
+              <strong
+                className={
+                  beats ? (beats % 2 ? styles.beatA : styles.beatB) : null
+                }
+              >
+                {total}
+              </strong>
             </div>
             <Button
               style="primary"
               fill
               onClick={() => {
                 onApply(total);
-                onClose();
+                closeModal();
               }}
             >
               {t("apply", { stamina: total })}
@@ -317,7 +349,7 @@ function StaminaCalculatorModal({ memories, onApply, onClose }) {
 
 export default function StaminaCalculator({ memorySlots, onApply }) {
   const t = useTranslations("StaminaCalculator");
-  const [open, setOpen] = useState(false);
+  const { setModal } = useContext(ModalContext);
   const memories = memorySlots.map((slot) => ({
     ...slot,
     pIdol: PIdols.getById(slot.pIdolId),
@@ -325,24 +357,19 @@ export default function StaminaCalculator({ memorySlots, onApply }) {
   const hasPIdol = memories.some(({ pIdol }) => pIdol);
 
   return (
-    <>
-      <button
-        type="button"
-        className={styles.open}
-        disabled={!hasPIdol}
-        title={hasPIdol ? t("open") : t("selectPIdol")}
-        aria-label={hasPIdol ? t("open") : t("selectPIdol")}
-        onClick={() => setOpen(true)}
-      >
-        <FaHeart />
-      </button>
-      {open && hasPIdol && (
-        <StaminaCalculatorModal
-          memories={memories}
-          onApply={onApply}
-          onClose={() => setOpen(false)}
-        />
-      )}
-    </>
+    <button
+      type="button"
+      className={styles.open}
+      disabled={!hasPIdol}
+      title={hasPIdol ? t("open") : t("selectPIdol")}
+      aria-label={hasPIdol ? t("open") : t("selectPIdol")}
+      onClick={() =>
+        setModal(
+          <StaminaCalculatorModal memories={memories} onApply={onApply} />,
+        )
+      }
+    >
+      <FaHeart />
+    </button>
   );
 }

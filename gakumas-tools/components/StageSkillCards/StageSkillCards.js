@@ -49,6 +49,7 @@ function StageSkillCards({
           onSwap={swapSkillCardIds}
           idolId={idolId}
           size={size}
+          showEmptyPlaceholder
         />
       ))}
     </div>

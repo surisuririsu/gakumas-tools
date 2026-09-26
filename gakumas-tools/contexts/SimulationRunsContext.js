@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { useSession } from "next-auth/react";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import LoadoutUrlContext from "@/contexts/LoadoutUrlContext";
 import {
   deriveRunMeta,
@@ -27,12 +27,13 @@ const SimulationRunsContext = createContext();
 export function SimulationRunsContextProvider({ children }) {
   const { status } = useSession();
   const { loadoutFromUrl, loadoutsFromUrl } = useContext(LoadoutUrlContext);
-  const { setLoadout, setLoadouts } = useContext(LoadoutContext);
+  const { setLoadout, setLoadouts } = useContext(LoadoutActionsContext);
 
   const [loaded, setLoaded] = useState(false);
   const [history, setHistory] = useState([]);
   const [savedRuns, setSavedRuns] = useState([]);
   const [savedLoading, setSavedLoading] = useState(true);
+  const [savedError, setSavedError] = useState(false);
   const didInitRef = useRef(false);
 
   useEffect(() => {
@@ -60,22 +61,42 @@ export function SimulationRunsContextProvider({ children }) {
     saveHistoryToStorage(history);
   }, [history, loaded]);
 
-  const fetchSaved = useCallback(async () => {
-    setSavedLoading(true);
+  const fetchSaved = useCallback(async ({ quiet = false } = {}) => {
+    if (!quiet) setSavedLoading(true);
     try {
       const res = await fetch("/api/loadout");
       if (!res.ok) {
-        setSavedRuns([]);
-        return;
+        throw new Error(`GET /api/loadout failed with ${res.status}`);
       }
       const list = await res.json();
       setSavedRuns(list.map(normalizeSavedRun).filter(Boolean));
-    } catch {
-      setSavedRuns([]);
+      setSavedError(false);
+    } catch (err) {
+      console.error(err);
+      setSavedError(true);
     } finally {
       setSavedLoading(false);
     }
   }, []);
+
+  const mutateSaved = useCallback(
+    async (method, body) => {
+      try {
+        const res = await fetch("/api/loadout", {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!res.ok) {
+          throw new Error(`${method} /api/loadout failed with ${res.status}`);
+        }
+        return res;
+      } finally {
+        await fetchSaved({ quiet: true });
+      }
+    },
+    [fetchSaved],
+  );
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -127,41 +148,30 @@ export function SimulationRunsContextProvider({ children }) {
         stats: run.stats,
         derived: run.derived,
       };
-      const res = await fetch("/api/loadout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error("Failed to save");
+      const res = await mutateSaved("POST", body);
       const data = await res.json();
-      await fetchSaved();
       return data.id;
     },
-    [fetchSaved],
+    [mutateSaved],
   );
 
   const deleteSaved = useCallback(
     async (ids) => {
-      await fetch("/api/loadout", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
-      });
-      await fetchSaved();
+      const idSet = new Set(ids);
+      setSavedRuns((cur) => cur.filter((r) => !idSet.has(r._id || r.id)));
+      await mutateSaved("DELETE", { ids });
     },
-    [fetchSaved],
+    [mutateSaved],
   );
 
   const renameSaved = useCallback(
     async (id, name) => {
-      await fetch("/api/loadout", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, name }),
-      });
-      await fetchSaved();
+      setSavedRuns((cur) =>
+        cur.map((r) => ((r._id || r.id) === id ? { ...r, name } : r)),
+      );
+      await mutateSaved("PATCH", { id, name });
     },
-    [fetchSaved],
+    [mutateSaved],
   );
 
   const loadRun = useCallback(
@@ -179,6 +189,7 @@ export function SimulationRunsContextProvider({ children }) {
       history,
       savedRuns,
       savedLoading,
+      savedError,
       pushRun,
       deleteHistoryRun,
       clearHistory,
@@ -192,6 +203,7 @@ export function SimulationRunsContextProvider({ children }) {
       history,
       savedRuns,
       savedLoading,
+      savedError,
       pushRun,
       deleteHistoryRun,
       clearHistory,

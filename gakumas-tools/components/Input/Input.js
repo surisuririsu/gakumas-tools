@@ -1,7 +1,17 @@
 import { memo } from "react";
+import c from "@/utils/classNames";
 import styles from "./Input.module.scss";
 
-function Input({ type, round, min, max, value, onChange, ...rest }) {
+function Input({
+  type,
+  round,
+  min,
+  max,
+  value,
+  onChange,
+  className,
+  ...rest
+}) {
   function handleChange(val) {
     if (type == "number") {
       if (round) {
@@ -18,7 +28,7 @@ function Input({ type, round, min, max, value, onChange, ...rest }) {
 
   return (
     <input
-      className={styles.input}
+      className={c(styles.input, className)}
       type={type}
       value={value ?? ""}
       onChange={(e) => handleChange(e.target.value)}

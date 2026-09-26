@@ -1,9 +1,15 @@
 import { memo, useContext, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { FaXmark } from "react-icons/fa6";
-import ModalContext from "@/contexts/ModalContext";
+import ModalContext, { ModalLayerContext } from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import styles from "./Modal.module.scss";
 
-function Modal({ children, dismissable = true, onClose }) {
+const INLINE_LAYER = { closing: false, covered: false, stacked: false };
+const EXIT_FALLBACK_MS = 400;
+
+function Modal({ children, dismissable = true, onClose, size }) {
+  const t = useTranslations("Modal");
   const { closeModal: contextClose, getModalStackDepth } =
     useContext(ModalContext);
   const close = onClose || contextClose;
@@ -11,8 +17,18 @@ function Modal({ children, dismissable = true, onClose }) {
   // rather than pushed onto the global stack. If a stacked modal is currently
   // on top, defer ESC to it instead of closing ourselves alongside it.
   const isInline = !!onClose;
+  const layer = useContext(ModalLayerContext);
+  const { closing, covered, stacked, onExited } =
+    (!isInline && layer) || INLINE_LAYER;
+  const active = !closing && !covered;
   const modalRef = useRef(null);
   const mouseDownOnOverlayRef = useRef(false);
+
+  useEffect(() => {
+    if (!closing) return;
+    const timer = setTimeout(onExited, EXIT_FALLBACK_MS);
+    return () => clearTimeout(timer);
+  }, [closing, onExited]);
 
   useEffect(() => {
     if (!modalRef.current) return;
@@ -27,6 +43,8 @@ function Modal({ children, dismissable = true, onClose }) {
   }, []);
 
   useEffect(() => {
+    if (!active) return;
+
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && dismissable) {
         if (isInline && getModalStackDepth() > 0) return;
@@ -61,7 +79,7 @@ function Modal({ children, dismissable = true, onClose }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [dismissable, close, isInline, getModalStackDepth]);
+  }, [active, dismissable, close, isInline, getModalStackDepth]);
 
   const handleOverlayMouseDown = (e) => {
     mouseDownOnOverlayRef.current = e.target === e.currentTarget;
@@ -73,6 +91,7 @@ function Modal({ children, dismissable = true, onClose }) {
     // direction fires `click` on the nearest common ancestor (the overlay),
     // which would otherwise look indistinguishable from a real outside click.
     const dismiss =
+      active &&
       dismissable &&
       mouseDownOnOverlayRef.current &&
       e.target === e.currentTarget;
@@ -82,19 +101,34 @@ function Modal({ children, dismissable = true, onClose }) {
 
   return (
     <div
-      className={styles.overlay}
+      className={c(
+        styles.overlay,
+        stacked && styles.stacked,
+        covered && styles.covered,
+        closing && styles.closing
+      )}
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
+      onAnimationEnd={(e) => {
+        if (closing && e.target === e.currentTarget) onExited();
+      }}
     >
-      <div 
+      <div
         ref={modalRef}
-        className={styles.modal} 
+        className={c(styles.modal, size == "small" && styles.small)}
         onClick={(e) => e.stopPropagation()}
         tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
       >
         {dismissable && (
-          <button className={styles.close} onClick={close}>
-            <FaXmark />
+          <button
+            type="button"
+            className={styles.close}
+            onClick={close}
+            aria-label={t("close")}
+          >
+            <FaXmark aria-hidden="true" />
           </button>
         )}
         {children}

@@ -1,5 +1,5 @@
 "use client";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { FaXTwitter } from "react-icons/fa6";
 import { Idols, PIdols } from "gakumas-data";
@@ -14,7 +14,8 @@ import usePersistedState from "@/utils/usePersistedState";
 import BreakdownGroup from "./BreakdownGroup";
 import PIdolTile from "./PIdolTile";
 import RaritySelect from "./RaritySelect";
-import { pct } from "./utils";
+import c from "@/utils/classNames";
+import { pct, rarityIconWidth } from "./utils";
 import styles from "./PIdolCollection.module.scss";
 
 const RARITIES = ["R", "SR", "SSR"];
@@ -50,7 +51,7 @@ const BREAKDOWNS = [
     labelKey: "byRarity",
     iconFor: (row) => ({
       src: `/rarities/${row.value}.png`,
-      width: 54,
+      width: rarityIconWidth(row.value, 18),
       height: 18,
       alt: row.value,
     }),
@@ -100,8 +101,19 @@ function PIdolCollection() {
     idolId: null,
   });
 
+  const [bulk, setBulk] = useState(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setReady(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   const toggle = useCallback(
     (id) => {
+      setBulk(null);
       setCollected((prev) => {
         const next = { ...prev };
         if (next[id]) delete next[id];
@@ -114,6 +126,7 @@ function PIdolCollection() {
 
   const setFilter = useCallback(
     (key, value) => {
+      setBulk(null);
       setFilters((prev) => ({ ...prev, [key]: value }));
     },
     [setFilters],
@@ -163,7 +176,13 @@ function PIdolCollection() {
 
   const overallPct = pct(stats.have, stats.total);
 
+  const [haveBump, setHaveBump] = useState({ value: stats.have, n: 0 });
+  if (haveBump.value !== stats.have) {
+    setHaveBump({ value: stats.have, n: ready ? haveBump.n + 1 : 0 });
+  }
+
   const selectAllInFilter = useCallback(() => {
+    setBulk("on");
     setCollected((prev) => {
       const next = { ...prev };
       filteredPIdols.forEach((p) => {
@@ -174,6 +193,7 @@ function PIdolCollection() {
   }, [filteredPIdols, setCollected]);
 
   const clearAllInFilter = useCallback(() => {
+    setBulk("off");
     setCollected((prev) => {
       const next = { ...prev };
       filteredPIdols.forEach((p) => {
@@ -205,7 +225,7 @@ function PIdolCollection() {
   }, [filters, stats, overallPct, locale, t]);
 
   return (
-    <div className={styles.collection}>
+    <div className={c(styles.collection, ready && styles.ready)}>
       <div className={styles.filters}>
         <RaritySelect
           selected={filters.rarity}
@@ -231,7 +251,12 @@ function PIdolCollection() {
         <div className={styles.overall}>
           <div className={styles.overallLabel}>{t("collected")}</div>
           <div className={styles.overallNumbers}>
-            <span className={styles.have}>{stats.have}</span>
+            <span
+              key={haveBump.n}
+              className={c(styles.have, haveBump.n > 0 && styles.haveBump)}
+            >
+              {stats.have}
+            </span>
             <span className={styles.slash}>/</span>
             <span className={styles.total}>{stats.total}</span>
             <span className={styles.percent}>{overallPct}%</span>
@@ -239,12 +264,13 @@ function PIdolCollection() {
           <div className={styles.bar}>
             <div
               className={styles.barFill}
-              style={{ width: `${overallPct}%` }}
+              style={{ scale: `${overallPct / 100} 1` }}
             />
           </div>
           <div className={styles.bulkActions}>
             <button
               type="button"
+              className={styles.bulkButton}
               onClick={selectAllInFilter}
               disabled={stats.total > 0 && stats.have === stats.total}
             >
@@ -252,6 +278,7 @@ function PIdolCollection() {
             </button>
             <button
               type="button"
+              className={styles.bulkButton}
               onClick={clearAllInFilter}
               disabled={stats.have === 0}
             >
@@ -259,7 +286,7 @@ function PIdolCollection() {
             </button>
             <button
               type="button"
-              className={styles.shareButton}
+              className={c(styles.bulkButton, styles.shareButton)}
               onClick={shareToX}
             >
               <FaXTwitter />
@@ -273,6 +300,7 @@ function PIdolCollection() {
             <BreakdownGroup
               key={filterKey}
               label={t(labelKey)}
+              animate={ready}
               rows={stats[statsKey].map((row) => {
                 const { src, width, height, alt } = iconFor(row);
                 const active = filters[filterKey] === row.value;
@@ -293,11 +321,18 @@ function PIdolCollection() {
         </div>
       </div>
 
-      <div className={styles.grid}>
-        {filteredPIdols.map((pIdol) => (
+      <div
+        className={c(
+          styles.grid,
+          bulk == "on" && styles.bulkOn,
+          bulk == "off" && styles.bulkOff,
+        )}
+      >
+        {filteredPIdols.map((pIdol, index) => (
           <PIdolTile
             key={pIdol.id}
             pIdol={pIdol}
+            index={index}
             signatureCard={SIGNATURE_CARD_BY_PIDOL[pIdol.id]}
             collected={!!collected[pIdol.id]}
             onToggle={toggle}

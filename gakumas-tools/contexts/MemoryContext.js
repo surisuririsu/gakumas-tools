@@ -1,5 +1,12 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import DataContext from "@/contexts/DataContext";
 import { fixCustomizations } from "@/utils/customizations";
 
@@ -32,45 +39,57 @@ export function MemoryContextProvider({ children }) {
 
   useEffect(() => {
     setSaveState("unsaved");
-  }, [name, pIdolId, params, pItemIds, skillCardIds]);
+  }, [name, pIdolId, params, pItemIds, skillCardIds, customizations]);
 
-  async function save(asNew) {
-    setSaveState("saving");
-    const memory = {
+  const save = useCallback(
+    async (asNew) => {
+      setSaveState("saving");
+      const memory = {
+        name,
+        pIdolId,
+        params,
+        pItemIds,
+        skillCardIds,
+        customizations,
+      };
+      const isNew = asNew || !id;
+      const url = isNew ? "/api/memory" : `/api/memory/${id}`;
+      const method = isNew ? "POST" : "PUT";
+      const body = isNew ? { memories: [memory] } : memory;
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+          throw new Error(`${method} ${url} failed with ${response.status}`);
+        }
+        if (isNew) {
+          const { ids } = await response.json();
+          setId(ids[0]);
+        }
+        setSaveState("saved");
+      } catch (error) {
+        console.error(error);
+        setSaveState("error");
+        return;
+      }
+      fetchMemories();
+    },
+    [
+      id,
       name,
       pIdolId,
       params,
       pItemIds,
       skillCardIds,
       customizations,
-    };
-    const isNew = asNew || !id;
-    const url = isNew ? "/api/memory" : `/api/memory/${id}`;
-    const method = isNew ? "POST" : "PUT";
-    const body = isNew ? { memories: [memory] } : memory;
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!response.ok) {
-        throw new Error(`${method} ${url} failed with ${response.status}`);
-      }
-      if (isNew) {
-        const { ids } = await response.json();
-        setId(ids[0]);
-      }
-      setSaveState("saved");
-    } catch (error) {
-      console.error(error);
-      setSaveState("error");
-      return;
-    }
-    fetchMemories();
-  }
+      fetchMemories,
+    ]
+  );
 
-  async function setAll(memory) {
+  const setAll = useCallback((memory) => {
     setId(memory._id || null);
     setName(memory.name || null);
     setPIdolId(memory.pIdolId || null);
@@ -82,55 +101,70 @@ export function MemoryContextProvider({ children }) {
     } else {
       setCustomizations([{}, {}, {}, {}, {}, {}]);
     }
-  }
+  }, []);
 
-  function replacePItemId(index, itemId) {
+  const replacePItemId = useCallback((index, itemId) => {
     setPItemIds((cur) => {
       const next = [...cur];
       next[index] = itemId;
       return next;
     });
-  }
+  }, []);
 
-  function replaceSkillCardId(index, cardId) {
+  const replaceSkillCardId = useCallback((index, cardId) => {
     setSkillCardIds((cur) => {
       const next = [...cur];
       next[index] = cardId;
       return next;
     });
-  }
+  }, []);
 
-  function replaceCustomizations(index, c11n) {
+  const replaceCustomizations = useCallback((index, c11n) => {
     setCustomizations((cur) => {
       const next = [...cur];
       next[index] = c11n;
       return next;
     });
-  }
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      saveState,
+      id,
+      name,
+      setName,
+      pIdolId,
+      setPIdolId,
+      params,
+      setParams,
+      pItemIds,
+      skillCardIds,
+      customizations,
+      replacePItemId,
+      replaceSkillCardId,
+      replaceCustomizations,
+      setAll,
+      save,
+    }),
+    [
+      saveState,
+      id,
+      name,
+      pIdolId,
+      params,
+      pItemIds,
+      skillCardIds,
+      customizations,
+      replacePItemId,
+      replaceSkillCardId,
+      replaceCustomizations,
+      setAll,
+      save,
+    ]
+  );
 
   return (
-    <MemoryContext.Provider
-      value={{
-        saveState,
-        id,
-        name,
-        setName,
-        pIdolId,
-        setPIdolId,
-        params,
-        setParams,
-        pItemIds,
-        skillCardIds,
-        customizations,
-        replacePItemId,
-        replaceSkillCardId,
-        replaceCustomizations,
-        setAll,
-        save,
-      }}
-    >
-      {children}
-    </MemoryContext.Provider>
+    <MemoryContext.Provider value={value}>{children}</MemoryContext.Provider>
   );
 }
 

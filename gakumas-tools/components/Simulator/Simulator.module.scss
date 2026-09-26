@@ -1,11 +1,19 @@
-@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .loadoutEditor {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-start;
+  gap: tokens.$space-3;
+  padding: tokens.$space-3;
+
+  @media (max-width: 480px) {
+    gap: tokens.$space-2;
+    padding: tokens.$space-2;
+  }
 }
 
 .configurator {
@@ -13,12 +21,12 @@
   display: flex;
   flex-direction: column;
   gap: tokens.$space-2;
-  padding: tokens.$space-2 tokens.$space-4;
+  padding: tokens.$space-3;
   overflow: auto;
+  @include mixins.card;
 
   @media (max-width: 480px) {
     padding: tokens.$space-2;
-    padding-bottom: 0;
     gap: tokens.$space-1;
   }
 }
@@ -33,31 +41,54 @@
 .loadoutTabs {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: tokens.$space-2;
 }
 
 .loadoutTab {
   display: flex;
-  gap: 4px;
+  gap: tokens.$space-1;
+
+  & > :not(.selectButton) {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .selectButton {
-  padding: 8px 2px;
-  border-radius: 100px;
-  color: colors.$gray;
-  border: 1px solid colors.$gray;
+  flex-shrink: 0;
+  width: 28px;
+  padding: tokens.$space-3 0;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
+  color: tokens.$surface-ink-subtle;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-heavy;
+  letter-spacing: 0.06em;
   writing-mode: vertical-lr;
-  font-weight: 600;
-  transition: all 0.2s;
+  @include mixins.raised;
 
   &:hover {
-    box-shadow: 0 0 8px color.adjust(colors.$black, $alpha: -0.5);
+    background-color: tokens.$fill-muted-hover;
+    color: tokens.$surface-ink;
+  }
+
+  &.selectedTab {
+    @include mixins.chip-selected;
   }
 }
 
 .loadoutSummary {
-  flex: 1;
-  padding: 0 4px;
+  padding: tokens.$space-1;
+  border-radius: tokens.$radius-lg;
+  cursor: pointer;
+  transition:
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
+
+  &:hover {
+    background-color: tokens.$fill-subtle;
+  }
 }
 
 .supportBonusInput {
@@ -106,15 +137,52 @@
     min-width: 42px;
     color: tokens.$surface-ink;
     font-size: tokens.$text-base;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+    font-weight: tokens.$weight-bold;
     text-align: right;
+    @include mixins.numeric;
   }
 }
 
 .numRunsSlider {
   flex: 1;
   min-width: 0;
+  height: 8px;
+  margin: 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    tokens.$primary var(--fill),
+    tokens.$surface-border var(--fill)
+  );
+  appearance: none;
+  outline-offset: 6px;
+
+  &::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: tokens.$surface-panel;
+    box-shadow:
+      tokens.$thumb-edge,
+      0 1px 4px rgba(20, 20, 40, 0.14);
+    appearance: none;
+    transition: scale tokens.$duration-spring tokens.$ease-spring;
+  }
+
+  &:active::-webkit-slider-thumb {
+    scale: 1.15;
+  }
+
+  &::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 50%;
+    background-color: tokens.$surface-panel;
+    box-shadow:
+      tokens.$thumb-edge,
+      0 1px 4px rgba(20, 20, 40, 0.14);
+  }
 }
 
 .expanderButtons {
@@ -122,55 +190,67 @@
   flex-wrap: wrap;
   gap: tokens.$space-1;
 
-  & + * {
-    margin-top: tokens.$space-2;
-  }
-
   button {
     display: inline-flex;
     align-items: center;
-    gap: tokens.$space-1;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background-color: tokens.$surface-muted;
+    gap: 3px;
+    height: 20px;
+    padding: 0 8px 0 10px;
+    border-radius: tokens.$radius-pill;
+    background-color: tokens.$fill-muted;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-xs;
-    font-weight: 600;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
+    font-weight: tokens.$weight-bold;
+    white-space: nowrap;
+    @include mixins.raised;
 
     svg {
-      font-size: 10px;
-      transition: transform 0.15s ease;
+      font-size: 9px;
+      @include mixins.caret;
     }
 
-    &:not(.disabled):hover {
+    &:hover:not(:disabled) {
+      background-color: tokens.$fill-muted-hover;
       color: tokens.$surface-ink;
     }
 
     &.expanded {
-      background-color: colors.$gk-orange-extra-light;
-      color: colors.$gk-red-orange;
+      @include mixins.chip-selected;
 
       svg {
-        transform: rotate(180deg);
+        @include mixins.caret-open;
       }
     }
 
-    &.disabled {
-      opacity: 0.5;
-      cursor: default;
+    &:disabled {
+      opacity: 0.45;
+      box-shadow: none;
+      cursor: not-allowed;
     }
   }
+}
+
+.subTool {
+  padding-top: tokens.$space-2;
 }
 
 .subLinks {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: colors.$blue;
-  font-size: 12px;
+  color: tokens.$link;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+
+  & > a {
+    padding: 2px tokens.$space-1;
+    border-radius: tokens.$radius-sm;
+    transition: background-color tokens.$duration-fast;
+
+    &:hover {
+      background-color: tokens.$link-hover-bg;
+    }
+  }
 }
 
 .buttons {
@@ -180,14 +260,105 @@
   gap: tokens.$space-2;
 }
 
+.copied {
+  color: tokens.$success;
+  @include mixins.pop-in;
+}
+
 .buttonText {
   @media (max-width: 480px) {
     display: none;
   }
 }
 
-.progressBarWrap {
-  margin-top: tokens.$space-1;
+.run {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: tokens.$primary;
+  color: colors.$white;
+  font-size: tokens.$text-base;
+  font-weight: tokens.$weight-heavy;
+  letter-spacing: 0.06em;
+  @include mixins.raised(tokens.$primary-edge, 3px);
+
+  &:hover {
+    background-color: tokens.$primary-hover;
+  }
+
+  &.running {
+    background-color: tokens.$primary;
+    cursor: progress;
+  }
+}
+
+.runFill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.22) 0 10px,
+    rgba(255, 255, 255, 0.08) 10px 20px
+  );
+  background-size: 28.28px 28.28px;
+  animation: stripes 0.7s linear infinite;
+  transition:
+    scale 0.25s linear,
+    opacity 0.5s 0.15s;
+
+  .run:not(.running) & {
+    opacity: 0;
+  }
+}
+
+@keyframes stripes {
+  to {
+    background-position: 28.28px 0;
+  }
+}
+
+.runLabel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+.runIdle,
+.runBusy {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  transition:
+    opacity tokens.$duration-base,
+    translate 0.4s tokens.$ease-spring;
+}
+
+.runBusy {
+  opacity: 0;
+  translate: 0 14px;
+}
+
+.running {
+  .runIdle {
+    opacity: 0;
+    translate: 0 -14px;
+  }
+
+  .runBusy {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.runPercent {
+  min-width: 4ch;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .resultPlaceholder {

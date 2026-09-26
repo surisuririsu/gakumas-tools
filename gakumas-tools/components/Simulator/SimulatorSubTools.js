@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { FaChevronDown } from "react-icons/fa6";
+import Collapse from "@/components/Collapse";
 import CostRanges from "@/components/CostRanges";
 import DefaultCards from "@/components/DefaultCards";
 import c from "@/utils/classNames";
@@ -20,28 +21,35 @@ function SimulatorSubTools({ defaultCardIds }) {
         <button
           className={c(activeSubTool === "costRanges" && styles.expanded)}
           onClick={() => toggleSubTool("costRanges")}
+          aria-expanded={activeSubTool === "costRanges"}
         >
           {t("costRanges")}
-          <FaChevronDown />
+          <FaChevronDown aria-hidden="true" />
         </button>
 
         <button
           disabled={!defaultCardIds.length}
-          className={c(
-            !defaultCardIds.length && styles.disabled,
-            activeSubTool === "defaultCards" && styles.expanded
-          )}
+          className={c(activeSubTool === "defaultCards" && styles.expanded)}
           onClick={() => toggleSubTool("defaultCards")}
+          aria-expanded={activeSubTool === "defaultCards"}
         >
           {t("defaultCards")}
-          <FaChevronDown />
+          <FaChevronDown aria-hidden="true" />
         </button>
       </div>
 
-      {activeSubTool == "costRanges" && <CostRanges />}
-      {activeSubTool == "defaultCards" && defaultCardIds && (
+      <Collapse
+        open={activeSubTool == "costRanges"}
+        className={styles.subTool}
+      >
+        <CostRanges />
+      </Collapse>
+      <Collapse
+        open={activeSubTool == "defaultCards" && !!defaultCardIds.length}
+        className={styles.subTool}
+      >
         <DefaultCards skillCardIds={defaultCardIds} />
-      )}
+      </Collapse>
     </>
   );
 }

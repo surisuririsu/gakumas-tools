@@ -4,7 +4,7 @@ import IconButton from "@/components/IconButton";
 function ActionIconList({ items }) {
   return items.map((a) => (
     <span key={a.key} title={a.label}>
-      <IconButton icon={a.icon} onClick={a.onClick} />
+      <IconButton icon={a.icon} onClick={a.onClick} ariaLabel={a.label} />
     </span>
   ));
 }

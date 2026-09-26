@@ -1,6 +1,7 @@
 import { getLocale, getMessages } from "next-intl/server";
 import Table from "@/components/Table";
 import { localePath } from "@/utils/localeUrls";
+import GuideSection from "./GuideSection";
 import styles from "./CalculatorGuide.module.scss";
 
 export default async function CalculatorGuide({ tool, path, ranks }) {
@@ -41,40 +42,41 @@ export default async function CalculatorGuide({ tool, path, ranks }) {
       <h1 className={styles.title}>{guide.h1}</h1>
       <p className={styles.about}>{guide.intro}</p>
 
-      <details>
-        <summary>{common.howToTitle}</summary>
-        <p>{guide.howToBody}</p>
-      </details>
+      <div className={styles.sections}>
+        <GuideSection title={common.howToTitle}>
+          <p>{guide.howToBody}</p>
+        </GuideSection>
 
-      {ranks && (
-        <details>
-          <summary>{common.ranksTitle}</summary>
-          <Table
-            headers={[common.rankHeader, common.ratingHeader]}
-            rows={ranks.map(([rank, rating]) => [
-              rank,
-              rating.toLocaleString(),
-            ])}
-          />
-        </details>
-      )}
+        {ranks && (
+          <GuideSection title={common.ranksTitle}>
+            <Table
+              className={styles.rankTable}
+              headers={[common.rankHeader, common.ratingHeader]}
+              rows={ranks.map(([rank, rating]) => [
+                rank,
+                rating.toLocaleString(),
+              ])}
+            />
+          </GuideSection>
+        )}
 
-      <details>
-        <summary>{common.formulaTitle}</summary>
-        <p>{guide.formulaBody}</p>
-      </details>
+        <GuideSection title={common.formulaTitle}>
+          <p>{guide.formulaBody}</p>
+        </GuideSection>
 
-      {guide.faq?.length > 0 && (
-        <details>
-          <summary>{common.faqTitle}</summary>
-          {guide.faq.map(({ q, a }) => (
-            <div key={q} className={styles.faqItem}>
-              <p className={styles.question}>{q}</p>
-              <p>{a}</p>
-            </div>
-          ))}
-        </details>
-      )}
+        {guide.faq?.length > 0 && (
+          <GuideSection title={common.faqTitle}>
+            <dl className={styles.faq}>
+              {guide.faq.map(({ q, a }) => (
+                <div key={q} className={styles.faqItem}>
+                  <dt>{q}</dt>
+                  <dd>{a}</dd>
+                </div>
+              ))}
+            </dl>
+          </GuideSection>
+        )}
+      </div>
 
       <script
         type="application/ld+json"

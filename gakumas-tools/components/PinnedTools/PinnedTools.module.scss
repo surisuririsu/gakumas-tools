@@ -1,31 +1,56 @@
-@use "sass:color";
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .pinnedTools {
   display: flex;
 }
 
 .container {
-  z-index: 1;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   width: 350px;
-  margin: 8px 0 8px 8px;
-  box-shadow: 0 0 4px color.adjust(colors.$black, $alpha: -0.75);
-  border-radius: 8px;
+  margin: tokens.$space-2 0 tokens.$space-2 tokens.$space-2;
+  border-radius: tokens.$radius-xl;
+  background-color: tokens.$surface-bg;
+  box-shadow:
+    0 0 0 1px tokens.$surface-border,
+    0 8px 24px rgba(20, 20, 40, 0.08);
   overflow: hidden;
+  @include mixins.rise-in;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  color: colors.$gk-orange;
-  border-bottom: 1px solid colors.$gk-orange;
+  align-items: center;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2 tokens.$space-2 tokens.$space-2 tokens.$space-3;
+  background-color: tokens.$surface-panel;
+  box-shadow: 0 1px 0 tokens.$surface-border;
+}
+
+.icon {
+  @include mixins.icon-tile(28px);
+  border-radius: 8px;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @include mixins.heading;
 }
 
 .tool {
   flex: 1;
   overflow: auto;
   container-type: inline-size;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
 }

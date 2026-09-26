@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -27,6 +28,8 @@ import styles from "./layout.module.scss";
 import "../globals.scss";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const TOOL_SWITCH = { "nav-tool": "tool-switch", default: "none" };
 
 export const viewport = {
   width: "device-width",
@@ -73,7 +76,12 @@ export default async function RootLayout({ params, children }) {
                             <ModalContextProvider>
                               <div className={styles.tools}>
                                 <PinnedTools />
-                                <main>{children}</main>
+                                <ViewTransition
+                                  update={TOOL_SWITCH}
+                                  default="none"
+                                >
+                                  <main>{children}</main>
+                                </ViewTransition>
                               </div>
                               <Tooltips />
                             </ModalContextProvider>

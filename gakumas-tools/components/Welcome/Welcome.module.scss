@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .welcome {
@@ -48,11 +49,12 @@
   &::after {
     content: "";
     display: block;
-    width: 56px;
-    height: 3px;
+    width: 48px;
+    height: 5px;
     margin: tokens.$space-3 auto 0;
-    border-radius: 2px;
-    background: tokens.$gradient-brand;
+    border-radius: 3px;
+    background-color: tokens.$brand;
+    box-shadow: 0 2px 0 tokens.$brand-edge;
   }
 }
 
@@ -65,7 +67,7 @@
   font-weight: 800;
   letter-spacing: normal;
   color: transparent;
-  -webkit-text-stroke: 1.5px color.adjust(colors.$gk-orange, $alpha: -0.6);
+  -webkit-text-stroke: 1.5px rgba(20, 20, 40, 0.07);
   user-select: none;
   pointer-events: none;
   white-space: nowrap;
@@ -80,24 +82,14 @@
   gap: 0.2em;
 }
 
-// Container-level gradient + child opacity creates a stacking context that
-// makes the clipped text invisible; applying the gradient to each span
-// sidesteps that.
-.heroTitlePrimary,
-.heroTitleSecondary {
-  background: tokens.$gradient-brand;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .heroTitlePrimary {
+  color: tokens.$surface-ink;
   font-weight: 800;
 }
 
 .heroTitleSecondary {
-  font-weight: 400;
-  opacity: 0.6;
+  color: tokens.$accent-ink;
+  font-weight: 800;
 }
 
 .toolsGrid {
@@ -117,61 +109,22 @@
 }
 
 .toolCard {
-  position: relative;
   display: flex;
   align-items: center;
   gap: tokens.$space-3;
   padding: tokens.$space-4;
   width: 100%;
-  background: tokens.$surface-panel;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  overflow: hidden;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  @include mixins.card-interactive;
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: tokens.$gradient-brand;
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &:hover {
-    border-color: colors.$gk-orange-light;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-    transform: translateY(-1px);
-
-    &::before {
-      transform: scaleX(1);
-    }
-
-    .toolIcon {
-      transform: scale(1.05);
+  @media (hover: hover) {
+    &:hover .toolIcon {
+      @include mixins.icon-tile-wiggle;
     }
   }
 }
 
 .toolIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: tokens.$radius-sm;
-  background: tokens.$gradient-brand;
-  color: colors.$white;
-  font-size: tokens.$text-lg;
-  transition: transform 0.2s ease;
+  @include mixins.icon-tile;
 }
 
 .toolInfo {
@@ -181,9 +134,7 @@
 }
 
 .toolTitle {
-  font-weight: 600;
-  color: tokens.$surface-ink;
-  font-size: tokens.$text-base;
+  @include mixins.heading;
 }
 
 .toolDescription {

@@ -8,6 +8,7 @@ export default function Tooltips() {
     <>
       <Tooltip id="panel-info-tooltip" className={styles.tooltip} />
       <Tooltip id="indications-tooltip" className={styles.tooltip} />
+      <Tooltip id="nav-tooltip" className={styles.tooltip} place="bottom" />
     </>
   );
 }

@@ -1,45 +1,113 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .entities {
   flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, 68px);
   grid-auto-rows: 68px;
-  gap: 8px;
+  gap: tokens.$space-2;
   justify-content: space-around;
-  padding: 8px;
+  padding: tokens.$space-3 10px;
   overflow-y: scroll;
 }
 
+.cell {
+  position: relative;
+  border-radius: tokens.$radius-icon;
+  transition:
+    transform tokens.$duration-slide tokens.$ease-spring,
+    box-shadow tokens.$duration-base tokens.$ease-out;
+}
+
+.selected {
+  z-index: tokens.$z-raised;
+  transform: translateY(-4px) scale(1.07);
+  @include mixins.selected-ring;
+}
+
+.noMatches {
+  grid-column: 1 / -1;
+  align-self: center;
+  padding: tokens.$space-4;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  text-align: center;
+}
+
 .filter {
+  flex-shrink: 0;
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  margin: 0 4px;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 64px;
+  padding: tokens.$space-2 10px;
 }
 
-.defaultFilters {
+.chip {
+  margin-top: 9px;
+  @include mixins.chip;
+}
+
+.chipOn {
+  @include mixins.chip-selected;
+}
+
+.chipIcon {
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.popA {
+  animation: chipPopA tokens.$duration-spring tokens.$ease-pop;
+
+  .chipIcon {
+    animation: iconPopA tokens.$duration-spring tokens.$ease-pop;
+  }
+}
+
+.popB {
+  animation: chipPopB tokens.$duration-spring tokens.$ease-pop;
+
+  .chipIcon {
+    animation: iconPopB tokens.$duration-spring tokens.$ease-pop;
+  }
+}
+
+.planIdol {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
-  flex: 1;
 }
 
-.customFilters {
-  display: flex;
-  gap: 4px;
+.planIdolIn {
+  @include mixins.pop-in;
 }
 
-.toggle {
-  gap: 4px;
-  border: 2px solid colors.$gray-light;
-  border-radius: 22px;
-  padding: 8px;
-  color: colors.$gray;
-  font-weight: 600;
-  line-height: 24px;
+@keyframes chipPopA {
+  from {
+    scale: 0.9;
+  }
 }
 
-.enabled {
-  border-color: colors.$gk-red-orange-dark;
-  background-color: colors.$gk-orange-extra-light;
-  color: colors.$gk-red-orange-dark;
+@keyframes chipPopB {
+  from {
+    scale: 0.9;
+  }
+}
+
+@keyframes iconPopA {
+  from {
+    scale: 0.3;
+    rotate: -30deg;
+  }
+}
+
+@keyframes iconPopB {
+  from {
+    scale: 0.3;
+    rotate: -30deg;
+  }
 }

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import {
   Chart as ChartJS,
@@ -14,6 +14,7 @@ import {
   BoxPlotController,
   BoxAndWiskers,
 } from "@sgratzl/chartjs-chart-boxplot";
+import { CHART_COLORS } from "@/components/Charts/theme";
 
 ChartJS.register(
   CategoryScale,
@@ -28,48 +29,58 @@ ChartJS.register(
 
 function BoxPlot({ labels, data, showLegend = true, showXAxis = true }) {
   const t = useTranslations("BoxPlot");
-  const options = {
-    scales: {
-      x: {
-        display: showXAxis,
+  const options = useMemo(
+    () => ({
+      scales: {
+        x: {
+          display: showXAxis,
+        },
       },
-    },
-    plugins: {
-      legend: {
-        display: showLegend,
-      },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            const { max, mean, median, min, q1, q3 } = context.parsed;
-            return [
-              `${t("max")}: ${Math.round(max)}`,
-              `${t("q3")}: ${Math.round(q3)}`,
-              `${t("mean")}: ${Math.round(mean)}`,
-              `${t("median")}: ${Math.round(median)}`,
-              `${t("q1")}: ${Math.round(q1)}`,
-              `${t("min")}: ${Math.round(min)}`,
-              "(k=3)",
-            ];
+      plugins: {
+        legend: {
+          display: showLegend,
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const { max, mean, median, min, q1, q3 } = context.parsed;
+              return [
+                `${t("max")}: ${Math.round(max)}`,
+                `${t("q3")}: ${Math.round(q3)}`,
+                `${t("mean")}: ${Math.round(mean)}`,
+                `${t("median")}: ${Math.round(median)}`,
+                `${t("q1")}: ${Math.round(q1)}`,
+                `${t("min")}: ${Math.round(min)}`,
+                "(k=3)",
+              ];
+            },
           },
         },
       },
-    },
-  };
+    }),
+    [t, showLegend, showXAxis]
+  );
 
-  const formattedData = {
-    labels,
-    datasets: data.map((d) => ({
-      label: d.label,
-      data: d.data,
-      coef: 3,
-      backgroundColor: "rgba(255, 118, 0, 0.5)",
-      borderColor: "rgb(255, 118, 0)",
-      outlierBorderColor: "rgb(255, 118, 0)",
-      meanRadius: 0,
-      maxBarThickness: 60,
-    })),
-  };
+  const formattedData = useMemo(
+    () => ({
+      labels,
+      datasets: data.map((d) => ({
+        label: d.label,
+        data: d.data,
+        coef: 3,
+        backgroundColor: CHART_COLORS.boxFill,
+        borderColor: CHART_COLORS.bar,
+        borderWidth: 2,
+        medianColor: CHART_COLORS.highlight,
+        outlierBackgroundColor: CHART_COLORS.boxFill,
+        outlierBorderColor: CHART_COLORS.whisker,
+        outlierRadius: 2.5,
+        meanRadius: 0,
+        maxBarThickness: 60,
+      })),
+    }),
+    [labels, data]
+  );
 
   return <Chart type="boxplot" data={formattedData} options={options} />;
 }
