@@ -251,6 +251,11 @@
 
   input {
     flex: 1;
+    min-width: 0;
+  }
+
+  button {
+    flex-shrink: 0;
   }
 }
 
@@ -261,13 +266,9 @@
 }
 
 .schedule {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: tokens.$space-3;
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .footer {
