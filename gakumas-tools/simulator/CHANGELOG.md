@@ -1,10 +1,6 @@
 # Contest Simulator Changelog
 
 All notable changes to the contest simulator will be documented in this file.
-Dates are based on Eastern Time Zone.
-
-
-
 
 ## 2026-09-26
 
@@ -13,10 +9,6 @@ Dates are based on Eastern Time Zone.
 ## 2026-09-25
 
 - Redesign the simulator
-- Show simulation progress and allow cancelling a run
-- Recover from failed simulation runs
-- Swap loadout cards by dragging on touch screens and in the pinned simulator
-- Open skill card and p-item pickers faster
 - Add missing skill card, p-item and p-idol images
 
 ## 2026-09-21
