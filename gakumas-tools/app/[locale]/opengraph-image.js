@@ -6,4 +6,4 @@ export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 export const alt = "Gakumas Tools";
 
-export default ogImageRoute("home", "brand");
+export default ogImageRoute();
