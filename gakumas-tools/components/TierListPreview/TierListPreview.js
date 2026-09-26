@@ -1,10 +1,13 @@
 import { Footer, Page, Raised } from "@/components/OgImage/parts";
-import { COLORS, SITE_HOST } from "@/components/OgImage/theme";
+import {
+  COLORS,
+  RANK_BACKGROUNDS,
+  SITE_HOST,
+} from "@/components/OgImage/theme";
 import styles, {
   FOOTER_SIZE,
   ITEM_EDGE,
   ITEM_SIZE,
-  RANK_BACKGROUNDS,
   rowHeight,
   tileCount,
 } from "./TierListPreview.styles";

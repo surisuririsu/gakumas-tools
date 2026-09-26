@@ -7,7 +7,6 @@ import {
   SCENARIO_COLORS,
   WATERMARK_FONT_FAMILY,
 } from "@/components/OgImage/theme";
-import { TARGET_RATING_BY_RANK } from "@/utils/produceRank";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
@@ -79,40 +78,29 @@ export async function loadFonts(locale) {
   ];
 }
 
-export async function rankImageSrc(rank) {
+async function rankImageSrc(rank) {
   const png = await readAsset("public/ranks", `${rank}.png`);
   return `data:image/png;base64,${png.toString("base64")}`;
 }
 
-const SAMPLE_RATING_BY_SCENARIO = {
-  hajime: 18240,
-  nia: 21480,
-  hif: 26980,
-};
-
-function sampleResult(rating) {
-  const ranks = Object.entries(TARGET_RATING_BY_RANK);
-  const index = ranks.findIndex(([, threshold]) => rating >= threshold);
-  const [nextRank, nextThreshold] = ranks[index - 1];
-  return {
-    rating,
-    rank: ranks[index][0],
-    nextRank,
-    toNext: nextThreshold - rating,
-  };
-}
+const BADGE_RANKS = ["S5", "S4+", "S4", "SSS+"];
 
 async function scenarioCard(locale, scenario) {
-  const messages = (await import(`@/messages/${locale}.json`)).default;
-  const sample = sampleResult(SAMPLE_RATING_BY_SCENARIO[scenario]);
+  const [messages, badges] = await Promise.all([
+    import(`@/messages/${locale}.json`).then((module) => module.default),
+    Promise.all(
+      BADGE_RANKS.map(async (rank) => ({
+        rank,
+        src: await rankImageSrc(rank),
+      })),
+    ),
+  ]);
   return (
     <ScenarioCard
       scenarioName={messages.Calculator.scenarios[scenario]}
       title={messages.tools.produceRankCalculator.title}
-      resultLabel={messages.Calculator.produceRank}
       colors={SCENARIO_COLORS[scenario]}
-      sample={sample}
-      rankSrc={await rankImageSrc(sample.rank)}
+      badges={badges}
     />
   );
 }

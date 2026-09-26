@@ -32,6 +32,29 @@ export const SCENARIO_COLORS = {
   hif: { color: "#4a6db8", edge: "#354f86" },
 };
 
+const PRISM = `linear-gradient(135deg, ${COLORS.danceTint}, ${COLORS.vocalTint})`;
+
+export const RANK_BACKGROUNDS = {
+  S5: { backgroundImage: PRISM },
+  "S4+": { backgroundImage: PRISM },
+  S4: { backgroundImage: PRISM },
+  "SSS+": { backgroundColor: COLORS.danceTint },
+  SSS: { backgroundColor: COLORS.danceTint },
+  "SS+": { backgroundColor: COLORS.danceTint },
+  SS: { backgroundColor: COLORS.danceTint },
+  "S+": { backgroundColor: COLORS.visualTint },
+  S: { backgroundColor: COLORS.visualTint },
+  "A+": { backgroundColor: COLORS.vocalTint },
+  A: { backgroundColor: COLORS.vocalTint },
+  "B+": { backgroundColor: COLORS.accentTint },
+  B: { backgroundColor: COLORS.accentTint },
+  "C+": { backgroundColor: COLORS.staminaTint },
+  C: { backgroundColor: COLORS.staminaTint },
+  D: { backgroundColor: COLORS.danceTint },
+  E: { backgroundColor: COLORS.fillMuted },
+  F: { backgroundColor: COLORS.fillMuted },
+};
+
 export const CARD_SHADOW = `0 2px 0 ${COLORS.border}, 0 6px 16px rgba(20, 20, 40, 0.05)`;
 
 export const FONT_FAMILY = "Inter, Noto Sans";

@@ -1,6 +1,5 @@
-import { FaArrowRight } from "react-icons/fa6";
-import { Bar, Footer, IconGlyph, Page, Raised, Watermark } from "./parts";
-import { COLORS, SITE_HOST } from "./theme";
+import { Bar, Footer, Page, Raised, Watermark } from "./parts";
+import { COLORS, RANK_BACKGROUNDS, SITE_HOST } from "./theme";
 
 const TITLE_WIDTH = 500;
 const TITLE_SIZE = 70;
@@ -49,88 +48,41 @@ function ScenarioChip({ name, color, edge }) {
   );
 }
 
-function SampleResult({ label, sample, rankSrc }) {
+function RankBadges({ badges }) {
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        gap: 13,
-        padding: 23,
-        borderRadius: 26,
+        flexWrap: "wrap",
+        gap: 14,
+        width: 398,
+        padding: 20,
+        borderRadius: 28,
         backgroundColor: COLORS.panel,
-        boxShadow: `0 4px 0 ${COLORS.border}, 0 17px 38px rgba(20, 20, 40, 0.08)`,
+        boxShadow: `0 4px 0 ${COLORS.border}, 0 18px 40px rgba(20, 20, 40, 0.08)`,
       }}
     >
-      <div style={{ display: "flex", fontSize: 26, fontWeight: 800 }}>
-        {label}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 24,
-          padding: "21px 32px",
-          borderRadius: 21,
-          backgroundColor: COLORS.accentTint,
-        }}
-      >
-        <img src={rankSrc} width={105} height={105} />
+      {badges.map(({ rank, src }) => (
         <div
+          key={rank}
           style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            gap: 6,
+            width: 172,
+            height: 172,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 26,
+            ...RANK_BACKGROUNDS[rank],
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              color: COLORS.accentInk,
-              fontSize: 64,
-              fontWeight: 800,
-              letterSpacing: -1,
-              lineHeight: 1.05,
-            }}
-          >
-            {sample.rating.toLocaleString("en")}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "4px 15px",
-              borderRadius: 999,
-              backgroundColor: COLORS.panel,
-              color: COLORS.accentInk,
-              fontSize: 21,
-              fontWeight: 700,
-            }}
-          >
-            {sample.toNext.toLocaleString("en")}
-            <IconGlyph
-              icon={<FaArrowRight />}
-              size={16}
-              color={COLORS.accentInk}
-            />
-            {sample.nextRank}
-          </div>
+          <img src={src} width={128} height={128} />
         </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-export default function ScenarioCard({
-  scenarioName,
-  title,
-  resultLabel,
-  colors,
-  sample,
-  rankSrc,
-}) {
+export default function ScenarioCard({ scenarioName, title, colors, badges }) {
   const lines = titleLines(title);
   return (
     <Page>
@@ -188,8 +140,16 @@ export default function ScenarioCard({
           }}
         />
       </div>
-      <div style={{ display: "flex", alignItems: "center", paddingLeft: 30 }}>
-        <SampleResult label={resultLabel} sample={sample} rankSrc={rankSrc} />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingRight: 40,
+        }}
+      >
+        <RankBadges badges={badges} />
       </div>
     </Page>
   );

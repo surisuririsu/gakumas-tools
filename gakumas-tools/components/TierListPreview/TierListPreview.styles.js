@@ -52,29 +52,6 @@ export function previewHeight(list) {
   );
 }
 
-const PRISM = `linear-gradient(135deg, ${COLORS.danceTint}, ${COLORS.vocalTint})`;
-
-export const RANK_BACKGROUNDS = {
-  S5: { backgroundImage: PRISM },
-  "S4+": { backgroundImage: PRISM },
-  S4: { backgroundImage: PRISM },
-  "SSS+": { backgroundColor: COLORS.danceTint },
-  SSS: { backgroundColor: COLORS.danceTint },
-  "SS+": { backgroundColor: COLORS.danceTint },
-  SS: { backgroundColor: COLORS.danceTint },
-  "S+": { backgroundColor: COLORS.visualTint },
-  S: { backgroundColor: COLORS.visualTint },
-  "A+": { backgroundColor: COLORS.vocalTint },
-  A: { backgroundColor: COLORS.vocalTint },
-  "B+": { backgroundColor: COLORS.accentTint },
-  B: { backgroundColor: COLORS.accentTint },
-  "C+": { backgroundColor: COLORS.staminaTint },
-  C: { backgroundColor: COLORS.staminaTint },
-  D: { backgroundColor: COLORS.danceTint },
-  E: { backgroundColor: COLORS.fillMuted },
-  F: { backgroundColor: COLORS.fillMuted },
-};
-
 // resvg re-rasterizes a clipped group for every filtered child, so nothing
 // here clips with `overflow: hidden`, and the tiles' hard edges are layers
 // (see Raised) rather than box-shadows.
