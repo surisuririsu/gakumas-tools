@@ -3,7 +3,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
-import { OSHI_PROPS } from "@/components/Oshi/config";
 import ToolHeader from "@/components/ToolHeader";
 import c from "@/utils/classNames";
 import { TOOLS } from "@/utils/tools";
@@ -18,7 +17,7 @@ const INDICATOR_FRACTION = 0.6;
 // Only loaded when a banner is configured.
 const Oshi = dynamic(() => import("@/components/Oshi"));
 
-function Navbar() {
+function Navbar({ oshi }) {
   const t = useTranslations("tools");
   const pathname = usePathname();
   const [pendingPath, setPendingPath] = useState(null);
@@ -62,7 +61,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className={c(styles.navbar, OSHI_PROPS && styles.hasOshi)}>
+      <nav className={c(styles.navbar, oshi && styles.hasOshi)}>
         <Link href="/" className={styles.brand}>
           <span className={styles.brandPrimary}>Gakumas</span>
           <span className={styles.brandSecondary}>Tools</span>
@@ -99,7 +98,7 @@ function Navbar() {
           <NavbarMenu />
         </div>
       </nav>
-      {OSHI_PROPS && <Oshi {...OSHI_PROPS} />}
+      {oshi && <Oshi {...oshi} />}
     </>
   );
 }
