@@ -43,6 +43,12 @@ async function resolveWorkspacePackage(specifier) {
 }
 
 export async function resolve(specifier, context, nextResolve) {
+  if (specifier.startsWith("@/")) {
+    specifier = pathToFileURL(
+      path.join(repoRoot, "gakumas-tools", specifier.slice(2)),
+    ).href;
+  }
+
   const workspacePackage = await resolveWorkspacePackage(specifier);
   if (workspacePackage) return workspacePackage;
 

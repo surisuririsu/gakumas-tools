@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "backup-db": "scripts/create_db_backup.sh"
+    "backup-db": "scripts/create_db_backup.sh",
+    "oshi": "node --env-file=.env.local --no-warnings --loader ../scripts/extensionless-loader.mjs scripts/oshi.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
