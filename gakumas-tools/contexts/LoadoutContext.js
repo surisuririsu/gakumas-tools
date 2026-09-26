@@ -153,9 +153,16 @@ export function LoadoutContextProvider({ children }) {
     }
   }, [pItemIds]);
 
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+  const memoryParamsRef = useRef(memoryParams);
+  memoryParamsRef.current = memoryParams;
+  const paramsRef = useRef(params);
+  paramsRef.current = params;
+
   const clear = useCallback(() => {
     setMemoryParams([null, null]);
-    setParams([null, null, null, null]);
+    setParams(getDefaultParams(stageRef.current));
     setPItemIds([0, 0, 0, 0]);
     setSkillCardIdGroups([
       [0, 0, 0, 0, 0, 0],
@@ -284,13 +291,6 @@ export function LoadoutContextProvider({ children }) {
       return updatedCustomizations;
     });
   }, []);
-
-  const stageRef = useRef(stage);
-  stageRef.current = stage;
-  const memoryParamsRef = useRef(memoryParams);
-  memoryParamsRef.current = memoryParams;
-  const paramsRef = useRef(params);
-  paramsRef.current = params;
 
   const selectStage = useCallback((stageId, customStage) => {
     const hasDefaultParams = getDefaultParams(stageRef.current).every(
