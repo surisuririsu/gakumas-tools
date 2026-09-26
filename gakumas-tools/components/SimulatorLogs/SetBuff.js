@@ -6,13 +6,19 @@ function SetBuff({ label, amount, turns, flat }) {
   const t = useTranslations("stage");
 
   return (
-    <div className={styles.tile}>
+    <div className={styles.line}>
       {label}{" "}
-      <span className={styles.blue}>
+      <span className={styles.value}>
         {amount >= 0 ? "+" : ""}
         {flat ? amount : `${amount * 100}%`}
       </span>{" "}
-      {turns ? `(${t("numTurns", { num: turns })})` : ""}
+      {turns ? (
+        <span className={styles.turns}>
+          ({t("numTurns", { num: turns })})
+        </span>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

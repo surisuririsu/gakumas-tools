@@ -1,43 +1,38 @@
 import { memo } from "react";
+import ButtonGroup from "@/components/ButtonGroup";
 import Image from "@/components/Image";
-import c from "@/utils/classNames";
 import styles from "./PIdolCollection.module.scss";
+import { rarityIconWidth } from "./utils";
 
+const ALL = "all";
 const RARITIES = ["R", "SR", "SSR"];
+
+const OPTIONS = [
+  {
+    value: ALL,
+    label: <Image src="/all.png" alt="All" width={22} height={22} />,
+  },
+  ...RARITIES.map((rarity) => ({
+    value: rarity,
+    label: (
+      <Image
+        src={`/rarities/${rarity}.png`}
+        alt={rarity}
+        width={rarityIconWidth(rarity, 22)}
+        height={22}
+      />
+    ),
+  })),
+];
 
 function RaritySelect({ selected, onChange }) {
   return (
-    <div className={styles.raritySelect}>
-      <button
-        type="button"
-        className={c(
-          styles.rarityOption,
-          styles.rarityAll,
-          selected === null && styles.raritySelected,
-        )}
-        onClick={() => onChange(null)}
-      >
-        <Image src="/all.png" alt="All" width={24} height={24} />
-      </button>
-      {RARITIES.map((rarity) => (
-        <button
-          key={rarity}
-          type="button"
-          className={c(
-            styles.rarityOption,
-            selected === rarity && styles.raritySelected,
-          )}
-          onClick={() => onChange(rarity)}
-        >
-          <Image
-            src={`/rarities/${rarity}.png`}
-            alt={rarity}
-            width={60}
-            height={20}
-          />
-        </button>
-      ))}
-    </div>
+    <ButtonGroup
+      className={styles.raritySelect}
+      options={OPTIONS}
+      selected={selected ?? ALL}
+      onChange={(value) => onChange(value == ALL ? null : value)}
+    />
   );
 }
 

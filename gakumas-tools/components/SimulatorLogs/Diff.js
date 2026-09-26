@@ -1,20 +1,19 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
 import { ALL_FIELDS, DEBUFF_FIELDS } from "gakumas-engine";
+import c from "@/utils/classNames";
 import styles from "./SimulatorLogs.module.scss";
 
 function Diff({ field, next, prev }) {
   const t = useTranslations("stage");
 
-  let diffDir = "positive";
-  if (!isNaN(next) && DEBUFF_FIELDS.includes(field) == next > prev) {
-    diffDir = "negative";
-  }
+  const negative =
+    !isNaN(next) && DEBUFF_FIELDS.includes(field) == next > prev;
 
   return (
-    <div className={styles.tile}>
+    <div className={styles.line}>
       {t(ALL_FIELDS[field])}{" "}
-      <span className={styles[diffDir]}>
+      <span className={c(styles.value, negative && styles.negative)}>
         {isNaN(next) ? (
           <>
             {t(prev)} → {t(next)}

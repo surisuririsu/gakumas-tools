@@ -2,7 +2,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
-  FaCheck,
+  FaCircleCheck,
   FaDownload,
   FaFileCsv,
   FaFileImage,
@@ -11,12 +11,11 @@ import {
   FaVideo,
 } from "react-icons/fa6";
 import { createWorker } from "tesseract.js";
-import c from "@/utils/classNames";
 import Button from "@/components/Button";
 import { BoxPlot, DistributionPlot } from "@/components/Charts";
+import Collapse from "@/components/Collapse";
 import Image from "@/components/Image";
 import ProgressBar from "@/components/ProgressBar";
-import Table from "@/components/Table";
 import { downloadBlob } from "@/utils/download";
 import { DEBUG } from "@/utils/imageProcessing/common";
 import {
@@ -27,6 +26,8 @@ import { streamCandidateFrames } from "@/utils/imageProcessing/videoFrameExtract
 import { bucketScores } from "@/utils/simulator";
 import { runBatched } from "@/utils/workerPool";
 import KofiAd from "../KofiAd";
+import FileDropzone from "./FileDropzone";
+import ScoreTiles from "./ScoreTiles";
 import RehearsalTable from "./RehearsalTable";
 import {
   bucketFiles,
@@ -47,14 +48,12 @@ const BRIGHTNESS_THRESHOLD = 180;
 
 function Rehearsal() {
   const t = useTranslations("Rehearsal");
-  const tRes = useTranslations("SimulatorResult");
 
   const [total, setTotal] = useState(null);
   const [progress, setProgress] = useState(null);
   const [processingStatus, setProcessingStatus] = useState("");
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [dragOver, setDragOver] = useState(false);
   const workersRef = useRef([]);
 
   // Each Tesseract worker fetches its script, core wasm and traineddata, so
@@ -242,6 +241,13 @@ function Rehearsal() {
     return { scores, bucketedScores, bucketSize, ...stats };
   }, [selected, boxPlotData]);
 
+  const [shownData, setShownData] = useState(null);
+  const [statsBeat, setStatsBeat] = useState(0);
+  if (selectedData && selectedData !== shownData) {
+    setShownData(selectedData);
+    setStatsBeat(statsBeat + 1);
+  }
+
   const handleChartClick = useCallback(
     (x) => setSelected((cur) => (x === cur ? null : x)),
     [],
@@ -293,24 +299,6 @@ function Rehearsal() {
     [],
   );
 
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault();
-    setDragOver(true);
-  }, []);
-  const handleDragLeave = useCallback((e) => {
-    // Ignore dragleave events fired when moving over child elements.
-    if (e.currentTarget.contains(e.relatedTarget)) return;
-    setDragOver(false);
-  }, []);
-  const handleDrop = useCallback(
-    (e) => {
-      e.preventDefault();
-      setDragOver(false);
-      if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
-    },
-    [handleFiles],
-  );
-
   // Allow pasting screenshots directly from the clipboard.
   useEffect(() => {
     const onPaste = (e) => {
@@ -322,100 +310,85 @@ function Rehearsal() {
 
   return (
     <div className={styles.rehearsal}>
-      <label
-        htmlFor="input"
-        className={c(styles.uploadCard, dragOver && styles.dragOver)}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <div className={styles.help}>
-          <Image
-            src="/rehearsal_parser_reference.png"
-            width={120}
-            height={120}
-            alt=""
-          />
-          <p>
-            {t("addScreenshots")}
-            <br />
-            <br />
-            {t("accuracyNotGuaranteed")}
-          </p>
-        </div>
-        <div className={styles.uploadPrompt}>
-          <span className={styles.uploadIcons}>
-            <FaFileImage />
-            <FaVideo />
-            <FaFileCsv />
-          </span>
-          <span>{t("dropFiles")}</span>
-        </div>
-      </label>
-      <input
-        className={styles.files}
-        type="file"
-        id="input"
-        multiple
-        accept="image/*,video/*,.csv,text/csv"
-        onChange={(e) => handleFiles(e.target.files)}
-        style={{ display: "none" }}
-      />
+      <div className={styles.help}>
+        <Image
+          src="/rehearsal_parser_reference.png"
+          width={120}
+          height={120}
+          alt=""
+        />
+        <p>
+          {t("addScreenshots")}
+          <br />
+          <br />
+          {t("accuracyNotGuaranteed")}
+        </p>
+      </div>
 
-      {progress != null && (
+      <FileDropzone
+        title={t("selectFiles")}
+        hint={t("dropFiles")}
+        accept="image/*,video/*,.csv,text/csv"
+        multiple
+        onFiles={handleFiles}
+      >
+        <span className={styles.formats} aria-hidden="true">
+          <FaFileImage />
+          <FaVideo />
+          <FaFileCsv />
+        </span>
+      </FileDropzone>
+
+      <Collapse open={progress != null}>
         <div className={styles.progress}>
-          <div className={styles.progressLabel}>
+          <div className={styles.progressLabel} aria-live="polite">
             <span>
               {processingStatus ||
-                t("progress", { progress, total: total ?? "?" })}
+                t("progress", { progress: progress ?? 0, total: total ?? "?" })}
             </span>
-            {progress === total && <FaCheck />}
+            {progress != null && progress === total && (
+              <FaCircleCheck className={styles.done} />
+            )}
           </div>
-          {total > 0 && <ProgressBar value={progress} max={total} />}
+          <ProgressBar value={progress ?? 0} max={total ?? 0} />
         </div>
-      )}
+      </Collapse>
 
       <div className={styles.toolbar}>
-        <Button style="default" size="sm" onClick={download}>
-          <FaDownload /> CSV
-        </Button>
         {flaggedCount > 0 && (
           <span className={styles.flaggedNotice}>
-            <FaTriangleExclamation />{" "}
+            <FaTriangleExclamation />
             {t("needsChecking", { count: flaggedCount })}
           </span>
         )}
+        <Button
+          style="default"
+          size="sm"
+          onClick={download}
+          disabled={!data.length}
+        >
+          <FaDownload /> CSV
+        </Button>
       </div>
 
       <BoxPlot labels={boxPlotLabels} data={boxPlotData} showLegend={false} />
 
-      {selectedData && (
-        <div className={styles.statsWrapper}>
-          <Table
-            className={styles.stats}
-            headers={[
-              tRes("min"),
-              tRes("average"),
-              tRes("median"),
-              tRes("max"),
-            ]}
-            rows={[
-              [
-                selectedData.min,
-                selectedData.average,
-                selectedData.median,
-                selectedData.max,
-              ],
-            ]}
-          />
-          <DistributionPlot
-            label={`${t("score")} (n=${selectedData.scores.length})`}
-            data={selectedData.bucketedScores}
-            bucketSize={selectedData.bucketSize}
-            color="rgba(68, 187, 255, 0.75)"
-          />
-        </div>
-      )}
+      <Collapse open={!!selectedData}>
+        {shownData && (
+          <div className={styles.statsWrapper}>
+            <ScoreTiles key={statsBeat} data={shownData} />
+            <div className={styles.distribution}>
+              <DistributionPlot
+                label={`${t("score")} (n=${shownData.scores.length})`}
+                data={shownData.bucketedScores}
+                bucketSize={shownData.bucketSize}
+                highlight={shownData.median}
+              />
+            </div>
+          </div>
+        )}
+      </Collapse>
+
       <div className={styles.tableWrapper}>
         <RehearsalTable
           data={data}
@@ -425,26 +398,27 @@ function Rehearsal() {
           onCellEdit={handleCellEdit}
           onVerifyRow={handleVerifyRow}
         />
-        <Button
-          className={styles.addButton}
-          fill
-          onClick={() =>
-            setData((d) => [
-              ...d,
-              {
-                scores: [
-                  [0, 0, 0],
-                  [0, 0, 0],
-                  [0, 0, 0],
-                ],
-                flags: ["ok", "ok", "ok"],
-              },
-            ])
-          }
-        >
-          <FaPlus />
-        </Button>
       </div>
+      <button
+        type="button"
+        className={styles.addButton}
+        aria-label={t("addRow")}
+        onClick={() =>
+          setData((d) => [
+            ...d,
+            {
+              scores: [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+              ],
+              flags: ["ok", "ok", "ok"],
+            },
+          ])
+        }
+      >
+        <FaPlus aria-hidden="true" />
+      </button>
 
       <div className={styles.ad}>
         <KofiAd />

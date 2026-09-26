@@ -23,7 +23,7 @@ function AxisRow({ ticks, xMin, xMax }) {
               className={styles.axisLabel}
               style={{ left: `${x}%` }}
             >
-              {compact.format(v)}
+              {compact.format(v || 0)}
             </span>
           );
         })}

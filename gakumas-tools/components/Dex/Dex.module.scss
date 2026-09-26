@@ -12,5 +12,9 @@
 }
 
 .tabs {
+  flex-shrink: 0;
   padding: tokens.$space-1;
+  border-radius: 15px;
+  background-color: tokens.$surface-panel;
+  box-shadow: tokens.$shadow-card;
 }

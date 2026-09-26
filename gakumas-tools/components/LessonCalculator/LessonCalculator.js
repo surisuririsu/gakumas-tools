@@ -3,11 +3,15 @@ import React, { memo, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import DifficultyPicker from "@/components/DifficultyPicker";
 import Input from "@/components/Input";
+import Panel from "@/components/Panel";
 import ParametersInput from "@/components/ParametersInput";
+import c from "@/utils/classNames";
 import { LESSONS_BY_DIFFICULTY } from "@/utils/lessons";
 import styles from "./LessonCalculator.module.scss";
 
 const DIFFICULTIES = ["regular", "pro", "master"];
+const PARAMS = ["vo", "da", "vi"];
+const PARAM_LABELS = ["Vo", "Da", "Vi"];
 
 function LessonCalculator() {
   const t = useTranslations("LessonCalculator");
@@ -23,89 +27,104 @@ function LessonCalculator() {
   const lessons = LESSONS_BY_DIFFICULTY[difficulty];
 
   return (
-    <>
-      <label>{t("difficulty")}</label>
-      <DifficultyPicker
-        difficulties={DIFFICULTIES}
-        selected={difficulty}
-        onChange={setDifficulty}
-      />
+    <div className={styles.stack}>
+      <Panel label={t("difficulty")}>
+        <DifficultyPicker
+          difficulties={DIFFICULTIES}
+          selected={difficulty}
+          onChange={setDifficulty}
+        />
+      </Panel>
 
-      <label>{t("lessonBonus")}</label>
-      <ParametersInput
-        parameters={paramRates}
-        onChange={setParamRates}
-        round={false}
-      />
+      <Panel className={styles.form}>
+        <label>{t("lessonBonus")}</label>
+        <ParametersInput
+          parameters={paramRates}
+          onChange={setParamRates}
+          round={false}
+        />
 
-      {difficulty == "master" && (
-        <>
-          <label>{t("limitIncrease")}</label>
-          <Input
-            type="number"
-            value={limitIncrease}
-            onChange={setLimitIncrease}
-            step={5}
-            min={0}
-          />
-        </>
-      )}
+        {difficulty == "master" && (
+          <>
+            <label>{t("limitIncrease")}</label>
+            <Input
+              type="number"
+              value={limitIncrease}
+              onChange={setLimitIncrease}
+              step={5}
+              min={0}
+            />
+          </>
+        )}
+      </Panel>
 
-      <label>{t("lessons")}</label>
-      <table className={styles.results}>
-        <thead>
-          <tr>
-            <th style={{ width: "7%" }}>{t("week")}</th>
-            <th style={{ width: "13%" }}>{t("type")}</th>
-            <th style={{ width: "10%" }}>{t("score")}</th>
-            <th colSpan={3} style={{ width: "20%" }}>
-              Vo
-            </th>
-            <th colSpan={3} style={{ width: "20%" }}>
-              Da
-            </th>
-            <th colSpan={3} style={{ width: "20%" }}>
-              Vi
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {lessons.map(({ week, lessonTypes }) => (
-            <React.Fragment key={week}>
-              {lessonTypes.map(({ type, score, main, sub }, i) => (
-                <tr key={type}>
-                  {i == 0 && <td rowSpan={lessonTypes.length}>{week}</td>}
-                  <td>{t(type)}</td>
-                  <td className={styles.perfect}>
-                    {score + (type == "oikomi" ? 0 : limitIncrease)}
-                  </td>
-                  {["vo", "da", "vi"].map((lessonParamType, i) => (
-                    <React.Fragment key={lessonParamType}>
-                      {type == "oikomi" ? (
-                        ["vo", "da", "vi"].map((paramType, j) => (
-                          <td key={paramType}>
+      <Panel label={t("lessons")}>
+        <table className={styles.results}>
+          <thead>
+            <tr>
+              <th style={{ width: "11%" }}>{t("week")}</th>
+              <th style={{ width: "13%" }}>{t("type")}</th>
+              <th style={{ width: "11%" }}>{t("score")}</th>
+              {PARAMS.map((param, i) => (
+                <th key={param} colSpan={3} className={styles[param]}>
+                  {PARAM_LABELS[i]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {lessons.map(({ week, lessonTypes }) => (
+              <React.Fragment key={week}>
+                {lessonTypes.map(({ type, score, main, sub }, i) => (
+                  <tr key={type} className={i == 0 ? styles.weekStart : null}>
+                    {i == 0 && (
+                      <td rowSpan={lessonTypes.length} className={styles.week}>
+                        {week}
+                      </td>
+                    )}
+                    <td className={styles.type}>{t(type)}</td>
+                    <td className={styles.perfect}>
+                      {score + (type == "oikomi" ? 0 : limitIncrease)}
+                    </td>
+                    {PARAMS.map((lessonParam, i) => (
+                      <React.Fragment key={lessonParam}>
+                        {type == "oikomi" ? (
+                          PARAMS.map((param, j) => (
+                            <td
+                              key={param}
+                              className={c(
+                                styles[param],
+                                styles.split,
+                                param == lessonParam && styles.main
+                              )}
+                            >
+                              {Math.floor(
+                                (param == lessonParam ? main : sub) *
+                                  (1 + paramRates[j] / 100)
+                              )}
+                            </td>
+                          ))
+                        ) : (
+                          <td
+                            colSpan={3}
+                            className={c(styles[lessonParam], styles.main)}
+                          >
                             {Math.floor(
-                              (paramType == lessonParamType ? main : sub) *
-                                (1 + paramRates[j] / 100)
+                              (score + limitIncrease) *
+                                (1 + paramRates[i] / 100)
                             )}
                           </td>
-                        ))
-                      ) : (
-                        <td colSpan={3}>
-                          {Math.floor(
-                            (score + limitIncrease) * (1 + paramRates[i] / 100)
-                          )}
-                        </td>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </tr>
-              ))}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </Panel>
+    </div>
   );
 }
 

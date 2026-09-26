@@ -1,19 +1,83 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .checkbox {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: tokens.$space-2;
+  min-height: 32px;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  @include mixins.label;
+  transition: color tokens.$duration-fast;
 
-  input {
-    width: 1.5em;
-    height: 1.5em;
-    accent-color: colors.$gk-orange;
-    cursor: pointer;
+  &:hover {
+    color: tokens.$surface-ink;
+  }
+}
+
+.input {
+  @include mixins.visually-hidden;
+}
+
+.box {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: tokens.$radius-sm;
+  background-color: tokens.$field-bg;
+  box-shadow: tokens.$field-inset;
+  color: colors.$white;
+  font-size: 12px;
+  transition:
+    background-color tokens.$duration-fast,
+    box-shadow tokens.$duration-spring tokens.$ease-spring,
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-pop;
+
+  svg {
+    scale: 0;
+    rotate: -20deg;
+    transition:
+      scale tokens.$duration-spring tokens.$ease-pop,
+      rotate tokens.$duration-spring tokens.$ease-pop;
   }
 
-  label {
-    display: inline;
-    user-select: none;
+  .checkbox:hover & {
+    background-color: tokens.$field-bg-hover;
+  }
+
+  .checkbox:active & {
+    scale: 0.86;
+    transition-duration: tokens.$duration-press;
+  }
+
+  .input:focus-visible + & {
+    outline: tokens.$focus-ring-width solid tokens.$focus-ring-color;
+    outline-offset: 2px;
+  }
+}
+
+.checked {
+  color: tokens.$surface-ink;
+
+  .box {
+    background-color: tokens.$brand;
+    box-shadow: 0 2px 0 tokens.$brand-edge;
+    translate: 0 -1px;
+
+    svg {
+      scale: 1;
+      rotate: 0deg;
+    }
+  }
+
+  &:hover .box {
+    background-color: tokens.$brand-hover;
   }
 }

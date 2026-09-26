@@ -3,52 +3,55 @@ import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import {
-  FaCirclePlus,
-  FaCircleArrowUp,
-  FaCircleArrowDown,
-  FaCircleXmark,
+  FaArrowDown,
+  FaArrowUp,
+  FaChevronDown,
   FaEllipsis,
-  FaImage,
   FaFilm,
+  FaImage,
   FaPercent,
+  FaPlus,
+  FaXmark,
 } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
 import gkImg from "gakumas-images";
+import Collapse from "@/components/Collapse";
 import Image from "@/components/Image";
 import MemoryPickerModal from "@/components/MemoryPickerModal";
-
-const MemoryImporterModal = dynamic(
-  () => import("@/components/MemoryImporterModal"),
-  { ssr: false }
-);
+import ModalLoading from "@/components/Modal/ModalLoading";
 import StageSkillCards from "@/components/StageSkillCards";
-import LoadoutContext from "@/contexts/LoadoutContext";
+import { LoadoutActionsContext } from "@/contexts/LoadoutContext";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
 import { useRouter } from "@/i18n/routing";
 import c from "@/utils/classNames";
 import styles from "./LoadoutSkillCardGroup.module.scss";
 
+const MemoryImporterModal = dynamic(
+  () => import("@/components/MemoryImporterModal"),
+  { ssr: false, loading: ModalLoading }
+);
+
 function LoadoutSkillCardGroup({
   skillCardIds,
   customizations,
   indications,
   groupIndex,
+  groupCount,
   idolId,
+  onInsert,
+  onMove,
+  onDelete,
 }) {
   const t = useTranslations("LoadoutSkillCardGroup");
   const { status } = useSession();
   const router = useRouter();
   const {
-    loadout,
     setMemory,
     replaceSkillCardId,
     swapSkillCardIds,
     replaceCustomizations,
-    insertSkillCardIdGroup,
-    deleteSkillCardIdGroup,
-    swapSkillCardIdGroups,
-  } = useContext(LoadoutContext);
+  } = useContext(LoadoutActionsContext);
   const { setTargetSkillCardIds, setAcquiredSkillCardIds } = useContext(
     MemoryCalculatorContext,
   );
@@ -77,6 +80,64 @@ function LoadoutSkillCardGroup({
     [costBreakdown],
   );
 
+  const actions = [
+    {
+      key: "memoryCalculator",
+      icon: FaPercent,
+      onClick: () => {
+        const nonPidolSkillCardIds = skillCardIds.filter(
+          (id) => SkillCards.getById(id).sourceType != "pIdol",
+        );
+        setTargetSkillCardIds(() => nonPidolSkillCardIds);
+        setAcquiredSkillCardIds(() => nonPidolSkillCardIds);
+        router.push("/memory-calculator");
+      },
+    },
+    status == "authenticated" && {
+      key: "memories",
+      icon: FaFilm,
+      onClick: () => setModal(<MemoryPickerModal index={groupIndex} />),
+    },
+    {
+      key: "importMemory",
+      icon: FaImage,
+      onClick: () =>
+        setModal(
+          <MemoryImporterModal
+            multiple={false}
+            onSuccess={(memories) => {
+              setMemory(memories[0], groupIndex);
+              closeModal();
+            }}
+          />,
+        ),
+    },
+    {
+      key: "addRow",
+      icon: FaPlus,
+      onClick: () => onInsert(groupIndex + 1),
+    },
+    {
+      key: "moveUp",
+      icon: FaArrowUp,
+      onClick: () => onMove(groupIndex, groupIndex - 1),
+      disabled: groupIndex < 1,
+    },
+    {
+      key: "moveDown",
+      icon: FaArrowDown,
+      onClick: () => onMove(groupIndex, groupIndex + 1),
+      disabled: groupIndex >= groupCount - 1,
+    },
+    {
+      key: "removeRow",
+      icon: FaXmark,
+      onClick: () => onDelete(groupIndex),
+      disabled: groupCount < 2,
+      danger: true,
+    },
+  ].filter(Boolean);
+
   return (
     <div>
       <StageSkillCards
@@ -94,104 +155,56 @@ function LoadoutSkillCardGroup({
         <div className={styles.costWrapper}>
           <button
             type="button"
-            className={c(styles.cost, costExpanded && styles.costOpen)}
+            className={c(styles.chip, costExpanded && styles.selected)}
             onClick={() => setCostExpanded((v) => !v)}
             aria-expanded={costExpanded}
           >
             {t("cost")}: {cost}
+            <FaChevronDown className={styles.caret} aria-hidden="true" />
           </button>
         </div>
         <div
-          className={c(styles.buttonGroup, expanded && styles.expanded)}
+          className={c(styles.actions, expanded && styles.expanded)}
           onClick={() => setExpanded(false)}
           data-export-hide="true"
         >
-          <button
-            className={styles.memoryCalculatorButton}
-            onClick={() => {
-              const nonPidolSkillCardIds = skillCardIds.filter(
-                (id) => SkillCards.getById(id).sourceType != "pIdol",
-              );
-              setTargetSkillCardIds(() => nonPidolSkillCardIds);
-              setAcquiredSkillCardIds(() => nonPidolSkillCardIds);
-              router.push("/memory-calculator");
-            }}
-          >
-            <FaPercent title={t("memoryCalculator")} />
-          </button>
-
-          {status == "authenticated" && (
+          {actions.map(({ key, icon: Icon, onClick, disabled, danger }, i) => (
             <button
-              className={styles.pickButton}
-              onClick={() => setModal(<MemoryPickerModal index={groupIndex} />)}
+              key={key}
+              type="button"
+              className={c(
+                styles.chip,
+                styles.action,
+                danger && styles.danger,
+              )}
+              style={{ "--i": i }}
+              onClick={onClick}
+              disabled={disabled}
+              title={t(key)}
+              aria-label={t(key)}
             >
-              <FaFilm title={t("memories")} />
+              <Icon aria-hidden="true" />
             </button>
-          )}
-
-          <button
-            className={styles.importButton}
-            onClick={() =>
-              setModal(
-                <MemoryImporterModal
-                  multiple={false}
-                  onSuccess={(memories) => {
-                    setMemory(memories[0], groupIndex);
-                    closeModal();
-                  }}
-                />,
-              )
-            }
-          >
-            <FaImage title={t("importMemory")} />
-          </button>
-
-          <button
-            className={styles.addButton}
-            onClick={() => insertSkillCardIdGroup(groupIndex + 1)}
-          >
-            <FaCirclePlus title={t("addRow")} />
-          </button>
-
-          <button
-            className={styles.moveButton}
-            onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex - 1)}
-            disabled={groupIndex < 1}
-          >
-            <FaCircleArrowUp title={t("moveUp")} />
-          </button>
-
-          <button
-            className={styles.moveButton}
-            onClick={() => swapSkillCardIdGroups(groupIndex, groupIndex + 1)}
-            disabled={groupIndex >= loadout.skillCardIdGroups.length - 1}
-          >
-            <FaCircleArrowDown title={t("moveDown")} />
-          </button>
-
-          <button
-            className={styles.deleteButton}
-            onClick={() => deleteSkillCardIdGroup(groupIndex)}
-            disabled={loadout.skillCardIdGroups.length < 2}
-          >
-            <FaCircleXmark title={t("removeRow")} />
-          </button>
+          ))}
         </div>
         <button
-          className={styles.expandButton}
+          type="button"
+          className={c(styles.chip, styles.more, expanded && styles.selected)}
           onClick={(e) => {
             setExpanded(!expanded);
             e.stopPropagation();
           }}
+          aria-expanded={expanded}
+          data-export-hide="true"
         >
-          <FaEllipsis />
+          <FaEllipsis aria-hidden="true" />
         </button>
       </div>
 
-      {costExpanded && (
+      <Collapse open={costExpanded} className={styles.costCollapse}>
         <ul className={styles.costBreakdown} data-export-hide="true">
           {costBreakdown.map((item, i) => (
-            <li key={`${i}_${item.id}`}>
+            <li key={`${i}_${item.id}`} style={{ "--i": i }}>
               <Image
                 src={gkImg(item.card, idolId).icon}
                 width={20}
@@ -203,7 +216,7 @@ function LoadoutSkillCardGroup({
             </li>
           ))}
         </ul>
-      )}
+      </Collapse>
     </div>
   );
 }

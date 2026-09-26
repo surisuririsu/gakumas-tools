@@ -4,18 +4,23 @@ import {
   COST_RANGES_BY_RANK,
 } from "@/utils/contestPower";
 
-// Recursive function to generate all combinations of a specified length
 function generateCombinations(cards, length) {
-  if (length == 0) return [[]];
-  return cards.reduce(
-    (acc, cur, i) =>
-      acc.concat(
-        generateCombinations(cards.slice(i + 1), length - 1).map(
-          (combination) => [cur].concat(combination)
-        )
-      ),
-    []
-  );
+  const combinations = [];
+  const combination = [];
+  function extend(start) {
+    if (combination.length == length) {
+      combinations.push([...combination]);
+      return;
+    }
+    const lastStart = cards.length - (length - combination.length);
+    for (let i = start; i <= lastStart; i++) {
+      combination.push(cards[i]);
+      extend(i + 1);
+      combination.pop();
+    }
+  }
+  extend(0);
+  return combinations;
 }
 
 export function generatePossibleMemories(skillCardIds, rank) {

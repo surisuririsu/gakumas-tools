@@ -1,43 +1,21 @@
-@use "sass:color";
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .input {
-  min-width: 0;
-  outline: none;
-  padding: tokens.$space-1 tokens.$space-2;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-xs;
-  background-color: transparent;
-  color: colors.$black;
-  font-size: tokens.$text-base;
-  font-weight: 600;
   text-align: center;
+  caret-color: tokens.$primary;
+  @include mixins.field;
+  @include mixins.no-spinner;
+  font-weight: tokens.$weight-heavy;
   transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-
-  &::placeholder {
-    color: colors.$gray;
-    font-weight: 400;
-  }
-
-  &:hover {
-    border-color: colors.$gk-orange-light;
-  }
-
-  &:focus {
-    border-color: colors.$gk-orange;
-    box-shadow: 0 0 0 3px color.adjust(colors.$gk-orange, $alpha: -0.85);
-  }
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+    background-color tokens.$duration-fast,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
 
   &[type="number"] {
-    -moz-appearance: textfield;
+    @include mixins.numeric;
+  }
+
+  &::placeholder {
+    font-weight: tokens.$weight-semibold;
   }
 }

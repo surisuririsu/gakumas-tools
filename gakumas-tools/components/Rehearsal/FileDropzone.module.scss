@@ -1,0 +1,78 @@
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
+.dropzone {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-3;
+  min-height: 84px;
+  padding: tokens.$space-3 tokens.$space-4;
+  border: 2px dashed tokens.$surface-border-strong;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$surface-panel;
+  cursor: pointer;
+  transition:
+    background-color tokens.$duration-fast,
+    border-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(tokens.$press-scale-wide);
+
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      border-color: tokens.$accent-edge;
+      background-color: tokens.$fill-subtle;
+
+      .tile {
+        @include mixins.icon-tile-wiggle;
+      }
+    }
+  }
+
+  &:has(.input:focus-visible) {
+    outline: tokens.$focus-ring-width solid tokens.$focus-ring-color;
+    outline-offset: 2px;
+  }
+
+  &.over {
+    border-color: tokens.$brand;
+    background-color: tokens.$accent-tint;
+    scale: 1.02;
+
+    .tile {
+      background-color: tokens.$surface-panel;
+      scale: 1.12;
+      rotate: -8deg;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+.input {
+  @include mixins.visually-hidden;
+}
+
+.tile {
+  @include mixins.icon-tile(48px);
+}
+
+.text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  @include mixins.heading;
+}
+
+.hint {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
+  line-height: 1.4;
+}

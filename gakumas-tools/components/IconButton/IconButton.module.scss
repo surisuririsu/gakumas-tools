@@ -1,26 +1,28 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .iconButton {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 999px;
+  border-radius: tokens.$radius-pill;
   background-color: transparent;
   color: tokens.$surface-ink-muted;
   transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.88);
 
   &:hover {
-    background-color: tokens.$surface-muted;
-    color: colors.$gk-orange;
+    background-color: tokens.$fill-muted;
+    color: tokens.$surface-ink;
   }
 }
 
 .danger:hover {
-  background-color: colors.$red-extra-light;
-  color: colors.$red-dark;
+  background-color: tokens.$danger-tint;
+  color: tokens.$danger;
 }
 
 .medium {
@@ -37,6 +39,6 @@
 
 .disabled {
   background-color: transparent !important;
-  color: tokens.$surface-border-strong !important;
-  cursor: default;
+  color: tokens.$surface-ink-faint !important;
+  cursor: not-allowed;
 }

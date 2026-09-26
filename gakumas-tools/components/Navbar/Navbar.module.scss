@@ -1,17 +1,25 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .navbar {
+  position: relative;
+  z-index: tokens.$z-nav;
   min-height: 52px;
   display: flex;
   align-items: center;
   padding: 0 tokens.$space-3;
   border-radius: 0 0 20px 20px;
   background: tokens.$gradient-brand;
+  box-shadow: 0 6px 16px rgba(243, 152, 0, 0.16);
   color: colors.$white;
 
   &.hasOshi {
     border-radius: 0;
+  }
+
+  :focus-visible {
+    outline-color: colors.$white;
   }
 }
 
@@ -45,15 +53,42 @@
 .indicator {
   position: absolute;
   left: 0;
-  bottom: 6px;
-  height: 2px;
+  bottom: 5px;
+  height: 3px;
   border-radius: 2px;
   background-color: colors.$white;
   pointer-events: none;
   transition:
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.2s ease;
+    transform 420ms tokens.$ease-spring,
+    width 420ms tokens.$ease-spring,
+    opacity tokens.$duration-base ease;
+
+  &.appearing {
+    transition: opacity tokens.$duration-base ease;
+    animation: indicatorGrow 420ms tokens.$ease-spring;
+  }
+
+  &.pending {
+    animation: indicatorPulse 0.8s ease-in-out infinite alternate;
+  }
+
+  &.appearing.pending {
+    animation:
+      indicatorGrow 420ms tokens.$ease-spring,
+      indicatorPulse 0.8s 420ms ease-in-out infinite alternate;
+  }
+}
+
+@keyframes indicatorGrow {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes indicatorPulse {
+  to {
+    opacity: 0.4;
+  }
 }
 
 .link {
@@ -62,7 +97,10 @@
   justify-content: center;
   align-items: center;
   color: rgba(255, 255, 255, 0.75);
-  transition: color 0.15s;
+  transition:
+    color tokens.$duration-fast,
+    scale tokens.$duration-slow tokens.$ease-spring;
+  @include mixins.pressable(0.88);
 
   &:hover {
     color: colors.$white;

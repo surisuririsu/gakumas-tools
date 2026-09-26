@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "../../styles/colors";
+@use "../../styles/tokens";
+
+@mixin colored-group {
+  :is(a, button) {
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+}
+
+@mixin selected($color) {
+  --segment: #{$color};
+  --segment-edge: #{color.adjust($color, $lightness: -14%)};
+  --segment-ink: #{colors.$white};
+}
+
+@mixin label($color) {
+  color: $color;
+  transition: color tokens.$duration-fast;
+
+  :is([aria-current="page"], [aria-pressed="true"]) > & {
+    color: inherit;
+    transition: color tokens.$duration-base tokens.$ease-out 110ms;
+  }
+}

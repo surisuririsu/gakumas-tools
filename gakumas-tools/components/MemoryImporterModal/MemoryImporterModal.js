@@ -1,10 +1,14 @@
 "use client";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { FaCheck } from "react-icons/fa6";
+import { FaCircleCheck, FaTriangleExclamation } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { createWorker } from "tesseract.js";
 import Image from "@/components/Image";
+import Loader from "@/components/Loader";
 import Modal from "@/components/Modal";
+import ProgressBar from "@/components/ProgressBar";
+import FileDropzone from "@/components/Rehearsal/FileDropzone";
+import c from "@/utils/classNames";
 import { getMemoryFromFile } from "@/utils/imageProcessing/memory";
 import {
   loadPItemModel,
@@ -13,86 +17,76 @@ import {
 import { logEvent } from "@/utils/logging";
 import styles from "./MemoryImporterModal.module.scss";
 
-const MAX_WORKERS = 1;
+const BUSY_STATUSES = ["preparing", "reading", "saving"];
 
 function MemoryImporterModal({ onSuccess, multiple = true }) {
   const t = useTranslations("MemoryImporterModal");
 
-  const [total, setTotal] = useState("?");
-  const [progress, setProgress] = useState(null);
-  const engWorkersRef = useRef();
+  const [status, setStatus] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [total, setTotal] = useState(0);
+  const engWorkerRef = useRef(null);
+  const busy = BUSY_STATUSES.includes(status);
 
-  useEffect(() => {
-    let numWorkers = 1;
-    if (navigator.hardwareConcurrency) {
-      numWorkers = Math.ceil(
-        Math.min(navigator.hardwareConcurrency, MAX_WORKERS)
-      );
-    }
+  useEffect(
+    () => () => {
+      engWorkerRef.current?.then((worker) => worker.terminate());
+    },
+    []
+  );
 
-    engWorkersRef.current = [];
-    for (let i = 0; i < numWorkers; i++) {
-      engWorkersRef.current.push(createWorker("eng", 1));
-    }
+  const handleFiles = useCallback(
+    async (files) => {
+      if (!files.length) return;
+      setTotal(files.length);
+      setProgress(0);
+      setStatus("preparing");
 
-    return () => {
-      engWorkersRef.current?.forEach(async (worker) =>
-        (await worker).terminate()
-      );
-    };
-  }, []);
+      try {
+        engWorkerRef.current ??= createWorker("eng", 1);
+        const [engWorker, pItemModel, skillCardModel] = await Promise.all([
+          engWorkerRef.current,
+          loadPItemModel(),
+          loadSkillCardModel(),
+        ]);
 
-  const handleFiles = useCallback(async (e) => {
-    // Get files and reset progress
-    const files = Array.from(e.target.files);
-    setProgress(null);
-    if (!files.length) return;
-    setTotal(files.length);
-    setProgress(0);
+        console.time("All memories parsed");
+        setStatus("reading");
+        const results = [];
+        for (const file of files) {
+          results.push(
+            await getMemoryFromFile(
+              file,
+              engWorker,
+              pItemModel.session,
+              pItemModel.classes,
+              skillCardModel.session,
+              skillCardModel.classes
+            )
+          );
+          setProgress((p) => p + 1);
+        }
+        console.timeEnd("All memories parsed");
 
-    console.time("All memories parsed");
+        logEvent("memories.import", {
+          num: results.length,
+        });
 
-    const [
-      { session: pItemSession, classes: pItemClasses },
-      { session: skillCardSession, classes: skillCardClasses },
-    ] = await Promise.all([loadPItemModel(), loadSkillCardModel()]);
-
-    let results = [];
-    const batchSize = engWorkersRef.current.length;
-    for (let i = 0; i < files.length; i += batchSize) {
-      const batch = files.slice(i, i + batchSize);
-      const promises = batch.map(async (file, j) => {
-        const engWorker = await engWorkersRef.current[
-          j % engWorkersRef.current.length
-        ];
-
-        const memory = await getMemoryFromFile(
-          file,
-          engWorker,
-          pItemSession,
-          pItemClasses,
-          skillCardSession,
-          skillCardClasses
-        );
-        setProgress((p) => p + 1);
-        return memory;
-      });
-
-      const res = await Promise.all(promises);
-      results = results.concat(res);
-    }
-
-    console.timeEnd("All memories parsed");
-
-    logEvent("memories.import", {
-      num: results.length,
-    });
-
-    onSuccess(results);
-  }, []);
+        setStatus("saving");
+        if ((await onSuccess(results)) === false) {
+          throw new Error("Couldn't save imported memories");
+        }
+        setStatus("done");
+      } catch (err) {
+        console.error(err);
+        setStatus("error");
+      }
+    },
+    [onSuccess]
+  );
 
   return (
-    <Modal>
+    <Modal dismissable={!busy}>
       <h3>{t("importMemories")}</h3>
       <div className={styles.help}>
         <Image
@@ -109,24 +103,37 @@ function MemoryImporterModal({ onSuccess, multiple = true }) {
         </div>
       </div>
 
-      <input
-        className={styles.files}
-        type="file"
-        id="input"
-        multiple={multiple}
+      <FileDropzone
+        title={t("selectScreenshots")}
+        hint={t("dropHint")}
         accept="image/*"
-        onChange={handleFiles}
+        multiple={multiple}
+        disabled={busy}
+        onFiles={handleFiles}
       />
 
-      {progress != null && (
-        <div className={styles.progress}>
-          {t("progress", {
-            progress,
-            total,
-          })}{" "}
-          {progress == total && <FaCheck />}
+      <div
+        className={c(
+          styles.progress,
+          status == "done" && styles.done,
+          status == "error" && styles.error
+        )}
+        aria-live="polite"
+      >
+        <div key={status} className={styles.status}>
+          {busy && <Loader />}
+          {status == "done" && <FaCircleCheck />}
+          {status == "error" && <FaTriangleExclamation />}
+          {status == "preparing" && t("preparing")}
+          {(status == "reading" || status == "done") &&
+            t("progress", { progress, total })}
+          {status == "saving" && t("saving")}
+          {status == "error" && t("failed")}
         </div>
-      )}
+        <div className={c(styles.bar, status && styles.barShown)}>
+          <ProgressBar value={progress} max={total} />
+        </div>
+      </div>
     </Modal>
   );
 }

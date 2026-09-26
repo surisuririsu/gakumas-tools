@@ -1,18 +1,4 @@
-@use "../../styles/colors";
-
-.history {
-  max-height: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 8px;
-  overflow: auto;
-
-  .summary {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
+@use "../../styles/tokens";
 
 .itemsAndStage {
   display: flex;
@@ -21,11 +7,21 @@
 }
 
 .stage {
-  margin-left: 8px;
+  margin-left: tokens.$space-2;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
 }
 
 .cards {
   display: flex;
-  gap: 0 8px;
+  gap: 0 tokens.$space-2;
   flex-wrap: wrap;
+}
+
+.itemsAndStage,
+.cards {
+  img {
+    border-radius: tokens.$radius-sm;
+  }
 }

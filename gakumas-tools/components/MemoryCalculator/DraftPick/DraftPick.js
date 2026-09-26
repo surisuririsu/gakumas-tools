@@ -1,10 +1,13 @@
 import { memo, useContext, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { FaChevronDown, FaChevronUp, FaFileImport } from "react-icons/fa6";
+import { FaChevronDown, FaFileImport } from "react-icons/fa6";
 import Button from "@/components/Button";
+import Collapse from "@/components/Collapse";
 import EntityIcon from "@/components/EntityIcon";
 import EntityPickerModal from "@/components/EntityPickerModal";
+import ModalLoading from "@/components/Modal/ModalLoading";
+import { usePopOnChange } from "@/utils/usePop";
 import Panel from "@/components/Panel";
 import MemoryCalculatorContext from "@/contexts/MemoryCalculatorContext";
 import ModalContext from "@/contexts/ModalContext";
@@ -19,7 +22,7 @@ import styles from "./DraftPick.module.scss";
 
 const DraftPickImporterModal = dynamic(
   () => import("@/components/DraftPickImporterModal"),
-  { ssr: false }
+  { ssr: false, loading: ModalLoading }
 );
 
 const EMPTY_SLOTS = [0, 0, 0];
@@ -94,20 +97,25 @@ function DraftPick({ idolId }) {
 
   return (
     <Panel
+      className={styles.draftPick}
       label={t("label")}
       info={t("info")}
       headerAction={
         <div className={styles.headerActions}>
           {open && (
-            <Button style="secondary" size="sm" pill onClick={openImporter}>
-              <FaFileImport />
-              {t("import")}
-            </Button>
+            <span className={styles.appear}>
+              <Button style="secondary" size="sm" pill onClick={openImporter}>
+                <FaFileImport />
+                {t("import")}
+              </Button>
+            </span>
           )}
           {open && hasAnyCandidate && (
-            <Button style="red-secondary" size="sm" pill onClick={clear}>
-              {t("clear")}
-            </Button>
+            <span className={styles.appear}>
+              <Button style="red-secondary" size="sm" pill onClick={clear}>
+                {t("clear")}
+              </Button>
+            </span>
           )}
           <Button
             style={open ? "secondary" : "default"}
@@ -116,12 +124,12 @@ function DraftPick({ idolId }) {
             onClick={() => setOpen((v) => !v)}
           >
             {open ? t("hide") : t("show")}
-            {open ? <FaChevronUp /> : <FaChevronDown />}
+            <FaChevronDown className={c(styles.caret, open && styles.open)} />
           </Button>
         </div>
       }
     >
-      {open && (
+      <Collapse open={open}>
         <div className={styles.slots}>
           {candidateCardIds.map((id, index) => {
             const probability = probabilities[index];
@@ -130,14 +138,16 @@ function DraftPick({ idolId }) {
               <div key={index} className={styles.slot}>
                 <div className={styles.commitRow}>
                   {id ? (
-                    <Button
-                      style="default"
-                      size="sm"
-                      pill
-                      onClick={() => commit(index)}
-                    >
-                      {t("commit")}
-                    </Button>
+                    <span className={styles.appear}>
+                      <Button
+                        style="default"
+                        size="sm"
+                        pill
+                        onClick={() => commit(index)}
+                      >
+                        {t("commit")}
+                      </Button>
+                    </span>
                   ) : null}
                 </div>
                 <div className={styles.cardWrap}>
@@ -159,19 +169,30 @@ function DraftPick({ idolId }) {
                     showEmptyPlaceholder
                   />
                 </div>
-                <div
-                  className={c(styles.probability, isBest && styles.best)}
-                >
-                  {probability == null
-                    ? "—"
-                    : `${(probability * 100).toFixed(2)}%`}
-                </div>
+                <Probability value={probability} best={isBest} />
               </div>
             );
           })}
         </div>
-      )}
+      </Collapse>
     </Panel>
+  );
+}
+
+function Probability({ value, best }) {
+  const beat = usePopOnChange(value);
+
+  return (
+    <div
+      className={c(
+        styles.probability,
+        value == null && styles.empty,
+        best && styles.best,
+        beat && styles[`beat${beat}`],
+      )}
+    >
+      {value == null ? "—" : `${(value * 100).toFixed(2)}%`}
+    </div>
   );
 }
 

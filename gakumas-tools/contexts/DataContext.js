@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useCallback, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 
 const DataContext = createContext();
@@ -28,9 +28,11 @@ export function DataContextProvider({ children }) {
   const [memoriesLoading, setMemoriesLoading] = useState(false);
   // One of "load" | "upload" | "delete" when the last request failed.
   const [memoriesError, setMemoriesError] = useState(null);
+  const loadingRef = useRef(false);
 
-  async function fetchMemories() {
-    if (status != "authenticated" || memoriesLoading) return;
+  const fetchMemories = useCallback(async () => {
+    if (status != "authenticated" || loadingRef.current) return;
+    loadingRef.current = true;
     setMemoriesLoading(true);
     setMemoriesError(null);
     try {
@@ -41,46 +43,64 @@ export function DataContextProvider({ children }) {
       console.error(error);
       setMemoriesError("load");
     } finally {
+      loadingRef.current = false;
       setMemoriesLoading(false);
     }
-  }
+  }, [status]);
 
-  async function mutateMemories(action, url, body) {
-    setMemoriesError(null);
-    try {
-      await postJson(url, body);
-    } catch (error) {
-      console.error(error);
-      setMemoriesError(action);
-      return;
-    }
-    fetchMemories();
-  }
-
-  function uploadMemories(memories) {
-    return mutateMemories("upload", "/api/memory", { memories });
-  }
-
-  function deleteMemories(memoryIds) {
-    return mutateMemories("delete", "/api/memory/bulk_delete", {
-      ids: memoryIds,
-    });
-  }
-
-  return (
-    <DataContext.Provider
-      value={{
-        memories,
-        fetchMemories,
-        uploadMemories,
-        deleteMemories,
-        memoriesLoading,
-        memoriesError,
-      }}
-    >
-      {children}
-    </DataContext.Provider>
+  const mutateMemories = useCallback(
+    async (action, url, body) => {
+      setMemoriesError(null);
+      try {
+        await postJson(url, body);
+        return true;
+      } catch (error) {
+        console.error(error);
+        setMemoriesError(action);
+        return false;
+      } finally {
+        fetchMemories();
+      }
+    },
+    [fetchMemories]
   );
+
+  const uploadMemories = useCallback(
+    (memories) => mutateMemories("upload", "/api/memory", { memories }),
+    [mutateMemories]
+  );
+
+  const deleteMemories = useCallback(
+    (memoryIds) => {
+      const ids = new Set(memoryIds);
+      setMemories((cur) => cur.filter((memory) => !ids.has(memory._id)));
+      return mutateMemories("delete", "/api/memory/bulk_delete", {
+        ids: memoryIds,
+      });
+    },
+    [mutateMemories]
+  );
+
+  const value = useMemo(
+    () => ({
+      memories,
+      fetchMemories,
+      uploadMemories,
+      deleteMemories,
+      memoriesLoading,
+      memoriesError,
+    }),
+    [
+      memories,
+      fetchMemories,
+      uploadMemories,
+      deleteMemories,
+      memoriesLoading,
+      memoriesError,
+    ]
+  );
+
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
 
 export default DataContext;

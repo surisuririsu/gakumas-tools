@@ -5,3 +5,37 @@
   flex-direction: column;
   gap: tokens.$space-2;
 }
+
+.swap {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.idle,
+.working {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  transition:
+    opacity tokens.$duration-base,
+    translate tokens.$duration-slide tokens.$ease-spring;
+}
+
+.working {
+  opacity: 0;
+  translate: 0 14px;
+}
+
+.busy {
+  .idle {
+    opacity: 0;
+    translate: 0 -14px;
+  }
+
+  .working {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

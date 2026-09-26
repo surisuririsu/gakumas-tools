@@ -1,26 +1,51 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .tabGroup {
+  position: relative;
   display: flex;
-  border-bottom: 2px solid colors.$gray-extra-light;
+  border-bottom: 2px solid tokens.$surface-border;
 
   button {
     flex: 1;
     padding: 12px 12px;
-    color: colors.$gray;
+    color: tokens.$surface-ink-subtle;
     font-size: 15px;
-    font-weight: 600;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.15s;
+    font-weight: 700;
+    transition:
+      color tokens.$duration-fast,
+      scale tokens.$duration-spring tokens.$ease-spring;
+    --press-opacity: 1;
+    @include mixins.focus-ring-inset;
 
     &:hover {
-      color: colors.$gk-red-orange;
+      color: tokens.$surface-ink;
+    }
+
+    &:active {
+      scale: 0.92;
+      transition-duration: tokens.$duration-press;
     }
 
     &.selected {
-      color: colors.$gk-orange;
-      border-bottom-color: colors.$gk-orange;
+      color: tokens.$surface-ink;
     }
   }
+
+  &:not(.measured) .selected {
+    box-shadow: inset 0 -3px 0 colors.$gk-orange;
+  }
+}
+
+.ink {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: colors.$gk-orange;
+  pointer-events: none;
+  transition: translate 450ms tokens.$ease-spring;
 }

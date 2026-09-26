@@ -26,6 +26,7 @@ import { FaShareNodes } from "react-icons/fa6";
 import ConfirmModal from "@/components/ConfirmModal";
 import EntityIcon from "@/components/EntityIcon";
 import ModalContext from "@/contexts/ModalContext";
+import c from "@/utils/classNames";
 import NavigationGuardContext from "@/contexts/NavigationGuardContext";
 import {
   EMPTY_LIST,
@@ -68,6 +69,12 @@ function TierList({ type }) {
   const [pickerTier, setPickerTier] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const [leaving, setLeaving] = useState([]);
+  const leavingRef = useRef(leaving);
+  leavingRef.current = leaving;
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => setReady(true), []);
 
   // Defer URL sync until a drag finishes — hover-driven mid-drag list mutations
   // would otherwise rewrite the URL on every frame.
@@ -173,23 +180,31 @@ function TierList({ type }) {
     });
   }, []);
 
+  const finishRemoveTier = useCallback((rank) => {
+    setLeaving((prev) => prev.filter((k) => k !== rank));
+    setList((prev) => {
+      if (!prev.tiers.includes(rank) || prev.tiers.length <= 1) return prev;
+      const nextTiers = prev.tiers.filter((k) => k !== rank);
+      const nextItems = { ...prev.items };
+      delete nextItems[rank];
+      return { tiers: nextTiers, items: nextItems };
+    });
+  }, []);
+
   const removeTier = useCallback(
     (rank) => {
       const cur = listRef.current;
-      if (!cur.tiers.includes(rank) || cur.tiers.length <= 1) return;
+      const remaining = cur.tiers.length - leavingRef.current.length;
+      if (!cur.tiers.includes(rank) || remaining <= 1) return;
       const apply = () =>
-        setList((prev) => {
-          if (prev.tiers.length <= 1) return prev;
-          const nextTiers = prev.tiers.filter((k) => k !== rank);
-          const nextItems = { ...prev.items };
-          delete nextItems[rank];
-          return { tiers: nextTiers, items: nextItems };
-        });
+        setLeaving((prev) => (prev.includes(rank) ? prev : [...prev, rank]));
       const itemCount = (cur.items[rank] || []).length;
       if (itemCount > 0) {
         setModal(
           <ConfirmModal
             message={t("confirmRemoveTier", { rank, count: itemCount })}
+            confirmLabel={t("removeRankTier", { rank })}
+            danger
             onConfirm={apply}
           />,
         );
@@ -204,6 +219,8 @@ function TierList({ type }) {
     setModal(
       <ConfirmModal
         message={t("confirmClear")}
+        confirmLabel={t("clearAll")}
+        danger
         onConfirm={() =>
           setList((prev) => ({
             ...prev,
@@ -237,7 +254,7 @@ function TierList({ type }) {
     return () => setGuard(null);
   }, [allIdsCount, setGuard, setModal, t]);
 
-  const canDeleteTier = list.tiers.length > 1;
+  const canDeleteTier = list.tiers.length - leaving.length > 1;
 
   // After a cross-container hover-move, freeze `over` for one frame so a
   // mid-frame layout shift doesn't ping-pong the active item between
@@ -254,7 +271,7 @@ function TierList({ type }) {
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, {
-      activationConstraint: { distance: 8 },
+      activationConstraint: { delay: 200, tolerance: 8 },
     }),
   );
 
@@ -298,6 +315,7 @@ function TierList({ type }) {
     setActiveId(event.active.id);
     lastOverIdRef.current = null;
     recentlyMovedRef.current = false;
+    navigator.vibrate?.(8);
   }, []);
 
   const handleDragOver = useCallback((event) => {
@@ -426,7 +444,7 @@ function TierList({ type }) {
           </button>
           <button
             type="button"
-            className={styles.headerButton}
+            className={c(styles.headerButton, styles.headerDanger)}
             onClick={clearAll}
             disabled={allIdsCount === 0}
           >
@@ -458,9 +476,12 @@ function TierList({ type }) {
                   addAbove={aboveRank}
                   addBelow={belowRank}
                   isDragActive={activeId != null}
+                  animateMount={ready}
+                  leaving={leaving.includes(tierKey)}
                   onAdd={setPickerTier}
                   onAddTier={addTier}
                   onDeleteTier={removeTier}
+                  onLeft={finishRemoveTier}
                 />
               );
             })}
@@ -491,7 +512,7 @@ function TierList({ type }) {
         dropAnimation={{ duration: 180, easing: "cubic-bezier(0.18, 0.67, 0.6, 1)" }}
       >
         {activeId != null ? (
-          <div className={styles.item}>
+          <div className={c(styles.item, styles.overlayItem)}>
             <EntityIcon type={type} id={activeId} size="fill" />
           </div>
         ) : null}

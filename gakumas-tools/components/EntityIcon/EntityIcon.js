@@ -1,4 +1,5 @@
-import { memo } from "react";
+import { memo, useContext } from "react";
+import { useTranslations } from "next-intl";
 import { FaPlus } from "react-icons/fa6";
 import { Idols } from "gakumas-data";
 import Image from "@/components/Image";
@@ -8,9 +9,9 @@ import {
   EntityTypes,
   resolveEntityIcon,
 } from "@/utils/entities";
-import { useDrag, useDrop } from "@/utils/safeDnd";
 import CustomizationCounts from "./CustomizationCounts";
 import Indications from "./Indications";
+import SwapButtonContext from "./SwapButtonContext";
 import TierIndicator from "./TierIndicator";
 import styles from "./EntityIcon.module.scss";
 
@@ -27,25 +28,10 @@ function EntityIcon({
   showTier,
   showEmptyPlaceholder,
 }) {
+  const t = useTranslations("EntityIcon");
+  const SwapButton = useContext(SwapButtonContext);
   const entity = ENTITY_DATA_BY_TYPE[type].getById(id);
   const icon = resolveEntityIcon(entity, idolId);
-
-  const [{ isDragging }, dragRef] = useDrag({
-    type: "ENTITY_ICON",
-    item: { type, id, index },
-  });
-
-  const [, dropRef] = useDrop({
-    accept: "ENTITY_ICON",
-    drop: (item) => {
-      if (item.type != type) {
-        return;
-      }
-      if (onSwap) {
-        onSwap(item.index, index);
-      }
-    },
-  });
 
   let displayName = entity?.name;
   if (entity?._type === "pIdol") {
@@ -78,27 +64,38 @@ function EntityIcon({
 
   const className = c(
     styles.entityIcon,
+    entity ? styles.filled : styles.empty,
     styles[size],
     indications?.duplicate && styles.duplicate
   );
 
-  if (onClick) {
-    return (
-        <button ref={dragRef} className={className} onClick={() => onClick(entity || {})}>
-          <div ref={dropRef} className={styles.dropArea}>
-            {unwrappedElement ||
-              (showEmptyPlaceholder && (
-                <FaPlus
-                  className={styles.emptyPlaceholder}
-                  aria-hidden="true"
-                />
-              ))}
-          </div>
-      </button>
-    );
-  } else {
+  if (!onClick) {
     return <div className={className}>{unwrappedElement}</div>;
   }
+
+  const contents = (
+    <div className={styles.dropArea}>
+      {unwrappedElement ||
+        (showEmptyPlaceholder && (
+          <FaPlus className={styles.emptyPlaceholder} aria-hidden="true" />
+        ))}
+    </div>
+  );
+  const buttonProps = {
+    className,
+    onClick: () => onClick(entity || {}),
+    "aria-label": entity ? undefined : t("emptySlot"),
+  };
+
+  if (onSwap && SwapButton) {
+    const swap = { type, index, id, idolId, customizations, onSwap };
+    return (
+      <SwapButton swap={swap} {...buttonProps}>
+        {contents}
+      </SwapButton>
+    );
+  }
+  return <button {...buttonProps}>{contents}</button>;
 }
 
 export default memo(EntityIcon);

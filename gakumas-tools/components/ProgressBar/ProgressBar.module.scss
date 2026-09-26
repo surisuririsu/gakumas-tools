@@ -2,18 +2,34 @@
 
 .progressBar {
   position: relative;
-  height: 4px;
-  border-radius: 2px;
-  background-color: tokens.$surface-muted;
+  height: 10px;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
   overflow: hidden;
+}
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    width: var(--progress, 0%);
-    background: tokens.$gradient-brand;
-    border-radius: inherit;
-    transition: width 0.15s ease;
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--progress, 0) * 100%);
+  border-radius: inherit;
+  background-color: tokens.$primary;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.22) 0 6px,
+    rgba(255, 255, 255, 0.08) 6px 12px
+  );
+  background-size: 16.97px 16.97px;
+  animation: stripes 0.7s linear infinite;
+  transition: width 0.25s tokens.$ease-out;
+
+  .complete & {
+    animation: none;
+  }
+}
+
+@keyframes stripes {
+  to {
+    background-position: 16.97px 0;
   }
 }

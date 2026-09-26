@@ -17,13 +17,13 @@ function Turn({
 
   return (
     <div className={c(styles.turn, styles[type])}>
-      <div className={c(styles.startTurn, styles[type])}>
+      <div className={styles.turnHeader}>
         <span>{t("turnN", { n: num })}</span>
         <span className={styles.multiplier}>
           {Math.round(multiplier * 100)}%
         </span>
       </div>
-      <div className={styles.childLogs}>
+      <div className={styles.turnLogs}>
         <Logs
           logs={childLogs}
           idolId={idolId}
