@@ -167,7 +167,6 @@
   padding: 0;
   border: 0;
   border-radius: tokens.$radius-pill;
-  appearance: none;
   background: none;
   box-shadow: inset 0 0 0 1px tokens.$fill-muted;
   cursor: pointer;
@@ -176,23 +175,18 @@
     box-shadow tokens.$duration-base;
   @include mixins.pressable;
 
-  &::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-
-  &::-webkit-color-swatch {
-    border: 0;
-    border-radius: tokens.$radius-pill;
-  }
-
-  &::-moz-color-swatch {
-    border: 0;
-    border-radius: tokens.$radius-pill;
-  }
-
   &.selected {
     @include mixins.selected-ring;
   }
+}
+
+.hex {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-1;
+  width: 140px;
+  @include mixins.label;
+  @include mixins.numeric;
 }
 
 .row {

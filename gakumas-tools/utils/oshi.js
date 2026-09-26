@@ -73,6 +73,13 @@ export function youTubeId(url) {
   return id && YOUTUBE_ID.test(id) ? id : null;
 }
 
+export function normalizeColor(value) {
+  return `#${String(value ?? "")
+    .trim()
+    .replace(/^#/, "")
+    .toLowerCase()}`;
+}
+
 export function oshiInk(color) {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
   return 0.299 * r + 0.587 * g + 0.114 * b > 170 ? "#111" : "#fefefe";
@@ -88,7 +95,7 @@ function normalizeBanner(input) {
         String(input.text?.[locale] ?? "").trim(),
       ])
     ),
-    color: String(input.color ?? ""),
+    color: normalizeColor(input.color),
     action: input.action,
     url: String(input.url ?? "").trim(),
     hasBadge: input.hasBadge === true,
@@ -111,7 +118,7 @@ function findBannerError(banner) {
     return `Text must be ${MAX_TEXT_LENGTH} characters or fewer`;
   }
   if (!HEX_COLOR.test(color)) {
-    return "Colour must be a hex code like #1c85ed";
+    return "Colour must be a 6-digit hex code like 1c85ed";
   }
   if (!ACTIONS.includes(action)) {
     return "Unknown action";

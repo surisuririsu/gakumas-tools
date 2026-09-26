@@ -10,7 +10,7 @@ import Oshi from "@/components/Oshi";
 import TabGroup from "@/components/TabGroup";
 import { routing } from "@/i18n/routing";
 import c from "@/utils/classNames";
-import { idolToken, oshiProps } from "@/utils/oshi";
+import { idolToken, normalizeColor, oshiProps } from "@/utils/oshi";
 import styles from "./OshiEditor.module.scss";
 
 const LANGUAGES = [
@@ -60,7 +60,6 @@ export default function BannerForm({ banner, onChange, onDelete }) {
   const textRef = useRef(null);
   const [language, setLanguage] = useState(routing.defaultLocale);
   const text = banner.text[language];
-  const customColor = !SWATCHES.some(({ color }) => color == banner.color);
 
   function setText(value) {
     onChange({ text: { ...banner.text, [language]: value } });
@@ -138,16 +137,16 @@ export default function BannerForm({ banner, onChange, onDelete }) {
               onClick={() => onChange({ color })}
             />
           ))}
-          <input
-            type="color"
-            className={c(styles.swatch, customColor && styles.selected)}
-            value={banner.color}
-            aria-label="Custom colour"
-            data-tooltip-id="panel-info-tooltip"
-            data-tooltip-content="Custom colour"
-            onChange={(e) => onChange({ color: e.target.value })}
-          />
         </div>
+        <label className={styles.hex}>
+          <span aria-hidden="true">#</span>
+          <Input
+            className={styles.text}
+            value={banner.color.replace(/^#/, "")}
+            aria-label="Hex colour"
+            onChange={(value) => onChange({ color: normalizeColor(value) })}
+          />
+        </label>
       </div>
 
       <div className={styles.field}>
