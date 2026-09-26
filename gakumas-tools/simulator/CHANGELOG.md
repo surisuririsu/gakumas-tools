@@ -10,17 +10,75 @@ Dates are based on Eastern Time Zone.
 
 - Add contest season 53 preview
 
+## 2026-09-25
+
+- Redesign the simulator
+- Show simulation progress and allow cancelling a run
+- Recover from failed simulation runs
+- Swap loadout cards by dragging on touch screens and in the pinned simulator
+- Open skill card and p-item pickers faster
+- Add missing skill card, p-item and p-idol images
+
+## 2026-09-21
+
+- Update me hiro
+
+## 2026-09-20
+
+- Add icons for sena's legend card and missing p-idols
+
+## 2026-09-19
+
+- Add preview of me hiro
+- Add garakutaroad sena icons
+
+## 2026-09-14
+
+- Confirm contest season 52 stages
+
+## 2026-09-11
+
+- Fix Suteki na Oshigoto welfare status
+
+## 2026-09-10
+
+- Add primastella kotone and sena legend cards
+- Update garakutaroad sena
+
+## 2026-09-09
+
+- Add contest season 52 preview
+- Add preview of garakutaroad sena
+
+## 2026-09-04
+
+- Add saigo no bunkasai event stages
+- Add shirube mao, china and sumika
+- Fix manual play crashing between decisions
+
+## 2026-09-02
+
+- Add Korean and Chinese translations for the compare tab
+
+## 2026-08-29
+
+- Confirm contest season 51 stages
+- Include the secondary memory in the stamina calculator
+- Remember stamina progression per p-idol
+
 ## 2026-08-28
 
 - Add a stamina calculator to the simulator loadout
 - Update neeyucchauyo misuzu
 
+## 2026-08-25
 
+- Add preview of neeyucchauyo misuzu
+- Fix buffCostConsumed trigger timing
 
+## 2026-08-24
 
-
-
-
+- Add contest season 51 preview
 
 ## 2026-08-17
 
@@ -30,6 +88,11 @@ Dates are based on Eastern Time Zone.
 
 - Add preview of neeyucchauyo temari
 - Add preview of neeyucchauyo sena
+- Fix ぴらっ♪ being treated as a p-idol card instead of a support card
+
+## 2026-08-11
+
+- Add semiblue and kamurogiku customizations
 
 ## 2026-08-10
 
@@ -56,9 +119,18 @@ Dates are based on Eastern Time Zone.
 - Add preview of kuraiai
 - Add preview of garakutaroad saki and s49
 
+## 2026-07-09
+
+- Update go my way ume
+
 ## 2026-07-07
 
 - Add preview of go my way ume
+
+## 2026-07-03
+
+- Add contest season 48 preview
+- Fix effects that check for legend or trouble card rarity
 
 ## 2026-06-26
 
