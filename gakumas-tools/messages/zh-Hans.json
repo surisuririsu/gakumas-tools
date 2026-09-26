@@ -67,6 +67,11 @@
     "sendFeedback": "反馈",
     "signOut": "登出"
   },
+  "ToolHeader": {
+    "pin": "固定到其他工具旁",
+    "unpin": "取消固定",
+    "pinned": "已固定：将显示在其他工具旁"
+  },
   "Welcome": {
     "title": "学园偶像大师工具站",
     "introduction": "一个为学园偶像大师而生的工具站。本站有计算目标评级所需得分、回忆卡生成概率计算、查看P道具与技能卡信息、导入和搜索回忆卡、竞技场编成与打分模拟等功能",
@@ -142,7 +147,8 @@
     "hifDerivedTotal": "合计 = {value}",
     "hifRound2StarGain": "闪耀值 +{value}",
     "hifScoreBonusNote": "请直接输入排名公布画面显示的分数（回合1包含第1名加成×1.2）。计算时会自动进行校正。",
-    "hifTargetRound2Scores": "各目标排名所需 Round 2 分数"
+    "hifTargetRound2Scores": "各目标排名所需 Round 2 分数",
+    "toNextRank": "距{rank}还差{points}"
   },
   "LessonCalculator": {
     "difficulties": {
@@ -163,6 +169,13 @@
   },
   "Dex": {
     "maxTimes": "最大{n}回合",
+    "unlockPlv": "解锁PLv {n}",
+    "plans": {
+      "sense": "感性",
+      "logic": "理性",
+      "anomaly": "异常",
+      "free": "自由"
+    },
     "tabs": {
       "skill-cards": "技能卡",
       "p-items": "P 道具",
@@ -261,6 +274,7 @@
     "acquiredInfo": "请包括每张卡的升级前/后版本",
     "produceRank": "制作评级",
     "costRange": "容量范围",
+    "cost": "容量",
     "success": "成功",
     "failure": "失败",
     "clear": "清除",
@@ -373,7 +387,9 @@
     "progress": "进度: {progress}/{total}",
     "preparing": "正在准备识别…（首次使用需下载数MB）",
     "saving": "保存中…",
-    "failed": "导入失败，请检查截图后重试。"
+    "failed": "导入失败，请检查截图后重试。",
+    "selectScreenshots": "选择截图",
+    "dropHint": "点击选择，或将截图拖放到此处"
   },
   "Simulator": {
     "supportBonus": "支援加成 %",
@@ -474,7 +490,10 @@
     "stats": "统计",
     "compare": "比较",
     "downloadScores": "分数",
-    "optimizeParams": "优化参数"
+    "optimizeParams": "优化参数",
+    "optimizeGain": "平均 +{gain}",
+    "optimizeAlready": "已是最优",
+    "optimizeFailed": "无法优化"
   },
   "CompareTab": {
     "saved": "已保存",
@@ -633,7 +652,9 @@
     "videoError": "处理视频时出错: {message}",
     "imageError": "{count} 张截图无法解析，已跳过。",
     "needsChecking": "{count} 行需要检查",
-    "confirmRow": "确认此行的数值正确"
+    "confirmRow": "确认此行的数值正确",
+    "selectFiles": "选择文件",
+    "addRow": "添加行"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

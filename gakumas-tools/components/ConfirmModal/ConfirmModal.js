@@ -27,10 +27,10 @@ export default function ConfirmModal({
   };
 
   return (
-    <Modal>
-      <p>{message}</p>
+    <Modal size="small">
+      <h3>{message}</h3>
       <div className={styles.buttons}>
-        <Button style="secondary" fill onClick={cancel}>
+        <Button style="default" fill onClick={cancel}>
           {t("cancel")}
         </Button>
         <Button style={danger ? "red" : "primary"} fill onClick={confirm}>

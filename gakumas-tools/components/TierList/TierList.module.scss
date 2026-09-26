@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .tierList {
@@ -10,7 +10,7 @@
 
 @media (hover: none) and (pointer: coarse) {
   .tierList {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
   }
 }
 
@@ -24,31 +24,37 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: tokens.$space-1 tokens.$space-2;
-  font-size: tokens.$text-xs;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-bg;
+  min-height: 32px;
+  padding: 0 tokens.$space-3;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$surface-panel;
   color: tokens.$surface-ink;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  @include mixins.raised;
 
   &:hover:not(:disabled) {
-    background-color: tokens.$surface-muted;
+    background-color: tokens.$surface-alt;
   }
 
   &:disabled {
-    opacity: 0.4;
+    color: tokens.$surface-ink-faint;
     cursor: not-allowed;
+  }
+}
+
+.headerDanger:not(:disabled) {
+  color: tokens.$danger;
+
+  &:hover {
+    background-color: tokens.$danger-tint;
   }
 }
 
 .tiers {
   display: flex;
   flex-direction: column;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
+  @include mixins.card;
   overflow: hidden;
 }
 
@@ -57,141 +63,214 @@
   flex-direction: column;
 }
 
-.tierAddTop,
-.tierAddBottom {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  color: tokens.$surface-ink-muted;
-  font-size: 9px;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 1;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 0.15s ease,
-    background-color 0.15s ease,
-    color 0.15s ease;
+.rowWrap {
+  display: grid;
+  grid-template-rows: 1fr;
 
-  svg {
-    font-size: 8px;
+  & + & {
+    border-top: 1px solid tokens.$surface-border;
   }
-
-  &:hover {
-    background-color: colors.$gk-orange-extra-light;
-    color: colors.$gk-orange;
-  }
-}
-
-.tierAddTop {
-  top: 0;
-}
-
-.tierAddBottom {
-  bottom: 0;
-}
-
-.tierLabel:hover .tierAddTop,
-.tierLabel:hover .tierAddBottom,
-.tierLabel:focus-within .tierAddTop,
-.tierLabel:focus-within .tierAddBottom {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .row {
+  min-height: 0;
   display: flex;
   align-items: stretch;
-  border-bottom: 1px solid tokens.$surface-border;
+}
 
-  &:last-child {
-    border-bottom: none;
+.rowEnter {
+  animation: rowExpand tokens.$duration-spring tokens.$ease-glide both;
+
+  > .row {
+    overflow: hidden;
+    animation: rowSettle tokens.$duration-spring tokens.$ease-spring both;
+  }
+}
+
+.rowLeave {
+  pointer-events: none;
+  animation: rowCollapse tokens.$duration-base tokens.$ease-in-out both;
+
+  > .row {
+    overflow: hidden;
+  }
+}
+
+@keyframes rowExpand {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes rowSettle {
+  from {
+    translate: 0 -10px;
+  }
+}
+
+@keyframes rowCollapse {
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
   }
 }
 
 .tierLabel {
-  position: relative;
   flex-shrink: 0;
-  width: 72px;
+  width: 84px;
+  display: flex;
+  padding: 6px 0 6px 6px;
+
+  @container (width < 460px) {
+    width: 76px;
+  }
+}
+
+.tierTile {
+  position: relative;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: tokens.$space-2;
-  background-color: tokens.$surface-muted;
-  border-right: 1px solid tokens.$surface-border;
+  border-radius: tokens.$radius-lg;
 
   img {
     width: auto;
     height: 48px;
     object-fit: contain;
   }
+
+  &.prism {
+    background: linear-gradient(
+      135deg,
+      tokens.$dance-tint,
+      tokens.$vocal-tint
+    );
+  }
+
+  &.dance {
+    background-color: tokens.$dance-tint;
+  }
+
+  &.visual {
+    background-color: tokens.$visual-tint;
+  }
+
+  &.vocal {
+    background-color: tokens.$vocal-tint;
+  }
+
+  &.accent {
+    background-color: tokens.$accent-tint;
+  }
+
+  &.stamina {
+    background-color: tokens.$stamina-tint;
+  }
+
+  &.muted {
+    background-color: tokens.$fill-muted;
+  }
 }
 
+.tierAdd,
 .tierDeleteBtn {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 12px;
+  z-index: tokens.$z-raised;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  color: tokens.$surface-ink-muted;
-  font-size: 9px;
+  background-color: tokens.$surface-panel;
   line-height: 1;
-  cursor: pointer;
-  z-index: 2;
   opacity: 0;
+  scale: 0.5;
   pointer-events: none;
+  @include mixins.raised;
   transition:
-    opacity 0.15s ease,
-    background-color 0.15s ease,
-    color 0.15s ease;
+    opacity tokens.$duration-fast,
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    translate tokens.$duration-spring tokens.$ease-spring,
+    scale tokens.$duration-spring tokens.$ease-pop,
+    box-shadow tokens.$duration-spring tokens.$ease-spring;
+}
+
+.tierAdd {
+  left: 0;
+  right: 0;
+  width: fit-content;
+  height: 20px;
+  margin: 0 auto;
+  padding: 0 7px;
+  gap: 2px;
+  border-radius: tokens.$radius-pill;
+  color: tokens.$accent-ink;
+  font-size: 10px;
+  font-weight: tokens.$weight-heavy;
+  white-space: nowrap;
+
+  svg {
+    font-size: 8px;
+  }
 
   &:hover {
-    background-color: colors.$red-extra-light;
-    color: colors.$red;
+    background-color: tokens.$accent-tint;
   }
 }
 
-.tierLabel:hover .tierDeleteBtn,
-.tierLabel:focus-within .tierDeleteBtn {
-  opacity: 1;
-  pointer-events: auto;
+.tierAddTop {
+  top: -3px;
+}
+
+.tierAddBottom {
+  bottom: -1px;
+}
+
+.tierDeleteBtn {
+  top: 0;
+  bottom: 0;
+  left: -3px;
+  width: 22px;
+  height: 22px;
+  margin: auto 0;
+  border-radius: 50%;
+  color: tokens.$danger;
+  font-size: 11px;
+
+  &:hover {
+    background-color: tokens.$danger-tint;
+  }
+}
+
+.tierLabel:hover,
+.tierLabel:focus-within {
+  .tierAdd,
+  .tierDeleteBtn {
+    opacity: 1;
+    scale: 1;
+    pointer-events: auto;
+  }
+
+  .tierAddBottom {
+    transition-delay: 30ms;
+  }
+
+  .tierDeleteBtn {
+    transition-delay: 15ms;
+  }
 }
 
 @media (hover: none) {
-  .tierAddTop,
-  .tierAddBottom,
+  .tierAdd,
   .tierDeleteBtn {
-    opacity: 0.85;
+    opacity: 1;
+    scale: 1;
     pointer-events: auto;
-    font-size: 11px;
-
-    svg {
-      font-size: 10px;
-    }
   }
 
-  .tierAddTop,
-  .tierAddBottom {
-    height: 18px;
-  }
-
-  .tierDeleteBtn {
-    width: 18px;
+  .tierTile img {
+    height: 40px;
   }
 }
 
@@ -200,18 +279,18 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: tokens.$space-1;
-  padding: tokens.$space-2;
+  gap: 6px;
+  padding: 12px 10px;
   min-height: 80px;
-  transition: background-color 0.15s ease;
+  transition: background-color tokens.$duration-base;
 }
 
 .itemsCanDrop {
-  background-color: rgba(243, 152, 0, 0.05);
+  background-color: tokens.$fill-subtle;
 }
 
 .itemsDropOver {
-  background-color: colors.$gk-orange-extra-light;
+  background-color: tokens.$accent-tint;
 }
 
 .item {
@@ -228,13 +307,49 @@
   }
 }
 
-.itemPlaceholder {
-  opacity: 0.25;
-  outline: 2px dashed colors.$gk-orange;
-  outline-offset: -2px;
-  border-radius: 8%;
+.itemEnter {
+  @include mixins.pop-in;
 }
 
+.itemLandA {
+  animation: landA 420ms tokens.$ease-pop 150ms both;
+}
+
+.itemLandB {
+  animation: landB 420ms tokens.$ease-pop 150ms both;
+}
+
+@keyframes landA {
+  from {
+    scale: 1.12;
+  }
+}
+
+@keyframes landB {
+  from {
+    scale: 1.12;
+  }
+}
+
+.itemPlaceholder {
+  opacity: 0.3;
+  border-radius: tokens.$radius-icon;
+  outline: 2px dashed tokens.$accent-edge;
+  outline-offset: 1px;
+}
+
+.overlayItem {
+  cursor: grabbing;
+  animation: pickUp tokens.$duration-spring tokens.$ease-pop forwards;
+  filter: drop-shadow(0 10px 14px rgba(20, 20, 40, 0.18));
+}
+
+@keyframes pickUp {
+  to {
+    scale: 1.08;
+    rotate: -3deg;
+  }
+}
 
 .addButton {
   width: 56px;
@@ -242,34 +357,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed tokens.$surface-border-strong;
-  border-radius: 8%;
-  background-color: tokens.$surface-bg;
-  color: tokens.$surface-ink-muted;
-  font-size: 20px;
-  cursor: pointer;
+  border: 1.5px dashed tokens.$surface-border-strong;
+  border-radius: tokens.$radius-icon;
+  background-color: tokens.$fill-subtle;
+  color: tokens.$accent-ink;
+  font-size: 18px;
+  --press-opacity: 1;
   transition:
-    opacity 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease,
-    background-color 0.15s ease;
+    opacity tokens.$duration-fast,
+    border-color tokens.$duration-fast,
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable(0.93);
+
+  svg {
+    transition: scale tokens.$duration-spring tokens.$ease-pop;
+  }
 
   &:hover {
-    border-color: colors.$gk-orange;
-    color: colors.$gk-orange;
-    background-color: colors.$gk-orange-extra-light;
+    border-color: tokens.$accent-edge;
+    background-color: tokens.$accent-tint;
+
+    svg {
+      scale: 1.2;
+    }
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .addButton {
     opacity: 0;
+    scale: 0.8;
     pointer-events: none;
   }
 
   .row:hover .addButton,
   .row:focus-within .addButton {
     opacity: 1;
+    scale: 1;
     pointer-events: auto;
+
+    &:active {
+      scale: 0.93;
+    }
   }
 }

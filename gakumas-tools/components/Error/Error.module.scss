@@ -1,19 +1,27 @@
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
 .error {
-  height: 100%;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
+  width: calc(100% - #{2 * tokens.$space-3});
+  max-width: 720px;
+  height: calc(100% - #{2 * tokens.$space-3});
+  margin: tokens.$space-3 auto;
+  overflow: hidden;
+  @include mixins.card;
 
   h2 {
-    padding: 16px 0 12px;
+    padding: tokens.$space-5 tokens.$space-4 tokens.$space-3;
     text-align: center;
+    @include mixins.title;
   }
 
   .actions {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    padding-bottom: 16px;
+    gap: tokens.$space-2;
+    padding-bottom: tokens.$space-4;
   }
 
   .wrapper {

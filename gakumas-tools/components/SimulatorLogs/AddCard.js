@@ -7,12 +7,12 @@ import styles from "./SimulatorLogs.module.scss";
 function AddCard({ id, idolId, text }) {
   const skillCard = SkillCards.getById(id);
   return (
-    <div className={styles.drawCard}>
-      {text}
+    <div className={styles.event}>
+      <span className={styles.eventLabel}>{text}</span>
       <Image
         src={gkImg(skillCard, idolId).icon}
-        width={24}
-        height={24}
+        width={22}
+        height={22}
         alt=""
       />
       {skillCard.name}

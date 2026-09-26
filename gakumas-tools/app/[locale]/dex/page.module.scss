@@ -1,4 +1,5 @@
 @use "../../../styles/colors";
+@use "../../../styles/mixins";
 @use "../../../styles/tokens";
 
 .hub {
@@ -22,31 +23,18 @@
   align-items: center;
   gap: tokens.$space-3;
   padding: tokens.$space-3;
-  border: 1px solid tokens.$surface-border;
-  border-radius: tokens.$radius-md;
-  background-color: tokens.$surface-panel;
   color: tokens.$surface-ink;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+  @include mixins.card-interactive;
 
-  &:hover {
-    border-color: colors.$gk-orange;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  @media (hover: hover) {
+    &:hover .icon {
+      @include mixins.icon-tile-wiggle;
+    }
   }
 }
 
 .icon {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: tokens.$radius-sm;
-  background-color: tokens.$surface-muted;
-  color: colors.$gk-orange;
-  font-size: 20px;
+  @include mixins.icon-tile(40px);
 }
 
 .text {
@@ -57,8 +45,7 @@
 }
 
 .title {
-  font-size: tokens.$text-base;
-  font-weight: 600;
+  @include mixins.heading;
 }
 
 .description {

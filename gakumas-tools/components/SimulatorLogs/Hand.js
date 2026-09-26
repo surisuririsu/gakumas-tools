@@ -1,11 +1,12 @@
 import React, { memo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { FaEllipsisVertical } from "react-icons/fa6";
 import { SkillCards } from "gakumas-data";
+import Collapse from "@/components/Collapse";
 import EntityIcon from "@/components/EntityIcon";
 import c from "@/utils/classNames";
 import { EntityTypes } from "@/utils/entities";
 import HandState from "./HandState";
+import HandTitle from "./HandTitle";
 import styles from "./SimulatorLogs.module.scss";
 
 function Hand({ handCards, scores, selectedIndex, state, idolId, hideScores }) {
@@ -15,13 +16,13 @@ function Hand({ handCards, scores, selectedIndex, state, idolId, hideScores }) {
 
   return (
     <div className={styles.hand}>
-      <div className={styles.handTitle}>
-        {t("hand")}{" "}
-        <button onClick={() => setExpanded(!expanded)}>
-          <FaEllipsisVertical />
-        </button>
-      </div>
-      {expanded && <HandState state={state} />}
+      <HandTitle
+        expanded={expanded}
+        onToggle={() => setExpanded(!expanded)}
+      />
+      <Collapse open={expanded}>
+        <HandState state={state} />
+      </Collapse>
       <div className={styles.handCards}>
         {handCards.map((card, i) => (
           <div
@@ -41,7 +42,9 @@ function Hand({ handCards, scores, selectedIndex, state, idolId, hideScores }) {
                 size="fill"
               />
             </div>
-            {SkillCards.getById(card.id).name}
+            <span className={styles.cardName}>
+              {SkillCards.getById(card.id).name}
+            </span>
             {!hideScores && (
               <span className={styles.cardScore}>
                 {scores[i] == -Infinity ? t("unplayable") : scores[i]}

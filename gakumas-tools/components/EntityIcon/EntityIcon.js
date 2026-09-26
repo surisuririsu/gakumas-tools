@@ -64,6 +64,7 @@ function EntityIcon({
 
   const className = c(
     styles.entityIcon,
+    entity ? styles.filled : styles.empty,
     styles[size],
     indications?.duplicate && styles.duplicate
   );

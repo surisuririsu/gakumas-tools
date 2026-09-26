@@ -2,7 +2,13 @@ import { memo, useContext } from "react";
 import dynamic from "next/dynamic";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { FaDiscord, FaPen } from "react-icons/fa6";
+import {
+  FaDiscord,
+  FaFileImport,
+  FaFilm,
+  FaMagnifyingGlass,
+  FaPen,
+} from "react-icons/fa6";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import MemoryEditorModal from "@/components/MemoryEditorModal";
@@ -26,6 +32,9 @@ function MemoriesNudge({ filtered }) {
   if (filtered) {
     return (
       <div className={styles.nudge}>
+        <span className={styles.nudgeIcon} aria-hidden="true">
+          <FaMagnifyingGlass />
+        </span>
         <p className={styles.nudgeText}>{t("noMatches")}</p>
       </div>
     );
@@ -34,13 +43,16 @@ function MemoriesNudge({ filtered }) {
   if (status == "loading" || memoriesLoading) {
     return (
       <div className={styles.nudge} aria-busy="true">
-        <Loader />
+        <Loader size="large" />
       </div>
     );
   }
 
   return (
     <div className={styles.nudge}>
+      <span className={styles.nudgeIcon} aria-hidden="true">
+        <FaFilm />
+      </span>
       {status == "unauthenticated" && (
         <>
           <p className={styles.nudgeText}>{t("signInHint")}</p>
@@ -63,7 +75,7 @@ function MemoriesNudge({ filtered }) {
               setModal(<MemoryImporterModal onSuccess={uploadMemories} />)
             }
           >
-            {t("import")}
+            <FaFileImport /> {t("import")}
           </Button>
         </>
       )}

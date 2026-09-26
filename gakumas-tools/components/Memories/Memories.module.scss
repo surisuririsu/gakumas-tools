@@ -1,15 +1,17 @@
-@use "sass:color";
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .memories {
+  width: calc(100% - #{2 * tokens.$space-2});
   max-width: 560px;
-  height: 100%;
-  margin: 0 auto;
+  height: calc(100% - #{2 * tokens.$space-2});
+  margin: tokens.$space-2 auto;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   container-type: inline-size;
+  @include mixins.card;
 }
 
 .nudge {
@@ -18,13 +20,20 @@
   align-items: center;
   gap: tokens.$space-4;
   padding: tokens.$space-6;
-  animation: nudgeIn tokens.$duration-slow tokens.$ease-out;
+  @include mixins.rise-in;
+}
+
+.nudgeIcon {
+  @include mixins.icon-tile(52px);
+  box-shadow: none;
+  @include mixins.pop-in(80ms);
 }
 
 .nudgeText {
   max-width: 320px;
   color: tokens.$surface-ink-muted;
   font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
   line-height: 1.5;
   text-align: center;
 }
@@ -34,12 +43,6 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: tokens.$space-2;
-}
-
-@keyframes nudgeIn {
-  from {
-    opacity: 0;
-  }
 }
 
 .alert {
@@ -54,44 +57,110 @@
 }
 
 .header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: tokens.$space-2;
-  padding: tokens.$space-2 tokens.$space-3;
   border-bottom: 1px solid tokens.$surface-border;
 }
 
-.fill {
-  flex: 1;
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2 tokens.$space-3;
 }
 
-.count {
+.layers {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  align-items: center;
+
+  &.end {
+    flex: 0 0 auto;
+    justify-items: end;
+  }
+}
+
+.layer {
+  grid-area: 1 / 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: tokens.$space-1;
-  padding: tokens.$space-1 tokens.$space-2;
-  border-radius: 999px;
-  background-color: tokens.$surface-muted;
-  color: tokens.$surface-ink-muted;
-  font-size: tokens.$text-sm;
-  font-weight: 600;
+  visibility: hidden;
+  opacity: 0;
+  translate: 16px 0;
+  pointer-events: none;
+  transition:
+    opacity tokens.$duration-base,
+    translate tokens.$duration-slide tokens.$ease-spring,
+    visibility 0s tokens.$duration-base;
+
+  &.home {
+    translate: -16px 0;
+  }
+
+  &.shown {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+    transition:
+      opacity tokens.$duration-base tokens.$duration-press,
+      translate tokens.$duration-slide tokens.$ease-spring,
+      visibility 0s;
+  }
+}
+
+.modeLabel {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  @include mixins.heading;
+  font-size: tokens.$text-md;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  svg {
+    flex-shrink: 0;
+    color: tokens.$accent-ink;
+    font-size: tokens.$text-sm;
+  }
+}
+
+.count {
+  @include mixins.tag;
+  padding: 3px 10px;
+  font-size: tokens.$text-xs;
+  @include mixins.numeric;
+
+  &.beatA {
+    animation: beatA tokens.$duration-spring tokens.$ease-pop;
+  }
+
+  &.beatB {
+    animation: beatB tokens.$duration-spring tokens.$ease-pop;
+  }
+}
+
+@keyframes beatA {
+  from {
+    scale: 0.8;
+  }
+}
+
+@keyframes beatB {
+  from {
+    scale: 0.8;
+  }
 }
 
 .search {
-  flex: 1;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: tokens.$space-1;
-}
-
-.delete {
-  display: flex;
-  align-items: center;
-  gap: tokens.$space-2;
-  font-size: tokens.$text-sm;
-  color: tokens.$surface-ink-muted;
+  padding: 0 tokens.$space-3 tokens.$space-3;
 }
 
 .list {
@@ -104,22 +173,91 @@
 .memoryTile {
   display: flex;
   border-bottom: 1px solid tokens.$surface-border;
+  transition: background-color tokens.$duration-base;
+
+  &.checked {
+    background-color: tokens.$danger-tint;
+  }
 }
 
 .check {
+  flex-shrink: 0;
+  width: 0;
   display: flex;
-  margin: 0;
-  background-color: color.adjust(colors.$red, $alpha: -0.85);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   cursor: pointer;
+  transition: width tokens.$duration-slide tokens.$ease-glide;
+
+  .deleting > & {
+    width: 40px;
+  }
 
   input {
-    width: 16px;
-    margin: tokens.$space-2;
-    accent-color: colors.$red-dark;
-    cursor: pointer;
+    @include mixins.visually-hidden;
+  }
+}
 
-    @media (pointer: coarse) {
-      width: 22px;
+.checkBox {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background-color: tokens.$surface-panel;
+  box-shadow:
+    inset 0 0 0 1.5px tokens.$surface-border-strong,
+    0 2px 0 tokens.$surface-edge;
+  color: colors.$white;
+  font-size: 13px;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    background-color tokens.$duration-fast,
+    box-shadow tokens.$duration-fast,
+    opacity tokens.$duration-base,
+    scale tokens.$duration-spring tokens.$ease-pop;
+
+  .deleting & {
+    opacity: 1;
+    scale: 1;
+    transition-delay: 0s, 0s, 80ms, 80ms;
+  }
+
+  svg {
+    opacity: 0;
+    scale: 0.4;
+    transition:
+      opacity tokens.$duration-fast,
+      scale tokens.$duration-spring tokens.$ease-pop;
+  }
+
+  .check:hover input:not(:checked) + & {
+    box-shadow:
+      inset 0 0 0 1.5px tokens.$danger,
+      0 2px 0 tokens.$surface-edge;
+  }
+
+  .check:active & {
+    scale: 0.88;
+    transition-duration: tokens.$duration-press;
+  }
+
+  input:checked + & {
+    background-color: tokens.$danger;
+    box-shadow: 0 2px 0 tokens.$danger-edge;
+
+    svg {
+      opacity: 1;
+      scale: 1;
     }
+  }
+
+  input:focus-visible + & {
+    outline: tokens.$focus-ring-width solid tokens.$focus-ring-color;
+    outline-offset: 2px;
   }
 }

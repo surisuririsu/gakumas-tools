@@ -1,21 +1,36 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .kofiAd {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: colors.$black;
-  font-size: 11px;
-  opacity: 0.35;
-  transition: opacity 0.2s;
+  gap: tokens.$space-1;
+  padding: tokens.$space-1 tokens.$space-2;
+  border-radius: tokens.$radius-pill;
+  color: tokens.$surface-ink-faint;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-semibold;
   text-decoration: none;
-
-  &:hover {
-    opacity: 0.6;
-  }
+  transition:
+    background-color tokens.$duration-fast,
+    color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-spring;
+  @include mixins.pressable;
 
   svg {
-    font-size: 12px;
+    font-size: tokens.$text-xs;
     color: #ff5e5b;
+    transition: scale tokens.$duration-spring tokens.$ease-pop;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: tokens.$fill-muted;
+      color: tokens.$surface-ink-muted;
+
+      svg {
+        scale: 1.2;
+      }
+    }
   }
 }

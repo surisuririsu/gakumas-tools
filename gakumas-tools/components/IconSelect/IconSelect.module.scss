@@ -1,45 +1,126 @@
 @use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .iconSelect {
+  min-width: 0;
+  padding: 4px 4px 6px;
+  border-radius: tokens.$radius-xl;
+  background-color: tokens.$fill-muted;
+  overflow: hidden;
+}
+
+.options {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
-  border: 1px solid tokens.$surface-border;
-  border-radius: 22px;
-  padding: 4px;
+  align-items: center;
+  gap: 4px;
+}
+
+.thumb {
+  position: absolute;
+  z-index: -1;
+  border-radius: tokens.$radius-pill;
+  background-color: colors.$white;
+  box-shadow:
+    inset 0 0 0 2px tokens.$brand,
+    0 2px 0 tokens.$brand-edge;
+  pointer-events: none;
 }
 
 .option {
-  border-radius: 16px;
+  --press-opacity: 1;
   padding: 4px;
+  border-radius: tokens.$radius-pill;
   transition:
-    background-color 0.15s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    background-color tokens.$duration-fast,
+    scale tokens.$duration-spring tokens.$ease-pop;
+  @include mixins.focus-ring-inset;
 
-  &:hover {
-    background-color: tokens.$surface-muted;
+  img {
+    display: block;
+    scale: 0.9;
+    transition: scale tokens.$duration-spring tokens.$ease-pop;
   }
 
-  @container (width < 512px) {
-    display: none;
+  &.selected img {
+    scale: 1;
   }
 
-  &.expanded {
-    display: flex;
+  @media (hover: hover) {
+    &:not(.selected):hover {
+      background-color: tokens.$fill-muted;
+
+      img {
+        scale: 1;
+      }
+    }
+  }
+
+  &:active {
+    scale: 0.84;
+    transition-duration: tokens.$duration-press;
   }
 }
 
-.current {
+.caret {
   display: none;
-
-  @container (width < 512px) {
-    display: flex;
-  }
 }
 
-.selected {
-  background-color: colors.$gk-orange-extra-light;
-  box-shadow: 0 0 0 2px colors.$gk-orange;
+@container (width < 512px) {
+  .collapsable {
+    .caret {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+      padding: 0 6px 0 2px;
+      cursor: pointer;
+
+      &::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background: mixins.$chevron center / contain no-repeat;
+        @include mixins.caret;
+      }
+    }
+  }
+
+  .collapsed {
+    flex-shrink: 0;
+    padding-bottom: 4px;
+    box-shadow: tokens.$field-inset;
+    transition: background-color tokens.$duration-fast;
+
+    .options {
+      flex-wrap: nowrap;
+    }
+
+    &:hover {
+      background-color: tokens.$field-bg-hover;
+    }
+
+    .option:not(.selected),
+    .thumb {
+      display: none;
+    }
+  }
+
+  .expanded {
+    .caret::before {
+      @include mixins.caret-open;
+    }
+
+    .thumb {
+      @include mixins.pop-in;
+    }
+
+    .option:not(.selected) {
+      @include mixins.pop-in;
+      @include mixins.stagger(12ms, 16);
+      animation-fill-mode: backwards;
+    }
+  }
 }

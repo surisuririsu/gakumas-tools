@@ -1,12 +1,12 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .save {
   max-width: 400px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
+  gap: tokens.$space-2;
+  margin-top: tokens.$space-2;
 }
 
 .statusSlot {
@@ -22,16 +22,13 @@
   top: 50%;
   left: 0;
   translate: 0 -50%;
-  white-space: nowrap;
-}
-
-.status,
-.saved {
   display: inline-flex;
   align-items: center;
-  gap: tokens.$space-1;
+  gap: 6px;
   font-size: tokens.$text-sm;
-  font-weight: 600;
+  font-weight: tokens.$weight-bold;
+  white-space: nowrap;
+  @include mixins.pop-in;
 }
 
 .status {
@@ -39,18 +36,9 @@
 }
 
 .saved {
-  color: colors.$custom-green;
-  animation: savedIn tokens.$duration-slow tokens.$ease-spring;
-}
-
-@keyframes savedIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
+  color: tokens.$success;
 }
 
 .error {
-  color: colors.$red;
-  font-size: tokens.$text-sm;
+  color: tokens.$danger;
 }

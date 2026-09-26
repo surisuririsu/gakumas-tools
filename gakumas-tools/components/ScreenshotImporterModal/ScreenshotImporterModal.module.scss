@@ -1,4 +1,4 @@
-@use "../../styles/colors";
+@use "../../styles/mixins";
 @use "../../styles/tokens";
 
 .instructions {
@@ -9,20 +9,78 @@
 }
 
 .file {
-  display: flex;
+  width: 100%;
   margin-top: tokens.$space-3;
   padding: tokens.$space-3;
-  border-radius: tokens.$radius-sm;
-  background-color: colors.$gk-orange-extra-light;
+  border: 1.5px dashed tokens.$surface-border-strong;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$fill-subtle;
+  color: tokens.$surface-ink-muted;
+  font-family: inherit;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
+  cursor: pointer;
+  transition:
+    background-color tokens.$duration-fast,
+    border-color tokens.$duration-fast;
+
+  &:hover:not(:disabled) {
+    border-color: tokens.$primary;
+    background-color: tokens.$primary-tint;
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: 0.6;
+  }
+
+  &::file-selector-button {
+    margin-right: tokens.$space-3;
+    padding: 7px 14px;
+    border: 0;
+    border-radius: tokens.$radius-pill;
+    background-color: tokens.$primary;
+    box-shadow: 0 tokens.$press-depth 0 tokens.$primary-edge;
+    color: tokens.$surface-panel;
+    font-family: inherit;
+    font-size: tokens.$text-sm;
+    font-weight: tokens.$weight-bold;
+    cursor: pointer;
+    transition:
+      background-color tokens.$duration-fast,
+      translate tokens.$duration-spring tokens.$ease-spring,
+      box-shadow tokens.$duration-spring tokens.$ease-spring;
+  }
+
+  &:hover:not(:disabled)::file-selector-button {
+    background-color: tokens.$primary-hover;
+  }
+
+  &:active:not(:disabled)::file-selector-button {
+    translate: 0 tokens.$press-depth;
+    box-shadow: 0 0 0 tokens.$primary-edge;
+    transition-duration: tokens.$duration-press;
+  }
+}
+
+.feedback {
+  min-height: 28px;
+  margin-top: tokens.$space-2;
 }
 
 .status {
-  margin-top: tokens.$space-2;
-  color: colors.$gk-orange;
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  color: tokens.$primary;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+  @include mixins.rise-in;
 }
 
 .error {
-  margin-top: tokens.$space-2;
-  color: colors.$red-dark;
+  color: tokens.$danger;
   font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-semibold;
+  @include mixins.rise-in;
 }

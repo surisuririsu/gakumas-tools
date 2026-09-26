@@ -1,5 +1,14 @@
+@use "../../styles/mixins";
+@use "../../styles/tokens";
+
 .list {
   display: grid;
   grid-template-columns: repeat(auto-fill, 60px);
-  gap: 4px;
+  gap: 6px;
+
+  img {
+    border-radius: tokens.$radius-md;
+    @include mixins.pop-in;
+    @include mixins.stagger(25ms);
+  }
 }

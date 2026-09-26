@@ -60,7 +60,7 @@ function NavbarMenu() {
           onClick={(e) => e.stopPropagation()}
         >
           {status == "unauthenticated" && (
-            <div>
+            <div className={styles.signIn}>
               <Button style="primary" onClick={discordSignIn} fill>
                 {t("signInWithDiscord")}
               </Button>

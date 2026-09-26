@@ -31,20 +31,24 @@ function HandStateLine({ k, state }) {
   if (buffKey) {
     const flat = FLAT_BUFFS[k];
     return state[k].map(({ amount, turns }) => (
-      <div key={turns}>
+      <div key={turns} className={styles.stateTag}>
         {t(buffKey)}{" "}
-        <span className={styles.blue}>
+        <span className={styles.value}>
           {flat ? amount : `${Math.round(amount * 100)}%`}
-        </span>{" "}
-        {turns ? `(${t("numTurns", { num: turns })})` : ""}
+        </span>
+        {turns ? (
+          <span className={styles.turns}>
+            ({t("numTurns", { num: turns })})
+          </span>
+        ) : null}
       </div>
     ));
   }
 
   return (
-    <div>
+    <div className={styles.stateTag}>
       {t(ALL_FIELDS[k])}{" "}
-      <span className={styles.blue}>
+      <span className={styles.value}>
         {isNaN(state[k]) ? t(state[k]) : state[k]}
       </span>
     </div>
@@ -56,15 +60,11 @@ function HandState({ state }) {
 
   return (
     <div className={styles.state}>
-      <div className={styles.stateContent}>
-        <div className={styles.turnIndicatorWrapper}>
-          <TurnIndicator turn={turn} />
-        </div>
-        <div className={styles.stateLines}>
-          {Object.keys(rest).map((k) => (
-            <HandStateLine key={k} k={k} state={rest} />
-          ))}
-        </div>
+      <TurnIndicator turn={turn} />
+      <div className={styles.stateLines}>
+        {Object.keys(rest).map((k) => (
+          <HandStateLine key={k} k={k} state={rest} />
+        ))}
       </div>
     </div>
   );

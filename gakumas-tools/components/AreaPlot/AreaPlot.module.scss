@@ -1,19 +1,22 @@
-@use "../../components/ButtonGroup/ButtonGroup.module";
+@use "../../styles/mixins";
+@use "../../styles/tokens";
 
 .fieldButtons {
-  @extend .buttonGroup;
-
-  margin-top: 8px;
+  display: flex;
   flex-wrap: wrap;
+  gap: 6px;
+  margin: tokens.$space-2 0 tokens.$space-1;
 
   button {
-    // Size buttons to their label instead of sharing row equally — with
-    // nowrap labels and flex: 1 the text overflowed each box and overlapped.
-    flex: 1 1 auto;
-    padding: 6px;
+    @include mixins.chip;
+
+    &.selected {
+      @include mixins.chip-selected;
+    }
 
     @media only screen and (max-width: 600px) {
-      font-size: 12px;
+      min-height: 28px;
+      padding: 0 10px;
     }
   }
 }

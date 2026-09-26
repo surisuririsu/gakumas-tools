@@ -1,4 +1,8 @@
-@use "../../../styles/colors";
+@use "sass:color";
+@use "../../../styles/mixins";
+@use "../../../styles/tokens";
+
+$danger-tint-edge: color.mix(tokens.$danger, tokens.$danger-tint, 28%);
 
 .targetSkillCards {
   max-width: 420px;
@@ -12,53 +16,129 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  gap: 6px;
   width: 16%;
 }
 
-%boolOp {
+%toggle {
   align-self: center;
-  z-index: 1;
-  border-radius: 4px;
-  padding: 4px;
-  color: colors.$white;
-  font-size: 14px;
-  line-height: 14px;
+  display: grid;
+  place-items: center;
+  height: 22px;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$fill-muted;
+  @include mixins.raised;
+
+  &:hover {
+    background-color: tokens.$fill-muted-hover;
+  }
+
+  > * {
+    grid-area: 1 / 1;
+  }
 }
 
-.or {
-  @extend %boolOp;
-  margin: -11px;
-  background-color: colors.$green;
+.negate {
+  @extend %toggle;
+  min-width: 38px;
+  padding: 0 6px;
+  color: tokens.$danger;
+}
+
+.minus,
+.not {
+  .live & {
+    transition:
+      opacity tokens.$duration-fast,
+      scale tokens.$duration-spring tokens.$ease-pop;
+  }
+}
+
+.minus {
+  font-size: 11px;
 }
 
 .not {
-  @extend %boolOp;
-  margin: -3px;
-  background-color: colors.$red;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-heavy;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  scale: 0.4;
+}
+
+.negated .negate {
+  background-color: tokens.$danger-tint;
+  box-shadow: 0 tokens.$press-depth 0 $danger-tint-edge;
+
+  .minus {
+    opacity: 0;
+    scale: 0.4;
+  }
+
+  .not {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 .orGroup {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  border-radius: 12px;
+
+  .live & {
+    transition:
+      background-color tokens.$duration-base,
+      box-shadow tokens.$duration-spring tokens.$ease-spring;
+  }
 }
 
 .hasMultiple {
-  outline: 2px solid colors.$green;
-  border-radius: 6px;
+  background-color: tokens.$success-tint;
+  box-shadow: 0 0 0 4px tokens.$success-tint;
 }
 
-%boolButton {
-  margin: 4px;
-  font-size: 16px;
+.negated .orGroup {
+  background-color: tokens.$danger-tint;
+  box-shadow: 0 0 0 4px tokens.$danger-tint;
 }
 
-.plus {
-  @extend %boolButton;
-  color: colors.$green;
+.alternate {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
-.minus {
-  @extend %boolButton;
-  color: colors.$red;
+.pop {
+  @include mixins.pop-in;
+}
+
+.or {
+  position: relative;
+  z-index: tokens.$z-raised;
+  align-self: center;
+  margin: -9px 0;
+  @include mixins.tag(tokens.$success-tint, tokens.$success);
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: tokens.$weight-heavy;
+  box-shadow: 0 0 0 2px tokens.$surface-panel;
+
+  .negated & {
+    background-color: tokens.$danger-tint;
+    color: tokens.$danger;
+  }
+}
+
+.addWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.add {
+  @extend %toggle;
+  width: 26px;
+  color: tokens.$success;
+  font-size: 11px;
 }

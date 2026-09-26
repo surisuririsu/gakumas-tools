@@ -39,6 +39,7 @@ import {
   runOnWorkers,
   workerCount,
 } from "@/simulator/workerPool";
+import c from "@/utils/classNames";
 import { createProgressStore } from "@/utils/progressStore";
 import { bucketScores, getMedianScore, mergeResults } from "@/utils/simulator";
 import usePersistedState from "@/utils/usePersistedState";
@@ -257,7 +258,11 @@ export default function Simulator() {
             {loadouts.map((loadout, index) => (
               <div key={index} className={styles.loadoutTab}>
                 <button
-                  className={styles.selectButton}
+                  className={c(
+                    styles.selectButton,
+                    index === currentLoadoutIndex && styles.selectedTab,
+                  )}
+                  aria-pressed={index === currentLoadoutIndex}
                   onClick={() => {
                     setLoadout(loadouts[index]);
                     setCurrentLoadoutIndex(index);
@@ -314,6 +319,7 @@ export default function Simulator() {
               <span>{numRuns}</span>
               <input
                 className={styles.numRunsSlider}
+                style={{ "--fill": `${((numRuns - 1000) / 9000) * 100}%` }}
                 type="range"
                 value={numRuns}
                 onChange={(e) => setNumRuns(parseInt(e.target.value, 10))}
