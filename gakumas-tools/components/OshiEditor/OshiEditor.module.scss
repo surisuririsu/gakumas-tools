@@ -18,9 +18,114 @@
   }
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: tokens.$space-3;
+}
+
 .title {
   margin: 0;
   @include mixins.title;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-3;
+  padding: tokens.$space-2 tokens.$space-3;
+  border-radius: tokens.$radius-md;
+  background-color: tokens.$fill-muted;
+  text-align: left;
+  @include mixins.raised;
+
+  &:hover {
+    background-color: tokens.$fill-muted-hover;
+  }
+
+  &.selected {
+    background-color: tokens.$accent-tint;
+    box-shadow: 0 tokens.$press-depth 0 tokens.$accent-edge;
+  }
+
+  &.invalid {
+    box-shadow:
+      inset 0 0 0 1.5px tokens.$danger,
+      0 tokens.$press-depth 0 tokens.$danger-edge;
+  }
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: tokens.$radius-pill;
+  box-shadow: inset 0 0 0 1px tokens.$fill-muted;
+}
+
+.summary {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summaryText {
+  overflow: hidden;
+  color: tokens.$surface-ink;
+  font-size: tokens.$text-md;
+  font-weight: tokens.$weight-bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summarySchedule {
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
+  @include mixins.numeric;
+}
+
+.status {
+  flex-shrink: 0;
+  @include mixins.tag;
+
+  &.showing {
+    background-color: tokens.$success-tint;
+    color: tokens.$success-ink;
+  }
+
+  &.scheduled {
+    background-color: tokens.$primary-tint;
+    color: tokens.$link;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-4;
+  padding: tokens.$space-4;
+  border-radius: tokens.$radius-lg;
+  background-color: tokens.$fill-subtle;
+
+  @media (max-width: 480px) {
+    padding: tokens.$space-3;
+  }
+}
+
+.hint {
+  color: tokens.$surface-ink-subtle;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
 }
 
 .preview {

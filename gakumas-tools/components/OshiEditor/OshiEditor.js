@@ -1,60 +1,23 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Idols } from "gakumas-data";
 import Button from "@/components/Button";
-import ButtonGroup from "@/components/ButtonGroup";
-import Checkbox from "@/components/Checkbox";
-import Input from "@/components/Input";
-import Oshi from "@/components/Oshi";
-import Select from "@/components/Select";
-import TabGroup from "@/components/TabGroup";
-import { routing } from "@/i18n/routing";
 import c from "@/utils/classNames";
-import { oshiProps, validateOshiSettings } from "@/utils/oshi";
+import {
+  DEFAULT_BANNER,
+  bannerStatus,
+  validateOshiSettings,
+} from "@/utils/oshi";
+import BannerForm from "./BannerForm";
 import styles from "./OshiEditor.module.scss";
 
-const LANGUAGES = [
-  { value: "ja", label: "日本語" },
-  { value: "en", label: "English" },
-  { value: "zh-Hans", label: "简体中文" },
-  { value: "ko", label: "한국어" },
-];
-
-const ACTIONS = [
-  { value: "link", label: "Link" },
-  { value: "video", label: "YouTube video" },
-];
-
-const IDOLS = [
-  { value: "", label: "None" },
-  ...Idols.getAll().map(({ id, name }) => ({ value: id, label: name })),
-];
-
-const SWATCHES = [
-  { name: "Brand", color: "#f39800" },
-  { name: "Vocal", color: "#f23584" },
-  { name: "Dance", color: "#1c85ed" },
-  { name: "Visual", color: "#f7b12e" },
-  { name: "Saki", color: "#e2041b" },
-  { name: "Temari", color: "#007bbb" },
-  { name: "Kotone", color: "#f7c114" },
-  { name: "Mao", color: "#7f1184" },
-  { name: "Lilja", color: "#eafdff" },
-  { name: "China", color: "#f68b1f" },
-  { name: "Sumika", color: "#7cfc00" },
-  { name: "Hiro", color: "#00afcc" },
-  { name: "Rinami", color: "#f6adc6" },
-  { name: "Ume", color: "#ea533a" },
-  { name: "Sena", color: "#f6ae54" },
-  { name: "Misuzu", color: "#7a99cf" },
-  { name: "PxW Mao", color: "#fa7abc" },
-  { name: "Suukawa", color: "#f566a4" },
-  { name: "Maokoku", color: "#f8bdbd" },
-  { name: "Payton", color: "#36b596" },
-  { name: "Mishima", color: "#9446ac" },
-  { name: "Colorful", color: "#fbdb16" },
-];
+const STATUS_LABELS = {
+  showing: "Showing",
+  hidden: "Hidden by a newer banner",
+  scheduled: "Scheduled",
+  ended: "Ended",
+  off: "Off",
+};
 
 const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
@@ -69,20 +32,35 @@ function fromJstInput(value) {
   return value ? `${value}:00+09:00` : null;
 }
 
-function toForm(settings) {
+function toForm(banner) {
   return {
-    ...settings,
-    startsAt: toJstInput(settings.startsAt),
-    endsAt: toJstInput(settings.endsAt),
+    ...banner,
+    startsAt: toJstInput(banner.startsAt),
+    endsAt: toJstInput(banner.endsAt),
   };
 }
 
-function toPayload(form) {
+function toPayload(banner) {
   return {
-    ...form,
-    startsAt: fromJstInput(form.startsAt),
-    endsAt: fromJstInput(form.endsAt),
+    ...banner,
+    startsAt: fromJstInput(banner.startsAt),
+    endsAt: fromJstInput(banner.endsAt),
   };
+}
+
+function toSchedule(banner) {
+  const date = (value) => (value ? new Date(fromJstInput(value)) : null);
+  return {
+    ...banner,
+    startsAt: date(banner.startsAt),
+    endsAt: date(banner.endsAt),
+  };
+}
+
+function scheduleLabel({ startsAt, endsAt }) {
+  if (!startsAt && !endsAt) return "No schedule";
+  const format = (value) => value.replace("T", " ");
+  return `${startsAt ? format(startsAt) : "…"} → ${endsAt ? format(endsAt) : "…"}`;
 }
 
 async function putSettings(payload) {
@@ -102,23 +80,48 @@ async function putSettings(payload) {
 
 export default function OshiEditor({ initialSettings }) {
   const router = useRouter();
-  const [form, setForm] = useState(() => toForm(initialSettings));
-  const [savedForm, setSavedForm] = useState(form);
-  const [language, setLanguage] = useState(routing.defaultLocale);
+  const [banners, setBanners] = useState(() =>
+    initialSettings.banners.map(toForm)
+  );
+  const [savedBanners, setSavedBanners] = useState(banners);
+  const [selectedId, setSelectedId] = useState(banners[0]?.id ?? null);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState(null);
 
-  const payload = toPayload(form);
-  const { error } = validateOshiSettings(payload);
-  const dirty = JSON.stringify(form) != JSON.stringify(savedForm);
-  const isCustomColor = !SWATCHES.some(({ color }) => color == form.color);
+  const payload = { banners: banners.map(toPayload) };
+  const { error, index: errorIndex } = validateOshiSettings(payload);
+  const dirty = JSON.stringify(banners) != JSON.stringify(savedBanners);
+  const scheduled = banners.map(toSchedule);
+  const now = new Date();
+  const selected = banners.find(({ id }) => id == selectedId);
   const message = error
     ? { text: error, tone: "error" }
     : (notice ?? (dirty ? { text: "Unsaved changes" } : null));
 
-  function update(changes) {
-    setForm({ ...form, ...changes });
+  function change(nextBanners) {
+    setBanners(nextBanners);
     setNotice(null);
+  }
+
+  function updateSelected(changes) {
+    change(
+      banners.map((banner) =>
+        banner.id == selectedId ? { ...banner, ...changes } : banner
+      )
+    );
+  }
+
+  function add() {
+    const banner = toForm({ ...DEFAULT_BANNER, id: crypto.randomUUID() });
+    change([...banners, banner]);
+    setSelectedId(banner.id);
+  }
+
+  function remove() {
+    const index = banners.findIndex(({ id }) => id == selectedId);
+    const remaining = banners.filter(({ id }) => id != selectedId);
+    change(remaining);
+    setSelectedId(remaining[Math.min(index, remaining.length - 1)]?.id);
   }
 
   async function save() {
@@ -129,7 +132,7 @@ export default function OshiEditor({ initialSettings }) {
     if (error) {
       setNotice({ text: error, tone: "error" });
     } else {
-      setSavedForm(form);
+      setSavedBanners(banners);
       setNotice({ text: "Saved", tone: "success" });
       router.refresh();
     }
@@ -137,134 +140,58 @@ export default function OshiEditor({ initialSettings }) {
 
   return (
     <div className={styles.editor}>
-      <h1 className={styles.title}>Oshi banner</h1>
-
-      <div className={styles.preview}>
-        <div className={styles.navbarEdge} />
-        <Oshi
-          key={`${form.action}-${form.initiallyExpanded}`}
-          {...oshiProps(form, language)}
-        />
+      <div className={styles.header}>
+        <h1 className={styles.title}>Oshi banners</h1>
+        <Button size="sm" onClick={add}>
+          Add banner
+        </Button>
       </div>
 
-      <Checkbox
-        label="Show banner"
-        checked={form.enabled}
-        onChange={(enabled) => update({ enabled })}
-      />
-
-      <div className={styles.field}>
-        <span className={styles.label}>Text</span>
-        <TabGroup
-          options={LANGUAGES}
-          selected={language}
-          onChange={setLanguage}
-        />
-        <Input
-          className={styles.text}
-          value={form.text[language]}
-          placeholder={
-            language == routing.defaultLocale
-              ? ""
-              : form.text[routing.defaultLocale]
-          }
-          onChange={(value) =>
-            update({ text: { ...form.text, [language]: value } })
-          }
-        />
-      </div>
-
-      <label className={styles.field}>
-        <span className={styles.label}>Idol icon</span>
-        <Select
-          options={IDOLS}
-          value={form.idolId ?? ""}
-          onChange={(idolId) => update({ idolId: idolId || null })}
-        />
-      </label>
-
-      <div className={styles.field}>
-        <span className={styles.label}>Colour</span>
-        <div className={styles.swatches}>
-          {SWATCHES.map(({ name, color }) => (
+      <div className={styles.list}>
+        {banners.length == 0 && (
+          <span className={styles.hint}>No banners yet.</span>
+        )}
+        {banners.map((banner, i) => {
+          const status = bannerStatus(scheduled[i], scheduled, now);
+          return (
             <button
-              key={color}
+              key={banner.id}
               type="button"
               className={c(
-                styles.swatch,
-                form.color == color && styles.selected
+                styles.item,
+                banner.id == selectedId && styles.selected,
+                i == errorIndex && styles.invalid
               )}
-              style={{ backgroundColor: color }}
-              title={name}
-              aria-label={name}
-              aria-pressed={form.color == color}
-              onClick={() => update({ color })}
-            />
-          ))}
-          <input
-            type="color"
-            className={c(styles.swatch, isCustomColor && styles.selected)}
-            value={form.color}
-            title="Custom"
-            aria-label="Custom"
-            onChange={(e) => update({ color: e.target.value })}
-          />
-        </div>
+              onClick={() => setSelectedId(banner.id)}
+            >
+              <span
+                className={styles.dot}
+                style={{ backgroundColor: banner.color }}
+              />
+              <span className={styles.summary}>
+                <span className={styles.summaryText}>
+                  {banner.text.ja || "Untitled"}
+                </span>
+                <span className={styles.summarySchedule}>
+                  {scheduleLabel(banner)}
+                </span>
+              </span>
+              <span className={c(styles.status, styles[status])}>
+                {STATUS_LABELS[status]}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className={styles.field}>
-        <span className={styles.label}>Opens</span>
-        <ButtonGroup
-          options={ACTIONS}
-          selected={form.action}
-          onChange={(action) => update({ action })}
+      {selected && (
+        <BannerForm
+          key={selected.id}
+          banner={selected}
+          onChange={updateSelected}
+          onDelete={remove}
         />
-      </div>
-
-      <label className={styles.field}>
-        <span className={styles.label}>URL</span>
-        <Input
-          className={styles.text}
-          type="url"
-          value={form.url}
-          placeholder="https://"
-          onChange={(url) => update({ url })}
-        />
-      </label>
-
-      <div className={styles.row}>
-        <Checkbox
-          label="Start expanded"
-          checked={form.initiallyExpanded}
-          onChange={(initiallyExpanded) => update({ initiallyExpanded })}
-        />
-        <Checkbox
-          label="Red dot while collapsed"
-          checked={form.hasBadge}
-          onChange={(hasBadge) => update({ hasBadge })}
-        />
-      </div>
-
-      <div className={styles.schedule}>
-        <label className={styles.field}>
-          <span className={styles.label}>Show from (JST)</span>
-          <Input
-            className={styles.text}
-            type="datetime-local"
-            value={form.startsAt}
-            onChange={(startsAt) => update({ startsAt })}
-          />
-        </label>
-        <label className={styles.field}>
-          <span className={styles.label}>Show until (JST)</span>
-          <Input
-            className={styles.text}
-            type="datetime-local"
-            value={form.endsAt}
-            onChange={(endsAt) => update({ endsAt })}
-          />
-        </label>
-      </div>
+      )}
 
       <div className={styles.footer}>
         <span className={c(styles.message, message && styles[message.tone])}>

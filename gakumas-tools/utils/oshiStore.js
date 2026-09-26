@@ -19,11 +19,8 @@ function setCached(settings) {
 
 export async function readOshiSettings() {
   const collection = await settingsCollection();
-  const doc = await collection.findOne(
-    { _id: DOC_ID },
-    { projection: { _id: 0, updatedAt: 0 } }
-  );
-  return { ...DEFAULT_OSHI_SETTINGS, ...doc };
+  const doc = await collection.findOne({ _id: DOC_ID });
+  return { banners: doc?.banners ?? DEFAULT_OSHI_SETTINGS.banners };
 }
 
 export async function saveOshiSettings(settings) {

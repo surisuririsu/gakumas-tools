@@ -3,12 +3,11 @@ import { useState } from "react";
 import { Resizable } from "re-resizable";
 import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
-import { oshiInk } from "@/utils/oshi";
+import { oshiInk, parseOshiText } from "@/utils/oshi";
 import styles from "./Oshi.module.scss";
 
 export default function Oshi({
   text,
-  idolId,
   color,
   initiallyExpanded,
   hasBadge,
@@ -19,10 +18,11 @@ export default function Oshi({
   const style = { "--oshi-bg": color, "--oshi-ink": oshiInk(color) };
   const badge = hasBadge && <div className={styles.badge} />;
   const label = (
-    <>
-      {idolId && <IdolIcon idolId={idolId} />}
-      {text}
-    </>
+    <span>
+      {parseOshiText(text).map((segment, i) =>
+        segment.idolId ? <IdolIcon key={i} idolId={segment.idolId} /> : segment
+      )}
+    </span>
   );
 
   if (videoId) {
