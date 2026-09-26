@@ -3,20 +3,16 @@ import path from "path";
 import sharp from "sharp";
 import TierListPreview from "@/components/TierListPreview";
 import {
-  ITEM_GAP,
-  ITEMS_PADDING,
   ITEM_SIZE,
-  MIN_ROW_HEIGHT,
-  PREVIEW_PADDING,
   PREVIEW_WIDTH,
-  TIER_LABEL_WIDTH,
+  previewHeight,
 } from "@/components/TierListPreview/TierListPreview.styles";
 import {
   ENTITY_DATA_BY_TYPE,
   EntityTypes,
   resolveEntityIcon,
 } from "@/utils/entities";
-import { PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
+import { loadFonts, PREVIEW_CACHE_CONTROL, renderImage } from "@/utils/og";
 import { clampList, decodeList, EMPTY_LIST } from "@/utils/tierList";
 
 const MAX_ITEMS_PER_TIER = 16;
@@ -93,14 +89,6 @@ async function fetchAll(entries) {
   return Object.fromEntries(arr.filter(([, v]) => v));
 }
 
-function rowHeight(itemCount, columns) {
-  if (itemCount === 0) return MIN_ROW_HEIGHT;
-  const lines = Math.ceil(itemCount / columns);
-  const itemsHeight =
-    lines * ITEM_SIZE + (lines - 1) * ITEM_GAP + ITEMS_PADDING * 2;
-  return Math.max(MIN_ROW_HEIGHT, itemsHeight);
-}
-
 export async function GET(request) {
   const url = new URL(request.url);
   const type = url.searchParams.get("type");
@@ -140,25 +128,12 @@ export async function GET(request) {
     if (iconCache[key]) itemSrc[id] = iconCache[key];
   }
 
-  const itemsAreaWidth = PREVIEW_WIDTH - PREVIEW_PADDING * 2 - TIER_LABEL_WIDTH;
-  const columns = Math.max(
-    1,
-    Math.floor(
-      (itemsAreaWidth - ITEMS_PADDING * 2 + ITEM_GAP) / (ITEM_SIZE + ITEM_GAP),
-    ),
-  );
-
-  let height = PREVIEW_PADDING * 2;
-  for (const rank of list.tiers) {
-    const count = list.items[rank].length + (list.overflow[rank] ? 1 : 0);
-    height += rowHeight(count, columns);
-  }
-
   return renderImage(
     <TierListPreview list={list} rankSrc={rankSrc} itemSrc={itemSrc} />,
     {
       width: PREVIEW_WIDTH,
-      height,
+      height: previewHeight(list),
+      fonts: await loadFonts(),
       headers: { "Cache-Control": PREVIEW_CACHE_CONTROL },
     },
   );
