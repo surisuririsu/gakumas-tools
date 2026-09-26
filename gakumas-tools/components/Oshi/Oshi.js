@@ -3,19 +3,22 @@ import { useState } from "react";
 import { Resizable } from "re-resizable";
 import IdolIcon from "@/components/IdolIcon";
 import YouTubeVideo from "@/components/YouTubeVideo";
-import { oshiInk, parseOshiText } from "@/utils/oshi";
+import { oshiBackground, oshiInk, parseOshiText } from "@/utils/oshi";
 import styles from "./Oshi.module.scss";
 
 export default function Oshi({
   text,
-  color,
+  colors,
   initiallyExpanded,
   hasBadge,
   videoId,
   url,
 }) {
   const [expanded, setExpanded] = useState(initiallyExpanded);
-  const style = { "--oshi-bg": color, "--oshi-ink": oshiInk(color) };
+  const style = {
+    "--oshi-bg": oshiBackground(colors),
+    "--oshi-ink": oshiInk(colors),
+  };
   const badge = hasBadge && <div className={styles.badge} />;
   const label = (
     <span>

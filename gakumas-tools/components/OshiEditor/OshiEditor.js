@@ -1,23 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import c from "@/utils/classNames";
-import {
-  DEFAULT_BANNER,
-  bannerStatus,
-  validateOshiSettings,
-} from "@/utils/oshi";
+import { DEFAULT_BANNER, validateOshiSettings } from "@/utils/oshi";
 import BannerForm from "./BannerForm";
+import BannerTimeline from "./BannerTimeline";
 import styles from "./OshiEditor.module.scss";
-
-const STATUS_LABELS = {
-  showing: "Showing",
-  hidden: "Hidden by a newer banner",
-  scheduled: "Scheduled",
-  ended: "Ended",
-  off: "Off",
-};
 
 const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
@@ -32,9 +21,16 @@ function fromJstInput(value) {
   return value ? `${value}:00+09:00` : null;
 }
 
+const MAX_COLORS = 3;
+const NOW_TICK_MS = 60 * 1000;
+
 function toForm(banner) {
   return {
     ...banner,
+    colors: [...banner.colors, ...Array(MAX_COLORS).fill("")].slice(
+      0,
+      MAX_COLORS
+    ),
     startsAt: toJstInput(banner.startsAt),
     endsAt: toJstInput(banner.endsAt),
   };
@@ -49,18 +45,15 @@ function toPayload(banner) {
 }
 
 function toSchedule(banner) {
-  const date = (value) => (value ? new Date(fromJstInput(value)) : null);
+  const date = (value) => {
+    const parsed = value && new Date(fromJstInput(value));
+    return parsed && !isNaN(parsed) ? parsed : null;
+  };
   return {
     ...banner,
     startsAt: date(banner.startsAt),
     endsAt: date(banner.endsAt),
   };
-}
-
-function scheduleLabel({ startsAt, endsAt }) {
-  if (!startsAt && !endsAt) return "No schedule";
-  const format = (value) => value.replace("T", " ");
-  return `${startsAt ? format(startsAt) : "…"} → ${endsAt ? format(endsAt) : "…"}`;
 }
 
 async function putSettings(payload) {
@@ -78,7 +71,7 @@ async function putSettings(payload) {
   }
 }
 
-export default function OshiEditor({ initialSettings }) {
+export default function OshiEditor({ initialSettings, initialNow }) {
   const router = useRouter();
   const [banners, setBanners] = useState(() =>
     initialSettings.banners.map(toForm)
@@ -87,12 +80,16 @@ export default function OshiEditor({ initialSettings }) {
   const [selectedId, setSelectedId] = useState(banners[0]?.id ?? null);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState(null);
+  const [now, setNow] = useState(initialNow);
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), NOW_TICK_MS);
+    return () => clearInterval(interval);
+  }, []);
 
   const payload = { banners: banners.map(toPayload) };
   const { error, index: errorIndex } = validateOshiSettings(payload);
   const dirty = JSON.stringify(banners) != JSON.stringify(savedBanners);
-  const scheduled = banners.map(toSchedule);
-  const now = new Date();
   const selected = banners.find(({ id }) => id == selectedId);
   const message = error
     ? { text: error, tone: "error" }
@@ -147,42 +144,17 @@ export default function OshiEditor({ initialSettings }) {
         </Button>
       </div>
 
-      <div className={styles.list}>
-        {banners.length == 0 && (
-          <span className={styles.hint}>No banners yet.</span>
-        )}
-        {banners.map((banner, i) => {
-          const status = bannerStatus(scheduled[i], scheduled, now);
-          return (
-            <button
-              key={banner.id}
-              type="button"
-              className={c(
-                styles.item,
-                banner.id == selectedId && styles.selected,
-                i == errorIndex && styles.invalid
-              )}
-              onClick={() => setSelectedId(banner.id)}
-            >
-              <span
-                className={styles.dot}
-                style={{ backgroundColor: banner.color }}
-              />
-              <span className={styles.summary}>
-                <span className={styles.summaryText}>
-                  {banner.text.ja || "Untitled"}
-                </span>
-                <span className={styles.summarySchedule}>
-                  {scheduleLabel(banner)}
-                </span>
-              </span>
-              <span className={c(styles.status, styles[status])}>
-                {STATUS_LABELS[status]}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+      {banners.length == 0 ? (
+        <span className={styles.hint}>No banners yet.</span>
+      ) : (
+        <BannerTimeline
+          banners={banners.map(toSchedule)}
+          selectedId={selectedId}
+          errorIndex={errorIndex}
+          now={now}
+          onSelect={setSelectedId}
+        />
+      )}
 
       {selected && (
         <BannerForm

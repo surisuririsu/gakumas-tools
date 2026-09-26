@@ -4,7 +4,7 @@ import { routing } from "@/i18n/routing";
 export const DEFAULT_BANNER = {
   enabled: true,
   text: Object.fromEntries(routing.locales.map((locale) => [locale, ""])),
-  color: "#1c85ed",
+  colors: ["#1c85ed"],
   action: "link",
   url: "",
   hasBadge: false,
@@ -18,6 +18,7 @@ export const DEFAULT_OSHI_SETTINGS = { banners: [] };
 const ACTIONS = ["link", "video"];
 const MAX_BANNERS = 50;
 const MAX_TEXT_LENGTH = 300;
+const MAX_COLORS = 3;
 const BANNER_ID = /^[\w-]{1,64}$/;
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 const YOUTUBE_ID = /^[\w-]{11}$/;
@@ -80,9 +81,25 @@ export function normalizeColor(value) {
     .toLowerCase()}`;
 }
 
-export function oshiInk(color) {
+function brightness(color) {
   const [r, g, b] = [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
-  return 0.299 * r + 0.587 * g + 0.114 * b > 170 ? "#111" : "#fefefe";
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+function validColors(colors) {
+  return colors.filter((color) => HEX_COLOR.test(color));
+}
+
+export function oshiBackground(colors) {
+  const stops = validColors(colors);
+  return stops.length > 1
+    ? `linear-gradient(100deg, ${stops.join(", ")})`
+    : (stops[0] ?? "transparent");
+}
+
+export function oshiInk(colors) {
+  const darkest = Math.min(...validColors(colors).map(brightness));
+  return darkest > 170 ? "#111" : "#fefefe";
 }
 
 function normalizeBanner(input) {
@@ -95,7 +112,9 @@ function normalizeBanner(input) {
         String(input.text?.[locale] ?? "").trim(),
       ])
     ),
-    color: normalizeColor(input.color),
+    colors: (Array.isArray(input.colors) ? input.colors : [])
+      .map(normalizeColor)
+      .filter((color) => color != "#"),
     action: input.action,
     url: String(input.url ?? "").trim(),
     hasBadge: input.hasBadge === true,
@@ -106,7 +125,7 @@ function normalizeBanner(input) {
 }
 
 function findBannerError(banner) {
-  const { id, enabled, text, color, action, url, startsAt, endsAt } = banner;
+  const { id, enabled, text, colors, action, url, startsAt, endsAt } = banner;
 
   if (!BANNER_ID.test(id)) {
     return "Invalid ID";
@@ -117,8 +136,12 @@ function findBannerError(banner) {
   if (Object.values(text).some((t) => t.length > MAX_TEXT_LENGTH)) {
     return `Text must be ${MAX_TEXT_LENGTH} characters or fewer`;
   }
-  if (!HEX_COLOR.test(color)) {
-    return "Colour must be a 6-digit hex code like 1c85ed";
+  if (
+    colors.length < 1 ||
+    colors.length > MAX_COLORS ||
+    validColors(colors).length < colors.length
+  ) {
+    return `Colours must be 1–${MAX_COLORS} 6-digit hex codes like 1c85ed`;
   }
   if (!ACTIONS.includes(action)) {
     return "Unknown action";
@@ -184,10 +207,10 @@ export function bannerStatus(banner, banners, now = new Date()) {
 }
 
 export function oshiProps(banner, locale) {
-  const { text, color, action, url, hasBadge, initiallyExpanded } = banner;
+  const { text, colors, action, url, hasBadge, initiallyExpanded } = banner;
   return {
     text: text[locale] || text[routing.defaultLocale],
-    color,
+    colors,
     hasBadge,
     initiallyExpanded,
     ...(action == "video" ? { videoId: youTubeId(url) } : { url }),

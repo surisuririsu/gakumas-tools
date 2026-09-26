@@ -1,5 +1,5 @@
 import { connect } from "@/utils/mongodb";
-import { DEFAULT_OSHI_SETTINGS } from "@/utils/oshi";
+import { DEFAULT_BANNER, DEFAULT_OSHI_SETTINGS } from "@/utils/oshi";
 
 const DOC_ID = "oshi";
 const CACHE_TTL_MS = 60 * 1000;
@@ -20,7 +20,10 @@ function setCached(settings) {
 export async function readOshiSettings() {
   const collection = await settingsCollection();
   const doc = await collection.findOne({ _id: DOC_ID });
-  return { banners: doc?.banners ?? DEFAULT_OSHI_SETTINGS.banners };
+  const banners = doc?.banners ?? DEFAULT_OSHI_SETTINGS.banners;
+  return {
+    banners: banners.map((banner) => ({ ...DEFAULT_BANNER, ...banner })),
+  };
 }
 
 export async function saveOshiSettings(settings) {

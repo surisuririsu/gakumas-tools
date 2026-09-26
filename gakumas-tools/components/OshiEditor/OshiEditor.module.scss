@@ -30,20 +30,68 @@
   @include mixins.title;
 }
 
-.list {
+.timeline {
+  --inset: #{tokens.$space-3};
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: tokens.$space-2;
+  padding-top: 22px;
+}
+
+.grid {
+  position: absolute;
+  inset: 0 var(--inset);
+  pointer-events: none;
+}
+
+.tick,
+.now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--at) * 100%);
+}
+
+.tick {
+  padding-left: tokens.$space-1;
+  border-left: 1px solid tokens.$fill-muted;
+  color: tokens.$surface-ink-subtle;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-semibold;
+  line-height: 1;
+  white-space: nowrap;
+  @include mixins.numeric;
+}
+
+.now {
+  z-index: 1;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: tokens.$radius-pill;
+  background-color: tokens.$danger;
+}
+
+.lane,
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: tokens.$space-2;
+  padding: tokens.$space-2 var(--inset);
+  border-radius: tokens.$radius-md;
+  text-align: left;
+}
+
+.lane {
+  background-color: tokens.$fill-subtle;
+}
+
+.laneTitle {
+  @include mixins.label;
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  gap: tokens.$space-3;
-  padding: tokens.$space-2 tokens.$space-3;
-  border-radius: tokens.$radius-md;
   background-color: tokens.$fill-muted;
-  text-align: left;
   @include mixins.raised;
 
   &:hover {
@@ -60,6 +108,60 @@
       inset 0 0 0 1.5px tokens.$danger,
       0 tokens.$press-depth 0 tokens.$danger-edge;
   }
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-3;
+}
+
+.track {
+  position: relative;
+  height: 10px;
+}
+
+.bar,
+.window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px tokens.$surface-panel;
+
+  &.openStart {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &.openEnd {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.window {
+  opacity: 0.3;
+
+  &.off {
+    opacity: 1;
+    border: 1.5px dashed tokens.$surface-border-strong;
+    box-shadow: none;
+  }
+}
+
+.empty {
+  color: tokens.$surface-ink-faint;
+  font-size: tokens.$text-2xs;
+  font-weight: tokens.$weight-semibold;
+  line-height: 10px;
+}
+
+.caption {
+  padding: 0 tokens.$space-3;
+  color: tokens.$surface-ink-subtle;
+  font-size: tokens.$text-xs;
+  font-weight: tokens.$weight-semibold;
 }
 
 .dot {
@@ -178,6 +280,12 @@
   &.selected {
     @include mixins.selected-ring;
   }
+}
+
+.hexes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: tokens.$space-2 tokens.$space-3;
 }
 
 .hex {

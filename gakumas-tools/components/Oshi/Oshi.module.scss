@@ -20,7 +20,8 @@
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--oshi-bg), black 10%);
+      background:
+        linear-gradient(rgb(0 0 0 / 10%), rgb(0 0 0 / 10%)), var(--oshi-bg);
     }
   }
 }

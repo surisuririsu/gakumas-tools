@@ -17,5 +17,10 @@ export default async function BannerAdminPage({ params }) {
   const session = await getServerSession(authOptions);
   if (!isAdmin(session)) notFound();
 
-  return <OshiEditor initialSettings={await readOshiSettings()} />;
+  return (
+    <OshiEditor
+      initialSettings={await readOshiSettings()}
+      initialNow={Date.now()}
+    />
+  );
 }

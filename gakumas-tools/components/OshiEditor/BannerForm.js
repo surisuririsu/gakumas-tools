@@ -10,7 +10,12 @@ import Oshi from "@/components/Oshi";
 import TabGroup from "@/components/TabGroup";
 import { routing } from "@/i18n/routing";
 import c from "@/utils/classNames";
-import { idolToken, normalizeColor, oshiProps } from "@/utils/oshi";
+import {
+  idolToken,
+  normalizeColor,
+  oshiBackground,
+  oshiProps,
+} from "@/utils/oshi";
 import styles from "./OshiEditor.module.scss";
 
 const LANGUAGES = [
@@ -32,34 +37,55 @@ const IDOLS = Idols.getAll().map((idol) => ({
 }));
 
 const SWATCHES = [
-  { name: "gk-orange", color: "#f39800" },
-  { name: "vocal", color: "#f23584" },
-  { name: "dance", color: "#1c85ed" },
-  { name: "visual", color: "#f7b12e" },
-  { name: "saki", color: "#e2041b" },
-  { name: "temari", color: "#007bbb" },
-  { name: "kotone", color: "#f7c114" },
-  { name: "mao", color: "#7f1184" },
-  { name: "lilja", color: "#eafdff" },
-  { name: "china", color: "#f68b1f" },
-  { name: "sumika", color: "#7cfc00" },
-  { name: "hiro", color: "#00afcc" },
-  { name: "rinami", color: "#f6adc6" },
-  { name: "ume", color: "#ea533a" },
-  { name: "sena", color: "#f6ae54" },
-  { name: "misuzu", color: "#7a99cf" },
-  { name: "pxw-mao", color: "#fa7abc" },
-  { name: "suukawa", color: "#f566a4" },
-  { name: "maokoku", color: "#f8bdbd" },
-  { name: "payton", color: "#36b596" },
-  { name: "mishima", color: "#9446ac" },
-  { name: "colorful", color: "#fbdb16" },
+  { name: "gk-orange", colors: ["#f39800"] },
+  { name: "vocal", colors: ["#f23584"] },
+  { name: "dance", colors: ["#1c85ed"] },
+  { name: "visual", colors: ["#f7b12e"] },
+  { name: "saki", colors: ["#e2041b"] },
+  { name: "temari", colors: ["#007bbb"] },
+  { name: "kotone", colors: ["#f7c114"] },
+  { name: "mao", colors: ["#7f1184"] },
+  { name: "lilja", colors: ["#eafdff"] },
+  { name: "china", colors: ["#f68b1f"] },
+  { name: "sumika", colors: ["#7cfc00"] },
+  { name: "hiro", colors: ["#00afcc"] },
+  { name: "rinami", colors: ["#f6adc6"] },
+  { name: "ume", colors: ["#ea533a"] },
+  { name: "sena", colors: ["#f6ae54"] },
+  { name: "misuzu", colors: ["#7a99cf"] },
+  { name: "pxw-mao", colors: ["#fa7abc"] },
+  { name: "suukawa", colors: ["#f566a4"] },
+  { name: "maokoku", colors: ["#f8bdbd"] },
+  { name: "payton", colors: ["#36b596"] },
+  { name: "mishima", colors: ["#9446ac"] },
+  { name: "colorful", colors: ["#fbdb16"] },
+  { name: "housoubu", colors: ["#88b1fe", "#fbb0b2"] },
+  { name: "gradient-brand", colors: ["#f39800", "#ffb841"] },
+  { name: "gradient-hajime", colors: ["#ff9870", "#ffbca3"] },
+  { name: "gradient-nia", colors: ["#5a8bff", "#b56bff"] },
+  { name: "gradient-hif", colors: ["#6357bb", "#4a8cd0", "#4ec0d8"] },
+  { name: "gradient-regular", colors: ["#ffa563", "#ffb0c0"] },
+  { name: "gradient-pro", colors: ["#7ea5ff", "#f2a4cc"] },
+  { name: "gradient-master", colors: ["#ff5f92", "#ff8f60"] },
+  { name: "gradient-legend", colors: ["#7d9cff", "#c88eff", "#ff7db9"] },
 ];
 
 export default function BannerForm({ banner, onChange, onDelete }) {
   const textRef = useRef(null);
   const [language, setLanguage] = useState(routing.defaultLocale);
   const text = banner.text[language];
+
+  const filledColors = banner.colors.filter(Boolean).join();
+
+  function setColors(colors) {
+    onChange({ colors: banner.colors.map((_, i) => colors[i] ?? "") });
+  }
+
+  function setColor(i, value) {
+    onChange({
+      colors: banner.colors.with(i, value.trim() ? normalizeColor(value) : ""),
+    });
+  }
 
   function setText(value) {
     onChange({ text: { ...banner.text, [language]: value } });
@@ -121,32 +147,39 @@ export default function BannerForm({ banner, onChange, onDelete }) {
       <div className={styles.field}>
         <span className={styles.label}>Colour</span>
         <div className={styles.swatches}>
-          {SWATCHES.map(({ name, color }) => (
+          {SWATCHES.map(({ name, colors }) => (
             <button
-              key={color}
+              key={name}
               type="button"
               className={c(
                 styles.swatch,
-                banner.color == color && styles.selected
+                colors.join() == filledColors && styles.selected
               )}
-              style={{ backgroundColor: color }}
+              style={{ background: oshiBackground(colors) }}
               aria-label={name}
-              aria-pressed={banner.color == color}
+              aria-pressed={colors.join() == filledColors}
               data-tooltip-id="panel-info-tooltip"
               data-tooltip-content={name}
-              onClick={() => onChange({ color })}
+              onClick={() => setColors(colors)}
             />
           ))}
         </div>
-        <label className={styles.hex}>
-          <span aria-hidden="true">#</span>
-          <Input
-            className={styles.text}
-            value={banner.color.replace(/^#/, "")}
-            aria-label="Hex colour"
-            onChange={(value) => onChange({ color: normalizeColor(value) })}
-          />
-        </label>
+        <div className={styles.hexes}>
+          {banner.colors.map((color, i) => (
+            <label key={i} className={styles.hex}>
+              <span aria-hidden="true">#</span>
+              <Input
+                className={styles.text}
+                value={color.replace(/^#/, "")}
+                aria-label={`Hex colour ${i + 1}`}
+                onChange={(value) => setColor(i, value)}
+              />
+            </label>
+          ))}
+        </div>
+        <span className={styles.hint}>
+          Fill in more than one hex code for a gradient.
+        </span>
       </div>
 
       <div className={styles.field}>
