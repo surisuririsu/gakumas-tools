@@ -5,6 +5,11 @@ export const ITEM_SIZE = 60;
 export const ITEM_GAP = 6;
 export const ITEMS_PADDING = 10;
 export const MIN_ROW_HEIGHT = 80;
+const PANEL_RADIUS = 10;
+
+// resvg re-rasterizes a clipped group for every filtered child, so the panel
+// takes no `overflow: hidden` (the first and last tier labels round their own
+// corners) and the tiles take a border rather than an inset box-shadow.
 
 const styles = {
   container: {
@@ -18,9 +23,8 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     border: "1px solid #dfe2e3",
-    borderRadius: "10px",
+    borderRadius: `${PANEL_RADIUS}px`,
     backgroundColor: "#ffffff",
-    overflow: "hidden",
   },
   row: {
     display: "flex",
@@ -41,6 +45,12 @@ const styles = {
     backgroundColor: "#eef0f1",
     borderRight: "1px solid #dfe2e3",
   },
+  tierLabelFirst: {
+    borderTopLeftRadius: `${PANEL_RADIUS - 1}px`,
+  },
+  tierLabelLast: {
+    borderBottomLeftRadius: `${PANEL_RADIUS - 1}px`,
+  },
   rankIcon: {
     width: "48px",
     height: "48px",
@@ -58,15 +68,23 @@ const styles = {
     width: `${ITEM_SIZE}px`,
     height: `${ITEM_SIZE}px`,
     display: "flex",
-    boxShadow: "inset 0 0 0 2px #ccc",
+    border: "2px solid #ccc",
     borderRadius: "8%",
     backgroundColor: "#eee",
-    overflow: "hidden",
+    backgroundSize: `${ITEM_SIZE}px ${ITEM_SIZE}px`,
+    backgroundRepeat: "no-repeat",
   },
-  itemImg: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
+  overflow: {
+    width: `${ITEM_SIZE}px`,
+    height: `${ITEM_SIZE}px`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "8%",
+    backgroundColor: "#eef0f1",
+    color: "#5f6b73",
+    fontSize: "20px",
+    fontWeight: 700,
   },
 };
 
