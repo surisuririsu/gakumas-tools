@@ -96,6 +96,10 @@ export default class CardManager extends EngineComponent {
   constructor(engine) {
     super(engine);
 
+    // Last cardMap entry seen at each card index, and its profile.
+    this.profiledEntries = [];
+    this.profiles = [];
+
     this.variableResolvers = {
       cardHasEffect: (state, effectName) =>
         this.getCardEffects(state, state[S.usedCard]).has(effectName),
@@ -303,8 +307,12 @@ export default class CardManager extends EngineComponent {
   }
 
   profileOf(state, card) {
-    const { id, c11n } = state[S.cardMap][card];
-    return getCardProfile(id, c11n);
+    const entry = state[S.cardMap][card];
+    if (this.profiledEntries[card] === entry) return this.profiles[card];
+    const profile = getCardProfile(entry.id, entry.c11n);
+    this.profiledEntries[card] = entry;
+    this.profiles[card] = profile;
+    return profile;
   }
 
   isForceInitialHand(state, card) {
