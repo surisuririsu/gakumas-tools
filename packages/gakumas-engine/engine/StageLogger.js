@@ -17,6 +17,10 @@ const LOGGED_BUFFS_FIELDS = [
   S.strengthEffectBuffs,
 ];
 
+const HAND_STATE_FIELDS = LOGGED_FIELDS.filter(
+  (field) => field != S.turnsRemaining && field != S.cardUsesRemaining,
+);
+
 export default class StageLogger {
   constructor(engine) {
     this.engine = engine;
@@ -87,11 +91,10 @@ export default class StageLogger {
 
   getHandStateForLogging(state) {
     let res = {};
-    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
-      if (LOGGED_FIELDS[i] == S.turnsRemaining) continue;
-      if (LOGGED_FIELDS[i] == S.cardUsesRemaining) continue;
-      if (state[LOGGED_FIELDS[i]]) {
-        res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
+    for (let i = 0; i < HAND_STATE_FIELDS.length; i++) {
+      const field = HAND_STATE_FIELDS[i];
+      if (state[field]) {
+        res[field] = state[field];
       }
     }
 
