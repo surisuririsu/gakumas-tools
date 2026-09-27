@@ -4,6 +4,14 @@ import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
 
 export default class EffectManager extends EngineComponent {
+  constructor(engine) {
+    super(engine);
+
+    // Every phase any effect has ever been registered under. setEffects is
+    // the only way effects enter state, so a phase missing here can't match.
+    this.registeredPhases = new Set();
+  }
+
   initializeState(state) {
     const config = this.getConfig(state);
 
@@ -87,6 +95,7 @@ export default class EffectManager extends EngineComponent {
       if (effect.phase == "turn" && effect.limit == 1) {
         effect.type = "reservation";
       }
+      this.registeredPhases.add(effect.phase);
       // Nested effects are now explicit in the AST - no more fallthrough
       state[S.effects].push(effect);
     }
@@ -107,8 +116,9 @@ export default class EffectManager extends EngineComponent {
   }
 
   triggerEffectsForPhase(state, phase, conditionState) {
-    // Fast path: no active effect matches this phase. Empirically ~79%
-    // of triggerEffectsForPhase calls hit this — skip the phase
+    if (!this.registeredPhases.has(phase)) return;
+
+    // Fast path: no active effect matches this phase — skip the phase
     // save/restore dance and the effectsByGroup allocation entirely.
     const effectList = state[S.effects];
     let anyMatch = false;
