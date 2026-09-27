@@ -96,7 +96,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       this.rootEffectCount = state[S.effects].length;
     }
 
-    const logIndex = this.engine.logger.log(state, "hand", null);
+    const handLog = this.engine.logger.log(state, "hand", null);
 
     const futures = state[S.handCards].map((card) =>
       this.getFuture(state, card)
@@ -115,7 +115,7 @@ export default class HeuristicStrategy extends BaseStrategy {
       maxScore = this.getStateScore(nextState);
     }
 
-    this.engine.logger.logs[logIndex].data = {
+    handLog.data = {
       handCards: state[S.handCards].map((card) => ({
         id: state[S.cardMap][card].id,
         c: state[S.cardMap][card].c11n,

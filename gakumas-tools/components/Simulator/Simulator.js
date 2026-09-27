@@ -17,7 +17,6 @@ import {
   STRATEGIES,
   StageEngine,
   StagePlayer,
-  S,
 } from "gakumas-engine";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
@@ -153,9 +152,7 @@ export default function Simulator() {
     const engine = new StageEngine(config, linkConfigs);
 
     const wrappedInputCallback = async (decision) => {
-      const currentLogs = decision.state[S.logs].map(
-        (logIndex) => engine.logger.logs[logIndex],
-      );
+      const currentLogs = engine.logger.getLogs(decision.state);
       currentLogs[currentLogs.length - 1] = {
         ...currentLogs[currentLogs.length - 1],
         isPending: true,

@@ -32,12 +32,13 @@ export default class StageLogger {
   }
 
   initializeState(state) {
-    state[S.logs] = [];
+    // Persistent list of { entry, prev } nodes, newest first, so copies of a
+    // state share their log history.
+    state[S.logs] = null;
     state[S.graphData] = freshGraphData();
   }
 
   reset() {
-    this.logs = [];
     this.disabled = false;
   }
 
@@ -49,18 +50,19 @@ export default class StageLogger {
     this.disabled = false;
   }
 
-  pickLogs(state) {
-    const logs = state[S.logs].map((logIndex) => this.logs[logIndex]);
-    this.logs = [];
-    return logs;
+  getLogs(state) {
+    const logs = [];
+    for (let node = state[S.logs]; node; node = node.prev) {
+      logs.push(node.entry);
+    }
+    return logs.reverse();
   }
 
   log(state, logType, data) {
     if (this.disabled) return;
-    this.logs.push({ logType, data });
-    const idx = this.logs.length - 1;
-    state[S.logs].push(idx);
-    return idx;
+    const entry = { logType, data };
+    state[S.logs] = { entry, prev: state[S.logs] };
+    return entry;
   }
 
   debug(...args) {

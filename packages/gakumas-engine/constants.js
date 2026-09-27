@@ -265,6 +265,7 @@ export const BUFF_LIST_FIELDS = [
 // Slots whose writers always replace the value rather than mutate it, so
 // copies of a state can share them.
 export const COPY_ON_WRITE_FIELDS = [
+  S.logs,
   S.graphData,
   S.turnTypes,
   S.effectCounters,
