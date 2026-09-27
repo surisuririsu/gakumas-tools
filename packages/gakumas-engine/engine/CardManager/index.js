@@ -239,6 +239,21 @@ export default class CardManager extends EngineComponent {
   // State initialization
 
   initializeState(state) {
+    // Entries are never mutated, so every run can start from one template.
+    this.initialCardMap ??= this.buildInitialCardMap(state);
+    state[S.cardMap] = this.initialCardMap.slice();
+
+    this.changeIdol(state);
+
+    state[S.heldCards] = [];
+    state[S.cardsUsed] = 0;
+    state[S.activeCardsUsed] = 0;
+    state[S.usedCard] = null;
+    state[S.lastUsedCard] = null;
+    state[S.movedCard] = null;
+  }
+
+  buildInitialCardMap(state) {
     const config = this.getConfig(state);
 
     let configs = [config];
@@ -264,16 +279,7 @@ export default class CardManager extends EngineComponent {
       cardMaps.push(cardMap);
     }
 
-    state[S.cardMap] = cardMaps.flat();
-
-    this.changeIdol(state);
-
-    state[S.heldCards] = [];
-    state[S.cardsUsed] = 0;
-    state[S.activeCardsUsed] = 0;
-    state[S.usedCard] = null;
-    state[S.lastUsedCard] = null;
-    state[S.movedCard] = null;
+    return cardMaps.flat();
   }
 
   changeIdol(state) {
