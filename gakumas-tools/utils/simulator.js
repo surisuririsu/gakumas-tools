@@ -293,6 +293,27 @@ export function mergeResults(results) {
   };
 }
 
+const plainCardKeys = new Map();
+const customizedCardKeys = new WeakMap();
+
+// Same string as JSON.stringify({ id, c: c || null }), memoized per card.
+function cardUsageKey(id, c) {
+  let keys = plainCardKeys;
+  if (c) {
+    keys = customizedCardKeys.get(c);
+    if (!keys) {
+      keys = new Map();
+      customizedCardKeys.set(c, keys);
+    }
+  }
+  let key = keys.get(id);
+  if (key === undefined) {
+    key = JSON.stringify({ id, c: c || null });
+    keys.set(id, key);
+  }
+  return key;
+}
+
 /**
  * Walk a single run's flat log stream and accumulate per-turn
  * {id, c, use, draw} counts into `cardUsage.turns`. Also ticks
@@ -327,19 +348,16 @@ export function accumulateCardUsage(logs, cardUsage) {
     // are fresh draws. This way, a deck with two copies of the same card
     // counts both as drawn — but a moveToHand re-presenting the same card
     // doesn't double-count.
-    const handCounts = {};
+    const handCounts = new Map();
     for (let i = 0; i < handCards.length; i++) {
       const { id, c } = handCards[i];
-      const key = JSON.stringify({ id, c: c || null });
-      handCounts[key] = (handCounts[key] || 0) + 1;
+      const key = cardUsageKey(id, c);
+      handCounts.set(key, (handCounts.get(key) || 0) + 1);
     }
-    for (const key in handCounts) {
-      const count = handCounts[key];
+    for (const [key, count] of handCounts) {
       const prev = drawCountThisTurn.get(key) || 0;
       if (count > prev) {
-        const sample = handCards.find(
-          (h) => JSON.stringify({ id: h.id, c: h.c || null }) === key,
-        );
+        const sample = handCards.find((h) => cardUsageKey(h.id, h.c) === key);
         if (!turnData[key]) {
           turnData[key] = {
             id: sample.id,
@@ -356,7 +374,7 @@ export function accumulateCardUsage(logs, cardUsage) {
 
     if (selectedIndex != null && handCards[selectedIndex]) {
       const { id, c } = handCards[selectedIndex];
-      const key = JSON.stringify({ id, c: c || null });
+      const key = cardUsageKey(id, c);
       if (!turnData[key]) {
         turnData[key] = { id, c: c || null, use: 0, draw: 0 };
       }

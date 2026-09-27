@@ -48,13 +48,13 @@ export default class ManualStrategy extends BaseStrategy {
   }
 
   async evaluate(state) {
-    const logIndex = this.engine.logger.log(state, "hand", null);
+    const handLog = this.engine.logger.log(state, "hand", null);
 
     const usableCards = state[S.handCards].filter((card) =>
       this.engine.isCardUsable(state, card)
     );
 
-    this.engine.logger.logs[logIndex].data = {
+    handLog.data = {
       handCards: state[S.handCards].map((card) => ({
         id: state[S.cardMap][card].id,
         c: state[S.cardMap][card].c11n,

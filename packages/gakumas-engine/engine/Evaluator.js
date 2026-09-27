@@ -8,6 +8,22 @@ import {
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
+const FIELD_INDEX = new Map(Object.entries(S));
+const CONSTANT_NAMES = new Set([
+  ...STANCES,
+  ...PHASES,
+  ...SOURCE_TYPES,
+  ...RARITIES,
+  ...SKILL_CARD_TYPES,
+]);
+
+function warning(message) {
+  return () => {
+    console.warn(message);
+    return undefined;
+  };
+}
+
 export default class Evaluator extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -23,6 +39,9 @@ export default class Evaluator extends EngineComponent {
       ...this.engine.cardManager.variableResolvers,
       ...this.engine.buffManager.variableResolvers,
     };
+
+    // AST node -> compiled (state) => value. AST nodes are immutable.
+    this.compiled = new WeakMap();
   }
 
   /**
@@ -49,200 +68,214 @@ export default class Evaluator extends EngineComponent {
       console.warn("Null AST node");
       return undefined;
     }
+    let evaluate = this.compiled.get(node);
+    if (evaluate === undefined) {
+      evaluate = this.compile(node);
+      this.compiled.set(node, evaluate);
+    }
+    return evaluate(state);
+  }
 
+  compileChild(node) {
+    if (!node) return warning("Null AST node");
+    return this.compile(node);
+  }
+
+  compile(node) {
     switch (node.type) {
-      case "number":
-        return node.value;
+      case "number": {
+        const value = node.value;
+        return () => value;
+      }
 
       case "identifier":
-        return this.resolveIdentifier(state, node.name);
+        return this.compileIdentifier(node.name);
 
       case "call":
-        return this.evaluateCall(state, node);
+        return this.compileCall(node);
 
       case "binary":
-        return this.evaluateBinary(state, node);
+        return this.compileBinary(node);
 
       case "unary":
-        return this.evaluateUnary(state, node);
+        return this.compileUnary(node);
 
       case "comparison":
-        return this.evaluateComparison(state, node);
+        return this.compileComparison(node);
 
       case "assignment":
         // Assignments are handled by Executor, not Evaluator
         // But we may need to evaluate the RHS
-        return this.evaluateAST(state, node.rhs);
+        return this.compileChild(node.rhs);
 
       default:
-        console.warn(`Unknown AST node type: ${node.type}`);
-        return undefined;
+        return warning(`Unknown AST node type: ${node.type}`);
     }
   }
 
   /**
-   * Resolve an identifier to its value
+   * Resolve an identifier to its value: state variables, then variable
+   * resolvers, then stance/phase/source type/rarity/card type names.
    */
-  resolveIdentifier(state, name) {
-    // State variables
-    if (name in S && S[name] in state) {
-      return state[S[name]];
-    }
+  compileIdentifier(name) {
+    const fallback = this.compileNonStateIdentifier(name);
+    const index = FIELD_INDEX.get(name);
+    if (index === undefined) return fallback;
+    return (state) => (index in state ? state[index] : fallback(state));
+  }
 
-    // Variable resolvers
+  compileNonStateIdentifier(name) {
     if (name in this.variableResolvers) {
-      return this.variableResolvers[name](state);
+      const resolver = this.variableResolvers[name];
+      return (state) => resolver(state);
     }
-
-    // Stances
-    if (STANCES.includes(name)) {
-      return name;
+    if (CONSTANT_NAMES.has(name)) {
+      return () => name;
     }
-
-    // Phases
-    if (PHASES.includes(name)) {
-      return name;
-    }
-
-    // Source types
-    if (SOURCE_TYPES.includes(name)) {
-      return name;
-    }
-
-    // Rarities
-    if (RARITIES.includes(name)) {
-      return name;
-    }
-
-    // Skill card types
-    if (SKILL_CARD_TYPES.includes(name)) {
-      return name;
-    }
-
-    console.warn(`Unknown identifier: ${name}`);
-    return undefined;
+    return warning(`Unknown identifier: ${name}`);
   }
 
   /**
-   * Evaluate a function call
+   * Function calls: target (passed as its AST node) followed by evaluated
+   * args, with identifier args passed by name
    */
-  evaluateCall(state, node) {
+  compileCall(node) {
     const { name, target, args } = node;
 
-    if (name in this.variableResolvers) {
-      // Build argument list: target (if present) followed by evaluated args
-      const evaluatedArgs = [];
+    if (!(name in this.variableResolvers)) {
+      return warning(`Unknown function: ${name}`);
+    }
 
-      // Target expression is passed as AST node
+    const resolver = this.variableResolvers[name];
+    const argFns = args.map((arg) => {
+      if (arg.type === "identifier") {
+        const argName = arg.name;
+        return () => argName;
+      }
+      return this.compileChild(arg);
+    });
+
+    if (!target && argFns.length === 0) {
+      return (state) => resolver(state);
+    }
+    if (!target && argFns.length === 1) {
+      const arg = argFns[0];
+      return (state) => resolver(state, arg(state));
+    }
+    if (target && argFns.length === 0) {
+      return (state) => resolver(state, target);
+    }
+    return (state) => {
+      const evaluatedArgs = [];
       if (target) {
         evaluatedArgs.push(target);
       }
-
-      // Evaluate remaining arguments
-      for (const arg of args) {
-        if (arg.type === "identifier") {
-          evaluatedArgs.push(arg.name);
-        } else {
-          evaluatedArgs.push(this.evaluateAST(state, arg));
-        }
+      for (let i = 0; i < argFns.length; i++) {
+        evaluatedArgs.push(argFns[i](state));
       }
-
-      return this.variableResolvers[name](state, ...evaluatedArgs);
-    }
-
-    console.warn(`Unknown function: ${name}`);
-    return undefined;
+      return resolver(state, ...evaluatedArgs);
+    };
   }
 
-  /**
-   * Evaluate a binary operation
-   */
-  evaluateBinary(state, node) {
-    const { op, left, right } = node;
+  compileBinary(node) {
+    const { op } = node;
+    const left = this.compileChild(node.left);
 
     // Short-circuit evaluation for logical operators
     if (op === "|") {
-      const leftVal = this.evaluateAST(state, left);
-      if (leftVal) return true;
-      return !!this.evaluateAST(state, right);
+      const right = this.compileChild(node.right);
+      return (state) => {
+        if (left(state)) return true;
+        return !!right(state);
+      };
     }
 
     if (op === "&") {
-      const leftVal = this.evaluateAST(state, left);
-      // If left is a Set, treat & as set membership (backward compat with old format)
-      if (leftVal && leftVal.has) {
-        // Right side should be an identifier name for set membership
-        const element = right.type === "identifier" ? right.name : this.evaluateAST(state, right);
-        return leftVal.has(element);
-      }
-      // Otherwise treat as boolean AND
-      if (!leftVal) return false;
-      return !!this.evaluateAST(state, right);
+      // If left is a Set, treat & as set membership (backward compat with
+      // old format); an identifier on the right is taken by name.
+      const rightNode = node.right;
+      const rightIsIdentifier = rightNode.type === "identifier";
+      const rightName = rightIsIdentifier ? rightNode.name : null;
+      const right = rightIsIdentifier ? null : this.compileChild(rightNode);
+      const boolRight = rightIsIdentifier ? this.compileChild(rightNode) : right;
+      return (state) => {
+        const leftVal = left(state);
+        if (leftVal && leftVal.has) {
+          return leftVal.has(rightIsIdentifier ? rightName : right(state));
+        }
+        if (!leftVal) return false;
+        return !!boolRight(state);
+      };
     }
 
-    // Evaluate both sides for arithmetic operators
-    const leftVal = this.evaluateAST(state, left);
-    const rightVal = this.evaluateAST(state, right);
-
+    const right = this.compileChild(node.right);
     switch (op) {
       case "+":
-        return leftVal + rightVal;
+        return (state) => left(state) + right(state);
       case "-":
-        return leftVal - rightVal;
+        return (state) => left(state) - right(state);
       case "*":
-        return leftVal * rightVal;
+        return (state) => left(state) * right(state);
       case "/":
-        return leftVal / rightVal;
+        return (state) => left(state) / right(state);
       case "%":
-        return leftVal % rightVal;
-      default:
-        console.warn(`Unknown binary operator: ${op}`);
-        return undefined;
+        return (state) => left(state) % right(state);
+      default: {
+        const warn = warning(`Unknown binary operator: ${op}`);
+        return (state) => {
+          left(state);
+          right(state);
+          return warn();
+        };
+      }
     }
   }
 
-  /**
-   * Evaluate a unary operation
-   */
-  evaluateUnary(state, node) {
-    const { op, operand } = node;
-    const val = this.evaluateAST(state, operand);
+  compileUnary(node) {
+    const { op } = node;
+    const operand = this.compileChild(node.operand);
 
     switch (op) {
       case "!":
-        return !val;
+        return (state) => !operand(state);
       case "-":
-        return -val;
-      default:
-        console.warn(`Unknown unary operator: ${op}`);
-        return undefined;
+        return (state) => -operand(state);
+      default: {
+        const warn = warning(`Unknown unary operator: ${op}`);
+        return (state) => {
+          operand(state);
+          return warn();
+        };
+      }
     }
   }
 
-  /**
-   * Evaluate a comparison
-   */
-  evaluateComparison(state, node) {
-    const { op, left, right } = node;
-    const leftVal = this.evaluateAST(state, left);
-    const rightVal = this.evaluateAST(state, right);
+  compileComparison(node) {
+    const { op } = node;
+    const left = this.compileChild(node.left);
+    const right = this.compileChild(node.right);
 
     switch (op) {
       case "==":
-        return leftVal == rightVal;
+        return (state) => left(state) == right(state);
       case "!=":
-        return leftVal != rightVal;
+        return (state) => left(state) != right(state);
       case "<":
-        return leftVal < rightVal;
+        return (state) => left(state) < right(state);
       case ">":
-        return leftVal > rightVal;
+        return (state) => left(state) > right(state);
       case "<=":
-        return leftVal <= rightVal;
+        return (state) => left(state) <= right(state);
       case ">=":
-        return leftVal >= rightVal;
-      default:
-        console.warn(`Unknown comparison operator: ${op}`);
-        return undefined;
+        return (state) => left(state) >= right(state);
+      default: {
+        const warn = warning(`Unknown comparison operator: ${op}`);
+        return (state) => {
+          left(state);
+          right(state);
+          return warn();
+        };
+      }
     }
   }
 }

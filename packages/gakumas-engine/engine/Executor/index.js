@@ -35,6 +35,42 @@ const DECREASE_PHASES = DECREASE_TRIGGER_FIELDS.map(
   (f) => `${ALL_FIELDS[f]}Decreased`,
 );
 
+// Fields triggerChangeEffects compares against their pre-action values.
+const CHANGE_WATCH_FIELDS = [
+  ...new Set([
+    ...BUFF_FIELDS,
+    ...INCREASE_TRIGGER_FIELDS,
+    ...DECREASE_TRIGGER_FIELDS,
+  ]),
+];
+const watchIndex = (f) => CHANGE_WATCH_FIELDS.indexOf(f);
+const BUFF_WATCH = BUFF_FIELDS.map(watchIndex);
+const INCREASE_WATCH = INCREASE_TRIGGER_FIELDS.map(watchIndex);
+const DECREASE_WATCH = DECREASE_TRIGGER_FIELDS.map(watchIndex);
+
+function snapshotWatchedFields(state) {
+  const snap = new Array(CHANGE_WATCH_FIELDS.length);
+  for (let i = 0; i < CHANGE_WATCH_FIELDS.length; i++) {
+    snap[i] = state[CHANGE_WATCH_FIELDS[i]];
+  }
+  return snap;
+}
+
+const ALWAYS_INTERMEDIATE = new Set(["cost", "fixedGenki", "fixedStamina"]);
+const INTERMEDIATE_ON_ADD = new Set([
+  "score",
+  "goodImpressionTurns",
+  "motivation",
+  "goodConditionTurns",
+  "concentration",
+  "enthusiasm",
+  "fullPowerCharge",
+  "genki",
+]);
+const GROWTH_INDEX_BY_FIELD = new Map(
+  ALL_FIELDS.map((name) => [name, G[`g.${name}`]]),
+);
+
 export default class Executor extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -165,7 +201,9 @@ export default class Executor extends EngineComponent {
           phase === "cardMovedToHeld" ||
           (state[S.triggeredEffect]?.type === "reservation" &&
             state[S.triggeredEffect]?.source?.type === "skillCardEffect");
-        const actionPrev = needsChangeTrigger ? state.slice() : null;
+        const actionPrev = needsChangeTrigger
+          ? snapshotWatchedFields(state)
+          : null;
         const prevGenki = state[S.genki];
         const prevGoodImpressionTurns = state[S.goodImpressionTurns];
 
@@ -215,10 +253,9 @@ export default class Executor extends EngineComponent {
     } finally {
       // Release frames (pool retains the arrays; drop state refs so dead
       // preview states aren't held alive between reuses).
-      for (let d = snapshotDepth; d < this.diffSnapshots.length; d++) {
-        this.diffSnapshots[d].state = null;
+      while (this.diffSnapshots.length > snapshotDepth) {
+        this.diffSnapshots.pop().state = null;
       }
-      this.diffSnapshots.length = snapshotDepth;
     }
 
     // Reset modifiers
@@ -233,7 +270,7 @@ export default class Executor extends EngineComponent {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
         if (state[field] > 0 && eotPrev[i] == 0) {
-          state[S.freshBuffs][field] = true;
+          state[S.freshBuffs] |= 1 << i;
         }
       }
     }
@@ -304,8 +341,7 @@ export default class Executor extends EngineComponent {
     // Cost consumed effects
     if (state[S.phase] == "processCost") {
       for (let i = 0; i < BUFF_FIELDS.length; i++) {
-        const f = BUFF_FIELDS[i];
-        if (state[f] < prev[f]) {
+        if (state[BUFF_FIELDS[i]] < prev[BUFF_WATCH[i]]) {
           state[S.buffCostConsumed] = true;
           break;
         }
@@ -314,9 +350,8 @@ export default class Executor extends EngineComponent {
 
     // Trigger increase effects
     for (let i = 0; i < INCREASE_TRIGGER_FIELDS.length; i++) {
-      const field = INCREASE_TRIGGER_FIELDS[i];
-      const curr = state[field];
-      const prior = prev[field];
+      const curr = state[INCREASE_TRIGGER_FIELDS[i]];
+      const prior = prev[INCREASE_WATCH[i]];
       if (curr > prior) {
         const deltaField = INCREASE_DELTA_FIELDS[i];
         const phase = INCREASE_PHASES[i];
@@ -328,9 +363,8 @@ export default class Executor extends EngineComponent {
 
     // Trigger decrease effects
     for (let i = 0; i < DECREASE_TRIGGER_FIELDS.length; i++) {
-      const field = DECREASE_TRIGGER_FIELDS[i];
-      const curr = state[field];
-      const prior = prev[field];
+      const curr = state[DECREASE_TRIGGER_FIELDS[i]];
+      const prior = prev[DECREASE_WATCH[i]];
       if (curr < prior) {
         const deltaField = DECREASE_DELTA_FIELDS[i];
         const phase = DECREASE_PHASES[i];
@@ -374,17 +408,19 @@ export default class Executor extends EngineComponent {
       const name = lhsName || "main";
       const rhsValue = this.engine.evaluator.evaluateExpression(state, rhs);
 
-      if (!state[S.effectCounters][id]) {
-        state[S.effectCounters][id] = {};
-      }
-      if (state[S.effectCounters][id][name] === undefined) {
-        state[S.effectCounters][id][name] = 0;
+      // effectCounters is copy-on-write.
+      const counters = { ...state[S.effectCounters] };
+      const counter = { ...counters[id] };
+      counters[id] = counter;
+      state[S.effectCounters] = counters;
+      if (counter[name] === undefined) {
+        counter[name] = 0;
       }
 
       if (op === "+=") {
-        state[S.effectCounters][id][name] += rhsValue;
+        counter[name] += rhsValue;
       } else if (op === "=") {
-        state[S.effectCounters][id][name] = rhsValue;
+        counter[name] = rhsValue;
       } else {
         console.warn(`Unsupported effectCounter operation: ${op}`);
       }
@@ -403,15 +439,8 @@ export default class Executor extends EngineComponent {
     // Special cases with intermediates
     let intermediateField = null;
     if (
-      ["cost", "fixedGenki", "fixedStamina"].includes(lhs) ||
-      (lhs === "score" && op === "+=") ||
-      (lhs === "goodImpressionTurns" && op === "+=") ||
-      (lhs === "motivation" && op === "+=") ||
-      (lhs === "goodConditionTurns" && op === "+=") ||
-      (lhs === "concentration" && op === "+=") ||
-      (lhs === "enthusiasm" && op === "+=") ||
-      (lhs === "fullPowerCharge" && op === "+=") ||
-      (lhs === "genki" && op === "+=") ||
+      ALWAYS_INTERMEDIATE.has(lhs) ||
+      (op === "+=" && INTERMEDIATE_ON_ADD.has(lhs)) ||
       (lhs === "stamina" && op === "-=")
     ) {
       intermediate = 0;
@@ -423,8 +452,9 @@ export default class Executor extends EngineComponent {
       intermediate = rhsValue;
     } else if (op === "+=") {
       intermediate += rhsValue;
-      if (growth?.[G[`g.${lhs}`]] && GROWABLE_FIELDS.includes(S[lhs])) {
-        intermediate += growth[G[`g.${lhs}`]];
+      const growthIndex = GROWTH_INDEX_BY_FIELD.get(lhs);
+      if (growth?.[growthIndex] && GROWABLE_FIELDS.includes(S[lhs])) {
+        intermediate += growth[growthIndex];
       }
     } else if (op === "-=") {
       if (state[S.phase] === "processCost" || state[S.phase] === "checkCost") {

@@ -1,4 +1,4 @@
-import { DEBUG } from "./constants";
+import { ALL_FIELDS, COPY_ON_WRITE_FIELDS, DEBUG } from "./constants";
 
 const seed = 610397104;
 
@@ -73,49 +73,15 @@ export function shallowCopy(state) {
   return state.slice();
 }
 
-// Marker for objects that cloneValue should share by reference instead of
-// deep-cloning. Used by append-only structures whose "mutation" sites
-// replace the whole container with a fresh one (copy-on-write), so no
-// two states ever witness a mid-mutation view of the same object.
-export const CLONE_SHARE = Symbol("cloneShare");
-
-// Recursive clone specialized for engine state. Much faster than
-// JSON.parse(JSON.stringify) on a typical mid-run state. Three
-// specializations:
-// (1) arrays of primitives — detected by peeking at the first element —
-// use native slice(), avoiding a per-element function call. The engine's
-// primitive arrays (card piles, logs, turn types, graphData columns) have
-// homogeneous element types, so the peek is reliable in practice.
-// (2) effect objects — identified by `effectInstanceId` — are shallow-cloned
-// so their AST-valued fields (conditions/actions/effects/targets/filter/
-// source) are shared by reference across copies. Those fields come from the
-// DSL parser and are never mutated after setEffects spreads them in, so the
-// shared refs remain safe; skipping them avoids recursing through the
-// entire per-card/per-p-item AST on every useCard/endTurn.
-// (3) everything else follows the recursive path so mutable nested state
-// (cardMap entries with `growth`, effectCounters, buff records) gets a
-// full independent copy.
+// Recursive clone for state slots that aren't copy-on-write.
+// Arrays are shallow-sliced: primitive arrays (card piles, logs) are
+// mutated in place, while object arrays (effects, cardMap) only ever have
+// entries replaced, never mutated, so sharing entries is safe.
 function cloneValue(v) {
-  if (v === null || typeof v !== "object") return v;
-  // All array-valued state slots carry a copy-on-write invariant:
-  //   - primitive arrays (card piles, logs, turn types, graphData
-  //     columns) are append/pop/splice in place, but a shallow slice
-  //     gives each state its own array instance so those in-place
-  //     mutations don't leak across states.
-  //   - object arrays (effects, cardMap, buff arrays) never mutate
-  //     their entries in place — every mutation site replaces the
-  //     entry with a fresh object — so a shallow slice is also safe
-  //     here (the entries are shared by reference).
   if (Array.isArray(v)) return v.slice();
-  // Effects: mutable fields (limit, ttl, delay) are decremented at
-  // known sites in EffectManager which clone the effect first.
+  // Effects and cardMap entries are replaced, never mutated.
   if (v.effectInstanceId !== undefined) return v;
-  // cardMap entries: only mutations (CardManager.grow, .upgrade)
-  // replace the entry with a fresh object.
   if (v.baseId !== undefined) return v;
-  // COW marker: the container's mutation sites replace the whole
-  // object with a fresh one.
-  if (v[CLONE_SHARE]) return v;
   const out = {};
   for (const k in v) {
     const val = v[k];
@@ -128,13 +94,13 @@ function cloneValue(v) {
   return out;
 }
 
+const SHARED_SLOTS = new Uint8Array(ALL_FIELDS.length);
+for (const field of COPY_ON_WRITE_FIELDS) SHARED_SLOTS[field] = 1;
+
 export function deepCopy(state) {
-  if (!Array.isArray(state)) return cloneValue(state);
-  // Shallow slice first (native, packed-array fast path), then walk and
-  // deep-clone only the object-valued slots. Primitive slots (most of
-  // the state array) are already correctly copied by the slice.
   const out = state.slice();
   for (let i = 0; i < out.length; i++) {
+    if (SHARED_SLOTS[i]) continue;
     const v = out[i];
     if (v !== null && typeof v === "object") {
       out[i] = cloneValue(v);

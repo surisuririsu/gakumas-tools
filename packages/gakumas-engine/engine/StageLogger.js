@@ -1,13 +1,4 @@
 import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
-import { CLONE_SHARE, deepCopy } from "../utils";
-
-function freshGraphData() {
-  const g = { [CLONE_SHARE]: true };
-  for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-    g[GRAPHED_FIELDS[i]] = [];
-  }
-  return g;
-}
 
 const LOGGED_BUFFS_FIELDS = [
   S.scoreBuffs,
@@ -26,6 +17,10 @@ const LOGGED_BUFFS_FIELDS = [
   S.strengthEffectBuffs,
 ];
 
+const HAND_STATE_FIELDS = LOGGED_FIELDS.filter(
+  (field) => field != S.turnsRemaining && field != S.cardUsesRemaining,
+);
+
 export default class StageLogger {
   constructor(engine) {
     this.engine = engine;
@@ -33,12 +28,14 @@ export default class StageLogger {
   }
 
   initializeState(state) {
-    state[S.logs] = [];
-    state[S.graphData] = freshGraphData();
+    // Persistent list of { entry, prev } nodes, newest first, so copies of a
+    // state share their log history.
+    state[S.logs] = null;
+    // Persistent list of { values, prev } snapshots, newest first.
+    state[S.graphData] = null;
   }
 
   reset() {
-    this.logs = [];
     this.disabled = false;
   }
 
@@ -50,18 +47,19 @@ export default class StageLogger {
     this.disabled = false;
   }
 
-  pickLogs(state) {
-    const logs = state[S.logs].map((logIndex) => this.logs[logIndex]);
-    this.logs = [];
-    return logs;
+  getLogs(state) {
+    const logs = [];
+    for (let node = state[S.logs]; node; node = node.prev) {
+      logs.push(node.entry);
+    }
+    return logs.reverse();
   }
 
   log(state, logType, data) {
     if (this.disabled) return;
-    this.logs.push({ logType, data });
-    const idx = this.logs.length - 1;
-    state[S.logs].push(idx);
-    return idx;
+    const entry = { logType, data };
+    state[S.logs] = { entry, prev: state[S.logs] };
+    return entry;
   }
 
   debug(...args) {
@@ -71,28 +69,32 @@ export default class StageLogger {
 
   pushGraphData(state) {
     if (this.disabled) return;
-    // graphData is shared across states via the CLONE_SHARE marker, so
-    // mutating in place would bleed into sibling states (HeuristicStrategy
-    // speculation branches). Produce a fresh graphData with appended
-    // values and swap it in.
-    const curr = state[S.graphData];
-    const next = { [CLONE_SHARE]: true };
+    const values = new Array(GRAPHED_FIELDS.length);
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-      const f = GRAPHED_FIELDS[i];
-      const arr = curr[f].slice();
-      arr.push(state[f]);
-      next[f] = arr;
+      values[i] = state[GRAPHED_FIELDS[i]];
     }
-    state[S.graphData] = next;
+    state[S.graphData] = { values, prev: state[S.graphData] };
+  }
+
+  getGraphData(state) {
+    const snapshots = [];
+    for (let node = state[S.graphData]; node; node = node.prev) {
+      snapshots.push(node.values);
+    }
+    snapshots.reverse();
+    const graphData = {};
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      graphData[GRAPHED_FIELDS[i]] = snapshots.map((values) => values[i]);
+    }
+    return graphData;
   }
 
   getHandStateForLogging(state) {
     let res = {};
-    for (let i = 0; i < LOGGED_FIELDS.length; i++) {
-      if (LOGGED_FIELDS[i] == S.turnsRemaining) continue;
-      if (LOGGED_FIELDS[i] == S.cardUsesRemaining) continue;
-      if (state[LOGGED_FIELDS[i]]) {
-        res[LOGGED_FIELDS[i]] = state[LOGGED_FIELDS[i]];
+    for (let i = 0; i < HAND_STATE_FIELDS.length; i++) {
+      const field = HAND_STATE_FIELDS[i];
+      if (state[field]) {
+        res[field] = state[field];
       }
     }
 
