@@ -414,7 +414,7 @@ export default class HeuristicStrategy extends BaseStrategy {
 
   evaluateForHold(state, card) {
     let previewState = this.engine.getInitialState(true);
-    previewState[S.cardMap] = deepCopy(state[S.cardMap]);
+    previewState[S.cardMap] = state[S.cardMap].slice();
     this.engine.buffManager.setStance(previewState, "fullPower");
     previewState[S.nullifySelect] = 1;
     previewState = this.engine.useCard(previewState, card);

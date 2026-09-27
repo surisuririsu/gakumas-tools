@@ -233,7 +233,7 @@ export default class Executor extends EngineComponent {
       for (let i = 0; i < EOT_DECREMENT_FIELDS.length; i++) {
         const field = EOT_DECREMENT_FIELDS[i];
         if (state[field] > 0 && eotPrev[i] == 0) {
-          state[S.freshBuffs][field] = true;
+          state[S.freshBuffs] |= 1 << i;
         }
       }
     }
@@ -374,17 +374,19 @@ export default class Executor extends EngineComponent {
       const name = lhsName || "main";
       const rhsValue = this.engine.evaluator.evaluateExpression(state, rhs);
 
-      if (!state[S.effectCounters][id]) {
-        state[S.effectCounters][id] = {};
-      }
-      if (state[S.effectCounters][id][name] === undefined) {
-        state[S.effectCounters][id][name] = 0;
+      // effectCounters is copy-on-write.
+      const counters = { ...state[S.effectCounters] };
+      const counter = { ...counters[id] };
+      counters[id] = counter;
+      state[S.effectCounters] = counters;
+      if (counter[name] === undefined) {
+        counter[name] = 0;
       }
 
       if (op === "+=") {
-        state[S.effectCounters][id][name] += rhsValue;
+        counter[name] += rhsValue;
       } else if (op === "=") {
-        state[S.effectCounters][id][name] = rhsValue;
+        counter[name] = rhsValue;
       } else {
         console.warn(`Unsupported effectCounter operation: ${op}`);
       }

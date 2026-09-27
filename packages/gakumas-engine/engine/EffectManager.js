@@ -189,15 +189,8 @@ export default class EffectManager extends EngineComponent {
   triggerEffects(state, effects, cndState, card, skipConditions, indices) {
     const conditionState = cndState || shallowCopy(state);
 
-    // Deep copy effectCounters so condition checks see pre-modification values
-    if (state[S.effectCounters]) {
-      conditionState[S.effectCounters] = {};
-      for (let id in state[S.effectCounters]) {
-        conditionState[S.effectCounters][id] = {
-          ...state[S.effectCounters][id],
-        };
-      }
-    }
+    // Condition checks see pre-modification counters (copy-on-write).
+    conditionState[S.effectCounters] = state[S.effectCounters];
 
     let triggeredEffects = [];
 

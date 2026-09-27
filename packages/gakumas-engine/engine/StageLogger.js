@@ -1,8 +1,7 @@
 import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
-import { CLONE_SHARE, deepCopy } from "../utils";
 
 function freshGraphData() {
-  const g = { [CLONE_SHARE]: true };
+  const g = {};
   for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
     g[GRAPHED_FIELDS[i]] = [];
   }
@@ -71,12 +70,9 @@ export default class StageLogger {
 
   pushGraphData(state) {
     if (this.disabled) return;
-    // graphData is shared across states via the CLONE_SHARE marker, so
-    // mutating in place would bleed into sibling states (HeuristicStrategy
-    // speculation branches). Produce a fresh graphData with appended
-    // values and swap it in.
+    // graphData is copy-on-write: replace it rather than append in place.
     const curr = state[S.graphData];
-    const next = { [CLONE_SHARE]: true };
+    const next = {};
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
       const f = GRAPHED_FIELDS[i];
       const arr = curr[f].slice();

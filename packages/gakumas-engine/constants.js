@@ -243,6 +243,34 @@ export const S = ALL_FIELDS.reduce((acc, cur, i) => {
   return acc;
 }, {});
 
+export const BUFF_LIST_FIELDS = [
+  S.scoreBuffs,
+  S.scoreDebuffs,
+  S.goodImpressionTurnsBuffs,
+  S.goodImpressionTurnsEffectBuffs,
+  S.goodImpressionTurnsTimesBuffs,
+  S.motivationBuffs,
+  S.motivationAdditionBuffs,
+  S.goodConditionTurnsBuffs,
+  S.concentrationBuffs,
+  S.concentrationAdditionBuffs,
+  S.concentrationEffectBuffs,
+  S.enthusiasmBuffs,
+  S.enthusiasmBonusBuffs,
+  S.fullPowerChargeBuffs,
+  S.fullPowerEffectBuffs,
+  S.strengthEffectBuffs,
+];
+
+// Slots whose writers always replace the value rather than mutate it, so
+// copies of a state can share them.
+export const COPY_ON_WRITE_FIELDS = [
+  S.graphData,
+  S.turnTypes,
+  S.effectCounters,
+  ...BUFF_LIST_FIELDS,
+];
+
 export const GROWTH_FIELDS = [
   "g.score",
   "g.scoreTimes",
