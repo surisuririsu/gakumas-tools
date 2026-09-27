@@ -526,7 +526,7 @@ export default class CardManager extends EngineComponent {
     } else {
       state[S.phase] = "processCost";
       this.engine.executor.executeActions(state, cost, card);
-      delete state[S.phase];
+      state[S.phase] = undefined;
     }
 
     state[pile].splice(pileIndex, 1);
@@ -563,7 +563,7 @@ export default class CardManager extends EngineComponent {
       }
       state[S.effectInstanceId]++;
       this.engine.effectManager.triggerEffects(state, actions, null, card);
-      delete state[S.phase];
+      state[S.phase] = undefined;
     }
 
     state[S.cardsUsed]++;
