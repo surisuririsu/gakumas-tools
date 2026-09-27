@@ -45,6 +45,52 @@ function actionEffectName(action) {
   return null;
 }
 
+function collectActionNames(lines, nestedKey) {
+  const names = new Set();
+  const walk = (entries) => {
+    for (const entry of entries || []) {
+      for (const action of entry.actions || []) {
+        const name = actionEffectName(action);
+        if (name) names.add(name);
+      }
+      if (entry[nestedKey]) walk(entry[nestedKey]);
+    }
+  };
+  walk(lines);
+  return names;
+}
+
+// Everything derived from a card's static data, keyed by (id, c11n).
+// cardMap entries are replaced (never mutated) on growth/upgrade, and c11n
+// objects come straight from the loadout config, so both are stable keys.
+const plainCardProfiles = new Map();
+const customizedCardProfiles = new WeakMap();
+
+function getCardProfile(id, c11n) {
+  let byId = plainCardProfiles;
+  if (c11n) {
+    byId = customizedCardProfiles.get(c11n);
+    if (!byId) {
+      byId = new Map();
+      customizedCardProfiles.set(c11n, byId);
+    }
+  }
+  let profile = byId.get(id);
+  if (!profile) {
+    profile = {
+      lines: {},
+      conditions: null,
+      costActions: null,
+      effectNames: null,
+      costNames: null,
+      forceInitialHand: null,
+      c11nNoLimit: null,
+    };
+    byId.set(id, profile);
+  }
+  return profile;
+}
+
 export default class CardManager extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -255,30 +301,44 @@ export default class CardManager extends EngineComponent {
     state[S.turnCardsUpgraded] = 0;
   }
 
-  isForceInitialHand(state, card) {
+  profileOf(state, card) {
     const { id, c11n } = state[S.cardMap][card];
+    return getCardProfile(id, c11n);
+  }
 
-    if (SkillCards.getById(id).forceInitialHand) {
-      return true;
+  isForceInitialHand(state, card) {
+    const profile = this.profileOf(state, card);
+    if (profile.forceInitialHand === null) {
+      const { id, c11n } = state[S.cardMap][card];
+      profile.forceInitialHand = !!(
+        SkillCards.getById(id).forceInitialHand ||
+        (c11n &&
+          Object.keys(c11n)
+            .filter((k) => c11n[k])
+            .some((k) => Customizations.getById(k).forceInitialHand))
+      );
     }
-    if (
-      c11n &&
-      Object.keys(c11n)
-        .filter((k) => c11n[k])
-        .some((k) => Customizations.getById(k).forceInitialHand)
-    ) {
-      return true;
-    }
-
-    return false;
+    return profile.forceInitialHand;
   }
 
   // Card queries
 
+  // Returned lines are shared across calls and must not be mutated.
   getLines(state, card, attribute) {
-    const skillCard = SkillCards.getById(state[S.cardMap][card].id);
+    const profile = this.profileOf(state, card);
+    let lines = profile.lines[attribute];
+    if (lines === undefined) {
+      lines = profile.lines[attribute] = this.computeLines(
+        state[S.cardMap][card],
+        attribute,
+      );
+    }
+    return lines;
+  }
+
+  computeLines({ id, c11n }, attribute) {
+    const skillCard = SkillCards.getById(id);
     let attr = skillCard[attribute] || [];
-    const c11n = state[S.cardMap][card].c11n;
     if (!c11n || !Object.keys(c11n).length) return attr;
 
     attr = attr.map((e) => ({ ...e }));
@@ -306,47 +366,70 @@ export default class CardManager extends EngineComponent {
     return attr;
   }
 
-  getCardEffects(state, card) {
-    let cardEffects = new Set();
-    if (card == null) return cardEffects;
-    const lines = this.getLines(state, card, "actions");
+  getConditions(state, card) {
+    const profile = this.profileOf(state, card);
+    if (profile.conditions === null) {
+      profile.conditions = this.getLines(state, card, "conditions")
+        .map((c) => c.conditions)
+        .flat();
+    }
+    return profile.conditions;
+  }
 
-    // Walk every action in every effect, recursing into nested `effects`
-    // (from conditional-phase blocks like `if:X { at:phase { Y } }`) so the
-    // stage's `cardEffects & X` check matches cards where the relevant
-    // action only appears in a deferred/conditional branch — parity with
-    // legacy, which reads from a flat effects list where those actions are
-    // already top-level entries.
-    const walk = (effects) => {
-      for (const effect of effects || []) {
-        for (const action of effect.actions || []) {
-          const name = actionEffectName(action);
-          if (name) cardEffects.add(name);
-        }
-        if (effect.effects) walk(effect.effects);
-      }
-    };
-    walk(lines);
-    return cardEffects;
+  getCostActions(state, card) {
+    const profile = this.profileOf(state, card);
+    if (profile.costActions === null) {
+      profile.costActions = this.getLines(state, card, "cost")
+        .map((c) => c.actions)
+        .flat();
+    }
+    return profile.costActions;
+  }
+
+  // Walks every action in every effect, recursing into nested `effects`
+  // (from conditional-phase blocks like `if:X { at:phase { Y } }`) so the
+  // stage's `cardEffects & X` check matches cards where the relevant
+  // action only appears in a deferred/conditional branch — parity with
+  // legacy, which reads from a flat effects list where those actions are
+  // already top-level entries. The returned Set is shared; don't mutate.
+  getCardEffects(state, card) {
+    if (card == null) return new Set();
+    const profile = this.profileOf(state, card);
+    if (profile.effectNames === null) {
+      profile.effectNames = collectActionNames(
+        this.getLines(state, card, "actions"),
+        "effects",
+      );
+    }
+    return profile.effectNames;
   }
 
   getCardCosts(state, card) {
-    let cardCosts = new Set();
-    if (card == null) return cardCosts;
-    const lines = this.getLines(state, card, "cost");
+    if (card == null) return new Set();
+    const profile = this.profileOf(state, card);
+    if (profile.costNames === null) {
+      profile.costNames = collectActionNames(
+        this.getLines(state, card, "cost"),
+        "costs",
+      );
+    }
+    return profile.costNames;
+  }
 
-    // Walk every action in every cost, recursing into nested `costs`
-    const walk = (costs) => {
-      for (const cost of costs || []) {
-        for (const action of cost.actions || []) {
-          const name = actionEffectName(action);
-          if (name) cardCosts.add(name);
-        }
-        if (cost.costs) walk(cost.costs);
-      }
-    };
-    walk(lines);
-    return cardCosts;
+  // A limited card is still discarded (not removed) when one of its
+  // customizations lifts the limit.
+  hasC11nLiftingLimit(state, card) {
+    const profile = this.profileOf(state, card);
+    if (profile.c11nNoLimit === null) {
+      const c11n = state[S.cardMap][card].c11n;
+      profile.c11nNoLimit = !!(
+        c11n &&
+        Object.keys(c11n)
+          .map(Customizations.getById)
+          .some((c) => c11n[c.id] && c?.limit === 0)
+      );
+    }
+    return profile.c11nNoLimit;
   }
 
   getCardSourceType(state, card) {
@@ -370,18 +453,14 @@ export default class CardManager extends EngineComponent {
     if (state[S.noActiveTurns] && skillCard.type == "active") return false;
     if (state[S.noMentalTurns] && skillCard.type == "mental") return false;
 
-    const conditions = this.getLines(state, card, "conditions")
-      .map((c) => c.conditions)
-      .flat();
+    const conditions = this.getConditions(state, card);
     for (let i = 0; i < conditions.length; i++) {
       if (!this.engine.evaluator.evaluateCondition(state, conditions[i])) {
         return false;
       }
     }
 
-    const cost = this.getLines(state, card, "cost")
-      .map((c) => c.actions)
-      .flat();
+    const cost = this.getCostActions(state, card);
     const previewState = shallowCopy(state);
     previewState[S.phase] = "checkCost";
     for (let i = 0; i < cost.length; i++) {
@@ -401,7 +480,6 @@ export default class CardManager extends EngineComponent {
     const usingPaid = state[S.paidCardUses] > 0;
     const pileIndex = state[pile].indexOf(card);
     const skillCard = SkillCards.getById(state[S.cardMap][card].id);
-    const c11n = state[S.cardMap][card].c11n;
 
     this.logger.log(state, "entityStart", {
       type: "skillCard",
@@ -420,9 +498,7 @@ export default class CardManager extends EngineComponent {
     let conditionState = shallowCopy(state);
     this.logger.debug("Applying cost", skillCard.cost);
 
-    const cost = this.getLines(state, card, "cost")
-      .map((c) => c.actions)
-      .flat();
+    const cost = this.getCostActions(state, card);
     const hasStaminaCost = cost.some(
       (action) => action.lhs === "cost" || action.lhs === "stamina",
     );
@@ -432,9 +508,7 @@ export default class CardManager extends EngineComponent {
       // / useSelectedCardFree / useAllCardsFree) manages the counter.
       // Free-use wrappers bypass isCardUsable, so re-check conditions here
       // and skip actions (but still emit cardUsed/afterCardUsed) if unmet.
-      const conditions = this.getLines(state, card, "conditions")
-        .map((c) => c.conditions)
-        .flat();
+      const conditions = this.getConditions(state, card);
       for (let i = 0; i < conditions.length; i++) {
         if (!this.engine.evaluator.evaluateCondition(state, conditions[i])) {
           skipActions = true;
@@ -505,12 +579,7 @@ export default class CardManager extends EngineComponent {
       state[S.thisCardHeld] = false;
     } else if (!skillCard.limit) {
       state[S.discardedCards].push(card);
-    } else if (
-      c11n &&
-      Object.keys(c11n)
-        .map(Customizations.getById)
-        .some((c) => c11n[c.id] && c?.limit === 0)
-    ) {
+    } else if (this.hasC11nLiftingLimit(state, card)) {
       state[S.discardedCards].push(card);
     } else {
       state[S.removedCards].push(card);
