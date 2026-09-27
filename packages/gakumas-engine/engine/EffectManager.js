@@ -134,12 +134,11 @@ export default class EffectManager extends EngineComponent {
     state[S.parentPhase] = state[S.phase];
     state[S.phase] = phase;
 
-    // Filter and group effects. Pair each matched effect ref with its
-    // index via parallel arrays so we can pass refs straight to
-    // triggerEffects — skipping the per-match `{...effect, phase: null,
-    // index: i}` spread, which was a substantial allocation hot spot.
-    let effectsByGroup = null;
-    let indicesByGroup = null;
+    // Pair each matched effect ref with its index via parallel arrays so
+    // refs go straight to triggerEffects without a per-match spread.
+    let matched = null;
+    let matchedIndices = null;
+    let grouped = false;
     for (let i = 0; i < effectList.length; i++) {
       const effect = effectList[i];
       if (effect.phase !== phase) continue;
@@ -155,46 +154,70 @@ export default class EffectManager extends EngineComponent {
         );
         if (!matching.has(sourceCard)) continue;
       }
-      const group = effect.group || 0;
-      if (!effectsByGroup) {
-        effectsByGroup = {};
-        indicesByGroup = {};
+      if (!matched) {
+        matched = [];
+        matchedIndices = [];
       }
-      let ge = effectsByGroup[group];
-      if (!ge) {
-        ge = [];
-        effectsByGroup[group] = ge;
-        indicesByGroup[group] = [];
-      }
-      ge.push(effect);
-      indicesByGroup[group].push(i);
+      matched.push(effect);
+      matchedIndices.push(i);
+      if (effect.group) grouped = true;
     }
 
-    // Trigger effects
-    if (effectsByGroup) {
-      this.logger.debug(phase, effectsByGroup);
-      for (const gKey in effectsByGroup) {
-        const triggered = this.triggerEffects(
+    if (matched) {
+      this.logger.debug(phase, matched);
+      if (!grouped) {
+        this.triggerPhaseGroup(
           state,
-          effectsByGroup[gKey],
+          effectList,
+          matched,
+          matchedIndices,
           conditionState,
-          null,
-          false,
-          indicesByGroup[gKey],
         );
-        for (let j = 0; j < triggered.length; j++) {
-          const idx = triggered[j];
-          const eff = effectList[idx];
-          if (eff.limit) {
-            // Replace the effect with a decremented copy; effects are
-            // shared across states via cloneValue's ref-share fast path.
-            effectList[idx] = { ...eff, limit: eff.limit - 1 };
+      } else {
+        // Groups trigger in for..in order of their keys.
+        const effectsByGroup = {};
+        const indicesByGroup = {};
+        for (let m = 0; m < matched.length; m++) {
+          const group = matched[m].group || 0;
+          if (!effectsByGroup[group]) {
+            effectsByGroup[group] = [];
+            indicesByGroup[group] = [];
           }
+          effectsByGroup[group].push(matched[m]);
+          indicesByGroup[group].push(matchedIndices[m]);
+        }
+        for (const gKey in effectsByGroup) {
+          this.triggerPhaseGroup(
+            state,
+            effectList,
+            effectsByGroup[gKey],
+            indicesByGroup[gKey],
+            conditionState,
+          );
         }
       }
     }
 
     state[S.phase] = state[S.parentPhase];
+  }
+
+  triggerPhaseGroup(state, effectList, effects, indices, conditionState) {
+    const triggered = this.triggerEffects(
+      state,
+      effects,
+      conditionState,
+      null,
+      false,
+      indices,
+    );
+    for (let j = 0; j < triggered.length; j++) {
+      const idx = triggered[j];
+      const eff = effectList[idx];
+      if (eff.limit) {
+        // Effects are shared across state copies; replace, don't mutate.
+        effectList[idx] = { ...eff, limit: eff.limit - 1 };
+      }
+    }
   }
 
   triggerEffects(state, effects, cndState, card, skipConditions, indices) {
