@@ -211,6 +211,7 @@ export default class BuffManager extends EngineComponent {
 
     for (const { field } of BUFF_TYPES) {
       const buffs = state[field];
+      if (!buffs.length) continue;
       const next = [];
       for (let i = 0; i < buffs.length; i++) {
         const b = buffs[i];
