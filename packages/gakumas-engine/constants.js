@@ -1,4 +1,5 @@
 import { deserializeEffectSequence } from "gakumas-data";
+import { normalizeEffect } from "./normalizeEffect";
 
 export const DEBUG = false;
 
@@ -20,10 +21,7 @@ export const RARITIES = ["N", "R", "SR", "SSR", "L", "T"];
  */
 function parseEffect(effectStr, source) {
   const effects = deserializeEffectSequence(effectStr);
-  for (const effect of effects) {
-    effect.source = source;
-  }
-  return effects;
+  return effects.map((effect) => normalizeEffect({ ...effect, source }));
 }
 
 export const DEFAULT_EFFECTS = parseEffect(

@@ -3,6 +3,7 @@ import { CARD_PILES, COST_FIELDS, S } from "../../constants";
 import EngineComponent from "../EngineComponent";
 import { getBaseId, getRand, shallowCopy, shuffle } from "../../utils";
 import { getTargetRuleCards } from "./targeting";
+import { normalizeEffect } from "../../normalizeEffect";
 
 const PATCHABLE_FIELDS = [
   "phase",
@@ -331,7 +332,7 @@ export default class CardManager extends EngineComponent {
       lines = profile.lines[attribute] = this.computeLines(
         state[S.cardMap][card],
         attribute,
-      );
+      ).map(normalizeEffect);
     }
     return lines;
   }

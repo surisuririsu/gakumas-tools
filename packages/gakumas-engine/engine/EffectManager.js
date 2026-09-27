@@ -2,6 +2,7 @@ import { PItems, SkillCards } from "gakumas-data";
 import { DEFAULT_EFFECTS, S } from "../constants";
 import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
+import { normalizeEffect } from "../normalizeEffect";
 
 export default class EffectManager extends EngineComponent {
   constructor(engine) {
@@ -83,7 +84,7 @@ export default class EffectManager extends EngineComponent {
 
   setEffects(state, effects, source) {
     for (let i = 0; i < effects.length; i++) {
-      const effect = { ...effects[i] };
+      const effect = normalizeEffect(effects[i]);
       effect.effectInstanceId = state[S.effectInstanceId];
       if (source) {
         effect.source = source;
