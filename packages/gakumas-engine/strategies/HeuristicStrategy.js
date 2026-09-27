@@ -1,4 +1,4 @@
-import { G, S } from "../constants";
+import { G, GROWTH_FIELDS, S } from "../constants";
 import { deepCopy } from "../utils";
 import BaseStrategy from "./BaseStrategy";
 
@@ -16,6 +16,8 @@ function sumBuffWeight(buffs, turnsRemaining) {
   }
   return total;
 }
+
+const GROWTH_SCORE_MULTIPLIER_BY_INDEX = [];
 
 const GROWTH_SCORE_MULTIPLIERS = {
   [G["g.score"]]: 2,
@@ -35,6 +37,9 @@ const GROWTH_SCORE_MULTIPLIERS = {
   [G["g.scoreByGenki"]]: 20,
   [G["g.stanceLevel"]]: 2,
 };
+for (let k = 0; k < GROWTH_FIELDS.length; k++) {
+  GROWTH_SCORE_MULTIPLIER_BY_INDEX[k] = GROWTH_SCORE_MULTIPLIERS[k] || 1;
+}
 
 export default class HeuristicStrategy extends BaseStrategy {
   constructor(engine) {
@@ -405,8 +410,11 @@ export default class HeuristicStrategy extends BaseStrategy {
     for (let i = 0; i < cardMap.length; i++) {
       const growth = cardMap[i].growth;
       if (!growth) continue;
-      for (let key in growth) {
-        growthScore += growth[key] * (GROWTH_SCORE_MULTIPLIERS[key] || 1);
+      for (let k = 0; k < GROWTH_FIELDS.length; k++) {
+        const value = growth[k];
+        if (value !== undefined) {
+          growthScore += value * GROWTH_SCORE_MULTIPLIER_BY_INDEX[k];
+        }
       }
     }
     return growthScore;
