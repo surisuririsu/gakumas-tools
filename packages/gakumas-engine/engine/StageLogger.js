@@ -1,13 +1,5 @@
 import { DEBUG, GRAPHED_FIELDS, LOGGED_FIELDS, S } from "../constants";
 
-function freshGraphData() {
-  const g = {};
-  for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-    g[GRAPHED_FIELDS[i]] = [];
-  }
-  return g;
-}
-
 const LOGGED_BUFFS_FIELDS = [
   S.scoreBuffs,
   S.scoreDebuffs,
@@ -35,7 +27,8 @@ export default class StageLogger {
     // Persistent list of { entry, prev } nodes, newest first, so copies of a
     // state share their log history.
     state[S.logs] = null;
-    state[S.graphData] = freshGraphData();
+    // Persistent list of { values, prev } snapshots, newest first.
+    state[S.graphData] = null;
   }
 
   reset() {
@@ -72,16 +65,24 @@ export default class StageLogger {
 
   pushGraphData(state) {
     if (this.disabled) return;
-    // graphData is copy-on-write: replace it rather than append in place.
-    const curr = state[S.graphData];
-    const next = {};
+    const values = new Array(GRAPHED_FIELDS.length);
     for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
-      const f = GRAPHED_FIELDS[i];
-      const arr = curr[f].slice();
-      arr.push(state[f]);
-      next[f] = arr;
+      values[i] = state[GRAPHED_FIELDS[i]];
     }
-    state[S.graphData] = next;
+    state[S.graphData] = { values, prev: state[S.graphData] };
+  }
+
+  getGraphData(state) {
+    const snapshots = [];
+    for (let node = state[S.graphData]; node; node = node.prev) {
+      snapshots.push(node.values);
+    }
+    snapshots.reverse();
+    const graphData = {};
+    for (let i = 0; i < GRAPHED_FIELDS.length; i++) {
+      graphData[GRAPHED_FIELDS[i]] = snapshots.map((values) => values[i]);
+    }
+    return graphData;
   }
 
   getHandStateForLogging(state) {

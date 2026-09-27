@@ -35,7 +35,7 @@ export default class StagePlayer {
     return {
       score: state[S.score],
       logs: this.engine.logger.getLogs(state),
-      graphData: state[S.graphData],
+      graphData: this.engine.logger.getGraphData(state),
     };
   }
 }
