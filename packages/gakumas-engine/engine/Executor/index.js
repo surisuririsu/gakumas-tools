@@ -253,10 +253,9 @@ export default class Executor extends EngineComponent {
     } finally {
       // Release frames (pool retains the arrays; drop state refs so dead
       // preview states aren't held alive between reuses).
-      for (let d = snapshotDepth; d < this.diffSnapshots.length; d++) {
-        this.diffSnapshots[d].state = null;
+      while (this.diffSnapshots.length > snapshotDepth) {
+        this.diffSnapshots.pop().state = null;
       }
-      this.diffSnapshots.length = snapshotDepth;
     }
 
     // Reset modifiers
