@@ -8,6 +8,15 @@ import {
 } from "../constants";
 import EngineComponent from "./EngineComponent";
 
+const FIELD_INDEX = new Map(Object.entries(S));
+const CONSTANT_NAMES = new Set([
+  ...STANCES,
+  ...PHASES,
+  ...SOURCE_TYPES,
+  ...RARITIES,
+  ...SKILL_CARD_TYPES,
+]);
+
 export default class Evaluator extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -85,8 +94,9 @@ export default class Evaluator extends EngineComponent {
    */
   resolveIdentifier(state, name) {
     // State variables
-    if (name in S && S[name] in state) {
-      return state[S[name]];
+    const index = FIELD_INDEX.get(name);
+    if (index !== undefined && index in state) {
+      return state[index];
     }
 
     // Variable resolvers
@@ -94,28 +104,8 @@ export default class Evaluator extends EngineComponent {
       return this.variableResolvers[name](state);
     }
 
-    // Stances
-    if (STANCES.includes(name)) {
-      return name;
-    }
-
-    // Phases
-    if (PHASES.includes(name)) {
-      return name;
-    }
-
-    // Source types
-    if (SOURCE_TYPES.includes(name)) {
-      return name;
-    }
-
-    // Rarities
-    if (RARITIES.includes(name)) {
-      return name;
-    }
-
-    // Skill card types
-    if (SKILL_CARD_TYPES.includes(name)) {
+    // Stances, phases, source types, rarities, skill card types
+    if (CONSTANT_NAMES.has(name)) {
       return name;
     }
 
