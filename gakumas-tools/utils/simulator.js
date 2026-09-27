@@ -331,14 +331,13 @@ export function accumulateCardUsage(logs, cardUsage) {
     // are fresh draws. This way, a deck with two copies of the same card
     // counts both as drawn — but a moveToHand re-presenting the same card
     // doesn't double-count.
-    const handCounts = {};
+    const handCounts = new Map();
     for (let i = 0; i < handCards.length; i++) {
       const { id, c } = handCards[i];
       const key = cardUsageKey(id, c);
-      handCounts[key] = (handCounts[key] || 0) + 1;
+      handCounts.set(key, (handCounts.get(key) || 0) + 1);
     }
-    for (const key in handCounts) {
-      const count = handCounts[key];
+    for (const [key, count] of handCounts) {
       const prev = drawCountThisTurn.get(key) || 0;
       if (count > prev) {
         const sample = handCards.find((h) => cardUsageKey(h.id, h.c) === key);
