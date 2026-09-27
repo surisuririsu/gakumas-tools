@@ -4,6 +4,13 @@ import EngineComponent from "./EngineComponent";
 import { shallowCopy } from "../utils";
 import { normalizeEffect } from "../normalizeEffect";
 
+function anyHasConditions(effects) {
+  for (let i = 0; i < effects.length; i++) {
+    if (effects[i].conditions) return true;
+  }
+  return false;
+}
+
 export default class EffectManager extends EngineComponent {
   constructor(engine) {
     super(engine);
@@ -221,10 +228,16 @@ export default class EffectManager extends EngineComponent {
   }
 
   triggerEffects(state, effects, cndState, card, skipConditions, indices) {
-    const conditionState = cndState || shallowCopy(state);
+    // A private condition snapshot is only needed if a condition is checked.
+    let conditionState = cndState;
+    if (!conditionState && !skipConditions && anyHasConditions(effects)) {
+      conditionState = shallowCopy(state);
+    }
 
     // Condition checks see pre-modification counters (copy-on-write).
-    conditionState[S.effectCounters] = state[S.effectCounters];
+    if (conditionState) {
+      conditionState[S.effectCounters] = state[S.effectCounters];
+    }
 
     let triggeredEffects = [];
 
@@ -278,7 +291,9 @@ export default class EffectManager extends EngineComponent {
       // Set current effect instance ID for counter resolution
       const prevInstanceId = state[S.currentEffectInstanceId];
       state[S.currentEffectInstanceId] = effect.effectInstanceId;
-      conditionState[S.currentEffectInstanceId] = effect.effectInstanceId;
+      if (conditionState) {
+        conditionState[S.currentEffectInstanceId] = effect.effectInstanceId;
+      }
 
       // Check conditions (AST nodes with proper AND support)
       if (!skipConditions && effect.conditions) {
