@@ -39,7 +39,8 @@ The announcement shows the **upgraded version only**. Create both unupgraded and
 - Name ends with + for upgraded version
 - sourceType: pIdol
 - pIdolId: the new pIdol's ID
-- unique: TRUE for pIdol cards
+- unique: TRUE for pIdol cards (this is 重複不可)
+- limit column: `1` only if the card text says **レッスン中1回** (the card is removed after one use); otherwise leave it empty. 重複不可 alone does not set it.
 
 **Card type (active vs mental)** — read it off the card icon, not the
 effects: the letter at the center bottom of the icon is **A** (active) or
