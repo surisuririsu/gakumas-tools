@@ -61,6 +61,9 @@ Run `pnpm validate:data` — it parses every DSL column and errors out on unknow
 ### Step 9: Regenerate JSON
 Run `pnpm --filter gakumas-data generate` and commit `json/stages.json` together with `csv/stages.csv`.
 
+### Step 10: Changelog
+Run `printf 'Add contest season N preview\nn\n' | pnpm changelog` (or "Confirm contest season N stages") to bump the simulator's "Last updated" date and add a CHANGELOG.md entry. Answer `n` to its commit prompt — it runs `git add --all`.
+
 ## Structured DSL Reference
 
 Effects use a block-scoped DSL. Effects are separated by `;` or whitespace;
