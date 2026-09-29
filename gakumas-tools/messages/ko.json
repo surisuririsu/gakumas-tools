@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Gakumas Tools - 학원마스 툴",
-    "description": "Gakumas Tools는 하츠보시 학원의 프로듀서과 학생들을 위한 유용한 도구의 모음집입니다. 프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션, P 아이템과 스킬 카드 정보 보기 등 편리한 기능을 제공합니다. 아이돌들을 빛내 주세요!"
+    "description": "Gakumas Tools는 하츠보시 학원의 프로듀서과 학생들을 위한 유용한 도구의 모음집입니다. 프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션, P아이템과 스킬 카드 정보 보기 등 편리한 기능을 제공합니다. 아이돌들을 빛내 주세요!"
   },
   "Error": {
     "notFound": "404 페이지를 찾을 수 없습니다",
@@ -31,8 +31,8 @@
       "description": "레슨에 의한 패러미터 상승량 계산하기"
     },
     "dex": {
-      "title": "P 도감",
-      "description": "P 아이템과 스킬 카드 정보 보기"
+      "title": "P도감",
+      "description": "P아이템과 스킬 카드 정보 보기"
     },
     "pIdolCollection": {
       "title": "P아이돌 도감",
@@ -40,7 +40,7 @@
     },
     "tierList": {
       "title": "티어리스트",
-      "description": "스킬 카드・P 아이템・P 드링크・P아이돌의 티어리스트 만들기"
+      "description": "스킬 카드・P아이템・P드링크・P아이돌의 티어리스트 만들기"
     },
     "memoryCalculator": {
       "title": "메모리 생성 확률 계산기",
@@ -75,7 +75,7 @@
   "Welcome": {
     "title": "Gakumas Tools - 학원마스 툴",
     "introduction": "프로듀스 평가에 필요한 최종시험 스코어 계산, 메모리 생성확률 계산, 콘테스트 편성 시뮬레이션 등 편리한 기능을 제공합니다.",
-    "disclaimer": "본 사이트는 비공식 팬 사이트이며, 『학원 아이돌마스터』의 개발·운영사와는 일절 관계가 없습니다."
+    "disclaimer": "본 사이트는 비공식 팬 사이트이며, 『학원 아이돌마스터』의 개발·운영사와 관계가 없습니다."
   },
   "Calculator": {
     "scenarios": {
@@ -110,7 +110,7 @@
     "produceRank": "프로듀스 평가",
     "targetScore": "목표 스코어",
     "score": "스코어",
-    "niaNote": "※오디션 보너스 패러미터나 득표 수의 계산방법이 확인되는 대로, 관련 기능을 업데이트할 예정입니다.",
+    "niaNote": "※오디션 보너스 패러미터나 투표  수의 계산방법이 확인되는 대로, 관련 기능을 업데이트할 예정입니다.",
     "affectionAtStartOfProduce": "프로듀스 개시시 친애도",
     "stage": "스테이지",
     "runN": "Run {num}",
@@ -118,20 +118,20 @@
     "idol": "아이돌",
     "evaluationCriteria": "심사 기준",
     "paramsPreAudition": "패러미터 (오디션 전)",
-    "challengePItemsParamBonusPct": "챌린지 P 아이템 패러미터 보너스 %",
+    "challengePItemsParamBonusPct": "챌린지 P아이템 패러미터 보너스 %",
     "paramBonusPct": "패러미터 보너스 %",
-    "votesPreAudition": "팬 득표수 (오디션 전)",
+    "votesPreAudition": "팬 투표 수 (오디션 전)",
     "recommendedScores": "권장 스코어",
     "paramHighGrowthScores": "이 이상의 점수에서는 패러미터 상승량이 낮습니다.",
     "paramMaximizingScores": "이 이상의 점수에서는 패러미터가 상승하지 않습니다.",
-    "voteCount": "팬 득표수",
+    "voteCount": "팬 투표 수",
     "scores": "스코어",
     "gainedParams": "패러미터 상한",
-    "challengeParams": "챌린지 P 아이템 보너스",
+    "challengeParams": "챌린지 P아이템 보너스",
     "bonusParams": "패러미터 보너스",
     "paramsPostAudition": "패러미터 (오디션 후)",
-    "gainedVotes": "팬 득표수 상한",
-    "votesPostAudition": "팬 득표수 (오디션 후)",
+    "gainedVotes": "팬 투표 수 상한",
+    "votesPostAudition": "팬 투표 수 (오디션 후)",
     "total": "합계",
     "preRound2": "라운드 2 전",
     "star": "스타성",
@@ -173,28 +173,28 @@
     "plans": {
       "sense": "센스",
       "logic": "로직",
-      "anomaly": "어노말리",
-      "free": "프리"
+      "anomaly": "아노말리",
+      "free": "제한 없음"
     },
     "tabs": {
       "skill-cards": "스킬 카드",
-      "p-items": "P 아이템",
-      "p-drinks": "P 드링크",
+      "p-items": "P아이템",
+      "p-drinks": "P드링크",
       "p-idols": "P아이돌",
       "support-cards": "서포트 카드"
     },
     "categories": {
       "reference": {
         "title": "도감",
-        "description": "스킬 카드・P 아이템・P 드링크 정보 보기"
+        "description": "스킬 카드・P아이템・P드링크 정보 보기"
       },
       "collection": {
         "title": "컬렉션",
-        "description": "획득한 P아이돌을 기록하기"
+        "description": "획득한 P아이돌 기록하기"
       },
       "tierlist": {
         "title": "티어리스트",
-        "description": "스킬 카드・P 아이템・P 드링크・P아이돌을 티어별로 정리하기"
+        "description": "스킬 카드・P아이템・P드링크・P아이돌 티어리스트 만들기"
       }
     }
   },
@@ -210,9 +210,9 @@
     "confirmClear": "이 티어리스트를 비우시겠습니까?",
     "addRankTier": "{rank} 추가",
     "removeRankTier": "{rank} 삭제",
-    "confirmRemoveTier": "티어 {rank}와(과) {count}개의 항목을 삭제하시겠습니까?",
+    "confirmRemoveTier": "티어 {rank}와 {count}개의 항목을 삭제하시겠습니까?",
     "share": "공유",
-    "shareHelp": "이 링크를 열면 티어리스트 사본을 가져올 수 있습니다.",
+    "shareHelp": "이 링크를 통해 티어리스트 사본을 가져올 수 있습니다.",
     "copy": "복사",
     "copied": "복사됨",
     "copyFailed": "클립보드에 복사하지 못했습니다.",
@@ -220,7 +220,7 @@
     "preparingImage": "이미지 준비 중…",
     "exportFailed": "이미지 내보내기에 실패했습니다.",
     "shareToX": "X에 공유",
-    "shareTweetText": "학원 아이돌 마스터 {type} 티어리스트",
+    "shareTweetText": "학원 아이돌마스터 {type} 티어리스트",
     "confirmLeave": "탭을 전환하면 현재 티어리스트가 사라집니다. 계속하시겠습니까?"
   },
   "PIdolCollection": {
@@ -228,16 +228,16 @@
     "byRarity": "레어도별",
     "byPlan": "플랜별",
     "byIdol": "아이돌별",
-    "markAll": "전부 획득",
+    "markAll": "모두 획득",
     "clearAll": "초기화",
     "share": "공유",
     "emptyResults": "조건에 맞는 P아이돌이 없습니다",
     "plans": {
       "sense": "센스",
       "logic": "로직",
-      "anomaly": "어노말리"
+      "anomaly": "아노말리"
     },
-    "shareText": "학마스(学マス) P아이돌 컬렉션\n{scope}을(를) {have}/{total} ({percent}%) 획득했습니다! 여러분은 얼마나 모았나요?",
+    "shareText": "학원마스(学マス) P아이돌 컬렉션\n{scope}을 {have}/{total} ({percent}%) 획득했습니다! 여러분은 얼마나 모았나요?",
     "shareScope": {
       "all": "{idol}의 {rarity} {plan} P아이돌",
       "rarity_plan": "{rarity} {plan} P아이돌",
@@ -258,7 +258,7 @@
     "high": "고",
     "low": "저",
     "planMismatch": "플랜 불일치",
-    "pIdolMismatch": "P 아이돌 불일치",
+    "pIdolMismatch": "P아이돌 불일치",
     "idolMismatch": "아이돌 불일치"
   },
   "EntityCustomizer": {
@@ -269,7 +269,7 @@
   },
   "MemoryCalculator": {
     "note": "※표시된 확률은 모든 메모리가 동일한 확률로 생성된다는 전제 하에 계산된 추정값으로, 실제 확률과는 차이가 있을 수 있습니다.",
-    "target": "원하는 조합",
+    "target": "희망 조합",
     "acquired": "획득 스킬 카드",
     "acquiredInfo": "각 카드의 강화 전후를 포함하세요",
     "produceRank": "프로듀스 평가",
@@ -278,7 +278,7 @@
     "success": "성공",
     "failure": "실패",
     "clear": "초기화",
-    "confirm": "이 스킬 카드들을 초기화할까요?"
+    "confirm": "스킬 카드를 초기화할까요?"
   },
   "TargetSkillCards": {
     "acquired": "획득 완료"
@@ -305,7 +305,7 @@
     "name": "이름",
     "contestPower": "종합력",
     "cost": "코스트",
-    "parameters": "파라미터",
+    "parameters": "패러미터",
     "pItems": "P아이템",
     "skillCards": "스킬 카드",
     "customizations": "커스터마이즈"
@@ -317,11 +317,11 @@
     "title": "체력 계산기",
     "open": "체력 계산",
     "openShort": "체력 계산",
-    "selectPIdol": "먼저 편성에 P 아이돌 카드 또는 아이템을 추가해 주세요",
+    "selectPIdol": "먼저 편성에 P아이돌 카드 또는 아이템을 추가해 주세요",
     "defaultsHelp": "일반적인 최대 육성 상태를 기본값으로 설정했습니다. 다른 항목만 변경하세요.",
     "memory": "메모리 {number}",
     "contribution": "{percent}% 반영: {stamina}",
-    "missingPIdol": "이 메모리의 체력을 계산하려면 P 아이돌 카드를 추가하세요.",
+    "missingPIdol": "이 메모리의 체력을 계산하려면 P아이돌 카드를 추가하세요.",
     "trainingRank": "특훈 단계",
     "awakeningRank": "재능 개화 단계",
     "affectionLevel": "친애도",
@@ -335,9 +335,9 @@
     "total": "계산된 체력",
     "showBreakdown": "내역 보기",
     "apply": "체력 {stamina} 입력",
-    "unavailable": "이 P 아이돌의 체력 데이터는 아직 확인되지 않았습니다.",
+    "unavailable": "이 P아이돌의 체력 데이터는 아직 확인되지 않았습니다.",
     "scenarios": {
-      "hajime": "하츠",
+      "hajime": "하지메",
       "nia": "N.I.A",
       "hif": "H.I.F"
     },
@@ -383,7 +383,7 @@
   },
   "MemoryImporterModal": {
     "importMemories": "스크린샷으로부터 메모리 불러오기",
-    "instructions": "<p>콘테스트 파워와 패러미터, P 아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상황에 따라 몇 초에서 몇 분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다. 권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
+    "instructions": "<p>콘테스트 파워와 패러미터, P아이템, 스킬 카드 아이콘은 각 스크린샷에 표시되어야 합니다.</p><p>불러오는 데는 불러오는 메모리의 수와 장치의 프로세서와 메모리 상황에 따라 몇 초에서 몇 분이 걸릴 수 있습니다. 너무 많은 메모리를 한 번에 불러오려고 하면 브라우저의 크래시를 유발할 수 있습니다. 권장하는 한도는 한 번에 50개의 메모리입니다. 스마트폰 환경에서는 사용을 권장하지 않습니다.</p><p>일부 메모리는 정확하게 불러와지지 않을 수 있으며, 불러온 후 수정이 필요할 수 있습니다. 이 경우에는, 이름에 \"(FIXME)\" 가 표시됩니다.</p>",
     "progress": "진행도: {progress}/{total}",
     "preparing": "인식기 준비 중… (처음 사용 시 몇 MB를 다운로드합니다)",
     "saving": "저장 중…",
@@ -393,10 +393,10 @@
   },
   "Simulator": {
     "supportBonus": "서포트 보너스 %",
-    "multiplierNote": "※ 스코어 보너스는 2400을 초과하는 파라미터에 대해 정확하지 않습니다.",
-    "previewNote": "※ 스테이지 프리뷰는 발표된 P 아이템과 심사 기준에만 기반합니다. 턴 타입은 아직 알려지지 않았습니다.",
+    "multiplierNote": "※ 스코어 보너스는 2400을 초과하는 패러미터에 대해 정확하지 않습니다.",
+    "previewNote": "※ 스테이지 프리뷰는 발표된 P아이템과 심사 기준에만 기반합니다. 턴 타입은 아직 알려지지 않았습니다.",
     "enterPercents": "계산식이 밝혀지지 않았으므로 스코어 보너스 %를 직접 입력해 주세요.",
-    "linkContestNote": "링크 콘테스트의 행동은 정확하게 재현되지 않을 수 있습니다. 아이돌 간 P 아이템과 스킬 카드들의 중복 제거는 아직 구현되지 않았습니다. 직접 중복을 제거하고 기본 카드를 추가해 주세요.",
+    "linkContestNote": "링크 콘테스트의 행동은 정확하게 재현되지 않을 수 있습니다. 아이돌 간 P아이템과 스킬 카드들의 중복 제거는 아직 구현되지 않았습니다. 직접 중복을 제거하고 기본 카드를 추가해 주세요.",
     "custom": "커스텀",
     "simulate": "실행",
     "numRuns": "시행 횟수",
@@ -463,13 +463,13 @@
   },
   "SimulatorLoadoutImporterModal": {
     "title": "스크린샷에서 편성 불러오기",
-    "instructions": "콘테스트 편성 화면의 스크린샷을 업로드하세요. P-아이템과 스킬 카드를 자동으로 감지합니다. 이 화면의 아이콘 스타일은 분류기 학습 데이터에 포함되어 있지 않아 인식 정확도가 낮을 수 있습니다.",
+    "instructions": "콘테스트 편성 화면의 스크린샷을 업로드하세요. P아이템과 스킬 카드를 자동으로 감지합니다. 이 화면의 아이콘 스타일은 분류기 학습 데이터에 포함되어 있지 않아 인식 정확도가 낮을 수 있습니다.",
     "processing": "처리 중...",
     "error": "불러오기에 실패했습니다"
   },
   "ShareModal": {
     "title": "공유",
-    "more": "더보기…",
+    "more": "더보기",
     "x": "X에 공유",
     "saveImage": "이미지로 저장",
     "exporting": "저장 중…"
@@ -490,7 +490,7 @@
     "stats": "통계",
     "compare": "비교",
     "downloadScores": "점수",
-    "optimizeParams": "파라미터 최적화",
+    "optimizeParams": "패러미터 최적화",
     "optimizeGain": "평균 +{gain}",
     "optimizeAlready": "이미 최적",
     "optimizeFailed": "최적화 불가"
@@ -569,7 +569,7 @@
     "lockStanceTurns": "지침 고정",
     "enthusiasm": "열의",
     "enthusiasmBonus": "열의 추가",
-    "halfCostTurns": "소비 체력 경감",
+    "halfCostTurns": "소비 체력 반감",
     "doubleCostTurns": "소비 체력 증가",
     "doubleBuffCostTurns": "강화 상태 비용 증가",
     "costReduction": "소비 체력 감소",
@@ -588,7 +588,7 @@
     "scoreDebuff": "스코어 상승량 감소",
     "goodImpressionTurnsBuff": "호인상 증가량 증가",
     "goodImpressionTurnsEffectBuff": "호인상 강화",
-    "goodImpressionTurnsTimesBuff": "Good impression effect times",
+    "goodImpressionTurnsTimesBuff": "호인상 추가 발동",
     "motivationBuff": "의욕 증가량 증가",
     "motivationAdditionBuff": "의욕 증가량 추가",
     "goodConditionTurnsBuff": "호조 증가량 증가",
@@ -604,21 +604,21 @@
     "upgradedHand": "손패를 모두 레슨 중 강화",
     "exchangedHand": "손패를 모두 변경",
     "setEffect": "지속 효과 부여",
-    "addedCardToHand": "손패에 스킬 카드 생성",
-    "addedCardToTopOfDeck": "스킬 카드를 덱 위에 생성",
-    "addedCardToDeckAtRandom": "스킬 카드를 덱의 랜덤한 위치에 생성",
+    "addedCardToHand": "스킬 카드를 손패에 생성",
+    "addedCardToTopOfDeck": "스킬 카드를 덱의 맨 위에 생성",
+    "addedCardToDeckAtRandom": "스킬 카드를 덱의 무작위 위치에 생성",
     "upgradedCard": "스킬 카드를 레슨 중 강화",
     "cardGrowth": "스킬 카드 성장",
     "heldCard": "스킬 카드를 보류로 이동",
     "discardedCard": "스킬 카드를 버림패로 이동",
     "movedCardToHand": "스킬 카드를 손패로 이동",
-    "movedCardToTopOfDeck": "스킬 카드를 덱 위로 이동",
-    "movedCardToDeckAtRandom": "스킬 카드를 덱의 랜덤한 위치로 이동",
-    "removedCard": "Removed card",
+    "movedCardToTopOfDeck": "스킬 카드를 덱의 맨 위로 이동",
+    "movedCardToDeckAtRandom": "스킬 카드를 덱의 무작위 위치로 이동",
+    "removedCard": "스킬 카드를 제외로 이동",
     "effect": "지속 효과",
     "stageEffect": "스테이지 효과",
     "skillCard": "스킬 카드",
-    "pItem": "P 아이템",
+    "pItem": "P아이템",
     "numTurns": "{num} 턴",
     "hand": "손패",
     "turnN": "{n} 턴",
@@ -626,9 +626,9 @@
     "unplayable": "사용 불가",
     "linkPhaseChange": "아이돌 교대",
     "skip": "스킵",
-    "selectCardsToHold": "{num}장의 카드를 선택",
-    "selectCardsToMoveToHand": "{num}장의 카드를 선택",
-    "selectCardsToMoveToTopOfDeck": "덱 맨 위로 옮길 카드 {num}장을 선택",
+    "selectCardsToHold": "{num}장의 카드 선택",
+    "selectCardsToMoveToHand": "{num}장의 카드 선택",
+    "selectCardsToMoveToTopOfDeck": "덱 맨 위로 이동할 카드 {num}장 선택",
     "confirm": "확인"
   },
   "BoxPlot": {
@@ -667,8 +667,8 @@
     "formulaTitle": "프로듀스 평가 계산식",
     "faqTitle": "자주 묻는 질문",
     "produceRankCalculator": {
-      "h1": "학마스 프로듀스 평가 계산기 (하지메·레전드 대응)",
-      "intro": "학원 아이돌마스터(학마스) '하지메' 시나리오의 프로듀스 평가 계산기입니다. 패러미터와 최종시험 스코어로 평가치와 프로듀스 랭크를 계산하고, S·A+ 등 목표 랭크에 필요한 최종시험 스코어를 확인할 수 있습니다.",
+      "h1": "학원마스 하지메 프로듀스 평가 계산기 (레전드 난이도 대응)",
+      "intro": "학원 아이돌마스터 하지메 시나리오의 프로듀스 평가 계산기입니다. 패러미터와 최종시험 스코어로 평가치와 프로듀스 랭크를 계산하고, S·A+ 등 목표 랭크에 필요한 최종시험 스코어를 확인할 수 있습니다.",
       "howToBody": "난이도(레귤러·프로·마스터·레전드)와 최종시험 순위를 선택하고, 시험 시작 시점의 Vo·Da·Vi 패러미터를 입력하면 랭크별로 필요한 최종시험 스코어가 표시됩니다. 레전드의 경우 중간시험 스코어도 입력해 주세요. 최종시험 스코어를 입력하면 실제 프로듀스 평가와 랭크를 확인할 수 있습니다.",
       "formulaBody": "프로듀스 평가는 「최종시험 순위 평가＋패러미터 평가＋시험 스코어 평가」의 합계입니다. 순위 평가는 1위 1,700·2위 900·3위 500. 패러미터 평가는 순위 보너스(1위 +30·2위 +20·3위 +10, 레전드는 +160·+80·+40)를 더한 Vo·Da·Vi 합계 ×2.3(레전드는 ×2.1)입니다. 최종시험 스코어의 환산율은 점차 감소하여, 스코어 5,000까지는 1점당 0.3, 10,000까지 0.15, 20,000까지 0.08, 30,000까지 0.04, 40,000까지 0.02, 그 이상은 0.01입니다. 레전드에서는 중간시험 스코어도 평가에 가산되며, 최종시험 스코어에는 별도의 환산율(스코어 2,000,000 상한)이 적용됩니다.",
       "faq": [
@@ -687,14 +687,14 @@
       ]
     },
     "niaCalculator": {
-      "h1": "학마스 N.I.A(NIA) 프로듀스 평가 계산기",
-      "intro": "학원 아이돌마스터(학마스) N.I.A 시나리오의 프로듀스 평가 계산기입니다. 오디션 스코어로 획득 패러미터와 팬 득표수를 계산하고, 평가치와 목표 랭크별 권장 스코어를 확인할 수 있습니다.",
-      "howToBody": "아이돌과 패러미터 보너스%를 설정하고, 오디션 전 패러미터와 팬 득표수를 입력합니다. Vo·Da·Vi 오디션 스코어를 입력하면 획득 패러미터·오디션 후 팬 득표수·프로듀스 평가가 계산됩니다. FINALE·QUARTET에서는 목표 랭크별 권장 스코어도 표시됩니다.",
-      "formulaBody": "프로듀스 평가는 「오디션 후 Vo·Da·Vi 합계 ×2.3＋팬 득표수 평가」로 계산됩니다. 팬 득표수 평가는 득표수 랭크(A~SSS)별로 기초값과 환산율이 다르며, 예를 들어 SSS 랭크에서는 기초값 5,200＋득표수 ×0.03입니다. 오디션 스코어에 의한 패러미터 상승은 일정 이상에서 점차 감소하므로, 권장 스코어 기능으로 효율적인 배분을 확인할 수 있습니다.",
+      "h1": "학원마스 N.I.A(넥스트 아이돌 오디션) 프로듀스 평가 계산기",
+      "intro": "학원 아이돌마스터 N.I.A 시나리오의 프로듀스 평가 계산기입니다. 오디션 스코어로 획득 패러미터와 팬 투표 수를 계산하고, 평가치와 목표 랭크별 권장 스코어를 확인할 수 있습니다.",
+      "howToBody": "아이돌과 패러미터 보너스%를 설정하고, 오디션 전 패러미터와 팬 투표 수를 입력합니다. Vo·Da·Vi 오디션 스코어를 입력하면 획득 패러미터·오디션 후 팬 투표 수·프로듀스 평가가 계산됩니다. FINALE·QUARTET에서는 목표 랭크별 권장 스코어도 표시됩니다.",
+      "formulaBody": "프로듀스 평가는 「오디션 후 Vo·Da·Vi 합계 ×2.3＋팬 투표 수 평가」로 계산됩니다. 팬 투표 수 평가는 투표 수 랭크(A~SSS)별로 초깃값과 환산율이 다릅니다. 예를 들어 SSS 랭크에서는 초깃값 5,200＋투표 수 ×0.03입니다. 오디션 스코어에 의한 패러미터 상승은 일정 이상에서 점차 감소하므로, 권장 스코어 기능으로 효율적인 배분을 확인할 수 있습니다.",
       "faq": [
         {
           "q": "N.I.A의 프로듀스 평가는 어떻게 결정되나요?",
-          "a": "오디션 후 패러미터 합계 ×2.3과 팬 득표수에 따른 평가의 합계로 결정됩니다."
+          "a": "오디션 후 패러미터 합계 ×2.3과 팬 투표 수에 따른 평가의 합계로 결정됩니다."
         },
         {
           "q": "오디션 보너스란?",
@@ -707,13 +707,13 @@
       ]
     },
     "hifCalculator": {
-      "h1": "학마스 H.I.F(HIF) 프로듀스 평가 계산기",
-      "intro": "학원 아이돌마스터(학마스) H.I.F 시나리오의 프로듀스 평가 계산기입니다. 패러미터·스타성·시험 점수(라운드 1/라운드 2)로 평가치를 계산하고, 목표 랭크에 필요한 라운드 2 점수를 확인할 수 있습니다.",
+      "h1": "학원마스 H.I.F(하츠보시 아이돌 페스티벌) 프로듀스 평가 계산기",
+      "intro": "학원 아이돌마스터 H.I.F 시나리오의 프로듀스 평가 계산기입니다. 패러미터·스타성·시험 점수(라운드 1/라운드 2)로 평가치를 계산하고, 목표 랭크에 필요한 라운드 2 점수를 확인할 수 있습니다.",
       "howToBody": "라운드 2 전의 Vo·Da·Vi 패러미터와 스타성을 입력하고, 시험 점수를 '합계' 또는 '분할'(라운드 1/라운드 2 별)로 입력합니다. 프로듀스 평가와 랭크, 목표 랭크별 필요 라운드 2 점수가 자동으로 표시됩니다.",
       "formulaBody": "프로듀스 평가는 「패러미터 합계 ×2＋스타성 ×7.5＋라운드 1 점수 평가＋라운드 2 점수 평가−2,000」으로 계산됩니다. 라운드 1 점수는 순위 발표 화면의 표시값(1위 보너스 ×1.2 포함)을 그대로 입력하면 1.2로 나눈 보정값으로 평가됩니다. 점수 평가는 점차 감소하며 라운드 1은 최대 5,500, 라운드 2는 최대 7,400입니다. 또한 라운드 2 점수에 따라 스타성도 획득(1.5배 보너스 포함 최대 225)되어 스타성 평가에 가산됩니다.",
       "faq": [
         {
-          "q": "H.I.F(HIF)의 평가 계산식은?",
+          "q": "H.I.F의 평가 계산식은?",
           "a": "패러미터 합계 ×2＋스타성 ×7.5＋라운드 1·라운드 2 점수 평가−2,000으로 계산됩니다."
         },
         {
