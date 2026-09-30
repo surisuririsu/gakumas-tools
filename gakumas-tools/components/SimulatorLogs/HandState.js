@@ -12,6 +12,7 @@ const BUFFS_MAP = {
   [S.motivationBuffs]: "motivationBuff",
   [S.motivationAdditionBuffs]: "motivationAdditionBuff",
   [S.goodConditionTurnsBuffs]: "goodConditionTurnsBuff",
+  [S.goodConditionTurnsAdditionBuffs]: "goodConditionTurnsAdditionBuff",
   [S.concentrationBuffs]: "concentrationBuff",
   [S.concentrationAdditionBuffs]: "concentrationAdditionBuff",
   [S.enthusiasmBuffs]: "enthusiasmBuff",
@@ -21,7 +22,10 @@ const BUFFS_MAP = {
   [S.strengthEffectBuffs]: "strengthEffectBuff",
 };
 
-const FLAT_BUFFS = { [S.enthusiasmBonusBuffs]: true };
+const FLAT_BUFFS = {
+  [S.enthusiasmBonusBuffs]: true,
+  [S.goodConditionTurnsAdditionBuffs]: true,
+};
 
 function HandStateLine({ k, state }) {
   const t = useTranslations("stage");
