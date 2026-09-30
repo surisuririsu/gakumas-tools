@@ -353,6 +353,11 @@ export default class HeuristicStrategy extends BaseStrategy {
       sumBuffWeight(state[S.goodConditionTurnsBuffs], turnsRemaining) *
       sc.goodConditionTurnsMultiplier;
 
+    // Good condition turns addition buffs
+    score +=
+      sumBuffWeight(state[S.goodConditionTurnsAdditionBuffs], turnsRemaining) *
+      sc.goodConditionTurnsMultiplier;
+
     // Motivation buffs
     score +=
       sumBuffWeight(state[S.motivationBuffs], turnsRemaining) *

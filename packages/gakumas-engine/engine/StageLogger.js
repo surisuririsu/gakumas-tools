@@ -8,6 +8,7 @@ const LOGGED_BUFFS_FIELDS = [
   S.motivationBuffs,
   S.motivationAdditionBuffs,
   S.goodConditionTurnsBuffs,
+  S.goodConditionTurnsAdditionBuffs,
   S.concentrationBuffs,
   S.concentrationAdditionBuffs,
   S.enthusiasmBuffs,

@@ -175,6 +175,7 @@ Assignment operators: `=`, `+=`, `-=`, `*=`, `/=`, `%=`.
 | 好印象効果回数増加                        | `setGoodImpressionTurnsTimesBuff(amount, turns?)`                        |
 | やる気増加量増加                          | `setMotivationBuff(amount, turns?)`                                      |
 | 好調増加量増加                            | `setGoodConditionTurnsBuff(amount, turns?)`                              |
+| 好調増加量追加                            | `setGoodConditionTurnsAdditionBuff(amount, turns?)`                      |
 | 集中増加量増加                            | `setConcentrationBuff(amount, turns?)`                                   |
 | 集中強化                                  | `setConcentrationEffectBuff(amount, turns?)`                             |
 | 熱気増加量増加                            | `setEnthusiasmBuff(amount, turns?)`                                      |

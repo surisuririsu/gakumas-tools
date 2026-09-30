@@ -233,6 +233,11 @@ export function resolveMotivation(state, motivation) {
 }
 
 export function resolveGoodConditionTurns(state, goodConditionTurns) {
+  // Apply good condition turns addition buffs
+  goodConditionTurns += state[S.goodConditionTurnsAdditionBuffs].reduce(
+    (acc, cur) => acc + cur.amount,
+    0,
+  );
   // Apply good condition turns buffs
   goodConditionTurns *= state[S.goodConditionTurnsBuffs].reduce(
     (acc, cur) => acc + cur.amount,
