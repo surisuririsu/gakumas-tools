@@ -488,6 +488,11 @@ import image_487 from "./487.png";
 import image_488 from "./488.png";
 import image_489 from "./489.png";
 import image_490 from "./490.png";
+import image_491 from "./491.png";
+import image_492 from "./492.png";
+import image_493 from "./493.png";
+import image_494 from "./494.png";
+import image_495 from "./495.png";
 
 const IMAGES = {
   '1': image_1,
@@ -980,6 +985,11 @@ const IMAGES = {
   '488': image_488,
   '489': image_489,
   '490': image_490,
+  '491': image_491,
+  '492': image_492,
+  '493': image_493,
+  '494': image_494,
+  '495': image_495,
 };
 
 export default IMAGES;

@@ -877,6 +877,12 @@ import image_877 from "./877.png";
 import image_878 from "./878.png";
 import image_879 from "./879.png";
 import image_880 from "./880.png";
+import image_881 from "./881.png";
+import image_882 from "./882.png";
+import image_883 from "./883.png";
+import image_884 from "./884.png";
+import image_885 from "./885.png";
+import image_886 from "./886.png";
 
 const IMAGES = {
   '1': image_1,
@@ -1758,6 +1764,12 @@ const IMAGES = {
   '878': image_878,
   '879': image_879,
   '880': image_880,
+  '881': image_881,
+  '882': image_882,
+  '883': image_883,
+  '884': image_884,
+  '885': image_885,
+  '886': image_886,
 };
 
 export default IMAGES;
