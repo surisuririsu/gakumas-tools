@@ -101,7 +101,7 @@ function StageCustomizer({ initialStage, onApply }) {
       <div className={styles.effects}>
         <EffectEditor value={effects} onChange={setEffects} />
         <a
-          href="https://github.com/surisuririsu/gakumas-tools/blob/master/packages/gakumas-data/Effects.md"
+          href="https://github.com/gakumas-tools/gakumas-tools/blob/master/packages/gakumas-data/Effects.md"
           target="_blank"
         >
           {t("effectFormat")}

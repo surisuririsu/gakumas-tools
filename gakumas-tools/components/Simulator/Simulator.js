@@ -348,7 +348,7 @@ export default function Simulator() {
         <div className={styles.subLinks} data-export-hide="true">
           <SimulatorButtons />
           <a
-            href="https://github.com/surisuririsu/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
+            href="https://github.com/gakumas-tools/gakumas-tools/blob/master/gakumas-tools/simulator/CHANGELOG.md"
             target="_blank"
           >
             {t("lastUpdated")}: 2026-09-26

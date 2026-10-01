@@ -11,7 +11,7 @@ A collection of tools for playing Gakuen Idolmaster.
 
 Clone the repository
 ```
-git clone git@github.com:surisuririsu/gakumas-tools.git
+git clone git@github.com:gakumas-tools/gakumas-tools.git
 ```
 
 Enter the project directory and install dependencies:
