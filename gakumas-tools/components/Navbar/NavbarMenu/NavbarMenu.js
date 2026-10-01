@@ -86,7 +86,7 @@ function NavbarMenu() {
               />
               <IconButton
                 icon={FaGithub}
-                href="https://github.com/surisuririsu/gakumas-tools"
+                href="https://github.com/gakumas-tools/gakumas-tools"
                 size="small"
                 ariaLabel="GitHub"
               />
