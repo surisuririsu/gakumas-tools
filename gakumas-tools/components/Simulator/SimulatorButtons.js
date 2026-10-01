@@ -1,8 +1,10 @@
 "use client";
 import { memo, useContext, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
+  FaFileImport,
   FaRegCopy,
   FaRegFloppyDisk,
   FaRegTrashCan,
@@ -10,16 +12,23 @@ import {
 } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ConfirmModal from "@/components/ConfirmModal";
+import ModalLoading from "@/components/Modal/ModalLoading";
 import LoadoutsModal from "@/components/SimulationRuns/LoadoutsModal";
 import ShareModal from "@/components/ShareModal";
 import LoadoutContext from "@/contexts/LoadoutContext";
 import ModalContext from "@/contexts/ModalContext";
 import styles from "./Simulator.module.scss";
 
+const SimulatorLoadoutImporterModal = dynamic(
+  () => import("@/components/SimulatorLoadoutImporterModal"),
+  { ssr: false, loading: ModalLoading },
+);
+
 function SimulatorButtons() {
   const t = useTranslations("SimulatorButtons");
 
-  const { clear, simulatorUrl } = useContext(LoadoutContext);
+  const { clear, loadout, setLoadout, simulatorUrl } =
+    useContext(LoadoutContext);
   const { setModal } = useContext(ModalContext);
   const [linkCopied, setLinkCopied] = useState(false);
   const copiedTimerRef = useRef(null);
@@ -58,6 +67,30 @@ function SimulatorButtons() {
       >
         <FaRegFloppyDisk />
         <span className={styles.buttonText}>{t("openLoadouts")}</span>
+      </Button>
+
+      <Button
+        style="blue-secondary"
+        size="sm"
+        onClick={() =>
+          setModal(
+            <SimulatorLoadoutImporterModal
+              stageId={loadout.stageId}
+              onImport={(imported) =>
+                setLoadout({
+                  ...loadout,
+                  ...imported,
+                  customizationGroups: imported.skillCardIdGroups.map((g) =>
+                    g.map(() => ({})),
+                  ),
+                })
+              }
+            />,
+          )
+        }
+      >
+        <FaFileImport />
+        <span className={styles.buttonText}>{t("import")}</span>
       </Button>
 
       {!!simulatorUrl && (
