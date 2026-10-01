@@ -459,13 +459,17 @@
     "confirm": "您确定要清除配置吗？",
     "clear": "清除",
     "share": "分享",
-    "openLoadouts": "编组"
+    "openLoadouts": "编组",
+    "import": "导入"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "从截图导入编组",
-    "instructions": "请上传游戏内选秀编组画面的截图。P道具和技能卡将被自动检测并加载。由于分类器未针对此图标样式进行训练，识别准确率可能较低。",
+    "instructions": "请上传游戏内比赛编组画面的截图。将读取属性值、P道具和技能卡，并根据类型倍率推算关卡和支援加成。",
     "processing": "正在处理截图...",
-    "error": "导入失败"
+    "error": "导入失败",
+    "matchingStages": "匹配的关卡",
+    "pickStage": "已选中最匹配的关卡，如有误请重新选择。",
+    "noStage": "没有关卡与截图中的类型倍率一致，因此关卡和支援加成保持不变。"
   },
   "ShareModal": {
     "title": "分享",

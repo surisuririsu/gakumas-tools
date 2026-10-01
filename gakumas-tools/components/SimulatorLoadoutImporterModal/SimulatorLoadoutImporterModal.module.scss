@@ -1,0 +1,8 @@
+@use "../../styles/tokens";
+
+.supportBonus {
+  flex-shrink: 0;
+  color: tokens.$surface-ink-muted;
+  font-size: tokens.$text-sm;
+  font-variant-numeric: tabular-nums;
+}

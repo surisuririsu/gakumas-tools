@@ -459,13 +459,17 @@
     "confirm": "Are you sure you want to clear the loadout?",
     "clear": "Clear",
     "share": "Share",
-    "openLoadouts": "Loadouts"
+    "openLoadouts": "Loadouts",
+    "import": "Import"
   },
   "SimulatorLoadoutImporterModal": {
     "title": "Import loadout from screenshot",
-    "instructions": "Upload a screenshot of the in-game contest loadout screen. P-items and skill cards will be auto-detected and loaded. Classification may be inaccurate since the classifier was not trained on this icon style.",
+    "instructions": "Upload a screenshot of the in-game contest loadout screen. Parameters, P-items and skill cards will be loaded, and the stage and support bonus will be inferred from the type multipliers.",
     "processing": "Processing screenshot...",
-    "error": "Failed to import"
+    "error": "Failed to import",
+    "matchingStages": "Matching stages",
+    "pickStage": "Best match selected. Pick another if it's wrong.",
+    "noStage": "No stage matches the screenshot's type multipliers, so the stage and support bonus were left unchanged."
   },
   "ShareModal": {
     "title": "Share",
