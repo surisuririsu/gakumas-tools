@@ -30,6 +30,10 @@ import {
   getPItemBoundingBoxes,
   getSkillCardBoundingBoxes,
 } from "../gakumas-tools/utils/imageProcessing/memoryGeometry.js";
+import {
+  classifyCrops,
+  ICON_SIZE,
+} from "../gakumas-tools/utils/imageProcessing/entityClassifier.js";
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HARNESS_DIR, "..");
@@ -41,7 +45,6 @@ const SKILL_CARD_MODEL = join(PUBLIC, "skill_card_model.onnx");
 const SKILL_CARD_CLASSES = join(PUBLIC, "skill_card_classes.json");
 const P_ITEM_MODEL = join(PUBLIC, "p_item_model.onnx");
 const P_ITEM_CLASSES = join(PUBLIC, "p_item_classes.json");
-const ICON_SIZE = 64;
 
 const PARAMS_REGEXP = /^\s*\d+\s+\d+\s+\d+\s+\d+\s*$/;
 
@@ -143,31 +146,23 @@ function extractLines(result) {
     .flat(2);
 }
 
-async function classifyBox(image, box, session, classes) {
-  // Round/clamp because the OCR-derived box origin is fractional.
-  const left = Math.max(0, Math.round(box.x));
-  const top = Math.max(0, Math.round(box.y));
-  const w = Math.min(image.width - left, Math.round(box.width));
-  const h = Math.min(image.height - top, Math.round(box.height));
-  const { data } = await sharp(image.pixels, { raw: image.raw })
-    .extract({ left, top, width: w, height: h })
-    .resize(ICON_SIZE, ICON_SIZE, { fit: "fill" })
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
-  for (let j = 0; j < ICON_SIZE * ICON_SIZE; j++) {
-    input[j] = data[j * 3] / 255;
-    input[j + ICON_SIZE * ICON_SIZE] = data[j * 3 + 1] / 255;
-    input[j + 2 * ICON_SIZE * ICON_SIZE] = data[j * 3 + 2] / 255;
-  }
-  const tensor = new ort.Tensor("float32", input, [1, 3, ICON_SIZE, ICON_SIZE]);
-  const output = await session.run({ input: tensor });
-  const logits = output.classifier.data;
-  let argmax = 0;
-  for (let k = 1; k < logits.length; k++) if (logits[k] > logits[argmax]) argmax = k;
-  const idStr = classes[argmax].split("_")[0];
-  return idStr === "0" ? 0 : parseInt(idStr, 10);
+async function classifyBoxes(image, boxes, session, classes) {
+  const crops = await Promise.all(
+    boxes.map(async (box) => {
+      // Round/clamp because the OCR-derived box origin is fractional.
+      const left = Math.max(0, Math.round(box.x));
+      const top = Math.max(0, Math.round(box.y));
+      const width = Math.min(image.width - left, Math.round(box.width));
+      const height = Math.min(image.height - top, Math.round(box.height));
+      return sharp(image.pixels, { raw: image.raw })
+        .extract({ left, top, width, height })
+        .resize(ICON_SIZE, ICON_SIZE, { fit: "fill" })
+        .removeAlpha()
+        .raw()
+        .toBuffer();
+    }),
+  );
+  return classifyCrops(ort, session, classes, crops, 3);
 }
 
 async function detectMemory(image, ocrWorker) {
@@ -279,14 +274,13 @@ async function main() {
       image = await loadImage(absPath);
       detection = await detectMemory(image, ocrWorker);
       params = detection.params;
-      pItems = [];
-      for (const box of detection.pItemBoxes) {
-        pItems.push(await classifyBox(image, box, pItem.session, pItem.classes));
-      }
-      skillCards = [];
-      for (const box of detection.skillCardBoxes) {
-        skillCards.push(await classifyBox(image, box, skillCard.session, skillCard.classes));
-      }
+      pItems = await classifyBoxes(image, detection.pItemBoxes, pItem.session, pItem.classes);
+      skillCards = await classifyBoxes(
+        image,
+        detection.skillCardBoxes,
+        skillCard.session,
+        skillCard.classes,
+      );
     } catch (err) {
       failed++;
       console.error(`✗ ${entry.file}  threw: ${err.message}`);

@@ -1,0 +1,117 @@
+name: classifier refresh
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - gk-img
+      - packages/gakumas-data/json/skill_cards.json
+      - packages/gakumas-data/json/p_items.json
+      - scripts/train_classifier/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: classifier-refresh
+  cancel-in-progress: true
+
+env:
+  BRANCH: automation/classifier-refresh
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # .gitmodules uses an SSH URL; gk-img is public, so fetch it over HTTPS.
+      - name: Checkout gk-img
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init --depth 1 gk-img
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/train_classifier/requirements-refresh.txt
+
+      - name: Refresh galleries
+        run: |
+          pip install -r scripts/train_classifier/requirements-refresh.txt
+          python -m scripts.train_classifier refresh | tee refresh.log
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- gakumas-tools/public; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: pnpm/action-setup@v4
+        if: steps.diff.outputs.changed == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.diff.outputs.changed == 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Run detection fixtures
+        id: fixtures
+        if: steps.diff.outputs.changed == 'true'
+        continue-on-error: true
+        run: |
+          pnpm install --frozen-lockfile
+          status=0
+          pnpm -s test:draft > draft.log 2>&1 || status=1
+          pnpm -s test:memory > memory.log 2>&1 || status=1
+          grep -hvE "Warning|--import|trace-warnings" draft.log memory.log | tee fixtures.log
+          exit $status
+
+      - name: Open or update PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FIXTURES: ${{ steps.fixtures.outcome }}
+        run: |
+          {
+            echo "Automated gallery refresh from \`python -m scripts.train_classifier refresh\` after ${GITHUB_SHA::7}."
+            echo
+            echo '```'
+            cat refresh.log
+            echo '```'
+            echo
+            echo "Detection fixtures: **${FIXTURES}**"
+            echo
+            echo '```'
+            cat fixtures.log 2>/dev/null
+            echo '```'
+          } > pr-body.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add gakumas-tools/public/*_model.onnx gakumas-tools/public/*_classes.json
+          git commit -m "Refresh icon classifier galleries"
+          git push --force origin "$BRANCH"
+
+          if [ "$(gh pr view "$BRANCH" --json state -q .state 2>/dev/null)" = "OPEN" ]; then
+            gh pr edit "$BRANCH" --body-file pr-body.md
+          elif ! gh pr create --base master --head "$BRANCH" \
+              --title "Refresh icon classifier galleries" --body-file pr-body.md; then
+            # Needs "Allow GitHub Actions to create and approve pull requests".
+            echo "Open a PR manually: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/master...$BRANCH" \
+              | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Fail on fixture regressions
+        if: steps.fixtures.outcome == 'failure'
+        run: exit 1

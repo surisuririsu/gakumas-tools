@@ -1,6 +1,4 @@
-torch>=2.0
 onnx>=1.14
-onnxscript>=0.1
 onnxruntime>=1.17
 numpy
 pillow
