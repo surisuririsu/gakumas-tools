@@ -36,62 +36,65 @@ ENTITY_CONFIG = {
 }
 
 
-def load_allowed_ids(entity_type):
-    config = ENTITY_CONFIG[entity_type]
-    json_path = os.path.join(GAKUMAS_DATA_JSON, config["json_filename"])
+def load_entities(entity_type):
+    json_path = os.path.join(GAKUMAS_DATA_JSON, ENTITY_CONFIG[entity_type]["json_filename"])
     with open(json_path) as f:
-        entities = json.load(f)
-    return {str(e["id"]) for e in entities if config["filter"](e)}
+        return json.load(f)
 
 
-def ensure_empty_class(data_dir):
-    class_dir = os.path.join(data_dir, EMPTY_CLASS_ID)
-    os.makedirs(class_dir, exist_ok=True)
-    icon_path = os.path.join(class_dir, "icon.webp")
-    if not os.path.exists(icon_path):
-        Image.new(
-            "RGB", (EMPTY_ICON_SIZE, EMPTY_ICON_SIZE), EMPTY_ICON_COLOR
-        ).save(icon_path, "WEBP")
+def load_allowed_ids(entity_type):
+    entity_filter = ENTITY_CONFIG[entity_type]["filter"]
+    return {str(e["id"]) for e in load_entities(entity_type) if entity_filter(e)}
+
+
+def load_upgraded_ids(entity_type):
+    return {str(e["id"]) for e in load_entities(entity_type) if e.get("upgraded")}
+
+
+def empty_icon():
+    return Image.new("RGB", (EMPTY_ICON_SIZE, EMPTY_ICON_SIZE), EMPTY_ICON_COLOR)
+
+
+def icon_classes(entity_type):
+    # Skill card art variants are named "<id>_<idol id>" and stay separate classes.
+    config = ENTITY_CONFIG[entity_type]
+    allowed_ids = load_allowed_ids(entity_type)
+    return sorted(
+        (name, os.path.join(config["icon_dir"], filename))
+        for filename in os.listdir(config["icon_dir"])
+        for name, ext in [os.path.splitext(filename)]
+        if ext == ".webp" and name.split("_")[0] in allowed_ids
+    )
 
 
 def prepare_entity(entity_type):
     config = ENTITY_CONFIG[entity_type]
-    allowed_ids = load_allowed_ids(entity_type) | {EMPTY_CLASS_ID}
     os.makedirs(config["data_dir"], exist_ok=True)
-    ensure_empty_class(config["data_dir"])
 
-    copied = 0
-    skipped = 0
-    for icon_filename in os.listdir(config["icon_dir"]):
-        if not icon_filename.endswith(".webp"):
-            continue
-        base = os.path.splitext(icon_filename)[0]
-        # Skill card filenames may be "<id>_<variant>"; the entity id is the
-        # part before the underscore, but each variant stays its own class.
-        entity_id = base.split("_")[0]
-        if entity_id not in allowed_ids:
-            skipped += 1
-            continue
-        class_dir = os.path.join(config["data_dir"], base)
+    empty_icon_path = os.path.join(config["data_dir"], EMPTY_CLASS_ID, "icon.webp")
+    if not os.path.exists(empty_icon_path):
+        os.makedirs(os.path.dirname(empty_icon_path), exist_ok=True)
+        empty_icon().save(empty_icon_path, "WEBP")
+
+    classes = icon_classes(entity_type)
+    for name, path in classes:
+        class_dir = os.path.join(config["data_dir"], name)
         os.makedirs(class_dir, exist_ok=True)
-        shutil.copy(
-            os.path.join(config["icon_dir"], icon_filename),
-            os.path.join(class_dir, "icon.webp"),
-        )
-        copied += 1
+        shutil.copy(path, os.path.join(class_dir, "icon.webp"))
 
-    extra_dirs = [
+    expected = {name for name, _ in classes} | {EMPTY_CLASS_ID}
+    extra_dirs = sorted(
         name
         for name in os.listdir(config["data_dir"])
-        if os.path.isdir(os.path.join(config["data_dir"], name))
-        and name.split("_")[0] not in allowed_ids
-    ]
+        if os.path.isdir(os.path.join(config["data_dir"], name)) and name not in expected
+    )
     if extra_dirs:
         print(
             f"  warning: {len(extra_dirs)} {entity_type} folder(s) in "
-            f"{config['data_dir']} no longer match gakumas-data filter: "
-            f"{', '.join(sorted(extra_dirs)[:5])}"
+            f"{config['data_dir']} have no matching icon and are ignored: "
+            f"{', '.join(extra_dirs[:5])}"
             + (" ..." if len(extra_dirs) > 5 else "")
         )
 
-    print(f"  {entity_type}: copied {copied} icons, skipped {skipped} filtered")
+    print(f"  {entity_type}: {len(classes)} icons")
+    return sorted(expected)
