@@ -1,14 +1,13 @@
-@use "sass:color";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
 @mixin tones {
-  @include mixins.param-tones using ($tint, $edge, $ink) {
+  @include mixins.param-tones using ($tint, $edge, $ink, $halo, $placeholder) {
     --tint: #{$tint};
     --edge: #{$edge};
     --ink: #{$ink};
-    --halo: #{color.change($ink, $alpha: 0.18)};
-    --placeholder: #{color.change($ink, $alpha: 0.45)};
+    --halo: #{$halo};
+    --placeholder: #{$placeholder};
   }
 }
 
@@ -85,7 +84,7 @@
     }
 
     &:hover:not(:focus, :disabled) {
-      background-color: rgba(255, 255, 255, 0.55);
+      background-color: tokens.$fill-lift;
     }
 
     &:focus {

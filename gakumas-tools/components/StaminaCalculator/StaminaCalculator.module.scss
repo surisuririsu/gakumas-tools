@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
@@ -28,7 +27,7 @@
   }
 
   &:not(:disabled):is(:hover, :focus-visible) {
-    background-color: color.change(tokens.$stamina-ink, $alpha: 0.12);
+    background-color: tokens.$stamina-wash;
 
     svg {
       scale: 1.3;

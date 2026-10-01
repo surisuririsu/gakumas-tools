@@ -1,8 +1,5 @@
-@use "sass:color";
 @use "../../../styles/mixins";
 @use "../../../styles/tokens";
-
-$danger-tint-edge: color.mix(tokens.$danger, tokens.$danger-tint, 28%);
 
 .targetSkillCards {
   max-width: 420px;
@@ -68,7 +65,7 @@ $danger-tint-edge: color.mix(tokens.$danger, tokens.$danger-tint, 28%);
 
 .negated .negate {
   background-color: tokens.$danger-tint;
-  box-shadow: 0 tokens.$press-depth 0 $danger-tint-edge;
+  box-shadow: 0 tokens.$press-depth 0 tokens.$danger-tint-edge;
 
   .minus {
     opacity: 0;

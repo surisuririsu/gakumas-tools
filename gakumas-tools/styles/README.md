@@ -26,6 +26,11 @@ Never give non-interactive things a hard edge, and never give buttons a flat loo
 - **Parameters** (`$vocal-*`, `$dance-*`, `$visual-*`, `$stamina-*`): only for Vo/Da/Vi/stamina values, via `param-tones`.
 - Text: `$surface-ink`, `$surface-ink-muted` for secondary, `$surface-ink-subtle`/`faint` for hints and placeholders.
 
+## Dark mode
+
+- The site follows the OS setting. A new colour goes in both `$light` and `$dark` in `tokens.scss`.
+- Tokens are `var()`s, so Sass colour functions can't take them; add a derived entry in `tokens.scss`. Avoid `color-mix()` inside `#simulator_loadout`, which html2canvas can't parse.
+
 ## Type roles
 
 - `title` names a page, `heading` names a card or section, `label` names a control. A heading is ink and heavy; a label is small and muted. Don't use `<label>` as a heading.

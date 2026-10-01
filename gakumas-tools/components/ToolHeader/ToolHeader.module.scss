@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
@@ -24,7 +25,7 @@
 
   &.pinned {
     background-color: colors.$white;
-    color: tokens.$accent-ink;
+    color: map.get(tokens.$light, accent-ink);
     box-shadow: 0 2px 0 rgba(160, 90, 0, 0.35);
     animation: pinPop tokens.$duration-spring tokens.$ease-pop;
 

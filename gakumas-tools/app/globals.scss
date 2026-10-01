@@ -2,6 +2,18 @@
 @use "../styles/mixins";
 @use "../styles/tokens";
 
+:root {
+  color-scheme: light;
+  @include tokens.theme(tokens.$light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-exporting]) {
+    color-scheme: dark;
+    @include tokens.theme(tokens.$dark);
+  }
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

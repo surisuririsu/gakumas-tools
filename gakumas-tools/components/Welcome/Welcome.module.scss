@@ -72,6 +72,10 @@
   pointer-events: none;
   white-space: nowrap;
   z-index: 0;
+
+  @include mixins.dark {
+    -webkit-text-stroke-color: rgba(255, 255, 255, 0.07);
+  }
 }
 
 .heroTitleMain {

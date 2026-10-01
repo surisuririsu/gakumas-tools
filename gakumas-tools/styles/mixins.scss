@@ -2,6 +2,14 @@
 @use "./colors";
 @use "./tokens";
 
+@mixin dark {
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-exporting]) & {
+      @content;
+    }
+  }
+}
+
 @mixin pressable($scale: tokens.$press-scale) {
   --press-opacity: 1;
 
@@ -148,9 +156,8 @@
   }
 }
 
-$chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2363636b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-
-$chevron-accent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ec8a00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+$chevron: tokens.$chevron;
+$chevron-accent: tokens.$chevron-accent;
 
 @mixin select {
   @include field;
@@ -421,16 +428,46 @@ $chevron-accent: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
   @each $i,
     $tint,
     $edge,
-    $ink
+    $ink,
+    $halo,
+    $placeholder
       in (
-        (1, tokens.$vocal-tint, tokens.$vocal-edge, tokens.$vocal-ink),
-        (2, tokens.$dance-tint, tokens.$dance-edge, tokens.$dance-ink),
-        (3, tokens.$visual-tint, tokens.$visual-edge, tokens.$visual-ink),
-        (4, tokens.$stamina-tint, tokens.$stamina-edge, tokens.$stamina-ink)
+        (
+          1,
+          tokens.$vocal-tint,
+          tokens.$vocal-edge,
+          tokens.$vocal-ink,
+          tokens.$vocal-halo,
+          tokens.$vocal-placeholder
+        ),
+        (
+          2,
+          tokens.$dance-tint,
+          tokens.$dance-edge,
+          tokens.$dance-ink,
+          tokens.$dance-halo,
+          tokens.$dance-placeholder
+        ),
+        (
+          3,
+          tokens.$visual-tint,
+          tokens.$visual-edge,
+          tokens.$visual-ink,
+          tokens.$visual-halo,
+          tokens.$visual-placeholder
+        ),
+        (
+          4,
+          tokens.$stamina-tint,
+          tokens.$stamina-edge,
+          tokens.$stamina-ink,
+          tokens.$stamina-halo,
+          tokens.$stamina-placeholder
+        )
       )
   {
     &:nth-child(#{$i}) {
-      @content ($tint, $edge, $ink);
+      @content ($tint, $edge, $ink, $halo, $placeholder);
     }
   }
 }

@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   border-radius: tokens.$radius-icon;
-  background-color: #f4f4f7;
+  background-color: tokens.$icon-bg;
   container-type: inline-size;
 
   img {
@@ -17,12 +17,12 @@
   }
 
   &.empty {
-    border: 1.5px dashed #d4d4dc;
+    border: 1.5px dashed tokens.$icon-empty-border;
     background-color: tokens.$fill-subtle;
   }
 
   &.filled {
-    background-color: colors.$white;
+    background-color: tokens.$thumb;
     box-shadow: 0 2px 0 rgba(20, 20, 40, 0.16);
   }
 
@@ -214,6 +214,20 @@ button.entityIcon:is(:hover, :focus-visible) .tier {
     background-color: #fdeec6;
     color: #8a6100;
     box-shadow: 0 1.5px 0 #f0cf79;
+  }
+
+  @include mixins.dark {
+    &.R {
+      background-color: #1b3542;
+      color: #8fd0ee;
+      box-shadow: 0 1.5px 0 #0e1f28;
+    }
+
+    &.SR {
+      background-color: #3a2f10;
+      color: #f0c860;
+      box-shadow: 0 1.5px 0 #211a07;
+    }
   }
 }
 
