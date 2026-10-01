@@ -7,6 +7,7 @@ import {
   loadImageFromFile,
   extractLines,
 } from "./common";
+import { classifyCrops, ICON_SIZE } from "./entityClassifier";
 import {
   getPItemBoundingBoxes,
   getSkillCardBoundingBoxes,
@@ -147,19 +148,13 @@ export function extractParams(line) {
   return (line.text.match(/\d+/g) || []).map((t) => parseInt(t, 10));
 }
 
-const ICON_SIZE = 64;
-
 export async function extractEntities(img, boxes, session, classes) {
   const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  // Draw section of the image from first box to canvas
   canvas.width = ICON_SIZE;
   canvas.height = ICON_SIZE;
-  const entityIds = [];
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
-  for (let i = 0; i < boxes.length; i++) {
-    const box = boxes[i];
+  const crops = boxes.map((box, i) => {
     ctx.drawImage(
       img,
       box.x,
@@ -171,39 +166,21 @@ export async function extractEntities(img, boxes, session, classes) {
       ICON_SIZE,
       ICON_SIZE
     );
-
     if (DEBUG) {
       document.body.append(canvas);
-
-      // Download as file
-      const dataUrl = canvas.toDataURL("image/webp");
-      const link = document.createElement("a");
-      link.setAttribute("href", dataUrl);
-      link.setAttribute("download", `entity_${i}_${Date.now()}.webp`);
-      document.body.append(link);
-      link.click();
-      document.body.removeChild(link);
+      downloadCrop(canvas, i);
     }
+    return ctx.getImageData(0, 0, ICON_SIZE, ICON_SIZE).data;
+  });
 
-    const imageData = ctx.getImageData(0, 0, ICON_SIZE, ICON_SIZE).data;
-    const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
-    for (let j = 0; j < ICON_SIZE * ICON_SIZE; j++) {
-      input[j] = imageData[j * 4] / 255;
-      input[j + ICON_SIZE * ICON_SIZE] = imageData[j * 4 + 1] / 255;
-      input[j + 2 * ICON_SIZE * ICON_SIZE] = imageData[j * 4 + 2] / 255;
-    }
-    const tensor = new ort.Tensor("float32", input, [
-      1,
-      3,
-      ICON_SIZE,
-      ICON_SIZE,
-    ]);
-    const output = await session.run({ input: tensor });
-    const logits = output.classifier.data;
-    const predictedClass = logits.indexOf(Math.max(...logits));
-    const entityId = classes[predictedClass].split("_")[0];
-    entityIds.push(entityId === "0" ? 0 : parseInt(entityId, 10));
-  }
+  return classifyCrops(ort, session, classes, crops, 4);
+}
 
-  return entityIds;
+function downloadCrop(canvas, i) {
+  const link = document.createElement("a");
+  link.setAttribute("href", canvas.toDataURL("image/webp"));
+  link.setAttribute("download", `entity_${i}_${Date.now()}.webp`);
+  document.body.append(link);
+  link.click();
+  document.body.removeChild(link);
 }

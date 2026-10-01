@@ -24,6 +24,10 @@ import sharp from "sharp";
 import * as ort from "onnxruntime-node";
 import { SkillCards } from "gakumas-data";
 import { detectDraftPickBoxes } from "../gakumas-tools/utils/imageProcessing/draftPickGeometry.js";
+import {
+  classifyCrops,
+  ICON_SIZE,
+} from "../gakumas-tools/utils/imageProcessing/entityClassifier.js";
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HARNESS_DIR, "..");
@@ -31,7 +35,6 @@ const FIXTURE_PATH = join(HARNESS_DIR, "draftPickBoxes.jsonl");
 const OVERLAY_DIR = join(HARNESS_DIR, "overlays", "draft");
 const MODEL_PATH = join(REPO_ROOT, "gakumas-tools/public/skill_card_model.onnx");
 const CLASSES_PATH = join(REPO_ROOT, "gakumas-tools/public/skill_card_classes.json");
-const ICON_SIZE = 64;
 
 const args = process.argv.slice(2);
 const UPDATE = args.includes("--update");
@@ -62,28 +65,18 @@ async function loadImage(absPath) {
   };
 }
 
-async function classifyBox(image, box, session, classes) {
-  const { data } = await sharp(image.pixels, { raw: image.raw })
-    .extract({ left: box.x, top: box.y, width: box.width, height: box.height })
-    .resize(ICON_SIZE, ICON_SIZE, { fit: "fill" })
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  // Channels-first float32 normalized to [0, 1] — matches the browser
-  // pipeline in utils/imageProcessing/memory.js extractEntities.
-  const input = new Float32Array(3 * ICON_SIZE * ICON_SIZE);
-  for (let j = 0; j < ICON_SIZE * ICON_SIZE; j++) {
-    input[j] = data[j * 3] / 255;
-    input[j + ICON_SIZE * ICON_SIZE] = data[j * 3 + 1] / 255;
-    input[j + 2 * ICON_SIZE * ICON_SIZE] = data[j * 3 + 2] / 255;
-  }
-  const tensor = new ort.Tensor("float32", input, [1, 3, ICON_SIZE, ICON_SIZE]);
-  const output = await session.run({ input: tensor });
-  const logits = output.classifier.data;
-  let argmax = 0;
-  for (let k = 1; k < logits.length; k++) if (logits[k] > logits[argmax]) argmax = k;
-  const idStr = classes[argmax].split("_")[0];
-  return idStr === "0" ? 0 : parseInt(idStr, 10);
+async function classifyBoxes(image, boxes, session, classes) {
+  const crops = await Promise.all(
+    boxes.map(async (box) =>
+      sharp(image.pixels, { raw: image.raw })
+        .extract({ left: box.x, top: box.y, width: box.width, height: box.height })
+        .resize(ICON_SIZE, ICON_SIZE, { fit: "fill" })
+        .removeAlpha()
+        .raw()
+        .toBuffer(),
+    ),
+  );
+  return classifyCrops(ort, session, classes, crops, 3);
 }
 
 function cardName(id) {
@@ -164,10 +157,7 @@ async function main() {
         width: image.width,
         height: image.height,
       });
-      cardIds = [];
-      for (const box of detection.boxes) {
-        cardIds.push(await classifyBox(image, box, session, classes));
-      }
+      cardIds = await classifyBoxes(image, detection.boxes, session, classes);
     } catch (err) {
       failed++;
       console.error(`✗ ${entry.file}  threw: ${err.message}`);
