@@ -72,7 +72,8 @@ jobs:
           status=0
           pnpm -s test:draft > draft.log 2>&1 || status=1
           pnpm -s test:memory > memory.log 2>&1 || status=1
-          grep -hvE "Warning|--import|trace-warnings" draft.log memory.log | tee fixtures.log
+          pnpm -s test:contest-loadout > contest-loadout.log 2>&1 || status=1
+          grep -hvE "Warning|--import|trace-warnings" draft.log memory.log contest-loadout.log | tee fixtures.log
           exit $status
 
       - name: Open or update PR
