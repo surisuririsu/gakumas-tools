@@ -493,3 +493,4 @@ id,name,rarity,upgraded,plan,mode,sourceType,pIdolId,welfare,effects
 492,小悪魔の色気+,SSR,TRUE,anomaly,stage,pIdol,157,FALSE,at:startOfTurn { if:isFullPower { genki+=7; fullPowerCharge+=2 }; limit:2 }
 493,天性の才能,SSR,FALSE,sense,stage,pIdol,158,FALSE,at:afterCardUsed { if:countCards[hand & baseId(23)]>=1 { score+=goodConditionTurns*0.3 } }
 494,天性の才能+,SSR,TRUE,sense,stage,pIdol,158,FALSE,at:afterCardUsed { if:countCards[hand & baseId(23)]>=1 { genki+=1; score+=goodConditionTurns*0.5 } }
+495,王子様隠しかぼちゃ,SR,FALSE,sense,produce,support,,FALSE,
