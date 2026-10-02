@@ -5,8 +5,8 @@
   max-width: 260px;
   padding: tokens.$space-2 tokens.$space-3 !important;
   border-radius: tokens.$radius-sm !important;
-  background-color: tokens.$surface-ink !important;
-  color: #fff !important;
+  background-color: tokens.$inverse !important;
+  color: tokens.$inverse-ink !important;
   font-size: tokens.$text-sm !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;

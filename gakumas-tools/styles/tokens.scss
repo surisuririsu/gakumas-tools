@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "sass:map";
+@use "sass:string";
 @use "./colors";
 
 // Spacing (4-point baseline)
@@ -56,78 +59,304 @@ $press-scale: 0.96;
 $press-scale-wide: 0.985;
 $press-depth: 2px;
 
-// Surfaces
-$surface-bg: #f2f2f5;
-$surface-alt: #f7f7f9;
-$surface-panel: #ffffff;
-$surface-muted: #efeff3;
-$surface-muted-hover: #e8e8ee;
-$surface-border: #e3e3e9;
-$surface-border-strong: #b5b5be;
-$surface-edge: #dadae1;
-$fill-muted: rgba(20, 20, 40, 0.06);
-$fill-muted-hover: rgba(20, 20, 40, 0.09);
-$fill-subtle: rgba(20, 20, 40, 0.035);
-$scrim: rgba(20, 20, 40, 0.5);
-$surface-ink: #1c1c22;
-$surface-ink-muted: #63636b;
-$surface-ink-subtle: #71717a;
-$surface-ink-faint: #a1a1aa;
+$light: (
+  surface-bg: #f2f2f5,
+  surface-alt: #f7f7f9,
+  surface-panel: #ffffff,
+  surface-muted: #efeff3,
+  surface-muted-hover: #e8e8ee,
+  surface-border: #e3e3e9,
+  surface-border-strong: #b5b5be,
+  surface-edge: #dadae1,
+  fill-muted: rgba(20, 20, 40, 0.06),
+  fill-muted-hover: rgba(20, 20, 40, 0.09),
+  fill-subtle: rgba(20, 20, 40, 0.035),
+  fill-lift: rgba(255, 255, 255, 0.55),
+  fill-lift-strong: rgba(255, 255, 255, 0.75),
+  scrim: rgba(20, 20, 40, 0.5),
+  surface-ink: #1c1c22,
+  surface-ink-muted: #63636b,
+  surface-ink-subtle: #71717a,
+  surface-ink-faint: #a1a1aa,
+  thumb: #fefefe,
+  thumb-edge-color: #d6d6dd,
+  icon-bg: #f4f4f7,
+  icon-empty-border: #d4d4dc,
+  inverse: #1c1c22,
+  code-bg: #1c1c22,
+  shadow-card: (
+    0 2px 0 #e3e3e9,
+    0 10px 24px rgba(20, 20, 40, 0.05),
+  ),
+  shadow-card-hover: (
+    0 4px 0 #e3e3e9,
+    0 14px 28px rgba(20, 20, 40, 0.08),
+  ),
+  shadow-float: (
+    0 0 0 1px rgba(20, 20, 40, 0.06),
+    0 4px 0 rgba(20, 20, 40, 0.06),
+    0 16px 40px rgba(20, 20, 40, 0.16),
+  ),
+  shadow-icon: (
+    0 3px 0 rgba(20, 20, 40, 0.2),
+    0 6px 12px rgba(20, 20, 40, 0.08),
+  ),
+  shadow-icon-pressed: (
+    0 1px 0 rgba(20, 20, 40, 0.2),
+    0 2px 4px rgba(20, 20, 40, 0.08),
+  ),
+  field-inset: inset 0 2px 0 rgba(20, 20, 40, 0.05),
+  brand-edge: #d27f00,
+  brand-hover: #f7a114,
+  accent-ink: #ec8a00,
+  accent-tint: #fff1df,
+  accent-tint-hover: #ffe9cc,
+  accent-edge: #ffcb8a,
+  primary: #1c8be6,
+  primary-edge: #0f64b5,
+  primary-hover: #2a95ee,
+  primary-tint: #e8f3fd,
+  primary-halo: rgba(28, 139, 230, 0.18),
+  link: #1479d6,
+  link-hover-bg: #edf5fd,
+  danger: #d23658,
+  danger-edge: #a8213f,
+  danger-hover: #dc4868,
+  danger-tint: #fdeff2,
+  success: #00934a,
+  success-ink: #00733a,
+  success-tint: #e7f8ee,
+  success-edge: #b6e3c8,
+  warning-ink: #9a5b00,
+  warning-tint: #fff5d4,
+  vocal-tint: #fdedf4,
+  vocal-edge: #f4c3d6,
+  vocal-ink: #d62a6e,
+  dance-tint: #eaf3fd,
+  dance-edge: #bfd8f4,
+  dance-ink: #1470d0,
+  visual-tint: #fff5d4,
+  visual-edge: #f9d46e,
+  visual-ink: #e89e00,
+  stamina-tint: #e7f8ee,
+  stamina-edge: #b6e3c8,
+  stamina-ink: #00934a,
+  chart-box-fill: #e3f1fd,
+  chart-whisker: #7fafde,
+  chart-grid: #ececf1,
+  chart-tick: #8a8a93,
+  chart-label: rgba(28, 28, 34, 0.92),
+  chart-crosshair: rgba(28, 28, 34, 0.45),
+);
 
-$shadow-card:
-  0 2px 0 $surface-border,
-  0 10px 24px rgba(20, 20, 40, 0.05);
-$shadow-card-hover:
-  0 4px 0 $surface-border,
-  0 14px 28px rgba(20, 20, 40, 0.08);
-$shadow-float:
-  0 0 0 1px rgba(20, 20, 40, 0.06),
-  0 4px 0 rgba(20, 20, 40, 0.06),
-  0 16px 40px rgba(20, 20, 40, 0.16);
-$shadow-icon:
-  0 3px 0 rgba(20, 20, 40, 0.2),
-  0 6px 12px rgba(20, 20, 40, 0.08);
-$shadow-icon-pressed:
-  0 1px 0 rgba(20, 20, 40, 0.2),
-  0 2px 4px rgba(20, 20, 40, 0.08);
-$thumb-edge: 0 2px 0 #d6d6dd;
+$dark: (
+  surface-bg: #111115,
+  surface-alt: #18181d,
+  surface-panel: #1c1c22,
+  surface-muted: #24242b,
+  surface-muted-hover: #2b2b33,
+  surface-border: #2c2c34,
+  surface-border-strong: #4c4c57,
+  surface-edge: #0b0b0e,
+  fill-muted: rgba(255, 255, 255, 0.07),
+  fill-muted-hover: rgba(255, 255, 255, 0.11),
+  fill-subtle: rgba(255, 255, 255, 0.04),
+  fill-lift: rgba(255, 255, 255, 0.06),
+  fill-lift-strong: rgba(255, 255, 255, 0.1),
+  scrim: rgba(0, 0, 0, 0.6),
+  surface-ink: #ececf1,
+  surface-ink-muted: #a4a4ae,
+  surface-ink-subtle: #8d8d97,
+  surface-ink-faint: #64646e,
+  thumb: #3a3a44,
+  thumb-edge-color: #0b0b0e,
+  icon-bg: #24242b,
+  icon-empty-border: #3e3e48,
+  inverse: #3a3a44,
+  code-bg: #0e0e12,
+  shadow-card: (
+    0 2px 0 #0b0b0e,
+    0 10px 24px rgba(0, 0, 0, 0.3),
+  ),
+  shadow-card-hover: (
+    0 4px 0 #0b0b0e,
+    0 14px 28px rgba(0, 0, 0, 0.4),
+  ),
+  shadow-float: (
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 4px 0 rgba(0, 0, 0, 0.3),
+    0 16px 40px rgba(0, 0, 0, 0.5),
+  ),
+  shadow-icon: (
+    0 3px 0 rgba(0, 0, 0, 0.45),
+    0 6px 12px rgba(0, 0, 0, 0.25),
+  ),
+  shadow-icon-pressed: (
+    0 1px 0 rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.25),
+  ),
+  field-inset: inset 0 2px 0 rgba(0, 0, 0, 0.25),
+  brand-edge: #a85f00,
+  brand-hover: #f7a114,
+  accent-ink: #ffa733,
+  accent-tint: #3a2a14,
+  accent-tint-hover: #45321a,
+  accent-edge: #6e4b16,
+  primary: #2a8fe6,
+  primary-edge: #155ea6,
+  primary-hover: #3d9bec,
+  primary-tint: #14283c,
+  primary-halo: rgba(61, 155, 236, 0.3),
+  link: #5aaaf2,
+  link-hover-bg: #172a3d,
+  danger: #e3496b,
+  danger-edge: #9c1f3b,
+  danger-hover: #e95d7d,
+  danger-tint: #3a1821,
+  success: #1fae64,
+  success-ink: #4cd38a,
+  success-tint: #12301f,
+  success-edge: #1f5a39,
+  warning-ink: #f0b54a,
+  warning-tint: #382c10,
+  vocal-tint: #3a1627,
+  vocal-edge: #6a2547,
+  vocal-ink: #ff5c9a,
+  dance-tint: #13283f,
+  dance-edge: #1f466f,
+  dance-ink: #56a8ff,
+  visual-tint: #382c10,
+  visual-edge: #6a5216,
+  visual-ink: #ffbf33,
+  stamina-tint: #12301f,
+  stamina-edge: #1f5a39,
+  stamina-ink: #2fd27a,
+  chart-box-fill: #16304a,
+  chart-whisker: #5f8fbf,
+  chart-grid: #2a2a32,
+  chart-tick: #8d8d97,
+  chart-label: rgba(58, 58, 68, 0.95),
+  chart-crosshair: rgba(236, 236, 241, 0.45),
+);
+
+@function -hex($color) {
+  @return string.slice(color.ie-hex-str($color), 4);
+}
+
+@function -chevron($color) {
+  @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23#{-hex($color)}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+@function -with-derived($t) {
+  @each $param in (vocal, dance, visual, stamina) {
+    $ink: map.get($t, #{$param}-ink);
+    $t: map.merge(
+      $t,
+      (
+        #{$param}-halo: color.change($ink, $alpha: 0.18),
+        #{$param}-placeholder: color.change($ink, $alpha: 0.45),
+      )
+    );
+  }
+  @return map.merge(
+    $t,
+    (
+      stamina-wash: color.change(map.get($t, stamina-ink), $alpha: 0.12),
+      danger-tint-edge:
+        color.mix(map.get($t, danger), map.get($t, danger-tint), 28%),
+      chevron: -chevron(map.get($t, surface-ink-muted)),
+      chevron-accent: -chevron(map.get($t, accent-ink)),
+    )
+  );
+}
+
+$light: -with-derived($light);
+$dark: -with-derived($dark);
+
+@mixin theme($values) {
+  @each $name, $value in $values {
+    --#{$name}: #{$value};
+  }
+}
+
+@function -var($name) {
+  @return var(--#{$name});
+}
+
+// Surfaces
+$surface-bg: -var(surface-bg);
+$surface-alt: -var(surface-alt);
+$surface-panel: -var(surface-panel);
+$surface-muted: -var(surface-muted);
+$surface-muted-hover: -var(surface-muted-hover);
+$surface-border: -var(surface-border);
+$surface-border-strong: -var(surface-border-strong);
+$surface-edge: -var(surface-edge);
+$fill-muted: -var(fill-muted);
+$fill-muted-hover: -var(fill-muted-hover);
+$fill-subtle: -var(fill-subtle);
+$fill-lift: -var(fill-lift);
+$fill-lift-strong: -var(fill-lift-strong);
+$scrim: -var(scrim);
+$surface-ink: -var(surface-ink);
+$surface-ink-muted: -var(surface-ink-muted);
+$surface-ink-subtle: -var(surface-ink-subtle);
+$surface-ink-faint: -var(surface-ink-faint);
+$thumb: -var(thumb);
+$thumb-edge-color: -var(thumb-edge-color);
+$icon-bg: -var(icon-bg);
+$icon-empty-border: -var(icon-empty-border);
+$inverse: -var(inverse);
+$inverse-ink: #ffffff;
+$code-bg: -var(code-bg);
+
+$shadow-card: -var(shadow-card);
+$shadow-card-hover: -var(shadow-card-hover);
+$shadow-float: -var(shadow-float);
+$shadow-icon: -var(shadow-icon);
+$shadow-icon-pressed: -var(shadow-icon-pressed);
+$thumb-edge: 0 2px 0 $thumb-edge-color;
 
 // Roles
 $brand: colors.$gk-orange;
-$brand-edge: #d27f00;
-$brand-hover: #f7a114;
-$accent-ink: #ec8a00;
-$accent-tint: #fff1df;
-$accent-tint-hover: #ffe9cc;
-$accent-edge: #ffcb8a;
+$brand-edge: -var(brand-edge);
+$brand-hover: -var(brand-hover);
+$accent-ink: -var(accent-ink);
+$accent-tint: -var(accent-tint);
+$accent-tint-hover: -var(accent-tint-hover);
+$accent-edge: -var(accent-edge);
 
-$primary: #1c8be6;
-$primary-edge: #0f64b5;
-$primary-hover: #2a95ee;
-$primary-tint: #e8f3fd;
-$primary-halo: rgba(28, 139, 230, 0.18);
-$link: #1479d6;
-$link-hover-bg: #edf5fd;
+$primary: -var(primary);
+$primary-edge: -var(primary-edge);
+$primary-hover: -var(primary-hover);
+$primary-tint: -var(primary-tint);
+$primary-halo: -var(primary-halo);
+$link: -var(link);
+$link-hover-bg: -var(link-hover-bg);
 
-$danger: #d23658;
-$danger-edge: #a8213f;
-$danger-hover: #dc4868;
-$danger-tint: #fdeff2;
+$danger: -var(danger);
+$danger-edge: -var(danger-edge);
+$danger-hover: -var(danger-hover);
+$danger-tint: -var(danger-tint);
+$danger-tint-edge: -var(danger-tint-edge);
 
-$success: #00934a;
-$success-ink: #00733a;
-$success-tint: #e7f8ee;
-$success-edge: #b6e3c8;
+$success: -var(success);
+$success-ink: -var(success-ink);
+$success-tint: -var(success-tint);
+$success-edge: -var(success-edge);
 
-$warning-ink: #9a5b00;
-$warning-tint: #fff5d4;
+$warning-ink: -var(warning-ink);
+$warning-tint: -var(warning-tint);
+
+$chevron: -var(chevron);
+$chevron-accent: -var(chevron-accent);
 
 // Fields
 $field-height: 36px;
 $field-radius: $radius-md;
 $field-bg: $fill-muted;
 $field-bg-hover: $fill-muted-hover;
-$field-inset: inset 0 2px 0 rgba(20, 20, 40, 0.05);
+$field-inset: -var(field-inset);
 $field-focus:
   inset 0 0 0 1.5px $primary,
   0 0 0 3px $primary-halo;
@@ -137,28 +366,37 @@ $focus-ring-width: 2px;
 $focus-ring-color: $primary;
 
 // Parameter tiles: tint, hard edge, ink
-$vocal-tint: #fdedf4;
-$vocal-edge: #f4c3d6;
-$vocal-ink: #d62a6e;
-$dance-tint: #eaf3fd;
-$dance-edge: #bfd8f4;
-$dance-ink: #1470d0;
-$visual-tint: #fff5d4;
-$visual-edge: #f9d46e;
-$visual-ink: #e89e00;
-$stamina-tint: #e7f8ee;
-$stamina-edge: #b6e3c8;
-$stamina-ink: #00934a;
+$vocal-tint: -var(vocal-tint);
+$vocal-edge: -var(vocal-edge);
+$vocal-ink: -var(vocal-ink);
+$dance-tint: -var(dance-tint);
+$dance-edge: -var(dance-edge);
+$dance-ink: -var(dance-ink);
+$visual-tint: -var(visual-tint);
+$visual-edge: -var(visual-edge);
+$visual-ink: -var(visual-ink);
+$stamina-tint: -var(stamina-tint);
+$stamina-edge: -var(stamina-edge);
+$stamina-ink: -var(stamina-ink);
+$stamina-wash: -var(stamina-wash);
+$vocal-halo: -var(vocal-halo);
+$vocal-placeholder: -var(vocal-placeholder);
+$dance-halo: -var(dance-halo);
+$dance-placeholder: -var(dance-placeholder);
+$visual-halo: -var(visual-halo);
+$visual-placeholder: -var(visual-placeholder);
+$stamina-halo: -var(stamina-halo);
+$stamina-placeholder: -var(stamina-placeholder);
 
 // Charts
 $chart-bar-top: #5bc0ff;
 $chart-bar: #1c8fe8;
 $chart-highlight-top: #ffc766;
 $chart-highlight: $brand;
-$chart-box-fill: #e3f1fd;
-$chart-whisker: #7fafde;
-$chart-grid: #ececf1;
-$chart-tick: #8a8a93;
+$chart-box-fill: -var(chart-box-fill);
+$chart-whisker: -var(chart-whisker);
+$chart-grid: -var(chart-grid);
+$chart-tick: -var(chart-tick);
 
 $gradient-brand: linear-gradient(
   100deg,

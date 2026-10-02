@@ -120,6 +120,11 @@
     height: auto;
     mix-blend-mode: multiply;
     filter: brightness(1.05);
+
+    @include mixins.dark {
+      mix-blend-mode: screen;
+      filter: invert(1) hue-rotate(180deg) brightness(1.1);
+    }
   }
 }
 

@@ -16,7 +16,7 @@
   text-align: center;
   @include mixins.numeric;
 
-  @include mixins.param-tones using ($tint, $edge, $ink) {
+  @include mixins.param-tones using ($tint, $edge, $ink, $_...) {
     background-color: $tint;
     color: $ink;
   }

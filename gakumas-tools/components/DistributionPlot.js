@@ -31,8 +31,6 @@ const CHART_OPTIONS = {
   },
 };
 
-const CROSSHAIR_LINE_COLOR = "rgba(28, 28, 34, 0.45)";
-const LABEL_BG_COLOR = "rgba(28, 28, 34, 0.92)";
 const LABEL_TEXT_COLOR = "#fff";
 const LABEL_FONT_SIZE = 12;
 const LABEL_FONT = `600 ${LABEL_FONT_SIZE}px ${ChartJS.defaults.font.family}`;
@@ -126,7 +124,7 @@ function DistributionPlot({ label, data, bucketSize, color, highlight }) {
           ((cumulativeBefore[idx] + frac * counts[idx]) / total) * 100;
 
         ctx.save();
-        ctx.strokeStyle = CROSSHAIR_LINE_COLOR;
+        ctx.strokeStyle = CHART_COLORS.crosshair;
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(x, top);
@@ -143,7 +141,7 @@ function DistributionPlot({ label, data, bucketSize, color, highlight }) {
         // cursor inside the chart) don't overlap with the readout.
         const boxY = Math.max(2, top - LABEL_OFFSET_Y - boxH);
 
-        ctx.fillStyle = LABEL_BG_COLOR;
+        ctx.fillStyle = CHART_COLORS.label;
         ctx.beginPath();
         ctx.roundRect(boxX, boxY, boxW, boxH, 6);
         ctx.fill();

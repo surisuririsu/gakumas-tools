@@ -108,7 +108,7 @@
 }
 
 .dragging {
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: tokens.$fill-lift-strong;
   outline: 2px dashed tokens.$accent-edge;
   outline-offset: 1px;
 }
@@ -137,6 +137,13 @@
       0 0 0 1px rgba(20, 20, 40, 0.06),
       0 -4px 0 rgba(20, 20, 40, 0.04),
       0 -12px 32px rgba(20, 20, 40, 0.14);
+
+    @include mixins.dark {
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 -4px 0 rgba(0, 0, 0, 0.3),
+        0 -12px 32px rgba(0, 0, 0, 0.5);
+    }
   }
 
   .scrollArea {

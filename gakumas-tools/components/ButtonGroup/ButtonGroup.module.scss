@@ -1,4 +1,3 @@
-@use "../../styles/colors";
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
@@ -48,16 +47,16 @@
   }
 
   &:not(.measured) .selected {
-    background-color: var(--segment, #{colors.$white});
-    box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
+    background-color: var(--segment, #{tokens.$thumb});
+    box-shadow: 0 2px 0 var(--segment-edge, #{tokens.$thumb-edge-color});
   }
 }
 
 .thumb {
   position: absolute;
   border-radius: var(--segment-radius, 8px);
-  background-color: var(--segment, #{colors.$white});
-  box-shadow: 0 2px 0 var(--segment-edge, #d6d6dd);
+  background-color: var(--segment, #{tokens.$thumb});
+  box-shadow: 0 2px 0 var(--segment-edge, #{tokens.$thumb-edge-color});
   pointer-events: none;
   transition:
     left tokens.$duration-slow tokens.$ease-glide,

@@ -387,9 +387,9 @@
   min-width: 130px;
   padding: tokens.$space-2 10px;
   border-radius: tokens.$radius-md;
-  background-color: color-mix(in srgb, tokens.$surface-ink 92%, transparent);
+  background-color: color-mix(in srgb, tokens.$inverse 92%, transparent);
   box-shadow: tokens.$shadow-float;
-  color: tokens.$surface-panel;
+  color: tokens.$inverse-ink;
   font-size: tokens.$text-xs;
   font-weight: tokens.$weight-semibold;
   white-space: nowrap;
