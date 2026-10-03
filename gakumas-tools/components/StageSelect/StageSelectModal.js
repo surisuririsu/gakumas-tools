@@ -11,7 +11,7 @@ import { compareStages } from "@/utils/sort";
 import StageSummary from "./StageSummary";
 import styles from "./StageSelect.module.scss";
 
-const allStages = Stages.getAll().sort(compareStages);
+const allStages = [...Stages.getAll()].sort(compareStages);
 const stagesByType = allStages.reduce((acc, stage) => {
   if (!acc[stage.type]) {
     acc[stage.type] = [];
