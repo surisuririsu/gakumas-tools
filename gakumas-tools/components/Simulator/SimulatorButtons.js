@@ -76,15 +76,7 @@ function SimulatorButtons() {
           setModal(
             <SimulatorLoadoutImporterModal
               stageId={loadout.stageId}
-              onImport={(imported) =>
-                setLoadout({
-                  ...loadout,
-                  ...imported,
-                  customizationGroups: imported.skillCardIdGroups.map((g) =>
-                    g.map(() => ({})),
-                  ),
-                })
-              }
+              onImport={(imported) => setLoadout({ ...loadout, ...imported })}
             />,
           )
         }

@@ -34,6 +34,11 @@ import {
   classifyCrops,
   ICON_SIZE,
 } from "../gakumas-tools/utils/imageProcessing/entityClassifier.js";
+import {
+  MEMORY_LAYOUT,
+  readBadges,
+} from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
+import { compareBadges } from "./badges.mjs";
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HARNESS_DIR, "..");
@@ -231,7 +236,7 @@ function loadFixture() {
     .map((l) => JSON.parse(l));
 }
 
-const FIXTURE_FIELD_ORDER = ["file", "note", "params", "pItems", "skillCards"];
+const FIXTURE_FIELD_ORDER = ["file", "note", "params", "pItems", "skillCards", "badges"];
 
 function writeFixture(entries) {
   const lines = entries.map((e) => {
@@ -326,6 +331,20 @@ async function main() {
       }
     }
 
+    const imageData = { data: image.pixels, width: image.width, height: image.height };
+    const badgeProblems = (entry.badges || []).flatMap((label, i) => {
+      if (!label || skillCards[i] !== entry.skillCards[i]) return [];
+      const read = readBadges(imageData, detection.skillCardBoxes[i], MEMORY_LAYOUT);
+      const { misread, inconsistent, iconRight } = compareBadges(`#${i}`, skillCards[i], read, label);
+      const wrongIcon = iconRight === false && `#${i} bottom icon misread`;
+      return [...misread, inconsistent, wrongIcon].filter(Boolean);
+    });
+    if (badgeProblems.length) {
+      failed++;
+      console.error(`✗ ${entry.file}  badges`);
+      for (const problem of badgeProblems) console.error(`    ${problem}`);
+    }
+
     if (VISUALIZE) {
       const out = await writeOverlay(image, absPath, detection);
       console.log(`    overlay → ${out}`);
@@ -337,6 +356,7 @@ async function main() {
       params,
       pItems,
       skillCards,
+      ...(entry.badges !== undefined && { badges: entry.badges }),
     });
   }
 

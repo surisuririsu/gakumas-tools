@@ -1,8 +1,10 @@
 import { PItems, SkillCards } from "gakumas-data";
 import * as ort from "onnxruntime-web/wasm";
+import { MEMORY_LAYOUT, readCustomizations } from "./cardBadges";
 import {
   DEBUG,
   getBlackCanvas,
+  getImageData,
   getWhiteCanvas,
   loadImageFromFile,
   extractLines,
@@ -87,6 +89,11 @@ export async function getMemoryFromFile(
     skillCardClasses
   );
 
+  const imageData = getImageData(img);
+  const customizations = skillCards.map((id, i) =>
+    readCustomizations(imageData, skillCardBoxes[i], MEMORY_LAYOUT, id)
+  );
+
   console.log(
     "Extracted p-items:",
     pItems.map((id) => PItems.getById(id)?.name || id)
@@ -107,7 +114,12 @@ export async function getMemoryFromFile(
     .find((card) => card.pIdolId)?.pIdolId;
 
   // Calculate contest power and flag those that are mismatched with the screenshot
-  const calculatedPower = calculateContestPower(params, pItems, skillCards, []);
+  const calculatedPower = calculateContestPower(
+    params,
+    pItems,
+    skillCards,
+    customizations
+  );
   const flag =
     !powerCandidates.includes(calculatedPower) || itemsPIdolId != cardsPIdolId;
 
@@ -117,7 +129,7 @@ export async function getMemoryFromFile(
     params,
     pItemIds: pItems,
     skillCardIds: skillCards,
-    customizations: [{}, {}, {}, {}, {}, {}],
+    customizations,
   };
 }
 

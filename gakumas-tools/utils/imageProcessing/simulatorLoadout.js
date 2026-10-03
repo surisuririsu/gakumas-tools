@@ -1,6 +1,7 @@
 import { PItems, SkillCards } from "gakumas-data";
 import { IdolConfig } from "gakumas-engine";
 import { findStageCandidates } from "@/utils/supportBonus";
+import { readLoadoutCards } from "./cardBadges";
 import { DEBUG, getImageData, loadImageFromFile } from "./common";
 import { detectLoadoutBoxes } from "./contestLoadoutGeometry";
 import { readStats } from "./contestLoadoutStats";
@@ -42,12 +43,20 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
     pItemSession,
     pItemClasses,
   );
-  const mainIds = skillCardIds.slice(0, mainBoxes.length);
-  const subIds = skillCardIds.slice(mainBoxes.length);
+  const { skillCardIdGroups, customizationGroups } = readLoadoutCards(
+    imageData,
+    [mainBoxes, subBoxes],
+    [
+      skillCardIds.slice(0, mainBoxes.length),
+      skillCardIds.slice(mainBoxes.length),
+    ],
+  );
+  const [mainIds, subIds] = skillCardIdGroups;
+
   const { plan } = new IdolConfig({
     params,
     pItemIds,
-    skillCardIdGroups: [mainIds, subIds],
+    skillCardIdGroups,
   });
   const stageCandidates = findStageCandidates(params, percents, {
     currentStageId,
@@ -75,7 +84,8 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
     stageCandidates,
     params,
     pItemIds,
-    skillCardIdGroups: [mainIds, subIds],
+    skillCardIdGroups,
+    customizationGroups,
   };
 }
 
