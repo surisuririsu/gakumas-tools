@@ -1,3 +1,15 @@
+export function hsv(r, g, b) {
+  const max = Math.max(r, g, b);
+  const delta = max - Math.min(r, g, b);
+  let h = 0;
+  if (delta) {
+    if (max === r) h = ((g - b) / delta + 6) % 6;
+    else if (max === g) h = (b - r) / delta + 2;
+    else h = (r - g) / delta + 4;
+  }
+  return [h * 60, max ? delta / max : 0, max];
+}
+
 const GLYPH_WIDTH = 10;
 const GLYPH_HEIGHT = 14;
 
@@ -58,6 +70,82 @@ export function segmentGlyphs(imageData, area, predicate, rightmost = false) {
     .map((g) => normalizeGlyph(mask, w, g));
 }
 
+export function components({ mask, w, h }) {
+  const labels = new Int32Array(w * h);
+  const found = [];
+  for (let start = 0; start < mask.length; start++) {
+    if (!mask[start] || labels[start]) continue;
+    const c = { id: found.length + 1, n: 0, x0: w, x1: 0, y0: h, y1: 0 };
+    const stack = [start];
+    labels[start] = c.id;
+    const visit = (q) => {
+      if (mask[q] && !labels[q]) {
+        labels[q] = c.id;
+        stack.push(q);
+      }
+    };
+    while (stack.length) {
+      const p = stack.pop();
+      const x = p % w;
+      const y = (p - x) / w;
+      c.n++;
+      c.x0 = Math.min(c.x0, x);
+      c.x1 = Math.max(c.x1, x);
+      c.y0 = Math.min(c.y0, y);
+      c.y1 = Math.max(c.y1, y);
+      if (x > 0) visit(p - 1);
+      if (x < w - 1) visit(p + 1);
+      if (y > 0) visit(p - w);
+      if (y < h - 1) visit(p + w);
+    }
+    found.push(c);
+  }
+  return { labels, found };
+}
+
+export function componentGlyphs(
+  imageData,
+  area,
+  predicate,
+  {
+    height: [minHeight, maxHeight],
+    interior = false,
+    minFill = 0,
+    minAspect = 0,
+  },
+) {
+  const masked = maskOf(imageData, area, predicate);
+  const { labels, found } = components(masked);
+  const height = (c) => c.y1 - c.y0 + 1;
+  const width = (c) => c.x1 - c.x0 + 1;
+  const touchesEdge = (c) =>
+    c.x0 === 0 || c.y0 === 0 || c.x1 === masked.w - 1 || c.y1 === masked.h - 1;
+  const sized = found.filter(
+    (c) =>
+      height(c) >= minHeight &&
+      height(c) <= maxHeight &&
+      width(c) >= minAspect * height(c) &&
+      c.n >= minFill * width(c) * height(c) &&
+      !(interior && touchesEdge(c)),
+  );
+  const tallest = Math.max(0, ...sized.map(height));
+  return sized
+    .filter((c) => height(c) >= 0.75 * tallest)
+    .sort((a, b) => a.x0 - b.x0)
+    .flatMap((c) => {
+      const only = labels.map((label) => (label === c.id ? 1 : 0));
+      return splitTouching(only, masked.w, c).map((g) => ({
+        ...normalizeGlyph(only, masked.w, g),
+        bounds: {
+          x0: area.x0 + g.x0,
+          x1: area.x0 + g.x1 + 1,
+          y0: area.y0 + g.y0,
+          y1: area.y0 + g.y1 + 1,
+        },
+      }));
+    });
+}
+
 const MAX_GLYPH_ASPECT = 1.15;
 
 function splitTouching(mask, w, g) {
@@ -78,6 +166,7 @@ function splitTouching(mask, w, g) {
       cut = x;
     }
   }
+  if (cut === -1) return [g];
   return [
     ...splitTouching(mask, w, { ...g, x1: cut - 1 }),
     ...splitTouching(mask, w, { ...g, x0: cut + 1 }),
@@ -111,24 +200,23 @@ function normalizeGlyph(mask, w, g) {
   return { pixels: out, aspect: gw / gh };
 }
 
-function classifyGlyph(glyph, templates) {
-  let best = null;
-  let bestDistance = Infinity;
+export function classifyGlyph(glyph, templates) {
+  let best = { digit: null, distance: Infinity };
   for (const [digit, template] of Object.entries(templates)) {
     let distance = 0;
     for (let i = 0; i < template.length; i++) {
       const d = glyph.pixels[i] - template[i];
       distance += d * d;
     }
-    if (distance < bestDistance) {
-      bestDistance = distance;
-      best = digit;
-    }
+    if (distance < best.distance) best = { digit, distance };
   }
   return best;
 }
 
 export function readNumber(glyphs, templates) {
   if (!glyphs.length) return null;
-  return parseInt(glyphs.map((g) => classifyGlyph(g, templates)).join(""), 10);
+  return parseInt(
+    glyphs.map((g) => classifyGlyph(g, templates).digit).join(""),
+    10,
+  );
 }
