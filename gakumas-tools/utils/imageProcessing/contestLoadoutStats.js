@@ -2,7 +2,7 @@ import DIGIT_TEMPLATES from "./contestLoadoutDigits.json";
 import { maskOf, readNumber, segmentGlyphs } from "./glyphs";
 
 const NUMBER_X = [4.35, 5.3];
-const PERCENT_X = [5.3, 6.25];
+const PERCENT_X = [5.3, 7.3];
 const PANEL_Y = [-3.6, -0.9];
 const MIN_LINE_HEIGHT = 0.08;
 const STAT_LINES = 4;
@@ -67,6 +67,7 @@ export function statGlyphs(imageData, mainRow) {
               imageData,
               { x0: percentX.x0, x1: percentX.x1, y0, y1 },
               isColoredText,
+              true,
             )
           : null,
     };

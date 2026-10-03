@@ -14,7 +14,20 @@ export function maskOf({ data, width }, area, predicate) {
   return { mask, w, h };
 }
 
-export function segmentGlyphs(imageData, area, predicate) {
+function lastRun(glyphs) {
+  const height = (g) => g.y1 - g.y0 + 1;
+  let start = glyphs.length - 1;
+  while (
+    start > 0 &&
+    glyphs[start].x0 - glyphs[start - 1].x1 <=
+      0.8 * Math.max(height(glyphs[start]), height(glyphs[start - 1]))
+  ) {
+    start--;
+  }
+  return glyphs.slice(start);
+}
+
+export function segmentGlyphs(imageData, area, predicate, rightmost = false) {
   const { mask, w, h } = maskOf(imageData, area, predicate);
   const glyphs = [];
   let glyph = null;
@@ -37,8 +50,9 @@ export function segmentGlyphs(imageData, area, predicate) {
       glyph = null;
     }
   }
-  const tallest = Math.max(0, ...glyphs.map((g) => g.y1 - g.y0 + 1));
-  return glyphs
+  const kept = rightmost ? lastRun(glyphs) : glyphs;
+  const tallest = Math.max(0, ...kept.map((g) => g.y1 - g.y0 + 1));
+  return kept
     .filter((g) => g.y1 - g.y0 + 1 >= 0.8 * tallest)
     .flatMap((g) => splitTouching(mask, w, g))
     .map((g) => normalizeGlyph(mask, w, g));
