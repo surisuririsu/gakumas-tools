@@ -10,6 +10,9 @@
  *   pnpm test:contest-loadout            # check against labels
  *   pnpm test:contest-loadout:visualize  # also write box overlays
  *   pnpm test:contest-loadout:digits     # rebuild digit templates from labels
+ *
+ * Badges are labeled as shown, [dot, score, genki, cost, bottom icon?], null
+ * when absent.
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -27,6 +30,13 @@ import {
   classifyCrops,
   ICON_SIZE,
 } from "../gakumas-tools/utils/imageProcessing/entityClassifier.js";
+import {
+  badgeGlyphs,
+  CONTEST_LAYOUT,
+  readBadges,
+} from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
+import { buildBadgeTemplates, closestIcon, compareBadges } from "./badges.mjs";
+import { predictBadges } from "../gakumas-tools/utils/inferCustomizations.js";
 import { findStageCandidates } from "../gakumas-tools/utils/supportBonus.js";
 
 const bestStage = (...args) => findStageCandidates(...args)[0] ?? null;
@@ -40,7 +50,14 @@ const DIGITS_PATH = join(
   REPO_ROOT,
   "gakumas-tools/utils/imageProcessing/contestLoadoutDigits.json",
 );
-const MIN_ICON_ACCURACY = 0.98;
+const BADGE_DIGITS_PATH = join(
+  REPO_ROOT,
+  "gakumas-tools/utils/imageProcessing/cardBadgeDigits.json",
+);
+const MIN_ICON_ACCURACY = 0.975;
+const MAX_BADGE_MISREAD_RATE = 0.005;
+const MIN_CUSTOMIZATION_ACCURACY = 0.98;
+const MIN_ICON_READ_ACCURACY = 0.75;
 
 const args = process.argv.slice(2);
 const VISUALIZE = args.includes("--visualize");
@@ -166,6 +183,24 @@ async function buildDigitTemplates(fixture) {
   console.log(`Wrote digit templates to ${DIGITS_PATH}`);
 }
 
+async function badgeSamples(fixture) {
+  const samples = [];
+  for (const entry of fixture) {
+    const image = await loadImage(join(REPO_ROOT, entry.file));
+    const { mainBoxes, subBoxes } = detectLoadoutBoxes(image);
+    const boxes = [...mainBoxes, ...subBoxes];
+    entry.badges.flat().forEach((label, i) => {
+      if (label && boxes[i]) {
+        samples.push({
+          glyphs: badgeGlyphs(image, boxes[i], CONTEST_LAYOUT),
+          label,
+        });
+      }
+    });
+  }
+  return samples;
+}
+
 function planOf(params, pItemIds, skillCardIdGroups) {
   return new IdolConfig({ params, pItemIds, skillCardIdGroups }).plan;
 }
@@ -189,6 +224,7 @@ async function main() {
   const fixture = loadFixture();
   if (DIGITS) {
     await buildDigitTemplates(fixture);
+    await buildBadgeTemplates(await badgeSamples(fixture), BADGE_DIGITS_PATH);
     return;
   }
 
@@ -197,6 +233,13 @@ async function main() {
     loadModel("skill_card"),
   ]);
 
+  let iconCards = 0;
+  let iconsRead = 0;
+  let badgeCards = 0;
+  let readBadgeCount = 0;
+  let unreadBadges = 0;
+  const misreadBadges = [];
+  const inconsistentCards = [];
   let iconSlots = 0;
   const iconErrors = [];
   const failures = [];
@@ -238,6 +281,23 @@ async function main() {
       ),
     );
 
+    const cardBoxes = [...boxes.mainBoxes, ...boxes.subBoxes];
+    entry.badges.flat().forEach((label, i) => {
+      const id = entry.skillCards.flat()[i];
+      if (!label || !cardBoxes[i] || cards[i] !== id) return;
+      const read = readBadges(image, cardBoxes[i], CONTEST_LAYOUT);
+      const result = compareBadges(`${entry.file} #${i}`, id, read, label);
+      badgeCards++;
+      readBadgeCount += result.read;
+      unreadBadges += result.unread;
+      misreadBadges.push(...result.misread);
+      if (result.inconsistent) inconsistentCards.push(result.inconsistent);
+      if (label[0] === 0) {
+        iconCards++;
+        if (closestIcon(read.icon) === predictBadges(id).icon) iconsRead++;
+      }
+    });
+
     if (stats.params.join() !== entry.params.join()) {
       failures.push(
         `${entry.file} params expected ${entry.params} got ${stats.params}`,
@@ -276,15 +336,29 @@ async function main() {
   }
 
   const accuracy = 1 - iconErrors.length / iconSlots;
+  const badgeAccuracy = 1 - inconsistentCards.length / badgeCards;
   for (const error of iconErrors) console.log(`  icon: ${error}`);
+  for (const misread of misreadBadges) console.log(`  badge: ${misread}`);
+  for (const card of inconsistentCards) console.log(`  customization: ${card}`);
   for (const failure of readFailures) console.error(`✗ ${failure}`);
   for (const failure of failures) console.error(`✗ ${failure}`);
   console.log(
     `\n${fixture.length} screenshots, icons ${iconSlots - iconErrors.length}/${iconSlots} ` +
       `(${(accuracy * 100).toFixed(1)}%), ${readFailures.length} misread stats, ` +
-      `${failures.length} wrong stage/support bonus`,
+      `${failures.length} wrong stage/support bonus\n` +
+      `${badgeCards} cards: ${misreadBadges.length} misread / ${unreadBadges} unread badges, ` +
+      `customizations match shown badges on ${badgeCards - inconsistentCards.length} ` +
+      `(${(badgeAccuracy * 100).toFixed(1)}%), ` +
+      `bottom icon right on ${iconsRead}/${iconCards} uncustomized cards`,
   );
-  if (failures.length || readFailures.length || accuracy < MIN_ICON_ACCURACY) {
+  if (
+    failures.length ||
+    readFailures.length ||
+    accuracy < MIN_ICON_ACCURACY ||
+    misreadBadges.length > MAX_BADGE_MISREAD_RATE * readBadgeCount ||
+    badgeAccuracy < MIN_CUSTOMIZATION_ACCURACY ||
+    iconsRead < MIN_ICON_READ_ACCURACY * iconCards
+  ) {
     process.exit(1);
   }
 }
