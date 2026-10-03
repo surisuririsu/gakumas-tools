@@ -197,7 +197,7 @@ function normalizeGlyph(mask, w, g) {
       out[cy * GLYPH_WIDTH + cx] = n ? sum / n : 0;
     }
   }
-  return { pixels: out, aspect: gw / gh };
+  return { pixels: out };
 }
 
 export function classifyGlyph(glyph, templates) {

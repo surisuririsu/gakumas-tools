@@ -5,37 +5,31 @@
  *
  * Usage: pnpm build:effect-icons
  */
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import sharp from "sharp";
 import { SkillCards } from "gakumas-data";
 import { predictBadges } from "../gakumas-tools/utils/inferCustomizations.js";
 import { CONTEST_LAYOUT } from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
-import { detectLoadoutBoxes } from "../gakumas-tools/utils/imageProcessing/contestLoadoutGeometry.js";
 import {
   findBottomIcon,
   iconColors,
   iconDistance,
 } from "../gakumas-tools/utils/imageProcessing/effectIcons.js";
+import {
+  labeledContestCards,
+  loadContestFixture,
+  loadImage,
+} from "../tests/badges.mjs";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ICON_DIR = join(REPO_ROOT, "gk-img/docs/skill_cards/icons");
-const FIXTURE_PATH = join(REPO_ROOT, "tests/contestLoadout.jsonl");
 const OUT_PATH = join(
   REPO_ROOT,
   "gakumas-tools/utils/imageProcessing/effectIconTemplates.json",
 );
 const GALLERY_LAYOUT = { x: 0.125, half: 0.115, bottom: [0.76, 0.92] };
 const PER_TYPE = 8;
-
-async function loadImage(path) {
-  const { data, info } = await sharp(path)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return { data, width: info.width, height: info.height };
-}
 
 function sample(image, box, layout, cardId) {
   const type = predictBadges(cardId).icon;
@@ -60,26 +54,19 @@ async function gallerySamples() {
 }
 
 async function fixtureSamples() {
-  const fixture = readFileSync(FIXTURE_PATH, "utf8")
-    .split("\n")
-    .filter((line) => line.trim())
-    .map((line) => JSON.parse(line));
   const samples = [];
-  for (const entry of fixture) {
-    const image = await loadImage(join(REPO_ROOT, entry.file));
-    const { mainBoxes, subBoxes } = detectLoadoutBoxes(image);
-    const boxes = [...mainBoxes, ...subBoxes];
-    const ids = entry.skillCards.flat();
-    entry.badges.flat().forEach((label, i) => {
-      if (label?.[0] !== 0 || !boxes[i]) return;
-      samples.push(sample(image, boxes[i], CONTEST_LAYOUT.icon, ids[i]));
-    });
+  for await (const { image, box, label, id } of labeledContestCards(
+    loadContestFixture(),
+  )) {
+    if (label[0] === 0)
+      samples.push(sample(image, box, CONTEST_LAYOUT.icon, id));
   }
   return samples.filter(Boolean);
 }
 
+const encode = (colors) => String.fromCharCode(...colors.map((c) => c + 48));
+
 function pickTemplates(samples) {
-  const encode = (colors) => String.fromCharCode(...colors.map((c) => c + 48));
   const templates = {};
   const types = new Set(samples.map((s) => s.type));
   for (const type of [...types].filter((t) => !t.startsWith("other:"))) {
@@ -89,10 +76,8 @@ function pickTemplates(samples) {
       .map((s) => ({
         s,
         mean:
-          pool.reduce(
-            (sum, o) => sum + iconDistance(s.colors, encode(o.colors)),
-            0,
-          ) / pool.length,
+          pool.reduce((sum, o) => sum + iconDistance(s.colors, o.colors), 0) /
+          pool.length,
       }))
       .sort((a, b) => a.mean - b.mean)
       .slice(0, Math.max(2, Math.ceil(pool.length * 0.8)))
@@ -103,9 +88,7 @@ function pickTemplates(samples) {
       let farthestDistance = -1;
       for (const candidate of typical) {
         const d = Math.min(
-          ...chosen.map((c) =>
-            iconDistance(candidate.colors, encode(c.colors)),
-          ),
+          ...chosen.map((c) => iconDistance(candidate.colors, c.colors)),
         );
         if (d > farthestDistance) {
           farthestDistance = d;

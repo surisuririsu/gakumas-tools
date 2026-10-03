@@ -14,7 +14,7 @@
  * Badges are labeled as shown, [dot, score, genki, cost, bottom icon?], null
  * when absent.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, join, parse } from "node:path";
 import sharp from "sharp";
@@ -33,19 +33,25 @@ import {
 import {
   badgeGlyphs,
   CONTEST_LAYOUT,
-  isGreyedOut,
   readBadges,
-  resolveGreyedOut,
+  readLoadoutCards,
 } from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
-import { buildBadgeTemplates, closestIcon, compareBadges } from "./badges.mjs";
-import { predictBadges } from "../gakumas-tools/utils/inferCustomizations.js";
+import {
+  addGlyphs,
+  BADGE_KEYS,
+  buildBadgeTemplates,
+  compareBadges,
+  labeledContestCards,
+  loadContestFixture,
+  loadImage,
+  writeTemplates,
+} from "./badges.mjs";
 import { findStageCandidates } from "../gakumas-tools/utils/supportBonus.js";
 
 const bestStage = (...args) => findStageCandidates(...args)[0] ?? null;
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HARNESS_DIR, "..");
-const FIXTURE_PATH = join(HARNESS_DIR, "contestLoadout.jsonl");
 const OVERLAY_DIR = join(HARNESS_DIR, "overlays", "contest_loadout");
 const PUBLIC = join(REPO_ROOT, "gakumas-tools/public");
 const DIGITS_PATH = join(
@@ -64,21 +70,6 @@ const MIN_ICON_READ_ACCURACY = 0.75;
 const args = process.argv.slice(2);
 const VISUALIZE = args.includes("--visualize");
 const DIGITS = args.includes("--digits");
-
-function loadFixture() {
-  return readFileSync(FIXTURE_PATH, "utf8")
-    .split("\n")
-    .filter((line) => line.trim())
-    .map((line) => JSON.parse(line));
-}
-
-async function loadImage(path) {
-  const { data, info } = await sharp(path)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  return { data, width: info.width, height: info.height };
-}
 
 async function loadModel(name) {
   return {
@@ -161,44 +152,17 @@ async function buildDigitTemplates(fixture) {
             `${entry.file}: ${glyphs.length} glyphs for ${font} ${number}`,
           );
         }
-        glyphs.forEach((glyph, k) => {
-          const sum = (sums[font][digits[k]] ??= { n: 0, pixels: [] });
-          sum.n++;
-          glyph.pixels.forEach(
-            (v, j) => (sum.pixels[j] = (sum.pixels[j] || 0) + v),
-          );
-        });
+        addGlyphs(sums, font, glyphs, digits);
       }
     });
   }
-  const templates = {};
-  for (const [font, digits] of Object.entries(sums)) {
-    templates[font] = {};
-    for (const digit of Object.keys(digits).sort()) {
-      const { n, pixels } = digits[digit];
-      templates[font][digit] = pixels.map(
-        (v) => Math.round((v / n) * 100) / 100,
-      );
-    }
-  }
-  writeFileSync(DIGITS_PATH, JSON.stringify(templates) + "\n");
-  console.log(`Wrote digit templates to ${DIGITS_PATH}`);
+  writeTemplates(sums, DIGITS_PATH);
 }
 
 async function badgeSamples(fixture) {
   const samples = [];
-  for (const entry of fixture) {
-    const image = await loadImage(join(REPO_ROOT, entry.file));
-    const { mainBoxes, subBoxes } = detectLoadoutBoxes(image);
-    const boxes = [...mainBoxes, ...subBoxes];
-    entry.badges.flat().forEach((label, i) => {
-      if (label && boxes[i]) {
-        samples.push({
-          glyphs: badgeGlyphs(image, boxes[i], CONTEST_LAYOUT),
-          label,
-        });
-      }
-    });
+  for await (const { image, box, label } of labeledContestCards(fixture)) {
+    samples.push({ glyphs: badgeGlyphs(image, box, CONTEST_LAYOUT), label });
   }
   return samples;
 }
@@ -223,7 +187,7 @@ function compareIcons(file, kind, expected, actual, nameOf) {
 }
 
 async function main() {
-  const fixture = loadFixture();
+  const fixture = loadContestFixture();
   if (DIGITS) {
     await buildDigitTemplates(fixture);
     await buildBadgeTemplates(await badgeSamples(fixture), BADGE_DIGITS_PATH);
@@ -238,7 +202,6 @@ async function main() {
   let iconCards = 0;
   let iconsRead = 0;
   let badgeCards = 0;
-  let readBadgeCount = 0;
   let unreadBadges = 0;
   const misreadBadges = [];
   const inconsistentCards = [];
@@ -258,19 +221,19 @@ async function main() {
     }
 
     const pItems = await classify(image, boxes.pItemBoxes, pItemModel);
-    const classified = await classify(
+    const cardBoxes = [...boxes.mainBoxes, ...boxes.subBoxes];
+    const classified = await classify(image, cardBoxes, skillCardModel);
+    const { skillCardIdGroups: skillCards } = readLoadoutCards(
       image,
-      [...boxes.mainBoxes, ...boxes.subBoxes],
-      skillCardModel,
-    );
-    const skillCards = resolveGreyedOut(
-      [classified.slice(0, 6), classified.slice(6)],
-      [boxes.mainBoxes, boxes.subBoxes].map((row) =>
-        row.map((box) => !!box && isGreyedOut(image, box)),
-      ),
+      [boxes.mainBoxes, boxes.subBoxes],
+      [
+        classified.slice(0, boxes.mainBoxes.length),
+        classified.slice(boxes.mainBoxes.length),
+      ],
     );
     const cards = skillCards.flat();
-    iconSlots += entry.pItems.length + entry.skillCards.flat().length;
+    const labeledIds = entry.skillCards.flat();
+    iconSlots += entry.pItems.length + labeledIds.length;
     iconErrors.push(
       ...compareIcons(entry.file, "pItems", entry.pItems, pItems, pItemName),
       ...compareIcons(
@@ -289,20 +252,18 @@ async function main() {
       ),
     );
 
-    const cardBoxes = [...boxes.mainBoxes, ...boxes.subBoxes];
     entry.badges.flat().forEach((label, i) => {
-      const id = entry.skillCards.flat()[i];
+      const id = labeledIds[i];
       if (!label || !cardBoxes[i] || cards[i] !== id) return;
       const read = readBadges(image, cardBoxes[i], CONTEST_LAYOUT);
       const result = compareBadges(`${entry.file} #${i}`, id, read, label);
       badgeCards++;
-      readBadgeCount += result.read;
       unreadBadges += result.unread;
       misreadBadges.push(...result.misread);
       if (result.inconsistent) inconsistentCards.push(result.inconsistent);
-      if (label[0] === 0) {
+      if (result.iconRight !== undefined) {
         iconCards++;
-        if (closestIcon(read.icon) === predictBadges(id).icon) iconsRead++;
+        if (result.iconRight) iconsRead++;
       }
     });
 
@@ -363,7 +324,9 @@ async function main() {
     failures.length ||
     readFailures.length ||
     accuracy < MIN_ICON_ACCURACY ||
-    misreadBadges.length > MAX_BADGE_MISREAD_RATE * readBadgeCount ||
+    misreadBadges.length >
+      MAX_BADGE_MISREAD_RATE *
+        (BADGE_KEYS.length * badgeCards - unreadBadges) ||
     badgeAccuracy < MIN_CUSTOMIZATION_ACCURACY ||
     iconsRead < MIN_ICON_READ_ACCURACY * iconCards
   ) {

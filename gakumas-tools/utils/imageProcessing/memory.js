@@ -1,7 +1,6 @@
 import { PItems, SkillCards } from "gakumas-data";
 import * as ort from "onnxruntime-web/wasm";
-import { inferCustomizations } from "../inferCustomizations";
-import { MEMORY_LAYOUT, readBadges } from "./cardBadges";
+import { MEMORY_LAYOUT, readCustomizations } from "./cardBadges";
 import {
   DEBUG,
   getBlackCanvas,
@@ -92,10 +91,7 @@ export async function getMemoryFromFile(
 
   const imageData = getImageData(img);
   const customizations = skillCards.map((id, i) =>
-    inferCustomizations(
-      id,
-      readBadges(imageData, skillCardBoxes[i], MEMORY_LAYOUT)
-    )
+    readCustomizations(imageData, skillCardBoxes[i], MEMORY_LAYOUT, id)
   );
 
   console.log(

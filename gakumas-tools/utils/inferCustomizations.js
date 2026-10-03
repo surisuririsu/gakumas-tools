@@ -1,4 +1,5 @@
 import { Customizations, SkillCards } from "gakumas-data";
+import { countCustomizations } from "./customizations";
 
 function defined(object) {
   return Object.fromEntries(
@@ -142,7 +143,7 @@ export function predictBadges(cardId, c11n = {}) {
   const score = constantGains(actions, "score");
   const genki = constantGains(actions, "genki");
   return {
-    dot: Object.values(c11n).reduce((sum, level) => sum + level, 0),
+    dot: countCustomizations(c11n),
     score: score.length ? score[0] + (growth.score || 0) : null,
     genki: genki.length
       ? genki.reduce((sum, gain) => sum + gain + (growth.genki || 0), 0)

@@ -1,13 +1,7 @@
 import { PItems, SkillCards } from "gakumas-data";
 import { IdolConfig } from "gakumas-engine";
-import { inferCustomizations } from "@/utils/inferCustomizations";
 import { findStageCandidates } from "@/utils/supportBonus";
-import {
-  CONTEST_LAYOUT,
-  isGreyedOut,
-  readBadges,
-  resolveGreyedOut,
-} from "./cardBadges";
+import { readLoadoutCards } from "./cardBadges";
 import { DEBUG, getImageData, loadImageFromFile } from "./common";
 import { detectLoadoutBoxes } from "./contestLoadoutGeometry";
 import { readStats } from "./contestLoadoutStats";
@@ -49,36 +43,20 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
     pItemSession,
     pItemClasses,
   );
-  const [mainIds, subIds] = resolveGreyedOut(
+  const { skillCardIdGroups, customizationGroups } = readLoadoutCards(
+    imageData,
+    [mainBoxes, subBoxes],
     [
       skillCardIds.slice(0, mainBoxes.length),
       skillCardIds.slice(mainBoxes.length),
     ],
-    [mainBoxes, subBoxes].map((boxes) =>
-      boxes.map((box) => !!box && isGreyedOut(imageData, box)),
-    ),
   );
-  const customizationGroups = [
-    [mainIds, mainBoxes],
-    [subIds, subBoxes],
-  ].map(([ids, boxes]) =>
-    ids.map((id, i) =>
-      boxes[i]
-        ? inferCustomizations(
-            id,
-            readBadges(imageData, boxes[i], CONTEST_LAYOUT),
-          )
-        : {},
-    ),
-  );
-  if (subIds[0] && subIds[0] === mainIds[0]) {
-    customizationGroups[1][0] = { ...customizationGroups[0][0] };
-  }
+  const [mainIds, subIds] = skillCardIdGroups;
 
   const { plan } = new IdolConfig({
     params,
     pItemIds,
-    skillCardIdGroups: [mainIds, subIds],
+    skillCardIdGroups,
   });
   const stageCandidates = findStageCandidates(params, percents, {
     currentStageId,
@@ -106,7 +84,7 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
     stageCandidates,
     params,
     pItemIds,
-    skillCardIdGroups: [mainIds, subIds],
+    skillCardIdGroups,
     customizationGroups,
   };
 }

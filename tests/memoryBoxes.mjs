@@ -38,8 +38,7 @@ import {
   MEMORY_LAYOUT,
   readBadges,
 } from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
-import { closestIcon, compareBadges } from "./badges.mjs";
-import { predictBadges } from "../gakumas-tools/utils/inferCustomizations.js";
+import { compareBadges } from "./badges.mjs";
 
 const HARNESS_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HARNESS_DIR, "..");
@@ -336,11 +335,8 @@ async function main() {
     const badgeProblems = (entry.badges || []).flatMap((label, i) => {
       if (!label || skillCards[i] !== entry.skillCards[i]) return [];
       const read = readBadges(imageData, detection.skillCardBoxes[i], MEMORY_LAYOUT);
-      const { misread, inconsistent } = compareBadges(`#${i}`, skillCards[i], read, label);
-      const icon = closestIcon(read.icon);
-      const expectedIcon = predictBadges(skillCards[i]).icon;
-      const wrongIcon =
-        label[0] === 0 && icon !== expectedIcon && `#${i} bottom icon read ${icon} shown ${expectedIcon}`;
+      const { misread, inconsistent, iconRight } = compareBadges(`#${i}`, skillCards[i], read, label);
+      const wrongIcon = iconRight === false && `#${i} bottom icon misread`;
       return [...misread, inconsistent, wrongIcon].filter(Boolean);
     });
     if (badgeProblems.length) {

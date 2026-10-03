@@ -108,36 +108,43 @@ for (let y = 0; y < ICON_GRID; y++) {
   for (let x = 0; x < ICON_GRID; x++) {
     const c = (ICON_GRID - 1) / 2;
     if ((Math.abs(x - c) + Math.abs(y - c)) / (ICON_GRID / 2) < 0.6) {
-      INNER.push([x, y]);
+      INNER.push(y * ICON_GRID + x);
     }
+  }
+}
+
+const SHIFTS = [];
+for (let sy = -2; sy <= 2; sy++) {
+  for (let sx = -1; sx <= 1; sx++) {
+    SHIFTS.push(INNER.map((i) => i + sy * ICON_GRID + sx));
   }
 }
 
 export function iconDistance(a, b) {
-  let best = 1;
-  for (let sy = -2; sy <= 2; sy++) {
-    for (let sx = -1; sx <= 1; sx++) {
-      let mismatched = 0;
-      let compared = 0;
-      for (const [x, y] of INNER) {
-        const x2 = x + sx;
-        const y2 = y + sy;
-        if (x2 < 0 || y2 < 0 || x2 >= ICON_GRID || y2 >= ICON_GRID) continue;
-        compared++;
-        if (a[y * ICON_GRID + x] !== b.charCodeAt(y2 * ICON_GRID + x2) - 48) {
-          mismatched++;
-        }
-      }
-      best = Math.min(best, mismatched / compared);
+  let best = INNER.length;
+  for (const shifted of SHIFTS) {
+    let mismatched = 0;
+    for (let k = 0; k < INNER.length; k++) {
+      if (a[INNER[k]] !== b[shifted[k]]) mismatched++;
     }
+    if (mismatched < best) best = mismatched;
   }
-  return best;
+  return best / INNER.length;
 }
+
+const decodeIcon = (map) => Uint8Array.from(map, (c) => c.charCodeAt(0) - 48);
+
+const TEMPLATES = Object.entries(ICON_TEMPLATES).map(([type, maps]) => [
+  type,
+  maps.map(decodeIcon),
+]);
 
 function iconDistances(colors) {
   const distances = {};
-  for (const [type, maps] of Object.entries(ICON_TEMPLATES)) {
-    distances[type] = Math.min(...maps.map((map) => iconDistance(colors, map)));
+  for (const [type, maps] of TEMPLATES) {
+    let best = Infinity;
+    for (const map of maps) best = Math.min(best, iconDistance(colors, map));
+    distances[type] = best;
   }
   return distances;
 }

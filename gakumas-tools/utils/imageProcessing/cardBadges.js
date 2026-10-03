@@ -1,4 +1,5 @@
 import BADGE_TEMPLATES from "./cardBadgeDigits.json";
+import { inferCustomizations } from "../inferCustomizations";
 import { readBottomIcon } from "./effectIcons";
 import {
   classifyGlyph,
@@ -134,7 +135,7 @@ function adjacentRun(glyphs, fromRight) {
 
 // 重複 and 制限 grey a card out and put a dark label with white text at its
 // top right.
-export function isGreyedOut({ data, width, height }, box) {
+function isGreyedOut({ data, width, height }, box) {
   let dark = 0;
   let white = 0;
   let total = 0;
@@ -158,18 +159,6 @@ export function isGreyedOut({ data, width, height }, box) {
     }
   }
   return total > 0 && dark / total >= 0.18 && white / total >= 0.2;
-}
-
-// 重複 is the main row's first card shared into the sub row; anything else
-// greyed out is 制限, which the stage doesn't allow.
-export function resolveGreyedOut([mainIds, subIds], [mainGreyed, subGreyed]) {
-  return [
-    mainIds.map((id, i) => (mainGreyed[i] ? 0 : id)),
-    subIds.map((id, i) => {
-      if (!subGreyed[i]) return id;
-      return i === 0 ? mainIds[0] : 0;
-    }),
-  ];
 }
 
 export function badgeGlyphs(imageData, box, layout) {
@@ -215,30 +204,54 @@ function readBadge(glyphs, templates, fromRight = false) {
   return parseInt((fromRight ? digits.reverse() : digits).join(""), 10);
 }
 
-function readDot(glyphs, templates) {
+function readDot(glyphs) {
   const size = ({ bounds: b }) => (b.x1 - b.x0) * (b.y1 - b.y0);
   const largest = glyphs.reduce(
     (a, b) => (size(b) > size(a) ? b : a),
     glyphs[0],
   );
   return largest
-    ? parseInt(classifyGlyph(largest, templates).digit, 10)
+    ? parseInt(classifyGlyph(largest, BADGE_TEMPLATES.dot).digit, 10)
     : undefined;
 }
 
 // null: the badge isn't shown. undefined: shown but unreadable.
-export function readBadges(
-  imageData,
-  box,
-  layout,
-  templates = BADGE_TEMPLATES,
-) {
+export function readBadges(imageData, box, layout) {
   const glyphs = badgeGlyphs(imageData, box, layout);
   return {
-    dot: glyphs.dot ? readDot(glyphs.dot, templates.dot) : 0,
-    score: glyphs.score.length ? readBadge(glyphs.score, templates.dark) : null,
-    genki: glyphs.genki ? readBadge(glyphs.genki, templates.white) : null,
-    cost: readBadge(glyphs.cost, templates.white, true),
+    dot: glyphs.dot ? readDot(glyphs.dot) : 0,
+    score: glyphs.score.length
+      ? readBadge(glyphs.score, BADGE_TEMPLATES.dark)
+      : null,
+    genki: glyphs.genki ? readBadge(glyphs.genki, BADGE_TEMPLATES.white) : null,
+    cost: readBadge(glyphs.cost, BADGE_TEMPLATES.white, true),
     icon: readBottomIcon(imageData, box, layout.icon),
   };
+}
+
+export function readCustomizations(imageData, box, layout, cardId) {
+  if (!box || !cardId || !findDot(imageData, box, layout)) return {};
+  return inferCustomizations(cardId, readBadges(imageData, box, layout));
+}
+
+// 重複 greys out the main row's first card shared into the sub row; anything
+// else greyed out is 制限, which the stage doesn't allow.
+export function readLoadoutCards(imageData, boxGroups, idGroups) {
+  const greyed = boxGroups.map((boxes) =>
+    boxes.map((box) => !!box && isGreyedOut(imageData, box)),
+  );
+  const shared = greyed[1][0];
+  const skillCardIdGroups = idGroups.map((ids, row) =>
+    ids.map((id, i) => (greyed[row][i] ? 0 : id)),
+  );
+  const customizationGroups = skillCardIdGroups.map((ids, row) =>
+    ids.map((id, i) =>
+      readCustomizations(imageData, boxGroups[row][i], CONTEST_LAYOUT, id),
+    ),
+  );
+  if (shared) {
+    skillCardIdGroups[1][0] = skillCardIdGroups[0][0];
+    customizationGroups[1][0] = { ...customizationGroups[0][0] };
+  }
+  return { skillCardIdGroups, customizationGroups };
 }
