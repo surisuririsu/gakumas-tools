@@ -2,7 +2,12 @@ import { PItems, SkillCards } from "gakumas-data";
 import { IdolConfig } from "gakumas-engine";
 import { inferCustomizations } from "@/utils/inferCustomizations";
 import { findStageCandidates } from "@/utils/supportBonus";
-import { CONTEST_LAYOUT, readBadges } from "./cardBadges";
+import {
+  CONTEST_LAYOUT,
+  isGreyedOut,
+  readBadges,
+  resolveGreyedOut,
+} from "./cardBadges";
 import { DEBUG, getImageData, loadImageFromFile } from "./common";
 import { detectLoadoutBoxes } from "./contestLoadoutGeometry";
 import { readStats } from "./contestLoadoutStats";
@@ -44,8 +49,15 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
     pItemSession,
     pItemClasses,
   );
-  const mainIds = skillCardIds.slice(0, mainBoxes.length);
-  const subIds = skillCardIds.slice(mainBoxes.length);
+  const [mainIds, subIds] = resolveGreyedOut(
+    [
+      skillCardIds.slice(0, mainBoxes.length),
+      skillCardIds.slice(mainBoxes.length),
+    ],
+    [mainBoxes, subBoxes].map((boxes) =>
+      boxes.map((box) => !!box && isGreyedOut(imageData, box)),
+    ),
+  );
   const customizationGroups = [
     [mainIds, mainBoxes],
     [subIds, subBoxes],
@@ -59,7 +71,6 @@ export async function getSimulatorLoadoutFromFile(file, currentStageId) {
         : {},
     ),
   );
-  // A card shared by both rows is greyed out in the sub row.
   if (subIds[0] && subIds[0] === mainIds[0]) {
     customizationGroups[1][0] = { ...customizationGroups[0][0] };
   }

@@ -132,6 +132,46 @@ function adjacentRun(glyphs, fromRight) {
   return fromRight ? run.reverse() : run;
 }
 
+// 重複 and 制限 grey a card out and put a dark label with white text at its
+// top right.
+export function isGreyedOut({ data, width, height }, box) {
+  let dark = 0;
+  let white = 0;
+  let total = 0;
+  for (
+    let y = Math.round(box.y + 0.04 * box.height);
+    y < box.y + 0.24 * box.height;
+    y++
+  ) {
+    for (
+      let x = Math.round(box.x + 0.4 * box.width);
+      x < box.x + 0.96 * box.width;
+      x++
+    ) {
+      if (x < 0 || y < 0 || x >= width || y >= height) continue;
+      const i = (y * width + x) * 4;
+      const max = Math.max(data[i], data[i + 1], data[i + 2]);
+      const min = Math.min(data[i], data[i + 1], data[i + 2]);
+      total++;
+      if (max < 95 && max - min < 25) dark++;
+      if (min > 215) white++;
+    }
+  }
+  return total > 0 && dark / total >= 0.18 && white / total >= 0.2;
+}
+
+// 重複 is the main row's first card shared into the sub row; anything else
+// greyed out is 制限, which the stage doesn't allow.
+export function resolveGreyedOut([mainIds, subIds], [mainGreyed, subGreyed]) {
+  return [
+    mainIds.map((id, i) => (mainGreyed[i] ? 0 : id)),
+    subIds.map((id, i) => {
+      if (!subGreyed[i]) return id;
+      return i === 0 ? mainIds[0] : 0;
+    }),
+  ];
+}
+
 export function badgeGlyphs(imageData, box, layout) {
   const white = (region, interior = true, predicate = isWhite) =>
     componentGlyphs(imageData, region, predicate, {

@@ -33,7 +33,9 @@ import {
 import {
   badgeGlyphs,
   CONTEST_LAYOUT,
+  isGreyedOut,
   readBadges,
+  resolveGreyedOut,
 } from "../gakumas-tools/utils/imageProcessing/cardBadges.js";
 import { buildBadgeTemplates, closestIcon, compareBadges } from "./badges.mjs";
 import { predictBadges } from "../gakumas-tools/utils/inferCustomizations.js";
@@ -54,7 +56,7 @@ const BADGE_DIGITS_PATH = join(
   REPO_ROOT,
   "gakumas-tools/utils/imageProcessing/cardBadgeDigits.json",
 );
-const MIN_ICON_ACCURACY = 0.975;
+const MIN_ICON_ACCURACY = 0.98;
 const MAX_BADGE_MISREAD_RATE = 0.005;
 const MIN_CUSTOMIZATION_ACCURACY = 0.98;
 const MIN_ICON_READ_ACCURACY = 0.75;
@@ -256,12 +258,18 @@ async function main() {
     }
 
     const pItems = await classify(image, boxes.pItemBoxes, pItemModel);
-    const cards = await classify(
+    const classified = await classify(
       image,
       [...boxes.mainBoxes, ...boxes.subBoxes],
       skillCardModel,
     );
-    const skillCards = [cards.slice(0, 6), cards.slice(6)];
+    const skillCards = resolveGreyedOut(
+      [classified.slice(0, 6), classified.slice(6)],
+      [boxes.mainBoxes, boxes.subBoxes].map((row) =>
+        row.map((box) => !!box && isGreyedOut(image, box)),
+      ),
+    );
+    const cards = skillCards.flat();
     iconSlots += entry.pItems.length + entry.skillCards.flat().length;
     iconErrors.push(
       ...compareIcons(entry.file, "pItems", entry.pItems, pItems, pItemName),
