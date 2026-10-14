@@ -1,4 +1,5 @@
 import { CARD_SHADOW, COLORS } from "@/components/OgImage/theme";
+import { OG_SIZE } from "@/utils/og";
 
 export const PREVIEW_PADDING = 16;
 export const CARD_PADDING = 14;
@@ -13,29 +14,55 @@ const FOOTER_GAP = 12;
 export const FOOTER_SIZE = 20;
 const FOOTER_HEIGHT = 22;
 
-export const PREVIEW_WIDTH =
-  PREVIEW_PADDING * 2 + CARD_PADDING * 2 + CARD_SIZE * 6 + ICON_GAP * 5;
+const GROUP_WIDTH = CARD_SIZE * 6 + ICON_GAP * 5;
+const COLUMN_GAP = 24;
 
-export function previewHeight(groupCount, isEmpty) {
+function naturalSize(groupCount, isEmpty, columns) {
+  const rows = Math.ceil(groupCount / columns);
   const group =
     GROUP_GAP +
     CARD_SIZE +
     EDGE +
     (isEmpty ? 0 : COST_GAP + COST_HEIGHT + EDGE);
-  return (
-    PREVIEW_PADDING * 2 +
-    CARD_PADDING * 2 +
-    ITEM_SIZE +
-    EDGE +
-    group * groupCount +
-    FOOTER_GAP +
-    FOOTER_HEIGHT
-  );
+  return {
+    width:
+      PREVIEW_PADDING * 2 +
+      CARD_PADDING * 2 +
+      GROUP_WIDTH * columns +
+      COLUMN_GAP * (columns - 1),
+    height:
+      PREVIEW_PADDING * 2 +
+      CARD_PADDING * 2 +
+      ITEM_SIZE +
+      EDGE +
+      group * rows +
+      FOOTER_GAP +
+      FOOTER_HEIGHT,
+  };
+}
+
+export function previewLayout(groupCount, isEmpty) {
+  return [1, 2]
+    .map((columns) => {
+      const size = naturalSize(groupCount, isEmpty, columns);
+      const scale = Math.min(
+        OG_SIZE.width / size.width,
+        OG_SIZE.height / size.height,
+      );
+      return { ...size, scale };
+    })
+    .reduce((best, layout) => (layout.scale > best.scale ? layout : best));
 }
 
 const styles = {
+  page: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   preview: {
+    display: "flex",
     flexDirection: "column",
+    flexShrink: 0,
     gap: FOOTER_GAP,
     padding: PREVIEW_PADDING,
   },
@@ -47,6 +74,12 @@ const styles = {
     borderRadius: 18,
     backgroundColor: COLORS.panel,
     boxShadow: CARD_SHADOW,
+  },
+  groups: {
+    display: "flex",
+    flexWrap: "wrap",
+    rowGap: GROUP_GAP,
+    columnGap: COLUMN_GAP,
   },
   footer: {
     height: FOOTER_HEIGHT,

@@ -11,23 +11,35 @@ export default function Preview({
   idolId,
   isEmpty,
   imageMap,
+  layout,
 }) {
   return (
-    <Page style={styles.preview}>
-      <div style={styles.card}>
-        <PreviewPItems itemIds={itemIds} imageMap={imageMap} />
-        {skillCardIdGroups.slice(0, 4).map((cards, groupIndex) => (
-          <PreviewSkillCardGroup
-            key={groupIndex}
-            cards={cards}
-            customizationGroup={customizationGroups?.[groupIndex]}
-            idolId={idolId}
-            isEmpty={isEmpty}
-            imageMap={imageMap}
-          />
-        ))}
+    <Page style={styles.page}>
+      <div
+        style={{
+          ...styles.preview,
+          width: layout.width,
+          height: layout.height,
+          transform: `scale(${layout.scale})`,
+        }}
+      >
+        <div style={styles.card}>
+          <PreviewPItems itemIds={itemIds} imageMap={imageMap} />
+          <div style={styles.groups}>
+            {skillCardIdGroups.slice(0, 4).map((cards, groupIndex) => (
+              <PreviewSkillCardGroup
+                key={groupIndex}
+                cards={cards}
+                customizationGroup={customizationGroups?.[groupIndex]}
+                idolId={idolId}
+                isEmpty={isEmpty}
+                imageMap={imageMap}
+              />
+            ))}
+          </div>
+        </div>
+        <Footer size={FOOTER_SIZE} host={SITE_HOST} style={styles.footer} />
       </div>
-      <Footer size={FOOTER_SIZE} host={SITE_HOST} style={styles.footer} />
     </Page>
   );
 }
