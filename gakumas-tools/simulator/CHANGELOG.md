@@ -2,6 +2,10 @@
 
 All notable changes to the contest simulator will be documented in this file.
 
+## 2026-10-15
+
+- Update level 81-90 skill switch cards
+
 ## 2026-10-14
 
 - Add contest season 54 preview
