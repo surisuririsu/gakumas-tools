@@ -46,11 +46,20 @@ function actionEffectName(action) {
   return null;
 }
 
-function collectActionNames(lines, nestedKey) {
+// In-game, only reducing a resource doesn't make the card an effect card of
+// that resource: 届いて！ (元気を0にする) isn't a 元気効果 card for 私を超えて.
+function isReduction(action) {
+  if (action?.type !== "assignment") return false;
+  if (action.op === "-=" || action.op === "/=") return true;
+  return action.op === "=" && action.rhs?.value === 0;
+}
+
+function collectActionNames(lines, nestedKey, skipReductions) {
   const names = new Set();
   const walk = (entries) => {
     for (const entry of entries || []) {
       for (const action of entry.actions || []) {
+        if (skipReductions && isReduction(action)) continue;
         const name = actionEffectName(action);
         if (name) names.add(name);
       }
@@ -414,6 +423,7 @@ export default class CardManager extends EngineComponent {
       profile.effectNames = collectActionNames(
         this.getLines(state, card, "actions"),
         "effects",
+        true,
       );
     }
     return profile.effectNames;
