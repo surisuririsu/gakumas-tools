@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "onnxruntime-node": "1.24",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "tesseract.js": "^7.0.0"
   },
   "packageManager": "pnpm@11.0.6"
