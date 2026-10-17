@@ -497,7 +497,8 @@
     "optimizeParams": "Optimize params",
     "optimizeGain": "Avg +{gain}",
     "optimizeAlready": "Already optimal",
-    "optimizeFailed": "Can't optimize"
+    "optimizeFailed": "Can't optimize",
+    "rehearsal": "Rehearsal"
   },
   "CompareTab": {
     "saved": "Saved",
@@ -660,6 +661,17 @@
     "confirmRow": "Confirm this row's values are correct",
     "selectFiles": "Select files",
     "addRow": "Add row"
+  },
+  "RehearsalComparison": {
+    "addResults": "Add rehearsal results",
+    "pickCell": "Tap this idol's score",
+    "flaggedExcluded": "{count} result(s) couldn't be verified and were left out",
+    "contribute": "Anonymously share this comparison to help improve the simulator",
+    "simulator": "Simulator",
+    "rehearsal": "Rehearsal",
+    "simulatorAverage": "Simulator avg",
+    "rehearsalAverage": "Rehearsal avg",
+    "difference": "Difference"
   },
   "KofiAd": {
     "prompt": "Support this project"
