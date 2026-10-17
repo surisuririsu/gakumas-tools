@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { createWorker } from "tesseract.js";
 import { DEBUG } from "@/utils/imageProcessing/common";
-import {
-  getScoresFromFile,
-  getScoresFromImage,
-} from "@/utils/imageProcessing/rehearsal";
-import { streamCandidateFrames } from "@/utils/imageProcessing/videoFrameExtractor";
 import { createWorkerPool } from "@/utils/workerPool";
 import {
   bucketFiles,
@@ -14,6 +8,27 @@ import {
   parseCsvFile,
   revokeRowSources,
 } from "./rehearsalFiles";
+
+let ocrModules = null;
+
+function loadOcrModules() {
+  ocrModules ??= Promise.all([
+    import("tesseract.js"),
+    import("@/utils/imageProcessing/rehearsal"),
+    import("@/utils/imageProcessing/videoFrameExtractor"),
+  ]).then(
+    ([tesseract, rehearsal, video]) => ({
+      ...tesseract,
+      ...rehearsal,
+      ...video,
+    }),
+    (err) => {
+      ocrModules = null;
+      throw err;
+    },
+  );
+  return ocrModules;
+}
 
 const FRAME_INTERVAL_MS = 200;
 const BRIGHTNESS_THRESHOLD = 180;
@@ -43,7 +58,7 @@ export default function useRehearsalParser() {
   const getOcrPool = useCallback(() => {
     ocrPoolRef.current ??= createWorkerPool({
       size: getOcrPoolSize(),
-      create: () => createWorker("eng", 1),
+      create: async () => (await loadOcrModules()).createWorker("eng", 1),
       destroy: (worker) => worker.terminate(),
     });
     return ocrPoolRef.current;
@@ -66,6 +81,8 @@ export default function useRehearsalParser() {
       const results = [];
       let scanStarted = false;
       let lastStatusAt = 0;
+      const { streamCandidateFrames, getScoresFromImage } =
+        await loadOcrModules();
       for await (const canvas of streamCandidateFrames(videoFile, {
         intervalMs: FRAME_INTERVAL_MS,
         brightnessThreshold: BRIGHTNESS_THRESHOLD,
@@ -106,6 +123,7 @@ export default function useRehearsalParser() {
 
   const processImages = useCallback(
     async (imageFiles) => {
+      const { getScoresFromFile } = await loadOcrModules();
       const pool = getOcrPool();
       const scored = await Promise.all(
         imageFiles.map(async (file) => {
