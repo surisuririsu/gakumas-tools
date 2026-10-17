@@ -1,18 +1,52 @@
-// Process `items` through a pool of async `workers` (promises resolving to
-// worker instances) in order-preserving batches of `workers.length`. Each
-// batch runs concurrently; batches run sequentially. `fn` receives the item,
-// the resolved worker, and the item index, and its return values are
-// collected into the result array in the same order as the input.
-export async function runBatched(items, workers, fn) {
-  const results = new Array(items.length);
-  for (let start = 0; start < items.length; start += workers.length) {
-    const batch = items.slice(start, start + workers.length);
-    const batchResults = await Promise.all(
-      batch.map(async (item, j) => fn(item, await workers[j], start + j)),
-    );
-    for (let k = 0; k < batchResults.length; k++) {
-      results[start + k] = batchResults[k];
+// Run tasks on at most `size` workers. Workers are created only when every
+// existing one is busy, reused while work keeps arriving, and destroyed once
+// the pool has sat idle for `idleMs`. A worker whose task throws is replaced,
+// since it may be left in a broken state.
+export function createWorkerPool({ size, create, destroy, idleMs = 10000 }) {
+  const idle = [];
+  const pending = [];
+  let active = 0;
+  let idleTimer = null;
+  let closed = false;
+
+  const discard = (worker) => worker.then(destroy, () => {});
+
+  function dispatch() {
+    clearTimeout(idleTimer);
+    while (pending.length && active < size) {
+      active++;
+      execute(pending.shift(), idle.pop() ?? create());
+    }
+    if (!active) {
+      idleTimer = setTimeout(() => idle.splice(0).forEach(discard), idleMs);
     }
   }
-  return results;
+
+  async function execute({ fn, resolve, reject }, worker) {
+    let healthy = true;
+    try {
+      resolve(await fn(await worker));
+    } catch (err) {
+      healthy = false;
+      reject(err);
+    }
+    active--;
+    if (healthy && !closed) idle.push(worker);
+    else discard(worker);
+    if (!closed) dispatch();
+  }
+
+  return {
+    run(fn) {
+      return new Promise((resolve, reject) => {
+        pending.push({ fn, resolve, reject });
+        dispatch();
+      });
+    },
+    close() {
+      closed = true;
+      clearTimeout(idleTimer);
+      idle.splice(0).forEach(discard);
+    },
+  };
 }

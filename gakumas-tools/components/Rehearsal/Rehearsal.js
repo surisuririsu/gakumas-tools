@@ -24,7 +24,7 @@ import {
 } from "@/utils/imageProcessing/rehearsal";
 import { streamCandidateFrames } from "@/utils/imageProcessing/videoFrameExtractor";
 import { bucketScores } from "@/utils/simulator";
-import { runBatched } from "@/utils/workerPool";
+import { createWorkerPool } from "@/utils/workerPool";
 import KofiAd from "../KofiAd";
 import FileDropzone from "./FileDropzone";
 import ScoreTiles from "./ScoreTiles";
@@ -42,9 +42,21 @@ import {
 } from "./rehearsalStats";
 import styles from "./Rehearsal.module.scss";
 
-const MAX_WORKERS = 8;
 const FRAME_INTERVAL_MS = 200;
 const BRIGHTNESS_THRESHOLD = 180;
+
+// A Tesseract worker's wasm heap grows to ~350 MB on an upscaled phone
+// screenshot and never shrinks, so the pool is sized by memory, not cores.
+function getOcrPoolSize() {
+  const cap = matchMedia("(pointer: coarse)").matches ? 2 : 4;
+  const byMemory = navigator.deviceMemory
+    ? Math.floor(navigator.deviceMemory / 2)
+    : cap;
+  return Math.max(
+    1,
+    Math.min(cap, byMemory, navigator.hardwareConcurrency || 1),
+  );
+}
 
 function Rehearsal() {
   const t = useTranslations("Rehearsal");
@@ -54,36 +66,31 @@ function Rehearsal() {
   const [processingStatus, setProcessingStatus] = useState("");
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
-  const workersRef = useRef([]);
+  const ocrPoolRef = useRef(null);
 
-  // Each Tesseract worker fetches its script, core wasm and traineddata, so
-  // spin them up on the first import rather than on page load, and only as
-  // many as the batch can use. Workers persist for later imports.
-  const ensureWorkers = useCallback((count) => {
-    const target = Math.min(
-      count,
-      navigator.hardwareConcurrency || 1,
-      MAX_WORKERS,
-    );
-    while (workersRef.current.length < target) {
-      workersRef.current.push(createWorker("eng", 1));
-    }
-    return workersRef.current;
+  const getOcrPool = useCallback(() => {
+    ocrPoolRef.current ??= createWorkerPool({
+      size: getOcrPoolSize(),
+      create: () => createWorker("eng", 1),
+      destroy: (worker) => worker.terminate(),
+    });
+    return ocrPoolRef.current;
   }, []);
 
   useEffect(() => {
     return () => {
-      workersRef.current.forEach(async (w) => (await w).terminate());
+      ocrPoolRef.current?.close();
+      ocrPoolRef.current = null;
     };
   }, []);
 
   const processVideo = useCallback(
     async (videoFile) => {
       setProcessingStatus(t("analyzingVideo"));
-      // Single worker is enough: seeking dominates runtime, OCR is fast, and
-      // one-frame-at-a-time streaming keeps peak memory flat (one canvas
-      // instead of N candidates on mobile).
-      const [worker] = await Promise.all(ensureWorkers(1));
+      // Frames are OCR'd one at a time: seeking dominates runtime, OCR is
+      // fast, and streaming keeps peak memory flat (one canvas instead of N
+      // candidates on mobile).
+      const pool = getOcrPool();
       const results = [];
       let scanStarted = false;
       let lastStatusAt = 0;
@@ -112,7 +119,9 @@ function Rehearsal() {
           );
         },
       })) {
-        const { scores, flags } = await getScoresFromImage(canvas, worker);
+        const { scores, flags } = await pool.run((worker) =>
+          getScoresFromImage(canvas, worker),
+        );
         if (scores && scores.some((stage) => stage.some((v) => v))) {
           results.push({ scores, flags, src: await canvasToObjectURL(canvas) });
         }
@@ -120,29 +129,32 @@ function Rehearsal() {
       setProcessingStatus(t("videoComplete", { count: results.length }));
       return { results, scanStarted };
     },
-    [ensureWorkers, t],
+    [getOcrPool, t],
   );
 
-  const processImages = useCallback(async (imageFiles) => {
-    const workers = ensureWorkers(imageFiles.length);
-    const scored = await runBatched(
-      imageFiles,
-      workers,
-      async (file, worker) => {
-        try {
-          const { scores, flags } = await getScoresFromFile(file, worker);
-          return scores && { scores, flags, src: URL.createObjectURL(file) };
-        } catch (err) {
-          console.error(`Error parsing ${file.name}:`, err);
-          return null;
-        } finally {
-          setProgress((p) => p + 1);
-        }
-      },
-    );
-    const results = scored.filter(Boolean);
-    return { results, failures: scored.length - results.length };
-  }, [ensureWorkers]);
+  const processImages = useCallback(
+    async (imageFiles) => {
+      const pool = getOcrPool();
+      const scored = await Promise.all(
+        imageFiles.map(async (file) => {
+          try {
+            const { scores, flags } = await pool.run((worker) =>
+              getScoresFromFile(file, worker),
+            );
+            return scores && { scores, flags, src: URL.createObjectURL(file) };
+          } catch (err) {
+            console.error(`Error parsing ${file.name}:`, err);
+            return null;
+          } finally {
+            setProgress((p) => p + 1);
+          }
+        }),
+      );
+      const results = scored.filter(Boolean);
+      return { results, failures: scored.length - results.length };
+    },
+    [getOcrPool],
+  );
 
   const handleFiles = useCallback(
     async (fileList) => {
