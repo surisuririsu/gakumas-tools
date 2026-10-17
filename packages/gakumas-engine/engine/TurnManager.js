@@ -80,6 +80,9 @@ export default class TurnManager extends EngineComponent {
     state[S.cardUsesRemaining] = 1;
     state[S.unfreshPhase] = true;
 
+    // "Next turn" reservations made while this turn starts belong to the next turn
+    const effectsBeforeTurnStart = state[S.effects].length;
+
     state[S.prevStance] = "none";
     this.engine.effectManager.triggerEffects(state, FULL_POWER_EFFECTS);
     this.engine.effectManager.triggerEffectsForPhase(
@@ -108,7 +111,12 @@ export default class TurnManager extends EngineComponent {
     }
 
     this.engine.effectManager.triggerEffectsForPhase(state, "afterStartOfTurn");
-    this.engine.effectManager.triggerEffectsForPhase(state, "turn");
+    this.engine.effectManager.triggerEffectsForPhase(
+      state,
+      "turn",
+      null,
+      effectsBeforeTurnStart
+    );
     this.engine.effectManager.triggerEffectsForPhase(state, "everyTurn");
     state[S.unfreshPhase] = false;
   }

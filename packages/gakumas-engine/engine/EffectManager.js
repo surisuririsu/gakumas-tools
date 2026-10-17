@@ -123,14 +123,19 @@ export default class EffectManager extends EngineComponent {
     });
   }
 
-  triggerEffectsForPhase(state, phase, conditionState) {
+  triggerEffectsForPhase(
+    state,
+    phase,
+    conditionState,
+    registeredBefore = state[S.effects].length,
+  ) {
     if (!this.registeredPhases.has(phase)) return;
 
     // Fast path: no active effect matches this phase — skip the phase
     // save/restore dance and the effectsByGroup allocation entirely.
     const effectList = state[S.effects];
     let anyMatch = false;
-    for (let i = 0; i < effectList.length; i++) {
+    for (let i = 0; i < registeredBefore; i++) {
       if (effectList[i].phase === phase) {
         anyMatch = true;
         break;
@@ -146,7 +151,7 @@ export default class EffectManager extends EngineComponent {
     let matched = null;
     let matchedIndices = null;
     let grouped = false;
-    for (let i = 0; i < effectList.length; i++) {
+    for (let i = 0; i < registeredBefore; i++) {
       const effect = effectList[i];
       if (effect.phase !== phase) continue;
       // Phase target filter: at:phase[rule] — fires only when the source
