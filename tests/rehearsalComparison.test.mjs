@@ -1,8 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  bucketShares,
   cellScores,
   compareScores,
+  likelyMisPick,
+  rehearsalGrid,
   validateComparison,
 } from "../gakumas-tools/utils/rehearsalComparison.js";
 
@@ -49,7 +52,15 @@ const valid = {
     bucketSize: 550,
     buckets: [1, 5, 9],
   },
-  rehearsal: { stage: 2, slot: 1, scores: [40000, 42000] },
+  rehearsal: {
+    stage: 2,
+    slot: 1,
+    grid: [
+      [[30000], [31000], []],
+      [[40000, 42000], [20000], []],
+      [[50000], [], []],
+    ],
+  },
 };
 
 test("validateComparison keeps known fields only", () => {
@@ -62,6 +73,8 @@ test("validateComparison keeps known fields only", () => {
   assert.equal(comparison.loadout.extra, undefined);
   assert.equal(comparison.simStats.extra, undefined);
   assert.deepEqual(comparison.loadout.params, [1, 2, 3, 4]);
+  assert.deepEqual(comparison.rehearsal.scores, [40000, 42000]);
+  assert.equal(comparison.rehearsal.grid.length, 3);
 });
 
 test("validateComparison rejects bad input", () => {
@@ -70,11 +83,58 @@ test("validateComparison rejects bad input", () => {
     { ...valid, id: "nope" },
     { ...valid, loadout: { stageId: "custom" } },
     { ...valid, rehearsal: { ...valid.rehearsal, slot: 4 } },
-    { ...valid, rehearsal: { ...valid.rehearsal, scores: [] } },
-    { ...valid, rehearsal: { ...valid.rehearsal, scores: [1.5] } },
+    { ...valid, rehearsal: { ...valid.rehearsal, slot: 3 } },
+    { ...valid, rehearsal: { ...valid.rehearsal, grid: [[[1.5]]] } },
+    {
+      ...valid,
+      rehearsal: {
+        ...valid.rehearsal,
+        grid: valid.rehearsal.grid.with(0, [[1.5], [], []]),
+      },
+    },
     { ...valid, simStats: null },
     { ...valid, simStats: { ...valid.simStats, mean: "41000" } },
     { ...valid, simStats: { ...valid.simStats, buckets: [{}] } },
   ];
   for (const body of bad) assert.ok(validateComparison(body).error);
+});
+
+test("bucketShares puts both groups on shared buckets as percentages", () => {
+  const { labels, bucketSize, shares } = bucketShares([
+    [1000, 1500, 2400, 2600],
+    [2500, 2900],
+  ]);
+  assert.equal(bucketSize, 100);
+  assert.equal(labels[0], 1000);
+  assert.equal(labels.at(-1), 2900);
+  assert.equal(shares[0].length, labels.length);
+  assert.equal(shares[0][0], 25);
+  assert.equal(shares[1][labels.indexOf(2500)], 50);
+  for (const s of shares) {
+    assert.ok(Math.abs(s.reduce((a, b) => a + b, 0) - 100) < 1e-9);
+  }
+});
+
+test("rehearsalGrid is stage-major", () => {
+  const grid = rehearsalGrid([row([[1, 2, 3], [4, 5, 6], [7, 8, 9]])]);
+  assert.deepEqual(grid, [
+    [[1], [2], [3]],
+    [[4], [5], [6]],
+    [[7], [8], [9]],
+  ]);
+});
+
+test("likelyMisPick points at a far better matching cell", () => {
+  const grid = [
+    [[100], [50], [20]],
+    [[60], [70], [80]],
+    [[10], [11], [12]],
+  ];
+  assert.deepEqual(likelyMisPick(100, grid, 3, 1), {
+    stage: 1,
+    slot: 1,
+    gap: 0,
+  });
+  assert.equal(likelyMisPick(100, grid, 1, 1), null);
+  assert.equal(likelyMisPick(90, grid, 1, 1), null);
 });

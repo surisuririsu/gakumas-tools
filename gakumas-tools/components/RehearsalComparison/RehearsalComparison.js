@@ -4,10 +4,11 @@ import {
   FaCircleCheck,
   FaFileCsv,
   FaFileImage,
+  FaShareNodes,
   FaTriangleExclamation,
   FaVideo,
 } from "react-icons/fa6";
-import Checkbox from "@/components/Checkbox";
+import Button from "@/components/Button";
 import Collapse from "@/components/Collapse";
 import ProgressBar from "@/components/ProgressBar";
 import FileDropzone from "@/components/Rehearsal/FileDropzone";
@@ -35,12 +36,12 @@ function RehearsalComparison({
   rehearsalScores,
   cell,
   onCellChange,
-  contribute,
-  onContributeChange,
+  submission,
 }) {
   const t = useTranslations("RehearsalComparison");
   const tRehearsal = useTranslations("Rehearsal");
-  const { data, handleFiles, progress, total, processingStatus } = parser;
+  const { data, icons, handleFiles, progress, total, processingStatus } =
+    parser;
 
   useEffect(() => {
     const onPaste = (e) => {
@@ -101,6 +102,7 @@ function RehearsalComparison({
                     <th scope="row">{tRehearsal("stage", { n: stage + 1 })}</th>
                     {SLOTS.map((slot) => {
                       const scores = grid[slot].data[stage];
+                      const icon = scores.length && icons?.[stage]?.[slot];
                       const selected =
                         cell?.[0] === stage && cell?.[1] === slot;
                       return (
@@ -117,13 +119,18 @@ function RehearsalComparison({
                               onCellChange(selected ? null : [stage, slot])
                             }
                           >
-                            <span className={styles.cellScore}>
-                              {scores.length
-                                ? compact.format(average(scores))
-                                : "—"}
-                            </span>
-                            <span className={styles.cellCount}>
-                              n={scores.length}
+                            {icon && (
+                              <img className={styles.icon} src={icon} alt="" />
+                            )}
+                            <span className={styles.cellText}>
+                              <span className={styles.cellScore}>
+                                {scores.length
+                                  ? compact.format(average(scores))
+                                  : "—"}
+                              </span>
+                              <span className={styles.cellCount}>
+                                n={scores.length}
+                              </span>
                             </span>
                           </button>
                         </td>
@@ -133,6 +140,30 @@ function RehearsalComparison({
                 ))}
               </tbody>
             </table>
+            <div className={styles.shareRow}>
+              {submission.status == "shared" ? (
+                <>
+                  <span className={styles.sharedNote}>
+                    <FaCircleCheck />
+                    {t("shared")}
+                  </span>
+                  <Button size="sm" onClick={submission.undo}>
+                    {t("undo")}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  style="primary"
+                  size="sm"
+                  fill
+                  disabled={!cell || submission.status == "sharing"}
+                  onClick={submission.share}
+                >
+                  <FaShareNodes />
+                  {t(submission.status == "failed" ? "shareFailed" : "share")}
+                </Button>
+              )}
+            </div>
             {flaggedCount > 0 && (
               <span className={styles.flaggedNotice}>
                 <FaTriangleExclamation />
@@ -141,12 +172,6 @@ function RehearsalComparison({
             )}
           </div>
         )}
-
-        <Checkbox
-          checked={contribute}
-          label={t("contribute")}
-          onChange={onContributeChange}
-        />
       </div>
 
       {rehearsalScores.length > 0 && (
@@ -154,6 +179,7 @@ function RehearsalComparison({
           simScores={simScores}
           rehearsalScores={rehearsalScores}
           cell={cell}
+          icon={icons?.[cell[0]]?.[cell[1]]}
         />
       )}
     </div>

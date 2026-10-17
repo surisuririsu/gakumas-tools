@@ -674,12 +674,15 @@
     "addResults": "リハーサル結果を追加",
     "pickCell": "このアイドルのスコアをタップ",
     "flaggedExcluded": "{count}件の結果は確認できなかったため除外しました",
-    "contribute": "比較結果を匿名で共有して、シミュレーターの改善に協力する",
     "simulator": "シミュレーター",
     "rehearsal": "リハーサル",
     "simulatorAverage": "シミュ平均",
     "rehearsalAverage": "リハ平均",
-    "difference": "差"
+    "difference": "差",
+    "share": "匿名で共有してシミュレーターの改善に協力",
+    "shared": "共有しました。ありがとうございます！",
+    "undo": "取り消す",
+    "shareFailed": "共有できませんでした。タップして再試行"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"

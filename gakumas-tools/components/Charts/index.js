@@ -15,6 +15,9 @@ const lazyChart = (loader) =>
 
 export const AreaPlot = lazyChart(() => import("@/components/AreaPlot"));
 export const BoxPlot = lazyChart(() => import("@/components/BoxPlot"));
+export const ComparisonHistogram = lazyChart(
+  () => import("@/components/ComparisonHistogram")
+);
 export const DistributionPlot = lazyChart(
   () => import("@/components/DistributionPlot")
 );
