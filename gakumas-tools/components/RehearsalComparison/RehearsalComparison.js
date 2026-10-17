@@ -40,7 +40,8 @@ function RehearsalComparison({
 }) {
   const t = useTranslations("RehearsalComparison");
   const tRehearsal = useTranslations("Rehearsal");
-  const { data, handleFiles, progress, total, processingStatus } = parser;
+  const { data, icons, handleFiles, progress, total, processingStatus } =
+    parser;
 
   useEffect(() => {
     const onPaste = (e) => {
@@ -101,6 +102,7 @@ function RehearsalComparison({
                     <th scope="row">{tRehearsal("stage", { n: stage + 1 })}</th>
                     {SLOTS.map((slot) => {
                       const scores = grid[slot].data[stage];
+                      const icon = scores.length && icons?.[stage]?.[slot];
                       const selected =
                         cell?.[0] === stage && cell?.[1] === slot;
                       return (
@@ -117,13 +119,18 @@ function RehearsalComparison({
                               onCellChange(selected ? null : [stage, slot])
                             }
                           >
-                            <span className={styles.cellScore}>
-                              {scores.length
-                                ? compact.format(average(scores))
-                                : "—"}
-                            </span>
-                            <span className={styles.cellCount}>
-                              n={scores.length}
+                            {icon && (
+                              <img className={styles.icon} src={icon} alt="" />
+                            )}
+                            <span className={styles.cellText}>
+                              <span className={styles.cellScore}>
+                                {scores.length
+                                  ? compact.format(average(scores))
+                                  : "—"}
+                              </span>
+                              <span className={styles.cellCount}>
+                                n={scores.length}
+                              </span>
                             </span>
                           </button>
                         </td>
@@ -154,6 +161,7 @@ function RehearsalComparison({
           simScores={simScores}
           rehearsalScores={rehearsalScores}
           cell={cell}
+          icon={icons?.[cell[0]]?.[cell[1]]}
         />
       )}
     </div>

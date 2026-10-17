@@ -98,3 +98,36 @@ export function validateComparison(body) {
     },
   };
 }
+
+const TARGET_BUCKETS = 20;
+
+function niceStep(raw) {
+  const magnitude = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 5, 10].map((m) => m * magnitude).find((s) => s >= raw);
+}
+
+export function bucketShares(groups) {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const scores of groups) {
+    for (const s of scores) {
+      if (s < min) min = s;
+      if (s > max) max = s;
+    }
+  }
+  const bucketSize = niceStep(Math.max((max - min) / TARGET_BUCKETS, 1));
+  const start = Math.floor(min / bucketSize);
+  const count = Math.floor(max / bucketSize) - start + 1;
+  const labels = Array.from(
+    { length: count },
+    (_, i) => (start + i) * bucketSize,
+  );
+  const shares = groups.map((scores) => {
+    const out = new Array(count).fill(0);
+    for (const s of scores) {
+      out[Math.floor(s / bucketSize) - start] += 100 / scores.length;
+    }
+    return out;
+  });
+  return { labels, bucketSize, shares };
+}

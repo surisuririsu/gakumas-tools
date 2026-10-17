@@ -57,12 +57,14 @@
 }
 
 .grid {
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 6px;
   margin: -6px;
   width: calc(100% + 12px);
 
   th {
+    width: 4.5em;
     color: tokens.$surface-ink-muted;
     font-size: tokens.$text-xs;
     font-weight: tokens.$weight-bold;
@@ -73,11 +75,10 @@
 
 .cell {
   @include mixins.chip;
-  flex-direction: column;
-  gap: 0;
+  gap: 6px;
   width: 100%;
   min-height: 44px;
-  padding: 4px;
+  padding: 4px 6px;
   border: none;
   cursor: pointer;
 
@@ -89,6 +90,28 @@
     cursor: default;
     opacity: 0.5;
   }
+}
+
+@media (max-width: 480px) {
+  .cell {
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 2px;
+    border-radius: tokens.$radius-lg;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+}
+
+.cellText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .cellScore {
@@ -154,14 +177,41 @@
   }
 }
 
+.withIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gapIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
 .margin {
   margin-left: 4px;
   font-size: tokens.$text-2xs;
   font-weight: tokens.$weight-bold;
 }
 
-.boxPlot {
+.gapToolbar {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+
+  > :first-child {
+    flex: 1;
+  }
+}
+
+.chartSelect button {
+  padding: 4px 6px;
+  font-size: 18px;
+}
+
+.chart {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 1;
+  aspect-ratio: 2 / 1;
 }

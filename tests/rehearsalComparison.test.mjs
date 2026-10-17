@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  bucketShares,
   cellScores,
   compareScores,
   validateComparison,
@@ -77,4 +78,20 @@ test("validateComparison rejects bad input", () => {
     { ...valid, simStats: { ...valid.simStats, buckets: [{}] } },
   ];
   for (const body of bad) assert.ok(validateComparison(body).error);
+});
+
+test("bucketShares puts both groups on shared buckets as percentages", () => {
+  const { labels, bucketSize, shares } = bucketShares([
+    [1000, 1500, 2400, 2600],
+    [2500, 2900],
+  ]);
+  assert.equal(bucketSize, 100);
+  assert.equal(labels[0], 1000);
+  assert.equal(labels.at(-1), 2900);
+  assert.equal(shares[0].length, labels.length);
+  assert.equal(shares[0][0], 25);
+  assert.equal(shares[1][labels.indexOf(2500)], 50);
+  for (const s of shares) {
+    assert.ok(Math.abs(s.reduce((a, b) => a + b, 0) - 100) < 1e-9);
+  }
 });

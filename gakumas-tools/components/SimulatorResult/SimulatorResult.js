@@ -220,9 +220,11 @@ function SimulatorResult({
       className={c(styles.result, pending && styles.pending)}
       aria-busy={pending}
     >
-      <ScoreStats data={data} />
+      <div className={styles.contents} data-comparison-export-hide="true">
+        <ScoreStats data={data} />
 
-      <SimulatorResultGraphs data={data} plan={plan} />
+        <SimulatorResultGraphs data={data} plan={plan} />
+      </div>
 
       <div className={styles.actions} data-export-hide="true">
         <Button fill size="sm" onClick={downloadScores}>
