@@ -497,7 +497,8 @@
     "optimizeParams": "패러미터 최적화",
     "optimizeGain": "평균 +{gain}",
     "optimizeAlready": "이미 최적",
-    "optimizeFailed": "최적화 불가"
+    "optimizeFailed": "최적화 불가",
+    "rehearsal": "리허설"
   },
   "CompareTab": {
     "saved": "저장됨",
@@ -660,6 +661,17 @@
     "confirmRow": "이 행의 값이 올바른지 확인",
     "selectFiles": "파일 선택",
     "addRow": "행 추가"
+  },
+  "RehearsalComparison": {
+    "addResults": "리허설 결과 추가",
+    "pickCell": "이 아이돌의 스코어를 탭하세요",
+    "flaggedExcluded": "확인할 수 없는 결과 {count}개를 제외했습니다",
+    "contribute": "시뮬레이터 개선을 위해 비교 결과를 익명으로 공유",
+    "simulator": "시뮬레이터",
+    "rehearsal": "리허설",
+    "simulatorAverage": "시뮬 평균",
+    "rehearsalAverage": "리허설 평균",
+    "difference": "차이"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"

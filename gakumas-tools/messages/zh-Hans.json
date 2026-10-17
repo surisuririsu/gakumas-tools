@@ -497,7 +497,8 @@
     "optimizeParams": "优化参数",
     "optimizeGain": "平均 +{gain}",
     "optimizeAlready": "已是最优",
-    "optimizeFailed": "无法优化"
+    "optimizeFailed": "无法优化",
+    "rehearsal": "排练"
   },
   "CompareTab": {
     "saved": "已保存",
@@ -660,6 +661,17 @@
     "confirmRow": "确认此行的数值正确",
     "selectFiles": "选择文件",
     "addRow": "添加行"
+  },
+  "RehearsalComparison": {
+    "addResults": "添加排练结果",
+    "pickCell": "点击该偶像的分数",
+    "flaggedExcluded": "{count}个结果无法验证，已排除",
+    "contribute": "匿名分享此对比，帮助改进模拟器",
+    "simulator": "模拟器",
+    "rehearsal": "排练",
+    "simulatorAverage": "模拟平均",
+    "rehearsalAverage": "排练平均",
+    "difference": "差异"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

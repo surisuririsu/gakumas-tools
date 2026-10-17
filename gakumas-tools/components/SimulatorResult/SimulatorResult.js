@@ -1,4 +1,11 @@
-import { memo, useCallback, useContext, useEffect, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslations } from "next-intl";
 import {
   FaCheck,
@@ -6,8 +13,13 @@ import {
   FaDownload,
   FaWandMagicSparkles,
 } from "react-icons/fa6";
+import { Stages } from "gakumas-data";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
+import useRehearsalParser from "@/components/Rehearsal/useRehearsalParser";
+import RehearsalComparison, {
+  useComparisonSubmission,
+} from "@/components/RehearsalComparison";
 import CompareTab from "@/components/SimulationRuns";
 import SimulatorLogs from "@/components/SimulatorLogs";
 import SimulatorStats from "@/components/SimulatorStats";
@@ -17,13 +29,17 @@ import c from "@/utils/classNames";
 import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
+import { cellScores } from "@/utils/rehearsalComparison";
+import usePersistedState from "@/utils/usePersistedState";
 import ScoreStats from "./ScoreStats";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
 import KofiAd from "../KofiAd";
 
-const TABS = ["stats", "logs", "compare"];
+const TABS = ["stats", "logs", "compare", "rehearsal"];
+const CONTEST_TABS = new Set(["rehearsal"]);
 const TAB_STORAGE_KEY = "simulatorResultTab";
+const CONTRIBUTE_KEY = "gakumas-tools.simulator.contributeRehearsal";
 const FEEDBACK_MS = 2200;
 const SPARKLE_COUNT = 4;
 const SPARKLE_PATH =
@@ -96,6 +112,9 @@ function SimulatorResult({
   const [tab, setTabState] = useState("logs");
   const [tabSwitched, setTabSwitched] = useState(false);
   const [optimizeFeedback, setOptimizeFeedback] = useState(null);
+  const rehearsalParser = useRehearsalParser();
+  const [rehearsalCell, setRehearsalCell] = useState(null);
+  const [contribute, setContribute] = usePersistedState(CONTRIBUTE_KEY, true);
   const [run, setRun] = useState({ data, config });
   if (run.data !== data) setRun({ data, config });
 
@@ -171,6 +190,24 @@ function SimulatorResult({
     });
   }, [data.scoreStats, run.config, config, enterPercents, setParams]);
 
+  const isContest =
+    Stages.getById(currentRun?.loadout?.stageId)?.type == "contest";
+  const tabs = isContest ? TABS : TABS.filter((v) => !CONTEST_TABS.has(v));
+  const shownTab = tabs.includes(tab) ? tab : "logs";
+  const rehearsalScores = useMemo(
+    () =>
+      rehearsalCell ? cellScores(rehearsalParser.data, ...rehearsalCell) : [],
+    [rehearsalParser.data, rehearsalCell],
+  );
+  useComparisonSubmission({
+    enabled: contribute && isContest,
+    run: currentRun,
+    enterPercents,
+    rows: rehearsalParser.data,
+    cell: rehearsalCell,
+    scores: rehearsalScores,
+  });
+
   const downloadScores = useCallback(() => {
     const blob = new Blob([data.scores.join("\n")], { type: "text/csv" });
     downloadBlob(blob, "simulator_scores.csv");
@@ -202,18 +239,21 @@ function SimulatorResult({
         </Button>
       </div>
 
-      <div className={styles.details} data-export-hide="true">
-        <ButtonGroup
-          options={TABS.map((value) => ({ value, label: t(value) }))}
-          selected={tab}
-          onChange={setTab}
-        />
+      <div className={styles.details}>
+        <div data-export-hide="true">
+          <ButtonGroup
+            options={tabs.map((value) => ({ value, label: t(value) }))}
+            selected={shownTab}
+            onChange={setTab}
+          />
+        </div>
 
         <div
-          key={tab}
+          key={shownTab}
           className={c(styles.panel, tabSwitched && styles.panelEnter)}
+          data-export-hide={shownTab == "rehearsal" ? undefined : "true"}
         >
-          {tab === "logs" && (
+          {shownTab === "logs" && (
             <SimulatorLogs
               minRun={data.minRun}
               averageRun={data.averageRun}
@@ -222,17 +262,29 @@ function SimulatorResult({
             />
           )}
 
-          {tab === "stats" && (
+          {shownTab === "stats" && (
             <SimulatorStats
               cardUsage={data.cardUsage}
               scoreStats={data.scoreStats}
             />
           )}
 
-          {tab === "compare" && <CompareTab currentRun={currentRun} />}
+          {shownTab === "compare" && <CompareTab currentRun={currentRun} />}
+
+          {shownTab === "rehearsal" && (
+            <RehearsalComparison
+              parser={rehearsalParser}
+              simScores={data.scores}
+              rehearsalScores={rehearsalScores}
+              cell={rehearsalCell}
+              onCellChange={setRehearsalCell}
+              contribute={contribute}
+              onContributeChange={setContribute}
+            />
+          )}
         </div>
 
-        <div className={styles.footer}>
+        <div className={styles.footer} data-export-hide="true">
           <KofiAd />
           <a className={styles.toTop} href="#simulator_loadout">
             Top

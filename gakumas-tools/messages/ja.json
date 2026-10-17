@@ -505,7 +505,8 @@
     "optimizeParams": "パラメータ最適化",
     "optimizeGain": "平均 +{gain}",
     "optimizeAlready": "最適化済み",
-    "optimizeFailed": "最適化できません"
+    "optimizeFailed": "最適化できません",
+    "rehearsal": "リハーサル"
   },
   "CompareTab": {
     "saved": "保存済み",
@@ -668,6 +669,17 @@
     "confirmRow": "この行の値が正しいことを確認",
     "selectFiles": "ファイルを選択",
     "addRow": "行を追加"
+  },
+  "RehearsalComparison": {
+    "addResults": "リハーサル結果を追加",
+    "pickCell": "このアイドルのスコアをタップ",
+    "flaggedExcluded": "{count}件の結果は確認できなかったため除外しました",
+    "contribute": "比較結果を匿名で共有して、シミュレーターの改善に協力する",
+    "simulator": "シミュレーター",
+    "rehearsal": "リハーサル",
+    "simulatorAverage": "シミュ平均",
+    "rehearsalAverage": "リハ平均",
+    "difference": "差"
   },
   "KofiAd": {
     "prompt": "このプロジェクトを支援する"
