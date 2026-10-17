@@ -10,6 +10,7 @@ import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import SearchContext from "@/contexts/SearchContext";
 import { calculateContestPower } from "@/utils/contestPower";
+import { takeMemoryDraft } from "@/utils/memoryDraft";
 import {
   compareFilteredMemories,
   compareUnfilteredMemories,
@@ -39,6 +40,15 @@ function Memories() {
     if (restoreDraft()) {
       setModal(<MemoryEditorModal />);
     }
+  }, []);
+
+  useEffect(() => {
+    const dropDraftOnBackForwardRestore = (event) => {
+      if (event.persisted) takeMemoryDraft();
+    };
+    window.addEventListener("pageshow", dropDraftOnBackForwardRestore);
+    return () =>
+      window.removeEventListener("pageshow", dropDraftOnBackForwardRestore);
   }, []);
 
   const hasSearchQuery = pItemIds.some((i) => i) || skillCardIds.some((i) => i);
