@@ -8,7 +8,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { verticalGradient } from "@/components/Charts/theme";
+import { CHART_COLORS, verticalGradient } from "@/components/Charts/theme";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -45,11 +45,15 @@ function ComparisonHistogram({ labels, series }) {
   const data = useMemo(
     () => ({
       labels,
-      datasets: series.map(({ label, data, color, colorTop }) => ({
+      datasets: series.map(({ label, data, tone }) => ({
         label,
         data,
         backgroundColor: ({ chart }) =>
-          verticalGradient(chart, color, colorTop),
+          verticalGradient(
+            chart,
+            CHART_COLORS[tone],
+            CHART_COLORS[`${tone}Top`],
+          ),
         borderRadius: { topLeft: 4, topRight: 4 },
         borderSkipped: "bottom",
         categoryPercentage: 0.9,

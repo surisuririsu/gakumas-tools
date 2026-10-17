@@ -5,7 +5,6 @@ import { FaDownload } from "react-icons/fa6";
 import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import { BoxPlot, ComparisonHistogram } from "@/components/Charts";
-import { CHART_COLORS } from "@/components/Charts/theme";
 import { exportImage } from "@/utils/exportImage";
 import { bucketShares, compareScores } from "@/utils/rehearsalComparison";
 import usePersistedState from "@/utils/usePersistedState";
@@ -67,14 +66,12 @@ function RehearsalGap({ simScores, rehearsalScores, cell, icon }) {
         {
           label: labels[0],
           data: shares[0],
-          color: CHART_COLORS.bar,
-          colorTop: CHART_COLORS.barTop,
+          tone: "bar",
         },
         {
           label: labels[1],
           data: shares[1],
-          color: CHART_COLORS.highlight,
-          colorTop: CHART_COLORS.highlightTop,
+          tone: "highlight",
         },
       ],
     };
