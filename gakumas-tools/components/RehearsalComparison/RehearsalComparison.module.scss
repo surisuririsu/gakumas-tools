@@ -1,7 +1,8 @@
 @use "../../styles/mixins";
 @use "../../styles/tokens";
 
-.tab {
+.tab,
+.controls {
   display: flex;
   flex-direction: column;
   gap: tokens.$space-3;
@@ -162,5 +163,5 @@
 .boxPlot {
   position: relative;
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 3 / 1;
 }

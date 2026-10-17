@@ -18,7 +18,6 @@ import Button from "@/components/Button";
 import ButtonGroup from "@/components/ButtonGroup";
 import useRehearsalParser from "@/components/Rehearsal/useRehearsalParser";
 import RehearsalComparison, {
-  RehearsalGap,
   useComparisonSubmission,
 } from "@/components/RehearsalComparison";
 import CompareTab from "@/components/SimulationRuns";
@@ -197,9 +196,7 @@ function SimulatorResult({
   const shownTab = tabs.includes(tab) ? tab : "logs";
   const rehearsalScores = useMemo(
     () =>
-      rehearsalCell
-        ? cellScores(rehearsalParser.data, ...rehearsalCell)
-        : [],
+      rehearsalCell ? cellScores(rehearsalParser.data, ...rehearsalCell) : [],
     [rehearsalParser.data, rehearsalCell],
   );
   useComparisonSubmission({
@@ -227,14 +224,6 @@ function SimulatorResult({
 
       <SimulatorResultGraphs data={data} plan={plan} />
 
-      {isContest && rehearsalScores.length > 0 && (
-        <RehearsalGap
-          simScores={data.scores}
-          rehearsalScores={rehearsalScores}
-          cell={rehearsalCell}
-        />
-      )}
-
       <div className={styles.actions} data-export-hide="true">
         <Button fill size="sm" onClick={downloadScores}>
           <FaDownload />
@@ -250,16 +239,19 @@ function SimulatorResult({
         </Button>
       </div>
 
-      <div className={styles.details} data-export-hide="true">
-        <ButtonGroup
-          options={tabs.map((value) => ({ value, label: t(value) }))}
-          selected={shownTab}
-          onChange={setTab}
-        />
+      <div className={styles.details}>
+        <div data-export-hide="true">
+          <ButtonGroup
+            options={tabs.map((value) => ({ value, label: t(value) }))}
+            selected={shownTab}
+            onChange={setTab}
+          />
+        </div>
 
         <div
           key={shownTab}
           className={c(styles.panel, tabSwitched && styles.panelEnter)}
+          data-export-hide={shownTab == "rehearsal" ? undefined : "true"}
         >
           {shownTab === "logs" && (
             <SimulatorLogs
@@ -282,6 +274,8 @@ function SimulatorResult({
           {shownTab === "rehearsal" && (
             <RehearsalComparison
               parser={rehearsalParser}
+              simScores={data.scores}
+              rehearsalScores={rehearsalScores}
               cell={rehearsalCell}
               onCellChange={setRehearsalCell}
               contribute={contribute}
@@ -290,7 +284,7 @@ function SimulatorResult({
           )}
         </div>
 
-        <div className={styles.footer}>
+        <div className={styles.footer} data-export-hide="true">
           <KofiAd />
           <a className={styles.toTop} href="#simulator_loadout">
             Top
