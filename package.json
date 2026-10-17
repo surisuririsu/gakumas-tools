@@ -27,6 +27,7 @@
     "test:rehearsal": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs",
     "test:rehearsal:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/rehearsalScores.mjs --update",
     "test:rehearsal:unit": "node --test tests/rehearsalRecovery.test.mjs",
+    "test:worker-pool": "node --test tests/workerPool.test.mjs",
     "test:stamina": "node --loader ./scripts/extensionless-loader.mjs --test tests/stamina.test.mjs",
     "test:card-effects": "node --loader ./scripts/extensionless-loader.mjs --test tests/cardHasEffect.test.mjs",
     "regression:add": "node --loader ./scripts/extensionless-loader.mjs ./tests/add.mjs",
