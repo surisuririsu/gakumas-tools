@@ -8,7 +8,10 @@ import {
   StageEngine,
   StagePlayer,
 } from "gakumas-engine";
-import { compareScores } from "../gakumas-tools/utils/rehearsalComparison.js";
+import {
+  compareScores,
+  likelyMisPick,
+} from "../gakumas-tools/utils/rehearsalComparison.js";
 import { silenceConsole } from "./lib.mjs";
 
 const args = process.argv.slice(2);
@@ -54,10 +57,13 @@ function describe(loadout) {
   };
 }
 
-const comparisons = readFileSync(file, "utf8")
-  .split("\n")
-  .filter(Boolean)
-  .map((line) => JSON.parse(line));
+const unique = new Map();
+for (const line of readFileSync(file, "utf8").split("\n").filter(Boolean)) {
+  const c = JSON.parse(line);
+  unique.set(JSON.stringify([c.loadout, c.rehearsal.scores]), c);
+}
+const comparisons = [...unique.values()];
+const sources = new Set(comparisons.map((c) => c.userHash || c.ipHash));
 
 const restore = silenceConsole();
 const results = [];
@@ -65,6 +71,12 @@ try {
   for (const c of comparisons) {
     const simScores = await simulate(c.loadout, c.enterPercents);
     const gap = compareScores(simScores, c.rehearsal.scores);
+    const misPick = likelyMisPick(
+      gap.simMean,
+      c.rehearsal.grid,
+      c.rehearsal.stage,
+      c.rehearsal.slot,
+    );
     results.push({
       id: c._id,
       ...describe(c.loadout),
@@ -73,6 +85,7 @@ try {
       diffPct: gap.diffPct,
       marginPct: gap.marginPct,
       z: gap.marginPct ? (gap.diffPct / gap.marginPct) * 1.96 : 0,
+      misPick: misPick && `${misPick.stage}-${misPick.slot}`,
     });
   }
 } finally {
@@ -85,7 +98,10 @@ if (asJson) {
   for (const r of results) console.log(JSON.stringify(r));
 } else {
   const pct = (v) => (v == null ? "    -" : `${(v * 100).toFixed(1)}%`);
-  console.log("stage  plan     n  submitted     now  ±95%     z  p-idol");
+  console.log(
+    `${comparisons.length} unique comparisons from ${sources.size} sources\n`,
+  );
+  console.log("stage  plan     n  submitted     now  ±95%     z  pick?  p-idol");
   for (const r of results) {
     console.log(
       [
@@ -96,12 +112,16 @@ if (asJson) {
         pct(r.diffPct).padStart(7),
         pct(r.marginPct).padStart(5),
         r.z.toFixed(1).padStart(5),
+        (r.misPick || "").padStart(6),
         ` ${r.pIdol}`,
       ].join(" "),
     );
   }
-  const byPlan = Object.groupBy(results, (r) => r.plan);
-  console.log("\nMean gap by plan (simulator vs rehearsal):");
+  const byPlan = Object.groupBy(
+    results.filter((r) => !r.misPick),
+    (r) => r.plan,
+  );
+  console.log("\nMean gap by plan, likely mis-picks excluded:");
   for (const [plan, rows] of Object.entries(byPlan)) {
     const mean = rows.reduce((a, r) => a + r.diffPct, 0) / rows.length;
     console.log(`  ${plan}: ${pct(mean)} over ${rows.length}`);
