@@ -16,15 +16,22 @@ function getOcrScale(img) {
 
 export async function getScoresFromFile(file, worker) {
   const img = await loadImageFromFile(file);
-  const whiteCanvas = getWhiteCanvas(img, 190, getOcrScale(img));
-  const engWhitePromise = worker.recognize(whiteCanvas, {}, { blocks: true });
-  return extractScores(await engWhitePromise); // { scores, flags }
+  return recognizeScores(getWhiteCanvas(img, 190, getOcrScale(img)), worker);
 }
 
 export async function getScoresFromImage(img, worker) {
-  const whiteCanvas = getWhiteCanvas(img, 160, getOcrScale(img));
-  const result = await worker.recognize(whiteCanvas, {}, { blocks: true });
-  return extractScores(result); // { scores, flags }
+  return recognizeScores(getWhiteCanvas(img, 160, getOcrScale(img)), worker);
+}
+
+async function recognizeScores(canvas, worker) {
+  try {
+    const result = await worker.recognize(canvas, {}, { blocks: true });
+    return extractScores(result); // { scores, flags }
+  } finally {
+    // Safari caps total canvas memory and frees it only on GC, which lags
+    // behind a fast import loop. Release the backing store now.
+    canvas.width = canvas.height = 0;
+  }
 }
 
 // The rehearsal result screen always has exactly three stages. extractScores
