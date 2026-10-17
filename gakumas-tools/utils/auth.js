@@ -5,6 +5,8 @@ export const authOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      // Discord now sends `iss` on the OAuth callback; openid-client rejects it unless the issuer is known.
+      issuer: "https://discord.com",
     }),
   ],
   callbacks: {
