@@ -53,6 +53,7 @@ export default function useRehearsalParser() {
   const [progress, setProgress] = useState(null);
   const [processingStatus, setProcessingStatus] = useState("");
   const [data, setData] = useState([]);
+  const [icons, setIcons] = useState(null);
   const ocrPoolRef = useRef(null);
 
   const getOcrPool = useCallback(() => {
@@ -108,11 +109,16 @@ export default function useRehearsalParser() {
           );
         },
       })) {
-        const { scores, flags } = await pool.run((worker) =>
+        const { scores, flags, icons } = await pool.run((worker) =>
           getScoresFromImage(canvas, worker),
         );
         if (scores && scores.some((stage) => stage.some((v) => v))) {
-          results.push({ scores, flags, src: await canvasToObjectURL(canvas) });
+          results.push({
+            scores,
+            flags,
+            icons,
+            src: await canvasToObjectURL(canvas),
+          });
         }
       }
       setProcessingStatus(t("videoComplete", { count: results.length }));
@@ -128,10 +134,17 @@ export default function useRehearsalParser() {
       const scored = await Promise.all(
         imageFiles.map(async (file) => {
           try {
-            const { scores, flags } = await pool.run((worker) =>
+            const { scores, flags, icons } = await pool.run((worker) =>
               getScoresFromFile(file, worker),
             );
-            return scores && { scores, flags, src: URL.createObjectURL(file) };
+            return (
+              scores && {
+                scores,
+                flags,
+                icons,
+                src: URL.createObjectURL(file),
+              }
+            );
           } catch (err) {
             console.error(`Error parsing ${file.name}:`, err);
             return null;
@@ -204,10 +217,19 @@ export default function useRehearsalParser() {
 
       await Promise.all([csvPromise, ocrPromise]);
       if (DEBUG) console.timeEnd("All results parsed");
-      setData(results);
+      setIcons(results.find((r) => r.icons)?.icons ?? null);
+      setData(results.map(({ icons, ...row }) => row));
     },
     [processVideo, processImages, t],
   );
 
-  return { data, setData, handleFiles, progress, total, processingStatus };
+  return {
+    data,
+    setData,
+    icons,
+    handleFiles,
+    progress,
+    total,
+    processingStatus,
+  };
 }

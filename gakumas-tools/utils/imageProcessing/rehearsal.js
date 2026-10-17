@@ -1,4 +1,5 @@
 import { extractLines, getWhiteCanvas, loadImageFromFile } from "./common";
+import { cropIcons } from "./rehearsalIcons";
 import {
   allTokens,
   parseScoreToken,
@@ -15,18 +16,20 @@ function getOcrScale(img) {
 }
 
 export async function getScoresFromFile(file, worker) {
-  const img = await loadImageFromFile(file);
-  return recognizeScores(getWhiteCanvas(img, 190, getOcrScale(img)), worker);
+  return recognizeScores(await loadImageFromFile(file), 190, worker);
 }
 
 export async function getScoresFromImage(img, worker) {
-  return recognizeScores(getWhiteCanvas(img, 160, getOcrScale(img)), worker);
+  return recognizeScores(img, 160, worker);
 }
 
-async function recognizeScores(canvas, worker) {
+async function recognizeScores(img, threshold, worker) {
+  const scale = getOcrScale(img);
+  const canvas = getWhiteCanvas(img, threshold, scale);
   try {
     const result = await worker.recognize(canvas, {}, { blocks: true });
-    return extractScores(result); // { scores, flags }
+    const { scores, flags, rows } = extractScores(result);
+    return { scores, flags, icons: cropIcons(img, rows, scale) };
   } finally {
     // Safari caps total canvas memory and frees it only on GC, which lags
     // behind a fast import loop. Release the backing store now.
@@ -102,7 +105,12 @@ export function extractScores(result) {
 
   const scores = [];
   const flags = [];
+  const rows = [];
   for (const { line, raw, cleanThree } of stageRows) {
+    rows.push({
+      bbox: line.bbox,
+      words: (line.words || []).map((w) => w.bbox),
+    });
     const totalLine = pairTotalLine(line, lines, chosen);
     const { scores: stageScores, recovery } = recoverStage(
       line.text,
@@ -121,6 +129,7 @@ export function extractScores(result) {
   while (scores.length < NUM_STAGES) {
     scores.push([0, 0, 0]);
     flags.push("ok");
+    rows.push(null);
   }
-  return { scores, flags };
+  return { scores, flags, rows };
 }
