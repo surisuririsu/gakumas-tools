@@ -30,12 +30,43 @@ export function compareScores(simScores, rehearsalScores) {
   return { n, simMean, rehearsalMean, diffPct, marginPct };
 }
 
+const SIM_STAT_FIELDS = [
+  "count",
+  "min",
+  "q1",
+  "median",
+  "mean",
+  "q3",
+  "max",
+  "stddev",
+  "bucketMin",
+  "bucketSize",
+];
+const MAX_BUCKETS = 100;
+
+function cleanSimStats(stats) {
+  if (!stats) return null;
+  const clean = {};
+  for (const field of SIM_STAT_FIELDS) {
+    if (!Number.isFinite(stats[field])) return null;
+    clean[field] = stats[field];
+  }
+  const { buckets } = stats;
+  if (
+    !Array.isArray(buckets) ||
+    buckets.length > MAX_BUCKETS ||
+    !buckets.every(Number.isInteger)
+  ) {
+    return null;
+  }
+  return { ...clean, buckets };
+}
+
 const isScore = (s) => Number.isInteger(s) && s > 0 && s < MAX_SCORE;
 const isId = (s) => typeof s == "string" && /^[0-9a-f-]{36}$/.test(s);
 
 export function validateComparison(body) {
-  const { id, loadout, enterPercents, simulator, simStats, rehearsal } =
-    body || {};
+  const { id, loadout, enterPercents, simStats, rehearsal } = body || {};
   if (!isId(id)) return { error: "Invalid id" };
   if (!loadout?.stageId || loadout.stageId == "custom") {
     return { error: "Invalid stage" };
@@ -55,19 +86,14 @@ export function validateComparison(body) {
   ) {
     return { error: "Invalid rehearsal" };
   }
-  if (!simStats || !Number.isFinite(simStats.mean)) {
-    return { error: "Invalid simulator result" };
-  }
+  const cleanStats = cleanSimStats(simStats);
+  if (!cleanStats) return { error: "Invalid simulator result" };
   return {
     comparison: {
       _id: id,
       loadout: extractLoadoutFields(loadout),
       enterPercents: !!enterPercents,
-      simulator: {
-        strategy: String(simulator?.strategy || ""),
-        numRuns: Number(simulator?.numRuns) || null,
-      },
-      simStats,
+      simStats: cleanStats,
       rehearsal: { stage, slot, scores },
     },
   };

@@ -69,7 +69,7 @@ try {
       id: c._id,
       ...describe(c.loadout),
       n: gap.n,
-      postedDiffPct: c.simStats.mean / gap.rehearsalMean - 1,
+      submittedDiffPct: c.simStats.mean / gap.rehearsalMean - 1,
       diffPct: gap.diffPct,
       marginPct: gap.marginPct,
       z: gap.marginPct ? (gap.diffPct / gap.marginPct) * 1.96 : 0,
@@ -85,14 +85,14 @@ if (asJson) {
   for (const r of results) console.log(JSON.stringify(r));
 } else {
   const pct = (v) => (v == null ? "    -" : `${(v * 100).toFixed(1)}%`);
-  console.log("stage  plan     n  posted     now  ±95%     z  p-idol");
+  console.log("stage  plan     n  submitted     now  ±95%     z  p-idol");
   for (const r of results) {
     console.log(
       [
         r.stage.padEnd(6),
         (r.plan || "").padEnd(7),
         String(r.n).padStart(3),
-        pct(r.postedDiffPct).padStart(7),
+        pct(r.submittedDiffPct).padStart(9),
         pct(r.diffPct).padStart(7),
         pct(r.marginPct).padStart(5),
         r.z.toFixed(1).padStart(5),

@@ -37,7 +37,6 @@ export default function useComparisonSubmission({
         id,
         loadout: run.loadout,
         enterPercents,
-        simulator: { strategy: "HeuristicStrategy", numRuns: run.stats.count },
         simStats: run.stats,
         rehearsal: { stage: cell[0] + 1, slot: cell[1] + 1, scores },
       });

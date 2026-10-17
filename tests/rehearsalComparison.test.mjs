@@ -36,16 +36,31 @@ const valid = {
   id: "0b6c7f6e-8a4f-4c55-9a43-6f1f3f1f2a10",
   loadout: { stageId: 148, params: [1, 2, 3, 4], extra: "dropped" },
   enterPercents: false,
-  simulator: { strategy: "HeuristicStrategy", numRuns: 2000 },
-  simStats: { mean: 41000, count: 2000 },
+  simStats: {
+    count: 2000,
+    min: 30000,
+    q1: 38000,
+    median: 41000,
+    mean: 41000,
+    q3: 44000,
+    max: 52000,
+    stddev: 4000,
+    bucketMin: 30000,
+    bucketSize: 550,
+    buckets: [1, 5, 9],
+  },
   rehearsal: { stage: 2, slot: 1, scores: [40000, 42000] },
 };
 
-test("validateComparison keeps known loadout fields only", () => {
-  const { comparison, error } = validateComparison(valid);
+test("validateComparison keeps known fields only", () => {
+  const { comparison, error } = validateComparison({
+    ...valid,
+    simStats: { ...valid.simStats, extra: { nested: "x" } },
+  });
   assert.equal(error, undefined);
   assert.equal(comparison._id, valid.id);
   assert.equal(comparison.loadout.extra, undefined);
+  assert.equal(comparison.simStats.extra, undefined);
   assert.deepEqual(comparison.loadout.params, [1, 2, 3, 4]);
 });
 
@@ -58,6 +73,8 @@ test("validateComparison rejects bad input", () => {
     { ...valid, rehearsal: { ...valid.rehearsal, scores: [] } },
     { ...valid, rehearsal: { ...valid.rehearsal, scores: [1.5] } },
     { ...valid, simStats: null },
+    { ...valid, simStats: { ...valid.simStats, mean: "41000" } },
+    { ...valid, simStats: { ...valid.simStats, buckets: [{}] } },
   ];
   for (const body of bad) assert.ok(validateComparison(body).error);
 });
