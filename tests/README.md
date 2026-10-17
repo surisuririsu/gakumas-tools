@@ -35,6 +35,15 @@ pnpm bench:update   # rewrite baseline
 
 Threshold: flags regressions greater than 10%. Re-baseline after an intentional perf change (either direction — both speedups and slowdowns get captured).
 
+### Fidelity against real rehearsals
+
+Users can share simulator-vs-rehearsal comparisons from the simulator's Rehearsal tab.
+
+```sh
+(cd gakumas-tools && pnpm comparisons export --since 2026-10-01) > comparisons.jsonl
+pnpm fidelity comparisons.jsonl --runs 500   # re-simulate on the current engine, rank gaps by z-score
+```
+
 ## Bootstrap (one-shot)
 
 ```sh

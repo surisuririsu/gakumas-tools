@@ -1,0 +1,109 @@
+import { readFileSync } from "node:fs";
+import { PIdols, SkillCards, Stages } from "gakumas-data";
+import {
+  IdolConfig,
+  IdolStageConfig,
+  STRATEGIES,
+  StageConfig,
+  StageEngine,
+  StagePlayer,
+} from "gakumas-engine";
+import { compareScores } from "../gakumas-tools/utils/rehearsalComparison.js";
+import { silenceConsole } from "./lib.mjs";
+
+const args = process.argv.slice(2);
+const runsIndex = args.indexOf("--runs");
+const RUNS = runsIndex >= 0 ? parseInt(args[runsIndex + 1], 10) : 200;
+const asJson = args.includes("--json");
+const file = args.find(
+  (a, i) => !a.startsWith("--") && !(runsIndex >= 0 && i == runsIndex + 1),
+);
+
+if (!file) {
+  console.error("Usage: pnpm fidelity <comparisons.jsonl> [--runs N] [--json]");
+  process.exit(1);
+}
+
+async function simulate(loadout, enterPercents) {
+  const stage = new StageConfig(Stages.getById(loadout.stageId));
+  const config = new IdolStageConfig(
+    new IdolConfig(loadout),
+    stage,
+    enterPercents,
+  );
+  const engine = new StageEngine(config);
+  const strategy = new STRATEGIES.HeuristicStrategy(engine);
+  engine.strategy = strategy;
+  const scores = [];
+  for (let i = 0; i < RUNS; i++) {
+    scores.push((await new StagePlayer(engine, strategy).play()).score);
+  }
+  return scores;
+}
+
+function describe(loadout) {
+  const stage = Stages.getById(loadout.stageId);
+  const cardId = loadout.skillCardIdGroups?.[0]?.find(
+    (id) => SkillCards.getById(id)?.sourceType == "pIdol",
+  );
+  const pIdol = PIdols.getById(SkillCards.getById(cardId)?.pIdolId);
+  return {
+    stage: stage ? `${stage.season}-${stage.stage}` : String(loadout.stageId),
+    plan: stage?.plan,
+    pIdol: pIdol ? `${pIdol.id} ${pIdol.title}` : "?",
+  };
+}
+
+const comparisons = readFileSync(file, "utf8")
+  .split("\n")
+  .filter(Boolean)
+  .map((line) => JSON.parse(line));
+
+const restore = silenceConsole();
+const results = [];
+try {
+  for (const c of comparisons) {
+    const simScores = await simulate(c.loadout, c.enterPercents);
+    const gap = compareScores(simScores, c.rehearsal.scores);
+    results.push({
+      id: c._id,
+      ...describe(c.loadout),
+      n: gap.n,
+      postedDiffPct: c.simStats.mean / gap.rehearsalMean - 1,
+      diffPct: gap.diffPct,
+      marginPct: gap.marginPct,
+      z: gap.marginPct ? (gap.diffPct / gap.marginPct) * 1.96 : 0,
+    });
+  }
+} finally {
+  restore();
+}
+
+results.sort((a, b) => Math.abs(b.z) - Math.abs(a.z));
+
+if (asJson) {
+  for (const r of results) console.log(JSON.stringify(r));
+} else {
+  const pct = (v) => (v == null ? "    -" : `${(v * 100).toFixed(1)}%`);
+  console.log("stage  plan     n  posted     now  ±95%     z  p-idol");
+  for (const r of results) {
+    console.log(
+      [
+        r.stage.padEnd(6),
+        (r.plan || "").padEnd(7),
+        String(r.n).padStart(3),
+        pct(r.postedDiffPct).padStart(7),
+        pct(r.diffPct).padStart(7),
+        pct(r.marginPct).padStart(5),
+        r.z.toFixed(1).padStart(5),
+        ` ${r.pIdol}`,
+      ].join(" "),
+    );
+  }
+  const byPlan = Object.groupBy(results, (r) => r.plan);
+  console.log("\nMean gap by plan (simulator vs rehearsal):");
+  for (const [plan, rows] of Object.entries(byPlan)) {
+    const mean = rows.reduce((a, r) => a + r.diffPct, 0) / rows.length;
+    console.log(`  ${plan}: ${pct(mean)} over ${rows.length}`);
+  }
+}

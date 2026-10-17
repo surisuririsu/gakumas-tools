@@ -35,6 +35,7 @@
     "regression:add": "node --loader ./scripts/extensionless-loader.mjs ./tests/add.mjs",
     "regression:bootstrap": "node --loader ./scripts/extensionless-loader.mjs ./tests/generate-suite.mjs",
     "regression:coverage": "node --loader ./scripts/extensionless-loader.mjs ./tests/coverage.mjs",
+    "fidelity": "node --no-warnings --loader ./scripts/extensionless-loader.mjs ./tests/fidelity.mjs",
     "bench": "node --loader ./scripts/extensionless-loader.mjs ./tests/bench.mjs",
     "bench:update": "node --loader ./scripts/extensionless-loader.mjs ./tests/bench.mjs --update",
     "validate:data": "node --loader ./scripts/extensionless-loader.mjs ./scripts/validate-data.mjs",
