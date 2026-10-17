@@ -666,12 +666,15 @@
     "addResults": "添加排练结果",
     "pickCell": "点击该偶像的分数",
     "flaggedExcluded": "{count}个结果无法验证，已排除",
-    "contribute": "匿名分享此对比，帮助改进模拟器",
     "simulator": "模拟器",
     "rehearsal": "排练",
     "simulatorAverage": "模拟平均",
     "rehearsalAverage": "排练平均",
-    "difference": "差异"
+    "difference": "差异",
+    "share": "匿名分享，帮助改进模拟器",
+    "shared": "已分享，谢谢！",
+    "undo": "撤销",
+    "shareFailed": "分享失败，点击重试"
   },
   "KofiAd": {
     "prompt": "支持这个项目"

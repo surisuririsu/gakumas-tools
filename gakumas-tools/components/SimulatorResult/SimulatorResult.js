@@ -30,7 +30,6 @@ import { downloadBlob } from "@/utils/download";
 import { logEvent } from "@/utils/logging";
 import { findOptimalParams } from "@/utils/paramOptimizer";
 import { cellScores } from "@/utils/rehearsalComparison";
-import usePersistedState from "@/utils/usePersistedState";
 import ScoreStats from "./ScoreStats";
 import SimulatorResultGraphs from "./SimulatorResultGraphs";
 import styles from "./SimulatorResult.module.scss";
@@ -39,7 +38,6 @@ import KofiAd from "../KofiAd";
 const TABS = ["stats", "logs", "compare", "rehearsal"];
 const CONTEST_TABS = new Set(["rehearsal"]);
 const TAB_STORAGE_KEY = "simulatorResultTab";
-const CONTRIBUTE_KEY = "gakumas-tools.simulator.contributeRehearsal";
 const FEEDBACK_MS = 2200;
 const SPARKLE_COUNT = 4;
 const SPARKLE_PATH =
@@ -114,7 +112,6 @@ function SimulatorResult({
   const [optimizeFeedback, setOptimizeFeedback] = useState(null);
   const rehearsalParser = useRehearsalParser();
   const [rehearsalCell, setRehearsalCell] = useState(null);
-  const [contribute, setContribute] = usePersistedState(CONTRIBUTE_KEY, true);
   const [run, setRun] = useState({ data, config });
   if (run.data !== data) setRun({ data, config });
 
@@ -199,13 +196,11 @@ function SimulatorResult({
       rehearsalCell ? cellScores(rehearsalParser.data, ...rehearsalCell) : [],
     [rehearsalParser.data, rehearsalCell],
   );
-  useComparisonSubmission({
-    enabled: contribute && isContest,
+  const submission = useComparisonSubmission({
     run: currentRun,
     enterPercents,
     rows: rehearsalParser.data,
     cell: rehearsalCell,
-    scores: rehearsalScores,
   });
 
   const downloadScores = useCallback(() => {
@@ -280,8 +275,7 @@ function SimulatorResult({
               rehearsalScores={rehearsalScores}
               cell={rehearsalCell}
               onCellChange={setRehearsalCell}
-              contribute={contribute}
-              onContributeChange={setContribute}
+              submission={submission}
             />
           )}
         </div>

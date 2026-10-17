@@ -666,12 +666,15 @@
     "addResults": "Add rehearsal results",
     "pickCell": "Tap this idol's score",
     "flaggedExcluded": "{count} result(s) couldn't be verified and were left out",
-    "contribute": "Anonymously share this comparison to help improve the simulator",
     "simulator": "Simulator",
     "rehearsal": "Rehearsal",
     "simulatorAverage": "Simulator avg",
     "rehearsalAverage": "Rehearsal avg",
-    "difference": "Difference"
+    "difference": "Difference",
+    "share": "Share anonymously to help improve the simulator",
+    "shared": "Shared. Thank you!",
+    "undo": "Undo",
+    "shareFailed": "Couldn't share. Tap to try again"
   },
   "KofiAd": {
     "prompt": "Support this project"

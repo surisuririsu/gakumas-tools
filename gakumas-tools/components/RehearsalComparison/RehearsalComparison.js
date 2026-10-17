@@ -4,10 +4,11 @@ import {
   FaCircleCheck,
   FaFileCsv,
   FaFileImage,
+  FaShareNodes,
   FaTriangleExclamation,
   FaVideo,
 } from "react-icons/fa6";
-import Checkbox from "@/components/Checkbox";
+import Button from "@/components/Button";
 import Collapse from "@/components/Collapse";
 import ProgressBar from "@/components/ProgressBar";
 import FileDropzone from "@/components/Rehearsal/FileDropzone";
@@ -35,8 +36,7 @@ function RehearsalComparison({
   rehearsalScores,
   cell,
   onCellChange,
-  contribute,
-  onContributeChange,
+  submission,
 }) {
   const t = useTranslations("RehearsalComparison");
   const tRehearsal = useTranslations("Rehearsal");
@@ -140,6 +140,30 @@ function RehearsalComparison({
                 ))}
               </tbody>
             </table>
+            <div className={styles.shareRow}>
+              {submission.status == "shared" ? (
+                <>
+                  <span className={styles.sharedNote}>
+                    <FaCircleCheck />
+                    {t("shared")}
+                  </span>
+                  <Button size="sm" onClick={submission.undo}>
+                    {t("undo")}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  style="primary"
+                  size="sm"
+                  fill
+                  disabled={!cell || submission.status == "sharing"}
+                  onClick={submission.share}
+                >
+                  <FaShareNodes />
+                  {t(submission.status == "failed" ? "shareFailed" : "share")}
+                </Button>
+              )}
+            </div>
             {flaggedCount > 0 && (
               <span className={styles.flaggedNotice}>
                 <FaTriangleExclamation />
@@ -148,12 +172,6 @@ function RehearsalComparison({
             )}
           </div>
         )}
-
-        <Checkbox
-          checked={contribute}
-          label={t("contribute")}
-          onChange={onContributeChange}
-        />
       </div>
 
       {rehearsalScores.length > 0 && (

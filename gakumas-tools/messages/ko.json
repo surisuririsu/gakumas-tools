@@ -666,12 +666,15 @@
     "addResults": "리허설 결과 추가",
     "pickCell": "이 아이돌의 스코어를 탭하세요",
     "flaggedExcluded": "확인할 수 없는 결과 {count}개를 제외했습니다",
-    "contribute": "시뮬레이터 개선을 위해 비교 결과를 익명으로 공유",
     "simulator": "시뮬레이터",
     "rehearsal": "리허설",
     "simulatorAverage": "시뮬 평균",
     "rehearsalAverage": "리허설 평균",
-    "difference": "차이"
+    "difference": "차이",
+    "share": "익명으로 공유하여 시뮬레이터 개선에 협력",
+    "shared": "공유했습니다. 감사합니다!",
+    "undo": "취소",
+    "shareFailed": "공유하지 못했습니다. 탭하여 다시 시도"
   },
   "KofiAd": {
     "prompt": "이 프로젝트 후원하기"

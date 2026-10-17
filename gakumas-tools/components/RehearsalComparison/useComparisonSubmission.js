@@ -1,46 +1,70 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { rehearsalGrid } from "@/utils/rehearsalComparison";
 
 const ENDPOINT = "/api/rehearsal-comparison";
-const DEBOUNCE_MS = 1500;
 
-function send(method, body) {
-  fetch(ENDPOINT, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    keepalive: true,
-  }).catch(console.error);
+async function send(method, body) {
+  try {
+    const res = await fetch(ENDPOINT, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      keepalive: true,
+    });
+    return res.ok;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 }
 
 export default function useComparisonSubmission({
-  enabled,
   run,
   enterPercents,
   rows,
   cell,
-  scores,
 }) {
-  const id = useMemo(() => crypto.randomUUID(), [run, rows]);
-  const submittedRef = useRef(new Set());
+  const [shared, setShared] = useState(null);
+  const [status, setStatus] = useState("idle");
 
+  const isCurrent =
+    shared?.run === run && shared?.rows === rows && shared?.cell === cell;
+  const sameData = shared?.run === run && shared?.rows === rows;
+
+  // Re-picking the cell means the shared pick was wrong, so withdraw it.
   useEffect(() => {
-    const submitted = submittedRef.current;
-    if (!enabled) {
-      if (submitted.delete(id)) send("DELETE", { id });
-      return;
+    if (shared && sameData && !isCurrent) {
+      send("DELETE", { id: shared.id });
+      setShared(null);
     }
-    if (!run?.stats || !cell || !scores.length) return;
+  }, [shared, sameData, isCurrent]);
 
-    const timer = setTimeout(() => {
-      submitted.add(id);
-      send("PUT", {
-        id,
-        loadout: run.loadout,
-        enterPercents,
-        simStats: run.stats,
-        rehearsal: { stage: cell[0] + 1, slot: cell[1] + 1, scores },
-      });
-    }, DEBOUNCE_MS);
-    return () => clearTimeout(timer);
-  }, [enabled, id, run, enterPercents, cell, scores]);
+  useEffect(() => setStatus("idle"), [run, rows, cell]);
+
+  const share = useCallback(async () => {
+    if (!run?.stats || !cell) return;
+    const id = crypto.randomUUID();
+    setStatus("sharing");
+    const ok = await send("PUT", {
+      id,
+      loadout: run.loadout,
+      enterPercents,
+      simStats: run.stats,
+      rehearsal: {
+        stage: cell[0] + 1,
+        slot: cell[1] + 1,
+        grid: rehearsalGrid(rows),
+      },
+    });
+    setStatus(ok ? "idle" : "failed");
+    if (ok) setShared({ id, run, rows, cell });
+  }, [run, enterPercents, rows, cell]);
+
+  const undo = useCallback(() => {
+    if (!shared) return;
+    send("DELETE", { id: shared.id });
+    setShared(null);
+  }, [shared]);
+
+  return { status: isCurrent ? "shared" : status, share, undo };
 }

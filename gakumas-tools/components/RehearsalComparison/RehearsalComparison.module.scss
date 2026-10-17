@@ -125,6 +125,28 @@
   @include mixins.numeric;
 }
 
+.shareRow {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  width: 100%;
+  min-height: 36px;
+}
+
+.sharedNote {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  gap: tokens.$space-1;
+  color: tokens.$success-ink;
+  font-size: tokens.$text-sm;
+  font-weight: tokens.$weight-bold;
+
+  svg {
+    color: tokens.$success;
+  }
+}
+
 .flaggedNotice {
   @include mixins.tag(tokens.$danger-tint, tokens.$danger);
   padding: 3px 10px;
