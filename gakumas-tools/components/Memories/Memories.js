@@ -10,7 +10,6 @@ import MemoryContext from "@/contexts/MemoryContext";
 import ModalContext from "@/contexts/ModalContext";
 import SearchContext from "@/contexts/SearchContext";
 import { calculateContestPower } from "@/utils/contestPower";
-import { takeMemoryDraft } from "@/utils/memoryDraft";
 import {
   compareFilteredMemories,
   compareUnfilteredMemories,
@@ -24,7 +23,7 @@ function Memories() {
   const t = useTranslations("Memories");
   const { status } = useSession();
   const { memories, memoriesError, fetchMemories } = useContext(DataContext);
-  const { restoreDraft } = useContext(MemoryContext);
+  const { restoreDraft, discardDraft } = useContext(MemoryContext);
   const { setModal } = useContext(ModalContext);
   const { pItemIds, skillCardIds } = useContext(SearchContext);
   const [action, setAction] = useState(null);
@@ -44,7 +43,7 @@ function Memories() {
 
   useEffect(() => {
     const dropDraftOnBackForwardRestore = (event) => {
-      if (event.persisted) takeMemoryDraft();
+      if (event.persisted) discardDraft();
     };
     window.addEventListener("pageshow", dropDraftOnBackForwardRestore);
     return () =>

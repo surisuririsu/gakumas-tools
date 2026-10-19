@@ -123,6 +123,10 @@ export function MemoryContextProvider({ children }) {
     return true;
   }, [setAll]);
 
+  const discardDraft = useCallback(() => {
+    takeMemoryDraft();
+  }, []);
+
   const replacePItemId = useCallback((index, itemId) => {
     setPItemIds((cur) => {
       const next = [...cur];
@@ -167,6 +171,7 @@ export function MemoryContextProvider({ children }) {
       save,
       stashDraft,
       restoreDraft,
+      discardDraft,
     }),
     [
       saveState,
@@ -184,6 +189,7 @@ export function MemoryContextProvider({ children }) {
       save,
       stashDraft,
       restoreDraft,
+      discardDraft,
     ]
   );
 
