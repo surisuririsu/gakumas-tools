@@ -7,6 +7,7 @@ All notable changes to the contest simulator will be documented in this file.
 ## 2026-10-20
 
 - Add preview of roar sena
+- Update roar sena
 
 ## 2026-10-17
 
