@@ -143,6 +143,7 @@ export default class BuffManager extends EngineComponent {
     state[S.fullPowerCharge] = 0;
     state[S.cumulativeFullPowerCharge] = 0;
     state[S.enthusiasm] = 0;
+    state[S.enthusiasmExtensionTurns] = 0;
     state[S.strengthTimes] = 0;
     state[S.preservationTimes] = 0;
     state[S.fullPowerTimes] = 0;
