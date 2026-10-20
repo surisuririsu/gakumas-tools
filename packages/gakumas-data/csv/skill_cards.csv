@@ -907,3 +907,5 @@ id,name,availableCustomizations,rarity,type,plan,unlockPlv,upgraded,unique,sourc
 906,ラッシュ+,"57,45,43",SR,active,anomaly,89,TRUE,FALSE,produce,,FALSE,,cost-=5,fullPowerCharge+=4; score+=cumulativeFullPowerCharge*1.5,1,at:fullPowerChargeIncreased { if:isDirectEffect { target:this { g.score+=6 } } }
 907,ブースト,,SR,active,anomaly,90,FALSE,FALSE,produce,,FALSE,,cost-=4,setStance(strength); fullPowerCharge+=2; score+=cumulativeFullPowerCharge,1,
 908,ブースト+,"57,61,37",SR,active,anomaly,90,TRUE,FALSE,produce,,FALSE,,cost-=3,setStance(strength2); fullPowerCharge+=3; score+=cumulativeFullPowerCharge,1,
+909,獲物はあなた,,SSR,active,sense,1,FALSE,TRUE,pIdol,160,FALSE,if:concentration>=6,cost-=2,"concentration+=6; cardUsesRemaining+=1; if:turnsRemaining<=5 { score+=5 }; if:turnsRemaining==1 { score+=10 }",1,
+910,獲物はあなた+,,SSR,active,sense,1,TRUE,TRUE,pIdol,160,FALSE,if:concentration>=6,cost-=2,"concentration+=6; cardUsesRemaining+=1; if:turnsRemaining<=5 { score+=5 }; if:turnsRemaining==1 { score+=10 }",1,
