@@ -1,4 +1,4 @@
-import SKILL_CARDS from "../json/skill_cards.json";
+import SKILL_CARDS from "../csv/skill_cards.csv";
 import { getSkillCardContestPower } from "../utils/contestPower";
 import { deserializeEffectSequence } from "../utils/effects";
 

@@ -1,4 +1,4 @@
-import STAGES from "../json/stages.json";
+import STAGES from "../csv/stages.csv";
 import { deserializeEffectSequence } from "../utils/effects";
 
 STAGES.forEach((stage) => {

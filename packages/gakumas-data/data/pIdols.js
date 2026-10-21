@@ -1,4 +1,4 @@
-import P_IDOLS from "../json/p_idols.json";
+import P_IDOLS from "../csv/p_idols.csv";
 
 P_IDOLS.forEach((pIdol) => {
   pIdol._type = "pIdol";
