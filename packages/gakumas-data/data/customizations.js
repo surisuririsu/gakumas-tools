@@ -1,4 +1,4 @@
-import CUSTOMIZATIONS from "../json/customizations.json";
+import CUSTOMIZATIONS from "../csv/customizations.csv";
 import { deserializePatchSequence } from "../utils/effects";
 
 CUSTOMIZATIONS.forEach((customization) => {

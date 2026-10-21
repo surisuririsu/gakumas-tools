@@ -1,4 +1,4 @@
-import json
+import csv
 import os
 import shutil
 
@@ -8,8 +8,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 
 DATA_ROOT = os.path.join(REPO_ROOT, ".classifier-data")
 GK_IMG_ROOT = os.path.join(REPO_ROOT, "gk-img", "docs")
-GAKUMAS_DATA_JSON = os.path.join(
-    REPO_ROOT, "packages", "gakumas-data", "json"
+GAKUMAS_DATA_CSV = os.path.join(
+    REPO_ROOT, "packages", "gakumas-data", "csv"
 )
 
 # Class "0" is the empty-slot placeholder. It has no entry in gakumas-data and
@@ -22,13 +22,13 @@ EMPTY_ICON_COLOR = (200, 200, 200)
 
 ENTITY_CONFIG = {
     "p_item": {
-        "json_filename": "p_items.json",
+        "csv_filename": "p_items.csv",
         "icon_dir": os.path.join(GK_IMG_ROOT, "p_items", "icons"),
         "data_dir": os.path.join(DATA_ROOT, "p_items"),
         "filter": lambda entity: entity.get("sourceType") != "produce",
     },
     "skill_card": {
-        "json_filename": "skill_cards.json",
+        "csv_filename": "skill_cards.csv",
         "icon_dir": os.path.join(GK_IMG_ROOT, "skill_cards", "icons"),
         "data_dir": os.path.join(DATA_ROOT, "skill_cards"),
         "filter": lambda entity: True,
@@ -37,9 +37,9 @@ ENTITY_CONFIG = {
 
 
 def load_entities(entity_type):
-    json_path = os.path.join(GAKUMAS_DATA_JSON, ENTITY_CONFIG[entity_type]["json_filename"])
-    with open(json_path) as f:
-        return json.load(f)
+    csv_path = os.path.join(GAKUMAS_DATA_CSV, ENTITY_CONFIG[entity_type]["csv_filename"])
+    with open(csv_path, encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def load_allowed_ids(entity_type):
@@ -48,7 +48,7 @@ def load_allowed_ids(entity_type):
 
 
 def load_upgraded_ids(entity_type):
-    return {str(e["id"]) for e in load_entities(entity_type) if e.get("upgraded")}
+    return {str(e["id"]) for e in load_entities(entity_type) if e.get("upgraded") == "TRUE"}
 
 
 def empty_icon():

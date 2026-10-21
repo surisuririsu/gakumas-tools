@@ -2,6 +2,7 @@ import { stat } from "node:fs/promises";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
+import { parseCsvRecords } from "../packages/gakumas-data/utils/csv.js";
 
 const repoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -78,6 +79,15 @@ export async function load(url, context, nextLoad) {
     return {
       format: "module",
       source: `export default ${source};`,
+      shortCircuit: true,
+    };
+  }
+
+  if (url.endsWith(".csv")) {
+    const records = parseCsvRecords(await readFile(fileURLToPath(url), "utf8"));
+    return {
+      format: "module",
+      source: `export default ${JSON.stringify(records)};`,
       shortCircuit: true,
     };
   }
