@@ -2,7 +2,7 @@
  * Perf benchmark for the structured engine against the committed baseline.
  *
  *   pnpm bench           # measure and compare to perf-baseline.json
- *   pnpm bench:update    # rewrite perf-baseline.json with current numbers
+ *   pnpm bench --update  # rewrite perf-baseline.json with current numbers
  *
  * Methodology:
  *   - Runs every query in suite.jsonl.
@@ -85,7 +85,7 @@ if (baseline) {
     process.exit(1);
   }
 } else if (!UPDATE) {
-  console.log("\nNo baseline yet — run `pnpm bench:update` to capture one.");
+  console.log("\nNo baseline yet — run `pnpm bench --update` to capture one.");
   process.exit(1);
 }
 

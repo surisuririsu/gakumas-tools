@@ -64,12 +64,14 @@ test("lists every matching stage of the plan, best first", () => {
 });
 
 test("picks the newest stage regardless of array order", () => {
+  const params = [923, 2610, 2552, 43];
+  const multipliers = [728, 2373, 2990];
+  const expected = stageName(bestStage(params, multipliers));
   const stages = Stages.getAll();
   const original = [...stages];
   stages.reverse();
   try {
-    const result = bestStage([923, 2610, 2552, 43], [728, 2373, 2990]);
-    assert.equal(stageName(result), "53-2");
+    assert.equal(stageName(bestStage(params, multipliers)), expected);
   } finally {
     stages.splice(0, stages.length, ...original);
   }

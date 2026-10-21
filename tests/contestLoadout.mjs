@@ -7,9 +7,9 @@
  * stay at or above MIN_ICON_ACCURACY.
  *
  * Usage:
- *   pnpm test:contest-loadout            # check against labels
- *   pnpm test:contest-loadout:visualize  # also write box overlays
- *   pnpm test:contest-loadout:digits     # rebuild digit templates from labels
+ *   pnpm test:contest-loadout              # check against labels
+ *   pnpm test:contest-loadout --visualize  # also write box overlays
+ *   pnpm test:contest-loadout --digits     # rebuild digit templates from labels
  *
  * Badges are labeled as shown, [dot, score, genki, cost, bottom icon?], null
  * when absent.
