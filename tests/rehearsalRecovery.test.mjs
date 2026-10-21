@@ -1,7 +1,7 @@
 // Pure-logic unit tests for the rehearsal score recovery solver.
 //
 // Run with Node's built-in test runner (no dependency):
-//   pnpm test:rehearsal:unit          # or: node --test tests/rehearsalRecovery.test.mjs
+//   pnpm test   # or: node --test tests/rehearsalRecovery.test.mjs
 //
 // The vectors are real-data ground truth ported from the Rust solver in the
 // sister project gakumas-screenshot (src/ocr/reconcile.rs, the spec). Where the

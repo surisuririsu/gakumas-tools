@@ -13,7 +13,7 @@
  *
  * WARNING: this overwrites any existing suite.jsonl. Once the suite is in
  * place, prefer `regression:add` (individual loadouts) and
- * `test:regression:update` (refresh stored scores) — regeneration drops
+ * `test:regression --update` (refresh stored scores) — regeneration drops
  * hand-curated entries that were pinned for specific regression coverage.
  */
 import { PItems, SkillCards, Stages, Customizations } from "gakumas-data";

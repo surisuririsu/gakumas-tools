@@ -14,23 +14,32 @@ Local tools for catching score drift and perf regressions in the structured engi
 
 ## Workflow
 
+### Unit tests
+
+```sh
+pnpm test                                                                      # every tests/*.test.mjs
+node --loader ./scripts/extensionless-loader.mjs --test tests/<name>.test.mjs  # just one file
+```
+
+Fixture harnesses (`test:draft`, `test:memory`, `test:contest-loadout`, `test:rehearsal`, `test:regression`) take their mode as a flag, e.g. `pnpm test:draft --update`.
+
 ### Correctness
 
 ```sh
-pnpm test:regression          # run suite, fail on any score mismatch
-pnpm test:regression:update   # rewrite scores (after intentional behavior change)
+pnpm test:regression           # run suite, fail on any score mismatch
+pnpm test:regression --update  # rewrite scores (after intentional behavior change)
 pnpm regression:add "<query>" --id=<id> --note="<provenance>"
 ```
 
-When `pnpm test:regression` fails, each mismatched line prints the expected and actual score — read the diff, decide whether the change was intentional. If yes, run `pnpm test:regression:update` and commit the updated `suite.jsonl`. If no, you have a regression to fix.
+When `pnpm test:regression` fails, each mismatched line prints the expected and actual score — read the diff, decide whether the change was intentional. If yes, run `pnpm test:regression --update` and commit the updated `suite.jsonl`. If no, you have a regression to fix.
 
 Add a loadout to the suite whenever a user reports a bug: it becomes a pinned test that prevents re-regression.
 
 ### Performance
 
 ```sh
-pnpm bench          # compare median runtime against perf-baseline.json
-pnpm bench:update   # rewrite baseline
+pnpm bench           # compare median runtime against perf-baseline.json
+pnpm bench --update  # rewrite baseline
 ```
 
 Threshold: flags regressions greater than 10%. Re-baseline after an intentional perf change (either direction — both speedups and slowdowns get captured).
@@ -47,8 +56,8 @@ pnpm fidelity comparisons.jsonl --runs 500   # re-simulate on the current engine
 ## Bootstrap (one-shot)
 
 ```sh
-pnpm regression:bootstrap        # writes suite.jsonl with 500 seeded loadouts
-pnpm bench:update                # captures initial perf baseline
+pnpm regression:bootstrap  # writes suite.jsonl with 500 seeded loadouts
+pnpm bench --update        # captures initial perf baseline
 ```
 
 The bootstrap script refuses to overwrite an existing `suite.jsonl` — once the suite contains hand-curated entries, preserving them matters.

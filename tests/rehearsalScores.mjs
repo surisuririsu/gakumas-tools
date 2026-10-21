@@ -10,8 +10,8 @@
  *   4. Compare against the pinned baseline.
  *
  * Usage:
- *   pnpm test:rehearsal          # compare; non-zero exit on mismatch
- *   pnpm test:rehearsal:update   # rewrite the fixture with current outputs
+ *   pnpm test:rehearsal           # compare; non-zero exit on mismatch
+ *   pnpm test:rehearsal --update  # rewrite the fixture with current outputs
  *
  * Tesseract auto-downloads its English language model on first run; the
  * harness directs that download into tests/.tesseract-cache/ (gitignored)
@@ -120,7 +120,7 @@ async function main() {
   if (fixture.length === 0) {
     console.error(
       `Fixture is empty: ${FIXTURE_PATH}\n` +
-        `Add entries with: pnpm test:rehearsal:update`,
+        `Add entries with: pnpm test:rehearsal --update`,
     );
     process.exit(2);
   }
