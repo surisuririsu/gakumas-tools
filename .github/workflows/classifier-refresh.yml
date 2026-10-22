@@ -5,8 +5,8 @@ on:
     branches: ["master"]
     paths:
       - gk-img
-      - packages/gakumas-data/json/skill_cards.json
-      - packages/gakumas-data/json/p_items.json
+      - packages/gakumas-data/csv/skill_cards.csv
+      - packages/gakumas-data/csv/p_items.csv
       - scripts/train_classifier/**
   workflow_dispatch:
 

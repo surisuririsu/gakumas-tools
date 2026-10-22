@@ -271,6 +271,10 @@ export default class HeuristicStrategy extends BaseStrategy {
 
       //Enthusiasm
       score += state[S.enthusiasm] * 5;
+      score +=
+        state[S.enthusiasm] *
+        Math.min(state[S.enthusiasmExtensionTurns], turnsRemaining) *
+        5;
 
       // Full power charge
       score +=

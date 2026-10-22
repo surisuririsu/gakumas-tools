@@ -1,4 +1,4 @@
-import P_DRINKS from "../json/p_drinks.json";
+import P_DRINKS from "../csv/p_drinks.csv";
 import { deserializeEffectSequence } from "../utils/effects";
 
 P_DRINKS.forEach((pDrink) => {

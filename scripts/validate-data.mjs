@@ -1,5 +1,5 @@
 /**
- * Walks every DSL field across the data JSON files and reports any
+ * Walks every DSL field across the data CSV files and reports any
  * unknown phase, identifier, function, or field name.
  *
  * Run via:
@@ -7,33 +7,34 @@
  *
  * Exit code is non-zero if any validation errors were found.
  *
- * JSON is read fresh from disk rather than imported — otherwise any
+ * CSVs are read fresh from disk rather than imported — otherwise any
  * transitive import of `gakumas-data` (e.g. via the schema introspecting
  * engine components) runs its side-effectful deserializer and mutates
- * the module-cached JSON in place, leaving us with ASTs instead of the
+ * the module-cached records in place, leaving us with ASTs instead of the
  * raw DSL strings the validator needs.
  */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { parseCsvRecords } from "gakumas-data/utils/csv";
 import { parseEffects, parsePatches } from "gakumas-data/utils/parser";
 import {
   validateEffectAst,
   validatePatchAst,
 } from "gakumas-data/utils/validator";
 
-const JSON_DIR = resolve(
+const CSV_DIR = resolve(
   dirname(fileURLToPath(import.meta.url)),
-  "../packages/gakumas-data/json",
+  "../packages/gakumas-data/csv",
 );
-const readJson = (name) =>
-  JSON.parse(readFileSync(resolve(JSON_DIR, name), "utf8"));
+const readCsv = (name) =>
+  parseCsvRecords(readFileSync(resolve(CSV_DIR, name), "utf8"));
 
-const CUSTOMIZATIONS = readJson("customizations.json");
-const SKILL_CARDS = readJson("skill_cards.json");
-const P_ITEMS = readJson("p_items.json");
-const STAGES = readJson("stages.json");
-const P_DRINKS = readJson("p_drinks.json");
+const CUSTOMIZATIONS = readCsv("customizations.csv");
+const SKILL_CARDS = readCsv("skill_cards.csv");
+const P_ITEMS = readCsv("p_items.csv");
+const STAGES = readCsv("stages.csv");
+const P_DRINKS = readCsv("p_drinks.csv");
 
 let totalErrors = 0;
 

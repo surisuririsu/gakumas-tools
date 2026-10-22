@@ -20,8 +20,11 @@ the complete inventory of state variables and actions.
 
 ## Data files
 
-CSVs under `csv/` are the source of truth. JSON under `json/` is generated
-by `python3 scripts/csv_to_json.py`.
+CSVs under `csv/` are the source of truth and are imported directly. Webpack
+(`gakumas-tools/loaders/csvLoader.js`) and the Node test loader
+(`scripts/extensionless-loader.mjs`) turn them into records with
+`utils/csv.js`, which converts `TRUE`/`FALSE` to booleans and digit-only
+fields to integers.
 
 Each CSV row's DSL columns (`conditions`, `cost`, `actions`, `effects`) are
 parsed at package import time via `deserializeEffectSequence` or

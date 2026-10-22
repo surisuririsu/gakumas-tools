@@ -9,9 +9,9 @@
  * between detection tweaks without affecting the classification.
  *
  * Usage:
- *   pnpm test:draft            # compare; non-zero exit on mismatch
- *   pnpm test:draft:update     # rewrite the fixture with current outputs
- *   pnpm test:draft:visualize  # also write overlays to tests/overlays/draft/
+ *   pnpm test:draft              # compare; non-zero exit on mismatch
+ *   pnpm test:draft --update     # rewrite the fixture with current outputs
+ *   pnpm test:draft --visualize  # also write overlays to tests/overlays/draft/
  *
  * Fixture screenshots live in tests/fixtures/draft/ so they're tracked
  * alongside the harness. Overlay PNGs go to a sibling overlays/ dir which
@@ -137,7 +137,7 @@ async function main() {
   if (fixture.length === 0) {
     console.error(
       `Fixture is empty: ${FIXTURE_PATH}\n` +
-        `Add entries with: pnpm test:draft:update`,
+        `Add entries with: pnpm test:draft --update`,
     );
     process.exit(2);
   }

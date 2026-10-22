@@ -3,6 +3,14 @@
 All notable changes to the contest simulator will be documented in this file.
 
 
+
+## 2026-10-20
+
+- Add preview of roar sena
+- Update roar sena
+- Add preview of garakutaroad tsubame
+- Add preview of garakutaroad china and misuzu
+
 ## 2026-10-17
 
 - Confirm contest season 54 stages

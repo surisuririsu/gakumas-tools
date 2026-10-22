@@ -1,9 +1,9 @@
 /**
  * Run the regression suite.
  *
- *   pnpm test:regression              # compare current engine to stored scores
- *   pnpm test:regression:update       # rewrite stored scores (use after
- *                                     # an intentional scoring change)
+ *   pnpm test:regression           # compare current engine to stored scores
+ *   pnpm test:regression --update  # rewrite stored scores (use after
+ *                                  # an intentional scoring change)
  *
  * Exit 0 on full match, 1 on any mismatch (unless --update is passed).
  */

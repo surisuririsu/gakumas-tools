@@ -1,4 +1,4 @@
-import P_ITEMS from "../json/p_items.json";
+import P_ITEMS from "../csv/p_items.csv";
 import { getPItemContestPower } from "../utils/contestPower";
 import { deserializeEffectSequence } from "../utils/effects";
 

@@ -380,6 +380,7 @@ They are also valid as assignment LHS unless marked read-only.
 | 全力値                         | `fullPowerCharge`              |
 | 累計全力値                     | `cumulativeFullPowerCharge`    |
 | 熱気                           | `enthusiasm`                   |
+| 熱意延長                       | `enthusiasmExtensionTurns`     |
 | 強気回数                       | `strengthTimes`                |
 | 温存回数                       | `preservationTimes`            |
 | のんびり回数                   | `leisureTimes`                 |

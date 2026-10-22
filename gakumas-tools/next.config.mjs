@@ -48,6 +48,12 @@ const nextConfig = {
       "gakumas-images$": require.resolve(`gakumas-images/${entry}`),
     };
 
+    config.module.rules.push({
+      test: /\.csv$/,
+      type: "json",
+      loader: path.resolve("loaders/csvLoader.js"),
+    });
+
     if (!gkImgBaseUrl) {
       config.module.rules = config.module.rules.filter(
         (c) => c.loader != "next-image-loader"
